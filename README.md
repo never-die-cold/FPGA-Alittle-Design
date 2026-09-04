@@ -233,8 +233,15 @@ edgesight/
 
 ## 参考资料
 
+完整的分类资料清单（FPGA / SoC / RTL / CNN / PYNQ / HDMI / 体系结构，共 40+ 站点）见 **[docs/resources.md](docs/resources.md)**。
+
+核心必读：
+
 - AMD 赛道官方选题指南（自主选题赛道·初级组）
 - PYNQ 官方文档：https://pynq.readthedocs.io/en/latest/
+- 蜂鸟 E203 RISC-V 处理器配套书与源码：https://github.com/riscv-mcu/e203_hbirdv1
+- HDLBits 在线刷题（上机考核必备）：https://hdlbits.01xz.net/
+- FINN 量化神经网络加速框架：https://github.com/Xilinx/finn
 - riscv-arch-test：https://github.com/riscv-non-isa/riscv-arch-test
 - AMD 官方 HLS 学习案例：https://xilinx.github.io/xup_high_level_synthesis_design_flow/
 - 大赛官网：http://www.fpgachina.cn/
