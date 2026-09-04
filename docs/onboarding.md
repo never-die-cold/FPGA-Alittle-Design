@@ -63,19 +63,9 @@ Agent = 能帮你**实际干活**的 AI（写代码、改文件、跑命令）�
 | ② | `docs/prep_checklist.md` | 开工前准备任务，**认领写你名字的项**（没有就去群里认领） |
 | ③ | `report/llm_log/README.md` + `template.md` | 大模型协作记录的规矩：什么时候记、怎么记 |
 | ④ | `report/llm_log/2026-09-04-project-kickoff.md` | 看一条真实记录长什么样 |
-| ⑤ | `docs/resources.md` | 学习资源清单，下一步要用 |
+| ⑤ | `docs/resources.md` | 学习资源清单，后续学习要用 |
 
 > ⚠️ 注意：src/、sim/、build/ 等目录现在大部分是**空壳占位**（只有说明 README），这是正常的——下周开工后往里填代码。
-
----
-
-## 第五步：开始学习（本周任务）
-
-按 `docs/resources.md` 的 ⭐ 项开始，三人的共同任务：
-
-- [ ] **HDLBits**（https://hdlbits.01xz.net/）每天 5 题，开工前刷完 Verilog Language 部分——**这直接对应决赛现场上机考核，是硬任务**
-- [ ] 《手把手教你设计 CPU》（蜂鸟 E203）流水线相关章节
-- [ ] 浏览 PYNQ 官方文档（https://pynq.readthedocs.io/en/latest/），知道 Overlay 是什么
 
 ---
 
