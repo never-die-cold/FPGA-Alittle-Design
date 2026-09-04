@@ -4,6 +4,8 @@
 
 **一句话简介**：在 AMD PYNQ-Z2（Zynq-7020）上实现一颗**自研三级流水线 RISC-V 软核**，外挂 **HDMI 图像预处理硬件流水线**与**轻量 CNN 推理协处理器**，构成一套"摄像头进、检测结果出"的边缘智能视觉 SoC，并与 ARM 纯软件基线做全链路量化对比。
 
+> 👋 新队友请先阅读 [docs/onboarding.md](docs/onboarding.md)（Git / Markdown / Agent 上手指南）
+
 ---
 
 ## 目录
