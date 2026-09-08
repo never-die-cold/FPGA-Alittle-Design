@@ -117,9 +117,66 @@
 
 ---
 
+## 9. 模块一学习路线资料清单（配合 src/riscv/plan.md）
+
+> 按 plan.md 的阶段与三条支路组织：阶段 0 公共基础（全员）→ 支路一逻辑开发（阶段 1→2）→ 支路二调试验证（阶段 1→3）→ 支路三文档答辩（理论线）。与上文第 3/4/7 节有重叠的只列入口，不再重复。
+
+### 9.1 阶段 0 公共基础：HDLBits + COAD 第 4 章 + RV32I 编码
+
+| 资料 | 链接 | 备注 |
+|:---|:---|:---|
+| HDLBits 官网（全部题集） | https://hdlbits.01xz.net/ | ⭐ 阶段 0 主刷题平台 |
+| HDLBits：Verilog Language 题集 | https://hdlbits.01xz.net/wiki/Verilog_Language | ⭐ 语法全部，每天 5 题 |
+| HDLBits：Circuits → Sequential Logic 题集 | https://hdlbits.01xz.net/wiki/Sequential_Logic | ⭐ 锁存器/触发器/计数器/移位寄存器/FSM，上机考核对应 |
+| 《计算机组成与设计：RISC-V 版》（Patterson & Hennessy）第 4 章 The Processor | 图书馆/电商购买；配套资源 https://www.elsevier.com/books/computer-organization-and-design-risc-v-edition/patterson/978-0-12-820331-6 | ⭐ 阶段 0 只看 4.1–4.5（单周期数据通路）；4.6–4.9 留到支路一阶段 2 |
+| RISC-V 官方指令集手册（Unprivileged ISA） | 总入口 https://riscv.org/technical/specifications/；PDF 下载 https://github.com/riscv/riscv-isa-manual/releases | ⭐ 第 2 章 RV32I 是编码唯一权威来源 |
+| RISC-V 指令编码速查卡（Reference Card） | https://github.com/jameslzhu/riscv-card | 🔧 阶段 0 自测（汇编↔机器码）随身查 |
+| 中文辅助：B 站搜 "RV32I 指令编码" / "单周期 CPU 数据通路" | B 站 | 📖 手算编码卡壳时的中文讲解 |
+
+**阶段 0 自测验收**（对应 plan.md）：HDLBits 能独立写状态机；能徒手画单周期 RV32I 数据通路并标控制信号；给定汇编指令能手算机器码、给定机器码能反汇编。
+
+### 9.2 支路一：逻辑开发主线（阶段 1→2，对应 Part A/B）
+
+| 资料 | 链接 | 备注 |
+|:---|:---|:---|
+| 《手把手教你设计 CPU——RISC-V 处理器篇》前 3 章 | https://github.com/riscv-mcu/e203_hbirdv1 | ⭐ 阶段 1 中文实践对照，随书源码 |
+| PicoRV32 源码速读 | https://github.com/YosysHQ/picorv32 | 🔧 阶段 1 极简核对照，可读性最高 |
+| riscv-gnu-toolchain 安装与使用 | https://github.com/riscv-collab/riscv-gnu-toolchain | ⭐ 阶段 1 工具链闭环（编译→反汇编→转 hex） |
+| （练手）8 位迷你核：Nandland 教程 | https://nandland.com/ | 📖 阶段 1 可选练手，一天跑通加法/跳转 |
+| COAD 第 4 章 4.6–4.9：流水线、冒险、旁路与停顿 | 同 9.1 COAD 条目 | ⭐ 阶段 2 理论核心 |
+| 《计算机体系结构基础》（胡伟武）流水线章节 | https://foxsen.github.io/archbase/ | ⭐ 阶段 2 中文理论互证 |
+| 蜂鸟 E203 流水线/转发章节精读 | 同上 E203 仓库 | ⭐ 阶段 2 工程实现参考（long-pipe 结构、旁路路径） |
+| Vivado 逻辑仿真用户指南 UG900（XSim 波形操作） | https://docs.amd.com/r/en-US/ug900-vivado-logic-simulation | 🔧 阶段 2 波形阅读、气泡计数 |
+
+### 9.3 支路二：调试验证线（阶段 1→3，对应 Part C 主测）
+
+| 资料 | 链接 | 备注 |
+|:---|:---|:---|
+| riscv-gnu-toolchain（链接脚本实操） | GNU ld 官方手册 https://sourceware.org/binutils/docs/ld/ | 🔧 阶段 1 补 linker script；中文搜 "链接脚本 教程" |
+| riscv-arch-test 一致性测试 | https://github.com/riscv-non-isa/riscv-arch-test | ⭐ 阶段 3：README 讲清编译与 signature 比对机制 |
+| Dhrystone 原始实现 | https://github.com/Keith-S-Thompson/dhrystone | 🔧 阶段 3 benchmark 思路来源（整型运算/循环/函数调用） |
+| CoreMark 基准 | https://github.com/eembc/coremark | 🔧 阶段 3 可选替代/对照 |
+| Embench 嵌入式基准套件 | https://github.com/embench/embench-iot | 🔧 阶段 3 更现代的整型基准参考 |
+| testbench 写法速查（ChipVerify） | https://www.chipverify.com/ | 🔧 阶段 1/3 自写 tb 规范 |
+| Vivado 综合/实现用户指南（读报告、WNS 分析） | UG901 https://docs.amd.com/r/en-US/ug901-vivado-synthesis；UG904 https://docs.amd.com/r/en-US/ug904-vivado-implementation | ⭐ 阶段 3 时序分析、定位最差路径 |
+| UltraFast 设计方法学 UG949（时序约束） | https://docs.amd.com/r/en-US/ug949-vivado-design-methodology | 🔧 阶段 3 约束与收敛方法论 |
+
+### 9.4 支路三：文档与答辩线（理论深挖 + 记录工具）
+
+| 资料 | 链接 | 备注 |
+|:---|:---|:---|
+| 阶段 0 三件套全通（HDLBits / COAD 4.1–4.5 / RV32I 编码） | 见 9.1 | ⭐ 答辩基础，任何模块都能讲清 |
+| 《计算机体系结构基础》（胡伟武）全书 | https://foxsen.github.io/archbase/ | ⭐ CPI 推导、冒险分类的理论依据 |
+| COAD 第 1 章（性能公式与 CPI） | 同 9.1 COAD 条目 | ⭐ "CPI 降低 ≥25%"指标的推导来源 |
+| Wavedrom（波形/时序图绘制） | https://wavedrom.com/ | 🔧 设计报告画流水线时序图必备 |
+| 蜂鸟 E203 书全本（讲清我们与 E203 的差异） | 同上 E203 仓库 | 📖 答辩"为什么不直接例化现成核"的论据 |
+| 协作记录模板与流程 | 本仓库 `report/llm_log/` | ⭐ 每个设计决策点按模板留痕，标 `#skill候选` |
+
+---
+
 ## 使用建议
 
-1. **开工前**：⭐ 标记的全部过一遍（约 1 周），重点是 PYNQ 文档、蜂鸟 E203 配套书、HDLBits 前 50 题
-2. **开发中**：🔧 标记的放在浏览器书签栏随用随查
+1. **开工前（阶段 0）**：按第 9.1 节清单过一遍（约 1 周），HDLBits 刷完 Verilog Language + Sequential Logic，COAD 4.1–4.5 读完，RV32I 编码能互译
+2. **开工后**：按自己支路走第 9.2 / 9.3 / 9.4 节清单；🔧 标记的放在浏览器书签栏随用随查
 3. **写报告时**：UG949 + 《计算机组成与设计》是理论依据来源；所有实测数据引用原始日志
 4. **每条踩坑**如果通过上述某个资料解决，记进 `report/llm_log/` 的经验沉淀节，注明出处
