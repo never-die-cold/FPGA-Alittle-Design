@@ -180,3 +180,52 @@
 2. **开工后**：按自己支路走第 9.2 / 9.3 / 9.4 节清单；🔧 标记的放在浏览器书签栏随用随查
 3. **写报告时**：UG949 + 《计算机组成与设计》是理论依据来源；所有实测数据引用原始日志
 4. **每条踩坑**如果通过上述某个资料解决，记进 `report/llm_log/` 的经验沉淀节，注明出处
+
+---
+
+## 10. 前置验证开发板：野火 ZYNQ7010/7020（PYNQ-Z2 到货前的替身）
+
+> 背景：2026-09 购置的 PYNQ-Z2 尚未到货，借到野火 ZYNQ7010/7020（XC7Z020）开发板做前置验证。决策全过程见 `report/llm_log/2026-09-08-wildfire-board-interim.md`。
+> **核心结论：模块一可 100% 在野火板上完成（含上板验收）；模块二需做视频接口抽象层；模块三不受影响；PS 侧 PYNQ 上位机暂不可复刻，用 Vitis 裸机串口菜单过渡。最终指标必须在 PYNQ-Z2 上复测。**
+
+### 10.1 两板差异速查
+
+| 项目 | PYNQ-Z2（比赛目标板） | 野火 ZYNQ7010/7020（前置验证板） |
+|:---|:---|:---|
+| 主芯片 | XC7Z020-1CLG400C（-1 速度等级） | XC7Z020（速度等级以芯片丝印为准，需确认） |
+| PL 资源 | 13,300 slices / 630KB BRAM / 220 DSP | ✅ 完全一致（同芯片） |
+| DDR3 | 512MB，16 位 @1050Mbps | 2 片（容量以实物/资料为准，通常更大） |
+| 视频接口 | HDMI 输入 + HDMI 输出 | LCD RGB888 FPC 座（未见 HDMI 口，以实物/原理图为准） |
+| 以太网 | 1 路千兆 | 2 路 RJ45 |
+| 工业接口 | 无 | RS232（DB9）、RS485 端子、RTC |
+| 人机交互 | 4 LED / 4 按键 / 2 开关 / 2 RGB LED | 数码管、更多按键、LED |
+| 扩展 | Arduino / 树莓派 / 2× Pmod | PL 端 2.54mm 排针 |
+| 调试下载 | 单根 Micro-USB 搞定 JTAG+UART | 排针式 JTAG，需自备 Xilinx 兼容下载器 |
+| 软件生态 | PYNQ v3.x 官方镜像（Jupyter） | 裸机 Vitis / PetaLinux / 野火 BSP，无现成 PYNQ 镜像 |
+
+### 10.2 分模块适用性（对应 README 三大核心模块）
+
+| 模块 | 野火板适用性 | 说明 |
+|:---|:---|:---|
+| 模块一：自研 RISC-V 核 | ✅ 完全适用 | SoC 外壳为纯 PL（BRAM 预载 hex + LED/UART），不碰 PS/DDR/HDMI/PYNQ；板子仅用于 JTAG 下载与上板验收（plan.md Part A）。仿真与 CPI 数据与板型无关；Fmax 报告同器件直接可比 |
+| 模块二：HDMI 预处理流水线 | 🟡 需接口抽象层 | 行缓存/滤波/缩放/AXI-Stream 核心 RTL 零改动迁移；把"视频源/显示输出"做成可替换接口层，野火板上用 LCD 屏或内部 Test Pattern 验证，PYNQ-Z2 到手后换接 HDMI |
+| 模块三：CNN 协处理器 | ✅ 完全适用 | 纯 PL（INT8 MAC 阵列 + 自定义指令 + AXI DMA），PS 仅跑 RISC-V 裸机调度 |
+| PS 侧 PYNQ 上位机 | ❌ 暂不可复刻 | 过渡期：Vitis 裸机串口菜单读写 AXI-Lite 寄存器；黄金参考比对放 PC 离线做；`sw/pynq_host/` 框架照 PYNQ 文档先写，真板到了联调 |
+
+### 10.3 上野火板前的准备清单
+
+- [ ] **Xilinx 兼容 JTAG 下载器**（卡脖子项，排针式接口）
+- [ ] 野火资料包：底板原理图 + 引脚定义（写 XDC 用，模块一顶层仅 clk/LED/UART 少量引脚）
+- [ ] 确认芯片速度等级丝印（-1/-2），Fmax 数据注明"器件+速度等级+测试板卡"
+- [ ] 若走 LCD 验证路线：野火 RGB LCD 屏（或先用内部 Test Pattern 发生器）
+- [ ] 核对 prep_checklist：PYNQ-Z2 最迟 10 月中旬到手（M3 全链路上板需要）
+
+### 10.4 参考链接
+
+| 资料 | 链接 | 备注 |
+|:---|:---|:---|
+| PYNQ-Z2 官方规格（AMD 大学计划） | https://www.amd.com/zh-tw/corporate/university-program/aup-boards/pynq-z2.html | ⭐ 目标板权威规格（-1 速度等级、512MB DDR3） |
+| PYNQ 官方文档 | https://pynq.readthedocs.io/en/latest/ | ⭐ pynq_host 开发与（可选）board-agnostic 镜像移植 |
+| 野火资料中心 | https://doc.embedfire.com/ | ⭐ 底板原理图、XDC/引脚定义、Linux BSP 教程入口 |
+| 野火官网产品页 | https://www.embedfire.com/ | ZYNQ7010/7020 开发板资料下载 |
+| Vivado 综合/实现用户指南 | 见 9.3 节 UG901/UG904 | Fmax/WNS 报告阅读（两板通用） |
