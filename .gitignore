@@ -1,0 +1,27 @@
+# --- Vivado / XSim 生成物 ---
+.Xil/
+xsim.dir/
+*.jou
+*.log
+!report/**/*.log
+*.wdb
+*.wcfg
+*.vcd
+*.pb
+*.str
+*.dcp
+*.bit
+webtalk*
+
+# 注意：*.hex / *.coe（BRAM 预载、测试向量）需要入库，不要忽略
+
+# --- Python ---
+__pycache__/
+*.pyc
+.venv/
+
+# --- 编辑器 / 系统 ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
