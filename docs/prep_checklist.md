@@ -14,9 +14,9 @@
 - [ ] **PYNQ 镜像烧录验证**（负责人：___）
   - 下载 PYNQ-Z2 v3.x 镜像烧 SD 卡
   - 通过标准：板子联网、Jupyter 可打开、base overlay 可加载、能点亮板载 LED
-- [ ] **RISC-V 工具链可用**（负责人：___）
-  - 安装 riscv-gnu-toolchain（RV32IM 配置）
-  - 通过标准：能编译出 helloworld 的 elf 文件
+- [x] **RISC-V 工具链可用**（负责人：never-die-cold）
+  - MSYS2 ucrt64 版 `riscv32-unknown-elf`（RV32IM，全队统一；安装与构建步骤见 [sw/riscv_fw/README.md](../sw/riscv_fw/README.md)）
+  - 通过标准：能编译出 helloworld 的 elf 文件 ✅ 2026-09-11 跑通 elf/反汇编/hex（GCC 14.2.0，记录见 `report/llm_log/2026-09-11-riscv-toolchain.md`）
 
 ## 🟡 建议完成（省后面时间）
 
