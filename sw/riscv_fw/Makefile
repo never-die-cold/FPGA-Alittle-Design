@@ -17,6 +17,8 @@ TARGET    := hello
 SRCS      := start.S main.c
 V0_TARGET := hello_v0
 V0_SRCS   := start.S main_v0.c
+TS_TARGET := hello_test
+TS_SRCS   := start.S test_rv32i.S
 
 ifeq ($(OS),Windows_NT)
 RM := del /q
@@ -25,13 +27,16 @@ RM := rm -f
 endif
 
 .PHONY: all clean
-all: $(TARGET).hex $(TARGET).dis $(V0_TARGET).hex $(V0_TARGET).dis
+all: $(TARGET).hex $(TARGET).dis $(V0_TARGET).hex $(V0_TARGET).dis $(TS_TARGET).hex $(TS_TARGET).dis
 
 $(TARGET).elf: $(SRCS) link.ld
 	$(CC) $(ARCH_IM) $(COMMON) $(SRCS) -o $@
 
 $(V0_TARGET).elf: $(V0_SRCS) link.ld
 	$(CC) $(ARCH_I) $(COMMON) $(V0_SRCS) -o $@
+
+$(TS_TARGET).elf: $(TS_SRCS) link.ld
+	$(CC) $(ARCH_I) $(COMMON) $(TS_SRCS) -o $@
 
 %.bin: %.elf
 	$(OBJCOPY) -O binary $< $@
@@ -43,4 +48,4 @@ $(V0_TARGET).elf: $(V0_SRCS) link.ld
 	$(OBJDUMP) -d $< > $@
 
 clean:
-	-$(RM) $(TARGET).elf $(TARGET).bin $(TARGET).hex $(TARGET).dis $(V0_TARGET).elf $(V0_TARGET).bin $(V0_TARGET).hex $(V0_TARGET).dis
+	-$(RM) $(TARGET).elf $(TARGET).bin $(TARGET).hex $(TARGET).dis $(V0_TARGET).elf $(V0_TARGET).bin $(V0_TARGET).hex $(V0_TARGET).dis $(TS_TARGET).elf $(TS_TARGET).bin $(TS_TARGET).hex $(TS_TARGET).dis
