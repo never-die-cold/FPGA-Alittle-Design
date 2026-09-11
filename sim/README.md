@@ -10,8 +10,11 @@ sim/
 ├── coprocessor/     # 协处理器 testbench
 ├── vision/          # 预处理流水线 testbench（含测试图样生成）
 ├── soc/             # SoC 级联调仿真
-└── scripts/         # xsim 批处理脚本（可复跑）
+├── scripts/         # xsim 批处理脚本（可复跑）
+└── tools/           # 辅助工具（RV32I 编解码自测等）
 ```
+
+辅助工具用法：`python sim/tools/verify_rv32i.py`（阶段 0 指令编码自测：22 组汇编→机器码 + 10 组反汇编双向校验，输出 `ALL OK` 即通过）
 
 ## 约定
 
