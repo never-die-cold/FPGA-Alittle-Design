@@ -91,16 +91,20 @@
 | `pc` | out | 32 | 当前 PC（接指令存储器地址） |
 | `pc_plus4` | out | 32 | PC+4（顺序取指 / `jal` 写回） |
 
-### 5.2 `if_stage.v`（指令流水寄存器）
+### 5.2 `if_stage.v`（IF 级流水寄存器）
 
 | 端口 | 方向 | 位宽 | 说明 |
 |:---|:---:|:---:|:---|
-| `clk` / `rst_n` | in | 1 | |
-| `imem_rdata` | in | 32 | 指令存储器同步读回数据 |
-| `flush` | in | 1 | 作废：本拍锁存 NOP（`0x00000013`） |
+| `clk` / `rst_n` | in | 1 | 复位后首拍内部注入气泡，保证首条指令只执行一次 |
+| `pc` | in | 32 | 当前取指 PC（锁存为 `pc_id`） |
+| `imem_rdata` | in | 32 | 指令存储器同步读回数据（BRAM 输出寄存器即本级的指令源） |
+| `flush` | in | 1 | 分支/跳转已生效：**下一拍**注入 NOP（`0x00000013`） |
 | `stall` | in | 1 | 保持当前指令（M 阶段多拍用，v0 恒 0） |
-| `instr` | out | 32 | 当前执行指令 |
-| `instr_valid` | out | 1 | 有效指示（作废拍为 0，供调试/统计） |
+| `instr` | out | 32 | 当前执行指令（flush 注入拍为 NOP） |
+| `instr_valid` | out | 1 | 有效指示（注入拍为 0，供调试/统计） |
+| `pc_id` | out | 32 | 当前指令的 PC，供分支目标求值与 `jal/jalr` 写回 PC+4 |
+
+> 实现要点：BRAM 输出寄存器与 `if_stage` 之间**不再加第二级寄存器**（否则变三级流水）；`flush_q` 在分支裁决后的拍住 NOP，形成 1 拍气泡。
 
 ### 5.3 `decode.v`
 
@@ -262,7 +266,8 @@ flowchart LR
 |:---|:---|
 | 指令 hex 格式 | `sw/riscv_fw/bin2hex.py` 输出：每行 8 位十六进制、32 位小端字、行号 = 地址/4 |
 | 入口 | 复位后 PC = `0x8000_0000`；`start.S` 设 `sp`、清 `.bss`、`call main` |
-| 冒烟判据 | `main` 返回 0 且写 `tohost(0x8000_3FF0) = 142879 (0x22E1F)`（见 `sw/riscv_fw/main.c`） |
+| 冒烟判据 | v0 核（RV32I）：`hello_v0` → `tohost = 13`、`tohost_exit = 0`（见 `sw/riscv_fw/main_v0.c`）；M 补齐后启用 RV32IM 程序：`tohost = 142879`、`tohost_exit = 0` |
+| 结果与退出码 | `main` 写结果到 `tohost(0x8000_3FF0)`；`start.S` 写退出码到 `tohost_exit(0x8000_3FF4)`，二者分离 |
 | 停机 | 固件最后死循环自旋；tb 跑固定拍数后检查（非 halt 信号） |
 | 工具链 | MSYS2 ucrt64 `riscv32-unknown-elf`（RV32IM，见 `sw/riscv_fw/README.md`） |
 
@@ -277,17 +282,18 @@ flowchart LR
 
 ## 10. 待办清单（Part A 开工即用）
 
-- [ ] `pc.v` / `if_stage.v`（9/21）
-- [ ] `regfile.v` / `decode.v`（9/21–9/22）
-- [ ] `alu.v` + RV32I 算术逻辑类（9/22）
-- [ ] 访存 / 分支 / 跳转 + `core_top` 连通（9/23）
-- [ ] 冒烟 tb 逐指令补齐（9/24；骨架已就位 `sim/riscv/tb_core_smoke.v`）
-- [ ] 最小 SoC 外壳 + 上板（9/26，视 PYNQ-Z2 到货情况回补）
-- [ ] M 扩展 `muldiv.v` 收尾（9/27）
-- [ ] 基线 CPI / Fmax 记录 `report/`（9/27）
+- [x] `pc.v` / `if_stage.v`（2026-09-11 提前完成）
+- [x] `regfile.v` / `decode.v`（2026-09-11）
+- [x] `alu.v` + RV32I 算术逻辑类（2026-09-11）
+- [x] 访存 / 分支 / 跳转 + `core_top` 连通（2026-09-11，`hello_v0` 冒烟 PASS）
+- [ ] 冒烟 tb 逐指令补齐（当前为程序级冒烟；逐指令用例待补）
+- [ ] 最小 SoC 外壳 + 上板（待 PYNQ-Z2 到货，issue #1）
+- [ ] M 扩展 `muldiv.v` 收尾（启用 `hello.hex` RV32IM 冒烟）
+- [ ] 基线 CPI / Fmax 记录 `report/`
 
 ## 11. 变更记录
 
 | 日期 | 变更 | 关联 |
 |:---|:---|:---|
-| 2026-09-11 | 首版冻结（4 项决策、接口表、真值表） | commit + `report/llm_log/2026-09-11-riscv-v0-design.md` |
+| 2026-09-11 | 首版冻结（4 项决策、接口表、真值表） | `report/llm_log/2026-09-11-riscv-v0-design.md` |
+| 2026-09-11 | RTL 落地：补 `if_stage` 的 `pc`/`pc_id` 端口与 flush 语义说明；冒烟判据改为 `hello_v0`（RV32I）+ `tohost_exit` 双字观测 | commits `80c47f7`…`81569ae`、`report/llm_log/2026-09-11-riscv-v0-rtl.md` |
