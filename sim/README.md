@@ -21,9 +21,12 @@ sim/
 - **过渡期**（Vivado 未安装，issue #2）：统一用 **Icarus Verilog 13.0**（MSYS2 ucrt64 包 `mingw-w64-ucrt-x86_64-iverilog`）跑 RTL 仿真
 - **Vivado 到货后**：XSim 跑同一套 tb 复核，两工具结论须一致
 - 用法（MSYS2 UCRT64 shell 中）：
-  - 核冒烟一键：`bash sim/scripts/run_iverilog.sh`（编译 `src/riscv/*.v` + `sim/riscv/tb_core_smoke.v`，产物在 `sim/build/`）
-  - `tb_core_smoke.v` 自动 `$readmemh` `sw/riscv_fw/hello.hex`，检查 `tohost==142879`
-- tb 接口以 [`src/riscv/design_v0.md`](../src/riscv/design_v0.md) 为唯一权威；RTL 未写全时 tb 不可编译（预期）
+  - 一键跑全部 tb：`bash sim/scripts/run_iverilog.sh`（编译 `src/riscv/*.v` + `sim/riscv/tb_core_*.v`，产物在 `sim/build/`）
+  - `tb_core_smoke.v`：加载 `sw/riscv_fw/hello_v0.hex`，检查 `tohost==13 && tohost_exit==0`（程序级冒烟）
+  - `tb_core_test.v`：加载 `sw/riscv_fw/hello_test.hex`，检查 `tohost_exit==0`（RV32I 逐指令自检 38 用例；失败值为用例编号）
+- tb 接口以 [`src/riscv/design_v0.md`](../src/riscv/design_v0.md) 为唯一权威
+
+> 当前状态：v0 核（RV32I）两个 tb 均 PASS（2026-09-11），见 `report/llm_log/2026-09-11-riscv-v0-rtl.md` 与逐指令 tb 记录
 
 ## 约定
 
@@ -31,4 +34,4 @@ sim/
 - 关键波形截图归档到 `report/`，供设计报告引用
 - 黄金参考数据放 `data/`，仿真比对脚本引用相对路径
 
-> 状态：🚧 待开发
+> 状态：🚧 进行中（v0 核 RV32I 已过冒烟与逐指令自检）

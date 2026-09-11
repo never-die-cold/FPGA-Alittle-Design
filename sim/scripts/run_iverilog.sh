@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# iverilog 一键仿真（核冒烟）：编译 sim/riscv/tb_core_smoke.v + src/riscv/*.v 并运行
+# iverilog 一键仿真：编译 sim/riscv/ 的 testbench + src/riscv/*.v 并逐个运行
 # 前置：PATH 中含 MSYS2 ucrt64 的 iverilog / vvp（13.0+）
 set -u
 
@@ -22,7 +22,10 @@ if [ ${#RTL_FILES[@]} -eq 0 ]; then
 fi
 
 mkdir -p build
-iverilog -g2012 -Wall -o build/tb_core_smoke.vvp \
-    riscv/tb_core_smoke.v "${RTL_FILES[@]}" || exit 1
-
-vvp build/tb_core_smoke.vvp
+for tb in riscv/tb_core_smoke.v riscv/tb_core_test.v; do
+    [ -f "$tb" ] || continue
+    name=$(basename "$tb" .v)
+    echo "== $name =="
+    iverilog -g2012 -Wall -o "build/$name.vvp" "$tb" "${RTL_FILES[@]}" || exit 1
+    vvp "build/$name.vvp" || exit 1
+done
