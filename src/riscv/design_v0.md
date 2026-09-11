@@ -286,7 +286,7 @@ flowchart LR
 - [x] `regfile.v` / `decode.v`（2026-09-11）
 - [x] `alu.v` + RV32I 算术逻辑类（2026-09-11）
 - [x] 访存 / 分支 / 跳转 + `core_top` 连通（2026-09-11，`hello_v0` 冒烟 PASS）
-- [ ] 冒烟 tb 逐指令补齐（当前为程序级冒烟；逐指令用例待补）
+- [x] 冒烟 tb 逐指令补齐（2026-09-11，`hello_test` 38 用例全过）
 - [ ] 最小 SoC 外壳 + 上板（待 PYNQ-Z2 到货，issue #1）
 - [ ] M 扩展 `muldiv.v` 收尾（启用 `hello.hex` RV32IM 冒烟）
 - [ ] 基线 CPI / Fmax 记录 `report/`
@@ -297,3 +297,4 @@ flowchart LR
 |:---|:---|:---|
 | 2026-09-11 | 首版冻结（4 项决策、接口表、真值表） | `report/llm_log/2026-09-11-riscv-v0-design.md` |
 | 2026-09-11 | RTL 落地：补 `if_stage` 的 `pc`/`pc_id` 端口与 flush 语义说明；冒烟判据改为 `hello_v0`（RV32I）+ `tohost_exit` 双字观测 | commits `80c47f7`…`81569ae`、`report/llm_log/2026-09-11-riscv-v0-rtl.md` |
+| 2026-09-11 | 逐指令自检 `hello_test`（38 用例）与 `tb_core_test` 全过；记录 lb 用例小端纠错 | commits `87d3f4f`、`58ed400`、`report/llm_log/2026-09-11-riscv-instruction-tests.md` |
