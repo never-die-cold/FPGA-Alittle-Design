@@ -43,19 +43,26 @@ mingw-w64-ucrt-x86_64-riscv32-unknown-elf-newlib 4.5.0.20241231-1
 ## 构建
 
 ```powershell
-mingw32-make          # 产出 hello.elf / hello.dis / hello.bin / hello.hex
+mingw32-make          # 产出 hello.*（RV32IM）与 hello_v0.*（RV32I 子集）
 mingw32-make clean
 ```
 
-编译参数固定在 `Makefile`：`-march=rv32im -mabi=ilp32 -mcmodel=medany -mno-relax -O2`，
-链接使用 `-nostdlib -nostartfiles -T link.ld`。
+编译参数固定在 `Makefile`：`-mcmodel=medany -mno-relax -O2`，
+链接使用 `-nostdlib -nostartfiles -T link.ld`；`hello` 用 `-march=rv32im`，`hello_v0` 用 `-march=rv32i`。
 
 | 产物 | 入库 | 说明 |
 |:---|:---:|:---|
-| `hello.elf` | 否 | 完整链接结果（ELF32 / RISC-V） |
-| `hello.bin` | 否 | 裸二进制 |
-| `hello.dis` | 是 | objdump 反汇编，测试证据 |
-| `hello.hex` | 是 | `$readmemh` 32 位小端字，指令 BRAM 预载用 |
+| `hello.elf` / `hello_v0.elf` | 否 | 完整链接结果（ELF32 / RISC-V） |
+| `hello.bin` / `hello_v0.bin` | 否 | 裸二进制 |
+| `hello.dis` / `hello_v0.dis` | 是 | objdump 反汇编，测试证据 |
+| `hello.hex` / `hello_v0.hex` | 是 | `$readmemh` 32 位小端字，指令 BRAM 预载用 |
+
+## 冒烟程序与预期
+
+| 程序 | 指令集 | 预期执行结果 | 用途 |
+|:---|:---|:---|:---|
+| `main_v0.c` → `hello_v0.hex` | RV32I | `tohost = 13`（`0xD`），`main` 返回 0 | **v0 核当前冒烟**（`sim/riscv/tb_core_smoke.v`） |
+| `main.c` → `hello.hex` | RV32IM | `tohost = 142879`（`0x22E1F`），`main` 返回 0 | Part A 收尾补 M 后上核 |
 
 ## 冒烟验收（2026-09-11 已通过）
 
