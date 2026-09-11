@@ -146,6 +146,7 @@ edgesight/
 ├── board/               # 上板工程、运行脚本、实测输出
 ├── data/                # 测试数据与参考结果
 ├── docs/                # 文档（onboarding / prep_checklist / resources 等）
+├── metrics/             # 指标汇总表与原始证据（M3 起填充）
 ├── skill/               # 技能包（见下文）
 └── report/              # 设计报告 + 大模型协作记录（llm_log/）
 ```
@@ -163,11 +164,12 @@ edgesight/
 | `sw/riscv_fw/` | `fpga/src/`（软核固件） | RISC-V 裸机程序 |
 | `sw/pynq_host/` | `host/app/` | 上位机应用与通信层 |
 | `data/` | `metrics/logs/`、`metrics/scripts/`（部分） | 测试数据与参考结果 |
+| `metrics/` | `metrics/` | 指标汇总表与原始证据（指南同名目录） |
 | `report/` | `report/`、`metrics/evidence/` | 设计报告、协作记录、波形证据 |
 | `docs/` | `docs/` | 架构、接口与硬件说明 |
 | `skill/` | `skill/` | 可复用 Skill 与工作流 |
 
-> 待 M3 采集指标时按指南新建 `metrics/`（`metrics.csv` + `logs/` + `scripts/` + `evidence/`）。
+> `metrics/` 骨架已按指南建立（`metrics.csv` 表头 + `logs/` + `scripts/` + `evidence/`），M3 实测时填充数值与证据。
 
 ---
 
