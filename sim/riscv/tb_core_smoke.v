@@ -8,8 +8,10 @@ module tb_core_smoke;
     localparam integer CLK_PERIOD   = 10;                    // 100 MHz
     localparam integer RESET_CYCLES = 8;
     localparam integer RUN_CYCLES   = 4000;
-    localparam [31:0]  TOHOST_ADDR   = 32'h8000_3FF0;
-    localparam [31:0]  TOHOST_EXPECT = 32'd142879;           // 见 sw/riscv_fw/main.c
+    localparam [31:0]  TOHOST_ADDR   = 32'h8000_3FF0;        // main 写入的结果值
+    localparam [31:0]  TOHOST_EXPECT = 32'd13;               // 见 sw/riscv_fw/main_v0.c（RV32I 冒烟）
+    localparam [31:0]  TOEXIT_ADDR   = 32'h8000_3FF4;        // start.S 写入的退出码
+    localparam [31:0]  TOEXIT_EXPECT = 32'd0;
 
     reg clk = 0;
     reg rst_n = 0;
@@ -26,13 +28,14 @@ module tb_core_smoke;
 
     // ---- 指令存储器模型：4096×32，同步读（本拍地址，下一拍数据）----
     reg [31:0] imem [0:4095];
+    initial imem_rdata = 32'h0000_0013;                      // 上电默认 NOP
     always @(posedge clk)
         imem_rdata <= imem[imem_addr[13:2]];
 
     initial begin
         for (i = 0; i < 4096; i = i + 1)
             imem[i] = 32'h00000013;                          // 默认 NOP
-        $readmemh("../sw/riscv_fw/hello.hex", imem);
+        $readmemh("../sw/riscv_fw/hello_v0.hex", imem);
     end
 
     // ---- 数据存储器模型：4096×32，异步读 + 4 位字节使能写 ----
@@ -75,11 +78,14 @@ module tb_core_smoke;
 
         repeat (RUN_CYCLES) @(posedge clk);
 
-        if (dmem[TOHOST_ADDR[13:2]] === TOHOST_EXPECT) begin
-            $display("PASS: tohost = %0d (0x%08x)", dmem[TOHOST_ADDR[13:2]], dmem[TOHOST_ADDR[13:2]]);
+        if (dmem[TOHOST_ADDR[13:2]] === TOHOST_EXPECT &&
+            dmem[TOEXIT_ADDR[13:2]] === TOEXIT_EXPECT) begin
+            $display("PASS: tohost = %0d (0x%08x), tohost_exit = %0d",
+                     dmem[TOHOST_ADDR[13:2]], dmem[TOHOST_ADDR[13:2]], dmem[TOEXIT_ADDR[13:2]]);
         end else begin
-            $display("FAIL: tohost = %0d (0x%08x), expect %0d (0x%08x)",
-                     dmem[TOHOST_ADDR[13:2]], dmem[TOHOST_ADDR[13:2]], TOHOST_EXPECT, TOHOST_EXPECT);
+            $display("FAIL: tohost = %0d (0x%08x) expect %0d; tohost_exit = %0d expect %0d",
+                     dmem[TOHOST_ADDR[13:2]], dmem[TOHOST_ADDR[13:2]], TOHOST_EXPECT,
+                     dmem[TOEXIT_ADDR[13:2]], TOEXIT_EXPECT);
             $display("      last imem_addr = 0x%08x", imem_addr);
             $fatal(1);
         end
