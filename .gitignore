@@ -20,6 +20,9 @@ sw/riscv_fw/*.elf
 sw/riscv_fw/*.bin
 sw/riscv_fw/*.o
 
+# --- iverilog 仿真产物 ---
+sim/build/
+
 # --- Python ---
 __pycache__/
 *.pyc
