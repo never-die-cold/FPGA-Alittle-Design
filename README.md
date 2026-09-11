@@ -126,26 +126,48 @@ flowchart LR
 
 ## 仓库目录结构
 
-> 按赛事要求：目录与文件名纯英文，中文只出现在正文。
+> 按赛事要求：目录与文件名纯英文（小写字母、数字、下划线或连字符），中文只出现在正文；根目录只保留 `README.md` 与 `LICENSE`，其余文件入目录。
 
 ```
 edgesight/
 ├── README.md            # 本文件
+├── LICENSE              # MIT 协议
+├── .github/             # Issue 模板与仓库配置
 ├── src/
 │   ├── riscv/           # RISC-V 核 RTL（三级流水 + 转发 + 分支预测）
 │   ├── coprocessor/     # CNN 协处理器 RTL
 │   ├── vision/          # HDMI 预处理流水线 RTL
 │   └── soc/             # 顶层集成、总线互连
-├── sim/                 # 各模块仿真脚本、testbench、波形
+├── sim/                 # testbench、仿真脚本（tools/ 含 RV32I 编解码自测）
 ├── sw/
 │   ├── riscv_fw/        # RISC-V 裸机程序（调度 + 推理驱动）
 │   └── pynq_host/       # Jupyter 上位机：配置、采集、比对
 ├── build/               # Vivado 可复现构建 tcl + 综合/实现报告
 ├── board/               # 上板工程、运行脚本、实测输出
 ├── data/                # 测试数据与参考结果
+├── docs/                # 文档（onboarding / prep_checklist / resources 等）
 ├── skill/               # 技能包（见下文）
-└── report/              # 设计报告 + 大模型协作记录
+└── report/              # 设计报告 + 大模型协作记录（llm_log/）
 ```
+
+### 与赛题指南推荐目录的对照
+
+> 赛题指南 3.2.5.5 为**推荐结构、非强制**；采用其他组织方式的队伍须在 README 中给出目录对照说明，下表即该说明。
+
+| 本仓库 | 赛题指南推荐 | 说明 |
+|:---|:---|:---|
+| `src/` | `fpga/src/` | RTL / 设计源码 |
+| `sim/` | `fpga/`（工程包验证部分） | testbench 与仿真脚本 |
+| `build/` | `fpga/build/` | 构建脚本与产出（`.bit` / `.xsa` 后续归档） |
+| `board/` | `fpga/build/`、`docs/hardware_setup.md` | 上板工程与本板配置说明 |
+| `sw/riscv_fw/` | `fpga/src/`（软核固件） | RISC-V 裸机程序 |
+| `sw/pynq_host/` | `host/app/` | 上位机应用与通信层 |
+| `data/` | `metrics/logs/`、`metrics/scripts/`（部分） | 测试数据与参考结果 |
+| `report/` | `report/`、`metrics/evidence/` | 设计报告、协作记录、波形证据 |
+| `docs/` | `docs/` | 架构、接口与硬件说明 |
+| `skill/` | `skill/` | 可复用 Skill 与工作流 |
+
+> 待 M3 采集指标时按指南新建 `metrics/`（`metrics.csv` + `logs/` + `scripts/` + `evidence/`）。
 
 ---
 
