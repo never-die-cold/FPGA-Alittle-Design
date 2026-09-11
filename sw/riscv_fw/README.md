@@ -61,8 +61,10 @@ mingw32-make clean
 
 | 程序 | 指令集 | 预期执行结果 | 用途 |
 |:---|:---|:---|:---|
-| `main_v0.c` → `hello_v0.hex` | RV32I | `tohost = 13`（`0xD`），`main` 返回 0 | **v0 核当前冒烟**（`sim/riscv/tb_core_smoke.v`） |
-| `main.c` → `hello.hex` | RV32IM | `tohost = 142879`（`0x22E1F`），`main` 返回 0 | Part A 收尾补 M 后上核 |
+| `main_v0.c` → `hello_v0.hex` | RV32I | `tohost = 13`（`0xD`），`tohost_exit = 0` | **v0 核当前冒烟**（`sim/riscv/tb_core_smoke.v`） |
+| `main.c` → `hello.hex` | RV32IM | `tohost = 142879`（`0x22E1F`），`tohost_exit = 0` | Part A 收尾补 M 后上核 |
+
+> 观测约定：`main` 写结果值到 `tohost`（`0x8000_3FF0`）；`start.S` 写退出码到 `tohost_exit`（`0x8000_3FF4`）——两者分离，退出码不会覆盖结果值。
 
 ## 冒烟验收（2026-09-11 已通过）
 
@@ -70,4 +72,5 @@ mingw32-make clean
 - `readelf -A`：`Tag_RISCV_arch: "rv32i2p1_m2p0_zmmul1p0"`（即 RV32IM）
 - 反汇编覆盖 I/M：`auipc/addi/lui/lw/sw/beq/bne/j/jalr/mul/divu/remu`
 - 与 `sim/tools/verify_rv32i.py` 独立编码器交叉核对 11 条指令机器码，ALL OK
-- 预期执行结果：`tohost`（`0x80003FF0`）写入 `142879`（`0x22E1F`），`main` 返回 0
+- 程序观测：`main` 写 `tohost = 142879` 等结果值，`start.S` 写 `tohost_exit = 0`（工具链阶段验证）
+- 2026-09-11 v0 核实测：`hello_v0` 在 `sim/riscv/tb_core_smoke.v` 上 PASS（`tohost=13, tohost_exit=0`）

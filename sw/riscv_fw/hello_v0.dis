@@ -18,7 +18,7 @@ Disassembly of section .text:
 80000028:	00000097          	auipc	ra,0x0
 8000002c:	018080e7          	jalr	24(ra) # 80000040 <main>
 80000030:	00004297          	auipc	t0,0x4
-80000034:	fc028293          	addi	t0,t0,-64 # 80003ff0 <tohost>
+80000034:	fc428293          	addi	t0,t0,-60 # 80003ff4 <tohost_exit>
 80000038:	00a2a023          	sw	a0,0(t0)
 8000003c:	0000006f          	j	8000003c <_start+0x3c>
 

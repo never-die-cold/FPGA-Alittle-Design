@@ -16,7 +16,7 @@ _start:
 2:
     call    main
 
-    la      t0, tohost
+    la      t0, tohost_exit
     sw      a0, 0(t0)
 3:
     j       3b
@@ -25,4 +25,7 @@ _start:
     .align  3
     .globl  tohost
 tohost:
+    .word   0
+    .globl  tohost_exit
+tohost_exit:
     .word   0
