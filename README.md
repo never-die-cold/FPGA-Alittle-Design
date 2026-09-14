@@ -255,7 +255,7 @@ edgesight/
 ## 开发环境与复现
 
 - 板卡：AMD PYNQ-Z2（XC7Z020）
-- 工具链：Vivado / Vitis 2025.2（免费 ML Standard；2026.1 BASIC 因年度续期 + 仿真受限仅备选，见 issue #2）、RISC-V GCC 工具链（MSYS2 ucrt64 `riscv32-unknown-elf`，RV32IM，见 [src/riscv_fw/README.md](src/riscv_fw/README.md)）、PYNQ v3.x 镜像
+- 工具链：Vivado / Vitis 2026.1（BASIC 免费档；XSim 限 50K 实例、仅 Windows，对本项目核级 tb 够用；2025.2 ML Standard 为回退备选，见 issue #2）、RISC-V GCC 工具链（MSYS2 ucrt64 `riscv32-unknown-elf`，RV32IM，见 [src/riscv_fw/README.md](src/riscv_fw/README.md)）、PYNQ v3.x 镜像
 - 复现步骤：见 `board/README.md`（从零烧录 SD 卡 → 构建 bitstream → 运行演示）
 
 ---

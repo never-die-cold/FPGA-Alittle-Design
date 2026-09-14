@@ -39,7 +39,7 @@
 ## build/ —— 构建产物（指南：可复现构建脚本 + 综合与实现报告）
 
 - 现状：`README.md` 占位。
-- 要做什么：Vivado 工程 tcl（可从零复现）、综合/实现报告（Fmax/WNS/资源）、`.bit/.xsa` 归档策略；issue #2（Vivado 2025.2）装好后第一件事就是把 v0 核的综合脚本与报告放进来，支撑 Part A 的 Fmax 基线数据。
+- 要做什么：Vivado 工程 tcl（可从零复现）、综合/实现报告（Fmax/WNS/资源）、`.bit/.xsa` 归档策略；issue #2（Vivado 2026.1）装好后第一件事就是把 v0 核的综合脚本与报告放进来，支撑 Part A 的 Fmax 基线数据。
 
 ## board/ —— 上板工程与实测输出（指南同名目录）
 
