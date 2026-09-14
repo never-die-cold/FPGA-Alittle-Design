@@ -133,6 +133,7 @@ flowchart LR
 ## 仓库目录结构
 
 > 按赛事要求：目录与文件名纯英文（小写字母、数字、下划线或连字符），中文只出现在正文；根目录只保留 `README.md` 与 `LICENSE`，其余文件入目录。
+> 📖 每个文件夹"定位 + 现状 + 后续要做什么"的逐目录详解：[docs/repo_structure.md](docs/repo_structure.md)。
 
 ```
 edgesight/
