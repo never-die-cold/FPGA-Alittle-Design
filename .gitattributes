@@ -1,0 +1,10 @@
+# 统一换行符：文本文件入库与检出一律 LF，根治 Windows/跨平台行尾 churn
+* text=auto eol=lf
+
+# 二进制产物不做换行转换
+*.bit  binary
+*.bin  binary
+*.dcp  binary
+*.xsa  binary
+*.png  binary
+*.jpg  binary
