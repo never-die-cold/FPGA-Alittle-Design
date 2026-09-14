@@ -4,6 +4,7 @@ xsim.dir/
 *.jou
 *.log
 !report/**/*.log
+!data/logs/**/*.log
 *.wdb
 *.wcfg
 *.vcd
