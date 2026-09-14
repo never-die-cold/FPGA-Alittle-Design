@@ -66,7 +66,7 @@ Part A 只剩收口项（M 扩展 / SoC 外壳 / 基线数据）。三线不空�
 | 线 | 分支 | 主责 | 内容（对齐 §4 验收标准） | 目录边界 |
 |:---|:---|:---|:---|:---|
 | RTL 线 | `dev/rtl` | 逻辑开发主力 | Part A 收口 + Part B 全部 + Part C 的 BHT RTL；内部 B→C 保持串行、一人连贯完成 | `src/riscv/` |
-| 验证线 | `dev/verify` | 组长 | 测试先行：转发专项 tb、arch-test 扩集、BHT 命中率统计、全套回归证据 | `sim/` |
+| 验证线 | `dev/verify` | 组长 | 测试先行：转发专项 tb、arch-test 扩集、BHT 命中率统计、全套回归证据 | `sim/`；归档可写 `data/logs/`、`data/evidence/` |
 | 基准线 | `dev/bench` | 文档与答辩 | benchmark C 程序、CPI 统计 harness、三档对比数据、`data/metrics.csv` 填报 | `src/riscv_fw/`、`data/` |
 
 ### 2.2 六条分支规矩

@@ -17,6 +17,14 @@
 - `regfile.v`：32×32 通用寄存器堆
 - `csr.v`：控制状态寄存器（按需裁剪）
 
+## SoC 外壳与集成（原 `src/soc/` 并入本目录）
+
+- `soc_top.v`：PL 侧 SoC 顶层（核 + 指令 BRAM + 数据 RAM + 最小外设）
+- `bus_interconnect.v`：内部总线互连（指令/数据存储、外设地址映射）
+- `imem.v` / `dmem.v`：指令/数据存储（BlockRAM）
+- `ps_interface.v`：PS↔PL AXI-Lite 寄存器映射 + 中断（M3）
+- `addr_map.md`：地址映射表（定稿后 `src/riscv_fw/` 与 `src/pynq_host/` 均以此为准）
+
 ## 命名与编码约定
 
 - 文件与模块名：小写 + 下划线；时钟 `clk`、复位 `rst_n`（低有效）
