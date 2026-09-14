@@ -154,7 +154,7 @@ edgesight/
 ├── docs/                # 非强制扩展：上手 / 清单 / 调研 / 备考等过程文档（见对照表）
 ├── .github/             # Issue 模板（仓库基础设施，不属作品结构对照范围）
 ├── .gitignore           # 忽略编译产物（*.hex/*.coe 明确入库）
-└── .opencode/           # OpenCode agent 配置（理解门槛 skill）
+└── skill/understand-gate/  # 入库理解门槛 skill（OpenCode 自动加载位说明见其文件头）
 ```
 
 ### 与赛题指南推荐目录的对照
@@ -172,7 +172,7 @@ edgesight/
 | `skill/` | `skill/` | 技能包（大模型协作沉淀，加分项） |
 | `report/` | `report/` | 设计报告 + 大模型协作记录（`llm_log/`） |
 | `docs/` | —（指南未列） | 非强制扩展：过程文档集中地（onboarding / 清单 / 赛题调研 / 备考 / Git 学习） |
-| `.github/` `.opencode/` `.gitignore` | — | 仓库基础设施与 agent 配置，不参与作品结构对照 |
+| `.github/` `.gitignore` | — | 仓库基础设施，不参与作品结构对照 |
 
 > `data/metrics.csv` 骨架已按指南要求建立（表头 + `logs/` + `scripts/` + `evidence/`），M3 实测时填充数值与证据；演示级指标增行说明见 `data/README.md`。
 
@@ -231,7 +231,7 @@ edgesight/
 记录规范与模板见 [`report/llm_log/`](report/llm_log/README.md)，日常操作三条规矩：
 
 1. **平时干活**：正常用 Kimi Work / OpenCode 工作，零额外负担。唯二规矩——AI 生成的 RTL 一律走 git commit（commit message 注明 prompt 要点）；agent 会话不删除
-2. **入库门槛（先读懂，再 commit）**：看不懂的代码不许入库。OpenCode 由 `understand-gate` skill 强制执行——commit 前 agent 先给逐段讲解 + 3 道理解测试题，答对才提交，讲解与测试全量落盘 `report/llm_log/`；其他 agent 平台手动走 [docs/code_review_checklist.md](docs/code_review_checklist.md)
+2. **入库门槛（先读懂，再 commit）**：看不懂的代码不许入库。按 `skill/understand-gate/SKILL.md` 执行——commit 前 agent 先给逐段讲解 + 3 道理解测试题，答对才提交，讲解与测试全量落盘 `report/llm_log/`；其他 agent 平台手动走 [docs/code_review_checklist.md](docs/code_review_checklist.md)
 3. **每个工作日收尾**：在当前会话里让 agent 自己写日志：
 
    > 把今天解决 [XX问题] 的过程按 `report/llm_log/template.md` 写一条协作记录，存为 `report/llm_log/YYYY-MM-DD-英文主题.md`，相关 commit 填进去，经验沉淀部分判断要不要标 #skill候选。

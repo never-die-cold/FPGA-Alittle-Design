@@ -2,7 +2,7 @@
 
 > 适用对象：从零 Verilog 水平 + AI 协作开发的本团队。
 > 一句话规则：**看不懂的代码不许入库——不管它是 AI 写的还是队友写的。**
-> 本检查单是跨平台兜底（Kimi Work / Codex / 任何 agent 都适用）；OpenCode 用户由 `.opencode/skill/understand-gate` 自动执行同样流程。
+> 本检查单是跨平台兜底（Kimi Work / Codex / 任何 agent 都适用）；正文版见 [`skill/understand-gate/SKILL.md`](../skill/understand-gate/SKILL.md)（2026-09-14 起为唯一权威，OpenCode 自动加载位已随结构整理移除，见文末"失效与恢复"）。
 
 ## 为什么要有这道门
 
@@ -31,5 +31,5 @@ AI 能生成功能正确的代码，但不能替你建立理解。直接粘贴 a
 ## 与其他流程的关系
 
 - `report/llm_log/`：理解测试题、讲解稿全量落盘于此（复盘与答辩素材），规范见该目录 README
-- `.opencode/skill/understand-gate`：OpenCode 内的自动化版本，触发词 commit
+- `skill/understand-gate/SKILL.md`：自动化版本正文（若需 OpenCode 自动触发，在 `.opencode/skill/understand-gate/SKILL.md` 放回 3 行指向本文件的 loader 即可）
 - 决赛 Verilog 上机考核：本检查单的训练过程就是备考过程

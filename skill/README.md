@@ -12,6 +12,12 @@
 - 失效条件
 - 从哪几条 `report/llm_log/` 记录（哪些失败）中总结得出
 
+## 已收录
+
+| Skill | 用途 | 关联失败记录 |
+|:---|:---|:---|
+| [`understand-gate/SKILL.md`](understand-gate/SKILL.md) | 入库理解门槛：AI 生成的代码 commit 前必须通过"逐段讲解 + 3 道理解测试题"，看不懂的代码不许入库 | `report/llm_log/2026-09-14-verilog-exam-plan.md`、`2026-09-14-understanding-gate.md`（已删，见 `docs/code_review_checklist.md`） |
+
 ## 规划方向
 
 1. 通用 PYNQ Overlay 加载、校验与寄存器映射使用范式

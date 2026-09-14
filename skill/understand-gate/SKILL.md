@@ -51,3 +51,9 @@ AI 生成的代码若不经过"人理解"环节，会在答辩、决赛上机、
 
 - commit message 遵守仓库现有规范：说明做了什么；AI 生成的代码注明 prompt 要点
 - 用户曾用其他 agent（Kimi Work 等）生成的代码要求 commit → 按本 skill 完整流程走一遍（代码不在本会话生成不影响理解验证的必要性）
+
+## 存放位置与失效条件
+
+- **位置**：`skill/understand-gate/SKILL.md`（2026-09-14 从 `.opencode/skill/` 移入，作为正式技能包条目；跨平台通用，见 `docs/code_review_checklist.md`）
+- **失效条件**：纯文档 / `.gitignore` / `llm_log` / `data` 记录类 commit 无需走本流程；成员已能独立复述并手写同类模块后，可按里程碑降频（如只抽 1 题）
+- **恢复自动触发**（可选）：OpenCode 只自动加载 `.opencode/skill/` 下的技能——如需恢复自动执行，新建 `.opencode/skill/understand-gate/SKILL.md`，内容仅 3 行 frontmatter + 一句"正文见 `skill/understand-gate/SKILL.md`，按其全流程执行"

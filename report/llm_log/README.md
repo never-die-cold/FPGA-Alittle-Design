@@ -24,7 +24,7 @@
 
 ## 理解门槛记录（全量落盘）
 
-按 `docs/code_review_checklist.md` 与 OpenCode skill `understand-gate` 的要求，每次 commit AI 生成的代码前须通过"逐段讲解 + 3 道理解测试题"。以下内容**全量**存入本目录（期末复盘与答辩演练素材）：
+按 `docs/code_review_checklist.md` 与 `skill/understand-gate/SKILL.md` 的要求，每次 commit AI 生成的代码前须通过"逐段讲解 + 3 道理解测试题"。以下内容**全量**存入本目录（期末复盘与答辩演练素材）：
 
 1. **逐段讲解稿**：agent 对本次提交代码的设计意图讲解（按 always 块/模块分组）
 2. **理解测试题 + 用户答案 + 判定**：含答错后补课再测的完整过程

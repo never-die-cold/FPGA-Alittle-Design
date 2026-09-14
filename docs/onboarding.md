@@ -55,7 +55,7 @@ Agent = 能帮你**实际干活**的 AI（写代码、改文件、跑命令）�
 
 **看不懂的代码不许入库**——不管它是 AI 写的还是队友写的。"能跑"不算过门，"讲得清"才算。
 
-- 每次让 agent 提交代码前，它会先给你**逐段讲解** + **3 道理解测试题**，你答对了它才会 commit（OpenCode 里由 `understand-gate` skill 自动执行；用其他 agent 时手动走 [docs/code_review_checklist.md](code_review_checklist.md) 检查单）
+- 每次让 agent 提交代码前，它会先给你**逐段讲解** + **3 道理解测试题**，你答对了它才会 commit（按 [`skill/understand-gate/SKILL.md`](../skill/understand-gate/SKILL.md) 执行；用其他 agent 时手动走 [docs/code_review_checklist.md](code_review_checklist.md) 检查单）
 - 读不懂的地方就是你的知识缺口清单，逐条问 agent 直到能讲出来——这个过程同时就是决赛 Verilog 上机考核的备考
 - 讲解稿和测试题会全量存进 `report/llm_log/`，期末复盘和答辩演练直接用
 
