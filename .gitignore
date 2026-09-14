@@ -16,9 +16,9 @@ webtalk*
 # 注意：*.hex / *.coe（BRAM 预载、测试向量）需要入库，不要忽略
 
 # --- RISC-V 固件编译产物（hex 与 dis 作为测试证据入库，见上） ---
-sw/riscv_fw/*.elf
-sw/riscv_fw/*.bin
-sw/riscv_fw/*.o
+src/riscv_fw/*.elf
+src/riscv_fw/*.bin
+src/riscv_fw/*.o
 
 # --- iverilog 仿真产物 ---
 sim/build/

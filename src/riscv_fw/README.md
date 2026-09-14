@@ -1,4 +1,4 @@
-# sw/riscv_fw —— RISC-V 裸机程序
+# src/riscv_fw —— RISC-V 裸机程序
 
 运行在自研 RISC-V 核上的裸机 C 程序：任务调度、协处理器驱动、基准测试。
 

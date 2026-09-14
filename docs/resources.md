@@ -212,7 +212,7 @@
 | 模块一：自研 RISC-V 核 | ✅ 完全适用 | SoC 外壳为纯 PL（BRAM 预载 hex + LED/UART），不碰 PS/DDR/HDMI/PYNQ；板子仅用于 JTAG 下载与上板验收（plan.md Part A）。仿真与 CPI 数据与板型无关；Fmax 报告同器件直接可比 |
 | 模块二：HDMI 预处理流水线 | 🟡 需接口抽象层 | 行缓存/滤波/缩放/AXI-Stream 核心 RTL 零改动迁移；把"视频源/显示输出"做成可替换接口层，野火板上用 LCD 屏或内部 Test Pattern 验证，PYNQ-Z2 到手后换接 HDMI |
 | 模块三：CNN 协处理器 | ✅ 完全适用 | 纯 PL（INT8 MAC 阵列 + 自定义指令 + AXI DMA），PS 仅跑 RISC-V 裸机调度 |
-| PS 侧 PYNQ 上位机 | ❌ 暂不可复刻 | 过渡期：Vitis 裸机串口菜单读写 AXI-Lite 寄存器；黄金参考比对放 PC 离线做；`sw/pynq_host/` 框架照 PYNQ 文档先写，真板到了联调 |
+| PS 侧 PYNQ 上位机 | ❌ 暂不可复刻 | 过渡期：Vitis 裸机串口菜单读写 AXI-Lite 寄存器；黄金参考比对放 PC 离线做；`src/pynq_host/` 框架照 PYNQ 文档先写，真板到了联调 |
 
 ### 10.3 上野火板前的准备清单（已冻结）
 

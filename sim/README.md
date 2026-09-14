@@ -22,8 +22,8 @@ sim/
 - **Vivado 到货后**：XSim 跑同一套 tb 复核，两工具结论须一致
 - 用法（MSYS2 UCRT64 shell 中）：
   - 一键跑全部 tb：`bash sim/scripts/run_iverilog.sh`（编译 `src/riscv/*.v` + `sim/riscv/tb_core_*.v`，产物在 `sim/build/`）
-  - `tb_core_smoke.v`：加载 `sw/riscv_fw/hello_v0.hex`，检查 `tohost==13 && tohost_exit==0`（程序级冒烟）
-  - `tb_core_test.v`：加载 `sw/riscv_fw/hello_test.hex`，检查 `tohost_exit==0`（RV32I 逐指令自检 38 用例；失败值为用例编号）
+  - `tb_core_smoke.v`：加载 `src/riscv_fw/hello_v0.hex`，检查 `tohost==13 && tohost_exit==0`（程序级冒烟）
+  - `tb_core_test.v`：加载 `src/riscv_fw/hello_test.hex`，检查 `tohost_exit==0`（RV32I 逐指令自检 38 用例；失败值为用例编号）
 - tb 接口以 [`src/riscv/design_v0.md`](../src/riscv/design_v0.md) 为唯一权威
 
 > 当前状态：v0 核（RV32I）两个 tb 均 PASS（2026-09-11），见 `report/llm_log/2026-09-11-riscv-v0-rtl.md` 与逐指令 tb 记录

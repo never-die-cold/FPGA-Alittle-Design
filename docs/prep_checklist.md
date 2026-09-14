@@ -9,7 +9,7 @@
   - 下载 PYNQ-Z2 v3.x 镜像烧 SD 卡
   - 通过标准：板子联网、Jupyter 可打开、base overlay 可加载、能点亮板载 LED
 - [x] **RISC-V 工具链可用**（负责人：never-die-cold）
-  - MSYS2 ucrt64 版 `riscv32-unknown-elf`（RV32IM，全队统一；安装与构建步骤见 [sw/riscv_fw/README.md](../sw/riscv_fw/README.md)）
+  - MSYS2 ucrt64 版 `riscv32-unknown-elf`（RV32IM，全队统一；安装与构建步骤见 [src/riscv_fw/README.md](../src/riscv_fw/README.md)）
   - 通过标准：能编译出 helloworld 的 elf 文件 ✅ 2026-09-11 跑通 elf/反汇编/hex（GCC 14.2.0，记录见 `report/llm_log/2026-09-11-riscv-toolchain.md`）
 
 > 2026-09-11 收敛：原「PYNQ-Z2 板子落实来源」「Vivado 安装」两条移出本清单——板子已购置，到货跟踪见 issue #1；Vivado 为全员自备，进度见 issue #2。

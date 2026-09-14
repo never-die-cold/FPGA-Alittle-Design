@@ -175,7 +175,7 @@
 | 模块 | 职责 |
 |:---|:---|
 | `soc_top.v` | 例化 `core_top` + 指令 BRAM + 数据 RAM + LED 驱动；`clk` 来自板载晶振，`rst_n` 接复位按键/上电复位 |
-| 指令 BRAM | 4096×32，同步读，`$readmemh` 预载 `sw/riscv_fw/hello.hex` |
+| 指令 BRAM | 4096×32，同步读，`$readmemh` 预载 `src/riscv_fw/hello.hex` |
 | 数据 RAM | 4K×32，异步读，4 位字节使能 |
 | LED 驱动 | v0 冒烟：LED = 分频计数器高位（证明时钟/复位/下载链路通），或 PC 高位；实现时定 |
 
@@ -264,12 +264,12 @@ flowchart LR
 
 | 项 | 约定 |
 |:---|:---|
-| 指令 hex 格式 | `sw/riscv_fw/bin2hex.py` 输出：每行 8 位十六进制、32 位小端字、行号 = 地址/4 |
+| 指令 hex 格式 | `src/riscv_fw/bin2hex.py` 输出：每行 8 位十六进制、32 位小端字、行号 = 地址/4 |
 | 入口 | 复位后 PC = `0x8000_0000`；`start.S` 设 `sp`、清 `.bss`、`call main` |
-| 冒烟判据 | v0 核（RV32I）：`hello_v0` → `tohost = 13`、`tohost_exit = 0`（见 `sw/riscv_fw/main_v0.c`）；M 补齐后启用 RV32IM 程序：`tohost = 142879`、`tohost_exit = 0` |
+| 冒烟判据 | v0 核（RV32I）：`hello_v0` → `tohost = 13`、`tohost_exit = 0`（见 `src/riscv_fw/main_v0.c`）；M 补齐后启用 RV32IM 程序：`tohost = 142879`、`tohost_exit = 0` |
 | 结果与退出码 | `main` 写结果到 `tohost(0x8000_3FF0)`；`start.S` 写退出码到 `tohost_exit(0x8000_3FF4)`，二者分离 |
 | 停机 | 固件最后死循环自旋；tb 跑固定拍数后检查（非 halt 信号） |
-| 工具链 | MSYS2 ucrt64 `riscv32-unknown-elf`（RV32IM，见 `sw/riscv_fw/README.md`） |
+| 工具链 | MSYS2 ucrt64 `riscv32-unknown-elf`（RV32IM，见 `src/riscv_fw/README.md`） |
 
 ## 9. 设计决策记录（2026-09-11 冻结）
 

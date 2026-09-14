@@ -9,7 +9,7 @@ module tb_core_smoke;
     localparam integer RESET_CYCLES = 8;
     localparam integer RUN_CYCLES   = 4000;
     localparam [31:0]  TOHOST_ADDR   = 32'h8000_3FF0;        // main 写入的结果值
-    localparam [31:0]  TOHOST_EXPECT = 32'd13;               // 见 sw/riscv_fw/main_v0.c（RV32I 冒烟）
+    localparam [31:0]  TOHOST_EXPECT = 32'd13;               // 见 src/riscv_fw/main_v0.c（RV32I 冒烟）
     localparam [31:0]  TOEXIT_ADDR   = 32'h8000_3FF4;        // start.S 写入的退出码
     localparam [31:0]  TOEXIT_EXPECT = 32'd0;
 
@@ -35,7 +35,7 @@ module tb_core_smoke;
     initial begin
         for (i = 0; i < 4096; i = i + 1)
             imem[i] = 32'h00000013;                          // 默认 NOP
-        $readmemh("../sw/riscv_fw/hello_v0.hex", imem);
+        $readmemh("../src/riscv_fw/hello_v0.hex", imem);
     end
 
     // ---- 数据存储器模型：4096×32，异步读 + 4 位字节使能写 ----

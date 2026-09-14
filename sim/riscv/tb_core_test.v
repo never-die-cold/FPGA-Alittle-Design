@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 // tb_core_test.v —— v0 核 RV32I 逐指令自检 testbench
 // 流程：$readmemh 预载 hello_test.hex → 复位 → 跑定拍 → 检查 tohost_exit == 0
-// 失败时 tohost_exit = 失败用例编号（见 sw/riscv_fw/test_rv32i.S）
+// 失败时 tohost_exit = 失败用例编号（见 src/riscv_fw/test_rv32i.S）
 // 接口以 src/riscv/design_v0.md §5.7 为准；运行目录约定：在 sim/ 下执行
 module tb_core_test;
 
@@ -33,7 +33,7 @@ module tb_core_test;
     initial begin
         for (i = 0; i < 4096; i = i + 1)
             imem[i] = 32'h00000013;
-        $readmemh("../sw/riscv_fw/hello_test.hex", imem);
+        $readmemh("../src/riscv_fw/hello_test.hex", imem);
     end
 
     // ---- 数据存储器模型：4096×32，异步读 + 4 位字节使能写 ----

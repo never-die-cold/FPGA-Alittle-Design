@@ -1,4 +1,4 @@
-# sw/pynq_host —— PYNQ 上位机
+# src/pynq_host —— PYNQ 上位机
 
 PS 侧 Jupyter Notebook：寄存器配置、黄金参考比对、性能与资源数据自动采集、结果展示。
 
