@@ -232,11 +232,12 @@ edgesight/
 记录规范与模板见 [`report/llm_log/`](report/llm_log/README.md)，日常操作三条规矩：
 
 1. **平时干活**：正常用 Kimi Work / OpenCode 工作，零额外负担。唯二规矩——AI 生成的 RTL 一律走 git commit（commit message 注明 prompt 要点）；agent 会话不删除
-2. **每个工作日收尾**：在当前会话里让 agent 自己写日志：
+2. **入库门槛（先读懂，再 commit）**：看不懂的代码不许入库。OpenCode 由 `understand-gate` skill 强制执行——commit 前 agent 先给逐段讲解 + 3 道理解测试题，答对才提交，讲解与测试全量落盘 `report/llm_log/`；其他 agent 平台手动走 [docs/code_review_checklist.md](docs/code_review_checklist.md)
+3. **每个工作日收尾**：在当前会话里让 agent 自己写日志：
 
    > 把今天解决 [XX问题] 的过程按 `report/llm_log/template.md` 写一条协作记录，存为 `report/llm_log/YYYY-MM-DD-英文主题.md`，相关 commit 填进去，经验沉淀部分判断要不要标 #skill候选。
 
-3. **每周 15 分钟**：给有可复用价值的记录打 `#skill候选` 标签，作为期末技能包的原料
+4. **每周 15 分钟**：给有可复用价值的记录打 `#skill候选` 标签，作为期末技能包的原料
 
 ### Skill 沉淀方向
 
