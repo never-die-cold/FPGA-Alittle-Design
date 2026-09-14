@@ -6,10 +6,9 @@
 
 ```
 sim/
-├── riscv/           # RISC-V 核各级与整核 testbench
+├── riscv/           # RISC-V 核各级、整核与 SoC 外壳 testbench
 ├── coprocessor/     # 协处理器 testbench
 ├── vision/          # 预处理流水线 testbench（含测试图样生成）
-├── soc/             # SoC 级联调仿真
 ├── scripts/         # xsim 批处理脚本（可复跑）
 └── tools/           # 辅助工具（RV32I 编解码自测等）
 ```

@@ -19,11 +19,11 @@
 
 | 子目录 | 现状 | 要做什么 |
 |:---|:---|:---|
-| `src/riscv/` | ✅ 已开工 | **模块一核心**：自研 RISC-V 核 RTL。`plan.md` 排期与学习路线、`design_v0.md` 接口契约（唯一权威）、`pc/regfile/alu/decode/if_stage/core_top.v` 六个模块（v0 两级流水已仿真 PASS）。后续：Part B 三级+转发（9/28–10/1）、Part C 分支预测（10/2–10/4）、M 扩展 `muldiv.v` 收尾 |
+| `src/riscv/` | ✅ 已开工 | **模块一核心**：自研 RISC-V 核 RTL。`plan.md` 排期与学习路线、`design_v0.md` 接口契约（唯一权威）、`pc/regfile/alu/decode/if_stage/core_top.v` 六个模块（v0 两级流水已仿真 PASS）。后续：Part B 三级+转发（9/28–10/1）、Part C 分支预测（10/2–10/4）、M 扩展 `muldiv.v` 与最小 SoC 外壳收尾（原 `src/soc/` 已并入本目录） |
 | `src/riscv_fw/` | ✅ 已开工 | 跑在自研核上的**裸机固件**：统一工具链权威文档（MSYS2 riscv32-unknown-elf）、Makefile 三目标（RV32IM 冒烟 / RV32I v0 冒烟 / 38 用例逐指令自检）、start.S/link.ld/bin2hex.py、三套 dis+hex 证据。后续：benchmark（Part C）、协处理器驱动 |
 | `src/vision/` | 🚧 占位 | **模块二**：HDMI 预处理流水线 RTL（rgb2gray→gaussian→scaler→sobel、行缓存、AXI-Lite 参数寄存器、OSD）。M2 开工；演示层任务（参数化直通、直通 vs 帧缓存对比）见 `docs/proposal_upgrade.md` |
 | `src/coprocessor/` | 🚧 占位 | **模块三**：CNN 推理协处理器（INT8 MAC 阵列、DMA、自定义指令译码）。M2 开工；算子化验证（CONV/POOL/GEMM 加速比表）+ 软硬切换；L2 降级时可整体裁剪 |
-| `src/soc/` | 🚧 占位 | **SoC 外壳**：核 + 存储器 + 外设顶层、地址映射表（`addr_map.md` 定稿后 `src/riscv_fw` 与 `src/pynq_host` 以此为准）。M1 起步、M3 完成集成 |
+| ~~`src/soc/`~~ | 已并入 | **SoC 外壳**已合并进 `src/riscv/`（顶层、总线互连、地址映射表）；`addr_map.md` 定稿后 `src/riscv_fw` 与 `src/pynq_host` 以此为准。M1 起步、M3 完成集成 |
 | `src/pynq_host/` | 🚧 占位 | **PS 侧上位机**：Jupyter 控制面板（实时调参、软/硬推理一键切换、指标实时曲线——命题升级 A 档演示形态）。M2/M3 |
 
 ## sim/ —— 仿真与验证（铁律：所有 RTL 先过仿真再上板）
@@ -34,7 +34,7 @@
 | `sim/riscv/tb_core_smoke.v` | ✅ | 程序级冒烟：加载 `../src/riscv_fw/hello_v0.hex`，查 `tohost==13 && tohost_exit==0` |
 | `sim/riscv/tb_core_test.v` | ✅ | 逐指令自检：加载 `hello_test.hex`，RV32I 38 用例全过才算 PASS |
 | `sim/scripts/run_iverilog.sh` | ✅ | 一键仿真入口（自动定位 iverilog、防 DLL 冲突、编译 + 逐 tb 运行）——**回归基线命令** |
-| `sim/coprocessor/`、`sim/vision/`、`sim/soc/` | 🚧 待建 | 各模块与整核联调 tb（M2/M3）；testbench 一律输出 PASS/FAIL，禁止肉眼看波形 |
+| `sim/coprocessor/`、`sim/vision/` | 🚧 待建 | 各模块与整核联调 tb（M2/M3）；SoC 外壳联调 tb 放 `sim/riscv/`；testbench 一律输出 PASS/FAIL，禁止肉眼看波形 |
 
 ## build/ —— 构建产物（指南：可复现构建脚本 + 综合与实现报告）
 

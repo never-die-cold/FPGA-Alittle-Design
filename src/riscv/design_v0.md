@@ -76,7 +76,7 @@
 | ALU | `src/riscv/alu.v` | 算术/逻辑/移位/比较；分支条件输出 | |
 | 乘除单元 | `src/riscv/muldiv.v` | M 扩展（v0 **预留不实现**，接口冻结） | 见 §10 |
 | 核顶层 | `src/riscv/core_top.v` | 例化互连、分支裁决、流控 | 对外接口见 §5.8 |
-| SoC 外壳 | `src/soc/soc_top.v` 等 | 指令 BRAM + 数据 RAM + LED + 核 | v0 上板冒烟用 |
+| SoC 外壳 | `src/riscv/soc_top.v` 等 | 指令 BRAM + 数据 RAM + LED + 核 | v0 上板冒烟用（原 `src/soc/` 已并入） |
 
 ## 5. 模块接口信号表
 
@@ -170,7 +170,7 @@
 | `dmem_we` | out | 1 | 写使能 |
 | `dmem_rdata` | in | 32 | 读数据（**同拍**有效） |
 
-### 5.8 SoC 外壳（`src/soc/`，v0 上板冒烟）
+### 5.8 SoC 外壳（`src/riscv/`，v0 上板冒烟）
 
 | 模块 | 职责 |
 |:---|:---|

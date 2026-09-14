@@ -140,10 +140,9 @@ edgesight/
 ├── README.md            # 本文件（项目简介 + 复现步骤，指南 §3.3.5.4 提交物要求）
 ├── LICENSE              # MIT 协议
 ├── src/                 # 设计源码（RTL / 固件 / PS 侧软件）
-│   ├── riscv/           # RISC-V 核 RTL（v0 两级流水已可仿真；plan/design 文档齐备）
+│   ├── riscv/           # RISC-V 核 RTL（v0 两级流水已可仿真；含 SoC 外壳；plan/design 文档齐备）
 │   ├── vision/          # HDMI 预处理流水线 RTL（占位）
 │   ├── coprocessor/     # CNN 推理协处理器 RTL（占位）
-│   ├── soc/             # 顶层集成、总线互连（占位）
 │   ├── riscv_fw/        # RISC-V 裸机固件（冒烟 / 逐指令自检 / 后续 benchmark）
 │   └── pynq_host/       # PS 侧 Jupyter 上位机：配置、采集、比对（占位）
 ├── sim/                 # testbench、仿真脚本（scripts/ 一键 iverilog；tools/ 含 RV32I 编解码自测）
@@ -165,7 +164,7 @@ edgesight/
 
 | 本仓库 | 指南 §3.3.5.4 推荐 | 说明 |
 |:---|:---|:---|
-| `src/` | `src/`（设计源码） | RTL 四个子目录 + `riscv_fw/` 固件 + `pynq_host/` PS 侧软件 |
+| `src/` | `src/`（设计源码） | RTL 三个子目录（`riscv/` 含 SoC 外壳）+ `riscv_fw/` 固件 + `pynq_host/` PS 侧软件 |
 | `sim/` | `sim/` | testbench、仿真脚本与结果 |
 | `build/` | `build/` | 可复现构建脚本 + 综合与实现报告（M2 起填充） |
 | `board/` | `board/` | 上板工程、运行脚本与实测输出 |
