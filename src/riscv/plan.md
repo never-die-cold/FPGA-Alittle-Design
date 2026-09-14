@@ -90,6 +90,7 @@ RTL 线内部 Part B（9/28–10/1）→ Part C（10/2–10/4）串行不变；�
 > 工时结构：工作日晚约 2h；整天块 = 9/19–20（周末）、9/25–27（中秋 3 天）。
 > 前置约束：9/14 前全队被另一比赛占用，阶段 0 知识准备并入本窗口第一周。
 > 用法：全员先读 §3.1，再读自己那条线（§3.2 / §3.3 / §3.4）；组长按 §3.5 验收、按 §3.6 对日历。
+> 逐人执行清单（含 9/14 实际进度核对）：[RTL 线 · LibJiang](../../docs/tasks/rtl_libjiang.md) ｜ [验证线 · never-die-cold](../../docs/tasks/verify_never-die-cold.md) ｜ [基准线 · waltercooper](../../docs/tasks/bench_waltercooper.md)
 
 ### 3.1 全员公共（每天固定动作）
 
