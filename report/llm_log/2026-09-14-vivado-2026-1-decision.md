@@ -39,7 +39,7 @@
 - 工具链定为 **Vivado 2026.1（BASIC 免费档）**；**2025.2 ML Standard 降为回退备选**（若 BASIC 实测不可用再启用）
 - 依据：BASIC 各项限制对本项目无实质影响；官方发布机制（每年 `.1`/`.2` 两版 + 更新）与"后期 2026 版本加支持"的说法一致，版本可持续获得更新
 - 同步更新：`README.md` 工具链行、`docs/amd_track_awards.md` 第 6 条、`docs/repo_structure.md`；旧记录 `2026-09-11-vivado-licensing-research.md` 加取代横幅（按计划待删除）
-- 验收（本机已装）：`vivado -version` 确认 2026.1；器件 `xc7z020clg400-1` 综合无报错；XSim 复核现有核级 tb
+- 验收：2026-09-14 当日完成——XSim 两套 tb PASS（与 iverilog 对拍一致）、v0 核综合基线出炉（**Fmax 86.8 MHz / WNS -1.530 ns**，未达 100 MHz，作为 Part B 对照），详见 [2026-09-14-vivado-2026-1-acceptance.md](2026-09-14-vivado-2026-1-acceptance.md)
 
 ## 6. 经验沉淀
 
