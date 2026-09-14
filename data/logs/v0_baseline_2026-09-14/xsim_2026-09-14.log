@@ -1,0 +1,94 @@
+=== Vivado 2026.1 XSim re-check (2026-09-14) ===
+
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/ASUS/AppData/Local/Temp/opencode/wt-v0-baseline-archive/src/riscv/alu.v" into library work
+INFO: [VRFC 10-311] analyzing module alu
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/ASUS/AppData/Local/Temp/opencode/wt-v0-baseline-archive/src/riscv/core_top.v" into library work
+INFO: [VRFC 10-311] analyzing module core_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/ASUS/AppData/Local/Temp/opencode/wt-v0-baseline-archive/src/riscv/decode.v" into library work
+INFO: [VRFC 10-311] analyzing module decode
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/ASUS/AppData/Local/Temp/opencode/wt-v0-baseline-archive/src/riscv/if_stage.v" into library work
+INFO: [VRFC 10-311] analyzing module if_stage
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/ASUS/AppData/Local/Temp/opencode/wt-v0-baseline-archive/src/riscv/pc.v" into library work
+INFO: [VRFC 10-311] analyzing module pc
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/ASUS/AppData/Local/Temp/opencode/wt-v0-baseline-archive/src/riscv/regfile.v" into library work
+INFO: [VRFC 10-311] analyzing module regfile
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/ASUS/AppData/Local/Temp/opencode/wt-v0-baseline-archive/sim/riscv/tb_core_smoke.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_core_smoke
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/ASUS/AppData/Local/Temp/opencode/wt-v0-baseline-archive/sim/riscv/tb_core_test.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_core_test
+
+Vivado Simulator v2026.1
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: D:/Vivado_downloads/2026.1/Vivado/bin/unwrapped/win64.o/xelab.exe tb_core_smoke -s smoke 
+Multi-threading is on. Using 18 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pc
+Compiling module work.if_stage
+Compiling module work.decode
+Compiling module work.regfile
+Compiling module work.alu
+Compiling module work.core_top
+Compiling module work.tb_core_smoke
+Built simulation snapshot smoke
+
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Mon Sep 14 17:03:31 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/smoke/xsim_script.tcl
+# xsim {smoke} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: tohost = 13 (0x0000000d), tohost_exit = 0
+$finish called at time : 40075 ns : File "C:/Users/ASUS/AppData/Local/Temp/opencode/wt-v0-baseline-archive/sim/riscv/tb_core_smoke.v" Line 92
+exit
+INFO: [Common 17-206] Exiting xsim at Mon Sep 14 17:03:33 2026...
+
+Vivado Simulator v2026.1
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: D:/Vivado_downloads/2026.1/Vivado/bin/unwrapped/win64.o/xelab.exe tb_core_test -s test 
+Multi-threading is on. Using 18 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pc
+Compiling module work.if_stage
+Compiling module work.decode
+Compiling module work.regfile
+Compiling module work.alu
+Compiling module work.core_top
+Compiling module work.tb_core_test
+Built simulation snapshot test
+
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Mon Sep 14 17:03:35 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/test/xsim_script.tcl
+# xsim {test} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: all RV32I tests passed (tohost_exit = 0)
+$finish called at time : 100075 ns : File "C:/Users/ASUS/AppData/Local/Temp/opencode/wt-v0-baseline-archive/sim/riscv/tb_core_test.v" Line 86
+exit
+INFO: [Common 17-206] Exiting xsim at Mon Sep 14 17:03:38 2026...
