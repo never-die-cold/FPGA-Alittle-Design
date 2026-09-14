@@ -1,9 +1,9 @@
 指标名称,类别,数值,单位,测量条件,测试次数/时长,证据文件
 RISC-V 核 CPI（benchmark 平均）,,,,,,
-RISC-V 核最高主频 Fmax / WNS,,,,,,
+RISC-V 核最高主频 Fmax / WNS,核级实现(OOC),Fmax 86.8 / WNS -1.530,MHz / ns,Vivado 2026.1；xc7z020clg400-1；v0 两级流水核 post-route；时钟约束 10 ns（目标 100 MHz）；OOC 无 I/O 约束；未达 100 MHz（Part B 优化项）,1 次,build/reports/timing_impl.rpt
 图像预处理延迟,,,,,,
 直通 vs 帧缓存架构对比（延迟/带宽/资源）,,,,,,
 端到端帧延迟（采集→OSD 显示）,,,,,,
 演示动效帧率（OSD/调参面板）,,,,,,
 CNN 推理单帧耗时 / 能效,,,,,,
-资源占用（LUT/FF/BRAM/DSP）,,,,,,
+资源占用（LUT/FF/BRAM/DSP）,核级实现(OOC),LUT 846 / FF 65 / BRAM 0 / DSP 0,个,Vivado 2026.1；xc7z020clg400-1；v0 两级流水核 post-route；OOC 无 I/O 约束,1 次,build/reports/utilization_impl.rpt

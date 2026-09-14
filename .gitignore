@@ -12,6 +12,7 @@ xsim.dir/
 *.dcp
 *.bit
 webtalk*
+clockInfo.txt
 
 # 注意：*.hex / *.coe（BRAM 预载、测试向量）需要入库，不要忽略
 
