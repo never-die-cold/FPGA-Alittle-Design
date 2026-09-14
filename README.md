@@ -136,46 +136,45 @@ flowchart LR
 
 ```
 edgesight/
-├── README.md            # 本文件
+├── README.md            # 本文件（项目简介 + 复现步骤，指南 §3.3.5.4 提交物要求）
 ├── LICENSE              # MIT 协议
-├── .github/             # Issue 模板与仓库配置
-├── src/
-│   ├── riscv/           # RISC-V 核 RTL（三级流水 + 转发 + 分支预测）
-│   ├── coprocessor/     # CNN 协处理器 RTL
-│   ├── vision/          # HDMI 预处理流水线 RTL
-│   └── soc/             # 顶层集成、总线互连
-├── sim/                 # testbench、仿真脚本（tools/ 含 RV32I 编解码自测）
-├── sw/
-│   ├── riscv_fw/        # RISC-V 裸机程序（调度 + 推理驱动）
-│   └── pynq_host/       # Jupyter 上位机：配置、采集、比对
-├── build/               # Vivado 可复现构建 tcl + 综合/实现报告
-├── board/               # 上板工程、运行脚本、实测输出
-├── data/                # 测试数据与参考结果
-├── docs/                # 文档（onboarding / prep_checklist / resources 等）
-├── metrics/             # 指标汇总表与原始证据（M3 起填充）
+├── src/                 # 设计源码（RTL / 固件 / PS 侧软件）
+│   ├── riscv/           # RISC-V 核 RTL（v0 两级流水已可仿真；plan/design 文档齐备）
+│   ├── vision/          # HDMI 预处理流水线 RTL（占位）
+│   ├── coprocessor/     # CNN 推理协处理器 RTL（占位）
+│   ├── soc/             # 顶层集成、总线互连（占位）
+│   ├── riscv_fw/        # RISC-V 裸机固件（冒烟 / 逐指令自检 / 后续 benchmark）
+│   └── pynq_host/       # PS 侧 Jupyter 上位机：配置、采集、比对（占位）
+├── sim/                 # testbench、仿真脚本（scripts/ 一键 iverilog；tools/ 含 RV32I 编解码自测）
+├── build/               # Vivado 可复现构建 tcl + 综合/实现报告（占位）
+├── board/               # 上板工程、运行脚本、实测输出（占位）
+├── data/                # 测试数据与参考结果（metrics.csv 指标汇总 + logs/ + scripts/ + evidence/）
 ├── skill/               # 技能包（见下文）
-└── report/              # 设计报告 + 大模型协作记录（llm_log/）
+├── report/              # 设计报告 + 大模型协作记录（llm_log/）
+├── docs/                # 非强制扩展：上手 / 清单 / 调研 / 备考等过程文档（见对照表）
+├── .github/             # Issue 模板（仓库基础设施，不属作品结构对照范围）
+├── .gitignore           # 忽略编译产物（*.hex/*.coe 明确入库）
+└── .opencode/           # OpenCode agent 配置（理解门槛 skill）
 ```
 
 ### 与赛题指南推荐目录的对照
 
-> 赛题指南 3.2.5.5 为**推荐结构、非强制**；采用其他组织方式的队伍须在 README 中给出目录对照说明，下表即该说明。
+> 本赛道（AMD 自主选题）指南 **§3.3.5.4** 为**推荐结构、非强制**；采用其他组织方式的队伍须在 README 中给出目录对照说明，下表即该说明。
+> 注：2026-09-14 已将顶层 `metrics/` 并入 `data/`、`sw/` 并入 `src/`，顶层与官方骨架一一对应。
 
-| 本仓库 | 赛题指南推荐 | 说明 |
+| 本仓库 | 指南 §3.3.5.4 推荐 | 说明 |
 |:---|:---|:---|
-| `src/` | `fpga/src/` | RTL / 设计源码 |
-| `sim/` | `fpga/`（工程包验证部分） | testbench 与仿真脚本 |
-| `build/` | `fpga/build/` | 构建脚本与产出（`.bit` / `.xsa` 后续归档） |
-| `board/` | `fpga/build/`、`docs/hardware_setup.md` | 上板工程与本板配置说明 |
-| `sw/riscv_fw/` | `fpga/src/`（软核固件） | RISC-V 裸机程序 |
-| `sw/pynq_host/` | `host/app/` | 上位机应用与通信层 |
-| `data/` | `metrics/logs/`、`metrics/scripts/`（部分） | 测试数据与参考结果 |
-| `metrics/` | `metrics/` | 指标汇总表与原始证据（指南同名目录） |
-| `report/` | `report/`、`metrics/evidence/` | 设计报告、协作记录、波形证据 |
-| `docs/` | `docs/` | 架构、接口与硬件说明 |
-| `skill/` | `skill/` | 可复用 Skill 与工作流 |
+| `src/` | `src/`（设计源码） | RTL 四个子目录 + `riscv_fw/` 固件 + `pynq_host/` PS 侧软件 |
+| `sim/` | `sim/` | testbench、仿真脚本与结果 |
+| `build/` | `build/` | 可复现构建脚本 + 综合与实现报告（M2 起填充） |
+| `board/` | `board/` | 上板工程、运行脚本与实测输出 |
+| `data/` | `data/` | 测试数据、黄金参考与 `metrics.csv` 指标汇总（含 `logs/`、`scripts/`、`evidence/`） |
+| `skill/` | `skill/` | 技能包（大模型协作沉淀，加分项） |
+| `report/` | `report/` | 设计报告 + 大模型协作记录（`llm_log/`） |
+| `docs/` | —（指南未列） | 非强制扩展：过程文档集中地（onboarding / 清单 / 赛题调研 / 备考 / Git 学习） |
+| `.github/` `.opencode/` `.gitignore` | — | 仓库基础设施与 agent 配置，不参与作品结构对照 |
 
-> `metrics/` 骨架已按指南建立（`metrics.csv` 表头 + `logs/` + `scripts/` + `evidence/`），M3 实测时填充数值与证据。
+> `data/metrics.csv` 骨架已按指南要求建立（表头 + `logs/` + `scripts/` + `evidence/`），M3 实测时填充数值与证据；演示级指标增行说明见 `data/README.md`。
 
 ---
 
@@ -255,7 +254,7 @@ edgesight/
 ## 开发环境与复现
 
 - 板卡：AMD PYNQ-Z2（XC7Z020）
-- 工具链：Vivado / Vitis 2025.2（免费 ML Standard；2026.1 BASIC 因年度续期 + 仿真受限仅备选，见 issue #2）、RISC-V GCC 工具链（MSYS2 ucrt64 `riscv32-unknown-elf`，RV32IM，见 [sw/riscv_fw/README.md](sw/riscv_fw/README.md)）、PYNQ v3.x 镜像
+- 工具链：Vivado / Vitis 2025.2（免费 ML Standard；2026.1 BASIC 因年度续期 + 仿真受限仅备选，见 issue #2）、RISC-V GCC 工具链（MSYS2 ucrt64 `riscv32-unknown-elf`，RV32IM，见 [src/riscv_fw/README.md](src/riscv_fw/README.md)）、PYNQ v3.x 镜像
 - 复现步骤：见 `board/README.md`（从零烧录 SD 卡 → 构建 bitstream → 运行演示）
 
 ---
