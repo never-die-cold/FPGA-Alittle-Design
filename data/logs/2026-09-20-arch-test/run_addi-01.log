@@ -1,0 +1,32 @@
+== [1/4] 编译 addi-01（套件 unknown（MSYS2 PATH 无 git））==
+make: 进入目录“/c/Users/ASUS/FPGA-Alittle-Design/sim/arch_test/suite”
+
+============================ VARIABLE INFO ==================================
+ROOTDIR: /c/Users/ASUS/FPGA-Alittle-Design/sim/arch_test/suite [origin: file]
+WORK: /c/Users/ASUS/FPGA-Alittle-Design/sim/build/arch_test [origin: command line]
+TARGETDIR: /c/Users/ASUS/FPGA-Alittle-Design/sim/arch_test/target [origin: command line]
+RISCV_TARGET: pynq_z2_v0 [origin: command line]
+XLEN: 32 [origin: command line]
+RISCV_DEVICE: I [origin: command line]
+=============================================================================
+
+make -j1 \
+	RISCV_TARGET=pynq_z2_v0 \
+	RISCV_DEVICE=I \
+	compile -C /c/Users/ASUS/FPGA-Alittle-Design/sim/arch_test/suite/riscv-test-suite/rv32i_m/I
+make[1]: 进入目录“/c/Users/ASUS/FPGA-Alittle-Design/sim/arch_test/suite/riscv-test-suite/rv32i_m/I”
+make[1]: 对“compile”无需做任何事。
+make[1]: 离开目录“/c/Users/ASUS/FPGA-Alittle-Design/sim/arch_test/suite/riscv-test-suite/rv32i_m/I”
+make: 离开目录“/c/Users/ASUS/FPGA-Alittle-Design/sim/arch_test/suite”
+== [2/4] 提取签名符号与参考 ==
+签名区 80002190..80002a60（564 字），参考 564 行
+== [3/4] 镜像转换（bin -> hex）==
+C:/Users/ASUS/FPGA-Alittle-Design/sim/build/arch_test/addi-01.bin -> C:/Users/ASUS/FPGA-Alittle-Design/sim/build/arch_test/addi-01.hex: 10860 bytes, 2715 words (32-bit little-endian)
+== [4/4] 仿真与签名比对（200000 周期）==
+WARNING: C:/Users/ASUS/FPGA-Alittle-Design/sim/riscv/tb_arch_test.v:92: $readmemh(build/arch_test/addi-01.hex): Not enough words in the file for the requested range [0:4095].
+WARNING: C:/Users/ASUS/FPGA-Alittle-Design/sim/riscv/tb_arch_test.v:93: $readmemh(build/arch_test/addi-01.hex): Not enough words in the file for the requested range [0:4095].
+WARNING: C:/Users/ASUS/FPGA-Alittle-Design/sim/riscv/tb_arch_test.v:94: $readmemh(build/arch_test/ref_clean.txt): Not enough words in the file for the requested range [0:4095].
+== arch-test addi-01: 预载完成，运行 200000 周期 ==
+PASS: addi-01 signature 564 words match reference
+C:/Users/ASUS/FPGA-Alittle-Design/sim/riscv/tb_arch_test.v:120: $finish called at 2000075000 (1ps)
+签名输出：/c/Users/ASUS/FPGA-Alittle-Design/sim/build/arch_test/rv32i_m/I/addi-01.signature.output

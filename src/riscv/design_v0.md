@@ -287,7 +287,8 @@ flowchart LR
 - [x] `alu.v` + RV32I 算术逻辑类（2026-09-11）
 - [x] 访存 / 分支 / 跳转 + `core_top` 连通（2026-09-11，`hello_v0` 冒烟 PASS）
 - [x] 冒烟 tb 逐指令补齐（2026-09-11，`hello_test` 38 用例全过）
-- [ ] 最小 SoC 外壳 + 上板（待 PYNQ-Z2 到货，issue #1）
+- [ ] 最小 SoC 外壳（仿真）+ 上板冒烟（板卡 2026-09-20 到货并验证，全队共用 1 块）
+- [ ] 上板时钟方案拍板：板载 PL 时钟 125 MHz（H16）> v0 当前 Fmax 86.8 MHz，需 MMCM 分频冒烟或等 Part B 提频后按 100 MHz 重测（§5.8 原写"clk 来自板载晶振"，待同步）
 - [ ] M 扩展 `muldiv.v` 收尾（启用 `hello.hex` RV32IM 冒烟）
 - [ ] 基线 CPI / Fmax 记录 `report/`
 
