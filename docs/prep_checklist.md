@@ -18,6 +18,9 @@
 - [ ] **报名状态核对**（负责人：never-die-cold）
   - fpgachina.cn 核对报名、赛道（AMD 自主选题·初级组）、官方时间节点
   - README 中日期沿用旧稿，一切以官网公告为准
+- [ ] **演示硬件到位**（负责人：待认领）
+  - HDMI 线 ×2、UVC 采集卡（或 HDMI 显示器）、笔记本视频源、12V 电源；可选 USB 功率计
+  - 规格、接线与验线步骤见 [board/hardware.md](../board/hardware.md)
 - [ ] **加入官方 QQ 群 1087309750**，翻一遍往届答疑记录（负责人：never-die-cold）
 - [ ] **三人仓库权限与 git 流程跑通**（负责人：全员）
   - 每人完成一次 clone / commit / push
