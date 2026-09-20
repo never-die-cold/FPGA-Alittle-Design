@@ -1,0 +1,10 @@
+WARNING: riscv/tb_core_fwd.v:47: $readmemh(riscv/fwd/fwd_test.hex): Not enough words in the file for the requested range [0:4095].
+VCD info: dumpfile tb_core_fwd.vcd opened for output.
+== fwd phase A (R-type RAW) : cycles=28 bubbles=0 (expect 0)
+== fwd phase B (lw->op)     : cycles=22 bubbles=0 (expect 4)
+== fwd phase C (taken)      : cycles=26 bubbles=5 (expect 5)
+== fwd phase D (not-taken)  : cycles=12 bubbles=0 (expect 0)
+FAIL: 阶段B 气泡 期望 4 实际 0
+FAIL: 1 项不符（详见上）
+FATAL: riscv/tb_core_fwd.v:199: 
+       Time: 1295000  Scope: tb_core_fwd

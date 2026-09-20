@@ -117,7 +117,7 @@ flowchart LR
 
 | 指标 | 基线 | 目标 | 对比对象 |
 |:---|:---|:---|:---|
-| RISC-V 核 CPI（benchmark 平均） | 两级流水基线实测值 | 降低 ≥ 25% | 同核无优化版 |
+| RISC-V 核 CPI（benchmark 平均） | v1 无转发（同三级核）实测值 | 降低 ≥ 25% | v1 无转发 vs v1+转发；v0 两级基线 CPI≈1 仅作参考锚点（2026-09-20 口径重定义，见 [llm_log](report/llm_log/2026-09-20-v0-no-stall-cpi-reframe.md)） |
 | RISC-V 核最高主频 Fmax / WNS | 基线实测值 | ≥ 100 MHz，WNS ≥ 0 | 同核无优化版 |
 | 图像预处理延迟 | 软件 OpenCV 实测值 | 降低 ≥ 10×，逐像素固定延迟 | PS 侧软件实现 |
 | 直通 vs 帧缓存架构对比（延迟/带宽/资源） | DDR 帧缓存参考实现 | 直通优势量化在案 | 自建对照组 |
@@ -253,7 +253,7 @@ edgesight/
 
 ## 开发环境与复现
 
-- 板卡：AMD PYNQ-Z2（XC7Z020）
+- 板卡：AMD PYNQ-Z2（XC7Z020）；已烧录 PYNQ 镜像并开通校园网 SSH 远程访问（`ssh xilinx@10.50.216.93`，详见 [board/README.md](board/README.md)）
 - 工具链：Vivado / Vitis 2026.1（BASIC 免费档；XSim 限 50K 实例、仅 Windows，对本项目核级 tb 够用；2025.2 ML Standard 为回退备选，见 issue #2）、RISC-V GCC 工具链（MSYS2 ucrt64 `riscv32-unknown-elf`，RV32IM，见 [src/riscv_fw/README.md](src/riscv_fw/README.md)）、PYNQ v3.x 镜像
 - 复现步骤：见 `board/README.md`（从零烧录 SD 卡 → 构建 bitstream → 运行演示）
 
