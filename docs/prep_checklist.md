@@ -5,8 +5,7 @@
 
 ## 🔴 必须完成（卡脖子项）
 
-- [ ] **PYNQ 镜像烧录验证**（负责人：never-die-cold；依赖板子到货，issue #1）
-  - 下载 PYNQ-Z2 v3.x 镜像烧 SD 卡
+- [x] **PYNQ 镜像烧录验证**（负责人：never-die-cold）——✅ 2026-09-20 板卡到货并完成上板验证，通过标准全过；全队共用 1 块板
   - 通过标准：板子联网、Jupyter 可打开、base overlay 可加载、能点亮板载 LED
 - [x] **RISC-V 工具链可用**（负责人：never-die-cold）
   - MSYS2 ucrt64 版 `riscv32-unknown-elf`（RV32IM，全队统一；安装与构建步骤见 [src/riscv_fw/README.md](../src/riscv_fw/README.md)）
@@ -38,4 +37,4 @@
 
 ---
 
-> ✅ 全部🔴项完成 = 具备开工条件（2026-09-11：RISC-V 工具链已完成；仅剩镜像烧录待板到货，不阻塞 RTL/仿真开发）
+> ✅ 全部🔴项完成 = 具备开工条件（2026-09-11：RISC-V 工具链已完成；2026-09-20：PYNQ-Z2 到货并上板验证通过，🔴项全部闭环）
