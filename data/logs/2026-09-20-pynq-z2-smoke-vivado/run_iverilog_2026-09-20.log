@@ -1,0 +1,10 @@
+Simulation outputs: /c/Users/ASUS/AppData/Local/Temp/opencode/rtl-wt/board/smoke_test/.sim_build/run.WUd1Hh
+TEST PASSED: DIV_CYCLES=1, startup/reset/24 steps
+C:/Users/ASUS/AppData/Local/Temp/opencode/rtl-wt/board/smoke_test/sim/pynq_z2_smoke_tb.v:75: $finish called at 261000 (1ps)
+TEST PASSED: DIV_CYCLES=2, startup/reset/24 steps
+C:/Users/ASUS/AppData/Local/Temp/opencode/rtl-wt/board/smoke_test/sim/pynq_z2_smoke_tb.v:75: $finish called at 469000 (1ps)
+TEST PASSED: DIV_CYCLES=5, startup/reset/24 steps
+C:/Users/ASUS/AppData/Local/Temp/opencode/rtl-wt/board/smoke_test/sim/pynq_z2_smoke_tb.v:75: $finish called at 1077000 (1ps)
+TEST PASSED: DIV_CYCLES=8, startup/reset/24 steps
+C:/Users/ASUS/AppData/Local/Temp/opencode/rtl-wt/board/smoke_test/sim/pynq_z2_smoke_tb.v:75: $finish called at 1693000 (1ps)
+TEST PASSED: all divider configurations
