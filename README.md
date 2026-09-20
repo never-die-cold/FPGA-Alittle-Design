@@ -190,6 +190,8 @@ edgesight/
 | **作品提交** | **11.4 18:00 截止** | 提交全套材料 |
 | 决赛准备 | 11 月 | Verilog 基础刷题 + 答辩演练（决赛 11.20–11.22 南京）；**备考**：全真模拟 2–3 次保持手感 |
 
+> **检查点体系（2026-09-20 起）**：里程碑即阶段检查点，验收单 = gate issue——M1 拆三个：[#19 Part A（9/27）](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/19)、[#20 Part B（10/1）](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20)、[#21 Part C + M1 收口（10/4）](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)；M2–M4 里程碑已建（due 10/18 / 10/25 / 11/4）。验收清单引用 [src/riscv/plan.md](src/riscv/plan.md) 对应章节，全勾后关闭。
+
 > ⚠️ 决赛有**现场 Verilog 限时上机考核**，**不通过直接失去评奖资格**。细则（从五年真题仓库归纳）：现场**断网**、限时手写（时序逻辑、状态机、计数器）、监考**验收仿真波形**、可能被**口头解释代码**；赛场 Vivado 版本可能较旧，勿依赖新版特性。每周日下午固定 1.5h 备考，题型清单、全真模拟流程与真题进度跟踪见 **[docs/exam_prep.md](docs/exam_prep.md)**。
 
 ---

@@ -164,6 +164,8 @@ RTL 线内部 Part B（9/28–10/1）→ Part C（10/2–10/4）串行不变；�
 
 ### 3.5 第一阶段出口检查表（9/27 验收，组长主持）
 
+> 检查点 issue：[#19 [M1] Part A 验收检查点（9/27）](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/19)——本表全勾后关闭。
+
 - [ ] 全员：HDLBits 累计 30+；阶段 0 自测三项全过（编解码 / 画数据通路 / 刷题）
 - [ ] RTL 线：§3.2 交付物全勾 + §4.1 Part A 验收
 - [ ] 验证线：§3.3 交付物全勾（转发 tb 在 v0 上跑出对照数据）
@@ -243,6 +245,8 @@ RTL 线内部 Part B（9/28–10/1）→ Part C（10/2–10/4）串行不变；�
 
 #### 验收标准
 
+> 检查点 issue：[#20 [M1] Part B 验收：三级流水 + 数据转发（10/1）](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20)
+
 - arch-test 与 v0 相同集合全过
 - 连续相关 R-type 序列 CPI 接近 1（旁路生效，波形零气泡）
 - load-use 场景正确插入 1 拍停顿
@@ -275,6 +279,8 @@ RTL 线内部 Part B（9/28–10/1）→ Part C（10/2–10/4）串行不变；�
 - [ ] 验证脚本/清单沉淀，标 `#skill候选`（如"CPI 测量流程"）
 
 #### 验收标准
+
+> 检查点 issue：[#21 [M1] Part C 验收 + M1 收口（10/4）](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)
 
 - CPI 相对 **v1 无转发**基线降低 ≥ 25%（2026-09-20 口径重定义：v0 两级基线 CPI≈1 不可作降幅基线，仅作参考锚点，见 [llm_log](../../report/llm_log/2026-09-20-v0-no-stall-cpi-reframe.md)）
 - Fmax ≥ 100 MHz，WNS ≥ 0
