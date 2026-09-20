@@ -1,0 +1,67 @@
+== tb_core_smoke ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+WARNING: riscv/tb_core_smoke.v:38: $readmemh(../src/riscv_fw/hello_v0.hex): Not enough words in the file for the requested range [0:4095].
+VCD info: dumpfile tb_core_smoke.vcd opened for output.
+PASS: tohost = 13 (0x0000000d), tohost_exit = 0
+riscv/tb_core_smoke.v:92: $finish called at 40075000 (1ps)
+== tb_core_test ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+WARNING: riscv/tb_core_test.v:36: $readmemh(../src/riscv_fw/hello_test.hex): Not enough words in the file for the requested range [0:4095].
+VCD info: dumpfile tb_core_test.vcd opened for output.
+PASS: all RV32I tests passed (tohost_exit = 0)
+riscv/tb_core_test.v:86: $finish called at 100075000 (1ps)
+== tb_core_fwd ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+WARNING: riscv/tb_core_fwd.v:47: $readmemh(riscv/fwd/fwd_test.hex): Not enough words in the file for the requested range [0:4095].
+VCD info: dumpfile tb_core_fwd.vcd opened for output.
+== fwd phase A (R-type RAW) : cycles=28 bubbles=0 (expect 0)
+== fwd phase B (lw->op)     : cycles=22 bubbles=0 (expect 0)
+== fwd phase C (taken)      : cycles=26 bubbles=5 (expect 5)
+== fwd phase D (not-taken)  : cycles=12 bubbles=0 (expect 0)
+PASS: fwd_test 结果全对；气泡 A/B/C/D = 0/0/5/0，总周期 122，总气泡 8
+riscv/tb_core_fwd.v:196: $finish called at 1295000 (1ps)

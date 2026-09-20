@@ -19,10 +19,11 @@ sim/
 
 - **主力回归**：Icarus Verilog 13.0（MSYS2 ucrt64 包 `mingw-w64-ucrt-x86_64-iverilog`）——一键跑全部 tb
 - **XSim 复核**（Vivado 2026.1 已装，issue #2）：同一套 tb 已复核对拍，**两工具结论一致**（2026-09-14；`xvlog → xelab → xsim -R`，从 `sim/` 目录运行以保证 `$readmemh` 相对路径正确）
-- 用法（MSYS2 UCRT64 shell 中）：
-  - 一键跑全部 tb：`bash sim/scripts/run_iverilog.sh`（编译 `src/riscv/*.v` + `sim/riscv/tb_core_*.v`，产物在 `sim/build/`）
+- 用法（MSYS2 UCRT64 shell 中，产物在 `sim/build/`）：
+  - 一键跑全部：`bash sim/scripts/run_iverilog.sh`；两档回归：`bash sim/scripts/run_iverilog.sh v0`（冒烟 + 逐指令）/ `fwd`（转发专项）
   - `tb_core_smoke.v`：加载 `src/riscv_fw/hello_v0.hex`，检查 `tohost==13 && tohost_exit==0`（程序级冒烟）
   - `tb_core_test.v`：加载 `src/riscv_fw/hello_test.hex`，检查 `tohost_exit==0`（RV32I 逐指令自检 38 用例；失败值为用例编号）
+  - `tb_core_fwd.v`：加载 `riscv/fwd/fwd_test.hex`（转发专项，Part B 测试先行）——数据冒险零气泡 + taken 分支 1 拍契约，气泡/结果双自检
 - tb 接口以 [`src/riscv/design_v0.md`](../src/riscv/design_v0.md) 为唯一权威
 
 > 当前状态：v0 核（RV32I）两个 tb 均 PASS（2026-09-11 iverilog；2026-09-14 XSim 复核对拍一致），见 `report/llm_log/2026-09-14-vivado-2026-1-acceptance.md`
@@ -46,10 +47,17 @@ sim/
 
 > `muldiv` 的接口缺口（`op` 只有 2 位、装不下 RV32IM 的 8 种运算等）详见 [`report/llm_log/2026-09-15-muldiv-interface-gap.md`](../report/llm_log/2026-09-15-muldiv-interface-gap.md)。
 
+## 转发专项测试（Part B 测试先行，2026-09-20 建立）
+
+- 被测程序：`riscv/fwd/fwd_test.S`（生成 `fwd_test.hex/.dis` 入库）；构建：`bash sim/scripts/build_fwd.sh`
+- 判据（v0 对照档）：阶段 A（R 型连读）气泡 0、阶段 B（lw→运算）气泡 0、阶段 C（taken 分支/跳转）气泡 = 5、阶段 D（not-taken 分支）气泡 0；各阶段结果与期望常数逐一比对
+- v1 接入：用 `+exp_a/+exp_b/+exp_c/+exp_d` 覆盖期望（如 v1 无预测档 `+exp_b=4`），机制演示见 `data/logs/2026-09-20-fwd-baseline/plusarg_override_demo.log`
+- 证据与对照数据：`data/logs/2026-09-20-fwd-baseline/`；口径决策：`report/llm_log/2026-09-20-v0-no-stall-cpi-reframe.md`
+
 ## 约定
 
 - 每个 testbench 输出 PASS/FAIL 自检结果，禁止只靠肉眼看波形
 - 关键波形截图归档到 `report/`，供设计报告引用
 - 黄金参考数据放 `data/`，仿真比对脚本引用相对路径
 
-> 状态：🚧 进行中（v0 核 RV32I 已过冒烟与逐指令自检）
+> 状态：🚧 进行中（v0 核 RV32I 已过冒烟与逐指令自检；转发专项 v0 对照基线已建立，2026-09-20）

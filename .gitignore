@@ -22,6 +22,10 @@ src/riscv_fw/*.elf
 src/riscv_fw/*.bin
 src/riscv_fw/*.o
 
+# --- 转发专项测试程序编译产物（sim/riscv/fwd/，hex 与 dis 入库） ---
+sim/riscv/fwd/*.elf
+sim/riscv/fwd/*.bin
+
 # --- iverilog 仿真产物 ---
 sim/build/
 
