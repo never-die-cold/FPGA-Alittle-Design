@@ -1,0 +1,2 @@
+# Windows 环境无符号链接（套件里该文件是符号链接）：显式包含目标公共配置
+include $(TARGETDIR)/$(RISCV_TARGET)/device/rv32i_m/Makefile.include
