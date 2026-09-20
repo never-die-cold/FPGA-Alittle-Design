@@ -9,6 +9,10 @@ PS 侧 Jupyter Notebook：寄存器配置、黄金参考比对、性能与资源
 - `golden_ref.py`：软件黄金参考实现（OpenCV / 纯 Python 推理）
 - `metrics.py`：数据自动采集与报告生成（→ `data/`）
 
+## 板卡访问
+
+- 校园网内 SSH：`ssh xilinx@10.50.216.93`（2026-09-20 建立，SD 卡已烧录 PYNQ 镜像）；notebook 在板卡 Jupyter（默认端口 9090）上运行
+
 ## 约定
 
 - 所有 notebook 从头运行（Restart & Run All）必须无报错

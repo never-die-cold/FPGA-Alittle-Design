@@ -47,6 +47,8 @@
 - 上板任务恢复执行：JTAG LED 冒烟 → `soc_top` 上板冒烟（9/27 Part A 顺延项回补）→ HDMI base overlay 排雷；均需先过仿真
 - 新待办：上板时钟方案（125 MHz 板载时钟 vs 86.8 MHz 当前 Fmax），写入 `design_v0.md` §10 待拍板
 
+> 2026-09-20 补充：SD 卡烧录完毕，已建立校园网 SSH 远程访问（`ssh xilinx@10.50.216.93`，22 端口连通性实测可达），同步至 `board/README.md` / `README.md` / `src/pynq_host/README.md` / `docs/prep_checklist.md`
+
 ## 6. 经验沉淀
 
 - 触发条件：长期阻塞项（缺件 / issue）解除后，仓库仍残留"顺延 / 等待"表述 #skill候选
