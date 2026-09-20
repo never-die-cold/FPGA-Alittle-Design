@@ -13,7 +13,17 @@
 | 记录人 | waltercooper |
 | 日期 | 2026-09-20 |
 
-## 硬件与连接
+## 硬件、连接与「两种下载」的区别（先看这里）
+
+项目里有两个容易混淆的「下载」，本记录对应的 PL 配置用的是 **JTAG**：
+
+| 名称 | 作用 | 本次情况 |
+|:---|:---|:---|
+| **SD 卡烧录** | 把 PYNQ Linux 镜像写入 SD 卡，让板子能启动（PS 侧） | 队友已完成，板子从 SD 卡启动 PYNQ v3.x / Ubuntu 22.04 |
+| **JTAG 下载** | 通过板载 USB-JTAG 把 `.bit` 配置进 **PL（可编程逻辑）** | **本次上板验证使用的方式**（Vivado hw_manager） |
+| （备选）PYNQ 加载 | 板内 Linux 用 `Bitstream.download()` 配置 PL | 本次未用，列出仅作对照 |
+
+> 两者不冲突：SD 卡负责「板子能不能开机」，JTAG 负责「PL 里烧的是哪个设计」。本记录验证的是后者。
 
 - 板卡：PYNQ-Z2（XC7Z020-1CLG400C），全队共用 1 块
 - 连接：板载 Micro-USB（JTAG/UART）直连本机 Windows；PYNQ Linux 串口在 **COM4（ttyPS0，115200）**
@@ -36,7 +46,7 @@ New-Item -ItemType Directory -Force C:\fpga_build\pynq_z2_smoke | Out-Null
 | SHA256 | `AA65F0B1D1D0DF42277B80686584D810F8228847ED4537C266B6187F4951C4B1` |
 | 大小 | 4,045,772 B |
 
-## 2. JTAG 下载到 PL
+## 2. JTAG 下载 bitstream 到 PL（本次方式）
 
 用 `program_pl.tcl`（临时脚本，放构建目录，不入库）：
 
@@ -100,6 +110,7 @@ LED smoke test 通过「仿真（iverilog）→ 构建（Vivado BUILD PASSED）�
 
 - `board/smoke_test/`（RTL/XDC/脚本）归 **RTL 线**维护；本记录归 `board/`（验证线归档边界 + 上板执行人）
 - bitstream 与 Vivado 工程不入库（`.gitignore *.bit`）；原始报告由构建脚本写在 `C:\fpga_build` 之外，需要时另存
+- 本记录用 JTAG 配置 PL；板子系统启动依赖队友完成的 SD 卡烧录（PYNQ 镜像），两者互不替代
 - 本次只配置 PL，不烧 Flash，断电后需重新下载
 - 上板时钟方案（板载 125 MHz vs v0 Fmax 86.8 MHz）与本测试无关，仍待拍板（`src/riscv/design_v0.md` §10）
 
