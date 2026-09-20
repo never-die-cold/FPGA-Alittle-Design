@@ -54,6 +54,14 @@ sim/
 - v1 接入：用 `+exp_a/+exp_b/+exp_c/+exp_d` 覆盖期望（如 v1 无预测档 `+exp_b=4`），机制演示见 `data/logs/2026-09-20-fwd-baseline/plusarg_override_demo.log`
 - 证据与对照数据：`data/logs/2026-09-20-fwd-baseline/`；口径决策：`report/llm_log/2026-09-20-v0-no-stall-cpi-reframe.md`
 
+## riscv-arch-test 接入（第三方「优化不改语义」判据，2026-09-20 建立）
+
+- 套件：`riscv-non-isa/riscv-arch-test` `old-framework-2.x`（自带 `references/*.reference_output` 参考签名）；获取：`bash sim/scripts/fetch_arch_test.sh`（克隆到 `sim/arch_test/suite/`，不入库）
+- 目标配置：`sim/arch_test/target/pynq_z2_v0/`（`model_test.h` + `env/link.ld` + 框架 Makefile 配置），编译经套件的 `make` 流程驱动
+- 跑法：`bash sim/scripts/run_arch_test.sh <测试名>`（默认 `add-01`）——编译 → 统一镜像双预载 → 逐字签名比对 → PASS/FAIL；签名输出兼容框架 `make verify` 的文件约定
+- 已纳入回归：`add-01` / `addi-01` / `and-01` 全 PASS；证据与边界：`data/logs/2026-09-20-arch-test/`
+- 说明：arch-test 需要 ELF 编译流程，不并入 `run_iverilog.sh`（后者只跑源码级 tb）
+
 ## 约定
 
 - 每个 testbench 输出 PASS/FAIL 自检结果，禁止只靠肉眼看波形

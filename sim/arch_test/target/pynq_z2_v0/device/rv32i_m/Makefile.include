@@ -1,0 +1,27 @@
+# PYNQ-Z2 自研 v0 核（RV32I）arch-test 编译配置
+# 用法（由 sim/scripts/run_arch_test.sh 调用）：
+#   make -C <suite> RISCV_TARGET=pynq_z2_v0 TARGETDIR=<repo>/sim/arch_test/target \
+#        RISCV_DEVICE=I XLEN=32 RISCV_TEST=add-01 WORK=<work> compile
+
+RISCV_PREFIX   ?= riscv32-unknown-elf-
+RISCV_GCC      ?= $(RISCV_PREFIX)gcc
+RISCV_OBJDUMP  ?= $(RISCV_PREFIX)objdump
+RISCV_OBJCOPY  ?= $(RISCV_PREFIX)objcopy
+RISCV_READELF  ?= $(RISCV_PREFIX)readelf
+
+# $(1) 由框架 compile_template 传入（-march=rv32i -mabi=ilp32 -DXLEN=32）
+RISCV_GCC_OPTS ?= -mcmodel=medany -mno-relax -static -ffreestanding -nostdlib -nostartfiles -Wl,--build-id=none
+
+COMPILE_TARGET = \
+	$$(RISCV_GCC) $(1) $$(RISCV_GCC_OPTS) \
+		-I$(ROOTDIR)/riscv-test-suite/env/ \
+		-I$(TARGETDIR)/$(RISCV_TARGET)/ \
+		-T$(TARGETDIR)/$(RISCV_TARGET)/env/link.ld $$< \
+		-o $$@; \
+	$$(RISCV_OBJDUMP) -D $$@ > $$@.objdump; \
+	$$(RISCV_READELF) -a $$@ > $$@.readelf; \
+	$$(RISCV_OBJCOPY) -O binary $$@ $$@.bin
+
+# 本目标的仿真/比对由 sim/scripts/run_arch_test.sh 统一驱动（不通过框架 make run）
+RUN_TARGET = \
+	echo "RUN_TARGET: 由 sim/scripts/run_arch_test.sh 接管"; false

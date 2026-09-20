@@ -29,6 +29,9 @@ sim/riscv/fwd/*.bin
 # --- iverilog 仿真产物 ---
 sim/build/
 
+# --- riscv-arch-test 第三方套件（用 sim/scripts/fetch_arch_test.sh 下载，不入库） ---
+sim/arch_test/suite/
+
 # --- Python ---
 __pycache__/
 *.pyc
