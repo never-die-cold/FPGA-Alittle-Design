@@ -17,18 +17,31 @@ module if_stage (
 
     reg [31:0] pc_id_r;
     reg        flush_q;
+    reg [31:0] instr_hold;
+    reg        valid_hold;
+    reg        stall_q;
 
-    assign instr       = flush_q ? NOP : imem_rdata;
-    assign instr_valid = ~flush_q;
+    assign instr       = stall_q ? instr_hold : (flush_q ? NOP : imem_rdata);
+    assign instr_valid = stall_q ? valid_hold : ~flush_q;
     assign pc_id       = pc_id_r;
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            pc_id_r <= 32'h8000_0000;
-            flush_q <= 1'b1;
-        end else if (!stall) begin
-            pc_id_r <= pc;
-            flush_q <= flush;
+            pc_id_r   <= 32'h8000_0000;
+            flush_q   <= 1'b1;
+            instr_hold <= NOP;
+            valid_hold <= 1'b0;
+            stall_q    <= 1'b0;
+        end else begin
+            stall_q <= stall;
+            if (stall && !stall_q) begin
+                instr_hold <= flush_q ? NOP : imem_rdata;
+                valid_hold <= ~flush_q;
+            end
+            if (!stall) begin
+                pc_id_r <= pc;
+                flush_q <= flush;
+            end
         end
     end
 

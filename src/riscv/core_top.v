@@ -126,7 +126,8 @@ module core_top (
 
     // ---------- 访存 ----------
     assign dmem_addr  = alu_y;
-    assign dmem_wdata = rdata2;
+    assign dmem_wdata = (mask_sel == 2'b00) ? {4{rdata2[7:0]}}  :
+                        (mask_sel == 2'b01) ? {2{rdata2[15:0]}} : rdata2;
 
     wire [3:0] be_w = (mask_sel == 2'b00) ? (4'b0001 << alu_y[1:0]) :
                       (mask_sel == 2'b01) ? (alu_y[1] ? 4'b1100 : 4'b0011) :
