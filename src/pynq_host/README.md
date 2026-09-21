@@ -1,4 +1,4 @@
-# src/pynq_host —— PYNQ 上位机
+﻿# src/pynq_host —— PYNQ 上位机
 
 PS 侧 Jupyter Notebook：寄存器配置、黄金参考比对、性能与资源数据自动采集、结果展示。
 
@@ -11,7 +11,7 @@ PS 侧 Jupyter Notebook：寄存器配置、黄金参考比对、性能与资源
 
 ## 板卡访问
 
-- 校园网内 SSH：`ssh xilinx@10.50.216.93`（2026-09-20 建立，SD 卡已烧录 PYNQ 镜像）；notebook 在板卡 Jupyter（默认端口 9090）上运行
+- 校园网内 SSH：`ssh xilinx@<板卡内网IP>`（2026-09-20 建立，SD 卡已烧录 PYNQ 镜像）；notebook 在板卡 Jupyter（默认端口 9090）上运行
 
 ## 约定
 

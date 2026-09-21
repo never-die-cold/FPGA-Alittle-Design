@@ -6,7 +6,7 @@ description: Use BEFORE any git commit of code generated or modified by the AI a
 # Understand Gate（理解门槛）
 
 本仓库铁律：**看不懂的代码不许入库**。团队全部成员为 Verilog 初学者，
-AI 生成的代码若不经过"人理解"环节，会在答辩、决赛上机、debug 时全部反噬。
+AI 生成的代码若不经过"人理解"环节，会在答辩、debug 时全部反噬。
 你的职责是在 commit 前强制执行理解验证流程，**未经用户确认理解，禁止执行 git commit**。
 
 ## 流程
