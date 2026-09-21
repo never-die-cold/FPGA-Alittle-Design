@@ -19,7 +19,7 @@
 
 | 子目录 | 现状 | 要做什么 |
 |:---|:---|:---|
-| `src/riscv/` | ✅ 已开工 | **模块一核心**：自研 RISC-V 核 RTL。`plan.md` 排期与学习路线、`design_v0.md` 接口契约（唯一权威）、`pc/regfile/alu/decode/if_stage/core_top.v` 六个模块（v0 两级流水已仿真 PASS）。后续：Part B 三级+转发（9/28–10/1）、Part C 分支预测（10/2–10/4）、M 扩展 `muldiv.v` 与最小 SoC 外壳收尾（原 `src/soc/` 已并入本目录） |
+| `src/riscv/` | ✅ 已开工 | **模块一核心**：自研 RISC-V 核 RTL。`plan.md` 排期与学习路线、`design_v0.md` 接口契约（唯一权威）、`pc/regfile/alu/decode/if_stage/core_top.v` 六个模块（v0 两级流水已仿真 PASS）。后续：Part B 三级+转发（9/25–9/28）、Part C 分支预测（9/29–10/1，2026-09-21 排期压缩）、M 扩展 `muldiv.v` 与最小 SoC 外壳收尾（原 `src/soc/` 已并入本目录） |
 | `src/riscv_fw/` | ✅ 已开工 | 跑在自研核上的**裸机固件**：统一工具链权威文档（MSYS2 riscv32-unknown-elf）、Makefile 三目标（RV32IM 冒烟 / RV32I v0 冒烟 / 38 用例逐指令自检）、start.S/link.ld/bin2hex.py、三套 dis+hex 证据。后续：benchmark（Part C）、协处理器驱动 |
 | `src/vision/` | 🚧 占位 | **模块二**：HDMI 预处理流水线 RTL（rgb2gray→gaussian→scaler→sobel、行缓存、AXI-Lite 参数寄存器、OSD）。M2 开工；演示层任务（参数化直通、直通 vs 帧缓存对比）见 `docs/proposal_upgrade.md` |
 | `src/coprocessor/` | 🚧 占位 | **模块三**：CNN 推理协处理器（INT8 MAC 阵列、DMA、自定义指令译码）。M2 开工；算子化验证（CONV/POOL/GEMM 加速比表）+ 软硬切换；L2 降级时可整体裁剪 |
@@ -81,10 +81,9 @@
 | `onboarding.md` | 新队友上手：Git/Markdown/Agent 使用与 Issue 纪律 |
 | `prep_checklist.md` | 开工前准备清单（🔴卡脖子项进度、🟡建议、🟢加分） |
 | `code_review_checklist.md` | 理解门槛检查单（跨 agent 通用版，与 `skill/understand-gate` 配套） |
-| `exam_prep.md` | 决赛 Verilog 上机备考（2019–2025 真题打法 + 进度表） |
-| `resources.md` | 分类资料清单（11 节 40+ 链接） |
+| `resources.md` | 分类资料清单（9 节 40+ 链接） |
 | `amd_track_awards.md` | 往届 AMD 赛道获奖作品与赛制调研 |
 | `track_guides_2026_summary.md` | 2026 全部 7 企业 24 选题指南摘要 |
-| `proposal_upgrade.md` | 命题升级方案（A/B/C 阶梯、借鉴映射、演示剧本、红线） |
-| `idea1.md` | EdgePilot 扩展方案（L4 云台伺服蓝图） |
-| `git_learning/` | 队友 Git 学习笔记（从根目录合规移入的历史记录） |
+| `proposal_upgrade.md` | 命题升级方案（A/B 阶梯、借鉴映射、演示剧本、红线） |
+
+> 注：`exam_prep.md`、`git_learning/`、`tasks/`、`idea1.md` 等队内过程材料已于 2026-09-21 移出开源仓库（转存队内私有目录，不随作品提交）；`report/llm_log/` 历史记录按"别后补"铁律保持原样，其中指向上述路径的链接为历史快照。
