@@ -19,7 +19,7 @@
 
 | 子目录 | 现状 | 要做什么 |
 |:---|:---|:---|
-| `src/riscv/` | ✅ 已开工 | **模块一核心**：自研 RISC-V 核 RTL。`plan.md` 排期与学习路线、`design_v0.md` 接口契约（唯一权威）、`pc/regfile/alu/decode/if_stage/core_top.v` 六个模块（v0 两级流水已仿真 PASS）。后续：Part B 三级+转发（9/28–10/1）、Part C 分支预测（10/2–10/4）、M 扩展 `muldiv.v` 与最小 SoC 外壳收尾（原 `src/soc/` 已并入本目录） |
+| `src/riscv/` | ✅ 已开工 | **模块一核心**：自研 RISC-V 核 RTL。`plan.md` 排期与学习路线、`design_v0.md` 接口契约（唯一权威）、`pc/regfile/alu/decode/if_stage/core_top.v` 六个模块（v0 两级流水已仿真 PASS）。后续：Part B 三级+转发（9/25–9/28）、Part C 分支预测（9/29–10/1，2026-09-21 排期压缩）、M 扩展 `muldiv.v` 与最小 SoC 外壳收尾（原 `src/soc/` 已并入本目录） |
 | `src/riscv_fw/` | ✅ 已开工 | 跑在自研核上的**裸机固件**：统一工具链权威文档（MSYS2 riscv32-unknown-elf）、Makefile 三目标（RV32IM 冒烟 / RV32I v0 冒烟 / 38 用例逐指令自检）、start.S/link.ld/bin2hex.py、三套 dis+hex 证据。后续：benchmark（Part C）、协处理器驱动 |
 | `src/vision/` | 🚧 占位 | **模块二**：HDMI 预处理流水线 RTL（rgb2gray→gaussian→scaler→sobel、行缓存、AXI-Lite 参数寄存器、OSD）。M2 开工；演示层任务（参数化直通、直通 vs 帧缓存对比）见 `docs/proposal_upgrade.md` |
 | `src/coprocessor/` | 🚧 占位 | **模块三**：CNN 推理协处理器（INT8 MAC 阵列、DMA、自定义指令译码）。M2 开工；算子化验证（CONV/POOL/GEMM 加速比表）+ 软硬切换；L2 降级时可整体裁剪 |

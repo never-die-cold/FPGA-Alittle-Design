@@ -10,11 +10,11 @@
 
 | # | 决策 | 内容 | 负责 | 时间 |
 |:---:|:---|:---|:---|:---|
-| 1 | 基准只用 CoreMark | 不做 Dhrystone；EEMBC 官方 coremark 裸机移植（`core_portme.c/h`） | 基准线 `dev/bench` | 9/28–10/4（与 Part B/C 并行） |
+| 1 | 基准只用 CoreMark | 不做 Dhrystone；EEMBC 官方 coremark 裸机移植（`core_portme.c/h`） | 基准线 `dev/bench` | 9/25–10/1（与 Part B/C 并行；2026-09-21 排期压缩前移） |
 | 2 | 仿真跑分用 iverilog | 短迭代（32 次）实测 → 外推 CoreMark/MHz，报告注明"仿真外推口径" | 基准线 | 同上 |
-| 3 | dmem/imem 扩容 + SoC 计数器归 Part A 收口 | dmem 4KB→32KB（CoreMark 数据段）；imem 16KB→32KB（代码段）；`soc_top` 加 32-bit 存储器映射自由运行计数器（计时用） | RTL 线 `dev/rtl` | 9/27 前（Part A 收口一并做） |
-| 4 | PicoRV32 对比由验证线做，排 M1 收口后 | regular + large 两配置，同器件同工具 OOC post-route | 验证线 `dev/verify` | 10/5–10/8 |
-| 5 | PicoRV32 性能数据引用官方公开口径 | 不重跑其 CoreMark；引用 0.309 DMIPS/MHz + CPI 4–5，注明来源 | 验证线 | 同上 |
+| 3 | dmem/imem 扩容 + SoC 计数器归 Part A 收口 | dmem 4KB→32KB（CoreMark 数据段）；imem 16KB→32KB（代码段）；`soc_top` 加 32-bit 存储器映射自由运行计数器（计时用） | RTL 线 `dev/rtl` | 9/24 前（Part A 收口一并做；9/27 合并日复核） |
+| 4 | PicoRV32 对比由验证线做，排 M1 收口后 | regular + large 两配置，同器件同工具 OOC post-route | 验证线 `dev/verify` | 10/21–10/24（M4 窗口前段；原 10/5–10/8 因排期压缩让位 M2/M3） |
+| 5 | PicoRV32 性能数据引用官方公开口径 | 不重跑其 CoreMark；引用 0.309 DMIPS/MHz + CPI 4–5，注明来源 | 验证线 | 同上（10/21–10/24） |
 
 ## 2. 参照数据（公开口径，正式引用前须逐条核对原文）
 

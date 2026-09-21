@@ -193,14 +193,15 @@ edgesight/
 | 阶段 | 时间 | 里程碑 |
 |:---|:---|:---|
 | 报名与选型 | 7.6 – 9.22 | 完成注册；搭建 Vivado/PYNQ 环境；RISC-V 核两级基线跑通单条指令 |
-| M1：内核成型 | 9/14 – 10/4 | 三级流水 + 转发 + 分支预测完成，仿真全过；CPI/主频基线数据出炉（日粒度排期见 [src/riscv/plan.md](src/riscv/plan.md)） |
-| M2：协处理器 + 预处理 | 10 月上中旬 | 预处理流水线 HDMI 直通演示；CNN 协处理器跑通首个网络 |
-| M3：系统集成 | 10 月下旬 | SoC 全链路闭环上板演示；全部指标实测采集完成 |
-| M4：文档冲刺 | 11 月初 | 设计报告、协作记录、Skill、演示视频收尾 |
+| M1：内核成型 | 9/14 – 10/1 | 三级流水 + 转发 + 分支预测完成，仿真全过；CPI/主频基线数据出炉（日粒度排期见 [src/riscv/plan.md](src/riscv/plan.md)；2026-09-21 压缩提前，原 10/4） |
+| M2：协处理器 + 预处理 | 10/2 – 10/12 | 预处理流水线 HDMI 直通演示；CNN 协处理器跑通首个网络 |
+| M3：系统集成 | 10/13 – 10/20 | SoC 全链路闭环上板演示；全部指标实测采集完成 |
+| M4：文档冲刺 | 10/21 – 10/26 | 设计报告、协作记录、Skill、演示视频收尾（里程碑内边做边写摊薄） |
+| 缓冲 + stretch | 10/27 – 11/3 | L3.5 检测-跟踪闭环（随时可砍）+ 答辩演练 |
 | **作品提交** | **11.4 18:00 截止** | 提交全套材料 |
 | 决赛准备 | 11 月 | 答辩演练（决赛 11.20–11.22 南京） |
 
-> **检查点体系（2026-09-20 起）**：里程碑即阶段检查点，验收单 = gate issue——M1 拆三个：[#19 Part A（9/27）](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/19)、[#20 Part B（10/1）](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20)、[#21 Part C + M1 收口（10/4）](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)；M2–M4 里程碑已建（due 10/18 / 10/25 / 11/4）。验收清单引用 [src/riscv/plan.md](src/riscv/plan.md) 对应章节，全勾后关闭。
+> **检查点体系（2026-09-20 起）**：里程碑即阶段检查点，验收单 = gate issue——M1 拆三个：[#19 Part A（9/27）](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/19)、[#20 Part B（9/28）](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20)、[#21 Part C + M1 收口（10/1）](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)；M2–M4 里程碑（due 10/12 / 10/20 / 10/26，2026-09-21 压缩前移）。验收清单引用 [src/riscv/plan.md](src/riscv/plan.md) 对应章节，全勾后关闭。
 
 ---
 
@@ -223,7 +224,7 @@ edgesight/
 | **L1 目标版** | 完整 SoC | 三级流水全优化 RISC-V + CNN 协处理器 + HDMI 预处理全链路 |
 | **L2 稳健版** | 砍协处理器 | RISC-V 核（含流水线优化）+ HDMI 预处理流水线；CNN 推理退化为 RISC-V 核上的软件实现，加速比对比改为"预处理加速 + CPI 优化"两条线 |
 | **L3 保底版** | 单点打透 | RISC-V 核三级流水 + 转发优化（分支预测可弃）+ 一路预处理（灰度+缩放），保证"流水线优化"这一核心创新点完整可测 |
-| **L3.5 增强版**（stretch） | 检测-跟踪闭环 | L3 之上加"CNN 检测 → 自研核轻量跟踪 → OSD 闭环"；无新硬件，10/25–11/4 窗口，随时可砍（[docs/proposal_upgrade.md](docs/proposal_upgrade.md)） |
+| **L3.5 增强版**（stretch） | 检测-跟踪闭环 | L3 之上加"CNN 检测 → 自研核轻量跟踪 → OSD 闭环"；无新硬件，10/27–11/3 窗口，随时可砍（[docs/proposal_upgrade.md](docs/proposal_upgrade.md)） |
 
 **核心原则**：架构绝不降级，优化思想绝不取消；降级只砍广度，不砍深度。每个模块独立分支开发，随时可回退。
 

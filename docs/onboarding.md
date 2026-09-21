@@ -88,7 +88,7 @@ Agent = 能帮你**实际干活**的 AI（写代码、改文件、跑命令）�
    - **Bug 报告**：仿真 / 上板 / 工具链问题，填现象、复现步骤、期望与实际结果、日志
    - **任务 / 待办**：需要跟踪的任务或提问，填验收标准、负责人、截止时间
 2. **标签**（负责人建一次，共 5 个）：`bug` / `rtl` / `verify` / `docs` / `hardware`
-3. **里程碑与检查点**：M1–M4 已建（due 10/4 / 10/18 / 10/25 / 11/4）；里程碑即阶段检查点，每阶段验收开一个 gate issue 挂到对应里程碑（M1 三个：[#19 Part A](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/19) / [#20 Part B](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20) / [#21 Part C + M1 收口](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)），验收清单全勾才关闭
+3. **里程碑与检查点**：M1–M4 已建（due 10/1 / 10/12 / 10/20 / 10/26，2026-09-21 压缩前移）；里程碑即阶段检查点，每阶段验收开一个 gate issue 挂到对应里程碑（M1 三个：[#19 Part A](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/19) / [#20 Part B](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20) / [#21 Part C + M1 收口](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)），验收清单全勾才关闭
 4. **关闭规矩**：修复的 commit message 写 `fixes #12`（或 `closes #12`），推送后自动关闭；修复过程顺手记入 `report/llm_log/`
 5. **与排期的边界**：M1 每天的计划任务看 `src/riscv/plan.md`，不为每天的排期重复建 issue
 
