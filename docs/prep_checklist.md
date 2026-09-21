@@ -1,11 +1,11 @@
-# 开工前准备清单（Prep Checklist）
+﻿# 开工前准备清单（Prep Checklist）
 
 > 目标：开工第一天直接进入 M1（两级流水基线跑通单条指令），不把时间耗在装环境上。
 > 用法：完成一项打一个勾，负责人认领后把名字填在括号里。
 
 ## 🔴 必须完成（卡脖子项）
 
-- [x] **PYNQ 镜像烧录验证**（负责人：never-die-cold）——✅ 2026-09-20 板卡到货并完成上板验证，SD 卡烧录完毕，已开通校园网 SSH 远程访问（`ssh xilinx@10.50.216.93`）；全队共用 1 块板
+- [x] **PYNQ 镜像烧录验证**（负责人：never-die-cold）——✅ 2026-09-20 板卡到货并完成上板验证，SD 卡烧录完毕，已开通校园网 SSH 远程访问（`ssh xilinx@<板卡内网IP>`）；全队共用 1 块板
   - 通过标准：板子联网、Jupyter 可打开、base overlay 可加载、能点亮板载 LED
 - [x] **RISC-V 工具链可用**（负责人：never-die-cold）
   - MSYS2 ucrt64 版 `riscv32-unknown-elf`（RV32IM，全队统一；安装与构建步骤见 [src/riscv_fw/README.md](../src/riscv_fw/README.md)）
@@ -25,18 +25,14 @@
 - [ ] **三人仓库权限与 git 流程跑通**（负责人：全员）
   - 每人完成一次 clone / commit / push
   - 确认 commit message 约定（AI 产出注明 prompt 要点）
-- [ ] **HDLBits 开刷**（负责人：全员）
-  - 每人每天 5 题，开工前刷完 Verilog Language 部分
-  - 直接对应决赛现场上机考核（细则与题型见 [exam_prep.md](exam_prep.md)）
 - [ ] **《手把手教你设计 CPU》（蜂鸟 E203）流水线章节读完**（负责人：never-die-cold）
 
 ## 🟢 可选加分
 
 - [x] **协作记录流程空跑一遍**（负责人：never-die-cold）
   - ✅ 2026-09-11 已产出多条真实记录（工具链、Vivado 选型、plan 合并、跳过野火板等），模板与 push 流程验证通过
-- [ ] **固定每周例会与刷题时间**（负责人：全员）
-  - **每周日下午固定 1.5h 决赛备考**：限时真题 / HDLBits 专题交替，题目与进度跟踪见 [exam_prep.md](exam_prep.md)
-  - 工作日晚开发时段不被备考占用；三人课表对齐，例会互讲进度（答辩质询不分工）
+- [ ] **固定每周例会时间**（负责人：全员）
+  - 三人课表对齐，例会互讲进度（答辩质询不分工）
 
 ---
 

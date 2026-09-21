@@ -1,8 +1,8 @@
-# 边缘慧眼（EdgeSight）——基于自研 RISC-V 的边缘智能视觉 SoC
+﻿# 边缘慧眼（EdgeSight）——基于自研 RISC-V 的片上视觉分析仪
 
 > 全国大学生嵌入式芯片与系统设计竞赛'2026 · FPGA 创新设计赛道 · **AMD 自主选题赛道（初级组）** 参赛作品仓库
 
-**一句话简介**：在 AMD PYNQ-Z2（Zynq-7020）上实现一颗**自研三级流水线 RISC-V 软核**，外挂**参数化 HDMI 视觉直通流水线**与**轻量 CNN 推理协处理器**，构成"摄像头进、检测结果出"的边缘智能视觉 SoC；PS 侧 Jupyter 提供可交互控制面板——实时调参、**软/硬件推理一键切换同屏对比**，并与 ARM 纯软件基线做全链路量化对比。命题升级方案见 [docs/proposal_upgrade.md](docs/proposal_upgrade.md)。
+**一句话简介**：在 AMD PYNQ-Z2（Zynq-7020）上实现一颗**自研三级流水线 RISC-V 软核**，外挂**参数化 HDMI 视觉直通流水线**与**轻量 CNN 推理协处理器**，构成"视频源进、检测结果出"的片上视觉分析仪；PS 侧 Jupyter 提供可交互控制面板——实时调参、**软/硬件推理一键切换同屏对比**，并与 ARM 纯软件基线做全链路量化对比。命题升级方案见 [docs/proposal_upgrade.md](docs/proposal_upgrade.md)。
 
 > 👋 新队友请先阅读 [docs/onboarding.md](docs/onboarding.md)（Git / Markdown / Agent 上手指南）
 
@@ -30,11 +30,19 @@
 
 边缘视觉节点（工业预检、智能门禁、桌面分拣）要求**本地、实时、低功耗**地完成"图像采集 → 预处理 → 推理 → 输出"全链路。通用 MCU 算不动 CNN，纯 ARM Linux 方案的预处理延迟和功耗又偏高。
 
+本作品的定位是**片上可交互视觉分析仪**：把"看清 → 看懂"装进片内——任意 HDMI 视频源（HDMI 摄像头/相机接入）经**直通流水线**实时预处理与推理，全链路逐环节可测、可调参、可对比，而非三个模块的拼盘。
+
 本作品给出的答案是：**在 FPGA 里造一颗为视觉任务定制的 SoC**——
 
 1. **自研三级流水 RISC-V 核（而非直接例化现成软核）**：以两级流水基线为对照，通过流水线重构、数据转发（旁路）、轻量分支预测优化 CPI，把"流水线优化"本身作为可量化验证的设计内容；
 2. **RTL 图像预处理硬件流水线**：HDMI 视频流逐像素实时处理（灰度化 → 高斯滤波 → 缩放/边缘），零 CPU 占用，与 OpenCV 软件基线对比延迟与帧率；
 3. **轻量 CNN 推理协处理器**：以自定义指令 + AXI 协处理器形式挂到 RISC-V 核上，INT8 量化，完成小型分类/检测网络推理，与 ARM Cortex-A9 纯软件推理对比加速比与能效。
+
+**为什么自研核，而不用 PicoRV32 / E203 现成软核？（用数据回答，不用情怀）**
+
+1. **面积效率（DMIPS/LUT）**：同器件（xc7z020）公开数据显示，PicoRV32 regular 约 904 LUT 但 CPI 4–5（0.309 DMIPS/MHz），蜂鸟 E203 约 4153 LUT；我们的核以 ≈850 LUT（v0，不含存储器）实现 CPI≈1 的流水线结构，目标是同器件实测 CoreMark/LUT 优于两者（对比实测计划见 [docs/core_comparison.md](docs/core_comparison.md)，数据入 [data/metrics.csv](data/metrics.csv)）
+2. **协处理器原生耦合**：现成核加 custom 指令需侵入他人微架构；自研核可在 EX 级原生集成 `conv.start/conv.wait`（协处理器 busy 直接进流水线 stall），这是外挂 AXI 方案做不到的集成深度
+3. **裁剪的量化收益**：面向"推理控制负载"裁掉 CSR/trap（fence/ecall/ebreak 按 NOP），省掉用不到的特权级逻辑；代价与适用边界在报告中主动披露（不适用于需要中断/异常的通用场景）
 
 **为什么不直接用 PYNQ Overlay + ARM？** 初级组考察的是 FPGA 基本设计能力。自研软核让我们的作品在"逻辑设计、状态机、时序约束、接口协议"四个考察点上全部有硬内容，而不是把难点都让给现成 IP。
 
@@ -45,15 +53,15 @@
 ```mermaid
 flowchart LR
     subgraph PL[PL 可编程逻辑]
-        CAM[HDMI IN<br/>摄像头视频流] --> PRE[图像预处理流水线<br/>灰度/滤波/缩放 RTL]
-        PRE -->|AXI-Stream / DMA| DDR[(DDR 帧缓冲)]
-        subgraph SOC[RISC-V SoC]
+        CAM[HDMI IN<br/>摄像头视频流] --> PRE[图像预处理直通流水线<br/>灰度/滤波/缩放 RTL<br/>行缓存 · 零逐帧 DDR 回写]
+        PRE -->|逐像素流| OSD[检测结果 OSD 叠加] --> HDMI[HDMI OUT 实时显示]
+        PRE -->|缩放后小图快照<br/>片上 BRAM ~KB 级| SOC2
+        subgraph SOC2[RISC-V SoC]
             CPU[自研三级流水<br/>RISC-V 核<br/>RV32IM + 转发 + 分支预测]
             COP[CNN 推理协处理器<br/>INT8 MAC 阵列<br/>自定义指令]
             CPU <-->|自定义指令/AXI| COP
         end
-        DDR --> SOC
-        SOC --> OSD[检测结果 OSD 叠加] --> HDMI[HDMI OUT 实时显示]
+        SOC2 -->|结果寄存器| OSD
     end
     subgraph PS[PS 处理系统 ARM Cortex-A9 / PYNQ]
         JUP[Jupyter Notebook<br/>任务调度 / 黄金参考 / 指标采集]
@@ -61,7 +69,9 @@ flowchart LR
     PS <-->|AXI-Lite 寄存器映射 / 中断| PL
 ```
 
-**演示闭环**：摄像头画面 → PL 预处理流水线 → 帧缓冲 → RISC-V 核调度 CNN 协处理器推理 → 识别结果叠加显示到屏幕；PS 侧同步运行软件基线并采集对比数据。
+> **双路径架构**：**显示/预处理路径零 DDR**——视频流经行缓存直通流水线逐像素处理、直出 HDMI（Ultra-Vision 式"算法直出"）；**推理路径按需快照**——RISC-V 核发快照命令后，缩放后的小尺寸图（网络输入级，KB 级）进片上 BRAM，CNN 推理在片上静态小图上进行，结果寄存器回 OSD 叠加。整条链路**不逐帧回写 DDR**，"直通 vs 帧缓存"的架构对比对照组为经 DDR 回写的参考实现。
+
+**演示闭环**：摄像头画面 → PL 预处理直通流水线 → HDMI 显示；快照触发 → RISC-V 核调度 CNN 协处理器对片上小图推理 → 识别结果叠加显示；PS 侧同步运行软件基线并采集对比数据。
 
 ---
 
@@ -82,15 +92,15 @@ flowchart LR
 ### 模块二：HDMI 图像预处理硬件流水线
 
 - HDMI IN → 解码 → 逐像素流水线：RGB→灰度 → 3×3 高斯滤波 → 双线性缩放（至网络输入尺寸）→ 可选 Sobel 边缘
-- 行缓存（Line Buffer）调度，全流水无帧缓存依赖，**像素级延迟固定可测**
+- 行缓存（Line Buffer）调度，全流水无逐帧 DDR 回写依赖，**像素级延迟固定可测**
 - **参数化直通链路**：滤波系数、缩放尺寸、ROI 经 AXI-Lite 由 PS/RISC-V 动态配置，现场实时调参
 - **架构对比点**：行缓存直通 vs 传统"DDR 帧缓存回写"方案，延迟/带宽/资源三列实测对比（借鉴往届国一作品 Ultra-Vision 的"算法直出"架构，见 [docs/proposal_upgrade.md](docs/proposal_upgrade.md)）
 - 对照组：PS 侧 OpenCV / 裸机 C 软件实现同算法
 
 ### 模块三：轻量 CNN 推理协处理器
 
-- 形态：RISC-V **自定义指令扩展**（如 `conv.start` / `conv.wait`）+ AXI 协处理器，片内 INT8 MAC 阵列 + DMA 搬运权重/特征图
-- 目标网络：小型分类网络（如 MNIST 级 / CIFAR 级 CNN，或剪枝后的轻量检测头），在 XC7Z020 资源内收敛
+- 形态：RISC-V **自定义指令扩展**（如 `conv.start` / `conv.wait`）+ AXI 协处理器，片内 INT8 MAC 阵列；推理输入为预处理缩放后的**片上快照小图**（KB 级 BRAM），权重经 DMA 预载
+- 目标网络：HDMI 画面字符/数字识别的小型分类 CNN（MNIST 级，或剪枝后的轻量检测头），在 XC7Z020 资源内收敛；演示时对 HDMI 视频源画面中实时呈现的待识别内容推理
 - 软件栈：PC 侧训练 + INT8 量化 → 导出权重 → RISC-V 裸机程序驱动协处理器
 - 对照组：同一网络在 ARM Cortex-A9 上的纯软件推理
 - **算子化验证**：CONV/POOL/GEMM 单算子逐一给出 ARM 基线加速比表（对标往届 HLS 算子赛道的评分打法）
@@ -104,10 +114,10 @@ flowchart LR
 |:---|:---|:---|
 | 实时像素处理 | PL（RTL 流水线） | HDMI 采集、预处理、OSD 叠加、显示输出 |
 | 算力密集推理 | PL（协处理器） | CNN 卷积/全连接加速 |
-| 任务控制 | PL（RISC-V 核，裸机 C） | 调度预处理与推理、协议解析、状态机 |
+| 任务控制 | PL（RISC-V 核，裸机 C） | 快照调度、推理任务编排、协议解析、状态机 |
 | 上位机/基准 | PS（PYNQ / Jupyter） | 寄存器配置、黄金参考比对、性能与资源数据自动采集、结果展示 |
 
-**通信接口**：PS↔PL 采用 AXI-Lite（寄存器映射）+ 中断；PL 内部采用 AXI-Stream / 自定义握手 + DMA 访存 DDR。
+**通信接口**：PS↔PL 采用 AXI-Lite（寄存器映射）+ 中断；PL 内部视觉流走行缓存直通（自定义握手），推理权重经 DMA 预载，推理输入输出走片上快照 BRAM 与结果寄存器，不逐帧访存 DDR。
 
 ---
 
@@ -118,6 +128,7 @@ flowchart LR
 | 指标 | 基线 | 目标 | 对比对象 |
 |:---|:---|:---|:---|
 | RISC-V 核 CPI（benchmark 平均） | v1 无转发（同三级核）实测值 | 降低 ≥ 25% | v1 无转发 vs v1+转发；v0 两级基线 CPI≈1 仅作参考锚点（2026-09-20 口径重定义，见 [llm_log](report/llm_log/2026-09-20-v0-no-stall-cpi-reframe.md)） |
+| RISC-V 核 CoreMark/MHz 与 CoreMark/LUT | v0 实测值（iverilog 仿真外推口径，见 [docs/core_comparison.md](docs/core_comparison.md)） | M1 收口后四档对比在案 | 同核四档（v0/v1无转发/v1+转发/v1+BHT）+ PicoRV32 公开数据对照 |
 | RISC-V 核最高主频 Fmax / WNS | 基线实测值 | ≥ 100 MHz，WNS ≥ 0 | 同核无优化版 |
 | 图像预处理延迟 | 软件 OpenCV 实测值 | 降低 ≥ 10×，逐像素固定延迟 | PS 侧软件实现 |
 | 直通 vs 帧缓存架构对比（延迟/带宽/资源） | DDR 帧缓存参考实现 | 直通优势量化在案 | 自建对照组 |
@@ -149,12 +160,11 @@ edgesight/
 ├── build/               # Vivado 可复现构建 tcl + 综合/实现报告（占位）
 ├── board/               # 上板工程、运行脚本、实测输出（占位）
 ├── data/                # 测试数据与参考结果（metrics.csv 指标汇总 + logs/ + scripts/ + evidence/）
-├── skill/               # 技能包（见下文）
-├── report/              # 设计报告 + 大模型协作记录（llm_log/）
-├── docs/                # 非强制扩展：上手 / 清单 / 调研 / 备考等过程文档（见对照表）
-├── .github/             # Issue 模板（仓库基础设施，不属作品结构对照范围）
-├── .gitignore           # 忽略编译产物（*.hex/*.coe 明确入库）
-└── skill/understand-gate/  # 入库理解门槛 skill（OpenCode 自动加载位说明见其文件头）
+├── skill/                 # 技能包（含 understand-gate 入库理解门槛 skill，OpenCode 自动加载位说明见其文件头）
+├── report/                # 设计报告 + 大模型协作记录（llm_log/）
+├── docs/                  # 非强制扩展：上手 / 清单 / 调研等过程文档（见对照表）
+├── .github/               # Issue 模板（仓库基础设施，不属作品结构对照范围）
+└── .gitignore             # 忽略编译产物（*.hex/*.coe 明确入库）
 ```
 
 ### 与赛题指南推荐目录的对照
@@ -171,7 +181,7 @@ edgesight/
 | `data/` | `data/` | 测试数据、黄金参考与 `metrics.csv` 指标汇总（含 `logs/`、`scripts/`、`evidence/`） |
 | `skill/` | `skill/` | 技能包（大模型协作沉淀，加分项） |
 | `report/` | `report/` | 设计报告 + 大模型协作记录（`llm_log/`） |
-| `docs/` | —（指南未列） | 非强制扩展：过程文档集中地（onboarding / 清单 / 赛题调研 / 备考 / Git 学习） |
+| `docs/` | —（指南未列） | 非强制扩展：过程文档集中地（onboarding / 清单 / 赛题调研） |
 | `.github/` `.gitignore` | — | 仓库基础设施，不参与作品结构对照 |
 
 > `data/metrics.csv` 骨架已按指南要求建立（表头 + `logs/` + `scripts/` + `evidence/`），M3 实测时填充数值与证据；演示级指标增行说明见 `data/README.md`。
@@ -183,16 +193,14 @@ edgesight/
 | 阶段 | 时间 | 里程碑 |
 |:---|:---|:---|
 | 报名与选型 | 7.6 – 9.22 | 完成注册；搭建 Vivado/PYNQ 环境；RISC-V 核两级基线跑通单条指令 |
-| M1：内核成型 | 9/14 – 10/4 | 三级流水 + 转发 + 分支预测完成，仿真全过；CPI/主频基线数据出炉（日粒度排期见 [src/riscv/plan.md](src/riscv/plan.md)）；**备考**：真题摸底 + 3 次限时专题 + 10/4 第一次全真模拟（[docs/exam_prep.md](docs/exam_prep.md)） |
-| M2：协处理器 + 预处理 | 10 月上中旬 | 预处理流水线 HDMI 直通演示；CNN 协处理器跑通首个网络；**备考**：每周日下午 1 道真题，题型清单过半 + 口头解释练习 |
-| M3：系统集成 | 10 月下旬 | SoC 全链路闭环上板演示；全部指标实测采集完成；**备考**：每周 1 题清完题型清单 + 全真模拟第 2 次（含口头解释） |
-| M4：文档冲刺 | 11 月初 | 设计报告、协作记录、Skill、演示视频收尾；**备考**：五年真题全覆盖、每人全题型独立做过；离线资料整理（考场断网） |
+| M1：内核成型 | 9/14 – 10/4 | 三级流水 + 转发 + 分支预测完成，仿真全过；CPI/主频基线数据出炉（日粒度排期见 [src/riscv/plan.md](src/riscv/plan.md)） |
+| M2：协处理器 + 预处理 | 10 月上中旬 | 预处理流水线 HDMI 直通演示；CNN 协处理器跑通首个网络 |
+| M3：系统集成 | 10 月下旬 | SoC 全链路闭环上板演示；全部指标实测采集完成 |
+| M4：文档冲刺 | 11 月初 | 设计报告、协作记录、Skill、演示视频收尾 |
 | **作品提交** | **11.4 18:00 截止** | 提交全套材料 |
-| 决赛准备 | 11 月 | Verilog 基础刷题 + 答辩演练（决赛 11.20–11.22 南京）；**备考**：全真模拟 2–3 次保持手感 |
+| 决赛准备 | 11 月 | 答辩演练（决赛 11.20–11.22 南京） |
 
 > **检查点体系（2026-09-20 起）**：里程碑即阶段检查点，验收单 = gate issue——M1 拆三个：[#19 Part A（9/27）](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/19)、[#20 Part B（10/1）](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20)、[#21 Part C + M1 收口（10/4）](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)；M2–M4 里程碑已建（due 10/18 / 10/25 / 11/4）。验收清单引用 [src/riscv/plan.md](src/riscv/plan.md) 对应章节，全勾后关闭。
-
-> ⚠️ 决赛有**现场 Verilog 限时上机考核**，**不通过直接失去评奖资格**。细则（从五年真题仓库归纳）：现场**断网**、限时手写（时序逻辑、状态机、计数器）、监考**验收仿真波形**、可能被**口头解释代码**；赛场 Vivado 版本可能较旧，勿依赖新版特性。每周日下午固定 1.5h 备考，题型清单、全真模拟流程与真题进度跟踪见 **[docs/exam_prep.md](docs/exam_prep.md)**。
 
 ---
 
@@ -216,7 +224,6 @@ edgesight/
 | **L2 稳健版** | 砍协处理器 | RISC-V 核（含流水线优化）+ HDMI 预处理流水线；CNN 推理退化为 RISC-V 核上的软件实现，加速比对比改为"预处理加速 + CPI 优化"两条线 |
 | **L3 保底版** | 单点打透 | RISC-V 核三级流水 + 转发优化（分支预测可弃）+ 一路预处理（灰度+缩放），保证"流水线优化"这一核心创新点完整可测 |
 | **L3.5 增强版**（stretch） | 检测-跟踪闭环 | L3 之上加"CNN 检测 → 自研核轻量跟踪 → OSD 闭环"；无新硬件，10/25–11/4 窗口，随时可砍（[docs/proposal_upgrade.md](docs/proposal_upgrade.md)） |
-| **L4 扩展版**（冲奖） | EdgePilot 云台伺服 | 视觉引导控制全链路（[docs/idea1.md](docs/idea1.md)）；仅预采购舵机/云台，10 月中旬评估进度后再决定是否集成 |
 
 **核心原则**：架构绝不降级，优化思想绝不取消；降级只砍广度，不砍深度。每个模块独立分支开发，随时可回退。
 
@@ -255,7 +262,7 @@ edgesight/
 
 ## 开发环境与复现
 
-- 板卡：AMD PYNQ-Z2（XC7Z020）；已烧录 PYNQ 镜像并开通校园网 SSH 远程访问（`ssh xilinx@10.50.216.93`，详见 [board/README.md](board/README.md)）
+- 板卡：AMD PYNQ-Z2（XC7Z020）；已烧录 PYNQ 镜像并开通校园网 SSH 远程访问（`ssh xilinx@<板卡内网IP>`，详见 [board/README.md](board/README.md)）
 - 工具链：Vivado / Vitis 2026.1（BASIC 免费档；XSim 限 50K 实例、仅 Windows，对本项目核级 tb 够用；2025.2 ML Standard 为回退备选，见 issue #2）、RISC-V GCC 工具链（MSYS2 ucrt64 `riscv32-unknown-elf`，RV32IM，见 [src/riscv_fw/README.md](src/riscv_fw/README.md)）、PYNQ v3.x 镜像
 - 复现步骤：见 `board/README.md`（从零烧录 SD 卡 → 构建 bitstream → 运行演示）
 
@@ -277,7 +284,6 @@ edgesight/
 - 2026 全部 7 企业选题指南摘要（团队会议归档）：[docs/track_guides_2026_summary.md](docs/track_guides_2026_summary.md)
 - PYNQ 官方文档：https://pynq.readthedocs.io/en/latest/
 - 蜂鸟 E203 RISC-V 处理器配套书与源码：https://github.com/riscv-mcu/e203_hbirdv1
-- HDLBits 在线刷题（上机考核必备）：https://hdlbits.01xz.net/
 - FINN 量化神经网络加速框架：https://github.com/Xilinx/finn
 - riscv-arch-test：https://github.com/riscv-non-isa/riscv-arch-test
 - AMD 官方 HLS 学习案例：https://xilinx.github.io/xup_high_level_synthesis_design_flow/

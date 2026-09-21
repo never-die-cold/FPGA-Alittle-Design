@@ -81,10 +81,9 @@
 | `onboarding.md` | 新队友上手：Git/Markdown/Agent 使用与 Issue 纪律 |
 | `prep_checklist.md` | 开工前准备清单（🔴卡脖子项进度、🟡建议、🟢加分） |
 | `code_review_checklist.md` | 理解门槛检查单（跨 agent 通用版，与 `skill/understand-gate` 配套） |
-| `exam_prep.md` | 决赛 Verilog 上机备考（2019–2025 真题打法 + 进度表） |
-| `resources.md` | 分类资料清单（11 节 40+ 链接） |
+| `resources.md` | 分类资料清单（9 节 40+ 链接） |
 | `amd_track_awards.md` | 往届 AMD 赛道获奖作品与赛制调研 |
 | `track_guides_2026_summary.md` | 2026 全部 7 企业 24 选题指南摘要 |
-| `proposal_upgrade.md` | 命题升级方案（A/B/C 阶梯、借鉴映射、演示剧本、红线） |
-| `idea1.md` | EdgePilot 扩展方案（L4 云台伺服蓝图） |
-| `git_learning/` | 队友 Git 学习笔记（从根目录合规移入的历史记录） |
+| `proposal_upgrade.md` | 命题升级方案（A/B 阶梯、借鉴映射、演示剧本、红线） |
+
+> 注：`exam_prep.md`、`git_learning/`、`tasks/`、`idea1.md` 等队内过程材料已于 2026-09-21 移出开源仓库（转存队内私有目录，不随作品提交）；`report/llm_log/` 历史记录按"别后补"铁律保持原样，其中指向上述路径的链接为历史快照。
