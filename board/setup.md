@@ -1,4 +1,4 @@
-# PYNQ-Z2 从零复现指南（setup）
+﻿# PYNQ-Z2 从零复现指南（setup）
 
 > 范围：SD 卡烧录 → 上电启动 → 网络（SSH / Jupyter）→ base overlay 验证。
 > 依据：2026-09-20 首次上板验证（联网 / Jupyter / base overlay / 板载 LED 全过）；
@@ -27,8 +27,8 @@
 
 | 服务 | 地址 |
 |:---|:---|
-| SSH | `ssh xilinx@10.50.216.93`（PYNQ 默认用户 `xilinx`，默认密码 `xilinx`，登录后建议修改） |
-| Jupyter | `http://10.50.216.93:9090`（PYNQ 默认端口 9090） |
+| SSH | `ssh xilinx@<板卡内网IP>`（PYNQ 默认用户 `xilinx`，默认密码 `xilinx`，登录后建议修改） |
+| Jupyter | `http://<板卡内网IP>:9090`（PYNQ 默认端口 9090） |
 
 - 若 IP 变化：在校园网管理端查询设备地址，或接 PROG-UART 串口终端后执行 `ip addr`
 - 仅在校园网内可达；远程使用需与板卡同网段
@@ -52,7 +52,7 @@ print("overlay loaded:", ol.is_loaded())     # 期望 True
 | 现象 | 排查 |
 |:---|:---|
 | 找不到 IP | 检查网线与校园网口；PROG-UART 串口看启动日志；确认 SD 启动跳线 |
-| Jupyter 打不开 | `ping 10.50.216.93`；确认 9090 端口与同网段 |
+| Jupyter 打不开 | `ping <板卡内网IP>`；确认 9090 端口与同网段 |
 | 启动失败/文件系统损坏 | 重烧镜像（第 2 节），换一张 SD 卡交叉验证 |
 
 ## 7. 使用后
