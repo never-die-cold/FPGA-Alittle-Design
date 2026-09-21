@@ -1,6 +1,6 @@
 # v0 接口设计：RV32I 两级流水基线核
 
-> 状态：📌 接口冻结（2026-09-11），RTL 待开发（Part A，9/21 开工）
+> 状态：📌 RV32I 接口冻结（2026-09-11）；RV32M 接口冻结（2026-09-20），Part A 收口中
 > 依据：`plan.md` 部分 A「两级流水基线核 v0」——先打通工具链闭环，拿下后续一切对比的锚点数据。
 > 本文是 v0 RTL 开发与 testbench 的唯一接口权威；改动须在 `report/llm_log/` 留决策记录。
 
@@ -74,7 +74,7 @@
 | 译码 | `src/riscv/decode.v` | 指令译码 → 全部控制信号 + 立即数生成 | 控制真值表见 §6 |
 | 寄存器堆 | `src/riscv/regfile.v` | 32×32，2 读 1 写；`x0` 恒 0 | 组合读、时钟沿写 |
 | ALU | `src/riscv/alu.v` | 算术/逻辑/移位/比较；分支条件输出 | |
-| 乘除单元 | `src/riscv/muldiv.v` | M 扩展（v0 **预留不实现**，接口冻结） | 见 §10 |
+| 乘除单元 | `src/riscv/muldiv.v` | RV32M 八条乘除指令，多拍迭代实现 | 见 §5.6、§6.6 |
 | 核顶层 | `src/riscv/core_top.v` | 例化互连、分支裁决、流控 | 对外接口见 §5.8 |
 | SoC 外壳 | `src/riscv/soc_top.v` 等 | 指令 BRAM + 数据 RAM + LED + 核 | v0 上板冒烟用（原 `src/soc/` 已并入） |
 
@@ -87,7 +87,7 @@
 | `clk` / `rst_n` | in | 1 | 时钟 / 异步复位低有效 |
 | `pc_sel` | in | 2 | 00=PC+4；01=跳转目标；10=保持（stall） |
 | `pc_target` | in | 32 | 跳转/分支目标地址 |
-| `stall` | in | 1 | 保持 PC（M 阶段多拍用，v0 恒 0） |
+| `stall` | in | 1 | 保持 PC；M 指令运算期间为 1 |
 | `pc` | out | 32 | 当前 PC（接指令存储器地址） |
 | `pc_plus4` | out | 32 | PC+4（顺序取指 / `jal` 写回） |
 
@@ -99,7 +99,7 @@
 | `pc` | in | 32 | 当前取指 PC（锁存为 `pc_id`） |
 | `imem_rdata` | in | 32 | 指令存储器同步读回数据（BRAM 输出寄存器即本级的指令源） |
 | `flush` | in | 1 | 分支/跳转已生效：**下一拍**注入 NOP（`0x00000013`） |
-| `stall` | in | 1 | 保持当前指令（M 阶段多拍用，v0 恒 0） |
+| `stall` | in | 1 | 保持当前指令；M 指令运算期间为 1 |
 | `instr` | out | 32 | 当前执行指令（flush 注入拍为 NOP） |
 | `instr_valid` | out | 1 | 有效指示（注入拍为 0，供调试/统计） |
 | `pc_id` | out | 32 | 当前指令的 PC，供分支目标求值与 `jal/jalr` 写回 PC+4 |
@@ -117,14 +117,15 @@
 | `alu_op` | out | 4 | 见 §6.1 |
 | `alu_a_sel` | out | 2 | 00=rs1；01=PC；10=0（`lui`） |
 | `alu_b_sel` | out | 2 | 00=rs2；01=imm；10=保留 |
-| `wb_sel` | out | 2 | 00=ALU；01=load 数据；10=PC+4；11=保留（M 扩展） |
+| `wb_sel` | out | 2 | 00=ALU；01=load 数据；10=PC+4；11=M 扩展结果 |
 | `reg_write` | out | 1 | 写回使能 |
 | `mem_read` / `mem_write` | out | 1 | 访存读 / 写 |
 | `mask_sel` | out | 2 | 00=byte；01=half；10=word |
 | `sign_ext` | out | 1 | load 符号扩展（`lb/lh`=1，`lbu/lhu`=0） |
 | `branch_type` | out | 3 | 见 §6.3 |
 | `jump_type` | out | 2 | 00=无；01=JAL；10=JALR |
-| `muldiv_op` | out | 2 | v0 恒 00（预留，见 §10） |
+| `muldiv_valid` | out | 1 | 当前有效指令是 M 扩展（`opcode=0110011` 且 `funct7=0000001`） |
+| `muldiv_op` | out | 3 | 直接采用 M 指令的 `funct3`，编码见 §6.6 |
 
 ### 5.4 `regfile.v`
 
@@ -146,16 +147,21 @@
 | `y` | out | 32 | 运算结果 |
 | `zero` / `lt` / `ltu` | out | 1 | 比较标志（分支条件用） |
 
-### 5.6 `muldiv.v`（v0 预留）
+### 5.6 `muldiv.v`
 
 | 端口 | 方向 | 位宽 | 说明 |
 |:---|:---:|:---:|:---|
 | `clk` / `rst_n` | in | 1 | |
-| `op` | in | 2 | 00=乘；01=除；10=取余；11=OFF |
-| `start` | in | 1 | 启动 |
-| `a` / `b` | in | 32 | 操作数 |
-| `result` | out | 32 | 结果（v0 未实现） |
-| `busy` | out | 1 | 忙（接 stall；v0 恒 0） |
+| `op` | in | 3 | M 指令的 `funct3`，编码见 §6.6 |
+| `start` | in | 1 | 单拍启动脉冲；仅在 `busy=0` 时允许拉高 |
+| `a` / `b` | in | 32 | 操作数；`start` 被接受时锁存，运算期间可变化 |
+| `result` | out | 32 | 运算结果；`done=1` 时更新并保持到下次完成 |
+| `busy` | out | 1 | 运算进行中；从接受 `start` 的时钟沿起拉高 |
+| `done` | out | 1 | 完成脉冲，仅拉高一拍；同拍 `result` 有效、`busy=0` |
+
+`start` 在上升沿被接受后，乘除单元独占 32 次迭代。完成沿同时更新
+`result`、清除 `busy` 并置位 `done`；下一拍自动清除 `done`。复位会清除
+`busy`、`done` 和结果寄存器，进行中的运算直接取消。
 
 ### 5.7 `core_top.v`（核对外唯一接口）
 
@@ -229,6 +235,7 @@
 | `auipc` | U | PC | imm | ALU | 1 | 0 | 0 | 0 | 0 |
 | `jal` | J | PC | imm | PC+4 | 1 | 0 | 0 | 0 | JAL |
 | `jalr` | I | rs1 | imm | PC+4 | 1 | 0 | 0 | 0 | JALR |
+| M-type (`mul/div/rem` 等) | — | rs1 | rs2 | M | 1（由 `done` 门控） | 0 | 0 | 0 | 0 |
 | `fence` / `ecall` / `ebreak` | — | — | — | — | 0 | 0 | 0 | 0 | 0 |
 
 > `fence/ecall/ebreak` v0 按 NOP 处理（不写回、不访存）；冒烟与 arch-test 子集不覆盖系统指令。
@@ -242,6 +249,30 @@
 | `lb` / `sb` | byte | 无 | `sign_ext` 定 | `be = 4'b0001 << addr[1:0]` |
 
 > v0 不实现非对齐异常（misaligned trap），工具链/固件保证对齐。
+
+### 6.6 M 扩展编码与多拍流控
+
+| `muldiv_op` / `funct3` | 指令 | 返回结果 |
+|:---:|:---:|:---|
+| `000` | `mul` | 乘积低 32 位 |
+| `001` | `mulh` | 有符号 × 有符号，乘积高 32 位 |
+| `010` | `mulhsu` | 有符号 × 无符号，乘积高 32 位 |
+| `011` | `mulhu` | 无符号 × 无符号，乘积高 32 位 |
+| `100` | `div` | 有符号商 |
+| `101` | `divu` | 无符号商 |
+| `110` | `rem` | 有符号余数 |
+| `111` | `remu` | 无符号余数 |
+
+`core_top` 用一位 `muldiv_pending` 防止被暂停的同一条指令重复启动。拍序为：
+
+1. 译码到有效 M 指令且 `muldiv_pending=0`：`start` 拉高一拍，同时置位
+   `muldiv_pending`，暂停 PC 与 IF 级。
+2. `busy=1`：继续暂停；源操作数和目的寄存器由当前 IF 指令保持。
+3. `done=1`：只在这一拍使能寄存器堆写回 `result`，撤销暂停并清除
+   `muldiv_pending`，下一条指令进入执行级。
+
+除法边界遵循 RV32M：除数为零时商为 `32'hFFFF_FFFF`，余数等于被除数；
+`32'h8000_0000 / 32'hFFFF_FFFF` 的商为 `32'h8000_0000`、余数为零。
 
 ## 7. 顶层框图（v0）
 
@@ -276,9 +307,10 @@ flowchart LR
 | # | 决策 | 被否方案 | 理由 |
 |:---:|:---|:---|:---|
 | 1 | 指令 BRAM 同步读 + 数据 RAM 异步读 | 全异步 / 全同步 | 同步读与两级流水天然契合、可推 BRAM；数据异步读保证 `lw` 单拍完成、v0 CPI 锚点干净 |
-| 2 | v0 先 RV32I，M 扩展 Part A 收尾补 | 一次到位 RV32IM | 沿用 plan.md 原风险预案：先拿 RV32I 基线数据；接口（`muldiv_op`/`stall`）已预留，补 M 不改架构 |
+| 2 | v0 先 RV32I，M 扩展 Part A 收尾补 | 一次到位 RV32IM | 沿用 plan.md 原风险预案：先拿 RV32I 基线数据；PC/IF 的 `stall` 已预留，补 M 不改变两级结构 |
 | 3 | `tohost` 用数据 RAM 高端地址观测 | MMIO 专用观测口 | 最简、与真实上板行为一致；tb 直接读存储器模型 |
 | 4 | `core_top` 外置哈佛存储接口 | 核内嵌存储 | 核零改动即可挂 tb 存储模型/真 SoC；地址译码留在外壳 |
+| 5 | M 操作直接采用 3 位 `funct3`，以 `start/busy/done` 握手 | 原 2 位操作码、仅用 `busy` | 3 位完整覆盖八条 RV32M 指令；`done` 明确唯一写回拍，避免暂停期间重复写回或重复启动 |
 
 ## 10. 待办清单（Part A 开工即用）
 
@@ -299,3 +331,4 @@ flowchart LR
 | 2026-09-11 | 首版冻结（4 项决策、接口表、真值表） | `report/llm_log/2026-09-11-riscv-v0-design.md` |
 | 2026-09-11 | RTL 落地：补 `if_stage` 的 `pc`/`pc_id` 端口与 flush 语义说明；冒烟判据改为 `hello_v0`（RV32I）+ `tohost_exit` 双字观测 | commits `80c47f7`…`81569ae`、`report/llm_log/2026-09-11-riscv-v0-rtl.md` |
 | 2026-09-11 | 逐指令自检 `hello_test`（38 用例）与 `tb_core_test` 全过；记录 lb 用例小端纠错 | commits `87d3f4f`、`58ed400`、`report/llm_log/2026-09-11-riscv-instruction-tests.md` |
+| 2026-09-20 | 冻结 RV32M 八操作编码、`start/busy/done` 握手、32 次迭代停顿与边界语义 | Part A M 扩展收口 |
