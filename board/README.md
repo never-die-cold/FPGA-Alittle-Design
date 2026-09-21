@@ -1,4 +1,4 @@
-# board —— 上板工程与实测输出
+﻿# board —— 上板工程与实测输出
 
 PYNQ-Z2 上板运行工程、启动脚本与实测输出记录。
 
@@ -6,7 +6,7 @@ PYNQ-Z2 上板运行工程、启动脚本与实测输出记录。
 
 - 板卡：PYNQ-Z2（XC7Z020-1CLG400C）× 1，**全队共用**
 - 状态：✅ 2026-09-20 到货并完成上板验证（联网 / Jupyter / base overlay / 板载 LED）；SD 卡烧录完毕（PYNQ 镜像），已建立校园网 SSH 远程访问
-- 远程访问（2026-09-20 建立）：校园网内 `ssh xilinx@10.50.216.93`（PYNQ 默认用户 `xilinx`）；Jupyter 为 PYNQ 默认端口 9090（`http://10.50.216.93:9090`）
+- 远程访问（2026-09-20 建立）：校园网内 `ssh xilinx@<板卡内网IP>`（PYNQ 默认用户 `xilinx`）；Jupyter 为 PYNQ 默认端口 9090（`http://<板卡内网IP>:9090`）
 - 关键硬件事实（写 XDC 用）：PL 板载时钟 125 MHz（引脚 H16）、4 个用户 LED、4 按键、2 拨码、HDMI IN/OUT 各一（均直连 PL）、板载 Micro-USB JTAG（Digilent SMT2）；官方引脚约束以 TUL master XDC 为准
 - 共用约定：上板前在群里报备（谁、做什么、预计时段），错峰使用；每次实测按下方约定留记录
 

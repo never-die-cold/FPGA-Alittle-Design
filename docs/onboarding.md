@@ -27,8 +27,8 @@ git push                  # ④ 上传到仓库，队友才能看到
 > 💡 不习惯命令行可以装 [GitHub Desktop](https://desktop.github.com/)，按钮操作，效果一样。
 > 推荐教程：B 站搜"Git 一小时入门"，边看边跟着敲一遍。
 
-> 📌 开工后是**三线并行 + 每周 PR** 的多人协作模式（每人一条 dev 分支，组长统一合并）：
-> 完整操作流程见 [docs/git_learning/branch_workflow.md](git_learning/branch_workflow.md)，本文只讲单人基础操作。
+> 📌 开工后是**三线并行 + 每周 PR** 的多人协作模式（每人一条 dev 分支，组长统一合并，任何人不含组长不直接 push `main`）：
+> 本文只讲单人基础操作；PR 审核与合并节奏见 `src/riscv/plan.md` §2。
 
 ---
 
@@ -59,7 +59,7 @@ Agent = 能帮你**实际干活**的 AI（写代码、改文件、跑命令）�
 **看不懂的代码不许入库**——不管它是 AI 写的还是队友写的。"能跑"不算过门，"讲得清"才算。
 
 - 每次让 agent 提交代码前，它会先给你**逐段讲解** + **3 道理解测试题**，你答对了它才会 commit（按 [`skill/understand-gate/SKILL.md`](../skill/understand-gate/SKILL.md) 执行；用其他 agent 时手动走 [docs/code_review_checklist.md](code_review_checklist.md) 检查单）
-- 读不懂的地方就是你的知识缺口清单，逐条问 agent 直到能讲出来——这个过程同时就是决赛 Verilog 上机考核的备考
+- 读不懂的地方就是你的知识缺口清单，逐条问 agent 直到能讲出来
 - 讲解稿和测试题会全量存进 `report/llm_log/`，期末复盘和答辩演练直接用
 
 ---
@@ -88,7 +88,7 @@ Agent = 能帮你**实际干活**的 AI（写代码、改文件、跑命令）�
    - **Bug 报告**：仿真 / 上板 / 工具链问题，填现象、复现步骤、期望与实际结果、日志
    - **任务 / 待办**：需要跟踪的任务或提问，填验收标准、负责人、截止时间
 2. **标签**（负责人建一次，共 5 个）：`bug` / `rtl` / `verify` / `docs` / `hardware`
-3. **里程碑与检查点**：M1–M4 已建（due 10/4 / 10/18 / 10/25 / 11/4）；里程碑即阶段检查点，每阶段验收开一个 gate issue 挂到对应里程碑（M1 三个：[#19 Part A](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/19) / [#20 Part B](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20) / [#21 Part C + M1 收口](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)），验收清单全勾才关闭
+3. **里程碑与检查点**：M1–M4 已建（due 10/1 / 10/12 / 10/20 / 10/26，2026-09-21 压缩前移）；里程碑即阶段检查点，每阶段验收开一个 gate issue 挂到对应里程碑（M1 三个：[#19 Part A](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/19) / [#20 Part B](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20) / [#21 Part C + M1 收口](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)），验收清单全勾才关闭
 4. **关闭规矩**：修复的 commit message 写 `fixes #12`（或 `closes #12`），推送后自动关闭；修复过程顺手记入 `report/llm_log/`
 5. **与排期的边界**：M1 每天的计划任务看 `src/riscv/plan.md`，不为每天的排期重复建 issue
 
@@ -96,4 +96,4 @@ Agent = 能帮你**实际干活**的 AI（写代码、改文件、跑命令）�
 
 ## 完成标准
 
-当你能独立完成：`git pull` → 读懂 README → 用 agent 写个小模块 → 通过理解门槛（先讲清再 commit）→ commit & push → 会发 PR（三线并行操作见 [docs/git_learning/branch_workflow.md](git_learning/branch_workflow.md)）→ 按模板写一条协作记录，就算上手完成🎉
+当你能独立完成：`git pull` → 读懂 README → 用 agent 写个小模块 → 通过理解门槛（先讲清再 commit）→ commit & push → 会发 PR（三线并行操作见 `src/riscv/plan.md` §2）→ 按模板写一条协作记录，就算上手完成🎉
