@@ -121,7 +121,7 @@ RTL 线内部 Part B（9/25–9/28）→ Part C（9/29–10/1）串行不变；�
 - [ ] `muldiv.v`：RV32M 乘除实现 + 单指令测试（接口风格对齐现有模块）
 - [ ] 最小 SoC 外壳：指令 BRAM 预载 hex + LED / UART 二选一，仿真跑通 + 上板冒烟（板卡已到，2026-09-20 解除顺延；共用板需错峰）
 - [ ] Vivado 装好后第一件事：综合 v0 → Fmax/WNS + LUT/FF/BRAM 基线数据 → 日志入 `data/logs/`、数值入 `data/metrics.csv`
-- [ ] **存储扩容（2026-09-21 新增，CoreMark 硬依赖）**：dmem 4KB→32KB、imem 16KB→32KB；dmem 若由异步读改同步读 BRAM，v0 CPI 锚点语义变化须重跑冒烟 + arch-test 回归，决策记录 llm_log
+- [ ] **存储扩容（2026-09-21 新增，CoreMark 硬依赖）**：dmem 16KB→32KB、imem 16KB→32KB；DMEM 冻结为异步读以保持 v0 CPI 锚点语义，统一契约见 design_v0.md §3，决策记录见 llm_log
 - [ ] **SoC 计时计数器（2026-09-21 新增）**：`soc_top` 加 32-bit 存储器映射自由运行计数器（~30 行），供 CoreMark 板上计时；地址分配写入 design_v0.md §3.3
 - [ ] 同步更新 `design_v0.md`（muldiv 接口与实现决策 + 扩容/计数器）
 - [ ] 风险预案：M 扩展卡住 → 先出 RV32I 基线数据，乘除后补；不影响 Part A 其余验收

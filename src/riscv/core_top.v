@@ -1,4 +1,4 @@
-// core_top.v —— RV32I 两级流水核顶层：IF / ID+EX+MEM+WB
+// core_top.v —— RV32IM 两级流水核顶层：IF / ID+EX+MEM+WB
 // 对外接口见 src/riscv/design_v0.md §5.7；v0 特性见 §2（无 RAW/load-use 停顿，跳转 1 拍气泡）
 module core_top (
     input  wire        clk,
@@ -15,7 +15,7 @@ module core_top (
     // ---------- 取指 ----------
     wire [31:0] pc, pc_id;
     wire [1:0]  pc_sel;
-    wire        stall = 1'b0;              // v0 无多拍指令
+    wire        stall;
     wire        branch_taken, jump_taken, flush;
     wire [31:0] pc_target, branch_target;
     wire [31:0] instr;
@@ -56,7 +56,9 @@ module core_top (
     wire        reg_write, mem_read, mem_write, sign_ext;
     wire [1:0]  mask_sel;
     wire [2:0]  branch_type;
-    wire [1:0]  jump_type, muldiv_op;
+    wire [1:0]  jump_type;
+    wire [2:0]  muldiv_op;
+    wire        muldiv_valid;
 
     decode u_decode (
         .instr      (instr),
@@ -76,11 +78,13 @@ module core_top (
         .sign_ext   (sign_ext),
         .branch_type(branch_type),
         .jump_type  (jump_type),
+        .muldiv_valid(muldiv_valid),
         .muldiv_op  (muldiv_op)
     );
 
     // ---------- 寄存器堆 ----------
     wire [31:0] rdata1, rdata2, wb_data;
+    wire        rf_we;
 
     regfile u_regfile (
         .clk    (clk),
@@ -90,7 +94,32 @@ module core_top (
         .rdata2 (rdata2),
         .waddr  (rd_addr),
         .wdata  (wb_data),
-        .we     (reg_write)
+        .we     (rf_we)
+    );
+
+    // ---------- 多拍乘除 ----------
+    reg         muldiv_pending;
+    wire [31:0] muldiv_result;
+    wire        muldiv_busy, muldiv_done;
+    wire        muldiv_start = instr_valid && muldiv_valid &&
+                               !muldiv_pending && !muldiv_busy;
+
+    assign stall = muldiv_valid && !muldiv_done;
+    assign rf_we = reg_write && (!muldiv_valid || muldiv_done);
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n)
+            muldiv_pending <= 1'b0;
+        else if (muldiv_done)
+            muldiv_pending <= 1'b0;
+        else if (muldiv_start)
+            muldiv_pending <= 1'b1;
+    end
+
+    muldiv u_muldiv (
+        .clk(clk), .rst_n(rst_n), .op(muldiv_op), .start(muldiv_start),
+        .a(rdata1), .b(rdata2), .result(muldiv_result),
+        .busy(muldiv_busy), .done(muldiv_done)
     );
 
     // ---------- ALU ----------
@@ -146,6 +175,7 @@ module core_top (
                             dmem_rdata;
 
     assign wb_data = (wb_sel == 2'b01) ? load_data :
-                     (wb_sel == 2'b10) ? (pc_id + 32'd4) : alu_y;
+                     (wb_sel == 2'b10) ? (pc_id + 32'd4) :
+                     (wb_sel == 2'b11) ? muldiv_result : alu_y;
 
 endmodule
