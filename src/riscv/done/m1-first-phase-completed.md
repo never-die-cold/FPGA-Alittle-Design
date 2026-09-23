@@ -107,7 +107,7 @@
 
 **交付物**：[ ] muldiv + 单测 ｜ [ ] SoC 外壳仿真 PASS ｜ [ ] v0 基线数据入档 ｜ [ ] design_v0.md 同步 ｜ [ ] 存储扩容 + 计时计数器（CoreMark 前置）
 
-> 📌 后续修订（`dev/rtl`，commit `f22f5a3`）：存储扩容契约冻结为 dmem 16KB→32KB、imem 16KB→32KB，DMEM 冻结为异步读以保住 v0 CPI 锚点语义（统一契约见 design_v0.md §3，决策见 `report/llm_log/2026-09-22-memory-contract.md`，该 commit 尚未并入 main，暂不挂链接）。
+> 📌 后续修订（`dev/rtl`，commit `f22f5a3`）：存储扩容契约冻结为 dmem 16KB→32KB、imem 16KB→32KB，DMEM 冻结为异步读以保住 v0 CPI 锚点语义（统一契约见 design_v0.md §3，决策见 `report/llm_log/2026-09-22-memory-contract.md`，该 commit 已于 2026-09-23 经 PR #32 并入 main）。
 
 ### 3.3 验证线（主责：组长）—— 分支 `dev/verify`
 

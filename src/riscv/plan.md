@@ -92,16 +92,16 @@ RTL 线内部 Part B（9/25–9/28）→ Part C（9/29–10/1）串行不变；�
 
 **v0 基线现状**
 
-- 核：v0 六模块两级流水 + 冒烟 / 逐指令 tb（38 用例）；RV32M `muldiv` 已在 `dev/rtl` 实现并通过 RV32IM 整核冒烟（待 PR 合并）
+- 核：v0 六模块两级流水 + 冒烟 / 逐指令 tb（38 用例）；RV32M `muldiv` 已在 `dev/rtl` 实现并通过 RV32IM 整核冒烟（已随 PR #32 合并，2026-09-23）
 - 基线数据：Fmax 86.8 MHz / WNS -1.530 ns、LUT 846 / FF 65 / BRAM 0 / DSP 0（Vivado 2026.1，xc7z020clg400-1，10 ns 约束 OOC）
-- 回归口径：`sim/scripts/run_iverilog.sh`（v0|fwd 两档）；riscv-arch-test 首组（add-01 / addi-01 / and-01）PASS
+- 回归口径：`sim/scripts/run_iverilog.sh`（v0|fwd|muldiv|rv32im|all 五档）；riscv-arch-test 首组（add-01 / addi-01 / and-01）PASS
 
 **遗留项（收口前必须处理，详见归档 §G）**
 
 - [ ] 最小 SoC 外壳（BRAM 预载 + LED/UART）仿真 + 上板冒烟
 - [ ] 存储扩容 32KB + SoC 计时计数器（契约已冻结，见归档 §G 第 2 项）
 - [ ] 基线 CPI 补录 `data/metrics.csv`
-- [ ] `dev/rtl` Part A 分支 PR 合并（`f22f5a3` 等 5 个 commit，9/27 周合并）
+- [x] `dev/rtl` Part A 分支 PR 合并（PR #32，2026-09-23；原计划 9/27 周合并）
 - [ ] gate #19 复核签字（9/27）
 - [ ] benchmark v0.1 / CPI harness / CoreMark 移植层（原第一阶段基准线交付物，顺延）
 
