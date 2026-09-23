@@ -20,7 +20,7 @@ sim/
 - **主力回归**：Icarus Verilog 13.0（MSYS2 ucrt64 包 `mingw-w64-ucrt-x86_64-iverilog`）——一键跑全部 tb
 - **XSim 复核**（Vivado 2026.1 已装，issue #2）：同一套 tb 已复核对拍，**两工具结论一致**（2026-09-14；`xvlog → xelab → xsim -R`，从 `sim/` 目录运行以保证 `$readmemh` 相对路径正确）
 - 用法（MSYS2 UCRT64 shell 中，产物在 `sim/build/`）：
-  - 一键跑全部：`bash sim/scripts/run_iverilog.sh`；两档回归：`bash sim/scripts/run_iverilog.sh v0`（冒烟 + 逐指令）/ `fwd`（转发专项）
+  - 一键跑全部：`bash sim/scripts/run_iverilog.sh`（`all`）；分档：`v0`（冒烟 + 逐指令）/ `fwd`（转发专项）/ `muldiv`（RV32M 单元）/ `rv32im`（RV32IM 整核冒烟）
   - `tb_core_smoke.v`：加载 `src/riscv_fw/hello_v0.hex`，检查 `tohost==13 && tohost_exit==0`（程序级冒烟）
   - `tb_core_test.v`：加载 `src/riscv_fw/hello_test.hex`，检查 `tohost_exit==0`（RV32I 逐指令自检 38 用例；失败值为用例编号）
   - `tb_core_fwd.v`：加载 `riscv/fwd/fwd_test.hex`（转发专项，Part B 测试先行）——数据冒险零气泡 + taken 分支 1 拍契约，气泡/结果双自检
@@ -61,6 +61,16 @@ sim/
 - 跑法：`bash sim/scripts/run_arch_test.sh <测试名>`（默认 `add-01`）——编译 → 统一镜像双预载 → 逐字签名比对 → PASS/FAIL；签名输出兼容框架 `make verify` 的文件约定
 - 已纳入回归：`add-01` / `addi-01` / `and-01` 全 PASS；证据与边界：`data/logs/2026-09-20-arch-test/`
 - 说明：arch-test 需要 ELF 编译流程，不并入 `run_iverilog.sh`（后者只跑源码级 tb）
+
+## CoreMark 基准 tb（契约先行，2026-09-23 建立）
+
+- 契约（判据/观测/接口唯一入口）：[`docs/coremark_tb_contract.md`](../docs/coremark_tb_contract.md)（草案全文，未决项收口后冻结）
+- 通用 tb：`riscv/tb_core_coremark.v`——8192×32 存储模型 + plusargs；`+hex` 默认 `../src/riscv_fw/coremark.hex`，支持 `+timer_addr` 计数器仿真
+- 当前状态：等待 32KB 实现（8B）与 `coremark.hex` 移植；`coremark` 回归模式待 8B 后接入（单独模式，暂不入 `all`）
+- 冒烟用法（固件未入库前，在 `sim/` 下）：
+  `iverilog -g2012 -o build/tb_core_coremark.vvp riscv/tb_core_coremark.v ../src/riscv/*.v`
+  `vvp build/tb_core_coremark.vvp +hex=../src/riscv_fw/hello.hex +exp_tohost=142879`
+- 记录：tb 落地 `report/llm_log/2026-09-23-coremark-tb.md`；契约起草 `report/llm_log/2026-09-23-coremark-tb-contract.md`
 
 ## 约定
 
