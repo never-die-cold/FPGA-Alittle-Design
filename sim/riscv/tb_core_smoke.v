@@ -26,28 +26,28 @@ module tb_core_smoke;
     wire        dmem_we;
     wire [31:0] dmem_rdata;
 
-    // ---- 指令存储器模型：4096×32，同步读（本拍地址，下一拍数据）----
-    reg [31:0] imem [0:4095];
+    // ---- 指令存储器模型：8192×32，同步读（本拍地址，下一拍数据）----
+    reg [31:0] imem [0:8191];
     initial imem_rdata = 32'h0000_0013;                      // 上电默认 NOP
     always @(posedge clk)
-        imem_rdata <= imem[imem_addr[13:2]];
+        imem_rdata <= imem[imem_addr[14:2]];
 
     initial begin
-        for (i = 0; i < 4096; i = i + 1)
+        for (i = 0; i < 8192; i = i + 1)
             imem[i] = 32'h00000013;                          // 默认 NOP
         $readmemh("../src/riscv_fw/hello_v0.hex", imem);
     end
 
-    // ---- 数据存储器模型：4096×32，异步读 + 4 位字节使能写 ----
-    reg [31:0] dmem [0:4095];
+    // ---- 数据存储器模型：8192×32，异步读 + 4 位字节使能写 ----
+    reg [31:0] dmem [0:8191];
     always @(posedge clk)
         if (dmem_we) begin
-            if (dmem_be[0]) dmem[dmem_addr[13:2]][7:0]   <= dmem_wdata[7:0];
-            if (dmem_be[1]) dmem[dmem_addr[13:2]][15:8]  <= dmem_wdata[15:8];
-            if (dmem_be[2]) dmem[dmem_addr[13:2]][23:16] <= dmem_wdata[23:16];
-            if (dmem_be[3]) dmem[dmem_addr[13:2]][31:24] <= dmem_wdata[31:24];
+            if (dmem_be[0]) dmem[dmem_addr[14:2]][7:0]   <= dmem_wdata[7:0];
+            if (dmem_be[1]) dmem[dmem_addr[14:2]][15:8]  <= dmem_wdata[15:8];
+            if (dmem_be[2]) dmem[dmem_addr[14:2]][23:16] <= dmem_wdata[23:16];
+            if (dmem_be[3]) dmem[dmem_addr[14:2]][31:24] <= dmem_wdata[31:24];
         end
-    assign dmem_rdata = dmem[dmem_addr[13:2]];
+    assign dmem_rdata = dmem[dmem_addr[14:2]];
 
     // ---- 时钟 ----
     always #(CLK_PERIOD / 2) clk = ~clk;
@@ -67,7 +67,7 @@ module tb_core_smoke;
 
     // ---- 激励与自检 ----
     initial begin
-        for (i = 0; i < 4096; i = i + 1)
+        for (i = 0; i < 8192; i = i + 1)
             dmem[i] = 32'h0;
 
         $dumpfile("tb_core_smoke.vcd");
@@ -78,14 +78,14 @@ module tb_core_smoke;
 
         repeat (RUN_CYCLES) @(posedge clk);
 
-        if (dmem[TOHOST_ADDR[13:2]] === TOHOST_EXPECT &&
-            dmem[TOEXIT_ADDR[13:2]] === TOEXIT_EXPECT) begin
+        if (dmem[TOHOST_ADDR[14:2]] === TOHOST_EXPECT &&
+            dmem[TOEXIT_ADDR[14:2]] === TOEXIT_EXPECT) begin
             $display("PASS: tohost = %0d (0x%08x), tohost_exit = %0d",
-                     dmem[TOHOST_ADDR[13:2]], dmem[TOHOST_ADDR[13:2]], dmem[TOEXIT_ADDR[13:2]]);
+                     dmem[TOHOST_ADDR[14:2]], dmem[TOHOST_ADDR[14:2]], dmem[TOEXIT_ADDR[14:2]]);
         end else begin
             $display("FAIL: tohost = %0d (0x%08x) expect %0d; tohost_exit = %0d expect %0d",
-                     dmem[TOHOST_ADDR[13:2]], dmem[TOHOST_ADDR[13:2]], TOHOST_EXPECT,
-                     dmem[TOEXIT_ADDR[13:2]], TOEXIT_EXPECT);
+                     dmem[TOHOST_ADDR[14:2]], dmem[TOHOST_ADDR[14:2]], TOHOST_EXPECT,
+                     dmem[TOEXIT_ADDR[14:2]], TOEXIT_EXPECT);
             $display("      last imem_addr = 0x%08x", imem_addr);
             $fatal(1);
         end

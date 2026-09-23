@@ -24,28 +24,28 @@ module tb_core_test;
     wire        dmem_we;
     wire [31:0] dmem_rdata;
 
-    // ---- 指令存储器模型：4096×32，同步读（本拍地址，下一拍数据）----
-    reg [31:0] imem [0:4095];
+    // ---- 指令存储器模型：8192×32，同步读（本拍地址，下一拍数据）----
+    reg [31:0] imem [0:8191];
     initial imem_rdata = 32'h0000_0013;
     always @(posedge clk)
-        imem_rdata <= imem[imem_addr[13:2]];
+        imem_rdata <= imem[imem_addr[14:2]];
 
     initial begin
-        for (i = 0; i < 4096; i = i + 1)
+        for (i = 0; i < 8192; i = i + 1)
             imem[i] = 32'h00000013;
         $readmemh("../src/riscv_fw/hello_test.hex", imem);
     end
 
-    // ---- 数据存储器模型：4096×32，异步读 + 4 位字节使能写 ----
-    reg [31:0] dmem [0:4095];
+    // ---- 数据存储器模型：8192×32，异步读 + 4 位字节使能写 ----
+    reg [31:0] dmem [0:8191];
     always @(posedge clk)
         if (dmem_we) begin
-            if (dmem_be[0]) dmem[dmem_addr[13:2]][7:0]   <= dmem_wdata[7:0];
-            if (dmem_be[1]) dmem[dmem_addr[13:2]][15:8]  <= dmem_wdata[15:8];
-            if (dmem_be[2]) dmem[dmem_addr[13:2]][23:16] <= dmem_wdata[23:16];
-            if (dmem_be[3]) dmem[dmem_addr[13:2]][31:24] <= dmem_wdata[31:24];
+            if (dmem_be[0]) dmem[dmem_addr[14:2]][7:0]   <= dmem_wdata[7:0];
+            if (dmem_be[1]) dmem[dmem_addr[14:2]][15:8]  <= dmem_wdata[15:8];
+            if (dmem_be[2]) dmem[dmem_addr[14:2]][23:16] <= dmem_wdata[23:16];
+            if (dmem_be[3]) dmem[dmem_addr[14:2]][31:24] <= dmem_wdata[31:24];
         end
-    assign dmem_rdata = dmem[dmem_addr[13:2]];
+    assign dmem_rdata = dmem[dmem_addr[14:2]];
 
     // ---- 时钟 ----
     always #(CLK_PERIOD / 2) clk = ~clk;
@@ -65,7 +65,7 @@ module tb_core_test;
 
     // ---- 激励与自检 ----
     initial begin
-        for (i = 0; i < 4096; i = i + 1)
+        for (i = 0; i < 8192; i = i + 1)
             dmem[i] = 32'h0;
 
         $dumpfile("tb_core_test.vcd");
@@ -76,11 +76,11 @@ module tb_core_test;
 
         repeat (RUN_CYCLES) @(posedge clk);
 
-        if (dmem[TOEXIT_ADDR[13:2]] === TOEXIT_EXPECT) begin
+        if (dmem[TOEXIT_ADDR[14:2]] === TOEXIT_EXPECT) begin
             $display("PASS: all RV32I tests passed (tohost_exit = 0)");
         end else begin
             $display("FAIL: test #%0d failed (tohost_exit = %0d), last pc = 0x%08x",
-                     dmem[TOEXIT_ADDR[13:2]], dmem[TOEXIT_ADDR[13:2]], imem_addr);
+                     dmem[TOEXIT_ADDR[14:2]], dmem[TOEXIT_ADDR[14:2]], imem_addr);
             $fatal(1);
         end
         $finish;

@@ -6,6 +6,8 @@
 #   bash sim/scripts/run_iverilog.sh fwd      # 转发专项（数据冒险 / 分支气泡，v0 对照档）
 #   bash sim/scripts/run_iverilog.sh muldiv   # RV32M 乘除单元模块级自检
 #   bash sim/scripts/run_iverilog.sh rv32im   # RV32IM 固件整核冒烟
+#   bash sim/scripts/run_iverilog.sh imem     # 32KB 同步读指令存储器模块级自检
+#   bash sim/scripts/run_iverilog.sh dmem     # 32KB 异步读数据存储器模块级自检
 # 前置：PATH 中含 MSYS2 ucrt64 的 iverilog / vvp（13.0+）
 set -u
 
@@ -16,8 +18,10 @@ case "$MODE" in
     fwd) TBS=(riscv/tb_core_fwd.v) ;;
     muldiv) TBS=(riscv/tb_muldiv.v) ;;
     rv32im) TBS=(riscv/tb_core_muldiv.v) ;;
-    all) TBS=(riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_fwd.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v) ;;
-    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|muldiv|rv32im|all]"; exit 1 ;;
+    imem) TBS=(riscv/tb_imem.v) ;;
+    dmem) TBS=(riscv/tb_dmem.v) ;;
+    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_fwd.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v) ;;
+    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|muldiv|rv32im|imem|dmem|all]"; exit 1 ;;
 esac
 
 cd "$(dirname "$0")/.."          # -> sim/
@@ -43,6 +47,6 @@ for tb in "${TBS[@]}"; do
     [ -f "$tb" ] || continue
     name=$(basename "$tb" .v)
     echo "== $name =="
-    iverilog -g2012 -Wall -o "build/$name.vvp" "$tb" "${RTL_FILES[@]}" || exit 1
+    iverilog -g2012 -Wall -s "$name" -o "build/$name.vvp" "$tb" "${RTL_FILES[@]}" || exit 1
     vvp "build/$name.vvp" || exit 1
 done
