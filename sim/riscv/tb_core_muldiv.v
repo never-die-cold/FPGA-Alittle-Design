@@ -8,19 +8,19 @@ module tb_core_muldiv;
     wire [31:0] imem_addr, dmem_addr, dmem_wdata, dmem_rdata;
     wire [3:0] dmem_be;
     wire dmem_we;
-    reg [31:0] imem [0:4095];
-    reg [31:0] dmem [0:4095];
+    reg [31:0] imem [0:8191];
+    reg [31:0] dmem [0:8191];
     integer i;
 
     always #5 clk = ~clk;
-    always @(posedge clk) imem_rdata <= imem[imem_addr[13:2]];
-    assign dmem_rdata = dmem[dmem_addr[13:2]];
+    always @(posedge clk) imem_rdata <= imem[imem_addr[14:2]];
+    assign dmem_rdata = dmem[dmem_addr[14:2]];
     always @(posedge clk) begin
         if (dmem_we) begin
-            if (dmem_be[0]) dmem[dmem_addr[13:2]][7:0]   <= dmem_wdata[7:0];
-            if (dmem_be[1]) dmem[dmem_addr[13:2]][15:8]  <= dmem_wdata[15:8];
-            if (dmem_be[2]) dmem[dmem_addr[13:2]][23:16] <= dmem_wdata[23:16];
-            if (dmem_be[3]) dmem[dmem_addr[13:2]][31:24] <= dmem_wdata[31:24];
+            if (dmem_be[0]) dmem[dmem_addr[14:2]][7:0]   <= dmem_wdata[7:0];
+            if (dmem_be[1]) dmem[dmem_addr[14:2]][15:8]  <= dmem_wdata[15:8];
+            if (dmem_be[2]) dmem[dmem_addr[14:2]][23:16] <= dmem_wdata[23:16];
+            if (dmem_be[3]) dmem[dmem_addr[14:2]][31:24] <= dmem_wdata[31:24];
         end
     end
 
@@ -31,7 +31,7 @@ module tb_core_muldiv;
     );
 
     initial begin
-        for (i = 0; i < 4096; i = i + 1) begin
+        for (i = 0; i < 8192; i = i + 1) begin
             imem[i] = 32'h0000_0013;
             dmem[i] = 32'd0;
         end

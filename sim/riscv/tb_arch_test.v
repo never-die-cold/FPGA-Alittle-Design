@@ -33,22 +33,22 @@ module tb_arch_test;
     wire        dmem_we;
     wire [31:0] dmem_rdata;
 
-    // ---- 指令存储器模型：4096×32，同步读 ----
-    reg [31:0] imem [0:4095];
+    // ---- 指令存储器模型：8192×32，同步读 ----
+    reg [31:0] imem [0:8191];
     initial imem_rdata = 32'h0000_0013;
     always @(posedge clk)
-        imem_rdata <= imem[imem_addr[13:2]];
+        imem_rdata <= imem[imem_addr[14:2]];
 
-    // ---- 数据存储器模型：4096×32，异步读 + 4 位字节使能写 ----
-    reg [31:0] dmem [0:4095];
+    // ---- 数据存储器模型：8192×32，异步读 + 4 位字节使能写 ----
+    reg [31:0] dmem [0:8191];
     always @(posedge clk)
         if (dmem_we) begin
-            if (dmem_be[0]) dmem[dmem_addr[13:2]][7:0]   <= dmem_wdata[7:0];
-            if (dmem_be[1]) dmem[dmem_addr[13:2]][15:8]  <= dmem_wdata[15:8];
-            if (dmem_be[2]) dmem[dmem_addr[13:2]][23:16] <= dmem_wdata[23:16];
-            if (dmem_be[3]) dmem[dmem_addr[13:2]][31:24] <= dmem_wdata[31:24];
+            if (dmem_be[0]) dmem[dmem_addr[14:2]][7:0]   <= dmem_wdata[7:0];
+            if (dmem_be[1]) dmem[dmem_addr[14:2]][15:8]  <= dmem_wdata[15:8];
+            if (dmem_be[2]) dmem[dmem_addr[14:2]][23:16] <= dmem_wdata[23:16];
+            if (dmem_be[3]) dmem[dmem_addr[14:2]][31:24] <= dmem_wdata[31:24];
         end
-    assign dmem_rdata = dmem[dmem_addr[13:2]];
+    assign dmem_rdata = dmem[dmem_addr[14:2]];
 
     always #(CLK_PERIOD / 2) clk = ~clk;
 
@@ -65,7 +65,7 @@ module tb_arch_test;
     );
 
     // ---- 参考签名与比对 ----
-    reg [31:0] ref_mem [0:4095];
+    reg [31:0] ref_mem [0:8191];
     integer sig_idx;
     integer fd;
     integer shown;
@@ -85,7 +85,7 @@ module tb_arch_test;
         i = $value$plusargs("sig_start=%d", sig_start);
         i = $value$plusargs("cycles=%d", run_cycles);
 
-        for (i = 0; i < 4096; i = i + 1) begin
+        for (i = 0; i < 8192; i = i + 1) begin
             imem[i] = 32'h0000_0013;
             dmem[i] = 32'h0;
         end
@@ -98,7 +98,7 @@ module tb_arch_test;
         rst_n = 1;
         repeat (run_cycles) @(posedge clk);
 
-        sig_idx = (sig_start & 32'h0000_3FFF) >> 2;
+        sig_idx = (sig_start & 32'h0000_7FFF) >> 2;
         errors = 0;
         shown = 0;
         fd = 0;
