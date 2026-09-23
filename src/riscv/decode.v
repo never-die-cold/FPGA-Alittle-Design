@@ -1,4 +1,4 @@
-// decode.v —— 指令译码：全部控制信号 + 立即数生成（RV32I；M 扩展预留 muldiv_op）
+// decode.v —— 指令译码：全部控制信号 + 立即数生成（RV32IM）
 // 控制真值表见 src/riscv/design_v0.md §6
 module decode (
     input  wire [31:0] instr,
@@ -18,7 +18,8 @@ module decode (
     output reg         sign_ext,
     output reg  [2:0]  branch_type,
     output reg  [1:0]  jump_type,
-    output reg  [1:0]  muldiv_op
+    output reg         muldiv_valid,
+    output reg  [2:0]  muldiv_op
 );
 
     localparam [6:0] OP_LUI    = 7'h37,
@@ -51,7 +52,8 @@ module decode (
 
     localparam [1:0] WB_ALU = 2'b00,
                      WB_MEM = 2'b01,
-                     WB_PC4 = 2'b10;
+                     WB_PC4 = 2'b10,
+                     WB_M   = 2'b11;
 
     wire [6:0] opcode = instr[6:0];
     wire [2:0] funct3 = instr[14:12];
@@ -74,7 +76,8 @@ module decode (
         sign_ext    = 1'b0;
         branch_type = 3'd0;
         jump_type   = 2'd0;
-        muldiv_op   = 2'd0;
+        muldiv_valid = 1'b0;
+        muldiv_op    = 3'd0;
 
         case (opcode)
             OP_LUI: begin
@@ -157,9 +160,9 @@ module decode (
                 alu_b_sel = B_RS2;
                 reg_write = 1'b1;
                 if (funct7 == 7'h01) begin
-                    // M 扩展：v0 暂不实现（design_v0.md §9 决策 2），按 NOP 处理
-                    reg_write = 1'b0;
-                    muldiv_op = {1'b0, funct3[1:0]};
+                    wb_sel       = WB_M;
+                    muldiv_valid = 1'b1;
+                    muldiv_op    = funct3;
                 end else begin
                     case (funct3)
                         3'b000:  alu_op = funct7[5] ? ALU_SUB : ALU_ADD;

@@ -51,19 +51,20 @@
 ### 3.1 指令存储器：同步读 BRAM
 
 - 语义：本拍给出 `imem_addr`，`imem_rdata` **下一拍**有效（BRAM 标准行为）；
-- SoC 外壳实现：4096 × 32bit，`$readmemh` 预载 hex（格式见 §9），复位后 PC = `0x8000_0000`；
-- 仿真 tb 用同语义存储器模型。
+- 容量：8192 × 32bit（32KB），`$readmemh` 预载 hex（格式见 §8），复位后 PC = `0x8000_0000`；
+- SoC 外壳与仿真 tb 均使用相同容量、地址索引和同步读语义。
 
 ### 3.2 数据存储器：异步读（分布式 RAM）
 
 - 语义：`dmem_addr` → `dmem_rdata` **同拍**有效；
 - 写支持 4 位字节使能 `dmem_be`（`sb/sh/sw` 与小端字节序由核生成使能）；
-- 容量建议 4K × 32bit（够 v0 冒烟；后续按需扩）。
+- 容量：8192 × 32bit（32KB）；保持异步读以维持 `lw` 同拍写回和 v0 CPI 锚点语义。
 
 ### 3.3 地址空间
 
-- v0 哈佛分离，两侧各自从 `0x8000_0000` 起：指令侧 `0x0–0x3FFF`、数据侧 `0x0–0x3FFF`；
-- 固件 `tohost` 约定在数据侧 `0x8000_3FF0`（即 `dmem` 偏移 `0xFFC`），tb 直接读该单元判定 PASS/FAIL；数据 RAM 上电初值全 0（无预载）。
+- v0 哈佛分离，IMEM/DMEM 地址范围均为 `0x8000_0000–0x8000_7FFF`；两个存储器模型统一用 `addr[14:2]` 作为 8192 深度的字索引。
+- 固件 `tohost` 保持在 `0x8000_3FF0`（字节偏移 `0x3FF0`、字索引 `0x0FFC`），`tohost_exit` 保持在 `0x8000_3FF4`；tb 直接读对应单元判定 PASS/FAIL。
+- 数据 RAM 上电初值全 0（无预载）；PYNQ-Z2 的 512MB DDR3 位于 PS 侧，当前纯 PL 核不直接使用。
 
 ## 4. 模块划分（v0）
 
@@ -181,8 +182,8 @@
 | 模块 | 职责 |
 |:---|:---|
 | `soc_top.v` | 例化 `core_top` + 指令 BRAM + 数据 RAM + LED 驱动；`clk` 来自板载晶振，`rst_n` 接复位按键/上电复位 |
-| 指令 BRAM | 4096×32，同步读，`$readmemh` 预载 `src/riscv_fw/hello.hex` |
-| 数据 RAM | 4K×32，异步读，4 位字节使能 |
+| 指令 BRAM | 8192×32（32KB），`addr[14:2]` 索引，同步读，`$readmemh` 预载 `src/riscv_fw/hello.hex` |
+| 数据 RAM | 8192×32（32KB），`addr[14:2]` 索引，异步读，4 位字节使能 |
 | LED 驱动 | v0 冒烟：LED = 分频计数器高位（证明时钟/复位/下载链路通），或 PC 高位；实现时定 |
 
 ## 6. 控制信号编码与真值表
@@ -278,7 +279,7 @@
 
 ```mermaid
 flowchart LR
-    PC["pc.v<br/>PC 寄存器 + 下一 PC 选择"] -->|pc| IM["指令存储器<br/>4096×32 同步读 BRAM"]
+    PC["pc.v<br/>PC 寄存器 + 下一 PC 选择"] -->|pc| IM["指令存储器<br/>8192×32 同步读 BRAM"]
     IM -->|imem_rdata 下一拍| IF["if_stage.v<br/>指令流水寄存器"]
     IF -->|instr| DEC["decode.v<br/>译码 + 立即数 + 控制"]
     DEC -->|rs1/rs2/rd + ctl| RF["regfile.v<br/>32×32"]
@@ -287,7 +288,7 @@ flowchart LR
     ALU -->|y| WB["写回选择<br/>ALU / MEM / PC+4"]
     WB -->|wdata/we| RF
     ALU -->|addr/wdata| MEMC["访存控制/扩展<br/>字节使能 + 符号扩展"]
-    MEMC <-->|异步读/字节写| DM["数据存储器<br/>4K×32 分布式 RAM"]
+    MEMC <-->|异步读/字节写| DM["数据存储器<br/>8192×32"]
     ALU -->|branch/jump 条件与目标| PC
 ```
 
@@ -306,11 +307,12 @@ flowchart LR
 
 | # | 决策 | 被否方案 | 理由 |
 |:---:|:---|:---|:---|
-| 1 | 指令 BRAM 同步读 + 数据 RAM 异步读 | 全异步 / 全同步 | 同步读与两级流水天然契合、可推 BRAM；数据异步读保证 `lw` 单拍完成、v0 CPI 锚点干净 |
+| 1 | 指令 BRAM 同步读 + 数据 RAM 异步读 | 全异步 / 全同步 | 同步读与两级流水天然契合、可推 BRAM；数据异步读保证 `lw` 单拍完成、维持 v0 CPI 锚点语义 |
 | 2 | v0 先 RV32I，M 扩展 Part A 收尾补 | 一次到位 RV32IM | 沿用 plan.md 原风险预案：先拿 RV32I 基线数据；PC/IF 的 `stall` 已预留，补 M 不改变两级结构 |
 | 3 | `tohost` 用数据 RAM 高端地址观测 | MMIO 专用观测口 | 最简、与真实上板行为一致；tb 直接读存储器模型 |
 | 4 | `core_top` 外置哈佛存储接口 | 核内嵌存储 | 核零改动即可挂 tb 存储模型/真 SoC；地址译码留在外壳 |
 | 5 | M 操作直接采用 3 位 `funct3`，以 `start/busy/done` 握手 | 原 2 位操作码、仅用 `busy` | 3 位完整覆盖八条 RV32M 指令；`done` 明确唯一写回拍，避免暂停期间重复写回或重复启动 |
+| 6 | IMEM/DMEM 统一为 8192×32，地址索引 `addr[14:2]`；`tohost` 地址不变 | 维持 16KB / 移动观测地址 | 32KB 满足 CoreMark 前置容量并统一仿真、固件和 SoC 口径；保留观测地址避免破坏现有冒烟判据 |
 
 ## 10. 待办清单（Part A 开工即用）
 
@@ -322,6 +324,7 @@ flowchart LR
 - [ ] 最小 SoC 外壳（仿真）+ 上板冒烟（板卡 2026-09-20 到货并验证，全队共用 1 块）
 - [ ] 上板时钟方案拍板：板载 PL 时钟 125 MHz（H16）> v0 当前 Fmax 86.8 MHz，需 MMCM 分频冒烟或等 Part B 提频后按 100 MHz 重测（§5.8 原写"clk 来自板载晶振"，待同步）
 - [ ] M 扩展 `muldiv.v` 收尾（启用 `hello.hex` RV32IM 冒烟）
+- [ ] 按 §3 的 32KB 契约同步固件、仿真存储器模型与 SoC 外壳
 - [ ] 基线 CPI / Fmax 记录 `report/`
 
 ## 11. 变更记录
@@ -332,3 +335,4 @@ flowchart LR
 | 2026-09-11 | RTL 落地：补 `if_stage` 的 `pc`/`pc_id` 端口与 flush 语义说明；冒烟判据改为 `hello_v0`（RV32I）+ `tohost_exit` 双字观测 | commits `80c47f7`…`81569ae`、`report/llm_log/2026-09-11-riscv-v0-rtl.md` |
 | 2026-09-11 | 逐指令自检 `hello_test`（38 用例）与 `tb_core_test` 全过；记录 lb 用例小端纠错 | commits `87d3f4f`、`58ed400`、`report/llm_log/2026-09-11-riscv-instruction-tests.md` |
 | 2026-09-20 | 冻结 RV32M 八操作编码、`start/busy/done` 握手、32 次迭代停顿与边界语义 | Part A M 扩展收口 |
+| 2026-09-22 | 冻结 IMEM/DMEM 8192×32、`addr[14:2]`、DMEM 异步读及原 `tohost` 地址；实现与回归后续分步完成 | `report/llm_log/2026-09-22-memory-contract.md` |
