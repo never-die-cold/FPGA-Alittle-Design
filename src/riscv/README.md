@@ -2,7 +2,7 @@
 
 自研三级流水 RISC-V 核（RV32IM）：流水线重构 + 数据转发（旁路）+ 轻量分支预测。
 
-> 📋 三部分分工（基线 v0 / 三级+转发 / 预测+验证）与技术栈学习路线见 [plan.md](plan.md)。
+> 📋 剩余计划（三级+转发 / 预测+验证）与技术栈学习路线见 [plan.md](plan.md)；已完成部分（阶段 0 / 第一阶段 / Part A）原文与证据归档见 [done/m1-first-phase-completed.md](done/m1-first-phase-completed.md)。
 > 🔧 v0 接口冻结（模块划分 / 信号表 / 控制真值表）：[design_v0.md](design_v0.md)。
 
 ## 规划内容
