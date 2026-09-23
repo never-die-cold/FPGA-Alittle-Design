@@ -9,9 +9,16 @@ CC      := $(CROSS)gcc
 OBJDUMP := $(CROSS)objdump
 OBJCOPY := $(CROSS)objcopy
 
-COMMON  := -mcmodel=medany -mno-relax -O2 -Wall -Wextra -ffreestanding -nostdlib -nostartfiles -T link.ld -Wl,--build-id=none
+COMMON  := -mcmodel=medany -mno-relax -O2 -Wall -Wextra -ffreestanding -nostdlib -nostartfiles -Wl,--build-id=none
 ARCH_IM := -march=rv32im -mabi=ilp32
 ARCH_I  := -march=rv32i  -mabi=ilp32
+
+# CoreMark 构建（契约 docs/coremark_tb_contract.md §4.1；输出 coremark.hex/.dis 入库）
+CM_SRCS  := start.S coremark/core_main.c coremark/core_portme.c \
+            coremark/vendor/core_list_join.c coremark/vendor/core_matrix.c \
+            coremark/vendor/core_state.c coremark/vendor/core_util.c
+CM_FLAGS := -DTOTAL_DATA_SIZE=2000 -DITERATIONS=32 -Icoremark -Icoremark/vendor
+CM_LD    := coremark/link_coremark.ld
 
 TARGET    := hello
 SRCS      := start.S main.c
@@ -27,16 +34,19 @@ RM := rm -f
 endif
 
 .PHONY: all clean
-all: $(TARGET).hex $(TARGET).dis $(V0_TARGET).hex $(V0_TARGET).dis $(TS_TARGET).hex $(TS_TARGET).dis
+all: $(TARGET).hex $(TARGET).dis $(V0_TARGET).hex $(V0_TARGET).dis $(TS_TARGET).hex $(TS_TARGET).dis coremark.hex coremark.dis
 
 $(TARGET).elf: $(SRCS) link.ld
-	$(CC) $(ARCH_IM) $(COMMON) $(SRCS) -o $@
+	$(CC) $(ARCH_IM) $(COMMON) -T link.ld $(SRCS) -o $@
 
 $(V0_TARGET).elf: $(V0_SRCS) link.ld
-	$(CC) $(ARCH_I) $(COMMON) $(V0_SRCS) -o $@
+	$(CC) $(ARCH_I) $(COMMON) -T link.ld $(V0_SRCS) -o $@
 
 $(TS_TARGET).elf: $(TS_SRCS) link.ld
-	$(CC) $(ARCH_I) $(COMMON) $(TS_SRCS) -o $@
+	$(CC) $(ARCH_I) $(COMMON) -T link.ld $(TS_SRCS) -o $@
+
+coremark.elf: $(CM_SRCS) $(CM_LD)
+	$(CC) $(ARCH_IM) $(COMMON) $(CM_FLAGS) -T $(CM_LD) $(CM_SRCS) -o $@
 
 %.bin: %.elf
 	$(OBJCOPY) -O binary $< $@
@@ -48,4 +58,4 @@ $(TS_TARGET).elf: $(TS_SRCS) link.ld
 	$(OBJDUMP) -d $< > $@
 
 clean:
-	-$(RM) $(TARGET).elf $(TARGET).bin $(TARGET).hex $(TARGET).dis $(V0_TARGET).elf $(V0_TARGET).bin $(V0_TARGET).hex $(V0_TARGET).dis $(TS_TARGET).elf $(TS_TARGET).bin $(TS_TARGET).hex $(TS_TARGET).dis
+	-$(RM) $(TARGET).elf $(TARGET).bin $(TARGET).hex $(TARGET).dis $(V0_TARGET).elf $(V0_TARGET).bin $(V0_TARGET).hex $(V0_TARGET).dis $(TS_TARGET).elf $(TS_TARGET).bin $(TS_TARGET).hex $(TS_TARGET).dis coremark.elf coremark.bin coremark.hex coremark.dis

@@ -1,0 +1,34 @@
+diff --git a/src/riscv_fw/coremark/vendor/core_main.c b/src/riscv_fw/coremark/core_main.c
+index a4beeb6..d178441 100644
+--- a/src/riscv_fw/coremark/vendor/core_main.c
++++ b/src/riscv_fw/coremark/core_main.c
+@@ -14,6 +14,12 @@ See the License for the specific language governing permissions and
+ limitations under the License.
+ 
+ Original Author: Shay Gal-on
++---------------------------------------------------------------------------
++本文件派生自 vendor/core_main.c（EEMBC CoreMark，commit 1f483d5b，Apache-2.0）。
++唯一改动：文件末尾 portable_fini 之前新增"结果导出钩子" port_results_export(...)
++（契约 docs/coremark_tb_contract.md §4.3/§4.4）；其余内容与官方一致。
++diff 证据：data/evidence/2026-09-23-coremark-main-hook.patch
++---------------------------------------------------------------------------
+ */
+ 
+ /* File: core_main.c
+@@ -435,6 +441,16 @@ for (i = 0; i < MULTITHREAD; i++)
+     for (i = 0; i < MULTITHREAD; i++)
+         portable_free(results[i].memblock[0]);
+ #endif
++
++    /* 本仓库新增：结果导出钩子（观测块 + tohost=crcfinal；契约 §4.3/§4.4） */
++    port_results_export(results[0].iterations,
++                        seedcrc,
++                        results[0].crclist,
++                        results[0].crcmatrix,
++                        results[0].crcstate,
++                        results[0].crc,
++                        total_errors);
++
+     /* And last call any target specific code for finalizing */
+     portable_fini(&(results[0].port));
+ 
