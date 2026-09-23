@@ -8,3 +8,9 @@
 *.xsa  binary
 *.png  binary
 *.jpg  binary
+
+# 上游原样文件与 diff 证据不参与空白检查：
+#   vendor/ 为 EEMBC 官方源码原样入库（禁止改动，含上游自带尾随空格）
+#   *.patch 为 unified diff 证据（空白上下文行会被 git diff --check 误报）
+src/riscv_fw/coremark/vendor/** -whitespace
+*.patch -whitespace

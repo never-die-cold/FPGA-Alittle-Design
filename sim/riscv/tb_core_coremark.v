@@ -2,8 +2,10 @@
 // tb_core_coremark.v —— 通用固件回归/跑分 tb（CoreMark 短迭代等）
 // 跑法（在 sim/ 下）：vvp build/tb_core_coremark.vvp
 //   [+hex=路径] [+exp_tohost=N] [+exp_exit=N] [+max_cycles=N] [+timer_addr=HEX] [+vcd]
+//   [+exp_iter=N] [+exp_seedcrc=HEX] [+exp_crclist=HEX] [+exp_crcmatrix=HEX] [+exp_crcstate=HEX] [+exp_crcfinal=HEX]
 // 默认固件 ../src/riscv_fw/coremark.hex；未入库前可用 +hex=../src/riscv_fw/hello.hex 冒烟
 // 判据：观察到写 tohost_exit(0x8000_3FF4) 即结束；核对 exit/tohost 后打印 cycles/instrs/bubbles/CPI
+// 观测块（契约 docs/coremark_tb_contract.md §4.3）：镜像自带 MAGIC 时自动 dump 11 字并按 +exp_* 判据校验
 // 存储模型：8192×32、addr[14:2]（design_v0.md §3.3 冻结契约）
 module tb_core_coremark;
 
@@ -22,6 +24,17 @@ module tb_core_coremark;
     integer exp_tohost = 0, has_exp_tohost = 0, exp_exit = 0;
     integer max_cycles = 10000000;
     integer timer_addr = 0;      // 非 0：该字节地址的读返回自由运行周期数（CoreMark 计时用）
+
+    // 观测块（契约 §4.3）：基址 0x8000_7F00，字索引 0x1FC0
+    localparam [12:0] OBS_IDX        = 13'h1FC0;
+    localparam [31:0] OBS_MAGIC_ID   = 32'h434D_4B31; // "CMK1"
+    localparam [31:0] OBS_MAGIC_DONE = 32'h444F_4E45; // "DONE"
+    integer exp_iter = 0, has_exp_iter = 0;
+    integer exp_seedcrc = 0, has_exp_seedcrc = 0;
+    integer exp_crclist = 0, has_exp_crclist = 0;
+    integer exp_crcmatrix = 0, has_exp_crcmatrix = 0;
+    integer exp_crcstate = 0, has_exp_crcstate = 0;
+    integer exp_crcfinal = 0, has_exp_crcfinal = 0;
 
     // ---- core_top 外部接口（design_v0.md §5.7）----
     wire [31:0] imem_addr, dmem_addr, dmem_wdata, dmem_rdata;
@@ -82,6 +95,12 @@ module tb_core_coremark;
         i = $value$plusargs("exp_exit=%d", exp_exit);
         i = $value$plusargs("max_cycles=%d", max_cycles);
         i = $value$plusargs("timer_addr=%h", timer_addr);
+        i = $value$plusargs("exp_iter=%d", exp_iter);        has_exp_iter = i;
+        i = $value$plusargs("exp_seedcrc=%h", exp_seedcrc);  has_exp_seedcrc = i;
+        i = $value$plusargs("exp_crclist=%h", exp_crclist);  has_exp_crclist = i;
+        i = $value$plusargs("exp_crcmatrix=%h", exp_crcmatrix); has_exp_crcmatrix = i;
+        i = $value$plusargs("exp_crcstate=%h", exp_crcstate); has_exp_crcstate = i;
+        i = $value$plusargs("exp_crcfinal=%h", exp_crcfinal); has_exp_crcfinal = i;
 
         fd = $fopen(hex_file, "r");
         if (fd == 0) $fatal(1, "hex 打不开：%0s（未移植 CoreMark 时用 +hex=../src/riscv_fw/hello.hex）", hex_file);
@@ -92,6 +111,9 @@ module tb_core_coremark;
             dmem[i] = 32'd0;
         end
         $readmemh(hex_file, imem);
+        // 哈佛双口加载器语义：镜像同时预载 DMEM（.data 初值与 .rodata 读取，
+        // CoreMark 的 switch 跳转表在 rodata，必须可读；见 docs/coremark_tb_contract.md §4.2）
+        $readmemh(hex_file, dmem);
 
         if ($test$plusargs("vcd")) begin
             $dumpfile("tb_core_coremark.vcd");
@@ -115,6 +137,27 @@ module tb_core_coremark;
         end
         if (has_exp_tohost && (!tohost_seen || tohost_val !== exp_tohost)) begin
             $display("FAIL: tohost 期望 %0d 实际 %0d（seen=%0d）", exp_tohost, tohost_val, tohost_seen);
+            errors = errors + 1;
+        end
+
+        // ---- 观测块判据（契约 §4.3/§5.1）----
+        if (dmem[OBS_IDX] === OBS_MAGIC_ID) begin
+            $display("== obs iter=%0d seedcrc=0x%04x crclist=0x%04x crcmatrix=0x%04x crcstate=0x%04x crcfinal=0x%04x t0=%0d t1=%0d errors=%0d",
+                     dmem[OBS_IDX+1], dmem[OBS_IDX+2][15:0], dmem[OBS_IDX+3][15:0],
+                     dmem[OBS_IDX+4][15:0], dmem[OBS_IDX+5][15:0], dmem[OBS_IDX+6][15:0],
+                     dmem[OBS_IDX+7], dmem[OBS_IDX+8], dmem[OBS_IDX+9]);
+            if (dmem[OBS_IDX+10] !== OBS_MAGIC_DONE) begin
+                $display("FAIL: 观测块未封口 DONE_MAGIC=0x%08x", dmem[OBS_IDX+10]);
+                errors = errors + 1;
+            end
+            if (has_exp_iter    && dmem[OBS_IDX+1]  !== exp_iter)    begin $display("FAIL: obs iterations 期望 %0d 实际 %0d", exp_iter, dmem[OBS_IDX+1]); errors = errors + 1; end
+            if (has_exp_seedcrc && dmem[OBS_IDX+2]  !== exp_seedcrc) begin $display("FAIL: obs seedcrc 期望 0x%04x 实际 0x%04x", exp_seedcrc, dmem[OBS_IDX+2][15:0]); errors = errors + 1; end
+            if (has_exp_crclist && dmem[OBS_IDX+3]  !== exp_crclist) begin $display("FAIL: obs crclist 期望 0x%04x 实际 0x%04x", exp_crclist, dmem[OBS_IDX+3][15:0]); errors = errors + 1; end
+            if (has_exp_crcmatrix && dmem[OBS_IDX+4] !== exp_crcmatrix) begin $display("FAIL: obs crcmatrix 期望 0x%04x 实际 0x%04x", exp_crcmatrix, dmem[OBS_IDX+4][15:0]); errors = errors + 1; end
+            if (has_exp_crcstate && dmem[OBS_IDX+5] !== exp_crcstate) begin $display("FAIL: obs crcstate 期望 0x%04x 实际 0x%04x", exp_crcstate, dmem[OBS_IDX+5][15:0]); errors = errors + 1; end
+            if (has_exp_crcfinal && dmem[OBS_IDX+6] !== exp_crcfinal) begin $display("FAIL: obs crcfinal 期望 0x%04x 实际 0x%04x", exp_crcfinal, dmem[OBS_IDX+6][15:0]); errors = errors + 1; end
+        end else if (has_exp_iter || has_exp_seedcrc || has_exp_crclist || has_exp_crcmatrix || has_exp_crcstate || has_exp_crcfinal) begin
+            $display("FAIL: 未找到观测块（dmem[0x%04x]=0x%08x），无法执行 CRC 判据", OBS_IDX, dmem[OBS_IDX]);
             errors = errors + 1;
         end
         if (errors != 0) $fatal(1, "FAIL: %0d 项不符", errors);

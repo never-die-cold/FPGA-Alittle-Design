@@ -66,7 +66,7 @@ sim/
 
 - 契约（判据/观测/接口唯一入口）：[`docs/coremark_tb_contract.md`](../docs/coremark_tb_contract.md)（草案全文，未决项收口后冻结）
 - 通用 tb：`riscv/tb_core_coremark.v`——8192×32 存储模型 + plusargs；`+hex` 默认 `../src/riscv_fw/coremark.hex`，支持 `+timer_addr` 计数器仿真
-- 当前状态：等待 32KB 实现（8B）与 `coremark.hex` 移植；`coremark` 回归模式待 8B 后接入（单独模式，暂不入 `all`）
+- 当前状态（2026-09-23）：`coremark.hex` 已入库、v0 32 迭代 PASS（CoreMark/MHz=1.506，判据/证据见 `data/logs/2026-09-23-coremark/`）；tb 已支持观测块判据（`+exp_iter/+exp_seedcrc/+exp_crclist/+exp_crcmatrix/+exp_crcstate/+exp_crcfinal`）与双口预载；`coremark` 回归模式待 8B 后接入（单独模式，暂不入 `all`）
 - 冒烟用法（固件未入库前，在 `sim/` 下）：
   `iverilog -g2012 -o build/tb_core_coremark.vvp riscv/tb_core_coremark.v ../src/riscv/*.v`
   `vvp build/tb_core_coremark.vvp +hex=../src/riscv_fw/hello.hex +exp_tohost=142879`

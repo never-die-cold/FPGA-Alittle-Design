@@ -3,7 +3,7 @@
 > 状态：📋 执行计划（2026-09-23 起草）
 > 主责：基准线 `dev/bench`｜窗口：9/25–10/1（与 Part B/C 并行，2026-09-21 压缩排期）
 > 依据：`docs/core_comparison.md`（决策与指标定义）、`src/riscv/plan.md` §1–§3（剩余计划与遗留）、`sim/README.md`
-> 配套契约：`docs/coremark_tb_contract.md`——接口/观测/判据的唯一执行口径（本地草稿已落盘 §1–§4，待复核入库）
+> 配套契约：`docs/coremark_tb_contract.md`——接口/观测/判据的唯一执行口径（§1–§7 已入库，commit `8100975`）
 > 冲突处理：接口以 `src/riscv/design_v0.md` 为唯一权威；本文只回答"做什么、谁做、怎么验收、卡在哪"
 
 ## 0. 现状快照（动手前先核对，禁止凭记忆）
@@ -13,7 +13,7 @@
 - 存储契约 8A 冻结：IMEM/DMEM `8192×32`、`addr[14:2]`、DMEM 异步读、`tohost 0x8000_3FF0`（随 PR #32 合入 main）
 - RV32IM 核 + `muldiv` 整核冒烟 PASS；回归五档 `v0|fwd|muldiv|rv32im|all`
 - 通用 tb `sim/riscv/tb_core_coremark.v` 已入库：plusarg 参数化、写事件判结束、cycles/instrs/bubbles/CPI 统计
-- 契约草稿 `docs/coremark_tb_contract.md` §1–§4 落盘（未入库）
+- 契约 `docs/coremark_tb_contract.md` §1–§7 已入库（commit `8100975`）
 
 **未就绪（阻塞项）**
 
@@ -21,12 +21,15 @@
 |:--:|:---|:---|:---|
 | 1 | 8B 存储模型（32KB 统一 RTL/固件/链接） | 未开始 | RTL 线 |
 | 2 | SoC 计时计数器（提案 `0x8000_8000`） | 未开始，地址待确认 | RTL 线 |
-| 3 | vendor CoreMark + 移植层 | 未开始 | bench |
-| 4 | `coremark.hex` + golden（crcfinal） | 未开始 | bench 出、verify 复核 |
+| 3 | vendor CoreMark + 移植层 | ✅ 2026-09-23：vendor/ + portme + 构建落地 | bench |
+| 4 | `coremark.hex` + golden（crcfinal） | ✅ hex 入库；golden 三方一致，verify 独立复核待办 | verify 复核 |
+| 7 | DMEM 镜像预载（哈佛加载器） | tb 已实现；`soc_top` 待支持 | RTL 线 |
 | 5 | `coremark` 回归模式（`run_iverilog.sh`） | 等 #1 | verify/bench |
 | 6 | `data/metrics.csv` 两行数值 | 骨架在，数值空 | bench |
 
 **依赖链**：#1/#2（RTL）→ #3（bench）→ #4/#5（bench/verify）→ metrics + 四档数据（bench）；阶段 A 契约可与 RTL 并行，不等 RTL 完成。
+
+**2026-09-23 实跑快照**：v0 32 迭代 PASS——四常数 + golden（`crcfinal=0x8799`）全对，CPI=2.105、CoreMark/MHz=1.506（仿真外推口径）；证据 `data/logs/2026-09-23-coremark/`。实跑修正两点：① **哈佛加载器语义**——镜像须同时预载 DMEM（`.data` 初值与 `.rodata` 跳转表；见契约 §3.2，实跑定位到间接跳转飞入数据区）；② `ee_printf` 置空，结果全部走观测块（原 D2 设想的 dmem 缓冲不必要）。
 
 ## 1. 阶段 A：契约收口（9/23–9/24）
 
@@ -45,19 +48,19 @@
 
 ## 3. 阶段 C：vendor 引入与构建（9/25，bench）
 
-- [ ] C1. EEMBC coremark 按**固定 commit** 拉入 `src/riscv_fw/coremark/vendor/`；commit 哈希/日期/使用文件 SHA-256 入 `data/evidence/`；附官方 LICENSE
-- [ ] C2. 守住官方规则：`core_list_join.c`/`core_matrix.c`/`core_state.c`/`core_util.c`/`coremark.h` 不改；允许改 `core_portme.c/h`；`core_main.c` 只加"结果导出钩子"（CRC/ticks 写观测块），diff 入证据
-- [ ] C3. `Makefile` 增 coremark 目标、`link.ld` 按 32KB 布局；产出 `coremark.hex/.dis`；`size` 查容量 + `objdump` 查无 libgcc/浮点/压缩/原子指令
-- [ ] C4. 容量兜底：2K profile（`TOTAL_DATA_SIZE=2000`、`ITERATIONS=32`、seeds `0/0/0x66`、`MEM_STATIC`）超限时按官方配置裁，裁剪即写入口径
+- [x] C1. EEMBC coremark 按**固定 commit** 拉入 `src/riscv_fw/coremark/vendor/`；commit 哈希/日期/使用文件 SHA-256 入 `data/evidence/`；附官方 LICENSE
+- [x] C2. 守住官方规则：`core_list_join.c`/`core_matrix.c`/`core_state.c`/`core_util.c`/`coremark.h` 不改；允许改 `core_portme.c/h`；`core_main.c` 只加"结果导出钩子"（CRC/ticks 写观测块），diff 入证据
+- [x] C3. `Makefile` 增 coremark 目标、`link.ld` 按 32KB 布局；产出 `coremark.hex/.dis`；`size` 查容量 + `objdump` 查无 libgcc/浮点/压缩/原子指令
+- [x] C4. 容量兜底：2K profile（`TOTAL_DATA_SIZE=2000`、`ITERATIONS=32`、seeds `0/0/0x66`、`MEM_STATIC`）超限时按官方配置裁，裁剪即写入口径
 - 验收：hex 字数 ≤ 8192、可被 tb 预载、`.text/.data/.bss+栈` 不越 32KB、不与观测块/`tohost` 重叠
 
 ## 4. 阶段 D：裸机移植层（9/25–9/27，bench）
 
-- [ ] D1. `core_portme.h`：配置项全部显式定义（`MEM_STATIC`、`HAS_FLOAT=0`、`HAS_TIME_H=0`、`MAIN_HAS_NOARGC`、`ITERATIONS=32`、seeds 通道）
-- [ ] D2. `core_portme.c`：`get_time` 读 `TIMER_ADDR`（打点用 `t_end - t_start`）；`time_in_secs`/`EE_TICKS_PER_SEC` 整数口径（不引浮点）；`ee_printf` 输出（按需，写入 dmem 缓冲）
-- [ ] D3. 观测块写入（契约 §4.3 字段表：MAGIC/iterations/seedcrc/三算法 CRC/crcfinal/t_start/t_end/errors_raw/DONE），每字段恰好一次、先于 `tohost_exit`
-- [ ] D4. 结束协议：`tohost = crcfinal` → `tohost_exit = 0` → 死循环自旋（tb 按写事件判结束）
-- [ ] D5. 自检通过：`seedcrc=0xe9f5`、CRC 与 golden 一致；`errors_raw` 携带的仿真 <10s 错误只作证据不作判据
+- [x] D1. `core_portme.h`：配置项全部显式定义（`MEM_STATIC`、`HAS_FLOAT=0`、`HAS_TIME_H=0`、`MAIN_HAS_NOARGC`、`ITERATIONS=32`、seeds 通道）
+- [x] D2. `core_portme.c`：`get_time` 读 `TIMER_ADDR`（打点用 `t_end - t_start`）；`time_in_secs`/`EE_TICKS_PER_SEC` 整数口径（不引浮点）；`ee_printf` 输出（按需，写入 dmem 缓冲）
+- [x] D3. 观测块写入（契约 §4.3 字段表：MAGIC/iterations/seedcrc/三算法 CRC/crcfinal/t_start/t_end/errors_raw/DONE），每字段恰好一次、先于 `tohost_exit`
+- [x] D4. 结束协议：`tohost = crcfinal` → `tohost_exit = 0` → 死循环自旋（tb 按写事件判结束）
+- [x] D5. 自检通过：`seedcrc=0xe9f5`、CRC 与 golden 一致；`errors_raw` 携带的仿真 <10s 错误只作证据不作判据
 - 验收：`+exp_tohost=<golden>` PASS；golden `crcfinal` 由 bench 出、verify 复核
 
 ## 5. 阶段 E：回归接入与证据（9/27–9/29，verify 主责、bench 配合）

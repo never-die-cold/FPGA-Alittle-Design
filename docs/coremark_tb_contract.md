@@ -1,6 +1,6 @@
 # CoreMark 基准 testbench 契约
 
-> 状态：草案全文完成（2026-09-23，§1–§7；待 §7 列出的未决项收口后转"已冻结 v1.0"）
+> 状态：草案全文 + 首轮实跑修订（2026-09-23；v0 32 迭代跑通，CoreMark/MHz=1.506）；待 §7 未决项收口后转"已冻结 v1.0"
 > 起草：基准线（`dev/bench`）｜消费者：基准线（移植层）、验证线（tb/回归/证据）、RTL 线（存储/计数器）
 > 依据：`docs/core_comparison.md`（执行决策）、`src/riscv/design_v0.md`（接口唯一权威）、`sim/riscv/tb_core_coremark.v`（既有通用 tb）
 > 本文与 `design_v0.md` 冲突时以 `design_v0.md` 为准，并立即修正本文；变更流程见 §7。
@@ -58,10 +58,11 @@ CoreMark 是本项目唯一正式基准（`docs/core_comparison.md` §1 决策 1
 |:--:|:---|:---|:---|:---|
 | 1 | 8B 存储模型实现（RTL/固件/链接统一 32KB） | 未开始 | RTL 线 | §4 运行前提；§6 `coremark` 回归模式 |
 | 2 | 计时计数器（地址/读时序/RTL） | 未开始；本文 §3 提案 | RTL 线确认 | §3 冻结 |
-| 3 | `coremark.hex` 移植层 | 未开始 | 基准线 | §4/§5 判据全部 |
-| 4 | crcfinal golden（PC 同源 32 迭代） | 未开始 | 基准线出、验证线复核 | §5 判据 |
-| 5 | 观测块判据扩展（tb 读取 CRC 字段） | 未开始；按需 | 验证线 | §4/§5 判据完整性 |
+| 3 | `coremark.hex` 移植层 | ✅ 2026-09-23 v0 32 迭代 PASS（判据全过） | 基准线 | — |
+| 4 | crcfinal golden（PC 同源 32 迭代） | ✅ bench 双路 + RTL 仿真一致；验证线复核待办 | 验证线 | §7.2 #4 收口 |
+| 5 | 观测块判据扩展（tb 读取 CRC 字段） | ✅ tb 已支持（`+exp_*` 判据 + obs dump） | 验证线 | — |
 | 6 | `coremark` 回归模式接入 `run_iverilog.sh` | 等 #1 | 验证线/基准线 | §6 运行入口 |
+| 7 | DMEM 镜像预载（哈佛加载器） | tb 已实现；RTL `soc_top` 待做 | RTL 线 | 板上跑分 |
 
 ### 2.3 依赖链与开工顺序
 
@@ -84,7 +85,7 @@ CoreMark 是本项目唯一正式基准（`docs/core_comparison.md` §1 决策 1
 | 项 | 约定 | 出处 |
 |:---|:---|:---|
 | IMEM | 8192×32（32KB），**同步读**，`addr[14:2]` 索引，`$readmemh` 预载 `coremark.hex` | 8A 契约 / `design_v0.md` §3.1 |
-| DMEM | 8192×32（32KB），**异步读**，4 位字节写使能，上电全 0（不预载） | 8A 契约 / `design_v0.md` §3.2 |
+| DMEM | 8192×32（32KB），**异步读**，4 位字节写使能；上电初值由加载器写入（见下） | 8A 契约 / `design_v0.md` §3.2 |
 | 地址空间 | 两侧均 `0x8000_0000–0x8000_7FFF`；哈佛分离 | `design_v0.md` §3.3 |
 | `tohost` | `0x8000_3FF0`（字索引 `0x0FFC`），程序写结果值 | `design_v0.md` §8 |
 | `tohost_exit` | `0x8000_3FF4`（字索引 `0x0FFD`），程序写退出码 | `design_v0.md` §8 |
@@ -93,6 +94,7 @@ CoreMark 是本项目唯一正式基准（`docs/core_comparison.md` §1 决策 1
 
 - 观测块放 DMEM 顶部：tb/Soc 都按 `addr[14:2]` 直接索引，且与 CoreMark 数据/栈区（链接脚本安排在中低部）物理隔离
 - 计时计数器放 32KB 之外：DMEM 内任何地址都是合法数据地址，MMIO 放进去会与程序数据访问产生歧义（误写不可见）；放界外后译码无二义
+- **哈佛加载器语义（2026-09-23 实跑修订）**：除零初始化 `.bss` 外，程序还依赖 `.data` 初值与 `.rodata` 读取（CoreMark 含编译器生成的 switch 跳转表，实跑定位：`.rodata` 表读到 0 → 间接跳转飞入数据区）。因此镜像必须**同时预载 IMEM 与 DMEM**（同一 hex）：仿真 tb 已按此实现；板上 `soc_top` 需支持 DMEM 预载（未决项 #7）
 
 ### 3.3 计时计数器（提案，待 RTL 线确认）
 
@@ -134,7 +136,7 @@ CoreMark 是本项目唯一正式基准（`docs/core_comparison.md` §1 决策 1
 | 区域 | 地址范围 | 要求 |
 |:---|:---|:---|
 | IMEM 代码 | `0x8000_0000` 起 | `.text` + `.rodata`，入口 `_start`；`coremark.hex` 按 `design_v0.md` §8 格式（每行 8 位十六进制小端字、行号 = 地址/4） |
-| DMEM 数据 | `0x8000_0000` 起 | `.data` / `.bss` / 栈；不得落入 `tohost` 与观测块 |
+| DMEM 数据 | `0x8000_0000` 起 | `.data` / `.bss` / 栈；不得落入 `tohost` 与观测块；**加载器须把镜像写入 DMEM**（`.data` 初值 + `.rodata` 读取） |
 | 栈 | linker 安排（建议 `.bss` 之后） | 大小 ≥ CoreMark 单线程所需；linker 必须显式预留并记录，不与下方保留区碰撞 |
 | `tohost` | `0x8000_3FF0` | 保留；`.tohost` 段 KEEP，程序写 `crcfinal` |
 | `tohost_exit` | `0x8000_3FF4` | 保留；程序写退出码（成功 0） |
@@ -256,11 +258,11 @@ vvp build/tb_core_coremark.vvp +hex=<镜像> +exp_exit=0 +timer_addr=80008000 +m
 | `+hex=<路径>` | `../src/riscv_fw/coremark.hex` | 固件镜像（`$readmemh` 预载 IMEM） |
 | `+exp_tohost=<值>` | 不校验 | 校验 `tohost`（= `crcfinal` = golden） |
 | `+exp_exit=<值>` | `0` | 校验退出码 |
-| `+max_cycles=<N>` | `10000000` | 看门狗；CoreMark 运行**必须显式给值** |
+| `+max_cycles=<N>` | `10000000`（tb 默认，不用于 CoreMark） | 看门狗；CoreMark 运行**必须显式给值**，取 §6.2 冻结的 `50000000` |
 | `+timer_addr=<HEX>` | `0`（关） | 计时计数器地址；本文提案 `80008000`，确认后固化 |
 | `+vcd` | 关 | 导出波形（调试用，不用于回归） |
 
-看门狗取值：首轮四档实测后取 `N = 2 × 最坏配置周期数` 写入本表（**当前未定，未决项 #6**）；在此之前运行者按保守上界给值。
+看门狗取值：v0 实测 21,275,738 周期 → **冻结 `N = 50,000,000`**（≈2.4×）；若 Part B/C 某档更慢再上调并记录（未决项 #6 收口时同步本表）。
 
 ### 6.3 证据归档
 
@@ -296,10 +298,11 @@ vvp build/tb_core_coremark.vvp +hex=<镜像> +exp_exit=0 +timer_addr=80008000 +m
 |:--:|:---|:---|
 | 1 | 8B 存储模型实现 | RTL/固件/tb 统一 8192×32，五档回归 PASS |
 | 2 | 计数器地址确认 | 地址写入 `design_v0.md` §3.3；本文 §3.3 去"提案"字样 |
-| 3 | `coremark.hex` 移植 | 镜像入库且 `+hex` 冒烟 PASS |
-| 4 | crcfinal golden | 两路结果一致并入库 `data/golden/` |
-| 5 | 观测块判据扩展 | tb 能按 §5.1 全 9 条判（或由运行脚本外部判） |
-| 6 | `coremark` 回归模式 | `run_iverilog.sh coremark` 可用并写入 `sim/README.md` |
+| 3 | `coremark.hex` 移植 | ✅ 2026-09-23：v0 32 迭代 PASS，判据全过（`data/logs/2026-09-23-coremark/`） |
+| 4 | crcfinal golden | ✅ bench 双路（O2/O0）+ RTL 仿真一致；⬜ 验证线独立复核后关闭（`data/golden/coremark_2k_32iter/`） |
+| 5 | 观测块判据扩展 | ✅ tb 已支持 `+exp_*` 判据与 obs dump（`sim/riscv/tb_core_coremark.v`） |
+| 6 | `coremark` 回归模式 | `run_iverilog.sh coremark` 可用并写入 `sim/README.md`；看门狗固化 50M |
+| 7 | DMEM 镜像预载（哈佛加载器） | `soc_top` 支持 DMEM 预载/等效加载，板上 CoreMark 可直接上板（RTL 线） |
 
 ### 7.3 变更记录
 
@@ -310,3 +313,5 @@ vvp build/tb_core_coremark.vvp +hex=<镜像> +exp_exit=0 +timer_addr=80008000 +m
 | 2026-09-23 | 起草 §4：镜像与观测契约（观测块字段表/结束协议） | 同上 |
 | 2026-09-23 | 起草 §5：判据契约（CRC/golden/公式/10s 禁令） | 同上 |
 | 2026-09-23 | 起草 §6–§7：运行/证据/变更控制与未决项收口 | 同上 |
+| 2026-09-23 | 首轮实跑修订：哈佛加载器（DMEM 预载）写入 §3.2/§4.2；看门狗冻结 50M（§6.2）；未决项 #3/#5 关闭、新增 #7 | `report/llm_log/2026-09-23-coremark-port.md` |
+| 2026-09-23 | v0 32 迭代跑分与 golden 落地：四常数 + crcfinal 全对，CoreMark/MHz=1.506 | `data/logs/2026-09-23-coremark/`、`data/golden/coremark_2k_32iter/` |
