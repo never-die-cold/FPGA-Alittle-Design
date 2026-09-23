@@ -12,8 +12,8 @@ module tb_core_fwd;
     localparam integer CYCLE_LIMIT  = 30000;                 // 看门狗上限
 
     // 观测地址（见 sim/riscv/fwd/fwd_test.S）
-    localparam [11:0] MARK_IDX   = 12'hF80;                  // 0x8000_3E00 >> 2
-    localparam [11:0] RESULT_IDX = 12'hE00;                  // 0x8000_3800 >> 2
+    localparam [12:0] MARK_IDX   = 13'h0F80;                 // 0x8000_3E00 >> 2
+    localparam [12:0] RESULT_IDX = 13'h0E00;                 // 0x8000_3800 >> 2
 
     // 气泡期望（默认 = v0 契约；可用 plusargs 覆盖）
     integer exp_a = 0;                                       // 阶段 A：R 型连读
@@ -35,28 +35,28 @@ module tb_core_fwd;
     wire        dmem_we;
     wire [31:0] dmem_rdata;
 
-    // ---- 指令存储器模型：4096×32，同步读 ----
-    reg [31:0] imem [0:4095];
+    // ---- 指令存储器模型：8192×32，同步读 ----
+    reg [31:0] imem [0:8191];
     initial imem_rdata = 32'h0000_0013;
     always @(posedge clk)
-        imem_rdata <= imem[imem_addr[13:2]];
+        imem_rdata <= imem[imem_addr[14:2]];
 
     initial begin
-        for (i = 0; i < 4096; i = i + 1)
+        for (i = 0; i < 8192; i = i + 1)
             imem[i] = 32'h00000013;
         $readmemh("riscv/fwd/fwd_test.hex", imem);
     end
 
-    // ---- 数据存储器模型：4096×32，异步读 + 4 位字节使能写 ----
-    reg [31:0] dmem [0:4095];
+    // ---- 数据存储器模型：8192×32，异步读 + 4 位字节使能写 ----
+    reg [31:0] dmem [0:8191];
     always @(posedge clk)
         if (dmem_we) begin
-            if (dmem_be[0]) dmem[dmem_addr[13:2]][7:0]   <= dmem_wdata[7:0];
-            if (dmem_be[1]) dmem[dmem_addr[13:2]][15:8]  <= dmem_wdata[15:8];
-            if (dmem_be[2]) dmem[dmem_addr[13:2]][23:16] <= dmem_wdata[23:16];
-            if (dmem_be[3]) dmem[dmem_addr[13:2]][31:24] <= dmem_wdata[31:24];
+            if (dmem_be[0]) dmem[dmem_addr[14:2]][7:0]   <= dmem_wdata[7:0];
+            if (dmem_be[1]) dmem[dmem_addr[14:2]][15:8]  <= dmem_wdata[15:8];
+            if (dmem_be[2]) dmem[dmem_addr[14:2]][23:16] <= dmem_wdata[23:16];
+            if (dmem_be[3]) dmem[dmem_addr[14:2]][31:24] <= dmem_wdata[31:24];
         end
-    assign dmem_rdata = dmem[dmem_addr[13:2]];
+    assign dmem_rdata = dmem[dmem_addr[14:2]];
 
     // ---- 时钟 ----
     always #(CLK_PERIOD / 2) clk = ~clk;
@@ -88,7 +88,7 @@ module tb_core_fwd;
             cycle_count = cycle_count + 1;
             if (dut.instr_valid === 1'b0)
                 bubble_count = bubble_count + 1;
-            if (dmem_we && (dmem_addr[13:2] == MARK_IDX)) begin
+            if (dmem_we && (dmem_addr[14:2] == MARK_IDX)) begin
                 if (marker_seen <= 8) begin
                     mark_bubbles[marker_seen] = bubble_count;
                     mark_cycles [marker_seen] = cycle_count;
@@ -119,7 +119,7 @@ module tb_core_fwd;
         i = $value$plusargs("exp_c=%d", exp_c);
         i = $value$plusargs("exp_d=%d", exp_d);
 
-        for (i = 0; i < 4096; i = i + 1)
+        for (i = 0; i < 8192; i = i + 1)
             dmem[i] = 32'h0;
 
         $dumpfile("tb_core_fwd.vcd");
