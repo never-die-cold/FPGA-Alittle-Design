@@ -281,7 +281,7 @@ edgesight/
 
 核心必读：
 
-- AMD 赛道官方选题指南（自主选题赛道·初级组）
+- AMD 赛道官方仓库（选题指南全文 TRACK_GUIDE_2026.md + 三赛道规则/开发板获取/技术支持）：https://gitee.com/Vickyiii/fpgachina26-amd
 - 2026 全部 7 企业选题指南摘要（团队会议归档）：[docs/track_guides_2026_summary.md](docs/track_guides_2026_summary.md)
 - PYNQ 官方文档：https://pynq.readthedocs.io/en/latest/
 - 蜂鸟 E203 RISC-V 处理器配套书与源码：https://github.com/riscv-mcu/e203_hbirdv1

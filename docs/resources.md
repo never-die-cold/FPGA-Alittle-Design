@@ -14,6 +14,7 @@
 | 竞赛交流 QQ 群 | 1087309750 | ⭐ 官方答疑群 |
 | AMD 赛灵思中文社区论坛 | https://adaptivesupport.amd.com/ | 🔧 历史帖子含大量问题解答 |
 | AMD 中国开发者平台（云资源申请） | https://developer.amd.com.cn/ | 验证窗口 GPU 云资源入口 |
+| AMD 赛道官方仓库（fpgachina26-amd） | https://gitee.com/Vickyiii/fpgachina26-amd | ⭐ 官方赛道入口：三赛道规则、选题指南全文（TRACK_GUIDE_2026.md）、开发板获取、技术支持；RTL/HLS 参考仓库 hlsagent2026 / rtlagent2026 亦由此索引 |
 
 ---
 
