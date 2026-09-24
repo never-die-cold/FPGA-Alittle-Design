@@ -18,7 +18,7 @@
 
 ## 设计参考
 
-- 软/硬件双版本同界面对比范式：往届国一 hlstrack2025_40562（YOLO+UKF 的 soft/hardware 双 notebook），见 [docs/track_research.md](../docs/track_research.md)
-- 算子化验证（CONV/POOL/GEMM 加速比表）与吞吐率指标（每拍采样数/SSR 思路）：[docs/proposal_upgrade.md](../docs/proposal_upgrade.md)
+- 软/硬件双版本同界面对比范式：往届国一 hlstrack2025_40562（YOLO+UKF 的 soft/hardware 双 notebook），见 [docs/track_research.md](../../docs/track_research.md)
+- 算子化验证（CONV/POOL/GEMM 加速比表）与吞吐率指标（每拍采样数/SSR 思路）：[docs/proposal_upgrade.md](../../docs/proposal_upgrade.md)
 
 > 状态：🚧 待开发（M2 里程碑，L2 降级时可整体裁剪）
