@@ -1,7 +1,7 @@
 # src/riscv_fw/coremark —— CoreMark 移植与构建
 
-> 契约：`docs/coremark_tb_contract.md`（接口/观测/判据唯一口径）
-> 计划：`docs/coremark_plan.md` 阶段 C/D
+> 契约：`docs/coremark.md`（§1–§7 契约主体）
+> 计划与进度：`docs/coremark.md` 附录 A
 
 ## 目录
 

@@ -13,7 +13,7 @@ COMMON  := -mcmodel=medany -mno-relax -O2 -Wall -Wextra -ffreestanding -nostdlib
 ARCH_IM := -march=rv32im -mabi=ilp32
 ARCH_I  := -march=rv32i  -mabi=ilp32
 
-# CoreMark 构建（契约 docs/coremark_tb_contract.md §4.1；输出 coremark.hex/.dis 入库）
+# CoreMark 构建（契约 docs/coremark.md §4.1；输出 coremark.hex/.dis 入库）
 CM_SRCS  := start.S coremark/core_main.c coremark/core_portme.c \
             coremark/vendor/core_list_join.c coremark/vendor/core_matrix.c \
             coremark/vendor/core_state.c coremark/vendor/core_util.c

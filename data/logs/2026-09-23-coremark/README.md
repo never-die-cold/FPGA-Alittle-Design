@@ -1,6 +1,6 @@
 # CoreMark v0（两级核）32 迭代跑分证据
 
-> 契约：`docs/coremark_tb_contract.md` §5/§6；golden：`data/golden/coremark_2k_32iter/`
+> 契约：`docs/coremark.md` §5/§6；golden：`data/golden/coremark_2k_32iter/`
 > 日期：2026-09-23｜配置：v0 两级流水（main 合并态）
 
 ## 测试条件（可复现）

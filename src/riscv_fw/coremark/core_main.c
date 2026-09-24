@@ -17,7 +17,7 @@ Original Author: Shay Gal-on
 ---------------------------------------------------------------------------
 本文件派生自 vendor/core_main.c（EEMBC CoreMark，commit 1f483d5b，Apache-2.0）。
 唯一改动：文件末尾 portable_fini 之前新增"结果导出钩子" port_results_export(...)
-（契约 docs/coremark_tb_contract.md §4.3/§4.4）；其余内容与官方一致。
+（契约 docs/coremark.md §4.3/§4.4）；其余内容与官方一致。
 diff 证据：data/evidence/2026-09-23-coremark-main-hook.patch
 ---------------------------------------------------------------------------
 */

@@ -1,5 +1,5 @@
 /* core_portme.c（host 版）—— CoreMark golden 复算用 PC 宿主移植层
- * 契约：docs/coremark_tb_contract.md §5.2（golden 生成）；profile 与 RISC-V 档完全一致
+ * 契约：docs/coremark.md §5.2（golden 生成）；profile 与 RISC-V 档完全一致
  */
 #include "coremark.h"
 #include "core_portme.h"

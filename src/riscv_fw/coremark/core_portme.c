@@ -1,5 +1,5 @@
 /* core_portme.c —— CoreMark 移植层实现（自研 RV32IM 核，裸机无 libc）
- * 契约：docs/coremark_tb_contract.md §3.3（计时）/§4.3（观测块字段表）/§4.4（结束协议）
+ * 契约：docs/coremark.md §3.3（计时）/§4.3（观测块字段表）/§4.4（结束协议）
  * 结束协议：导出钩子写观测块 + tohost=crcfinal → main 返回 0 → start.S 写 tohost_exit=0 → 自旋
  */
 #include "coremark.h"

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # coremark_score.py —— 解析 CoreMark 回归日志，输出 score/CPI 与 metrics 填报行
 # 用法：python data/scripts/coremark_score.py <run_coremark.log>
-# 口径（docs/coremark_tb_contract.md §5.3/§5.4）：
+# 口径（docs/coremark.md §5.3/§5.4）：
 #   ticks = t1 - t0（移植层 start/stop 计时窗口，非 tb 全局周期）
 #   CoreMark/MHz = iterations × 1e6 / ticks（仿真外推口径；短迭代不满足官方 ≥10s）
 #   CPI = cycles / instrs（tb 全局口径，含 muldiv 多拍与分支气泡，仅作体检不参与评分）

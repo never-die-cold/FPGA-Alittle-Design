@@ -1,5 +1,6 @@
-# CoreMark 基准 testbench 契约
+# CoreMark 基准契约与工作包计划
 
+> 本文由原 `coremark_tb_contract.md`（契约主体，§1–§7 编号不变）与 `coremark_plan.md`（附录 A 计划与进度）合并而来（2026-09-24）。
 > 状态：仿真契约已接入一键回归；SoC 计数器/板上预载与 verify 独立 golden 复核仍待收口
 > 起草：基准线（`dev/bench`）｜消费者：基准线（移植层）、验证线（tb/回归/证据）、RTL 线（存储/计数器）
 > 依据：`docs/core_comparison.md`（执行决策）、`src/riscv/design_v0.md`（接口唯一权威）、`sim/riscv/tb_core_coremark.v`（既有通用 tb）
@@ -314,3 +315,109 @@ vvp build/tb_core_coremark.vvp +hex=<镜像> +exp_exit=0 +timer_addr=80008000 +m
 | 2026-09-23 | 首轮实跑修订：哈佛加载器（DMEM 预载）写入 §3.2/§4.2；看门狗冻结 50M（§6.2）；未决项 #3/#5 关闭、新增 #7 | `report/llm_log/2026-09-23-coremark-port.md` |
 | 2026-09-23 | v0 32 迭代跑分与 golden 落地：四常数 + crcfinal 全对，CoreMark/MHz=1.506 | `data/logs/2026-09-23-coremark/`、`data/golden/coremark_2k_32iter/` |
 | 2026-09-23 | 8B 存储、CoreMark 脚本入口与全量回归接入；本轮实测结果归档 | `sim/scripts/run_iverilog.sh`、`data/logs/2026-09-23-coremark-script-regression/` |
+
+---
+
+# 附录 A：CoreMark 跑分工作包计划与进度（原 `coremark_plan.md`）
+
+> 状态：执行中；v0 CoreMark 仿真通过，脚本入口已接入；剩余 SoC 计数器/DMEM 上板预载、metrics 与四档数据
+> 主责：基准线 `dev/bench`｜窗口：9/25–10/1（与 Part B/C 并行，2026-09-21 压缩排期）
+> 依据：`docs/core_comparison.md`（决策与指标定义）、`src/riscv/plan.md` §1–§3（剩余计划与遗留）、`sim/README.md`
+> 配套契约：本文 §1–§7——接口/观测/判据的唯一执行口径
+> 冲突处理：接口以 `src/riscv/design_v0.md` 为唯一权威；本附录只回答"做什么、谁做、怎么验收、卡在哪"
+
+## A.0 现状快照（动手前先核对，禁止凭记忆）
+
+**已就绪**
+
+- 存储契约 8A 冻结并于 PR #32 合入；8B/8C/9A/9B 实现随 PR #33 合入：IMEM/DMEM `8192×32`、`addr[14:2]`、DMEM 异步读、`tohost 0x8000_3FF0`
+- RV32IM 核 + `muldiv` 整核冒烟 PASS；回归入口：`v0|fwd|muldiv|rv32im|imem|dmem|coremark|all`
+- 通用 tb `sim/riscv/tb_core_coremark.v` 已入库：plusarg 参数化、写事件判结束、cycles/instrs/bubbles/CPI 统计
+- 契约本文 §1–§7 已入库（commit `8100975`）
+
+**当前状态与剩余项**
+
+| # | 项 | 现状 | 责任线 |
+|:--:|:---|:---|:---|
+| 1 | 8B 存储模型（32KB 统一 RTL/固件/链接） | ✅ 已合入；IMEM/DMEM RTL、固件、链接与仿真模型统一 8192×32 | 完成 |
+| 2 | SoC 计时计数器（地址 `0x8000_8000`） | ⬜ RTL/SoC 尚未实现；仿真由 tb `+timer_addr` 模拟 | RTL 线 |
+| 3 | vendor CoreMark + 移植层 | ✅ 2026-09-23：vendor/ + portme + 构建落地 | bench |
+| 4 | `coremark.hex` + golden（crcfinal） | ✅ hex/golden 入库且 RTL 仿真吻合；verify 独立复核仍待办 | verify 复核 |
+| 5 | `coremark` 回归模式（`run_iverilog.sh`） | ✅ `coremark` 单档模式与 `all` 全量入口已接入 | 完成 |
+| 6 | `data/metrics.csv` 两行数值 | 🟡 CoreMark/MHz=1.506 与 CPI=2.105 已填；CoreMark/LUT 待重综合 | bench |
+| 7 | DMEM 镜像预载（哈佛加载器） | ✅ 仿真 tb 双口预载；`soc_top` 板上加载仍待实现 | RTL 线 |
+
+**依赖链**：#1 已完成；仿真用例可依赖 tb 计数器参数运行。剩余板上路径依赖 #2/#7；bench 数据收口依赖 verify 独立 golden 复核与四档 RTL。
+
+**2026-09-23 实跑快照**：v0 32 迭代 PASS——四常数 + golden（`crcfinal=0x8799`）全对，CPI=2.105、CoreMark/MHz=1.506（仿真外推口径）；证据 `data/logs/2026-09-23-coremark/`。实跑修正两点：① 哈佛加载器语义——镜像须同时预载 DMEM（`.data` 初值与 `.rodata` 跳转表；见本文 §3.2，实跑定位到间接跳转飞入数据区）；② `ee_printf` 置空，结果全部走观测块（原 D2 设想的 dmem 缓冲不必要）。
+
+## A.1 阶段 A：契约收口（9/23–9/24）
+
+- [x] A1. 本文 §5 判据、§6 运行与证据、§7 变更控制已入库
+- [ ] A2. 观测块与 `tohost` 约定已落文档；SoC 计时器地址/读语义仍待 RTL 确认并写入 `design_v0.md` §3.3
+- [ ] A3. 补齐计时器契约后同步更新 `data/metrics.csv` 测量口径文字
+- 验收：契约冻结 → 三线可并行；任何实现与契约冲突，先改契约再改码
+
+## A.2 阶段 B：RTL 前置（9/24–9/25，RTL 线主责，bench 只消费）
+
+- [x] B1. 8B 存储模型：IMEM/DMEM `8192×32` 落地（RTL 模块 / tb / 固件 / 链接统一 32KB）
+- [ ] B2. SoC 计时计数器：32 位自由运行、每 clk +1、同拍可读、地址按 A2 冻结值
+- [x] B3. CoreMark 接入后的全量回归（8 个 tb）及 arch-test `add-01/addi-01/and-01` 复跑；日志入 `data/logs/2026-09-23-coremark-script-regression/`
+- 验收：coremark 路径不被存储容量/计时读数卡死
+- bench 配合：地址未定稿前 `TIMER_ADDR` 用宏占位 + tb `+timer_addr` plusarg，不阻塞移植层开发
+
+## A.3 阶段 C：vendor 引入与构建（9/25，bench）
+
+- [x] C1. EEMBC coremark 按固定 commit 拉入 `src/riscv_fw/coremark/vendor/`；commit 哈希/日期/使用文件 SHA-256 入 `data/evidence/`；附官方 LICENSE
+- [x] C2. 守住官方规则：`core_list_join.c`/`core_matrix.c`/`core_state.c`/`core_util.c`/`coremark.h` 不改；允许改 `core_portme.c/h`；`core_main.c` 只加"结果导出钩子"（CRC/ticks 写观测块），diff 入证据
+- [x] C3. `Makefile` 增 coremark 目标、`link.ld` 按 32KB 布局；产出 `coremark.hex/.dis`；`size` 查容量 + `objdump` 查无 libgcc/浮点/压缩/原子指令
+- [x] C4. 容量兜底：2K profile（`TOTAL_DATA_SIZE=2000`、`ITERATIONS=32`、seeds `0/0/0x66`、`MEM_STATIC`）超限时按官方配置裁，裁剪即写入口径
+- 验收：hex 字数 ≤ 8192、可被 tb 预载、`.text/.data/.bss+栈` 不越 32KB、不与观测块/`tohost` 重叠
+
+## A.4 阶段 D：裸机移植层（9/25–9/27，bench）
+
+- [x] D1. `core_portme.h`：配置项全部显式定义（`MEM_STATIC`、`HAS_FLOAT=0`、`HAS_TIME_H=0`、`MAIN_HAS_NOARGC`、`ITERATIONS=32`、seeds 通道）
+- [x] D2. `core_portme.c`：`get_time` 读 `TIMER_ADDR`（打点用 `t_end - t_start`）；`time_in_secs`/`EE_TICKS_PER_SEC` 整数口径（不引浮点）；`ee_printf` 置空，结果由观测块导出
+- [x] D3. 观测块写入（本文 §4.3 字段表：MAGIC/iterations/seedcrc/三算法 CRC/crcfinal/t_start/t_end/errors_raw/DONE），每字段恰好一次、先于 `tohost_exit`
+- [x] D4. 结束协议：`tohost = crcfinal` → `tohost_exit = 0` → 死循环自旋（tb 按写事件判结束）
+- [x] D5. 自检通过：`seedcrc=0xe9f5`、CRC 与 golden 一致；`errors_raw` 携带的仿真 <10s 错误只作证据不作判据
+- 验收：`+exp_tohost=<golden>` PASS；golden `crcfinal` 由 bench 出、verify 复核
+
+## A.5 阶段 E：回归接入与证据（9/27–9/29，verify 主责、bench 配合）
+
+- [x] E1. `run_iverilog.sh coremark` 单档模式已接入；纳入 `all` 全量回归
+- [x] E2. 脚本固定 `+max_cycles=50000000`、`+timer_addr=80008000` 与 golden 判据
+- [x] E3. 评分解析脚本 `data/scripts/coremark_score.py` 已入库并对两份 PASS 日志验证（1.506/CPI 2.105）；原始日志归档 `data/logs/2026-09-23-coremark/` 与 `data/logs/2026-09-23-coremark-script-regression/`
+- 验收：一条命令可复现（仓库内 tb + 脚本，禁临时文件）、PASS/FAIL 明确、日志可追溯到数值
+
+## A.6 阶段 F：数据入档（9/29–10/1，bench）
+
+- [ ] F1. `data/metrics.csv` 两行收口中：CoreMark/MHz ✅ 1.506（口径/条件/证据齐全）；CPI 行 ✅ 2.105（同轮数据，全局口径）；CoreMark/LUT ⬜ 待 8B 后 Vivado 重综合取 post-route LUT（公式已注明）
+- [ ] F2. `docs/core_comparison.md` §5 勾选、§2 表更新为实测行（M1 后）
+- [ ] F3. README「为什么自研核」占位数字刷新（实测后再写，禁止先写目标后凑数）
+
+## A.7 阶段 G：四档对比（9/29–10/1，配合 Part B/C）
+
+- [ ] G1. 同一份 `coremark.hex` 只换 RTL 配置，跑四档：v0 / v1 无转发 / v1+转发 / v1+BHT
+- [ ] G2. 每档出 cycles/instrs/bubbles/CPI + CoreMark/MHz + CoreMark/LUT 表；原始日志入档
+- [ ] G3. 结论入 `report/`（四档表 + 测试条件 + 原始日志索引）
+
+## A.8 纪律与风险
+
+- 纪律：非纯文档 commit 走理解门槛（讲解 + 3 题）；单步 ≤100 行；每步汇报四件套
+- 风险 1｜SoC 计数器/DMEM 预载延期：仿真继续用 tb `+timer_addr` 与双口镜像预载；只延迟板上跑分，不阻塞 v0 仿真数据
+- 风险 2｜移植卡住：退自写 benchmark 的 CPI 对比，CoreMark 列留空注明原因（`plan.md` §4.3 预案）
+- 风险 3｜数据段超 32KB：官方配置项裁剪并注明口径，不用 DDR（触碰"零 DDR"卖点）
+- 风险 4｜四档 RTL 未就绪：先出 v0 单档，其余档随 RTL 逐档补，M1 收口不受阻
+
+## A.9 排期一览
+
+| 阶段 | 日期 | 主责 | 出口 |
+|:---|:---|:---|:---|
+| A 契约收口 | 9/23–9/24 | bench（RTL/verify 复核） | 契约入库 |
+| B RTL 前置 | 9/24–9/25 | RTL 线 | 8B + 计数器可用 |
+| C vendor + 构建 | 9/25 | bench | `coremark.hex/.dis` |
+| D 移植层 | 9/25–9/27 | bench | CRC 正确、观测块可读 |
+| E 回归接入 | 9/27–9/29 | verify/bench | 一键跑分 + 证据 |
+| F 数据入档 | 9/29–10/1 | bench | metrics 两行 + 日志 |
+| G 四档对比 | 9/29–10/1 | bench（RTL 配合） | 四档数据表 |

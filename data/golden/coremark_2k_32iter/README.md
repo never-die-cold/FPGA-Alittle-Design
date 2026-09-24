@@ -1,6 +1,6 @@
 # Golden：CoreMark 2K profile / 32 迭代 `crcfinal`
 
-> 契约：`docs/coremark_tb_contract.md` §5.2（生成与复核）
+> 契约：`docs/coremark.md` §5.2（生成与复核）
 > 生成：2026-09-23，基准线 `dev/bench`；复核状态见文末
 
 ## 固定 profile
