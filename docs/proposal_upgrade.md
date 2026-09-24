@@ -2,7 +2,7 @@
 
 > 状态：📌 已采纳（2026-09-11），档位 = 组合阶梯 A+B；**2026-09-20 更新：报名未截止、题目可改，注册名定为《边缘慧眼（EdgeSight）——基于自研 RISC-V 的边缘智能视觉 SoC》，README 标题同步（决策见 `report/llm_log/2026-09-20-registration-rename.md`）；2026-09-21 裁撤原 C 档（EdgePilot 云台，赛后扩展，不进比赛范围）**
 > 决策记录：`report/llm_log/2026-09-11-proposal-upgrade.md`、`report/llm_log/2026-09-20-registration-rename.md`
-> 往届作品调研底稿：[`docs/amd_track_awards.md`](amd_track_awards.md)
+> 往届作品调研底稿：[`docs/track_research.md`](track_research.md)
 
 ---
 
