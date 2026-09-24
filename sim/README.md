@@ -20,7 +20,7 @@ sim/
 - **主力回归**：Icarus Verilog 13.0（MSYS2 ucrt64 包 `mingw-w64-ucrt-x86_64-iverilog`）——一键跑全部 tb
 - **XSim 复核**（Vivado 2026.1 已装，issue #2）：同一套 tb 已复核对拍，**两工具结论一致**（2026-09-14；`xvlog → xelab → xsim -R`，从 `sim/` 目录运行以保证 `$readmemh` 相对路径正确）
 - 用法（MSYS2 UCRT64 shell 中，产物在 `sim/build/`）：
-  - 一键跑全部：`bash sim/scripts/run_iverilog.sh`（`all`）；分档：`v0`（冒烟 + 逐指令）/ `fwd`（转发专项）/ `muldiv`（RV32M 单元）/ `rv32im`（RV32IM 整核冒烟）
+  - 一键跑全部：`bash sim/scripts/run_iverilog.sh all`（含 CoreMark，约 2,100 万周期）；单档：`v0` / `fwd` / `muldiv` / `rv32im` / `imem` / `dmem` / `coremark`
   - `tb_core_smoke.v`：加载 `src/riscv_fw/hello_v0.hex`，检查 `tohost==13 && tohost_exit==0`（程序级冒烟）
   - `tb_core_test.v`：加载 `src/riscv_fw/hello_test.hex`，检查 `tohost_exit==0`（RV32I 逐指令自检 38 用例；失败值为用例编号）
   - `tb_core_fwd.v`：加载 `riscv/fwd/fwd_test.hex`（转发专项，Part B 测试先行）——数据冒险零气泡 + taken 分支 1 拍契约，气泡/结果双自检
@@ -31,19 +31,19 @@ sim/
 ## v0 八模块验证观察点（仿真时看什么、怎么判对错）
 
 > 这是给写 testbench 的人用的「看对错清单」：每个模块在仿真里**要看什么、什么算对、什么算错**。
-> 判据以 [`src/riscv/design_v0.md`](../src/riscv/design_v0.md) 为唯一权威；目前只有整核级的两个 tb，模块级 tb 还没写。
-> `muldiv` / `soc_top` 还没有 RTL（只有空壳），先按契约写好观察点，等 RTL 到位直接用。
+> 判据以 [`src/riscv/design_v0.md`](../src/riscv/design_v0.md) 为唯一权威；已有整核级及 imem/dmem/muldiv 模块级 tb。
+> `soc_top` 仍是空壳，SoC 集成级 tb 与板上存储器预载尚未完成。
 
 | 模块 | 出处 | 观察点（看什么、怎么判对错） | 现有覆盖 |
 |:---|:---|:---|:---|
 | `pc` | §5.1 | 复位后 PC 从 `0x8000_0000` 起步；没跳转时每拍 +4，跳转时下一拍变成目标地址；`stall=1` 时即使来了跳转 PC 也保持不动。**判错**：跳转后停着不走，或一次跳两格（+8） | 整核 tb 间接覆盖 |
 | `if_stage` | §5.2 | 复位后第一拍只输出空指令（`instr=NOP`）且 `instr_valid=0`，保证第一条指令不被执行两次；分支/跳转生效后，下一拍必须**恰好是 1 拍 NOP**——这就是从波形数气泡的锚点。**判错**：气泡 0 拍或 2 拍 | 整核 tb 间接覆盖 |
-| `decode` | §5.3 / §6 | 拿各类代表指令对照真值表逐条查控制信号；重点：B/J 型立即数最低位有没有补 0、`lui` 时 ALU 的 a 端是不是固定为 0、`jal/jalr` 写回的是不是 PC+4、load 的符号/零扩展对不对、`fence/ecall/ebreak` 这类系统指令有没有被当 NOP。**判错**：`funct7[5]` 区分不出 ADD/SUB 或 SRL/SRA。M 扩展的 `muldiv_op` 目前是占位映射（已知缺口） | 整核 tb 间接覆盖（38 用例） |
+| `decode` | §5.3 / §6 | 拿各类代表指令对照真值表逐条查控制信号；重点：B/J 型立即数最低位有没有补 0、`lui` 时 ALU 的 a 端是不是固定为 0、`jal/jalr` 写回的是不是 PC+4、load 的符号/零扩展对不对、`fence/ecall/ebreak` 这类系统指令有没有被当 NOP。**判错**：`funct7[5]` 区分不出 ADD/SUB 或 SRL/SRA。RV32M 译码按 `funct3` 输出 3 位 `muldiv_op` | 整核 tb + `tb_muldiv` |
 | `regfile` | §5.4 | 往 `x0` 写东西再读出来必须还是 0；寄存器堆是「组合读、时钟沿写」，所以一条指令在拍末写回，下一条紧跟着的指令当拍就能读到新值——这正是 v0 没有数据停顿的原因。注意：同一拍写读同一个寄存器读到的是旧值；寄存器没有复位，上电是未知值 X，测试程序必须先写后读 | 整核 tb 间接覆盖 |
 | `alu` | §5.5 / §6.1 | 每种运算抽边界值查：负数的算术右移（SRA）、有符号与无符号比较（SLT vs SLTU）、移位只认 b 的低 5 位。`zero/lt/ltu` 三个标志由 a、b 直接比较得出，和结果同拍。**判错**：没定义的运算编码会被当 ADD 处理，而不是报错 | 整核 tb 间接覆盖 |
-| `muldiv` | §5.6 | RTL 未实现（空壳），先按契约查：`op` 两位能不能区分 8 种乘除运算（**目前分不出，是已知缺口**）；`busy` 忙时 PC 和指令要停住、寄存器不许写、忙结束只写一次 rd；`start` 只能触发一次、`busy` 期间不能重复启动；除法四个边界（除零、`INT_MIN/-1`） | 待建 |
-| `core_top` | §5.7 / §2 | 第 k 拍给出的指令地址，第 k+1 拍才拿到对应指令（指令存储器延迟恰好 1 拍）；分支目标是「本指令的 PC + 立即数」；`jal/jalr` 无条件跳转、每次都**恰好 1 拍气泡**；`jalr` 目标地址末位清 0；`lw` 当拍就能写回、字节使能只在写的时候有效。**判错**：跳转没清气泡、`jalr` 末位没清、`lw` 多等一拍 | `tb_core_smoke` + `tb_core_test` |
-| `soc_top` | §5.8 | RTL 未实现（空壳；板卡 2026-09-20 到货并验证，上板观察点启用）。仿真里：能预载 hex、指令存储器同步读（本拍地址、下拍出数据）、数据存储器异步读 + 4 位字节写使能、复位后 PC 对。上板：LED 按分频周期闪、JTAG 下载成功 | 待建 |
+| `muldiv` | §5.6 | 8 种 RV32M 运算及除零、`INT_MIN/-1` 边界；检查 `start/busy/done` 握手、忙时停顿、完成拍单次写回 | `tb_muldiv` 模块级 + `tb_core_muldiv` 整核级 PASS |
+| `core_top` | §5.7 / §2 | 第 k 拍给出的指令地址，第 k+1 拍才拿到对应指令（指令存储器延迟恰好 1 拍）；分支目标是「本指令的 PC + 立即数」；`jal/jalr` 无条件跳转、每次都**恰好 1 拍气泡**；`jalr` 目标地址末位清 0；`lw` 当拍就能写回、字节使能只在写的时候有效。**判错**：跳转没清气泡、`jalr` 末位没清、`lw` 多等一拍 | `tb_core_smoke` / `tb_core_test` / `tb_core_muldiv` / `tb_core_coremark` |
+| `soc_top` | §5.8 | 验收观察点仍为：hex 预载、同步 IMEM、异步读/字节写 DMEM、复位 PC；上板 LED 与 JTAG 冒烟 | RTL 空壳；SoC 集成级 tb 待建 |
 
 > `muldiv` 的接口缺口（`op` 只有 2 位、装不下 RV32IM 的 8 种运算等）详见 [`report/llm_log/2026-09-15-muldiv-interface-gap.md`](../report/llm_log/2026-09-15-muldiv-interface-gap.md)。
 
@@ -64,12 +64,11 @@ sim/
 
 ## CoreMark 基准 tb（契约先行，2026-09-23 建立）
 
-- 契约（判据/观测/接口唯一入口）：[`docs/coremark_tb_contract.md`](../docs/coremark_tb_contract.md)（草案全文，未决项收口后冻结）
+- 契约（判据/观测/接口唯一入口）：[`docs/coremark_tb_contract.md`](../docs/coremark_tb_contract.md)（接口/判据草案；SoC 计时器与板上预载仍待收口）
 - 通用 tb：`riscv/tb_core_coremark.v`——8192×32 存储模型 + plusargs；`+hex` 默认 `../src/riscv_fw/coremark.hex`，支持 `+timer_addr` 计数器仿真
-- 当前状态（2026-09-23）：`coremark.hex` 已入库、v0 32 迭代 PASS（CoreMark/MHz=1.506，判据/证据见 `data/logs/2026-09-23-coremark/`）；tb 已支持观测块判据（`+exp_iter/+exp_seedcrc/+exp_crclist/+exp_crcmatrix/+exp_crcstate/+exp_crcfinal`）与双口预载；`coremark` 回归模式待 8B 后接入（单独模式，暂不入 `all`）
-- 冒烟用法（固件未入库前，在 `sim/` 下）：
-  `iverilog -g2012 -o build/tb_core_coremark.vvp riscv/tb_core_coremark.v ../src/riscv/*.v`
-  `vvp build/tb_core_coremark.vvp +hex=../src/riscv_fw/hello.hex +exp_tohost=142879`
+- 当前状态：`coremark.hex` 已入库，v0 32 迭代 PASS（CoreMark/MHz=1.506）；tb 有观测块判据与双口预载；脚本 `coremark` 模式已接入并纳入 `all`。证据见 `data/logs/2026-09-23-coremark/` 与 `data/logs/2026-09-23-coremark-script-regression/`。
+- 单档复跑：`bash sim/scripts/run_iverilog.sh coremark`（固定 2K/32 迭代、50M 看门狗与 golden 判据；约 2,100 万周期）
+- 全档回归：`bash sim/scripts/run_iverilog.sh all`（同样含 CoreMark 长测）
 - 记录：tb 落地 `report/llm_log/2026-09-23-coremark-tb.md`；契约起草 `report/llm_log/2026-09-23-coremark-tb-contract.md`
 
 ## 约定

@@ -21,11 +21,12 @@
 | 第一阶段 | 转发专项 tb + v0 对照数据 + 理解门槛样板 | ✅ 2026-09-20 | `sim/riscv/tb_core_fwd.v`、`data/logs/2026-09-20-fwd-baseline/`、commit `38f1084` |
 | 第一阶段 | riscv-arch-test 接入（首组 3 用例 PASS） | ✅ 2026-09-20 | `sim/arch_test/`、`data/logs/2026-09-20-arch-test/`、commit `643f258` |
 | 第一阶段 | 工具链复现手册（基准线） | ✅ | `src/riscv_fw/README.md` |
-| 第一阶段 | benchmark v0.1 / CPI harness / CoreMark 移植层（基准线） | ⬜ 未入库，顺延至 Part B/C 窗口 | `data/scripts/`（仅 `.gitkeep`） |
+| 第一阶段 | benchmark v0.1 / CPI harness / CoreMark 移植层（基准线） | 🟡 CoreMark 2K/32 迭代移植与 v0 跑分已入库（PR #34）；benchmark v0.1 / CPI harness 仍待补 | `src/riscv_fw/coremark/`、`data/logs/2026-09-23-coremark/` |
 | 第一阶段 | 三线工作流 + gate issue 体系 | ✅ 2026-09-14/20 | §2 原文随 [../plan.md](../plan.md) §2 保留；issues #19–#21、commits `3d944a8`/`6193f4f` |
-| Part A | `muldiv.v`（RV32M 八操作 + 边界） | 🟡 已实现，待 `dev/rtl` PR 合并 | 分支 `origin/dev/rtl`：`d4c1649`/`745d3b3`/`726d4e5`/`f22f5a3`；`sim/riscv/tb_core_muldiv.v`（该分支） |
+| Part A | `muldiv.v`（RV32M 八操作 + 边界） | ✅ 已随 PR #32 合入 main（2026-09-23） | `sim/riscv/tb_muldiv.v`、`sim/riscv/tb_core_muldiv.v` |
 | Part A | 最小 SoC 外壳（BRAM 预载 + LED/UART） | 🟡 接口骨架在 main，仿真 / 上板收口中 | `src/riscv/soc_top.v`、`design_v0.md` §5.8 |
-| Part A | 存储扩容 32KB + SoC 计时计数器 | ⬜ 契约已冻结（8A），实现未开始 | `report/llm_log/2026-09-22-memory-contract.md`（`dev/rtl`） |
+| Part A | 存储扩容 32KB | ✅ 已随 PR #33 合入 main（8B/8C/9A/9B） | `src/riscv/imem.v`、`src/riscv/dmem.v`、`sim/riscv/tb_imem.v`、`sim/riscv/tb_dmem.v` |
+| Part A | SoC 计时计数器 + DMEM 镜像预载 | ⬜ `soc_top` 仍为空壳，板上路径未完成 | `src/riscv/soc_top.v`、`docs/coremark_tb_contract.md` §7.2 |
 | Part A | 基线数据 Fmax / WNS | ✅ 2026-09-14（Fmax 86.8 MHz / WNS -1.530 ns） | `data/metrics.csv`、`build/reports/timing_impl.rpt` |
 | Part A | 基线数据 CPI / 资源 | ⬜ CPI 待补录；资源 ✅（LUT 846 / FF 65 / BRAM 0 / DSP 0） | `data/metrics.csv`、`build/reports/utilization_impl.rpt` |
 | Part A | 上板冒烟（LED，JTAG） | ✅ 2026-09-20（回补） | `board/logs/2026-09-20-pynq-z2-smoke/`、`board/smoke_test/`、commit `c8bd5fa` |
@@ -262,13 +263,12 @@ Part A 只剩收口项（M 扩展 / SoC 外壳 / 基线数据）。三线不空�
 
 ## §G 遗留与收口清单（Part A / 第一阶段未完成项）
 
-> 归档不代表验收完成——以下为截至 2026-09-23 仍未收口的项目，跟踪入口：[../plan.md](../plan.md) §3.2，验收签字见 issue #19。
+> 归档不代表验收完成——以下为截至 `ac6dcee`（2026-09-23）仍未收口的项目，跟踪入口：[../plan.md](../plan.md) §3.2，验收签字见 issue #19。
 
 | # | 遗留项 | 现状 | 建议窗口 |
 |:---|:---|:---|:---|
-| 1 | 最小 SoC 外壳仿真 + 上板冒烟 | `soc_top.v` 骨架在 main；仿真 tb / 上板工程未收口 | 9/24–9/27（gate #19 前） |
-| 2 | 存储扩容 32KB + SoC 计时计数器 | 契约已冻结（`dev/rtl` 8A），实现未开始 | Part A 收口 / Part B 前 |
+| 1 | 最小 SoC 外壳仿真 + 上板冒烟 | `soc_top.v` 仍为空壳；SoC 集成仿真与上板路径未收口 | Part A 收口 |
+| 2 | SoC 计时计数器 + DMEM 镜像预载 | 仿真 tb 通过 `+timer_addr` 模拟；SoC RTL 尚未实现 | SoC 集成 |
 | 3 | 基线 CPI 补录 | `data/metrics.csv` 第 2 行留空 | Part A 收口 |
-| 4 | `dev/rtl` Part A 分支合并 | 5 个 commit 未进 main（`f22f5a3` 等） | 9/27 周合并 |
-| 5 | gate #19 复核签字 | issue OPEN | 9/27 |
-| 6 | benchmark v0.1 / CPI harness / CoreMark 移植层 | 未入库（原第一阶段基准线交付物） | Part B/C 窗口（与 Part B/C 并行） |
+| 4 | gate #19 复核签字 | issue OPEN | 9/27 |
+| 5 | benchmark v0.1 / CPI harness / CoreMark 四档对比 | CoreMark v0 已 PASS；benchmark v0.1、CPI harness 与四档数据仍待补 | Part B/C 窗口（与 Part B/C 并行） |

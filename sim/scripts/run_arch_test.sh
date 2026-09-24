@@ -87,7 +87,7 @@ riscv32-unknown-elf-objcopy -O binary "$elf" "$work/$test_name.bin"
 $PY "$repo/src/riscv_fw/bin2hex.py" "$work/$test_name.bin" "$work/$test_name.hex"
 
 echo "== [4/4] 仿真与签名比对（$cycles 周期）=="
-iverilog -g2012 -o "$work/tb_arch_test.vvp" "$sim/riscv/tb_arch_test.v" "$repo"/src/riscv/*.v
+iverilog -g2012 -s tb_arch_test -o "$work/tb_arch_test.vvp" "$sim/riscv/tb_arch_test.v" "$repo"/src/riscv/*.v
 
 sig_out_abs="$work/rv${xl}i_m/$device/$test_name.signature.output"
 mkdir -p "$(dirname "$sig_out_abs")"
