@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 # iverilog 一键仿真：编译 sim/riscv/ 的 testbench + src/riscv/*.v 并逐个运行
 # 用法：
-#   bash sim/scripts/run_iverilog.sh          # 全部（v0 回归 + 转发专项）
+#   bash sim/scripts/run_iverilog.sh          # 全量回归（含 CoreMark，约 2,100 万周期）
 #   bash sim/scripts/run_iverilog.sh v0       # v0 回归集合（冒烟 + 逐指令自检）
 #   bash sim/scripts/run_iverilog.sh fwd      # 转发专项（数据冒险 / 分支气泡，v0 对照档）
 #   bash sim/scripts/run_iverilog.sh muldiv   # RV32M 乘除单元模块级自检
 #   bash sim/scripts/run_iverilog.sh rv32im   # RV32IM 固件整核冒烟
 #   bash sim/scripts/run_iverilog.sh imem     # 32KB 同步读指令存储器模块级自检
 #   bash sim/scripts/run_iverilog.sh dmem     # 32KB 异步读数据存储器模块级自检
+#   bash sim/scripts/run_iverilog.sh coremark # CoreMark 2K/32 迭代 + golden 判据
 # 前置：PATH 中含 MSYS2 ucrt64 的 iverilog / vvp（13.0+）
 set -u
 
@@ -20,8 +21,9 @@ case "$MODE" in
     rv32im) TBS=(riscv/tb_core_muldiv.v) ;;
     imem) TBS=(riscv/tb_imem.v) ;;
     dmem) TBS=(riscv/tb_dmem.v) ;;
-    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_fwd.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v) ;;
-    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|muldiv|rv32im|imem|dmem|all]"; exit 1 ;;
+    coremark) TBS=(riscv/tb_core_coremark.v) ;;
+    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_fwd.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_core_coremark.v) ;;
+    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|muldiv|rv32im|imem|dmem|coremark|all]"; exit 1 ;;
 esac
 
 cd "$(dirname "$0")/.."          # -> sim/
@@ -43,10 +45,19 @@ if [ ${#RTL_FILES[@]} -eq 0 ]; then
 fi
 
 mkdir -p build
+COREMARK_ARGS=(
+    +hex=../src/riscv_fw/coremark.hex +exp_exit=0 +timer_addr=80008000 +max_cycles=50000000
+    +exp_tohost=34713 +exp_iter=32 +exp_seedcrc=e9f5 +exp_crclist=e714
+    +exp_crcmatrix=1fd7 +exp_crcstate=8e3a +exp_crcfinal=8799
+)
 for tb in "${TBS[@]}"; do
     [ -f "$tb" ] || continue
     name=$(basename "$tb" .v)
     echo "== $name =="
     iverilog -g2012 -Wall -s "$name" -o "build/$name.vvp" "$tb" "${RTL_FILES[@]}" || exit 1
-    vvp "build/$name.vvp" || exit 1
+    if [ "$name" = "tb_core_coremark" ]; then
+        vvp "build/$name.vvp" "${COREMARK_ARGS[@]}" || exit 1
+    else
+        vvp "build/$name.vvp" || exit 1
+    fi
 done

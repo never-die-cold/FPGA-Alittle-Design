@@ -1,6 +1,6 @@
 # CoreMark 基准 testbench 契约
 
-> 状态：草案全文 + 首轮实跑修订（2026-09-23；v0 32 迭代跑通，CoreMark/MHz=1.506）；待 §7 未决项收口后转"已冻结 v1.0"
+> 状态：仿真契约已接入一键回归；SoC 计数器/板上预载与 verify 独立 golden 复核仍待收口
 > 起草：基准线（`dev/bench`）｜消费者：基准线（移植层）、验证线（tb/回归/证据）、RTL 线（存储/计数器）
 > 依据：`docs/core_comparison.md`（执行决策）、`src/riscv/design_v0.md`（接口唯一权威）、`sim/riscv/tb_core_coremark.v`（既有通用 tb）
 > 本文与 `design_v0.md` 冲突时以 `design_v0.md` 为准，并立即修正本文；变更流程见 §7。
@@ -47,28 +47,26 @@ CoreMark 是本项目唯一正式基准（`docs/core_comparison.md` §1 决策 1
 
 ### 2.1 已就绪
 
-- 存储契约（8A）：IMEM/DMEM 8192×32、`addr[14:2]`、DMEM 异步读、`tohost` 地址不变（已随 PR #32 并入 main）
+- 存储契约（8A/8B）：IMEM/DMEM 8192×32、`addr[14:2]`、DMEM 异步读，RTL/固件/linker/tb 已统一
 - RV32IM 核：`muldiv` 整核冒烟 PASS（`bash sim/scripts/run_iverilog.sh rv32im`）
 - 通用 tb：`tb_core_coremark.v` 可运行（`+hex` 冒烟、plusargs 参数化、写事件判结束）
-- 回归脚本五档：`v0 | fwd | muldiv | rv32im | all`
+- 回归脚本含 `coremark` 单档入口；`all` 也包含 CoreMark 长测
 
 ### 2.2 未决项（阻塞与排期）
 
 | # | 未决项 | 现状 | 责任线 | 阻塞了本文哪节 |
 |:--:|:---|:---|:---|:---|
-| 1 | 8B 存储模型实现（RTL/固件/链接统一 32KB） | 未开始 | RTL 线 | §4 运行前提；§6 `coremark` 回归模式 |
-| 2 | 计时计数器（地址/读时序/RTL） | 未开始；本文 §3 提案 | RTL 线确认 | §3 冻结 |
+| 1 | 8B 存储模型实现（RTL/固件/链接统一 32KB） | ✅ 已完成，五档存储契约一致 | 已关闭 |
+| 2 | SoC 计时计数器（地址/读时序/RTL） | ⬜ SoC 未实现；本文地址仍为提案，仿真由 tb plusarg 模拟 | RTL 线确认 | 板上计时 |
 | 3 | `coremark.hex` 移植层 | ✅ 2026-09-23 v0 32 迭代 PASS（判据全过） | 基准线 | — |
-| 4 | crcfinal golden（PC 同源 32 迭代） | ✅ bench 双路 + RTL 仿真一致；验证线复核待办 | 验证线 | §7.2 #4 收口 |
+| 4 | crcfinal golden（PC 同源 32 迭代） | ✅ bench 双路 + RTL 仿真一致；验证线独立复核待办 | 验证线 | §7.2 #4 收口 |
 | 5 | 观测块判据扩展（tb 读取 CRC 字段） | ✅ tb 已支持（`+exp_*` 判据 + obs dump） | 验证线 | — |
-| 6 | `coremark` 回归模式接入 `run_iverilog.sh` | 等 #1 | 验证线/基准线 | §6 运行入口 |
-| 7 | DMEM 镜像预载（哈佛加载器） | tb 已实现；RTL `soc_top` 待做 | RTL 线 | 板上跑分 |
+| 6 | `coremark` 回归模式接入 `run_iverilog.sh` | ✅ 单档与 `all` 均已接入，固定 50M 看门狗与 golden 参数 | 已关闭 |
+| 7 | DMEM 镜像预载（哈佛加载器） | ✅ 仿真 tb 双口预载；RTL `soc_top` 尚待板上实现 | RTL 线 | 板上跑分 |
 
 ### 2.3 依赖链与开工顺序
 
-- #3（移植层）依赖 #1（32KB 实现）与 #2（计数器地址冻结）
-- #5（tb 判据扩展）依赖 #3 产出的镜像与观测块；#4（golden）可与 #3 并行
-- #6（脚本模式）依赖 #1，避免与 RTL 线改同一文件造成分叉（见 `report/llm_log/2026-09-23-coremark-tb.md` §2/§3）
+- #1/#3/#5/#6 的仿真路径已完成；当前剩余链路为 verify 独立复核 #4，以及板上路径所需的 #2/#7
 
 ## 3. 接口契约
 
@@ -242,14 +240,14 @@ CoreMark/MHz = iterations × 1_000_000 / ticks_elapsed
 
 ### 6.1 运行入口
 
-手动（当前可用；在 `sim/` 下执行）：
+手动（在 `sim/` 下执行；golden 参数见回归脚本）：
 
 ```bash
 iverilog -g2012 -Wall -o build/tb_core_coremark.vvp riscv/tb_core_coremark.v ../src/riscv/*.v
 vvp build/tb_core_coremark.vvp +hex=<镜像> +exp_exit=0 +timer_addr=80008000 +max_cycles=<N> [+exp_tohost=<golden>]
 ```
 
-回归脚本（8B 合入后）：`bash sim/scripts/run_iverilog.sh coremark`——**单独模式**，`coremark.hex` 稳定前不进 `all`（避免拖慢常规回归）。
+回归入口：`bash sim/scripts/run_iverilog.sh coremark`；默认 `all` 也运行此长测。入口统一传 `+timer_addr=80008000`、`+max_cycles=50000000` 与 golden/CRC 判据。
 
 ### 6.2 plusargs 约定（既有 tb 接口，冻结）
 
@@ -296,13 +294,13 @@ vvp build/tb_core_coremark.vvp +hex=<镜像> +exp_exit=0 +timer_addr=80008000 +m
 
 | # | 未决项 | 收口标志 |
 |:--:|:---|:---|
-| 1 | 8B 存储模型实现 | RTL/固件/tb 统一 8192×32，五档回归 PASS |
-| 2 | 计数器地址确认 | 地址写入 `design_v0.md` §3.3；本文 §3.3 去"提案"字样 |
-| 3 | `coremark.hex` 移植 | ✅ 2026-09-23：v0 32 迭代 PASS，判据全过（`data/logs/2026-09-23-coremark/`） |
-| 4 | crcfinal golden | ✅ bench 双路（O2/O0）+ RTL 仿真一致；⬜ 验证线独立复核后关闭（`data/golden/coremark_2k_32iter/`） |
-| 5 | 观测块判据扩展 | ✅ tb 已支持 `+exp_*` 判据与 obs dump（`sim/riscv/tb_core_coremark.v`） |
-| 6 | `coremark` 回归模式 | `run_iverilog.sh coremark` 可用并写入 `sim/README.md`；看门狗固化 50M |
-| 7 | DMEM 镜像预载（哈佛加载器） | `soc_top` 支持 DMEM 预载/等效加载，板上 CoreMark 可直接上板（RTL 线） |
+| 1 | 8B 存储模型实现 | ✅ RTL/固件/tb 统一 8192×32，CoreMark + 全量 8 tb 回归 PASS（见 `data/logs/2026-09-23-coremark-script-regression/`） |
+| 2 | SoC 计数器地址确认/实现 | 地址与读语义写入 `design_v0.md` §3.3，SoC RTL 实现并复测 |
+| 3 | `coremark.hex` 移植 | ✅ v0 32 迭代 PASS，判据全过（`data/logs/2026-09-23-coremark/`） |
+| 4 | crcfinal golden 独立复核 | ✅ bench 双路 + RTL 仿真一致；⬜ 验证线独立复核（`data/golden/coremark_2k_32iter/`） |
+| 5 | 观测块判据扩展 | ✅ tb 支持 `+exp_*` 判据与 obs dump |
+| 6 | `coremark` 回归模式 | ✅ 单档与 `all` 已接入；50M 看门狗与 golden 判据固定并实跑 PASS |
+| 7 | DMEM 镜像预载（哈佛加载器） | tb ✅；⬜ `soc_top` 需支持预载/等效加载，之后才能板上运行（RTL 线） |
 
 ### 7.3 变更记录
 
@@ -315,3 +313,4 @@ vvp build/tb_core_coremark.vvp +hex=<镜像> +exp_exit=0 +timer_addr=80008000 +m
 | 2026-09-23 | 起草 §6–§7：运行/证据/变更控制与未决项收口 | 同上 |
 | 2026-09-23 | 首轮实跑修订：哈佛加载器（DMEM 预载）写入 §3.2/§4.2；看门狗冻结 50M（§6.2）；未决项 #3/#5 关闭、新增 #7 | `report/llm_log/2026-09-23-coremark-port.md` |
 | 2026-09-23 | v0 32 迭代跑分与 golden 落地：四常数 + crcfinal 全对，CoreMark/MHz=1.506 | `data/logs/2026-09-23-coremark/`、`data/golden/coremark_2k_32iter/` |
+| 2026-09-23 | 8B 存储、CoreMark 脚本入口与全量回归接入；本轮实测结果归档 | `sim/scripts/run_iverilog.sh`、`data/logs/2026-09-23-coremark-script-regression/` |

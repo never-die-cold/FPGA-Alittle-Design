@@ -1,8 +1,8 @@
 指标名称,类别,数值,单位,测量条件,测试次数/时长,证据文件
-RISC-V 核 CPI（benchmark 平均）,,,,,,
+RISC-V 核 CPI（benchmark 平均）,核级基准(仿真),2.105,CPI,iverilog 13.0；v0 两级流水（8B/PR #34 后）；CoreMark 2K/32 迭代 tb 全局 cycles/instrs 口径（含 muldiv 32 拍停顿与分支气泡，仅体检不参与评分；v0 无数据停顿锚点见 design_v0.md §2.2）,1 次仿真（21275738 cycles / 10106387 instrs）,data/logs/2026-09-23-coremark/run_v0_32iter.log
 RISC-V 核最高主频 Fmax / WNS,核级实现(OOC),Fmax 86.8 / WNS -1.530,MHz / ns,Vivado 2026.1；xc7z020clg400-1；v0 两级流水核 post-route；时钟约束 10 ns（目标 100 MHz）；OOC 无 I/O 约束；未达 100 MHz（Part B 优化项）,1 次,build/reports/timing_impl.rpt
-RISC-V 核 CoreMark/MHz,核级基准(仿真外推),,,,,
-RISC-V 核 CoreMark/LUT,核级基准(仿真外推),,,,,
+RISC-V 核 CoreMark/MHz,核级基准(仿真外推),1.506,CoreMark/MHz,iverilog 13.0（MSYS2 ucrt64）；v0 两级流水（PR #34 后 RTL）；coremark 2K profile（TOTAL_DATA_SIZE=2000、seeds 0/0/0x66、MEM_STATIC、-march=rv32im -O2、ITERATIONS=32）；tb 时钟 10 ns（标称 100 MHz）；ticks=21253869（移植层计时窗口 t1−t0）；CRC/golden 全对（crcfinal=0x8799）；errors_raw=1 为官方 <10s 计数不作判据；短迭代仿真外推口径,1 次仿真 × 32 迭代,data/logs/2026-09-23-coremark/run_v0_32iter.log；data/logs/2026-09-23-coremark-script-regression/run_coremark.log；解析脚本 data/scripts/coremark_score.py
+RISC-V 核 CoreMark/LUT,核级基准(仿真外推),,CoreMark/LUT,待测：8B 存储合入后需 Vivado 重综合取 post-route LUT；公式 CoreMark/MHz ÷ post-route LUT 数（build/reports/utilization）,,
 PicoRV32 对照 LUT / Fmax（同器件同工具 OOC）,对比实测,,LUT / MHz,计划：Vivado 2026.1；xc7z020clg400-1；OOC post-route；约束递减收敛法；regular+large 两配置；M1 收口后执行（docs/core_comparison.md §4.4）,,
 图像预处理延迟,,,,,,
 直通 vs 帧缓存架构对比（延迟/带宽/资源）,,,,,,
