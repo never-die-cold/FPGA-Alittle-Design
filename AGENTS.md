@@ -7,7 +7,7 @@
 
 ## 一、开工三件事（缺一不可）
 
-1. **读开工清单**：完整阅读 `docs/kickoff_checklist.md`，逐项执行其中的「必做」项。
+1. **读开工清单**：完整阅读 `docs/workflow.md`，逐项执行其中的「必做」项。
 2. **核实现状**：先跑 `git rev-parse --abbrev-ref HEAD`、`git log --oneline -5`、`git status`；
    再对照 `src/riscv/design_v0.md`（接口唯一权威）与 `src/riscv/plan.md`，
    在开工回复开头贴出一份三类清单：
@@ -40,7 +40,7 @@
 
 ## 三、参考入口
 
-- 详细清单：`docs/kickoff_checklist.md`
+- 详细清单：`docs/workflow.md`
 - 计划与验收：`src/riscv/plan.md` §3.2 / §4.1
 - 接口契约：`src/riscv/design_v0.md`
 - 工作流技能：`skill/gufa-programming/SKILL.md`、`skill/understand-gate/SKILL.md`

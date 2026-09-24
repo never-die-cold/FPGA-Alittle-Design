@@ -65,7 +65,7 @@
 1. 每人只动自己目录；跨目录改动（README / docs / llm_log 等共享文件）先在群里说一声
 2. 每周日 = 合并日（例会日）：上午各线发 PR，下午例会审合并；首次 9/20，此后 9/27、10/4
 3. **任何人（含组长）不直接 push `main`**，一切改动经 PR 合并
-4. 组长审 PR 时按 [code_review_checklist.md](../../docs/code_review_checklist.md) 走理解门槛（逐段讲解 + 3 道测试题）；AI 代码未通过不 merge
+4. 组长审 PR 时按 [workflow.md](../../docs/workflow.md) §2 走理解门槛（逐段讲解 + 3 道测试题）；AI 代码未通过不 merge
 5. 合并后全员 `git pull origin main` 同步，下一周从最新 main 续做
 6. 任何一步卡住超 30 分钟：群里报，不硬扛
 
@@ -103,7 +103,7 @@ RTL 线内部 Part B（9/25–9/28）→ Part C（9/29–10/1）串行不变；�
 - [ ] 基线 CPI 补录 `data/metrics.csv`
 - [x] `dev/rtl` Part A 分支 PR 合并（PR #32，2026-09-23；原计划 9/27 周合并）
 - [ ] gate #19 复核签字（9/27）
-- [ ] benchmark v0.1 / CPI harness / CoreMark 四档与 metrics 入档；CoreMark 移植层及 v0 32 迭代基准已完成（见 `docs/coremark_plan.md`）
+- [ ] benchmark v0.1 / CPI harness / CoreMark 四档与 metrics 入档；CoreMark 移植层及 v0 32 迭代基准已完成（见 `docs/coremark.md` 附录 A）
 
 ### 3.3 引用兼容说明
 

@@ -4,7 +4,7 @@
 
 **一句话简介**：在 AMD PYNQ-Z2（Zynq-7020）上实现一颗**自研三级流水线 RISC-V 软核**，外挂**参数化 HDMI 视觉直通流水线**与**轻量 CNN 推理协处理器**，构成"视频源进、检测结果出"的片上视觉分析仪；PS 侧 Jupyter 提供可交互控制面板——实时调参、**软/硬件推理一键切换同屏对比**，并与 ARM 纯软件基线做全链路量化对比。命题升级方案见 [docs/proposal_upgrade.md](docs/proposal_upgrade.md)。
 
-> 👋 新队友请先阅读 [docs/onboarding.md](docs/onboarding.md)（Git / Markdown / Agent 上手指南）
+> 👋 新队友请先阅读 [docs/README.md](docs/README.md)（人读入口：5 分钟搞清目录与"找东西"规则），再读 [docs/onboarding.md](docs/onboarding.md)（Git / Markdown / Agent 上手指南）
 
 ---
 
@@ -144,7 +144,7 @@ flowchart LR
 ## 仓库目录结构
 
 > 按赛事要求：目录与文件名纯英文（小写字母、数字、下划线或连字符），中文只出现在正文；根目录只保留 `README.md` 与 `LICENSE`，其余文件入目录。
-> 📖 每个文件夹"定位 + 现状 + 后续要做什么"的逐目录详解：[docs/repo_structure.md](docs/repo_structure.md)。
+> 📖 目录导航与"找东西"规则（日志/证据/计划各自放哪）：[docs/README.md](docs/README.md)；每个文件夹的职责见其目录内 README。
 
 ```
 edgesight/
@@ -241,7 +241,7 @@ edgesight/
 记录规范与模板见 [`report/llm_log/`](report/llm_log/README.md)，日常操作三条规矩：
 
 1. **平时干活**：正常用 Kimi Work / OpenCode 工作，零额外负担。唯二规矩——AI 生成的 RTL 一律走 git commit（commit message 注明 prompt 要点）；agent 会话不删除
-2. **入库门槛（先读懂，再 commit）**：看不懂的代码不许入库。按 `skill/understand-gate/SKILL.md` 执行——commit 前 agent 先给逐段讲解 + 3 道理解测试题，答对才提交，讲解与测试全量落盘 `report/llm_log/`；其他 agent 平台手动走 [docs/code_review_checklist.md](docs/code_review_checklist.md)
+2. **入库门槛（先读懂，再 commit）**：看不懂的代码不许入库。按 `skill/understand-gate/SKILL.md` 执行——commit 前 agent 先给逐段讲解 + 3 道理解测试题，答对才提交，讲解与测试全量落盘 `report/llm_log/`；其他 agent 平台手动走 [docs/workflow.md](docs/workflow.md) §2 检查单
 3. **每个工作日收尾**：在当前会话里让 agent 自己写日志：
 
    > 把今天解决 [XX问题] 的过程按 `report/llm_log/template.md` 写一条协作记录，存为 `report/llm_log/YYYY-MM-DD-英文主题.md`，相关 commit 填进去，经验沉淀部分判断要不要标 #skill候选。
@@ -282,7 +282,7 @@ edgesight/
 核心必读：
 
 - AMD 赛道官方仓库（选题指南全文 TRACK_GUIDE_2026.md + 三赛道规则/开发板获取/技术支持）：https://gitee.com/Vickyiii/fpgachina26-amd
-- 2026 全部 7 企业选题指南摘要（团队会议归档）：[docs/track_guides_2026_summary.md](docs/track_guides_2026_summary.md)
+- 2026 全部 7 企业选题指南摘要 + 往届获奖作品调研（团队会议归档）：[docs/track_research.md](docs/track_research.md)
 - PYNQ 官方文档：https://pynq.readthedocs.io/en/latest/
 - 蜂鸟 E203 RISC-V 处理器配套书与源码：https://github.com/riscv-mcu/e203_hbirdv1
 - FINN 量化神经网络加速框架：https://github.com/Xilinx/finn
