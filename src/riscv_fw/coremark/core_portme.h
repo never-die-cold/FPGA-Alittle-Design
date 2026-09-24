@@ -1,5 +1,5 @@
 /* core_portme.h —— CoreMark 移植层配置（自研 RV32IM 核，裸机无 libc）
- * 契约：docs/coremark_tb_contract.md §4.1（配置冻结）/§3.3（计时计数器）/§4.3（观测块）
+ * 契约：docs/coremark.md §4.1（配置冻结）/§3.3（计时计数器）/§4.3（观测块）
  * 位置：本文件属"允许改动"的移植层；vendor/ 内算法文件与 coremark.h 禁止改动
  */
 #ifndef CORE_PORTME_H

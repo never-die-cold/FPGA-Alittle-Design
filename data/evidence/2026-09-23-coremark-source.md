@@ -1,6 +1,6 @@
 # CoreMark 官方源码入库证据
 
-> 用途：`docs/coremark_tb_contract.md` §4.1 要求——记录官方源码来源、固定 commit 与逐文件 SHA-256
+> 用途：`docs/coremark.md` §4.1 要求——记录官方源码来源、固定 commit 与逐文件 SHA-256
 > 采集：2026-09-23（基准线 `dev/bench`）
 
 ## 来源
@@ -31,7 +31,7 @@
 ## 规则
 
 - 算法文件（`core_list_join.c` / `core_matrix.c` / `core_state.c` / `core_util.c` / `coremark.h`）**永不改动**（官方成绩规则）
-- `core_main.c` 仅允许加"结果导出钩子"；实现方式为派生副本（父目录），diff 留证（见 `docs/coremark_tb_contract.md` §4.1）
+- `core_main.c` 仅允许加"结果导出钩子"；实现方式为派生副本（父目录），diff 留证（见 `docs/coremark.md` §4.1）
 - 许可：Apache-2.0（`LICENSE.md` 随入库）
 
 ## 复核记录（2026-09-23 入库时）

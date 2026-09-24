@@ -5,7 +5,7 @@
 //   [+exp_iter=N] [+exp_seedcrc=HEX] [+exp_crclist=HEX] [+exp_crcmatrix=HEX] [+exp_crcstate=HEX] [+exp_crcfinal=HEX]
 // 默认固件 ../src/riscv_fw/coremark.hex；未入库前可用 +hex=../src/riscv_fw/hello.hex 冒烟
 // 判据：观察到写 tohost_exit(0x8000_3FF4) 即结束；核对 exit/tohost 后打印 cycles/instrs/bubbles/CPI
-// 观测块（契约 docs/coremark_tb_contract.md §4.3）：镜像自带 MAGIC 时自动 dump 11 字并按 +exp_* 判据校验
+// 观测块（契约 docs/coremark.md §4.3）：镜像自带 MAGIC 时自动 dump 11 字并按 +exp_* 判据校验
 // 存储模型：8192×32、addr[14:2]（design_v0.md §3.3 冻结契约）
 module tb_core_coremark;
 
@@ -112,7 +112,7 @@ module tb_core_coremark;
         end
         $readmemh(hex_file, imem);
         // 哈佛双口加载器语义：镜像同时预载 DMEM（.data 初值与 .rodata 读取，
-        // CoreMark 的 switch 跳转表在 rodata，必须可读；见 docs/coremark_tb_contract.md §4.2）
+        // CoreMark 的 switch 跳转表在 rodata，必须可读；见 docs/coremark.md §4.2）
         $readmemh(hex_file, dmem);
 
         if ($test$plusargs("vcd")) begin

@@ -1,5 +1,5 @@
 /* link_coremark.ld —— CoreMark 裸机链接脚本（32KB 哈佛布局，IMEM/DMEM 同基址）
- * 契约：docs/coremark_tb_contract.md §4.2
+ * 契约：docs/coremark.md §4.2
  * 布局要点（2026-09-23）：
  *   - .text/.data/.bss 在低区（实测 ~13KB，须止于 tohost 区前）
  *   - tohost/tohost_exit 固定 0x8000_3FF0 不可移动（design_v0 §3.3）

@@ -64,7 +64,7 @@ sim/
 
 ## CoreMark 基准 tb（契约先行，2026-09-23 建立）
 
-- 契约（判据/观测/接口唯一入口）：[`docs/coremark_tb_contract.md`](../docs/coremark_tb_contract.md)（接口/判据草案；SoC 计时器与板上预载仍待收口）
+- 契约（判据/观测/接口唯一入口）：[`docs/coremark.md`](../docs/coremark.md)（§1–§7 契约主体 + 附录 A 计划；SoC 计时器与板上预载仍待收口）
 - 通用 tb：`riscv/tb_core_coremark.v`——8192×32 存储模型 + plusargs；`+hex` 默认 `../src/riscv_fw/coremark.hex`，支持 `+timer_addr` 计数器仿真
 - 当前状态：`coremark.hex` 已入库，v0 32 迭代 PASS（CoreMark/MHz=1.506）；tb 有观测块判据与双口预载；脚本 `coremark` 模式已接入并纳入 `all`。证据见 `data/logs/2026-09-23-coremark/` 与 `data/logs/2026-09-23-coremark-script-regression/`。
 - 单档复跑：`bash sim/scripts/run_iverilog.sh coremark`（固定 2K/32 迭代、50M 看门狗与 golden 判据；约 2,100 万周期）
