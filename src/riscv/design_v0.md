@@ -189,10 +189,13 @@
 
 | 模块 | 职责 |
 |:---|:---|
-| `soc_top.v` | 例化 `core_top` + 指令 BRAM + 数据 RAM + LED 驱动；`clk` 来自板载晶振，`rst_n` 接复位按键/上电复位 |
-| 指令 BRAM | 8192×32（32KB），`addr[14:2]` 索引，同步读，`$readmemh` 预载 `src/riscv_fw/hello.hex` |
+| `soc_top.v` | 固定接口 `soc_top(clk, rst_n, led)`；例化 `core_top` + 指令 BRAM + 数据 RAM + LED 驱动；`clk` 是板级 MMCM 输出的安全核时钟，`rst_n` 为低有效复位 |
+| 指令 BRAM | 8192×32（32KB），`addr[14:2]` 索引，同步读；本阶段上板镜像固定为 `src/riscv_fw/hello_v0.hex` |
 | 数据 RAM | 8192×32（32KB），`addr[14:2]` 索引，异步读，4 位字节使能 |
-| LED 驱动 | v0 冒烟：LED = 分频计数器高位（证明时钟/复位/下载链路通），或 PC 高位；实现时定 |
+| LED 驱动 | 复位清零；当 `dmem_we=1` 且 `dmem_addr=0x8000_3FF0` 时，在写入沿锁存 `dmem_wdata[3:0]`；`led[3:0]` 持续输出锁存值 |
+| 板级时钟 | PYNQ-Z2 的 H16 输入为 125 MHz；板级顶层用 MMCM 先降至 40 MHz 再驱动 `soc_top.clk`，不得把 125 MHz 直连当前 v0 核；125 MHz 为 Part B 提频目标 |
+
+本阶段上板程序为 RV32I `hello_v0.hex`：程序结束后 `tohost=13`（`0xD`），因此四个高电平点亮的 LED 按 `led[3:0]` 读取为 `1101`。只有 bitstream 实际下载到 PYNQ-Z2，且人工观察到该稳定值，才可记为“已上板”；仿真、综合或生成 bitstream 均不能替代这一结论。
 
 ## 6. 控制信号编码与真值表
 
@@ -306,7 +309,7 @@ flowchart LR
 |:---|:---|
 | 指令 hex 格式 | `src/riscv_fw/bin2hex.py` 输出：每行 8 位十六进制、32 位小端字、行号 = 地址/4 |
 | 入口 | 复位后 PC = `0x8000_0000`；`start.S` 设 `sp`、清 `.bss`、`call main` |
-| 冒烟判据 | v0 核（RV32I）：`hello_v0` → `tohost = 13`、`tohost_exit = 0`（见 `src/riscv_fw/main_v0.c`）；M 补齐后启用 RV32IM 程序：`tohost = 142879`、`tohost_exit = 0` |
+| 冒烟判据 | 本阶段仿真 SoC 与上板均固定使用 RV32I `hello_v0`：`tohost = 13`、`tohost_exit = 0`、LED=`1101`（见 `src/riscv_fw/main_v0.c`）；RV32IM `hello` 继续用于整核回归：`tohost = 142879`、`tohost_exit = 0` |
 | 结果与退出码 | `main` 写结果到 `tohost(0x8000_3FF0)`；`start.S` 写退出码到 `tohost_exit(0x8000_3FF4)`，二者分离 |
 | 停机 | 固件最后死循环自旋；tb 跑固定拍数后检查（非 halt 信号） |
 | 工具链 | MSYS2 ucrt64 `riscv32-unknown-elf`（RV32IM，见 `src/riscv_fw/README.md`） |
@@ -329,10 +332,10 @@ flowchart LR
 - [x] `alu.v` + RV32I 算术逻辑类（2026-09-11）
 - [x] 访存 / 分支 / 跳转 + `core_top` 连通（2026-09-11，`hello_v0` 冒烟 PASS）
 - [x] 冒烟 tb 逐指令补齐（2026-09-11，`hello_test` 38 用例全过）
-- [ ] 最小 SoC 外壳（仿真）+ 上板冒烟（板卡 2026-09-20 到货并验证，全队共用 1 块）
-- [ ] 上板时钟方案拍板：板载 PL 时钟 125 MHz（H16）> v0 当前 Fmax 86.8 MHz，需 MMCM 分频冒烟或等 Part B 提频后按 100 MHz 重测（§5.8 原写"clk 来自板载晶振"，待同步）
-- [ ] M 扩展 `muldiv.v` 收尾（启用 `hello.hex` RV32IM 冒烟）
-- [ ] 按 §3 的 32KB 契约同步固件、仿真存储器模型与 SoC 外壳
+- [ ] 最小 SoC 外壳（仿真）+ 上板冒烟（镜像 `hello_v0.hex`，预期 LED=`1101`）
+- [x] 板级 125 MHz 经 MMCM 降至 40 MHz 后驱动 v0 核；Vivado 2026.1 实现 WNS=+0.142 ns、WHS=+0.071 ns
+- [x] M 扩展 `muldiv.v` 收尾（`hello.hex` RV32IM 整核冒烟 `tohost=142879`）
+- [ ] 按 §3 的 32KB 契约完成 SoC 外壳与真实上板验收
 - [ ] 基线 CPI / Fmax 记录 `report/`
 
 ## 11. 变更记录
@@ -344,3 +347,5 @@ flowchart LR
 | 2026-09-11 | 逐指令自检 `hello_test`（38 用例）与 `tb_core_test` 全过；记录 lb 用例小端纠错 | commits `87d3f4f`、`58ed400`、`report/llm_log/2026-09-11-riscv-instruction-tests.md` |
 | 2026-09-20 | 冻结 RV32M 八操作编码、`start/busy/done` 握手、32 次迭代停顿与边界语义 | Part A M 扩展收口 |
 | 2026-09-22 | 冻结 IMEM/DMEM 8192×32、`addr[14:2]`、DMEM 异步读及原 `tohost` 地址；实现与回归后续分步完成 | `report/llm_log/2026-09-22-memory-contract.md` |
+| 2026-09-23 | 冻结 SoC LED/tohost 行为与板级时钟：`hello_v0.hex` → `tohost=13` → LED=`1101`；125 MHz 初定经 MMCM 降至 50 MHz；2026-09-25 根据实现时序修订为 40 MHz，真实下载并观察后才算上板 | `report/llm_log/2026-09-23-partA-soc-onboard.md` |
+| 2026-09-25 | 50 MHz 实现 WNS=-0.214 ns，门禁未生成 bitstream；安全核时钟调整为 40 MHz（125×8÷25），仍要求 WNS≥0 | `report/llm_log/2026-09-23-partA-soc-onboard.md` |

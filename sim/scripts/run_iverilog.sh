@@ -9,6 +9,7 @@
 #   bash sim/scripts/run_iverilog.sh imem     # 32KB 同步读指令存储器模块级自检
 #   bash sim/scripts/run_iverilog.sh dmem     # 32KB 异步读数据存储器模块级自检
 #   bash sim/scripts/run_iverilog.sh coremark # CoreMark 2K/32 迭代 + golden 判据
+#   bash sim/scripts/run_iverilog.sh soc      # hello_v0 SoC + tohost LED 自检
 # 前置：PATH 中含 MSYS2 ucrt64 的 iverilog / vvp（13.0+）
 set -u
 
@@ -22,8 +23,9 @@ case "$MODE" in
     imem) TBS=(riscv/tb_imem.v) ;;
     dmem) TBS=(riscv/tb_dmem.v) ;;
     coremark) TBS=(riscv/tb_core_coremark.v) ;;
-    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_fwd.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_core_coremark.v) ;;
-    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|muldiv|rv32im|imem|dmem|coremark|all]"; exit 1 ;;
+    soc) TBS=(riscv/tb_soc_top.v) ;;
+    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_fwd.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_core_coremark.v riscv/tb_soc_top.v) ;;
+    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|muldiv|rv32im|imem|dmem|coremark|soc|all]"; exit 1 ;;
 esac
 
 cd "$(dirname "$0")/.."          # -> sim/
