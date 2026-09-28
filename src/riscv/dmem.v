@@ -1,6 +1,8 @@
 // dmem.v —— 8192×32 数据存储器：异步读、同步字节写
-// 接口与时序见 src/riscv/design_v0.md §3.2
-module dmem (
+// 接口与时序见 src/riscv/design_v0.md §3.2；INIT_FILE 双口预载见 §5.8
+module dmem #(
+    parameter INIT_FILE = ""            // 非空时按 §8 格式预载；空 = 上电全 0
+) (
     input  wire        clk,
     input  wire        we,
     input  wire [3:0]  be,
@@ -15,6 +17,8 @@ module dmem (
     initial begin
         for (i = 0; i < 8192; i = i + 1)
             mem[i] = 32'h0000_0000;
+        if (INIT_FILE != "")
+            $readmemh(INIT_FILE, mem);
     end
 
     assign rdata = mem[addr[14:2]];

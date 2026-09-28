@@ -72,7 +72,8 @@
 
 - v0 哈佛分离，IMEM/DMEM 地址范围均为 `0x8000_0000–0x8000_7FFF`；两个存储器模型统一用 `addr[14:2]` 作为 8192 深度的字索引。
 - 固件 `tohost` 保持在 `0x8000_3FF0`（字节偏移 `0x3FF0`、字索引 `0x0FFC`），`tohost_exit` 保持在 `0x8000_3FF4`；tb 直接读对应单元判定 PASS/FAIL。
-- 数据 RAM 上电初值全 0（无预载）；PYNQ-Z2 的 512MB DDR3 位于 PS 侧，当前纯 PL 核不直接使用。
+- MMIO 计时计数器固定 `0x8000_8000`（32KB 数据区间之外，译码无二义）：32 位自由运行、每个核时钟 +1、`rst_n=0` 期间清零；**同拍组合读**、只读（写被忽略且不得落入 DMEM）；语义与用途见 `docs/coremark.md` §3.3。
+- 数据 RAM 上电初值为 0；SoC 板上路径由 `DMEM_INIT_FILE` 参数可选预载镜像（与 IMEM 同一 hex，哈佛双口加载语义，见 §5.8）；PYNQ-Z2 的 512MB DDR3 位于 PS 侧，当前纯 PL 核不直接使用。
 
 ## 4. 模块划分（v0）
 
@@ -85,7 +86,7 @@
 | ALU | `src/riscv/alu.v` | 算术/逻辑/移位/比较；分支条件输出 | |
 | 乘除单元 | `src/riscv/muldiv.v` | RV32M 八条乘除指令，多拍迭代实现 | 见 §5.6、§6.6 |
 | 核顶层 | `src/riscv/core_top.v` | 例化互连、分支裁决、流控 | 对外接口见 §5.8 |
-| SoC 外壳 | `src/riscv/soc_top.v` 等 | 指令 BRAM + 数据 RAM + LED + 核 | v0 上板冒烟用（原 `src/soc/` 已并入） |
+| SoC 外壳 | `src/riscv/soc_top.v` 等 | 指令 BRAM + 数据 RAM + 计时计数器 + LED + 核 | v0 上板冒烟用（原 `src/soc/` 已并入） |
 
 ## 5. 模块接口信号表
 
@@ -189,13 +190,16 @@
 
 | 模块 | 职责 |
 |:---|:---|
-| `soc_top.v` | 固定接口 `soc_top(clk, rst_n, led)`；例化 `core_top` + 指令 BRAM + 数据 RAM + LED 驱动；`clk` 是板级 MMCM 输出的安全核时钟，`rst_n` 为低有效复位 |
+| `soc_top.v` | 固定接口 `soc_top(clk, rst_n, led)`；参数 `IMEM_INIT_FILE`/`DMEM_INIT_FILE`（默认 `src/riscv_fw/hello_v0.hex`，双口预载同一镜像）；例化 `core_top` + 指令 BRAM + 数据 RAM + 计时计数器 + LED 驱动；`clk` 是板级 MMCM 输出的安全核时钟，`rst_n` 为低有效复位 |
 | 指令 BRAM | 8192×32（32KB），`addr[14:2]` 索引，同步读；本阶段上板镜像固定为 `src/riscv_fw/hello_v0.hex` |
-| 数据 RAM | 8192×32（32KB），`addr[14:2]` 索引，异步读，4 位字节使能 |
+| 数据 RAM | 8192×32（32KB），`addr[14:2]` 索引，异步读，4 位字节使能；由 `DMEM_INIT_FILE` 预载（与 IMEM 同一 hex，哈佛双口加载语义） |
+| 计时计数器 | `0x8000_8000`：32 位自由运行、每核时钟 +1、`rst_n=0` 期间清零；读取同拍返回计数值；写该地址被忽略且不写入 DMEM |
 | LED 驱动 | 复位清零；当 `dmem_we=1` 且 `dmem_addr=0x8000_3FF0` 时，在写入沿锁存 `dmem_wdata[3:0]`；`led[3:0]` 持续输出锁存值 |
 | 板级时钟 | PYNQ-Z2 的 H16 输入为 125 MHz；板级顶层用 MMCM 先降至 40 MHz 再驱动 `soc_top.clk`，不得把 125 MHz 直连当前 v0 核；125 MHz 为 Part B 提频目标 |
 
 本阶段上板程序为 RV32I `hello_v0.hex`：程序结束后 `tohost=13`（`0xD`），因此四个高电平点亮的 LED 按 `led[3:0]` 读取为 `1101`。只有 bitstream 实际下载到 PYNQ-Z2，且人工观察到该稳定值，才可记为“已上板”；仿真、综合或生成 bitstream 均不能替代这一结论。
+
+软复位语义：`rst_n` 拉低只复位核内寄存器与 PC、清零计时计数器，**不清 IMEM/DMEM**。因此 `hello_v0` 第二次运行读取上一次的 `tohost`（13）作种子，结果 `sum=65`、`tohost=65`、LED=`0001`；这是契约定义的行为，由 `tb_soc_top` 单独断言，与首次运行的 `1101` 主判据分开。
 
 ## 6. 控制信号编码与真值表
 
@@ -349,3 +353,4 @@ flowchart LR
 | 2026-09-22 | 冻结 IMEM/DMEM 8192×32、`addr[14:2]`、DMEM 异步读及原 `tohost` 地址；实现与回归后续分步完成 | `report/llm_log/2026-09-22-memory-contract.md` |
 | 2026-09-23 | 冻结 SoC LED/tohost 行为与板级时钟：`hello_v0.hex` → `tohost=13` → LED=`1101`；125 MHz 初定经 MMCM 降至 50 MHz；2026-09-25 根据实现时序修订为 40 MHz，真实下载并观察后才算上板 | `report/llm_log/2026-09-23-partA-soc-onboard.md` |
 | 2026-09-25 | 50 MHz 实现 WNS=-0.214 ns，门禁未生成 bitstream；安全核时钟调整为 40 MHz（125×8÷25），仍要求 WNS≥0 | `report/llm_log/2026-09-23-partA-soc-onboard.md` |
+| 2026-09-28 | Part A 收口：冻结计时计数器 `0x8000_8000`（只读、同拍、界外译码）与软复位语义（不清 IMEM/DMEM，`hello_v0` 重跑 `tohost=65`/LED=`0001`）；`soc_top` 增加 `DMEM_INIT_FILE` 双口预载 | `report/llm_log/2026-09-28-partA-closure.md` |

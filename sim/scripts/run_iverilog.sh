@@ -10,6 +10,8 @@
 #   bash sim/scripts/run_iverilog.sh dmem     # 32KB 异步读数据存储器模块级自检
 #   bash sim/scripts/run_iverilog.sh coremark # CoreMark 2K/32 迭代 + golden 判据
 #   bash sim/scripts/run_iverilog.sh soc      # hello_v0 SoC + tohost LED 自检
+#   bash sim/scripts/run_iverilog.sh soc_check # SoC 预载 + 计时器端到端自检
+#   bash sim/scripts/run_iverilog.sh bench    # benchmark v0.1 + CPI 统计
 # 前置：PATH 中含 MSYS2 ucrt64 的 iverilog / vvp（13.0+）
 set -u
 
@@ -24,8 +26,10 @@ case "$MODE" in
     dmem) TBS=(riscv/tb_dmem.v) ;;
     coremark) TBS=(riscv/tb_core_coremark.v) ;;
     soc) TBS=(riscv/tb_soc_top.v) ;;
-    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_fwd.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_core_coremark.v riscv/tb_soc_top.v) ;;
-    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|muldiv|rv32im|imem|dmem|coremark|soc|all]"; exit 1 ;;
+    soc_check) TBS=(riscv/tb_soc_check.v) ;;
+    bench) TBS=(riscv/tb_core_coremark.v) ;;
+    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_fwd.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_core_coremark.v riscv/tb_soc_top.v riscv/tb_soc_check.v) ;;
+    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|muldiv|rv32im|imem|dmem|coremark|soc|soc_check|bench|all]"; exit 1 ;;
 esac
 
 cd "$(dirname "$0")/.."          # -> sim/
@@ -52,13 +56,25 @@ COREMARK_ARGS=(
     +exp_tohost=34713 +exp_iter=32 +exp_seedcrc=e9f5 +exp_crclist=e714
     +exp_crcmatrix=1fd7 +exp_crcstate=8e3a +exp_crcfinal=8799
 )
+BENCH_ARGS=(
+    +hex=../src/riscv_fw/bench_v0_1.hex +exp_exit=0
+    +exp_tohost=327535569 +max_cycles=200000
+)
 for tb in "${TBS[@]}"; do
     [ -f "$tb" ] || continue
     name=$(basename "$tb" .v)
     echo "== $name =="
     iverilog -g2012 -Wall -s "$name" -o "build/$name.vvp" "$tb" "${RTL_FILES[@]}" || exit 1
     if [ "$name" = "tb_core_coremark" ]; then
-        vvp "build/$name.vvp" "${COREMARK_ARGS[@]}" || exit 1
+        if [ "$MODE" = "bench" ]; then
+            vvp "build/$name.vvp" "${BENCH_ARGS[@]}" || exit 1
+        else
+            vvp "build/$name.vvp" "${COREMARK_ARGS[@]}" || exit 1
+            if [ "$MODE" = "all" ]; then
+                echo "== tb_bench_v0_1 =="
+                vvp "build/$name.vvp" "${BENCH_ARGS[@]}" || exit 1
+            fi
+        fi
     else
         vvp "build/$name.vvp" || exit 1
     fi

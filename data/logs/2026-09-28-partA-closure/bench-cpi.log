@@ -1,0 +1,3 @@
+PASS: benchmark-v0.1 cycles=3446 instrs=1205 bubbles=129 cpi=2.860
+metrics.csv suggested row:
+RISC-V benchmark-v0.1 CPI,core benchmark,2.860,CPI,iverilog; cycles/instrs,3446 cycles / 1205 instrs,data/logs/2026-09-28-partA-closure/bench.log

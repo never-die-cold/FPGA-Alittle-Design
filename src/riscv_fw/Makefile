@@ -26,6 +26,10 @@ V0_TARGET := hello_v0
 V0_SRCS   := start.S main_v0.c
 TS_TARGET := hello_test
 TS_SRCS   := start.S test_rv32i.S
+SOC_TARGET := soc_check
+SOC_SRCS   := start.S soc_check.c
+BENCH_TARGET := bench_v0_1
+BENCH_SRCS   := start.S bench_v0_1.c
 
 ifeq ($(OS),Windows_NT)
 RM := del /q
@@ -34,7 +38,7 @@ RM := rm -f
 endif
 
 .PHONY: all clean
-all: $(TARGET).hex $(TARGET).dis $(V0_TARGET).hex $(V0_TARGET).dis $(TS_TARGET).hex $(TS_TARGET).dis coremark.hex coremark.dis
+all: $(TARGET).hex $(TARGET).dis $(V0_TARGET).hex $(V0_TARGET).dis $(TS_TARGET).hex $(TS_TARGET).dis $(SOC_TARGET).hex $(SOC_TARGET).dis $(BENCH_TARGET).hex $(BENCH_TARGET).dis coremark.hex coremark.dis
 
 $(TARGET).elf: $(SRCS) link.ld
 	$(CC) $(ARCH_IM) $(COMMON) -T link.ld $(SRCS) -o $@
@@ -44,6 +48,12 @@ $(V0_TARGET).elf: $(V0_SRCS) link.ld
 
 $(TS_TARGET).elf: $(TS_SRCS) link.ld
 	$(CC) $(ARCH_I) $(COMMON) -T link.ld $(TS_SRCS) -o $@
+
+$(SOC_TARGET).elf: $(SOC_SRCS) link.ld
+	$(CC) $(ARCH_I) $(COMMON) -T link.ld $(SOC_SRCS) -o $@
+
+$(BENCH_TARGET).elf: $(BENCH_SRCS) link.ld
+	$(CC) $(ARCH_IM) $(COMMON) -T link.ld $(BENCH_SRCS) -o $@
 
 coremark.elf: $(CM_SRCS) $(CM_LD)
 	$(CC) $(ARCH_IM) $(COMMON) $(CM_FLAGS) -T $(CM_LD) $(CM_SRCS) -o $@
@@ -58,4 +68,4 @@ coremark.elf: $(CM_SRCS) $(CM_LD)
 	$(OBJDUMP) -d $< > $@
 
 clean:
-	-$(RM) $(TARGET).elf $(TARGET).bin $(TARGET).hex $(TARGET).dis $(V0_TARGET).elf $(V0_TARGET).bin $(V0_TARGET).hex $(V0_TARGET).dis $(TS_TARGET).elf $(TS_TARGET).bin $(TS_TARGET).hex $(TS_TARGET).dis coremark.elf coremark.bin coremark.hex coremark.dis
+	-$(RM) $(TARGET).elf $(TARGET).bin $(TARGET).hex $(TARGET).dis $(V0_TARGET).elf $(V0_TARGET).bin $(V0_TARGET).hex $(V0_TARGET).dis $(TS_TARGET).elf $(TS_TARGET).bin $(TS_TARGET).hex $(TS_TARGET).dis $(SOC_TARGET).elf $(SOC_TARGET).bin $(SOC_TARGET).hex $(SOC_TARGET).dis $(BENCH_TARGET).elf $(BENCH_TARGET).bin $(BENCH_TARGET).hex $(BENCH_TARGET).dis coremark.elf coremark.bin coremark.hex coremark.dis

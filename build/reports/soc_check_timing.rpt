@@ -1,8 +1,8 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
-| Date         : Fri Sep 25 01:42:41 2026
-| Host         : LAPTOP-QQRU1B0D running 64-bit major release  (build 9200)
+| Date         : Mon Sep 28 14:01:01 2026
+| Host         : never-die-cold running 64-bit major release  (build 9200)
 | Command      : check_timing -override_defaults {no_clock constant_clock unconstrained_internal_endpoints generated_clocks} -verbose -return_string
 | Design       : pynq_z2_top
 | Device       : 7z020-clg400

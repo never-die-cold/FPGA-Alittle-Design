@@ -1,9 +1,9 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
-| Date         : Fri Sep 25 01:42:40 2026
-| Host         : LAPTOP-QQRU1B0D running 64-bit major release  (build 9200)
-| Command      : report_drc -file //wsl.localhost/Ubuntu-22.04/home/jianglibo/FPGA-Alittle-Design/build/reports/soc_drc_impl.rpt
+| Date         : Mon Sep 28 14:01:01 2026
+| Host         : never-die-cold running 64-bit major release  (build 9200)
+| Command      : report_drc -file E:/Projects/FPGA-Alittle-Design/build/reports/soc_drc_impl.rpt
 | Design       : pynq_z2_top
 | Device       : xc7z020clg400-1
 | Speed File   : -1

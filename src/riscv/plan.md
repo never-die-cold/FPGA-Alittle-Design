@@ -93,17 +93,17 @@ RTL 线内部 Part B（9/25–9/28）→ Part C（9/29–10/1）串行不变；�
 **v0 基线现状**
 
 - 核：v0 六模块两级流水 + 冒烟 / 逐指令 tb（38 用例）；RV32M `muldiv` 已在 `dev/rtl` 实现并通过 RV32IM 整核冒烟（已随 PR #32 合并，2026-09-23）
-- 基线数据：Fmax 86.8 MHz / WNS -1.530 ns、LUT 846 / FF 65 / BRAM 0 / DSP 0（Vivado 2026.1，xc7z020clg400-1，10 ns 约束 OOC）
-- 回归口径：`sim/scripts/run_iverilog.sh`（v0|fwd|muldiv|rv32im|imem|dmem|coremark|all）；arch-test `add-01/addi-01/and-01` PASS
+- 基线数据：Fmax 83.8 MHz / WNS -1.935 ns、LUT 1606 / FF 401 / BRAM 0 / DSP 0（2026-09-28 Vivado 2026.1 重综合，xc7z020clg400-1，10 ns 约束 OOC）
+- 回归口径：`sim/scripts/run_iverilog.sh`（含 `soc`/`soc_check`/`bench`/`coremark`/`all`）；arch-test `add-01/addi-01/and-01` PASS
 
 **遗留项（收口前必须处理，详见归档 §G）**
 
-- [ ] 最小 SoC 外壳（BRAM 预载 + LED/UART）仿真 + 上板冒烟
-- [x] 存储扩容 32KB（8B/8C/9A/9B 已合入）；[ ] SoC 计时计数器与 DMEM 镜像预载（板上路径仍待实现）
-- [ ] 基线 CPI 补录 `data/metrics.csv`
+- [x] 最小 SoC 外壳仿真 + 上板冒烟（基线 `db9fe33` 已上板；2026-09-28 新修订只完成仿真/实现，M3 再上板）
+- [x] 存储扩容 32KB（8B/8C/9A/9B 已合入）；[x] SoC 计时计数器与 DMEM 镜像预载（RTL、端到端仿真、40 MHz 实现通过）
+- [x] 基线 CPI、CoreMark/LUT 与 SoC 资源补录 `data/metrics.csv`
 - [x] `dev/rtl` Part A 分支 PR 合并（PR #32，2026-09-23；原计划 9/27 周合并）
 - [ ] gate #19 复核签字（9/27）
-- [ ] benchmark v0.1 / CPI harness / CoreMark 四档与 metrics 入档；CoreMark 移植层及 v0 32 迭代基准已完成（见 `docs/coremark.md` 附录 A）
+- [x] benchmark v0.1 / CPI harness / v0 metrics 入档；[ ] CoreMark 四档对比待 Part B/C 完成后补齐
 
 ### 3.3 引用兼容说明
 
