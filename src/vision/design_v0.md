@@ -52,7 +52,10 @@ ADV7611 HDMI IN ──像素时钟域──> 输入对齐/24bit RGB ──> rgb2
 - `rgb2gray.v`：BT.601 定点 `Y=(77R+150G+29B)>>8`，1 拍延迟，黄金参考 `data/golden/vision/rgb2gray/`。
 - `line_buffer.v`：参数化单行 RAM（WIDTH/DW），同步读；同拍同址**先读后写**（返回旧值）——gaussian 依赖此语义读取"正在被写入的 buffer"的旧行。
 - `gaussian_3x3.v`：双行缓存按行号奇偶轮替，输出行落后输入 1 行；末行在 vblank 冲刷补出（底邻居钳位为自身）；列方向三级读链给出 {左,中,右}，左右边界用中列钳位；全移位加无乘除法。黄金参考 `data/golden/vision/gaussian3x3/`。
-- 回归入口：`bash sim/scripts/run_vision_iverilog.sh [rgb2gray|linebuf|gaussian|all]`（模块二独立 harness，不进模块一 `all`，tb 在 `sim/vision/`）。
+- `sobel.v`：窗口装配/冲刷与 gaussian 同构；Gx/Gy L1 幅值 `|Gx|+|Gy|` 8 位饱和。黄金参考 `data/golden/vision/sobel/`。
+- `scaler.v`：16.16 定点双线性（坐标 `(2d+1)S/(2D)-0.5` clamp，fx/fy 高 8 位，两级 8bit lerp）；NLINES 行槽滑动缓存 + 2 拍/像素双相位随机列读；发射与源写入解耦（未就绪挂起、hs 续发）。约束：NLINES 为 2 的幂，行步进 ≤ NLINES-2；吞吐 1 像素/2 拍（缩小档充足）。黄金参考 `data/golden/vision/scaler/`。
+- `tb_chain.v`：rgb2gray→gaussian 级联冒烟；级间 vs/hs 标记随 de 同拍延迟传播（vision_top 集成时沿用该约定）。
+- 回归入口：`bash sim/scripts/run_vision_iverilog.sh [rgb2gray|linebuf|gaussian|scaler|sobel|chain|all]`（模块二独立 harness，不进模块一 `all`，tb 在 `sim/vision/`）。
 - 单元级参数 WIDTH=16/HEIGHT=8 为紧凑测试格式；接真实视频时参数放大即可，无需改 RTL 逻辑。
 
 ## 4. 关键定点参数（初稿）
