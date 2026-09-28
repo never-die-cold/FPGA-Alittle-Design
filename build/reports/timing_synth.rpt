@@ -1,9 +1,9 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
-| Date         : Mon Sep 14 16:43:45 2026
+| Date         : Mon Sep 28 11:50:49 2026
 | Host         : never-die-cold running 64-bit major release  (build 9200)
-| Command      : report_timing_summary -file C:/Users/ASUS/FPGA-Alittle-Design/build/reports/timing_synth.rpt -delay_type max
+| Command      : report_timing_summary -file E:/Projects/FPGA-Alittle-Design/build/reports/timing_synth.rpt -delay_type max
 | Design       : core_top
 | Device       : 7z020-clg400
 | Speed File   : -1  PRODUCTION 1.12 2019-11-22
@@ -29,11 +29,11 @@ Timing Summary Report
   Merge Timing Exceptions                    :  Yes
   Inter-SLR Compensation                     :  Conservative
 
-  Corner  Analyze    Analyze    
-  Name    Max Paths  Min Paths  
-  ------  ---------  ---------  
-  Slow    Yes        Yes        
-  Fast    Yes        Yes        
+  Corner  Analyze    Analyze
+  Name    Max Paths  Min Paths
+  ------  ---------  ---------
+  Slow    Yes        Yes
+  Fast    Yes        Yes
 
 
 ------------------------------------------------------------------------------------------------
@@ -136,9 +136,9 @@ Table of Contents
 | ---------------------
 ------------------------------------------------------------------------------------------------
 
-    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
-    -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
-     -1.754     -101.649                    101                  661        3.750        0.000                       0                   153  
+    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints
+    -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------
+     -2.844     -214.627                    101                 1394        3.750        0.000                       0                   489
 
 
 Timing constraints are not met.
@@ -151,7 +151,7 @@ Timing constraints are not met.
 
 Clock    Waveform(ns)       Period(ns)      Frequency(MHz)
 -----    ------------       ----------      --------------
-sys_clk  {0.000 5.000}      10.000          100.000         
+sys_clk  {0.000 5.000}      10.000          100.000
 
 
 ------------------------------------------------------------------------------------------------
@@ -159,9 +159,9 @@ sys_clk  {0.000 5.000}      10.000          100.000
 | -----------------
 ------------------------------------------------------------------------------------------------
 
-Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
------             -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
-sys_clk            -1.754     -101.649                    101                  661        3.750        0.000                       0                   153  
+Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints
+-----             -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------
+sys_clk            -2.844     -214.627                    101                 1394        3.750        0.000                       0                   489
 
 
 ------------------------------------------------------------------------------------------------
@@ -169,8 +169,8 @@ sys_clk            -1.754     -101.649                    101                  6
 | -----------------
 ------------------------------------------------------------------------------------------------
 
-From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
-----------    --------          -------      -------  ---------------------  -------------------  
+From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints
+----------    --------          -------      -------  ---------------------  -------------------
 
 
 ------------------------------------------------------------------------------------------------
@@ -178,8 +178,8 @@ From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS
 | -----------------------
 ------------------------------------------------------------------------------------------------
 
-Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
-----------    ----------    --------          -------      -------  ---------------------  -------------------  
+Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints
+----------    ----------    --------          -------      -------  ---------------------  -------------------
 
 
 ------------------------------------------------------------------------------------------------
@@ -192,7 +192,7 @@ Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing 
 From Clock:  sys_clk
   To Clock:  sys_clk
 
-Setup :          101  Failing Endpoints,  Worst Slack       -1.754ns,  Total Violation     -101.649ns
+Setup :          101  Failing Endpoints,  Worst Slack       -2.844ns,  Total Violation     -214.627ns
 Hold  :           NA  Failing Endpoints,  Worst Slack           NA  ,  Total Violation           NA
 PW    :            0  Failing Endpoints,  Worst Slack        3.750ns,  Total Violation        0.000ns
 ---------------------------------------------------------------------------------------------------
@@ -200,18 +200,18 @@ PW    :            0  Failing Endpoints,  Worst Slack        3.750ns,  Total Vio
 
 Max Delay Paths
 --------------------------------------------------------------------------------------
-Slack (VIOLATED) :        -1.754ns  (required time - arrival time)
-  Source:                 u_if_stage/flush_q_reg/C
-                            (rising edge-triggered cell FDPE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+Slack (VIOLATED) :        -2.844ns  (required time - arrival time)
+  Source:                 u_if_stage/instr_hold_reg[21]/C
+                            (rising edge-triggered cell FDCE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
   Destination:            u_if_stage/flush_q_reg/D
                             (rising edge-triggered cell FDPE clocked by sys_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
   Path Group:             sys_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (sys_clk rise@10.000ns - sys_clk rise@0.000ns)
-  Data Path Delay:        11.621ns  (logic 2.417ns (20.799%)  route 9.204ns (79.201%))
-  Logic Levels:           13  (LUT2=1 LUT5=2 LUT6=7 MUXF7=1 MUXF8=1 RAMD32=1)
+  Data Path Delay:        12.711ns  (logic 2.541ns (19.991%)  route 10.170ns (80.009%))
+  Logic Levels:           14  (LUT4=2 LUT5=2 LUT6=7 MUXF7=1 MUXF8=1 RAMD32=1)
   Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 )
     Source Clock Delay      (SCD):    0.973ns
     Clock Pessimism Removal (CPR):    0.000ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
@@ -224,53 +224,55 @@ Slack (VIOLATED) :        -1.754ns  (required time - arrival time)
   -------------------------------------------------------------------    -------------------
                          (clock sys_clk rise edge)    0.000     0.000 r  <hidden>
                                                       0.000     0.000 r  clk
-                         net (fo=152, unset)          0.973     0.973    u_if_stage/clk
-                         FDPE                                         r  u_if_stage/flush_q_reg/C
+                         net (fo=488, unset)          0.973     0.973    u_if_stage/clk
+                         FDCE                                         r  u_if_stage/instr_hold_reg[21]/C
   -------------------------------------------------------------------    -------------------
-                         FDPE (Prop_fdpe_C_Q)         0.362     1.335 f  u_if_stage/flush_q_reg/Q
-                         net (fo=103, unplaced)       0.411     1.746    u_if_stage/flush_q
-                         LUT2 (Prop_lut2_I1_O)        0.295     2.041 r  u_if_stage/regs_reg_r2_0_31_0_5_i_4/O
-                         net (fo=36, unplaced)        1.185     3.226    u_regfile/regs_reg_r2_0_31_0_5/ADDRB1
+                         FDCE (Prop_fdce_C_Q)         0.362     1.335 r  u_if_stage/instr_hold_reg[21]/Q
+                         net (fo=1, unplaced)         0.666     2.001    u_if_stage/instr_hold[21]
+                         LUT4 (Prop_lut4_I0_O)        0.295     2.296 r  u_if_stage/dmem_wdata[4]_INST_0_i_2/O
+                         net (fo=41, unplaced)        1.188     3.484    u_regfile/regs_reg_r2_0_31_0_5/ADDRB1
                          RAMD32 (Prop_ramd32_RADR1_O)
-                                                      0.152     3.378 r  u_regfile/regs_reg_r2_0_31_0_5/RAMB/O
-                         net (fo=2, unplaced)         0.975     4.353    u_if_stage/rdata20[2]
-                         LUT6 (Prop_lut6_I0_O)        0.124     4.477 r  u_if_stage/dmem_addr[2]_INST_0_i_7/O
-                         net (fo=110, unplaced)       1.213     5.690    u_if_stage/alu_b[2]
-                         LUT6 (Prop_lut6_I1_O)        0.124     5.814 f  u_if_stage/dmem_addr[21]_INST_0_i_13/O
-                         net (fo=2, unplaced)         0.913     6.727    u_if_stage/dmem_addr[21]_INST_0_i_13_n_0
-                         LUT5 (Prop_lut5_I0_O)        0.124     6.851 f  u_if_stage/dmem_addr[19]_INST_0_i_10/O
-                         net (fo=2, unplaced)         0.913     7.764    u_if_stage/dmem_addr[19]_INST_0_i_10_n_0
-                         LUT6 (Prop_lut6_I0_O)        0.124     7.888 f  u_if_stage/dmem_addr[18]_INST_0_i_5/O
-                         net (fo=1, unplaced)         0.000     7.888    u_if_stage/dmem_addr[18]_INST_0_i_5_n_0
-                         MUXF7 (Prop_muxf7_I0_O)      0.209     8.097 f  u_if_stage/dmem_addr[18]_INST_0_i_2/O
-                         net (fo=2, unplaced)         0.000     8.097    u_if_stage/dmem_addr[18]_INST_0_i_2_n_0
-                         MUXF8 (Prop_muxf8_I1_O)      0.088     8.185 f  u_if_stage/pc_reg[31]_i_31/O
-                         net (fo=1, unplaced)         0.611     8.796    u_if_stage/pc_reg[31]_i_31_n_0
-                         LUT5 (Prop_lut5_I0_O)        0.319     9.115 r  u_if_stage/pc[31]_i_26/O
-                         net (fo=1, unplaced)         1.111    10.226    u_if_stage/pc[31]_i_26_n_0
-                         LUT6 (Prop_lut6_I1_O)        0.124    10.350 f  u_if_stage/pc[31]_i_18/O
-                         net (fo=1, unplaced)         0.902    11.252    u_if_stage/pc[31]_i_18_n_0
-                         LUT6 (Prop_lut6_I0_O)        0.124    11.376 r  u_if_stage/pc[31]_i_11/O
-                         net (fo=1, unplaced)         0.449    11.825    u_if_stage/alu_zero
-                         LUT6 (Prop_lut6_I0_O)        0.124    11.949 r  u_if_stage/pc[31]_i_4/O
-                         net (fo=33, unplaced)        0.521    12.470    u_if_stage/branch_taken
-                         LUT6 (Prop_lut6_I0_O)        0.124    12.594 r  u_if_stage/flush_q_i_1/O
-                         net (fo=1, unplaced)         0.000    12.594    u_if_stage/flush
+                                                      0.152     3.636 r  u_regfile/regs_reg_r2_0_31_0_5/RAMB/O
+                         net (fo=6, unplaced)         0.996     4.632    u_regfile/rdata20[2]
+                         LUT6 (Prop_lut6_I0_O)        0.124     4.756 r  u_regfile/dmem_wdata[2]_INST_0/O
+                         net (fo=2, unplaced)         0.676     5.432    u_if_stage/dmem_wdata[2]
+                         LUT6 (Prop_lut6_I0_O)        0.124     5.556 r  u_if_stage/dmem_addr[2]_INST_0_i_3/O
+                         net (fo=110, unplaced)       1.213     6.769    u_if_stage/alu_b[2]
+                         LUT6 (Prop_lut6_I1_O)        0.124     6.893 f  u_if_stage/dmem_addr[21]_INST_0_i_14/O
+                         net (fo=2, unplaced)         0.913     7.806    u_if_stage/dmem_addr[21]_INST_0_i_14_n_0
+                         LUT5 (Prop_lut5_I0_O)        0.124     7.930 f  u_if_stage/dmem_addr[19]_INST_0_i_22/O
+                         net (fo=2, unplaced)         0.913     8.843    u_if_stage/dmem_addr[19]_INST_0_i_22_n_0
+                         LUT6 (Prop_lut6_I0_O)        0.124     8.967 f  u_if_stage/dmem_addr[18]_INST_0_i_8/O
+                         net (fo=1, unplaced)         0.000     8.967    u_if_stage/dmem_addr[18]_INST_0_i_8_n_0
+                         MUXF7 (Prop_muxf7_I0_O)      0.209     9.176 f  u_if_stage/dmem_addr[18]_INST_0_i_5/O
+                         net (fo=1, unplaced)         0.000     9.176    u_if_stage/dmem_addr[18]_INST_0_i_5_n_0
+                         MUXF8 (Prop_muxf8_I1_O)      0.088     9.264 f  u_if_stage/dmem_addr[18]_INST_0_i_2/O
+                         net (fo=2, unplaced)         0.622     9.886    u_if_stage/dmem_addr[18]_INST_0_i_2_n_0
+                         LUT5 (Prop_lut5_I0_O)        0.319    10.205 r  u_if_stage/pc[31]_i_36/O
+                         net (fo=1, unplaced)         1.111    11.316    u_if_stage/pc[31]_i_36_n_0
+                         LUT6 (Prop_lut6_I1_O)        0.124    11.440 f  u_if_stage/pc[31]_i_20/O
+                         net (fo=1, unplaced)         0.902    12.342    u_if_stage/pc[31]_i_20_n_0
+                         LUT6 (Prop_lut6_I0_O)        0.124    12.466 r  u_if_stage/pc[31]_i_14/O
+                         net (fo=1, unplaced)         0.449    12.915    u_if_stage/alu_zero
+                         LUT6 (Prop_lut6_I0_O)        0.124    13.039 r  u_if_stage/pc[31]_i_6/O
+                         net (fo=33, unplaced)        0.521    13.560    u_if_stage/branch_taken
+                         LUT4 (Prop_lut4_I0_O)        0.124    13.684 r  u_if_stage/flush_q_i_1/O
+                         net (fo=1, unplaced)         0.000    13.684    u_if_stage/flush
                          FDPE                                         r  u_if_stage/flush_q_reg/D
   -------------------------------------------------------------------    -------------------
 
                          (clock sys_clk rise edge)   10.000    10.000 r  <hidden>
                                                       0.000    10.000 r  clk
-                         net (fo=152, unset)          0.924    10.924    u_if_stage/clk
+                         net (fo=488, unset)          0.924    10.924    u_if_stage/clk
                          FDPE                                         r  u_if_stage/flush_q_reg/C
                          clock pessimism              0.000    10.924    <hidden>
                          clock uncertainty           -0.035    10.889    <hidden>
                          FDPE (Setup_fdpe_C_D)       -0.049    10.840    u_if_stage/flush_q_reg
   -------------------------------------------------------------------
                          required time                         10.840    <hidden>
-                         arrival time                         -12.594    <hidden>
+                         arrival time                         -13.684    <hidden>
   -------------------------------------------------------------------
-                         slack                                 -1.754    <hidden>
+                         slack                                 -2.844    <hidden>
 
 
 
@@ -284,9 +286,6 @@ Period(ns):         10.000
 Sources:            { clk }
 
 Check Type        Corner  Lib Pin     Reference Pin  Required(ns)  Actual(ns)  Slack(ns)  Location  Pin
-Min Period        n/a     FDPE/C      n/a            1.000         10.000      9.000                u_if_stage/flush_q_reg/C
+Min Period        n/a     FDCE/C      n/a            1.000         10.000      9.000                muldiv_pending_reg/C
 Low Pulse Width   Slow    RAMD32/CLK  n/a            1.250         5.000       3.750                u_regfile/regs_reg_r1_0_31_0_5/RAMA/CLK
 High Pulse Width  Slow    RAMD32/CLK  n/a            1.250         5.000       3.750                u_regfile/regs_reg_r1_0_31_0_5/RAMA/CLK
-
-
-

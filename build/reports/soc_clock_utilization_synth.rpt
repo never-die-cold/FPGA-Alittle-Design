@@ -1,14 +1,14 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
---------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
-| Date         : Fri Sep 25 01:41:07 2026
-| Host         : LAPTOP-QQRU1B0D running 64-bit major release  (build 9200)
-| Command      : report_clock_utilization -file //wsl.localhost/Ubuntu-22.04/home/jianglibo/FPGA-Alittle-Design/build/reports/soc_clock_utilization_synth.rpt
+| Date         : Mon Sep 28 13:58:18 2026
+| Host         : never-die-cold running 64-bit major release  (build 9200)
+| Command      : report_clock_utilization -file E:/Projects/FPGA-Alittle-Design/build/reports/soc_clock_utilization_synth.rpt
 | Design       : pynq_z2_top
 | Device       : 7z020-clg400
 | Speed File   : -1  PRODUCTION 1.12 2019-11-22
 | Design State : Synthesized
---------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------
 
 Clock Utilization Report
 
@@ -44,7 +44,7 @@ Table of Contents
 +-----------+-----------+-----------------+------------+------+--------------+-------------------+-------------+-----------------+--------------+------------------+-------------------+--------------+
 | Global Id | Source Id | Driver Type/Pin | Constraint | Site | Clock Region | Load Clock Region | Clock Loads | Non-Clock Loads | Clock Period | Clock            | Driver Pin        | Net          |
 +-----------+-----------+-----------------+------------+------+--------------+-------------------+-------------+-----------------+--------------+------------------+-------------------+--------------+
-| g0        | src0      | BUFG/O          | None       |      | n/a          |                 0 |        1453 |               0 |       25.000 | core_clk_40      | u_core_clk_bufg/O | clk_40       |
+| g0        | src0      | BUFG/O          | None       |      | n/a          |                 0 |        1485 |               0 |       25.000 | core_clk_40      | u_core_clk_bufg/O | clk_40       |
 | g1        | src1      | BUFG/O          | None       |      | n/a          |                 0 |           1 |               0 |        8.000 | clk_feedback_raw | u_feedback_bufg/O | clk_feedback |
 +-----------+-----------+-----------------+------------+------+--------------+-------------------+-------------+-----------------+--------------+------------------+-------------------+--------------+
 * Clock Loads column represents cell count of net connects that connect to a clock pin. Internal cell leaf pins are not considered
