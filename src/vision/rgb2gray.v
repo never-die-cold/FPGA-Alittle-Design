@@ -2,14 +2,21 @@
 // rgb2gray —— RGB888 转灰度（模块二流水线第一级）
 // 契约：Y = (77R + 150G + 29B) >> 8（BT.601 定点，src/vision/design_v0.md §4）
 // 流约定：单时钟域，in_de 高表示当前输入像素有效；输出对齐输入，固定延迟 1 拍。
+// 级间约定：out_vs/out_hs 为输入标记的 1 拍延迟，与 out_de 同拍传播给下级。
 module rgb2gray (
     input  wire        clk,
+    input  wire        in_vs,
+    input  wire        in_hs,
     input  wire        in_de,
     input  wire [23:0] in_rgb,      // {R[7:0], G[7:0], B[7:0]}
+    output reg         out_vs,
+    output reg         out_hs,
     output reg         out_de,
     output reg  [7:0]  out_y
 );
     always @(posedge clk) begin
+        out_vs <= in_vs;
+        out_hs <= in_hs;
         out_de <= in_de;
         if (in_de)
             out_y <= (77  * in_rgb[23:16]

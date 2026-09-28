@@ -19,8 +19,9 @@ case "$MODE" in
     scaler)   TBS=(vision/tb_scaler.v) ;;
     sobel)    TBS=(vision/tb_sobel.v) ;;
     chain)    TBS=(vision/tb_chain.v) ;;
-    all)      TBS=(vision/tb_rgb2gray.v vision/tb_line_buffer.v vision/tb_gaussian3x3.v vision/tb_scaler.v vision/tb_sobel.v vision/tb_chain.v) ;;
-    *)   echo "用法: bash sim/scripts/run_vision_iverilog.sh [rgb2gray|linebuf|gaussian|scaler|sobel|chain|all]"; exit 1 ;;
+    fullchain) TBS=(vision/tb_fullchain.v) ;;
+    all)      TBS=(vision/tb_rgb2gray.v vision/tb_line_buffer.v vision/tb_gaussian3x3.v vision/tb_scaler.v vision/tb_sobel.v vision/tb_chain.v vision/tb_fullchain.v) ;;
+    *)   echo "用法: bash sim/scripts/run_vision_iverilog.sh [rgb2gray|linebuf|gaussian|scaler|sobel|chain|fullchain|all]"; exit 1 ;;
 esac
 
 cd "$(dirname "$0")/.."          # -> sim/

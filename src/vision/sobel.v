@@ -16,6 +16,8 @@ module sobel #(
     input  wire       in_hs,
     input  wire       in_de,
     input  wire [7:0] in_y,
+    output reg        out_vs,     // 级间标记：与 out_de 同拍传播（3 拍延迟）
+    output reg        out_hs,     // 行尾标记；末行冲刷时输出合成 hs（vblank 内）
     output reg        out_de,
     output reg  [7:0] out_g
 );
@@ -23,9 +25,11 @@ module sobel #(
     reg [AW:0]   x;
     reg [YW-1:0] y;
     reg          flushing;
-    reg [AW:0]   fc;
+    reg [AW+2:0] fc;
+    // 冲刷窗口时序同 gaussian_3x3.v：eff_de 推迟 2 拍启动（fc∈[2,WIDTH+1]），
+    // 给直通行尾 hs 留间隔；合成 hs 注入 fc==WIDTH+2（末像素后 1 拍）。
     wire flush_start = in_hs && (y == HEIGHT-1);
-    wire eff_de = in_de || (flushing && fc < WIDTH);
+    wire eff_de = in_de || (flushing && fc >= 2 && fc < WIDTH+2);
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -39,7 +43,7 @@ module sobel #(
                 flushing <= 1; fc <= 0;
             end else if (flushing) begin
                 fc <= fc + 1;
-                if (fc == WIDTH-1) flushing <= 0;
+                if (fc == WIDTH+3) flushing <= 0;
             end
         end
     end
@@ -109,12 +113,29 @@ module sobel #(
     wire [10:0] gy = (gy_pos > gy_neg) ? (gy_pos - gy_neg) : (gy_neg - gy_pos);
     wire [11:0] mag = gx + gy;                     // <= 4*255*2 = 2040
 
+    // 级间标记（同 gaussian_3x3）：直通 hs 门控 y>=1，冲刷末像素拍注入合成 hs
+    wire hs_gen = (in_hs && (y >= 1)) || (flushing && (fc == WIDTH+2));
+    reg  vs_d1, vs_d2, vs_d3;
+    reg  hs_d1, hs_d2, hs_d3;
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            vs_d1 <= 0; vs_d2 <= 0; vs_d3 <= 0;
+            hs_d1 <= 0; hs_d2 <= 0; hs_d3 <= 0;
+        end else begin
+            vs_d1 <= in_vs; vs_d2 <= vs_d1; vs_d3 <= vs_d2;
+            hs_d1 <= hs_gen; hs_d2 <= hs_d1; hs_d3 <= hs_d2;
+        end
+    end
+
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             out_de <= 0; out_g <= 0;
+            out_vs <= 0; out_hs <= 0;
         end else begin
             out_de <= de_d2 && (y >= 1);
             out_g  <= (mag > 12'd255) ? 8'd255 : mag[7:0];
+            out_vs <= vs_d3;
+            out_hs <= hs_d3;
         end
     end
 endmodule

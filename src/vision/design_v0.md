@@ -54,8 +54,15 @@ ADV7611 HDMI IN ──像素时钟域──> 输入对齐/24bit RGB ──> rgb2
 - `gaussian_3x3.v`：双行缓存按行号奇偶轮替，输出行落后输入 1 行；末行在 vblank 冲刷补出（底邻居钳位为自身）；列方向三级读链给出 {左,中,右}，左右边界用中列钳位；全移位加无乘除法。黄金参考 `data/golden/vision/gaussian3x3/`。
 - `sobel.v`：窗口装配/冲刷与 gaussian 同构；Gx/Gy L1 幅值 `|Gx|+|Gy|` 8 位饱和。黄金参考 `data/golden/vision/sobel/`。
 - `scaler.v`：16.16 定点双线性（坐标 `(2d+1)S/(2D)-0.5` clamp，fx/fy 高 8 位，两级 8bit lerp）；NLINES 行槽滑动缓存 + 2 拍/像素双相位随机列读；发射与源写入解耦（未就绪挂起、hs 续发）。约束：NLINES 为 2 的幂，行步进 ≤ NLINES-2；吞吐 1 像素/2 拍（缩小档充足）。黄金参考 `data/golden/vision/scaler/`。
-- `tb_chain.v`：rgb2gray→gaussian 级联冒烟；级间 vs/hs 标记随 de 同拍延迟传播（vision_top 集成时沿用该约定）。
-- 回归入口：`bash sim/scripts/run_vision_iverilog.sh [rgb2gray|linebuf|gaussian|scaler|sobel|chain|all]`（模块二独立 harness，不进模块一 `all`，tb 在 `sim/vision/`）。
+- `tb_chain.v` / `tb_fullchain.v`：两级与三级（rgb2gray→gaussian→scaler）级联冒烟；末端对拍 `data/golden/vision/fullchain/expected_fullchain.hex`，中间级同时对拍单级 golden。
+- 回归入口：`bash sim/scripts/run_vision_iverilog.sh [rgb2gray|linebuf|gaussian|scaler|sobel|chain|fullchain|all]`（模块二独立 harness，不进模块一 `all`，tb 在 `sim/vision/`）。
+
+### 3.2 级间标记约定 v0.2（tb_fullchain 通过后确立，10/5 评审确认）
+
+- 每级自产输出标记 `out_vs/out_hs`，与 `out_de` 同拍传播给下级（`rgb2gray` 延迟 1 拍；`gaussian/sobel` 延迟 3 拍），vision_top 级联时无需额外标记管理。
+- **直通行尾 hs 门控**：输出行 l 的行尾 hs = 输入行 l+1 的 hs；输入行 0 的 hs 不对应任何输出行，必须屏蔽——否则下游行计数错位（tb_fullchain 调试实录，2026-09-29）。
+- **冲刷行标记**：gaussian/sobel 末行冲刷在 vblank 内自产合成 hs（`flush_start` 后延迟 3 拍输出，末像素后 1 拍）；冲刷 eff_de **推迟 2 拍启动**（flush_start 后 +3 拍起输出），与直通行尾 hs 保持间隔，避免下游同拍收到 de+hs 导致行错位（同日调试实录）。
+- 下游（scaler 类行槽消费者）约定：hs 提交一行；已提交行数用寄存器 sticky（组合 hs 判据在挂起期不可见）；行坐标跨像素流水时末像素插值完成后才允许更新行坐标（pending 提交，见 scaler.v 注释）。
 - 单元级参数 WIDTH=16/HEIGHT=8 为紧凑测试格式；接真实视频时参数放大即可，无需改 RTL 逻辑。
 
 ## 4. 关键定点参数（初稿）

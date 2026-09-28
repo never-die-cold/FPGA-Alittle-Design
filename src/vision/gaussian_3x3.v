@@ -21,6 +21,8 @@ module gaussian_3x3 #(
     input  wire       in_hs,      // 行尾标记（单拍，该行 de 结束 >=3 拍后）
     input  wire       in_de,      // 像素有效
     input  wire [7:0] in_y,       // 灰度像素流
+    output reg        out_vs,     // 级间标记：与 out_de 同拍传播（3 拍延迟）
+    output reg        out_hs,     // 行尾标记；末行冲刷时输出合成 hs（vblank 内）
     output reg        out_de,
     output reg  [7:0] out_g
 );
@@ -28,9 +30,13 @@ module gaussian_3x3 #(
     reg [AW:0]   x;         // 可达 WIDTH（末列保持，供右边界钳位读数）
     reg [YW-1:0] y;         // 流内行号；末行 hs 后 = HEIGHT
     reg          flushing;
-    reg [AW:0]   fc;
+    reg [AW+2:0] fc;
+    // 冲刷窗口时序（flush_start=T）：fc=i-1 于拍 T+i；eff_de 冲刷段 fc∈[2,WIDTH+1]
+    // （拍 T+3..T+WIDTH+2，输出像素 T+6..T+WIDTH+5）——推迟 2 拍启动，给直通行尾
+    // hs（T+3 到达）留出间隔，避免下游同拍收到 de+hs；合成 hs 注入 fc==WIDTH+2
+    // （out_hs = T+WIDTH+6，末像素后 1 拍）；fc==WIDTH+3 清 flushing。
     wire flush_start = in_hs && (y == HEIGHT-1);
-    wire eff_de = in_de || (flushing && fc < WIDTH);   // 冲刷恰好 WIDTH 拍（末列有显式钳位，无需保持拍）
+    wire eff_de = in_de || (flushing && fc >= 2 && fc < WIDTH+2);
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -44,7 +50,7 @@ module gaussian_3x3 #(
                 flushing <= 1; fc <= 0;
             end else if (flushing) begin
                 fc <= fc + 1;
-                if (fc == WIDTH-1) flushing <= 0;
+                if (fc == WIDTH+3) flushing <= 0;
             end
         end
     end
@@ -115,12 +121,32 @@ module gaussian_3x3 #(
                     + 2*midL + 4*midM + 2*midR
                     + botL + 2*botM + botR;
 
+    // 级间标记：vs/hs 与 out_de 同拍延迟（3 拍）；冲刷末像素拍注入合成 hs，
+    // 使末行在 vblank 内获得行尾标记（下游 scaler 等该标记提交最后一行）。
+    // 直通 hs 门控 y>=1：输出行 l 的行尾 = 输入行 l+1 的 hs；输入行 0 的 hs
+    // 不对应任何输出行，必须屏蔽，否则下游行计数错位。
+    wire hs_gen = (in_hs && (y >= 1)) || (flushing && (fc == WIDTH+2));
+    reg  vs_d1, vs_d2, vs_d3;
+    reg  hs_d1, hs_d2, hs_d3;
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            vs_d1 <= 0; vs_d2 <= 0; vs_d3 <= 0;
+            hs_d1 <= 0; hs_d2 <= 0; hs_d3 <= 0;
+        end else begin
+            vs_d1 <= in_vs; vs_d2 <= vs_d1; vs_d3 <= vs_d2;
+            hs_d1 <= hs_gen; hs_d2 <= hs_d1; hs_d3 <= hs_d2;
+        end
+    end
+
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             out_de <= 0; out_g <= 0;
+            out_vs <= 0; out_hs <= 0;
         end else begin
             out_de <= de_d2 && (y >= 1);   // y=0（流内首行）无输出行；y=HEIGHT 为冲刷行
             out_g  <= sum[11:4];
+            out_vs <= vs_d3;
+            out_hs <= hs_d3;
         end
     end
 endmodule
