@@ -1,6 +1,6 @@
 # v1 接口设计：RV32IM 三级流水核
 
-> 状态：草案，Part B 契约编写中；完成全部章节并经用户确认后冻结。
+> 状态：📌 接口契约已冻结（2026-09-28）；阶段 2 RTL 必须遵守本文，偏差须先回写决策。
 > 依据：`plan.md` Part B/C、`design_v0.md` 与 2026-09-20 CPI 口径重定义。
 > 权威范围：定稿后，本文件是 Part B/C 的流水、转发、冒险与模块接口唯一权威；
 > v0 的冻结接口仍以 `design_v0.md` 为准。
@@ -41,7 +41,7 @@
 
 | 对象 | 固定方式 | 用途 |
 |:---|:---|:---|
-| v0 两级基线 | commit `962a4f5`；契约定稿时创建 tag `partA-v0` | 功能、CPI、Fmax 参考锚点 |
+| v0 两级基线 | commit `962a4f5`，tag `partA-v0` | 功能、CPI、Fmax 参考锚点 |
 | v1 无转发 | `core_top` 顶层参数关闭转发，hazard 对 RAW 执行停顿 | 主 CPI 对照档 |
 | v1 + 转发 | 同一份 RTL、同一顶层参数打开转发 | Part B 主交付档 |
 
@@ -422,14 +422,355 @@ done 后紧随的消费者可从 M 的 MEM+WB 结果执行 EX→EX 转发，不�
 v1 必须复用现有 `tb_muldiv` 证明单元未回归，并在整核 tb 检查：start 仅一次、等待期
 无提交、done 结果进入正确 rd、紧随消费者开/关转发结果一致。
 
+## 11. 存储器与寄存器堆时序
+
+### 11.1 对外接口与容量保持不变
+
+v1 保持 v0 §3 的哈佛接口、地址空间和容量，不修改 `imem.v/dmem.v` 端口：
+
+| 对象 | 容量/索引 | 读时序 | 写时序 |
+|:---|:---|:---|:---|
+| IMEM | 8192×32，`addr[14:2]` | 同步读，地址后下一拍数据有效 | 固件预载，无运行时写口 |
+| DMEM | 8192×32，`addr[14:2]` | 异步读，同拍数据有效 | 上升沿按 `we` 与 `be[3:0]` 字节写 |
+
+地址范围继续为 `0x8000_0000–0x8000_7FFF`；`tohost=0x8000_3FF0`、
+`tohost_exit=0x8000_3FF4` 不变。不增加缓存、总线等待或非对齐异常。
+
+同步 IMEM 的输出寄存器属于 IF。hold 时保持当前 IF/ID 槽，redirect 时将顺序输出
+标成 `valid=0`；正常路径不得再增加指令寄存器。
+
+### 11.2 load 的 MEM+WB 动作
+
+load 在 ID+EX 计算有效地址，并把地址、mask、符号扩展和 rd 写入 MEM+WB。
+下一拍由 `mem_addr` 驱动异步 DMEM，按 `mem_addr[1:0]` 选择 byte/half lane：
+
+```text
+load_data = extend(dmem_rdata lane, mem_mask_sel, mem_sign_ext)
+wb_data   = mem_mem_read ? load_data : mem_result
+rf_we     = mem_valid && mem_reg_write && (mem_rd != 0)
+```
+
+`load_data` 与写回选择在 MEM+WB 同拍组合完成，拍末写 regfile。非相关后续指令
+无需等待；立即 load-use 按 §9 固定停 1 拍，禁止把该组合读路径继续串入消费者 ALU。
+
+### 11.3 store 的 MEM+WB 动作
+
+store 在 ID+EX 计算地址，并把转发后的原始 rs2 数据捕获为 `mem_store_data`。
+MEM+WB 根据地址低位生成 byte enable，并在写入前复制低字节或低半字：
+
+```text
+dmem_wdata = byte ? {4{mem_store_data[7:0]}}
+           : half ? {2{mem_store_data[15:0]}}
+           : mem_store_data
+dmem_we    = mem_valid && mem_mem_write
+dmem_be    = dmem_we ? lane_mask(mem_mask_sel, mem_addr[1:0]) : 4'b0000
+```
+
+store 只在 MEM+WB 的一个上升沿产生副作用。stall 不得冻结有效 store 槽；气泡、
+flush 和复位后的无效槽即使 payload 残留，也因 `mem_valid=0` 不能写内存。
+
+ALU→store 的 rs2 可直接转发后捕获；load→store 仍属于 load-use，固定停 1 拍。
+地址基址 rs1 与 store data rs2 分别进行 uses、hazard 和 forwarding 判断。
+
+### 11.4 regfile 读写与同沿可见性
+
+`regfile.v` 继续为 32×32、双组合读、单上升沿写，模块不增加复位端口：
+
+- `raddr1/raddr2==0` 时组合返回 0；
+- 只有 `rf_we && mem_rd!=0` 才写，任何指令都不能改变 x0；
+- MEM+WB 在上升沿写入后，组合读端在该沿后的同一周期看到新值；
+- load-use/关闭转发 RAW 停顿正是利用下一周期重读已更新 regfile。
+
+regfile 不要求整体清零。复位只清流水 `valid` 和握手状态，未初始化的非 x0 内容
+在被软件写入前不得作为有效程序状态；功能安全来自 valid/控制门控。
+
+### 11.5 提交与复位边界
+
+MEM+WB 是唯一架构副作用级：
+
+- ALU、JAL/JALR、完成的 M 指令用 `mem_result` 写回；load 用 `load_data` 写回；
+- `mem_mem_read` 与 `mem_mem_write` 对有效指令必须互斥；
+- 每个 `mem_valid` 槽至多产生一次 regfile 写或 DMEM 写；
+- 核复位不清 IMEM 固件，也不清 DMEM；SoC 上电初始化和软复位语义沿用 v0。
+
+因此软复位后 DMEM 可保留旧值，程序若读取旧 `tohost` 或旧数据，结果可受其影响；
+这不是流水错误。tb 若要求干净数据环境，必须显式重新初始化存储器模型。
+
+### 11.6 存储器专项验收点
+
+- load byte/half/word 的 lane 与符号/零扩展均使用寄存后的 `mem_addr`；
+- store byte/half/word 检查地址 lane、复制数据、be 及恰好一次写入；
+- 气泡、flush、stall、复位期间不得产生 regfile/DMEM 副作用；
+- 紧邻 load-use 恰好 1 拍，非相关 load 不造成全局停顿；
+- v0 与 v1 使用同一 IMEM/DMEM 模型、固件镜像和 tohost 判据。
+
+## 12. `id_ex_stage.v` 与 `mem_wb_stage.v` 接口
+
+### 12.1 模块边界原则
+
+`if_stage` 的输出寄存器提供 IF/ID 边界；`mem_wb_stage` 提供 ID+EX/MEM+WB
+边界。`id_ex_stage` 是中间组合级外壳，不再保存整条指令，因此不会增加第四级。
+
+`id_ex_stage` 复用现有 `decode.v` 与 `alu.v`，接收已经过 forwarding 的两个
+寄存器值。`core_top` 负责 regfile、forwarding、hazard、muldiv 与级间总控；
+`mem_wb_stage` 只保存提交所需 payload，不自行访问存储器或写 regfile。
+
+### 12.2 `id_ex_stage.v` 输入端口
+
+| 端口 | 方向 | 位宽 | 语义 |
+|:---|:---:|:---:|:---|
+| `in_valid` | in | 1 | 当前 IF/ID 槽有效；所有输出控制的语义前提 |
+| `in_pc` | in | 32 | 当前指令 PC，用于 PC+4、branch/JAL 目标 |
+| `in_instr` | in | 32 | 当前指令，送 decode |
+| `rs1_value` | in | 32 | forwarding 后的 rs1；未使用时忽略 |
+| `rs2_value` | in | 32 | forwarding 后的 rs2；未使用时忽略 |
+| `muldiv_result` | in | 32 | M 单元结果；仅 M done 被接受时进入下游 |
+
+`id_ex_stage` 不设 `clk/rst_n`，也不拥有 pending。组合输出可随输入变化，只有
+`core_top` 产生 `ex_accept=1` 时才允许其 payload 在时钟沿进入 `mem_wb_stage`。
+
+### 12.3 `id_ex_stage.v` 译码与冒险输出
+
+| 端口 | 方向 | 位宽 | 语义 |
+|:---|:---:|:---:|:---|
+| `rs1_addr/rs2_addr/rd_addr` | out | 5 | regfile、RAW 比较与目的寄存器 |
+| `uses_rs1/uses_rs2` | out | 1 | 指令是否真正读取对应源 |
+| `muldiv_valid` | out | 1 | 当前指令是合法 RV32M |
+| `muldiv_op` | out | 3 | M 指令 `funct3` |
+| `branch_taken` | out | 1 | branch 条件原始裁决，尚未经过 `ex_accept` |
+| `jump_taken` | out | 1 | JAL/JALR 原始裁决，尚未经过 `ex_accept` |
+| `redirect_target` | out | 32 | branch/JAL 目标或清 bit0 后的 JALR 目标 |
+
+`branch_taken/jump_taken` 即使组合为 1，也不能直接改 PC；`core_top` 必须按 §9
+用 `in_valid && ex_accept` 门控 redirect。
+
+### 12.4 `id_ex_stage.v` 下游 payload 输出
+
+| 端口 | 方向 | 位宽 | 语义 |
+|:---|:---:|:---:|:---|
+| `ex_result` | out | 32 | ALU、PC+4 或 `muldiv_result` 的非 load 写回值 |
+| `ex_addr` | out | 32 | load/store 有效地址；其它指令可忽略 |
+| `ex_store_data` | out | 32 | 未复制的 forwarding 后 rs2 |
+| `ex_reg_write` | out | 1 | regfile 写候选 |
+| `ex_mem_read/ex_mem_write` | out | 1 | load/store 控制，合法译码下互斥 |
+| `ex_wb_sel` | out | 2 | 沿用 v0：ALU/load/PC+4/M；下游只据此选最终值 |
+| `ex_mask_sel` | out | 2 | byte/half/word |
+| `ex_sign_ext` | out | 1 | load 符号扩展控制 |
+
+所有 payload 在 `in_valid=0` 时均可为无关值；安全性由写入下游的 `in_valid` 保证。
+store data 必须直接等于 `rs2_value`，不能从 ALU B 端或实时 regfile 重新取得。
+
+### 12.5 `mem_wb_stage.v` 端口
+
+| 端口组 | 方向 | 位宽 | 语义 |
+|:---|:---:|:---:|:---|
+| `clk/rst_n` | in | 1 | 上升沿捕获；低有效异步复位只强制清 valid |
+| `in_valid` | in | 1 | 上游 `if_valid && ex_accept` 形成的有效提交槽 |
+| `in_instr/in_pc` | in | 32/32 | retire、CPI 与波形定位 |
+| `in_rd` | in | 5 | 目的寄存器 |
+| `in_result/in_addr/in_store_data` | in | 32/32/32 | 非 load 结果、访存地址、store 原始数据 |
+| `in_reg_write/in_mem_read/in_mem_write` | in | 1/1/1 | 提交控制 |
+| `in_wb_sel/in_mask_sel/in_sign_ext` | in | 2/2/1 | 写回、宽度和扩展控制 |
+| 同名 `mem_*` 端口 | out | 同输入 | 上述字段的寄存输出，命名与 §6.2 一致 |
+
+`mem_wb_stage` 每个上升沿都捕获一组输入，不提供 hold/enable 端口。上游停顿时必须
+显式送 `in_valid=0`，让旧有效槽提交一次后排空；若加 hold 会造成重复提交风险。
+
+复位分支必须令 `mem_valid=0`；其余 payload 可清零改善波形，但功能不得依赖清零。
+输出在整拍内稳定，直接驱动 DMEM 地址/写口、load 扩展、regfile 写回和转发记录。
+
+### 12.6 接口验收点
+
+- lint/编译证明端口宽度与 §6.2 完全一致，无隐式网络或截断；
+- 单元 tb 检查正常捕获、气泡覆盖旧槽、复位清 valid，且不存在 hold；
+- `id_ex_stage` 输入变化只产生组合变化，不额外延迟一拍；
+- `mem_wb_stage` 的一个有效输入只允许形成一次提交；
+- debug 字段 `instr/pc` 不参与功能控制，删除其观测用途不应改变结果。
+
+## 13. `forwarding.v`、`hazard.v` 与 `core_top.v` 接口
+
+### 13.1 `forwarding.v`
+
+`forwarding` 为纯组合模块，无 `clk/rst_n`。端口固定如下：
+
+| 端口组 | 方向 | 位宽 | 语义 |
+|:---|:---:|:---:|:---|
+| `enable` | in | 1 | 顶层 `ENABLE_FORWARDING` 常量 |
+| `uses_rs1/uses_rs2` | in | 1/1 | 两个源是否真实使用 |
+| `rs1_addr/rs2_addr` | in | 5/5 | 消费者源地址 |
+| `rs1_data/rs2_data` | in | 32/32 | regfile 原始读值 |
+| `ex_valid/ex_we/ex_ready` | in | 1/1/1 | EX 来源状态 |
+| `ex_rd/ex_data` | in | 5/32 | EX 来源目的和值 |
+| `mem_valid/mem_we/mem_ready` | in | 1/1/1 | MEM 来源状态 |
+| `mem_rd/mem_data` | in | 5/32 | MEM 来源目的和值 |
+| `wb_valid/wb_we` | in | 1/1 | WB 来源状态 |
+| `wb_rd/wb_data` | in | 5/32 | WB 来源目的和值 |
+| `rs1_fwd/rs2_fwd` | out | 32/32 | 按 §8 优先级选择后的值 |
+| `rs1_sel/rs2_sel` | out | 2/2 | 波形与覆盖使用的来源编码 |
+
+选择编码固定为 `00=RF、01=WB、10=MEM、11=EX`。`enable=0` 时两个 sel 均为
+`00`；地址为 x0 时输出固定为 0。两个操作数的选择逻辑完全独立。
+
+### 13.2 `hazard.v`
+
+`hazard` 同样为纯组合模块，只产生控制决策，不保存 stall 计数：
+
+| 端口组 | 方向 | 位宽 | 语义 |
+|:---|:---:|:---:|:---|
+| `enable_forwarding` | in | 1 | 与顶层参数相同 |
+| `c_valid/c_uses_rs1/c_uses_rs2` | in | 1/1/1 | ID+EX 消费者状态 |
+| `c_rs1/c_rs2` | in | 5/5 | 消费者源地址 |
+| `p_valid/p_we/p_is_load` | in | 1/1/1 | MEM+WB 生产者状态 |
+| `p_rd` | in | 5 | 生产者目的寄存器 |
+| `muldiv_wait` | in | 1 | §10 定义的 M 等待 |
+| `branch_taken/jump_taken` | in | 1/1 | ID+EX 原始控制裁决 |
+| `data_stall` | out | 1 | §9.2 的 RAW 停顿 |
+| `front_stall` | out | 1 | `data_stall || muldiv_wait` |
+| `ex_accept` | out | 1 | `c_valid && !front_stall` |
+| `redirect/if_flush` | out | 1/1 | 接受的 taken 控制转移；二者同值 |
+| `mem_in_valid` | out | 1 | 等于 `ex_accept`，送 MEM+WB 输入 valid |
+
+`hazard` 不计算 redirect 地址；`core_top` 在 `redirect=1` 时采用
+`id_ex_stage.redirect_target`。合法输出必须满足 `redirect && front_stall == 0`。
+
+### 13.3 v1 `core_top.v` 对外接口
+
+模块声明增加一个顶层参数，端口列表保持 v0 完全不变：
+
+```verilog
+module core_top #(
+    parameter ENABLE_FORWARDING = 1'b1
+) (
+    input wire clk, input wire rst_n,
+    output wire [31:0] imem_addr, input wire [31:0] imem_rdata,
+    output wire [31:0] dmem_addr, output wire [31:0] dmem_wdata,
+    output wire [3:0] dmem_be, output wire dmem_we,
+    input wire [31:0] dmem_rdata
+);
+```
+
+因此现有 `soc_top` 无参数覆盖时自动使用转发档，不需要改变 SoC 外部接口。
+无转发 tb 用 elaboration 参数覆盖为 0，禁止复制或编辑 `core_top.v`。
+
+### 13.4 `core_top` 实例与状态归属
+
+| 对象 | 实例/状态 | 归属 |
+|:---|:---|:---|
+| 取指 | `pc`、`if_stage` | PC、同步 IMEM 接口、hold/flush |
+| 执行 | `id_ex_stage` | decode、ALU、原始控制裁决 |
+| 数据相关 | `regfile`、`forwarding`、`hazard` | 操作数、旁路和 stall |
+| 多拍执行 | `muldiv`、`muldiv_pending` | 单元实例与 core 内 1 位状态 |
+| 提交 | `mem_wb_stage` | 唯一新增边界寄存器 |
+| MEM/WB 组合 | core 内连线 | DMEM、load 扩展、写回与提交记录 |
+
+`decode` 和 `alu` 由 `id_ex_stage` 例化，其余模块由 `core_top` 例化。
+`ENABLE_FORWARDING` 同时连接 forwarding.enable 与 hazard.enable_forwarding。
+
+### 13.5 三类来源在合并三级中的映射
+
+- EX 视图：MEM+WB 中 `wb_sel=ALU` 的 `mem_result`，表示上一拍 EX 形成的值；
+- MEM 视图：MEM+WB 中 `wb_sel=load` 的扩展后 `load_data`；load-use 时值可形成但消费者不接受；
+- WB 视图：MEM+WB 中 `wb_sel=PC+4/M` 的最终 `wb_data`；
+- 三类均携带当前槽的 valid、we、rd，且不得绕过 `mem_valid`。
+
+该映射只是来源分类；三个视图共享一个 MEM+WB 物理槽，不增加寄存器级。
+forwarding 的通用优先级仍按 §8 固定，单元 tb 必须独立覆盖多重命中。
+
+### 13.6 顶层接口验收点
+
+- v1 默认参数下现有 `soc_top` 与所有存储器 tb 无端口改动即可编译；
+- 参数 0/1 两档均来自同一文件列表，仅 elaboration 参数不同；
+- `redirect/front_stall` 互斥，`mem_in_valid` 在每种 stall/done 情况符合逐拍表；
+- 所有 regfile/DMEM 写使能最终包含 `mem_valid`，x0 写入被抑制；
+- Verilog 编译不得出现隐式 wire、位宽截断或组合环路警告。
+
+## 14. 指标、验证与证据契约
+
+### 14.1 功能回归门禁
+
+v1 必须与 v0 跑相同 RV32IM 功能集合，并增加三级专项：
+
+| 门禁 | 一键入口/判据 |
+|:---|:---|
+| v1+转发 | `bash sim/scripts/run_iverilog.sh v1_fwd` 全 PASS |
+| v1无转发 | `bash sim/scripts/run_iverilog.sh v1_nofwd` 全 PASS |
+| 全量 | `bash sim/scripts/run_iverilog.sh all` 包含上述两档及现有模块/SoC 测试 |
+| arch-test | 对同一用例清单逐项运行 `run_arch_test.sh <name> <ext>`，两档签名一致 |
+| RV32IM | 八种 M、除零、溢出及整核 `tohost=142879` |
+| 冒险专项 | R-type 零气泡；load-use 1 气泡；taken 控制转移 1 气泡 |
+
+任何 PASS 必须来自仓库内 tb 和脚本；命令、工具版本、commit、参数与原始输出归档。
+v0 在 tag `partA-v0` 上复现，v1 两档在同一 commit 上复现。
+
+### 14.2 CPI 统计口径
+
+主指标固定为同一三级核的 v1+转发相对 v1无转发，v0 两级只作参考锚点：
+
+```text
+cycles  = rst_n 释放后到首次终止 tohost 写入之间的核时钟拍数
+retired = 同一窗口内 wb_valid=1 的指令数；气泡不计，M 指令只计一次
+CPI     = cycles / retired
+gain    = (CPI_nofwd - CPI_fwd) / CPI_nofwd * 100%
+```
+
+两档必须使用同一 hex、初始内存、终止条件、最大周期和计数代码。主验收为
+`gain >= 25%`；连续相关 R-type 在流水填充后数据气泡为 0、局部 CPI≈1。
+load-use、muldiv 与 taken 分支的等待拍均计入 cycles，禁止从数据中删除。
+
+原始日志写入 `data/logs/`，波形/覆盖证据写入 `data/evidence/`，汇总数值写入
+`data/metrics.csv`；表格必须链接原始日志，禁止只留手抄结果。
+
+### 14.3 Vivado 与频率门禁
+
+- 使用同器件 `xc7z020clg400-1`、同 Vivado 版本和同报告口径比较 v0/v1；
+- 每个报告点必须满足 WNS≥0、无未约束内部端点、无 Error/Critical Warning DRC；
+- Part B 基本验收：v1 功能通过，实际最高通过频率相对 v0 提升或持平；
+- 125 MHz 是非阻塞加分目标，未经 WNS≥0 不得直接把板载 125 MHz 接入核；
+- 到收尾时间盒仍未通过 125 MHz：保留实测最高通过频率，停止追频并启动 L3；
+- L3 固定为“两级 + 完整转发”，不得因追频拖慢 M1 功能与 CPI 收口。
+
+报告保存于 `build/reports/`，至少包含 utilization、timing summary、worst paths、
+clock utilization、check_timing、DRC 和 Vivado 版本。bitstream 只能在门禁后生成。
+
+### 14.4 板级表述与证据
+
+生成 bitstream 或 `PROGRAM PASSED` 均不能单独记为“已上板通过”。只有实际下载
+PYNQ-Z2，并观察到约定 LED/tohost 现象，才可追加 board 日志；报告须记录 bitstream
+对应 commit、核时钟、Vivado 版本、连接方式和观察结果。当前已验证 40 MHz 属 v0；
+v1 未重新下载和观察前必须标为“待上板”，不得借用 v0 证据。
+
+## 15. 已确认决策 D1–D15
+
+| ID | 已选方案 | 未选方案 | 核心理由 |
+|:---:|:---|:---|:---|
+| D1 | IF / ID+EX / MEM+WB 三级 | 增加独立 EX/MEM/WB 级 | 控制规模与提频收益平衡 |
+| D2 | 同步 IMEM 计入 IF，仅两个边界 | IMEM 后再固定打一拍 | 避免实际变四级 |
+| D3 | 同 RTL + 顶层参数切转发 | 复制或手改源码 | 公平、可复现的单变量对比 |
+| D4 | `962a4f5` 标记 `partA-v0` | 用移动分支名作基线 | v0 锚点不可漂移 |
+| D5 | 显式 valid 门控所有副作用 | 只把 instr 改 NOP | 控制残留不能误提交 |
+| D6 | `EX > MEM > WB > RF` | 固定选旧来源 | 最近生产者优先 |
+| D7 | decode 输出 uses_rs1/uses_rs2 | 只比较指令位域 | 排除伪 RAW |
+| D8 | load-use 固定停 1 拍 | DMEM→ALU 零拍旁路 | 缩短关键组合路径 |
+| D9 | 转发覆盖 ALU/branch/JALR/store/M | 只覆盖 ALU | 所有真实消费者语义一致 |
+| D10 | ID+EX 裁决、taken 冲刷 1 槽 | Part B 引入 BHT | 先保证静态语义，预测留 Part C |
+| D11 | M 留在 ID+EX，MEM+WB 排空 | 冻结全部流水 | 防止较老指令重复提交 |
+| D12 | M done 经 MEM+WB 统一写回 | done 直接写 regfile | 单一提交与转发口径 |
+| D13 | core_top 原位演进，v0 用 tag 留存 | 长期维护两份 core | 避免接口和修复分叉 |
+| D14 | CPI 主比 v1开/关转发 | 相对 v0 宣称降 25% | v0 CPI≈1，不是有效降幅基线 |
+| D15 | 125 MHz 非阻塞时间盒 + L3 | 无限追频 | 功能正确和 CPI 优先 |
+
+D1–D15 已由用户全部确认，契约阶段无未决微架构选项。D4 标签与交叉引用已在
+1B-10 完成；若实现证据推翻假设，必须先回到文档提出新决策，不得静默改 RTL。
+
 ## 99. 契约编写状态
 
 - [x] 三级拍序、流水寄存器字段及裁剪规则；
 - [x] 转发真值表、mux 优先级与关闭转发模式；
 - [x] load-use、flush、stall 的逐拍行为；
 - [x] RV32M 多拍流控；
-- [ ] 存储器与 regfile 三级语义；
-- [ ] 新增模块端口和位宽；
-- [ ] CPI、回归、Vivado 与板级验收；
-- [ ] 待拍板决策、v0/plan 交叉引用及决策记录。
+- [x] 存储器与 regfile 三级语义；
+- [x] forwarding/hazard/core 端口和位宽；
+- [x] CPI、回归、Vivado 与板级验收；
+- [x] D1–D15 已确认决策；
+- [x] v0/plan 交叉引用及决策记录定稿。
 

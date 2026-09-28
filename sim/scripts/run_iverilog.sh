@@ -4,6 +4,7 @@
 #   bash sim/scripts/run_iverilog.sh          # 全量回归（含 CoreMark，约 2,100 万周期）
 #   bash sim/scripts/run_iverilog.sh v0       # v0 回归集合（冒烟 + 逐指令自检）
 #   bash sim/scripts/run_iverilog.sh fwd      # 转发专项（数据冒险 / 分支气泡，v0 对照档）
+#   bash sim/scripts/run_iverilog.sh decode   # 译码源操作数使用标志
 #   bash sim/scripts/run_iverilog.sh muldiv   # RV32M 乘除单元模块级自检
 #   bash sim/scripts/run_iverilog.sh rv32im   # RV32IM 固件整核冒烟
 #   bash sim/scripts/run_iverilog.sh imem     # 32KB 同步读指令存储器模块级自检
@@ -20,6 +21,7 @@ MODE="${1:-all}"
 case "$MODE" in
     v0)  TBS=(riscv/tb_core_smoke.v riscv/tb_core_test.v) ;;
     fwd) TBS=(riscv/tb_core_fwd.v) ;;
+    decode) TBS=(riscv/tb_decode.v) ;;
     muldiv) TBS=(riscv/tb_muldiv.v) ;;
     rv32im) TBS=(riscv/tb_core_muldiv.v) ;;
     imem) TBS=(riscv/tb_imem.v) ;;
@@ -28,8 +30,8 @@ case "$MODE" in
     soc) TBS=(riscv/tb_soc_top.v) ;;
     soc_check) TBS=(riscv/tb_soc_check.v) ;;
     bench) TBS=(riscv/tb_core_coremark.v) ;;
-    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_fwd.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_core_coremark.v riscv/tb_soc_top.v riscv/tb_soc_check.v) ;;
-    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|muldiv|rv32im|imem|dmem|coremark|soc|soc_check|bench|all]"; exit 1 ;;
+    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_fwd.v riscv/tb_decode.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_core_coremark.v riscv/tb_soc_top.v riscv/tb_soc_check.v) ;;
+    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|decode|muldiv|rv32im|imem|dmem|coremark|soc|soc_check|bench|all]"; exit 1 ;;
 esac
 
 cd "$(dirname "$0")/.."          # -> sim/

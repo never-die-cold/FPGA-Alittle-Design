@@ -1,8 +1,9 @@
 # v0 接口设计：RV32I 两级流水基线核
 
-> 状态：📌 RV32I 接口冻结（2026-09-11）；RV32M 接口冻结（2026-09-20），Part A 收口中
+> 状态：📌 Part A v0 已冻结并收口；锚点为 commit `962a4f5` / tag `partA-v0`
 > 依据：`plan.md` 部分 A「两级流水基线核 v0」——先打通工具链闭环，拿下后续一切对比的锚点数据。
 > 本文是 v0 RTL 开发与 testbench 的唯一接口权威；改动须在 `report/llm_log/` 留决策记录。
+> Part B/C 的三级流水、转发与冒险接口以 [`design_v1.md`](design_v1.md) 为准，不反向修改 v0 语义。
 
 ---
 
@@ -336,11 +337,11 @@ flowchart LR
 - [x] `alu.v` + RV32I 算术逻辑类（2026-09-11）
 - [x] 访存 / 分支 / 跳转 + `core_top` 连通（2026-09-11，`hello_v0` 冒烟 PASS）
 - [x] 冒烟 tb 逐指令补齐（2026-09-11，`hello_test` 38 用例全过）
-- [ ] 最小 SoC 外壳（仿真）+ 上板冒烟（镜像 `hello_v0.hex`，预期 LED=`1101`）
+- [x] 最小 SoC 外壳（仿真）+ 上板冒烟（`hello_v0.hex`，实测 LED=`1101`）
 - [x] 板级 125 MHz 经 MMCM 降至 40 MHz 后驱动 v0 核；Vivado 2026.1 实现 WNS=+0.142 ns、WHS=+0.071 ns
 - [x] M 扩展 `muldiv.v` 收尾（`hello.hex` RV32IM 整核冒烟 `tohost=142879`）
-- [ ] 按 §3 的 32KB 契约完成 SoC 外壳与真实上板验收
-- [ ] 基线 CPI / Fmax 记录 `report/`
+- [x] 按 §3 的 32KB 契约完成 SoC 外壳与真实上板验收
+- [x] 基线 CPI / Fmax 已记录于 `data/metrics.csv` 与 `build/reports/`
 
 ## 11. 变更记录
 
@@ -354,3 +355,4 @@ flowchart LR
 | 2026-09-23 | 冻结 SoC LED/tohost 行为与板级时钟：`hello_v0.hex` → `tohost=13` → LED=`1101`；125 MHz 初定经 MMCM 降至 50 MHz；2026-09-25 根据实现时序修订为 40 MHz，真实下载并观察后才算上板 | `report/llm_log/2026-09-23-partA-soc-onboard.md` |
 | 2026-09-25 | 50 MHz 实现 WNS=-0.214 ns，门禁未生成 bitstream；安全核时钟调整为 40 MHz（125×8÷25），仍要求 WNS≥0 | `report/llm_log/2026-09-23-partA-soc-onboard.md` |
 | 2026-09-28 | Part A 收口：冻结计时计数器 `0x8000_8000`（只读、同拍、界外译码）与软复位语义（不清 IMEM/DMEM，`hello_v0` 重跑 `tohost=65`/LED=`0001`）；`soc_top` 增加 `DMEM_INIT_FILE` 双口预载 | `report/llm_log/2026-09-28-partA-closure.md` |
+| 2026-09-28 | Part A 状态收口；增加 v1 交叉引用，v0 语义继续冻结 | `design_v1.md`、tag `partA-v0` |
