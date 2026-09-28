@@ -43,7 +43,7 @@ mingw-w64-ucrt-x86_64-riscv32-unknown-elf-newlib 4.5.0.20241231-1
 ## 构建
 
 ```powershell
-mingw32-make          # 产出 hello.*（RV32IM）、hello_v0.*（RV32I）、hello_test.*（逐指令自检）
+mingw32-make          # 另产出 soc_check.*、bench_v0_1.* 与 CoreMark 镜像
 mingw32-make clean
 ```
 
@@ -64,6 +64,8 @@ mingw32-make clean
 | `main_v0.c` → `hello_v0.hex` | RV32I | `tohost = 13`（`0xD`），`tohost_exit = 0` | **v0 核程序级冒烟**（`sim/riscv/tb_core_smoke.v`） |
 | `test_rv32i.S` → `hello_test.hex` | RV32I | `tohost_exit = 0`；失败则为用例编号（1–38） | **RV32I 逐指令自检**（`sim/riscv/tb_core_test.v`） |
 | `main.c` → `hello.hex` | RV32IM | `tohost = 142879`（`0x22E1F`），`tohost_exit = 0` | Part A 收尾补 M 后上核 |
+| `soc_check.c` → `soc_check.hex` | RV32I | `tohost = 0x534F4301` | DMEM 预载与计时器真实指令路径 |
+| `bench_v0_1.c` → `bench_v0_1.hex` | RV32IM | checksum `0x1385CBD1` | 自写 benchmark 与 CPI harness |
 
 > 观测约定：`main` 写结果值到 `tohost`（`0x8000_3FF0`）；`start.S` 写退出码到 `tohost_exit`（`0x8000_3FF4`）——两者分离，退出码不会覆盖结果值。
 
