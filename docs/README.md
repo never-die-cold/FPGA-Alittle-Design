@@ -7,14 +7,14 @@
 ## 项目三句话
 
 1. 是什么：在 PYNQ-Z2 上做一颗自研三级流水 RISC-V 软核 + HDMI 视觉直通流水线 + 轻量 CNN 协处理器，构成片上视觉分析仪（2026 嵌赛 FPGA 赛道 · AMD 自主选题）。
-2. 现在到哪：M1 Part A 完成——v0 两级流水核（RV32IM）仿真全过，CoreMark v0 跑分 1.506 CoreMark/MHz；下一步是 Part B 三级流水 + 转发（9/25–9/28）。
+2. 现在到哪：Part A 已收口（tag `partA-v0`）；Part B 契约冻结、R1 译码标志落地，转发/冒险 RTL 进行中；模块二单元级提前完成（10/10 tb PASS）；M1 验收 10/4。
 3. 计划和验收：看 `src/riscv/plan.md`；接口契约看 `src/riscv/design_v0.md`（唯一权威）。
 
 ## 目录地图（每个目录一句话）
 
 | 目录 | 是什么 |
 |:---|:---|
-| `src/` | 设计源码。`riscv/` 是核心（RTL + plan + design_v0）；`riscv_fw/` 裸机固件；`vision/`、`coprocessor/`、`pynq_host/` 是 M2+ 占位 |
+| `src/` | 设计源码。`riscv/` 是核心（RTL + plan + design_v0）；`riscv_fw/` 裸机固件；`vision/` 单元级已完成；`coprocessor/`、`pynq_host/` 是 M2/M3 占位 |
 | `sim/` | 验证。`riscv/` 放 tb；`scripts/run_iverilog.sh` 一键回归；`arch_test/` 第三方套件（脚本拉取，不入库） |
 | `build/` | Vivado 可复现构建（build.tcl + constraints + 综合报告） |
 | `board/` | 上板。`smoke_test/` 工程、`setup.md` 复现指南、`logs/` 上板实测记录（只追加） |
@@ -31,7 +31,10 @@
 | 仿真 / Vivado 构建日志 | `data/logs/` |
 | 上板实测记录 | `board/logs/` |
 | 协作记录 / 决策过程 | `report/llm_log/` |
-| 计划、排期、验收 | `src/riscv/plan.md`；专项计划在 `docs/` 对应文档 |
+| 计划、验收标准 | `src/riscv/plan.md`；专项计划在 `docs/` 对应文档 |
+| 每日任务、交接与风险 | `src/riscv/plan_calendar.md` |
+| Part B 验证与验收执行清单 | `docs/partB-verify-plan.md` |
+| 模块三训练与量化前期 | `docs/module3-model-training.md` |
 | 接口定义（唯一权威） | `src/riscv/design_v0.md` |
 | 指标数值 | `data/metrics.csv` |
 | 证据（golden、源码溯源） | `data/evidence/`、`data/golden/` |
@@ -43,7 +46,7 @@
 2. 本文件——目录与归属
 3. `docs/onboarding.md`——Git / Markdown / Agent 操作
 4. `docs/workflow.md`——开工三件事、理解门槛、收尾四件套
-5. 按分工读 `src/riscv/plan.md`（排期）与 `src/riscv/design_v0.md`（契约）
+5. 按分工读 `src/riscv/plan.md`（分工/验收）与 `src/riscv/plan_calendar.md`（每日任务），接口看 `src/riscv/design_v0.md`
 
 ## 日常三条规矩（浓缩版）
 

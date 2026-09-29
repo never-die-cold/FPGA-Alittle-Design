@@ -5,17 +5,18 @@
 > 📋 剩余计划（三级+转发 / 预测+验证）与技术栈学习路线见 [plan.md](plan.md)；已完成部分（阶段 0 / 第一阶段 / Part A）原文与证据归档见 [done/m1-first-phase-completed.md](done/m1-first-phase-completed.md)。
 > 🔧 v0 接口冻结（模块划分 / 信号表 / 控制真值表）：[design_v0.md](design_v0.md)。
 
-## 规划内容
+## v1 规划内容（待实现）
 
-- `core_top.v`：核顶层，例化各级流水与互连
-- `if_stage.v`：取指级（PC、分支预测 BHT）
+- `core_top.v`：核顶层，例化各级流水与互连（v1 改造）
 - `id_ex_stage.v`：译码 + 执行级（译码、ALU、乘除单元、转发裁决）
 - `mem_wb_stage.v`：访存 + 写回级
 - `forwarding.v`：数据转发（旁路）单元
 - `hazard.v`：冒险检测与流水线暂停（Stall）控制
 - `branch_predict.v`：1-bit/2-bit 分支历史表
-- `regfile.v`：32×32 通用寄存器堆
-- `csr.v`：控制状态寄存器（按需裁剪）
+- `decode.v`：译码（R1 已加 `uses_rs1/uses_rs2` 源使用标志）
+- `regfile.v` / `alu.v` / `pc.v` / `muldiv.v`：v0 已有，v1 沿用
+
+> v1 模块接口与拍序以 `design_v1.md` 冻结契约为准。
 
 ## SoC 外壳与集成（原 `src/soc/` 并入本目录）
 
@@ -33,7 +34,7 @@
 
 ## 版本基线
 
-- `v0`：两级流水基线（用于 CPI/主频对照）
-- `v1`：三级流水 + 转发 + 分支预测（目标版本）
+- `v0`：两级流水基线（已收口，锚点 tag `partA-v0` = `962a4f5`，接口见 `design_v0.md`）
+- `v1`：三级流水 + 转发 + 分支预测（契约已冻结，见 `design_v1.md`；转发/冒险/三级重构 RTL 待实现）
 
-> 状态：🚧 待开发（M1 里程碑）
+> 状态（2026-09-29）：v0 与 Part A 收口完成；v1 契约定稿、R1 译码源使用标志已落地并通过回归；剩余 RTL 按 10/2 交付、10/4 验收推进。
