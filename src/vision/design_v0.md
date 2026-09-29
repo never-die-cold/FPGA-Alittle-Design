@@ -55,7 +55,9 @@ ADV7611 HDMI IN ──像素时钟域──> 输入对齐/24bit RGB ──> rgb2
 - `sobel.v`：窗口装配/冲刷与 gaussian 同构；Gx/Gy L1 幅值 `|Gx|+|Gy|` 8 位饱和。黄金参考 `data/golden/vision/sobel/`。
 - `scaler.v`：16.16 定点双线性（坐标 `(2d+1)S/(2D)-0.5` clamp，fx/fy 高 8 位，两级 8bit lerp）；NLINES 行槽滑动缓存 + 2 拍/像素双相位随机列读；发射与源写入解耦（未就绪挂起、hs 续发）。约束：NLINES 为 2 的幂，行步进 ≤ NLINES-2；吞吐 1 像素/2 拍（缩小档充足）。黄金参考 `data/golden/vision/scaler/`。
 - `tb_chain.v` / `tb_fullchain.v`：两级与三级（rgb2gray→gaussian→scaler）级联冒烟；末端对拍 `data/golden/vision/fullchain/expected_fullchain.hex`，中间级同时对拍单级 golden。
-- 回归入口：`bash sim/scripts/run_vision_iverilog.sh [rgb2gray|linebuf|gaussian|scaler|sobel|chain|fullchain|all]`（模块二独立 harness，不进模块一 `all`，tb 在 `sim/vision/`）。
+- `osd_overlay.v`：灰度流直通 + 两个 1px 描边框（box 检测框 / roi），命中像素以各自颜色替换、重叠 box 优先；**参数在帧首 vs 锁存**——帧内改参数不影响当前帧（A4 动效换帧生效语义），tb 以双帧 golden 验证锁存。黄金参考 `data/golden/vision/osd/`。
+- `axi_regs.v`：AXI-Lite 从机参数寄存器堆（NREG=16，映射 v0.1 见模块头注释：R0 控制开关 / R1–R5 检测框 / R6–R10 ROI / R11–R15 保留）。要点：**AW 默认 7，须满足 2^AW > NREG*4**——AW=6 时地址空间恰好被寄存器占满，越界判别永远无法触发（tb 实测教训，2026-09-29）；保留区写忽略读 0；wstrb 字节使能；读写通道序列化握手；复位全零（control 默认全关，防 X 传播）。单元级单时钟域，PS↔PL 跨时钟由 vision_top 评审定。黄金参考无（协议 tb：BFM 确定性拍数驱动）。
+- 回归入口：`bash sim/scripts/run_vision_iverilog.sh [rgb2gray|linebuf|gaussian|scaler|sobel|chain|fullchain|osd|axi|all]`（模块二独立 harness，不进模块一 `all`，tb 在 `sim/vision/`）。
 
 ### 3.2 级间标记约定 v0.2（tb_fullchain 通过后确立，10/5 评审确认）
 
