@@ -151,13 +151,13 @@ edgesight/
 ├── README.md            # 本文件（项目简介 + 复现步骤，指南 §3.3.5.4 提交物要求）
 ├── LICENSE              # MIT 协议
 ├── src/                 # 设计源码（RTL / 固件 / PS 侧软件）
-│   ├── riscv/           # RISC-V 核 RTL（v0 两级流水已可仿真；含 SoC 外壳；plan/design 文档齐备）
-│   ├── vision/          # HDMI 预处理流水线 RTL（占位）
-│   ├── coprocessor/     # CNN 推理协处理器 RTL（占位）
+│   ├── riscv/           # RISC-V 核 RTL（v0 已收口；v1 契约冻结、RTL 进行中；含 SoC 外壳）
+│   ├── vision/          # HDMI 预处理流水线 RTL（单元级已完成 10/10 PASS）
+│   ├── coprocessor/     # CNN 推理协处理器 RTL（10/5 开工）
 │   ├── riscv_fw/        # RISC-V 裸机固件（冒烟 / 逐指令自检 / 后续 benchmark）
 │   └── pynq_host/       # PS 侧 Jupyter 上位机：配置、采集、比对（占位）
 ├── sim/                 # testbench、仿真脚本（scripts/ 一键 iverilog；tools/ 含 RV32I 编解码自测）
-├── build/               # Vivado 可复现构建 tcl + 综合/实现报告（占位）
+├── build/               # Vivado 可复现构建 tcl + 综合/实现报告
 ├── board/               # 上板工程、运行脚本、实测输出（占位）
 ├── data/                # 测试数据与参考结果（metrics.csv 指标汇总 + logs/ + scripts/ + evidence/）
 ├── skill/                 # 技能包（含 understand-gate 入库理解门槛 skill，OpenCode 自动加载位说明见其文件头）
@@ -193,7 +193,7 @@ edgesight/
 | 阶段 | 时间 | 里程碑 |
 |:---|:---|:---|
 | 报名与选型 | 7.6 – 9.22 | 完成注册；搭建 Vivado/PYNQ 环境；RISC-V 核两级基线跑通单条指令 |
-| M1：内核成型 | 9/14 – 10/1 | 三级流水 + 转发 + 分支预测完成，仿真全过；CPI/主频基线数据出炉（日粒度排期见 [src/riscv/plan.md](src/riscv/plan.md)；2026-09-21 压缩提前，原 10/4） |
+| M1：内核成型 | 9/14 – 10/4 | 10/2 交付三级核 RTL；10/4 完成功能、性能和证据验收 |
 | M2：协处理器 + 预处理 | 10/2 – 10/12 | 预处理流水线 HDMI 直通演示；CNN 协处理器跑通首个网络 |
 | M3：系统集成 | 10/13 – 10/20 | SoC 全链路闭环上板演示；全部指标实测采集完成 |
 | M4：文档冲刺 | 10/21 – 10/26 | 设计报告、协作记录、Skill、演示视频收尾（里程碑内边做边写摊薄） |
@@ -201,7 +201,9 @@ edgesight/
 | **作品提交** | **11.4 18:00 截止** | 提交全套材料 |
 | 决赛准备 | 11 月 | 答辩演练（决赛 11.20–11.22 南京） |
 
-> **检查点体系（2026-09-20 起）**：里程碑即阶段检查点，验收单 = gate issue——M1 拆三个：[#19 Part A（9/27）](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/19)、[#20 Part B（9/28）](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20)、[#21 Part C + M1 收口（10/1）](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)；M2–M4 里程碑（due 10/12 / 10/20 / 10/26，2026-09-21 压缩前移）。验收清单引用 [src/riscv/plan.md](src/riscv/plan.md) 对应章节，全勾后关闭。
+详细分工、验收标准见 [开发计划](src/riscv/plan.md)，每日任务见 [执行日历](src/riscv/plan_calendar.md)。
+
+M1 检查点为 [#19 Part A](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/19)、[#20 Part B](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20) 和 [#21 Part C / M1 收口](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)；#20、#21 在 10/4 联合验收。
 
 ---
 
