@@ -32,6 +32,8 @@
 | 上板实测记录 | `board/logs/` |
 | 协作记录 / 决策过程 | `report/llm_log/` |
 | 计划、排期、验收 | `src/riscv/plan.md`；专项计划在 `docs/` 对应文档 |
+| Part B 验证与验收执行清单 | `docs/partB-verify-plan.md` |
+| 模块三训练与量化前期 | `docs/module3-model-training.md` |
 | 接口定义（唯一权威） | `src/riscv/design_v0.md` |
 | 指标数值 | `data/metrics.csv` |
 | 证据（golden、源码溯源） | `data/evidence/`、`data/golden/` |
