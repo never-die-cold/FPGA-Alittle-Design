@@ -18,6 +18,8 @@ module decode (
     output reg         sign_ext,
     output reg  [2:0]  branch_type,
     output reg  [1:0]  jump_type,
+    output reg         uses_rs1,
+    output reg         uses_rs2,
     output reg         muldiv_valid,
     output reg  [2:0]  muldiv_op
 );
@@ -76,6 +78,8 @@ module decode (
         sign_ext    = 1'b0;
         branch_type = 3'd0;
         jump_type   = 2'd0;
+        uses_rs1     = 1'b0;
+        uses_rs2     = 1'b0;
         muldiv_valid = 1'b0;
         muldiv_op    = 3'd0;
 
@@ -98,12 +102,15 @@ module decode (
                 jump_type = 2'd1;
             end
             OP_JALR: begin
+                uses_rs1 = 1'b1;
                 imm_type  = 3'd0;
                 wb_sel    = WB_PC4;
                 reg_write = 1'b1;
                 jump_type = 2'd2;
             end
             OP_BRANCH: begin
+                uses_rs1 = 1'b1;
+                uses_rs2 = 1'b1;
                 imm_type  = 3'd2;
                 alu_a_sel = A_RS1;
                 alu_b_sel = B_RS2;
@@ -119,6 +126,7 @@ module decode (
                 endcase
             end
             OP_LOAD: begin
+                uses_rs1 = 1'b1;
                 imm_type  = 3'd0;
                 reg_write = 1'b1;
                 mem_read  = 1'b1;
@@ -132,6 +140,8 @@ module decode (
                 endcase
             end
             OP_STORE: begin
+                uses_rs1 = 1'b1;
+                uses_rs2 = 1'b1;
                 imm_type  = 3'd1;
                 mem_write = 1'b1;
                 case (funct3)
@@ -141,6 +151,7 @@ module decode (
                 endcase
             end
             OP_IMM: begin
+                uses_rs1 = 1'b1;
                 imm_type  = 3'd0;
                 reg_write = 1'b1;
                 case (funct3)
@@ -156,6 +167,8 @@ module decode (
                 endcase
             end
             OP_REG: begin
+                uses_rs1 = 1'b1;
+                uses_rs2 = 1'b1;
                 alu_a_sel = A_RS1;
                 alu_b_sel = B_RS2;
                 reg_write = 1'b1;
