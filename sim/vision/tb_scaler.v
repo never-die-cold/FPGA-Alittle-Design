@@ -5,20 +5,33 @@ module tb_scaler;
     reg clk, rst_n, in_vs, in_hs, in_de;
     reg [7:0] in_y;
     wire out_de;
+    wire s_vs, s_hs;
     wire [7:0] out_y;
-    integer checked, errors, l, c;
+    integer checked, errors, l, c, vs_cnt, hs_cnt;
+    reg seen_vs;
     reg [7:0] gray [0:127];
     reg [7:0] exp  [0:511];
 
     scaler #(.SW(16), .SH(8), .DW(32), .DH(16), .NLINES(16)) dut (
         .clk(clk), .rst_n(rst_n),
         .in_vs(in_vs), .in_hs(in_hs), .in_de(in_de), .in_y(in_y),
-        .out_de(out_de), .out_y(out_y)
+        .out_vs(s_vs), .out_hs(s_hs), .out_de(out_de), .out_y(out_y)
     );
     always #5 clk = ~clk;
 
     always @(posedge clk) begin
+        if (rst_n) begin
+            if (s_vs) begin vs_cnt = vs_cnt + 1; seen_vs = 1; end
+            if (s_hs) hs_cnt = hs_cnt + 1;
+        end
+    end
+
+    always @(posedge clk) begin
         if (rst_n && out_de) begin
+            if (!seen_vs) begin
+                errors = errors + 1;
+                $display("FAIL: out_de before out_vs");
+            end
             if (out_y !== exp[checked]) begin
                 errors = errors + 1;
                 $display("FAIL: out[%0d]=%02x exp=%02x", checked, out_y, exp[checked]);
@@ -30,7 +43,7 @@ module tb_scaler;
 
     initial begin
         clk = 0; rst_n = 0; in_vs = 0; in_hs = 0; in_de = 0; in_y = 0;
-        checked = 0; errors = 0;
+        checked = 0; errors = 0; vs_cnt = 0; hs_cnt = 0; seen_vs = 0;
         $readmemh("../data/golden/vision/scaler/input_gray.hex", gray);
         $readmemh("../data/golden/vision/scaler/expected_y.hex", exp);
         repeat (4) @(negedge clk);
@@ -47,8 +60,9 @@ module tb_scaler;
             @(negedge clk);
         end
         repeat (1300) @(negedge clk);   // vblank：发射追赶（512 px * 2 拍 + 余量）
-        if (checked !== 512 || errors !== 0) begin
-            $display("FAIL: collected=%0d errors=%0d (expect 512/0)", checked, errors);
+        if (checked !== 512 || errors !== 0 || vs_cnt !== 1 || hs_cnt !== 16) begin
+            $display("FAIL: collected=%0d errors=%0d vs=%0d hs=%0d (expect 512/0/1/16)",
+                     checked, errors, vs_cnt, hs_cnt);
             $fatal(1);
         end
         $display("PASS: scaler 16x8->32x16, 512 px, 0 errors");

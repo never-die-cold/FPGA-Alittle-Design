@@ -6,7 +6,7 @@
 module tb_fullchain;
     reg clk, rst_n, in_vs, in_hs, in_de;
     reg [23:0] in_rgb;
-    wire g_vs, g_hs, g_de, s_vs, s_hs, s_de, c_de;
+    wire g_vs, g_hs, g_de, s_vs, s_hs, s_de, c_vs, c_hs, c_de;
     wire [7:0] g_y, s_g, c_y;
     integer g_checked, g_errors, s_checked, s_errors, c_checked, c_errors, l, c;
     reg [23:0] rgb       [0:127];
@@ -26,7 +26,7 @@ module tb_fullchain;
     scaler #(.SW(16), .SH(8), .DW(32), .DH(16), .NLINES(16)) u_scaler (
         .clk(clk), .rst_n(rst_n),
         .in_vs(s_vs), .in_hs(s_hs), .in_de(s_de), .in_y(s_g),
-        .out_de(c_de), .out_y(c_y)
+        .out_vs(c_vs), .out_hs(c_hs), .out_de(c_de), .out_y(c_y)
     );
     always #5 clk = ~clk;
 

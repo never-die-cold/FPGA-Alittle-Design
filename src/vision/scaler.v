@@ -29,6 +29,8 @@ module scaler #(
     input  wire       in_hs,
     input  wire       in_de,
     input  wire [7:0] in_y,
+    output reg        out_vs,     // 首行发射前置脉冲（先于首个 out_de >=1 拍）
+    output reg        out_hs,     // 行末像素 out_de 后 1 拍的单拍行尾标记
     output reg        out_de,
     output reg  [7:0] out_y
 );
@@ -57,6 +59,8 @@ module scaler #(
     reg                   pend_valid, last_pending;
     reg [AWY-1:0]         pend_y0, pend_y1;
     reg [FXH-1:0]         pend_fy;
+    // 输出标记：vs 在首行发射前置起；hs 由行末像素 de 输出拍触发（后置 1 拍）
+    reg                   vs_pending, hs_pending, last_px_out;
 
     // 像素坐标（组合，ph0/ph1 期间 x_acc 均为当前像素；先于行槽例化声明）
     wire signed [31:0] xs_shift = x_acc >>> FR;
@@ -156,13 +160,30 @@ module scaler #(
             p00r <= 0; p10r <= 0; data_ready <= 0;
             pend_valid <= 0; last_pending <= 0;
             pend_y0 <= 0; pend_y1 <= 0; pend_fy <= 0;
+            last_px_out <= 0;
+            vs_pending <= 0; hs_pending <= 0;
             out_de <= 0; out_y <= 0;
+            out_vs <= 0; out_hs <= 0;
         end else begin
             out_de <= 0;   // 单拍脉冲默认
+            // 标记寄存：默认清（先）+ 条件置起（后），单拍脉冲
+            vs_pending <= 0;
+            hs_pending <= 0;
+            out_vs <= vs_pending;
+            out_hs <= hs_pending;
 
-            if (start_idle) begin
+            // 帧边界复位：发射状态逐帧重建（多帧复用时 out_row/y_acc 必须归零，
+            // 否则 DH 行发射完后 start_idle 恒假、后续帧永不输出）
+            if (in_vs) begin
+                emitting <= 0; out_row <= 0;
+                y_acc <= INIT_Y;
+                committed <= 0;
+                data_ready <= 0; pend_valid <= 0; last_pending <= 0;
+                last_px_out <= 0;
+            end else if (start_idle) begin
                 emitting <= 1;
                 ph       <= 0;
+                if (out_row == 0) vs_pending <= 1;   // 帧首行发射前置 vs
                 xd       <= 0;
                 x_acc    <= INIT_X;        // 新行从第 0 列坐标开始
                 load_row(idle_y0, idle_y1, idle_fy);
@@ -173,6 +194,10 @@ module scaler #(
                         out_y      <= val[15:8];
                         out_de     <= 1;
                         data_ready <= 0;
+                        if (last_px_out) begin
+                            hs_pending  <= 1;    // 该 de 是行末像素
+                            last_px_out <= 0;
+                        end
                     end
                     if (pend_valid) begin
                         // 末像素已算完，提交下一行坐标
@@ -200,6 +225,7 @@ module scaler #(
                         pend_y1 <= cont_y1;
                         pend_fy <= cont_fy;
                         pend_valid <= 1;
+                        last_px_out <= 1;         // 下一次输出即行末像素
                         if (!more_rows || !cont_ready) last_pending <= 1;
                     end else begin
                         xd    <= xd + 1;
@@ -209,4 +235,6 @@ module scaler #(
             end
         end
     end
+
+    // 标记输出逻辑并入主状态机（单 always，避免多驱动）
 endmodule
