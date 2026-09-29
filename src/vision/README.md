@@ -19,6 +19,22 @@ HDMI 视频流逐像素实时处理：灰度化 → 3×3 高斯滤波 → 双线
 
 实现口径见 [design_v0.md](design_v0.md) §3.1/§3.2；接口契约仍为草案，10/5 评审后升格冻结。
 
+## 验证与复现（watercopper 评审入口）
+
+全部验证可由仓库内脚本一键复现（前置：MSYS2 UCRT64 的 iverilog 13.0+；OOC 另需 Vivado 2026.1）：
+
+| 步骤 | 命令 | 期望 |
+|:---|:---|:---|
+| 黄金参考再生成 | `python data/golden/vision/rgb2gray/gen_rgb2gray.py`（另 gaussian3x3/scaler/sobel/osd/fullchain 各自目录下 `gen_*.py`） | 每个 `PASS`（含定点 vs 浮点自检） |
+| 单元+链路回归 | `bash sim/scripts/run_vision_iverilog.sh all` | 10/10 tb `PASS`，逐像素 0 错误 |
+| 单项回归 | `bash sim/scripts/run_vision_iverilog.sh <rgb2gray\|linebuf\|gaussian\|scaler\|sobel\|chain\|fullchain\|osd\|axi\|top>` | 对应 tb `PASS` |
+| OOC 综合（单元参数） | `bash sim/scripts/run_vivado_vision_ooc.sh unit` | 各模块 `OOC_RESULT` 行 |
+| OOC 综合（720p 行宽） | `bash sim/scripts/run_vivado_vision_ooc.sh real` | 同上，含 BRAM 推断 |
+
+验证方法：每个处理模块由 `data/golden/vision/<模块>/gen_*.py` 生成输入 hex 与期望 hex，tb 逐像素 `!==` 比对，错 1 像素即 FAIL；链路 tb（chain/fullchain/top）中间级与末端同时对拍；OSD 双帧 golden 验证"参数帧首锁存"；tb_scaler 含标记协议断言（vs 每帧 1 次、hs 每行 1 次、vs 先于首个 de）。tb 清单与断言点见 [design_v0.md](design_v0.md) §3.1。
+
+评审关注点（模块二特有的坑，均有 tb 用例覆盖）：line_buffer 先读后写语义、gaussian 末行 vblank 冲刷 + 合成 hs、直通行尾 hs 门控（输入行 0 的 hs 不对应输出行）、scaler 发射/写入解耦与多帧复位、axi_regs 地址空间约束 `2^AW > NREG*4`。
+
 ## 未完成
 
 - HDMI 输入/输出通路选型（ADV7611 I2C/EDID vs Vivado IP）、分辨率/色彩空间、pclk 频率——见 [design_v0.md](design_v0.md) §5。
