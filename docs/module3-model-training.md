@@ -27,6 +27,7 @@
 
 - 网络规模约束：x7z020 资源 + INT8 MAC 阵列规模（等契约），候选为轻量级分类/检测头（层数 ≤8 卷积级、通道 ≤64 量级）；
 - 数据集：随演示场景定（边缘慧眼叙事下候选：公开小目标集裁剪域 / 自拍场景集）。**10/5 前先完成：训练环境（PyTorch/Brevitas）跑通 + 任选一个公开小模型完成一次"训练→INT8→hex 导出"全链演练**，避免正式开工时被工程问题卡住。
+- **✅ 演练已完成（2026-09-30，torch 2.14 CPU）**：`data/scripts/m3_train_drill.py` 一键复现（`python data/scripts/m3_train_drill.py`），输出归档 `data/logs/2026-09-30-m3-train-drill/`。结论：链路可行——极简 CNN 训练收敛（acc 1.00）、手工 per-tensor 对称 INT8 量化后与 FP32 argmax 100% 一致、2740 权重导出 hex + scales + 逐层激活 golden。演练暴露的接口细节：① torch Sequential 参数名带占位索引（0/2/5），导出脚本必须显式层名映射，不能按 conv 序号拼；② 量化语义（对称 per-tensor、权重 [-127,127]）已按协处理器 MAC 阵列口径实现，`cop_top` 契约冻结时若改 per-channel/zp 需同步改演练脚本。
 
 ## 4. 训练侧时间线（对齐 plan.md §6.1）
 
