@@ -1,0 +1,9 @@
+== tb_rgb2gray ==
+PASS: rgb2gray 128 px, 0 errors
+vision/tb_rgb2gray.v:44: $finish called at 1340000 (1ps)
+== tb_line_buffer ==
+PASS: line_buffer sync-read, read-before-write, addressing
+vision/tb_line_buffer.v:60: $finish called at 360000 (1ps)
+== tb_gaussian3x3 ==
+PASS: gaussian3x3 128 px, 0 errors
+vision/tb_gaussian3x3.v:55: $finish called at 2140000 (1ps)
