@@ -6,9 +6,9 @@
 
 ## 项目三句话
 
-1. 是什么：在 PYNQ-Z2 上做一颗自研三级流水 RISC-V 软核 + HDMI 视觉直通流水线 + 轻量 CNN 协处理器，构成片上视觉分析仪（2026 嵌赛 FPGA 赛道 · AMD 自主选题）。
-2. 现在到哪：Part A 已收口（tag `partA-v0`）；Part B 契约冻结、R1 译码标志落地，转发/冒险 RTL 进行中；模块二单元级提前完成（10/10 tb PASS）；M1 验收 10/4。
-3. 计划和验收：看 `src/riscv/plan.md`；接口契约看 `src/riscv/design_v0.md`（唯一权威）。
+1. 是什么：在 PYNQ-Z2 上用自研 RISC-V + HDMI 视觉流水线 + CNN 协处理器识别桌面紧固件，视频经采集卡进入 Windows EXE，统一显示识别框、类别、计数与工单异常（2026 嵌赛 FPGA 赛道 · AMD 自主选题）。
+2. 现在到哪：Part A 已收口（tag `partA-v0`）；v1 契约冻结，积木模块已有独立复验，完整核尚未验收；视觉模块有 10/10 tb PASS，定位/正式模型/工业闭环/EXE 未实现。自由分散且互不遮挡、传统定位 + CNN 分类已确定；EXE 由 watercopper 负责。
+3. 计划和验收：根目录 `plan.md` 管全项目收口、分工和交付看板；`src/riscv/plan.md` 只管核专项，`src/riscv/plan_calendar.md` 只管核任务与卡点。接口按模块与核版本看对应设计契约。
 
 ## 目录地图（每个目录一句话）
 
@@ -31,8 +31,9 @@
 | 仿真 / Vivado 构建日志 | `data/logs/` |
 | 上板实测记录 | `board/logs/` |
 | 协作记录 / 决策过程 | `report/llm_log/` |
-| 计划、验收标准 | `src/riscv/plan.md`；专项计划在 `docs/` 对应文档 |
-| 每日任务、交接与风险 | `src/riscv/plan_calendar.md` |
+| 全项目目标、收口、分工和验收 | 根目录 `plan.md` |
+| 全项目下一交付物、依赖与卡点 | 根目录 `plan.md` §3 |
+| RISC-V 核专项计划与看板 | `src/riscv/plan.md`、`src/riscv/plan_calendar.md` |
 | Part B 验证与验收执行清单 | `docs/partB-verify-plan.md` |
 | 模块三训练与量化前期 | `docs/module3-model-training.md` |
 | 接口定义（唯一权威） | `src/riscv/design_v0.md` |
@@ -46,7 +47,7 @@
 2. 本文件——目录与归属
 3. `docs/onboarding.md`——Git / Markdown / Agent 操作
 4. `docs/workflow.md`——开工三件事、理解门槛、收尾四件套
-5. 按分工读 `src/riscv/plan.md`（分工/验收）与 `src/riscv/plan_calendar.md`（每日任务），接口看 `src/riscv/design_v0.md`
+5. 先读根目录 `plan.md`（全项目），再按分工读模块自己的计划与契约；核专项在 `src/riscv/plan.md`
 
 ## 日常三条规矩（浓缩版）
 
