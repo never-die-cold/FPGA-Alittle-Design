@@ -3,7 +3,9 @@
 #   module  ∈ {rgb2gray, gaussian_3x3, sobel, scaler, line_buffer}
 #   variant ∈ {unit(默认), real}
 #     unit：单元级参数（WIDTH=16/HEIGHT=8/NLINES=16），第一批基线口径；
-#     real：720p 行宽参数（WIDTH=1280/HEIGHT=720；scaler 目标 224×224，NLINES=16），
+#     real：720p 行宽参数（WIDTH=1280/HEIGHT=720；scaler 目标 224×224，NLINES=8——
+#           行步进 720/224=3.2 <= NLINES-2=6 成立；8 槽减少选择逻辑与 BRAM，
+#           实测关键路径仍为两级 lerp，减少槽数未改善时序，2026-09-30），
 #           验证 BRAM 推断与真实时序，模块三输入尺寸拍板前用 224 占位。
 # 输出：build/reports/vision_ooc/<mod>[_<variant>]_{utilization,timing}.rpt 与 _ooc_result.txt
 if {$argc < 1} { puts "ERROR: 需要 -tclargs <module> [variant]"; exit 1 }
@@ -25,7 +27,7 @@ if {$variant eq "real"} {
     switch $mod {
         gaussian_3x3 { foreach g {WIDTH=1280 HEIGHT=720} { lappend synth_args -generic $g } }
         sobel        { foreach g {WIDTH=1280 HEIGHT=720} { lappend synth_args -generic $g } }
-        scaler       { foreach g {SW=1280 SH=720 DW=224 DH=224 NLINES=16} { lappend synth_args -generic $g } }
+        scaler       { foreach g {SW=1280 SH=720 DW=224 DH=224 NLINES=8} { lappend synth_args -generic $g } }
         line_buffer  { foreach g {WIDTH=1280} { lappend synth_args -generic $g } }
     }
 }
