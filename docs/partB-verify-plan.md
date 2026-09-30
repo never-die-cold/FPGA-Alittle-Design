@@ -41,9 +41,9 @@
 
 | tb | 覆盖契约 | 必查断言 | 状态 |
 |:---|:---|:---|:---|
-| `tb_forwarding.v`（单元） | §8.6 | 无命中 / x0 / `src_used=0` / 三单命中 / 多重命中优先级；`enable=0` 时 sel=00；`rs1_sel/rs2_sel` 编码 00=RF 01=WB 10=MEM 11=EX | **verify 线已预写（9/29），stub 自查 25 例过；DUT 落地后须真跑 PASS** |
-| `tb_hazard.v`（单元） | §13.2 | 两档停顿方程；`redirect && front_stall == 0` 互斥断言 | **verify 线已预写（9/29），参考模型穷举 16020 组合过；DUT 落地后须真跑 PASS** |
-| `tb_mem_wb_stage.v`（单元） | §12.6 | 正常捕获、气泡覆盖旧槽、复位清 valid、无 hold 端口 | 未写（交付前可预写） |
+| `tb_forwarding.v`（单元） | §8.6 | 无命中 / x0 / `src_used=0` / 三单命中 / 多重命中优先级；`enable=0` 时 sel=00；`rs1_sel/rs2_sel` 编码 00=RF 01=WB 10=MEM 11=EX | **已闭环（9/30）：对 jianglibo 真 DUT 25 例一次通过（R2–R5 复验，data/logs/2026-09-30-r2r5-verify/）** |
+| `tb_hazard.v`（单元） | §13.2 | 两档停顿方程；`redirect && front_stall == 0` 互斥断言 | **已闭环（9/30）：对真 DUT 16020 组合穷举一次通过（含互斥不变量，data/logs/2026-09-30-r2r5-verify/）** |
+| `tb_mem_wb_stage.v`（单元） | §12.6 | 正常捕获、气泡覆盖旧槽、复位清 valid、无 hold 端口 | **RTL 线已自写并接入回归（R2–R5，9/30 复验 PASS）** |
 | 整核转发专项（新增或扩 tb_core_fwd） | §8.6 | ALU→ALU/branch/JALR/store/muldiv；连续 R-type RAW 零气泡；load-use 恰 1 拍；关转发结果一致且可见 RAW 气泡 | 等 RTL |
 | 整核 hazard 专项 | §9.6 | taken 冲刷 1 槽、not-taken 不冲刷；branch 遇 RAW 先停顿再裁决；stall 期间生产者只提交一次；气泡不写 regfile/DMEM/不启动 muldiv | 等 RTL |
 | 整核 RV32M | §10.6 | start 仅一次、等待期无提交、done 进正确 rd、紧随消费者两档结果一致 | 等 RTL |

@@ -28,7 +28,7 @@ git push                  # ④ 上传到仓库，队友才能看到
 > 推荐教程：B 站搜"Git 一小时入门"，边看边跟着敲一遍。
 
 > 📌 开工后是**三线并行 + 每周 PR** 的多人协作模式（每人一条 dev 分支，组长统一合并，任何人不含组长不直接 push `main`）：
-> 本文只讲单人基础操作；PR 审核与合并节奏见 `src/riscv/plan.md` §2。
+> 本文只讲单人基础操作；PR 审核与合并节奏见根目录 `plan.md` §2。
 
 ---
 
@@ -82,18 +82,18 @@ Agent = 能帮你**实际干活**的 AI（写代码、改文件、跑命令）�
 
 ## 第五步：用 Issue 跟踪 bug 与卡点（M1 起执行）
 
-> 一句话原则：**能用 commit 直接闭环的计划内任务不建 issue**（计划看 `src/riscv/plan.md`）；需要别人知道、需要跟踪状态的才建——bug、卡点、待办提问。
+> 一句话原则：**能用 commit 直接闭环的计划内任务不建 issue**（全项目看根目录 `plan.md`，技术任务看相关模块计划）；需要别人知道、需要跟踪状态的才建——bug、卡点、待办提问。
 
 1. **建 issue**：仓库页 → Issues → New issue，选模板：
    - **Bug 报告**：仿真 / 上板 / 工具链问题，填现象、复现步骤、期望与实际结果、日志
    - **任务 / 待办**：需要跟踪的任务或提问，填验收标准、负责人、截止时间
 2. **标签**（负责人建一次，共 5 个）：`bug` / `rtl` / `verify` / `docs` / `hardware`
-3. **里程碑与检查点**：M1–M4 已建（due 10/1 / 10/12 / 10/20 / 10/26，2026-09-21 压缩前移）；里程碑即阶段检查点，每阶段验收开一个 gate issue 挂到对应里程碑（M1 三个：[#19 Part A](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/19) / [#20 Part B](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20) / [#21 Part C + M1 收口](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)），验收清单全勾才关闭
+3. **里程碑与检查点**：收口日期以根目录 `plan.md` §1.2 为准；每阶段验收开一个 gate issue 挂到对应里程碑（M1 三个：[#19 Part A](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/19) / [#20 Part B](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20) / [#21 Part C + M1 收口](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)），验收清单全勾才关闭。远端 milestone 日期由维护人核对同步，不把本地文档修改视为远端更新
 4. **关闭规矩**：修复的 commit message 写 `fixes #12`（或 `closes #12`），推送后自动关闭；修复过程顺手记入 `report/llm_log/`
-5. **与排期的边界**：M1 每天的计划任务看 `src/riscv/plan.md`，不为每天的排期重复建 issue
+5. **与排期的边界**：主计划只固定收口时间；全项目下一交付物、依赖与卡点看根目录 `plan.md` §3，核专项看 `src/riscv/plan_calendar.md`，不为逐日排期重复建 issue
 
 ---
 
 ## 完成标准
 
-当你能独立完成：`git pull` → 读懂 README → 用 agent 写个小模块 → 通过理解门槛（先讲清再 commit）→ commit & push → 会发 PR（三线并行操作见 `src/riscv/plan.md` §2）→ 按模板写一条协作记录，就算上手完成🎉
+当你能独立完成：`git pull` → 读懂 README → 用 agent 写个小模块 → 通过理解门槛（先讲清再 commit）→ commit & push → 会发 PR（三线并行操作见根目录 `plan.md` §2）→ 按模板写一条协作记录，就算上手完成🎉
