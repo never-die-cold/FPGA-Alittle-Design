@@ -1,6 +1,7 @@
 # 命题升级方案：借鉴往届国一/国二作品
 
-> 状态：📌 已采纳（2026-09-11），档位 = 组合阶梯 A+B；**2026-09-20 更新：报名未截止、题目可改，注册名定为《边缘慧眼（EdgeSight）——基于自研 RISC-V 的边缘智能视觉 SoC》，README 标题同步（决策见 `report/llm_log/2026-09-20-registration-rename.md`）；2026-09-21 裁撤原 C 档（EdgePilot 云台，赛后扩展，不进比赛范围）**
+> 当前执行以根目录 [项目主计划](../plan.md) 为准：自由分散且互不遮挡的紧固件，传统视觉定位 + CNN 分类，采集卡视频 + 网口结果进入 Windows EXE，前端由 watercopper 负责。本文保留早期升级依据；下文旧排期、Jupyter 主界面和板端 OSD 叠加方案不作为当前执行要求，跨帧跟踪仍为增强功能。
+> 历史状态：📌 已采纳（2026-09-11），档位 = 组合阶梯 A+B；**2026-09-20 更新：报名未截止、题目可改，注册名定为《边缘慧眼（EdgeSight）——基于自研 RISC-V 的边缘智能视觉 SoC》，README 标题同步（决策见 `report/llm_log/2026-09-20-registration-rename.md`）；2026-09-21 裁撤原 C 档（EdgePilot 云台，赛后扩展，不进比赛范围）**
 > 决策记录：`report/llm_log/2026-09-11-proposal-upgrade.md`、`report/llm_log/2026-09-20-registration-rename.md`
 > 往届作品调研底稿：[`docs/track_research.md`](track_research.md)
 
