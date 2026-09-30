@@ -3,12 +3,12 @@
 > 给谁看：全体队员 + AI agent（每次开工前必读）。
 > 什么时候读：每次开新会话或新一步前，从头过一遍「必做」项再动手。
 > 三份旧文档的合并：原 `kickoff_checklist.md`（§1/§3/§4）、`code_review_checklist.md`（§2）、`prep_checklist.md`（§5 历史存证）。
-> 配套：目录边界与红线同时写在根 `AGENTS.md`；接口契约以 `src/riscv/design_v0.md` 为准；排期与验收以 `src/riscv/plan.md` 为准。
+> 配套：目录边界与红线同时写在根 `AGENTS.md`；核接口以对应版本设计契约为准；全项目收口、分工与验收见根目录 `plan.md`，RISC-V 专项见 `src/riscv/plan.md`。
 
 ## §1 开工三件事（必做，缺一不可）
 
 1. **读开工清单**：通读本文件 §1–§4；对应步骤回看 `skill/gufa-programming/SKILL.md`（古法编程流程与失效条件）。
-2. **核实现状**：跑 `git rev-parse --abbrev-ref HEAD`、`git log --oneline -5`、`git status`；对照 `src/riscv/design_v0.md`（接口唯一权威）与 `src/riscv/plan.md`，在开工回复开头贴三类清单：
+2. **核实现状**：跑 `git rev-parse --abbrev-ref HEAD`、`git log --oneline -5`、`git status`；对照根目录主计划、相关模块计划与接口契约（核为 `src/riscv/plan.md`、对应版本 `design_v0.md` / `design_v1.md`），在开工回复开头贴三类清单：
    - ✅ 已实现并验证
    - 🟡 已实现但未验证
    - ⬜ 未实现 / 未接入核

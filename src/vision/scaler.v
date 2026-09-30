@@ -42,6 +42,7 @@ module scaler #(
     // ---- 写侧：源行滑槽 ----
     reg [AW-1:0] wx;
     reg [RW-1:0] w_row;
+    reg [RW-1:0] committed;   // 已完成写入的行数（sticky，单驱动，帧边界清零）
     wire [AWY-1:0] w_slot = w_row[AWY-1:0];
 
     // ---- 发射状态 ----
@@ -96,24 +97,19 @@ module scaler #(
         end
     end
 
-    // ---- 写侧时序 ----
+    // ---- 写侧时序：位置计数 + 行提交（单 always 单驱动，committed 帧边界清零） ----
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            wx <= 0; w_row <= 0;
+            wx <= 0; w_row <= 0; committed <= 0;
         end else begin
             if (in_vs || in_hs) wx <= 0;
             else if (in_de)     wx <= wx + 1;
+            // vs/hs 不同拍（流约定）：vs 帧边界清零；hs 提交当前行并递增行号
+            if (in_vs) committed <= 0;
+            else if (in_hs) committed <= w_row + 1;
             if (in_vs)                          w_row <= 0;
             else if (in_hs && (w_row < SH-1))   w_row <= w_row + 1;
         end
-    end
-
-    // ---- 行坐标 ----
-    // 已完成写入的行数（寄存 sticky）：hs 提交当前行；vblank 期间保持，供末行发射判据
-    reg [RW-1:0] committed;
-    always @(posedge clk or negedge rst_n) begin
-        if (!rst_n)     committed <= 0;
-        else if (in_hs) committed <= w_row + 1;
     end
     wire row_end   = emitting && ph && (xd == DW-1);
     wire more_rows = (out_row < DH-1);
@@ -173,11 +169,11 @@ module scaler #(
             out_hs <= hs_pending;
 
             // 帧边界复位：发射状态逐帧重建（多帧复用时 out_row/y_acc 必须归零，
-            // 否则 DH 行发射完后 start_idle 恒假、后续帧永不输出）
+            // 否则 DH 行发射完后 start_idle 恒假、后续帧永不输出）。
+            // 注意 committed 的复位在写侧 always（单驱动），此处不得重复赋值。
             if (in_vs) begin
                 emitting <= 0; out_row <= 0;
                 y_acc <= INIT_Y;
-                committed <= 0;
                 data_ready <= 0; pend_valid <= 0; last_pending <= 0;
                 last_px_out <= 0;
             end else if (start_idle) begin

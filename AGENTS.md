@@ -9,7 +9,7 @@
 
 1. **读开工清单**：完整阅读 `docs/workflow.md`，逐项执行其中的「必做」项。
 2. **核实现状**：先跑 `git rev-parse --abbrev-ref HEAD`、`git log --oneline -5`、`git status`；
-   再对照 `src/riscv/design_v0.md`（接口唯一权威）与 `src/riscv/plan.md`，
+   再对照根目录 `plan.md`（全项目）、`src/riscv/plan.md`（核专项）与对应版本核接口契约，
    在开工回复开头贴出一份三类清单：
    - ✅ 已实现并验证
    - 🟡 已实现但未验证
@@ -41,6 +41,7 @@
 ## 三、参考入口
 
 - 详细清单：`docs/workflow.md`
-- 计划与验收：`src/riscv/plan.md` §3.2 / §4.1
+- 主计划与全局验收：根目录 `plan.md`
+- RISC-V 专项与核验收：`src/riscv/plan.md` §3.2 / §4.1
 - 接口契约：`src/riscv/design_v0.md`
 - 工作流技能：`skill/gufa-programming/SKILL.md`、`skill/understand-gate/SKILL.md`
