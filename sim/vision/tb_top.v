@@ -1,12 +1,11 @@
 `timescale 1ns/1ps
-// vision_top 专项 tb：六帧拓扑序列 + 帧内改 R0 锁存验证
-//   帧 1：R0=0（gray only）          → 对拍 gray golden（128px）
-//   帧 2：R0=gauss_en                → 对拍 gaussian golden（128px）；
-//         第 4 行后帧内写 R0=0       → 帧 2 输出不变（拓扑帧锁存）
-//   帧 3：拓扑=gray（帧 2 所写生效）  → 对拍 gray golden（128px）
-//   帧 4：R0=gauss|scaler（osd 关）   → 对拍 fullchain golden（512px）
-//   帧 5：R0=gauss|sobel             → 对拍 gauss_sobel golden（128px，2026-09-30 sobel 接入）
-//   帧 6：R0=sobel（bit0=0）         → 对拍 gray_sobel golden（128px，raw gray 上做边缘）
+// vision_top 专项 tb：六帧拓扑序列 + 双通道对拍（v0.3 双路径）+ 帧内改 R0 锁存验证
+//   显示通道 out_*（全分辨率）：
+//   帧 1：R0=0（gray）    → expA（128px）      帧 2：R0=gauss → expB（128px）；
+//         第 4 行后帧内写 R0=0 → 帧 2 输出不变（拓扑帧锁存）
+//   帧 3：拓扑=gray       → expA（128px）      帧 4：R0=gauss|scaler → 显示=expB（scaler 不上屏）
+//   帧 5：R0=gauss|sobel  → expC（128px）      帧 6：R0=sobel → expE（128px）
+//   快照通道 cop_*：仅帧 4 scaler 使能 → expD（512px）；其余帧 cop_de 恒 0
 module tb_top;
     reg clk, rst_n, in_vs, in_hs, in_de;
     reg [23:0] in_rgb;
@@ -19,13 +18,16 @@ module tb_top;
     wire [31:0] rdata;
     wire out_vs, out_hs, out_de;
     wire [7:0] out_y;
+    wire cop_vs, cop_hs, cop_de;
+    wire [7:0] cop_y;
     integer fidx, f, l, c, errors;
-    integer fcnt [0:5];
+    integer fcnt [0:5];       // 显示通道逐帧计数
+    integer fcnt_c;           // 快照通道计数
     reg [7:0] expv;
     reg [23:0] rgb      [0:127];
     reg [7:0]  expA     [0:127];   // gray golden
     reg [7:0]  expB     [0:127];   // gaussian golden
-    reg [7:0]  expD     [0:511];   // fullchain golden
+    reg [7:0]  expD     [0:511];   // fullchain golden（快照通道）
     reg [7:0]  expC     [0:127];   // gauss|sobel golden
     reg [7:0]  expE     [0:127];   // gray|sobel golden
 
@@ -37,7 +39,8 @@ module tb_top;
         .bvalid(bvalid), .bready(bready), .bresp(bresp),
         .arvalid(arvalid), .arready(arready), .araddr(araddr),
         .rvalid(rvalid), .rready(rready), .rdata(rdata), .rresp(rresp),
-        .out_vs(out_vs), .out_hs(out_hs), .out_de(out_de), .out_y(out_y)
+        .out_vs(out_vs), .out_hs(out_hs), .out_de(out_de), .out_y(out_y),
+        .cop_vs(cop_vs), .cop_hs(cop_hs), .cop_de(cop_de), .cop_y(cop_y)
     );
     always #5 clk = ~clk;
 
@@ -86,8 +89,7 @@ module tb_top;
         begin
             case (f)
                 0, 2: v = expA[i];
-                1:    v = expB[i];
-                3:    v = expD[i];
+                1, 3: v = expB[i];    // 帧 4 显示通道 = 高斯（scaler 已改走快照分支）
                 4:    v = expC[i];
                 5:    v = expE[i];
                 default: v = 8'hxx;
@@ -100,10 +102,21 @@ module tb_top;
             exp_at(fidx, fcnt[fidx], expv);
             if (out_y !== expv) begin
                 errors = errors + 1;
-                $display("FAIL: f%0d px[%0d]=%02x exp=%02x", fidx, fcnt[fidx], out_y, expv);
+                $display("FAIL: f%0d disp px[%0d]=%02x exp=%02x", fidx, fcnt[fidx], out_y, expv);
                 if (errors > 8) $fatal(1);
             end
             fcnt[fidx] = fcnt[fidx] + 1;
+        end
+        if (rst_n && cop_de) begin
+            if (fidx !== 3) begin
+                errors = errors + 1;
+                $display("FAIL: cop_de active in frame %0d (scaler disabled)", fidx);
+            end else if (cop_y !== expD[fcnt_c]) begin
+                errors = errors + 1;
+                $display("FAIL: cop px[%0d]=%02x exp=%02x", fcnt_c, cop_y, expD[fcnt_c]);
+                if (errors > 8) $fatal(1);
+            end
+            fcnt_c = fcnt_c + 1;
         end
     end
 
@@ -111,7 +124,7 @@ module tb_top;
         clk = 0; rst_n = 0; in_vs = 0; in_hs = 0; in_de = 0; in_rgb = 0;
         awvalid = 0; wvalid = 0; arvalid = 0; bready = 0; rready = 0;
         awaddr = 0; araddr = 0; wdata = 0; wstrb = 0;
-        fidx = 0; errors = 0;
+        fidx = 0; errors = 0; fcnt_c = 0;
         fcnt[0] = 0; fcnt[1] = 0; fcnt[2] = 0; fcnt[3] = 0;
         fcnt[4] = 0; fcnt[5] = 0;
         $readmemh("../data/golden/vision/rgb2gray/input_rgb.hex", rgb);
@@ -142,10 +155,14 @@ module tb_top;
         do_frame;
         repeat (2000) @(negedge clk);
         fidx = 3;
-        // 帧 4：gauss + scaler（osd 关）
+        // 帧 4：gauss + scaler（显示=高斯全分辨率；快照通道出 fullchain 512px）
         axi_write(7'h00, 32'h3);
         do_frame;
         repeat (2600) @(negedge clk);
+        if (fcnt_c !== 512) begin
+            $display("FAIL: cop collected=%0d (expect 512)", fcnt_c);
+            $fatal(1);
+        end
         fidx = 4;
         // 帧 5：gauss + sobel（边缘接在高斯后，全分辨率）
         axi_write(7'h00, 32'h9);
@@ -157,13 +174,13 @@ module tb_top;
         do_frame;
         repeat (2000) @(negedge clk);
 
-        if (fcnt[0] !== 128 || fcnt[1] !== 128 || fcnt[2] !== 128 || fcnt[3] !== 512
-            || fcnt[4] !== 128 || fcnt[5] !== 128 || errors !== 0) begin
-            $display("FAIL: fcnt=%0d/%0d/%0d/%0d/%0d/%0d errors=%0d (expect 128/128/128/512/128/128/0)",
-                     fcnt[0], fcnt[1], fcnt[2], fcnt[3], fcnt[4], fcnt[5], errors);
+        if (fcnt[0] !== 128 || fcnt[1] !== 128 || fcnt[2] !== 128 || fcnt[3] !== 128
+            || fcnt[4] !== 128 || fcnt[5] !== 128 || fcnt_c !== 512 || errors !== 0) begin
+            $display("FAIL: disp=%0d/%0d/%0d/%0d/%0d/%0d cop=%0d errors=%0d (expect 128x6/512/0)",
+                     fcnt[0], fcnt[1], fcnt[2], fcnt[3], fcnt[4], fcnt[5], fcnt_c, errors);
             $fatal(1);
         end
-        $display("PASS: vision_top 6 frames gray/gauss/gray/full/gs_sobel/gray_sobel, 1024 px, 0 errors (frame-latch verified)");
+        $display("PASS: vision_top v0.3 6 frames dual-path, display 768 px + cop 512 px, 0 errors (frame-latch verified)");
         $finish;
     end
 endmodule
