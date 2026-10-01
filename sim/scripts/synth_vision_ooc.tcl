@@ -23,10 +23,7 @@ set suffix [expr {$variant eq "unit" ? "" : "_$variant"}]
 set period [expr {$variant eq "real75" ? 13.468 : 10.0}]
 
 if {$mod eq "vision_top"} {
-    set files [list src/vision/rgb2gray.v src/vision/line_buffer.v src/vision/gaussian_3x3.v \
-                    src/vision/sobel.v src/vision/scaler.v src/vision/osd_overlay.v \
-                    src/vision/axi_regs.v src/vision/in_align.v src/vision/cop_buf.v \
-                    src/vision/vision_top.v]
+    set files [glob src/vision/*.v]
 } else {
     set files [list src/vision/${mod}.v]
     if {$mod eq "gaussian_3x3" || $mod eq "sobel" || $mod eq "scaler"} {
@@ -50,8 +47,8 @@ eval $synth_args
 if {$mod eq "vision_top"} {
     create_clock -name pclk      -period $period [get_ports clk]
     create_clock -name s_axi_aclk -period 10.0   [get_ports s_axi_aclk]
-    set_clock_groups -asynchronous -group [get_clocks pclk] -group [get_clocks s_axi_aclk]
-    report_cdc -file $rep/${mod}${suffix}_cdc.rpt
+    source src/vision/config_cdc.xdc
+    report_cdc -details -file $rep/${mod}${suffix}_cdc.rpt
 } else {
     create_clock -name clk -period $period [get_ports clk]
 }
