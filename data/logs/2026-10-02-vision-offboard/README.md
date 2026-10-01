@@ -30,12 +30,14 @@ bash sim/scripts/run_vivado_hdmi.sh           # 物理 HDMI 工程
 
 ## 物理 HDMI 工程状态与边界
 
-`hdmi/driver.log`：PS7 + dvi2rgb/rgb2dvi + vision_axi 全链 `write_bitstream completed
-successfully`，`sim/build/hdmi-project/vision.bit` 已生成（不入库）；report_timing
-"All user specified timing constraints are met"；report_drc 0 Error（46 条 Warning：
-RAMB 异步控制、无路由负载等，逐条非阻塞）。最后 `write_hw_platform` 导出 XSA 报
-Common 17-69（批处理模式取不到工程内 bit 的已知行为），因此门禁按失败存证；XSA
-仅 PS 侧 Vitis 需要，不影响离板 bitstream 结论，也不代替上板验收。
+`hdmi/driver.log`：PS7 + dvi2rgb/rgb2dvi + vision_axi 全链布线完成、时序约束
+全满足、DRC 0 错误，bitgen 成功。首次 `write_hw_platform` 报 Common 17-69：
+`write_bitstream` 写了自定义路径，工程模式导出只认 impl_1 run 目录内的 bit。
+`build_hdmi.tcl` 已改为 `launch_runs impl_1 -to_step write_bitstream`（bit 入
+run 后复制到 $out）；对既有工程按同流程补导出（`hdmi/export_xsa.tcl` +
+`xsa-export.log`）成功，`sim/build/hdmi-project/vision.xsa` 内含 `vision.bit`
++ `vision.hwh`（PYNQ `Overlay()` 所需）。bit/XSA 为 sim/build 构建产物不入库。
+布线后工程不再打开 Hardware Manager；下载、锁定与实机验收另行安排。
 
 内部并行边界 OOC 正余量不证明 TMDS 引脚/相机/采集卡闭环；下载、锁定、EDID、
 延迟与采集卡显示留给上板验收（负责人另行安排）。

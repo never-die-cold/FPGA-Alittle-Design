@@ -84,7 +84,8 @@ dev/vision 已在独立工作树中检出，复验前后源码工作区均干净
    tb_patterns 非恒定图案、tb_vision_axi 字节序/lock-loss。
 7. OOC post-route 门禁（CDC 逐条核对、稳定总线 max_delay）：WNS=+0.330/WHS=+0.027，
    复检 +0.629/+0.009；物理 HDMI 工程 bitgen 成功、时序约束全满足、DRC 0 错误；
-   XSA 导出失败（批处理模式已知行为）不影响 bitstream，详见日志 README。
+   XSA 导出经修复（bit 入 impl_1 run 目录后 write_hw_platform）成功，含 .hwh，
+   见 data/logs/2026-10-02-vision-offboard/README.md。
 8. PS 侧 vision_regs.commit/wait_applied/status + mock 协议测试（提交/确认/busy/
    超时/回绕）；定位黄金参考 reference.py（4 连通分割 + bbox + RECHECK 状态 +
    逐目标 crop_resize，与 scaler 定点口径互验）+ test_localize.py。

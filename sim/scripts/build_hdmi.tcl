@@ -42,7 +42,15 @@ if {[catch {
     foreach port [get_ports -filter {NAME !~ DDR* && NAME !~ FIXED_IO*}] {
         if {[get_property PACKAGE_PIN $port] eq ""} { error "missing physical pin $port" }
     }
-    write_bitstream -force $out/vision.bit
+    # bit 必须落在工程 run 目录 write_hw_platform 才取得到（2026-10-02 教训：
+    # write_bitstream 写自定义路径后导出报 Common 17-69）；bitgen 经 launch_runs
+    # 入 run 目录，再复制一份到 $out 供 PYNQ 直取。
+    close_design
+    launch_runs impl_1 -to_step write_bitstream -jobs 2
+    wait_on_run impl_1
+    if {[get_property PROGRESS [get_runs impl_1]] ne "100%"} { error "HDMI bitstream failed" }
+    set runbit [file join [get_property DIRECTORY [get_runs impl_1]] [get_property TOP [current_fileset]].bit]
+    file copy -force $runbit $out/vision.bit
     write_hw_platform -fixed -include_bit -force -file $out/vision.xsa
     puts "PASS: PYNQ-Z2 HDMI physical route and bitstream (offline; board validation pending)"
 } reason]} {
