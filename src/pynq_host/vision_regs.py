@@ -7,19 +7,21 @@
   R5      box_color（[7:0]）
   R6-R9   roi_x0/y0/x1/y1
   R10     roi_color
-  R11-15  保留（写忽略读 0）
-时序语义：全部帧首 in_vs 锁存、帧边界生效——软件随意写，无需等待（写快于帧率自动
-  按帧量化）；多字节参数跨时钟按 D10 帧首锁存口径。
+  R11     bit0 写1提交，读为busy；R12 已应用配置编号；R13-15 保留
+时序语义：R0..10 为暂存区；commit() 提交整组并等待帧首应用确认。
+无视频帧时会超时；busy 时不能重复提交。设置函数自身不隐式提交。
 
 用法（板端）：
     from pynq import Overlay, MMIO
     ol = Overlay('vision.bit')            # 布局定稿后 base 从 ol.ip_dict 取
     v = VisionRegs(base=0x4000_0000)      # AXI_GP 映射窗口内 axi_regs 基址
     v.apply_preset('GAUSS_SOBEL')
+    v.commit()
 PC 侧自测（无板）：
     python vision_regs.py   # mock 后端走一遍位域打包/回读/预设值断言
 """
 from __future__ import annotations
+import time
 
 # ---- 寄存器位域常量（与 §3.3 / vision_top v0.3 一致） ----
 BIT_GAUSS = 0
@@ -33,8 +35,8 @@ PRESETS = {
     "GAUSS": 0x1,           # 高斯
     "GAUSS_SOBEL": 0x9,     # 高斯后接边缘
     "GRAY_SOBEL": 0x8,      # raw gray 上边缘
-    "SNAPSHOT": 0x2,        # 仅快照分支（显示=gray，cop 出 DW×DH）
-    "GAUSS_SNAPSHOT": 0x3,  # 显示=高斯 + 快照
+    "SNAPSHOT": 0x2,        # 灰度快照，HDMI 彩色原图不变
+    "GAUSS_SNAPSHOT": 0x3,  # 高斯快照，HDMI 彩色原图不变
 }
 # R0 起始字偏移 = 0；寄存器 i 偏移 = i*4（axi_regs NREG=16, AW=7 → 128B 窗口）
 NREG = 16
@@ -92,6 +94,28 @@ class VisionRegs:
     def read_reg(self, idx: int) -> int:
         assert 0 <= idx < NREG
         return self._read(idx * 4)
+
+    def commit(self, wait: bool = True, timeout: float = 0.5) -> int:
+        """提交暂存参数；返回本次配置编号，帧首应用后才确认。"""
+        if self._read(44) & 1:
+            raise RuntimeError("configuration commit is busy")
+        expected = (self._read(48) + 1) & 0xFFFFFFFF
+        self._write(44, 1)
+        if wait:
+            self.wait_applied(expected, timeout)
+        return expected
+
+    def wait_applied(self, expected: int, timeout: float = 0.5, poll: float = 0.001):
+        if timeout <= 0 or poll <= 0:
+            raise ValueError("timeout and poll must be positive")
+        deadline = time.monotonic() + timeout
+        while self._read(48) != expected:
+            if time.monotonic() >= deadline:
+                raise TimeoutError("configuration not applied: check video/frame input")
+            time.sleep(poll)
+
+    def status(self) -> dict:
+        return {"busy": bool(self._read(44) & 1), "applied_config_id": self._read(48)}
 
 
 def _mock_backend():
