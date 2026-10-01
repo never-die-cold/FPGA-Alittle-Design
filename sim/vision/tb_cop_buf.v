@@ -16,7 +16,7 @@ module tb_cop_buf;
         .in_vs(in_vs), .in_hs(in_hs), .in_de(in_de), .in_y(in_y),
         .cop_ready(cop_ready),
         .out_vs(out_vs), .out_hs(out_hs), .out_de(out_de), .out_y(out_y),
-        .frame_done(frame_done), .buf_full(buf_full)
+        .frame_done(frame_done), .buf_full(buf_full),.in_frame_id(32'b0),.in_config_id(32'b0)
     );
     always #5 clk = ~clk;
 
