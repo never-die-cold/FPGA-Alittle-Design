@@ -22,9 +22,10 @@ case "$MODE" in
     fullchain) TBS=(vision/tb_fullchain.v) ;;
     osd)      TBS=(vision/tb_osd.v) ;;
     axi)      TBS=(vision/tb_axi_regs.v) ;;
+    align)    TBS=(vision/tb_in_align.v) ;;
     top)      TBS=(vision/tb_top.v) ;;
-    all)      TBS=(vision/tb_rgb2gray.v vision/tb_line_buffer.v vision/tb_gaussian3x3.v vision/tb_scaler.v vision/tb_sobel.v vision/tb_chain.v vision/tb_fullchain.v vision/tb_osd.v vision/tb_axi_regs.v vision/tb_top.v) ;;
-    *)   echo "用法: bash sim/scripts/run_vision_iverilog.sh [rgb2gray|linebuf|gaussian|scaler|sobel|chain|fullchain|osd|axi|top|all]"; exit 1 ;;
+    all)      TBS=(vision/tb_rgb2gray.v vision/tb_line_buffer.v vision/tb_gaussian3x3.v vision/tb_scaler.v vision/tb_sobel.v vision/tb_chain.v vision/tb_fullchain.v vision/tb_osd.v vision/tb_axi_regs.v vision/tb_in_align.v vision/tb_top.v) ;;
+    *)   echo "用法: bash sim/scripts/run_vision_iverilog.sh [rgb2gray|linebuf|gaussian|scaler|sobel|chain|fullchain|osd|axi|align|top|all]"; exit 1 ;;
 esac
 
 cd "$(dirname "$0")/.."          # -> sim/
