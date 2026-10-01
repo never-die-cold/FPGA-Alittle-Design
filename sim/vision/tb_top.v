@@ -23,6 +23,10 @@ module tb_top;
     integer fidx, f, l, c, errors;
     integer fcnt [0:5];       // 显示通道逐帧计数
     integer fcnt_c;           // 快照通道计数
+    // A5 逐像素延迟：首 in_de → 首 out_de 周期差（显示通道，恒定流水延迟）
+    integer cyc, in_first, out_first, lat_err;
+    integer lat [0:5];
+    reg in_seen, out_seen;
     reg [7:0] expv;
     reg [23:0] rgb      [0:127];
     reg [7:0]  expA     [0:127];   // gray golden
@@ -98,6 +102,15 @@ module tb_top;
     endtask
 
     always @(posedge clk) begin
+        cyc = cyc + 1;
+        if (rst_n) begin
+            if (in_vs) begin in_seen = 0; out_seen = 0; end
+            if (in_de && !in_seen) begin in_seen = 1; in_first = cyc; end
+            if (out_de && !out_seen) begin
+                out_seen = 1;
+                lat[fidx] = cyc - in_first;   // 首像素逐级流水延迟（拍）
+            end
+        end
         if (rst_n && out_de) begin
             exp_at(fidx, fcnt[fidx], expv);
             if (out_y !== expv) begin
@@ -125,6 +138,8 @@ module tb_top;
         awvalid = 0; wvalid = 0; arvalid = 0; bready = 0; rready = 0;
         awaddr = 0; araddr = 0; wdata = 0; wstrb = 0;
         fidx = 0; errors = 0; fcnt_c = 0;
+        cyc = 0; in_first = 0; out_first = 0; lat_err = 0;
+        in_seen = 0; out_seen = 0;
         fcnt[0] = 0; fcnt[1] = 0; fcnt[2] = 0; fcnt[3] = 0;
         fcnt[4] = 0; fcnt[5] = 0;
         $readmemh("../data/golden/vision/rgb2gray/input_rgb.hex", rgb);
@@ -180,7 +195,26 @@ module tb_top;
                      fcnt[0], fcnt[1], fcnt[2], fcnt[3], fcnt[4], fcnt[5], fcnt_c, errors);
             $fatal(1);
         end
+        // A5 帧首像素延迟模型（实测校正，2026-10-01）：窗口级有 1 行结构滞后
+        //   （3×3 窗口需下一行流入才能算当前行，双行缓存设计使然），故
+        //   gray = 1；gauss = 行周期+4；gauss+sobel = 2×行周期+7；gray+sobel = 行周期+4。
+        //   §3.2 的"每级 3 拍"是稳态标记滞后，与帧首像素滞后是两个口径。
+        lat_err = 0;
+        for (f = 0; f < 6; f = f + 1) begin
+            case (f)
+                0, 2: if (lat[f] !== 1) lat_err = 1;
+                1, 3: if (lat[f] !== 21 + 4) lat_err = 1;
+                4:    if (lat[f] !== 2 * 21 + 7) lat_err = 1;
+                5:    if (lat[f] !== 21 + 4) lat_err = 1;
+            endcase
+        end
+        if (lat_err) begin
+            $display("FAIL: latency f0..f5 = %0d/%0d/%0d/%0d/%0d/%0d (expect 1/25/1/25/49/25)",
+                     lat[0], lat[1], lat[2], lat[3], lat[4], lat[5]);
+            $fatal(1);
+        end
         $display("PASS: vision_top v0.3 6 frames dual-path, display 768 px + cop 512 px, 0 errors (frame-latch verified)");
+        $display("PASS: A5 latency gray=1 gauss=25 gauss+sobel=49 cycles (1-row window lag model match), scaler throughput-based");
         $finish;
     end
 endmodule
