@@ -125,7 +125,7 @@ ADV7611 HDMI IN ──像素时钟域──> 输入对齐/24bit RGB ──> rgb2
 - 黄金参考需求：`rgb2gray`、`gaussian_3x3`（含边界填充）、`scaler`（两组尺寸档）各一份 Python 脚本 + 测试图（≥3 张：含斜线/棋盘/人脸纹理），输出 `data/golden/vision/<module>/`。
 - 波形专项：帧边界切换参数不撕裂；`de` 无效期各级无输出副作用。
 - A5 指标采集：逐像素延迟（理论值 vs 波形实测）、端到端帧延迟、资源（LUT/BRAM/DSP）。
-- XSim 对拍口径沿用 Part B（`docs/partB-verify-plan.md` §6）：iverilog 全 PASS 后 XSim 复跑同判据。
+- XSim 对拍口径沿用 Part B（`docs/partB-verify-plan.md` §6）：iverilog 全 PASS 后 XSim 复跑同判据。**✅ 已执行（2026-10-01）**：11/11 tb 在 XSim 下同判据 PASS，一键入口 `bash sim/scripts/run_vision_xsim.sh all`，证据 `data/logs/2026-10-01-vision-m2-sprint/xsim-all-11tb.log`。
 
 ## 7. 与模块三的衔接（给 jianglibo 的对齐点）
 

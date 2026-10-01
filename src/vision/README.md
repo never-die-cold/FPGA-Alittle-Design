@@ -31,6 +31,8 @@ HDMI 视频流逐像素实时处理：灰度化 → 3×3 高斯滤波 → 双线
 | 单项回归 | `bash sim/scripts/run_vision_iverilog.sh <rgb2gray\|linebuf\|gaussian\|scaler\|sobel\|chain\|fullchain\|osd\|axi\|top>` | 对应 tb `PASS` |
 | OOC 综合（单元参数） | `bash sim/scripts/run_vivado_vision_ooc.sh unit` | 各模块 `OOC_RESULT` 行 |
 | OOC 综合（720p 行宽） | `bash sim/scripts/run_vivado_vision_ooc.sh real` | 同上，含 BRAM 推断 |
+| OOC 综合（720p60 达标随访） | `vivado -mode batch -source sim/scripts/synth_vision_ooc.tcl -tclargs <module> real75` | WNS ≥ 0 即 74.25 MHz 达标 |
+| XSim 对拍（同判据复跑） | `bash sim/scripts/run_vision_xsim.sh all` | 11/11 tb `PASS`（与 iverilog 同判据） |
 
 验证方法：每个处理模块由 `data/golden/vision/<模块>/gen_*.py` 生成输入 hex 与期望 hex，tb 逐像素 `!==` 比对，错 1 像素即 FAIL；链路 tb（chain/fullchain/top）中间级与末端同时对拍；OSD 双帧 golden 验证"参数帧首锁存"；tb_scaler 含标记协议断言（vs 每帧 1 次、hs 每行 1 次、vs 先于首个 de）。tb 清单与断言点见 [design_v0.md](design_v0.md) §3.1。
 
