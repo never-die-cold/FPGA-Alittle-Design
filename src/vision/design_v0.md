@@ -53,7 +53,7 @@ ADV7611 HDMI IN ──像素时钟域──> 输入对齐/24bit RGB ──> rgb2
 - `line_buffer.v`：参数化单行 RAM（WIDTH/DW），同步读；同拍同址**先读后写**（返回旧值）——gaussian 依赖此语义读取"正在被写入的 buffer"的旧行。
 - `gaussian_3x3.v`：双行缓存按行号奇偶轮替，输出行落后输入 1 行；末行在 vblank 冲刷补出（底邻居钳位为自身）；列方向三级读链给出 {左,中,右}，左右边界用中列钳位；全移位加无乘除法。黄金参考 `data/golden/vision/gaussian3x3/`。
 - `sobel.v`：窗口装配/冲刷与 gaussian 同构；Gx/Gy L1 幅值 `|Gx|+|Gy|` 8 位饱和。黄金参考 `data/golden/vision/sobel/`。
-- `scaler.v`：16.16 定点双线性（坐标 `(2d+1)S/(2D)-0.5` clamp，fx/fy 高 8 位，两级 8bit lerp）；NLINES 行槽滑动缓存 + 2 拍/像素双相位随机列读；发射与源写入解耦（未就绪挂起、hs 续发）。约束：NLINES 为 2 的幂，行步进 ≤ NLINES-2；吞吐 1 像素/2 拍（缩小档充足）。黄金参考 `data/golden/vision/scaler/`。
+- `scaler.v`：16.16 定点双线性（坐标 `(2d+1)S/(2D)-0.5` clamp，fx/fy 高 8 位，两级 8bit lerp）；NLINES 行槽滑动缓存 + 2 拍/像素**错半拍预寻址列读**（ph0 发 x1 地址、ph1 发下一像素 x0 地址，x 插值 ph1 拍寄存、发射拍仅 y 插值，2026-09-30 切拍后口径）；发射与源写入解耦（未就绪挂起、hs 续发）。约束：NLINES 为 2 的幂，行步进 ≤ NLINES-2；吞吐 1 像素/2 拍（缩小档充足）。real 档 OOC WNS −0.534@10ns（≈94.9 MHz，720p60 达标）。黄金参考 `data/golden/vision/scaler/`。
 - `tb_chain.v` / `tb_fullchain.v`：两级与三级（rgb2gray→gaussian→scaler）级联冒烟；末端对拍 `data/golden/vision/fullchain/expected_fullchain.hex`，中间级同时对拍单级 golden。
 - `osd_overlay.v`：灰度流直通 + 两个 1px 描边框（box 检测框 / roi），命中像素以各自颜色替换、重叠 box 优先；**参数在帧首 vs 锁存**——帧内改参数不影响当前帧（A4 动效换帧生效语义），tb 以双帧 golden 验证锁存。黄金参考 `data/golden/vision/osd/`。
 - `axi_regs.v`：AXI-Lite 从机参数寄存器堆（NREG=16，映射 v0.1 见模块头注释：R0 控制开关 / R1–R5 检测框 / R6–R10 ROI / R11–R15 保留）。要点：**AW 默认 7，须满足 2^AW > NREG*4**——AW=6 时地址空间恰好被寄存器占满，越界判别永远无法触发（tb 实测教训，2026-09-29）；保留区写忽略读 0；wstrb 字节使能；读写通道序列化握手；复位全零（control 默认全关，防 X 传播）。单元级单时钟域，PS↔PL 跨时钟由 vision_top 评审定。黄金参考无（协议 tb：BFM 确定性拍数驱动）。
@@ -81,7 +81,8 @@ ADV7611 HDMI IN ──像素时钟域──> 输入对齐/24bit RGB ──> rgb2
 
 ## 5. 开放问题（10/5 评审前必须定，阻塞 vision_top）
 
-0. **scaler 时钟达标路径（2026-09-30 实测新增）**：real 档 OOC（1280 行宽、NLINES=8/16 均测）WNS −7.4~−7.5 @10ns ≈57 MHz，不满足 720p60 的 74.25 MHz。worst path = 槽读数据 → 两级 8bit lerp → 输出寄存（20 级逻辑，主凶是 lerp 乘法综合成的 9 级 CARRY4 进位链，槽 mux 占比小——NLINES 16→8 实测无效）。可选：① **720p30 演示**（37.5 MHz 像素钟，现状即达标，零工作量，推荐首发）；② 插值链切一级流水（需预寻址重排读时序，x-lerp 提前拍的三次尝试均因 BRAM 一拍滞后与行边界相位连环失配被撤销，工作量约半天，收益 75+ MHz）；③ 乘法改差值形式 / DSP 引导（收益不确定）。评审拍板①或②。
+0. **scaler 时钟达标路径（2026-09-30 实测新增，同日②已实施）**：real 档 OOC（1280 行宽、NLINES=8/16 均测）WNS −7.4~−7.5 @10ns ≈57 MHz，不满足 720p60 的 74.25 MHz。worst path = 槽读数据 → 两级 8bit lerp → 输出寄存（20 级逻辑，主凶是 lerp 乘法综合成的 9 级 CARRY4 进位链，槽 mux 占比小——NLINES 16→8 实测无效）。可选：① **720p30 演示**（37.5 MHz 像素钟，现状即达标，零工作量）；② 插值链切一级流水（预寻址重排读时序；早期 x-lerp 提前拍三次尝试因行边界相位连环失配撤销）；③ 乘法改差值形式 / DSP 引导（收益不确定）。
+   **✅ ② 已实施（2026-09-30，用户拍板 720p60 为正式目标）**：错半拍预寻址——ph0 发 x1 列地址、ph1 发下一像素 x0 地址，x 方向插值于 ph1 拍寄存，发射拍只剩 y 插值；**发射时刻与输出标记一拍不变**（行边界捕获用 pend 槽号、复位/帧边界 x_acc 置 INIT_X 保冷启动）。实测：iverilog 10/10 位精确（tb_scaler/fullchain/top 逐像素 0 错）；real 档 OOC **WNS −0.534 @10ns ≈ 94.9 MHz**，验收线 −3.47（=74.25 MHz）大幅达标。新 worst path = BRAM→槽 mux→x 插值→寄存（ph1 拍）。证据 `data/logs/2026-09-30-scaler-retiming/`。
 
 1. **HDMI 输入通路选型**：ADV7611 需 I2C 初始化与 EDID（Ultra-Vision 经验）；用 Vivado 自带 DVI/HDMI IP 还是移植开源解码器；pclk 频率（720p60≈74.25 MHz / 1080p60≈148.5 MHz）。
 2. **分辨率与色彩空间**：720p60 RGB444（推荐首发）还是 1080p；ADV7611 输出 RGB444 还是 YCbCr422（若是 422，rgb2gray 前需加色度变换级）。
@@ -108,3 +109,4 @@ ADV7611 HDMI IN ──像素时钟域──> 输入对齐/24bit RGB ──> rgb2
 | 日期 | 变更 | 作者 |
 |:---|:---|:---|
 | 2026-09-29 | 首版草案：模块划分/接口初稿/定点参数/验证策略/开放问题，供 10/5 前评审 | never-die-cold（模块二 RTL） |
+| 2026-09-30 | §5.0 ② scaler 插值链切拍实施（错半拍预寻址，WNS −0.534≈94.9 MHz 达标 720p60）；§3.1 scaler 口径同步 | never-die-cold（模块二 RTL） |

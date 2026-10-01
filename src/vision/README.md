@@ -11,7 +11,7 @@ HDMI 视频流逐像素实时处理：灰度化 → 3×3 高斯滤波 → 双线
 | `rgb2gray.v` | 已实现 | BT.601 定点，黄金参考逐像素对拍 |
 | `line_buffer.v` | 已实现 | 同步读、同拍同址先读后写（旧值） |
 | `gaussian_3x3.v` | 已实现 | 双行缓存轮替、边界钳位、vblank 冲刷末行 |
-| `scaler.v` | 已实现 | 16.16 定点双线性、行槽滑动、自产 `out_vs/out_hs` 标记 |
+| `scaler.v` | 已实现 | 16.16 定点双线性、行槽滑动、自产 `out_vs/out_hs` 标记；2026-09-30 插值链切拍（错半拍预寻址），real 档 OOC ≈94.9 MHz，720p60 达标 |
 | `sobel.v` | 已实现 | Gx/Gy L1 幅值饱和；单元级 PASS，未接入 `vision_top` |
 | `osd_overlay.v` | 已实现 | box/roi 双框叠加、帧首参数锁存 |
 | `axi_regs.v` | 已实现 | AXI-Lite 16 寄存器；`AW` 须满足 `2^AW > NREG*4` |

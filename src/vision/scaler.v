@@ -7,9 +7,10 @@
 // 实现口径 v0.1（单元级，10/5 评审后冻结）：
 //   * NLINES 个行槽（2 的幂）滑动缓存源行，写侧按行号取模入槽；
 //     行步进 SH/DH <= NLINES-2 时读槽不被写覆盖（tb 断言，RTL 不含检查）；
-//   * 2 拍/像素：ph0 读 x0 列、ph1 读 x1 列（两槽同址），下一 ph0 末出数；
-//     吞吐 = 1 像素/2 拍——缩小档吞吐充足，放大档受帧预算约束（design_v0.md §3.1）；
-//   * 读地址由坐标累加器组合产生（x1_of 函数），行切换无滞后读；
+//   * 2 拍/像素错半拍预寻址（2026-09-30 切拍，design_v0.md §5.0 选项②）：
+//     ph0 发当前像素 x1 列地址、ph1 发下一像素 x0 列地址，ph1 拍 x0/x1 两列读数
+//     同时在手，x 方向插值当拍寄存；下一 ph0（发射拍）只剩 y 方向插值——两级乘法
+//     分居两拍，路径减半；发射时刻与输出标记一拍不变；吞吐 = 1 像素/2 拍不变；
 //   * 发射与源写入解耦：行尾若下一行源未就绪则挂起，hs 提交后续发。
 module scaler #(
     parameter SW = 16,            // 源宽
@@ -54,6 +55,7 @@ module scaler #(
     reg [FXH-1:0]         fx8_r, fy8_r;
     reg [AWY-1:0]         y0_slot, y1_slot;
     reg [7:0]             p00r, p10r;
+    reg [7:0]             top8_r, bot8_r;   // x 方向插值结果寄存（ph1 拍算，发射拍用）
     reg                   data_ready;
     // 行坐标跨像素流水：末像素的插值发生在行尾后一拍，行坐标先装 pending、
     // 末像素算完（下一 ph0 末）再提交，避免末像素用错下一行的 fy/槽
@@ -64,12 +66,20 @@ module scaler #(
     reg                   vs_pending, hs_pending, last_px_out;
 
     // 像素坐标（组合，ph0/ph1 期间 x_acc 均为当前像素；先于行槽例化声明）
+    wire row_end = emitting && ph && (xd == DW-1);   // 行末像素判定（ph1 拍，预寻址要用）
     wire signed [31:0] xs_shift = x_acc >>> FR;
     wire [AW-1:0] xs_c  = (x_acc < 0) ? 0 :
                           (xs_shift > SW-1) ? (SW-1) : xs_shift[AW-1:0];
     wire [AW-1:0] xs_x1 = (xs_c == SW-1) ? xs_c : (xs_c + 1);
     wire [FXH-1:0] xs_f = (x_acc < 0) ? 0 : x_acc[FR-1 -: FXH];
-    wire [AW-1:0] rd_addr = ph ? xs_x1 : xs_c;
+    // 下一像素 x0 列坐标（ph1 预寻址用；行末像素的"下一像素"= 新行第 0 列）
+    wire signed [31:0] nxs_acc   = row_end ? INIT_X : (x_acc + STEP_X);
+    wire signed [31:0] nxs_shift = nxs_acc >>> FR;
+    wire [AW-1:0] nxs_c = (nxs_acc < 0) ? 0 :
+                          (nxs_shift > SW-1) ? (SW-1) : nxs_shift[AW-1:0];
+    // 读调度（错半拍）：空闲期持续发待发首像素 x0 地址（冷启动预取）；
+    // ph0 发当前像素 x1 地址，ph1 发下一像素 x0 地址
+    wire [AW-1:0] rd_addr = !emitting ? xs_c : (ph ? nxs_c : xs_x1);
 
     wire [7:0] slot_rd [0:NLINES-1];
     genvar g;
@@ -97,6 +107,19 @@ module scaler #(
         end
     end
 
+    // x0 列捕获槽选择：换行那拍 y0/y1_slot 还是旧行号，须用待提交的 pend 槽号
+    wire [AWY-1:0] cap_y0 = pend_valid ? pend_y0 : y0_slot;
+    wire [AWY-1:0] cap_y1 = pend_valid ? pend_y1 : y1_slot;
+    reg [7:0] cap_px0, cap_px1;
+    integer kk;
+    always @* begin
+        cap_px0 = 8'h00; cap_px1 = 8'h00;
+        for (kk = 0; kk < NLINES; kk = kk + 1) begin
+            if (kk == cap_y0) cap_px0 = slot_rd[kk];
+            if (kk == cap_y1) cap_px1 = slot_rd[kk];
+        end
+    end
+
     // ---- 写侧时序：位置计数 + 行提交（单 always 单驱动，committed 帧边界清零） ----
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -111,7 +134,6 @@ module scaler #(
             else if (in_hs && (w_row < SH-1))   w_row <= w_row + 1;
         end
     end
-    wire row_end   = emitting && ph && (xd == DW-1);
     wire more_rows = (out_row < DH-1);
     wire signed [31:0] cont_acc   = y_acc + STEP_Y;              // 行尾续发的下一行
     wire signed [31:0] pend_acc   = y_acc;                       // 空闲挂起的待发行
@@ -131,10 +153,11 @@ module scaler #(
     wire start_idle  = !emitting && !in_vs && idle_ready && (out_row < DH);
     wire start_cont  = row_end && more_rows && cont_ready;
 
-    // 两级 8bit lerp：ph0 末用捕获的 x0 列与当前 x1 列(rdata) 插值
+    // 两级 8bit lerp（切拍后）：ph1 拍用寄存的 x0 列与实时 x1 列(rdata) 做 x 方向插值；
+    // 发射 ph0 拍只用寄存器做 y 方向插值
     wire [15:0] top = (256 - fx8_r) * p00r + fx8_r * p_row0;
     wire [15:0] bot = (256 - fx8_r) * p10r + fx8_r * p_row1;
-    wire [15:0] val = (256 - fy8_r) * top[15:8] + fy8_r * bot[15:8];
+    wire [15:0] val = (256 - fy8_r) * top8_r + fy8_r * bot8_r;
 
     // 行坐标装载（两处调用）
     task load_row;
@@ -150,10 +173,10 @@ module scaler #(
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             emitting <= 0; ph <= 0; xd <= 0; out_row <= 0;
-            x_acc <= 0; y_acc <= INIT_Y;
+            x_acc <= INIT_X; y_acc <= INIT_Y;   // x_acc 复位为 INIT_X：空闲期预寻址首列正确
             fx8_r <= 0; fy8_r <= 0;
             y0_slot <= 0; y1_slot <= 0;
-            p00r <= 0; p10r <= 0; data_ready <= 0;
+            p00r <= 0; p10r <= 0; top8_r <= 0; bot8_r <= 0; data_ready <= 0;
             pend_valid <= 0; last_pending <= 0;
             pend_y0 <= 0; pend_y1 <= 0; pend_fy <= 0;
             last_px_out <= 0;
@@ -173,7 +196,7 @@ module scaler #(
             // 注意 committed 的复位在写侧 always（单驱动），此处不得重复赋值。
             if (in_vs) begin
                 emitting <= 0; out_row <= 0;
-                y_acc <= INIT_Y;
+                y_acc <= INIT_Y; x_acc <= INIT_X;   // 帧边界重建：空闲预寻址首列
                 data_ready <= 0; pend_valid <= 0; last_pending <= 0;
                 last_px_out <= 0;
             end else if (start_idle) begin
@@ -186,6 +209,8 @@ module scaler #(
             end else if (emitting) begin
                 if (!ph) begin
                     fx8_r <= xs_f;
+                    p00r   <= cap_px0;   // 捕获 x0 列读数（上一 ph1 预寻址地址的读数）
+                    p10r   <= cap_px1;
                     if (data_ready) begin
                         out_y      <= val[15:8];
                         out_de     <= 1;
@@ -208,8 +233,8 @@ module scaler #(
                     end
                     ph <= 1;
                 end else begin
-                    p00r       <= p_row0;
-                    p10r       <= p_row1;
+                    top8_r     <= top[15:8];   // x 方向插值当拍寄存，发射拍只剩 y 插值
+                    bot8_r     <= bot[15:8];
                     data_ready <= 1;
                     ph         <= 0;
                     if (row_end) begin
