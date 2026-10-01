@@ -16,7 +16,7 @@ module sobel #(
     input  wire       in_hs,
     input  wire       in_de,
     input  wire [7:0] in_y,
-    output reg        out_vs,     // 级间标记：与 out_de 同拍传播（3 拍延迟）
+    output reg        out_vs,     // 级间标记：与 out_de 同拍传播（4 拍延迟）
     output reg        out_hs,     // 行尾标记；末行冲刷时输出合成 hs（vblank 内）
     output reg        out_de,
     output reg  [7:0] out_g
@@ -109,21 +109,34 @@ module sobel #(
     wire [10:0] gx_neg = topL + 2*midL + botL;
     wire [10:0] gy_pos = botL + 2*botM + botR;
     wire [10:0] gy_neg = topL + 2*topM + topR;
-    wire [10:0] gx = (gx_pos > gx_neg) ? (gx_pos - gx_neg) : (gx_neg - gx_pos);
-    wire [10:0] gy = (gy_pos > gy_neg) ? (gy_pos - gy_neg) : (gy_neg - gy_pos);
+    reg [9:0] gx_pos_r,gx_neg_r,gy_pos_r,gy_neg_r;
+    reg arithmetic_valid;
+    always @(posedge clk or negedge rst_n) begin
+        if(!rst_n) begin
+            gx_pos_r<=0;gx_neg_r<=0;gy_pos_r<=0;gy_neg_r<=0;arithmetic_valid<=0;
+        end else begin
+            gx_pos_r<=gx_pos[9:0];gx_neg_r<=gx_neg[9:0];
+            gy_pos_r<=gy_pos[9:0];gy_neg_r<=gy_neg[9:0];
+            arithmetic_valid<=de_d2 && (y>=1);
+        end
+    end
+    wire [10:0] gx = (gx_pos_r > gx_neg_r) ? (gx_pos_r - gx_neg_r) : (gx_neg_r - gx_pos_r);
+    wire [10:0] gy = (gy_pos_r > gy_neg_r) ? (gy_pos_r - gy_neg_r) : (gy_neg_r - gy_pos_r);
     wire [11:0] mag = gx + gy;                     // <= 4*255*2 = 2040
 
     // 级间标记（同 gaussian_3x3）：直通 hs 门控 y>=1，冲刷末像素拍注入合成 hs
     wire hs_gen = (in_hs && (y >= 1)) || (flushing && (fc == WIDTH+2));
-    reg  vs_d1, vs_d2, vs_d3;
-    reg  hs_d1, hs_d2, hs_d3;
+    reg  vs_d1, vs_d2, vs_d3,vs_d4;
+    reg  hs_d1, hs_d2, hs_d3,hs_d4;
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             vs_d1 <= 0; vs_d2 <= 0; vs_d3 <= 0;
             hs_d1 <= 0; hs_d2 <= 0; hs_d3 <= 0;
+            vs_d4<=0;hs_d4<=0;
         end else begin
             vs_d1 <= in_vs; vs_d2 <= vs_d1; vs_d3 <= vs_d2;
             hs_d1 <= hs_gen; hs_d2 <= hs_d1; hs_d3 <= hs_d2;
+            vs_d4<=vs_d3;hs_d4<=hs_d3;
         end
     end
 
@@ -132,10 +145,10 @@ module sobel #(
             out_de <= 0; out_g <= 0;
             out_vs <= 0; out_hs <= 0;
         end else begin
-            out_de <= de_d2 && (y >= 1);
+            out_de <= arithmetic_valid;
             out_g  <= (mag > 12'd255) ? 8'd255 : mag[7:0];
-            out_vs <= vs_d3;
-            out_hs <= hs_d3;
+            out_vs <= vs_d4;
+            out_hs <= hs_d4;
         end
     end
 endmodule

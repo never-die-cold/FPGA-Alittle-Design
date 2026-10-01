@@ -62,6 +62,13 @@ module tb_top;
             @(posedge clk);
             @(negedge clk);
             bready = 0;
+            // 暂存参数写完后显式提交；帧内提交仍须等下一帧生效。
+            if(addr==0) begin
+                @(negedge clk);awaddr=7'h2c;awvalid=1;wdata=1;wvalid=1;bready=1;
+                @(negedge clk);awvalid=0;wvalid=0;
+                @(negedge clk);bready=0;
+                repeat(4) @(negedge clk);
+            end
         end
     endtask
 
@@ -151,6 +158,7 @@ module tb_top;
         $readmemh("../data/golden/vision/fullchain/expected_gray_sobel.hex", expE);
         repeat (4) @(negedge clk);
         rst_n = 1;
+        repeat(4) @(negedge clk);
 
         // 帧 1：gray only
         axi_write(7'h00, 32'h0);
@@ -205,17 +213,17 @@ module tb_top;
             case (f)
                 0, 2: if (lat[f] !== 1) lat_err = 1;
                 1, 3: if (lat[f] !== 21 + 4) lat_err = 1;
-                4:    if (lat[f] !== 2 * 21 + 7) lat_err = 1;
-                5:    if (lat[f] !== 21 + 4) lat_err = 1;
+                4:    if (lat[f] !== 2 * 21 + 8) lat_err = 1;
+                5:    if (lat[f] !== 21 + 5) lat_err = 1;
             endcase
         end
         if (lat_err) begin
-            $display("FAIL: latency f0..f5 = %0d/%0d/%0d/%0d/%0d/%0d (expect 1/25/1/25/49/25)",
+            $display("FAIL: latency f0..f5 = %0d/%0d/%0d/%0d/%0d/%0d (expect 1/25/1/25/50/26)",
                      lat[0], lat[1], lat[2], lat[3], lat[4], lat[5]);
             $fatal(1);
         end
         $display("PASS: vision_top v0.3 6 frames dual-path, display 768 px + cop 512 px, 0 errors (frame-latch verified)");
-        $display("PASS: A5 latency gray=1 gauss=25 gauss+sobel=49 cycles (1-row window lag model match), scaler throughput-based");
+        $display("PASS: A5 latency gray=1 gauss=25 gauss+sobel=50 cycles (window lag + pipelined arithmetic), scaler throughput-based");
         $finish;
     end
 endmodule

@@ -1,15 +1,11 @@
 `timescale 1ns/1ps
-// vision_top —— 模块二流水线顶层（v0.3：双路径拓扑）
-// 显示路径（全分辨率直通，A5 延迟固定可测）：
-//   rgb2gray（恒接）→ [gaussian] → [sobel] → [osd] → out_*（送给 HDMI OUT，全分辨率）
-// 快照分支（喂模块三协处理器，design_v0 §7）：
-//   [scaler] → cop_*（DW×DH 灰度流，R0 bit1 使能；M3 落乒乓行组缓冲后接 cop_top）
-//   两路径在 sobel 之后分叉——scaler 不再串在显示路径里（224 小图不上屏）。
+// vision_top —— 彩色显示、灰度分析和快照分流。
+// display_* 原图 RGB 直通；out_* 为灰度诊断流，不能直接驱动物理 HDMI。
+// 分析：rgb2gray → [gaussian] → [sobel] → [osd]；scaler 在 sobel 后分叉。
+// 快照：scaler → cop_buf → cop_*；ready 仅授权整帧启动。
 // R0 位定义 v0.2：bit0 gauss_en / bit1 scaler_en（快照使能）/ bit2 osd_en / bit3 sobel_en。
-// 拓扑切换语义：路径选择在输入帧首 in_vs 锁存，帧内恒定；每帧自洽，帧间可变。
-// 时钟域：像素流全部在 pclk；axi_regs 在 s_axi_aclk（PS AXI_GP 域）——R0 开关位经
-//   2FF 同步进 pclk（帧首锁存前）；box/roi 多字节参数沿用 D10 口径：帧首锁存 +
-//   帧边界生效吸收跨时钟位偏差（写入远快于帧周期）。HDMI 解码/编码不在本单元。
+// R0..10 整组暂存，R11 提交，config_bridge 在帧首应用并确认 R12 配置编号。
+// 请求/确认两级同步；在途配置总线保持不变。两时钟分别同步释放复位。
 module vision_top #(
     parameter SW = 16,            // 源宽（= gaussian 行宽）
     parameter SH = 8,
@@ -18,7 +14,7 @@ module vision_top #(
     parameter NLINES = 16
 )(
     input  wire       clk,          // pclk：像素流域
-    input  wire       s_axi_aclk,   // AXI-Lite 配置域（板级 = PS AXI_GP；仿真与 clk 同源）
+    input  wire       s_axi_aclk,   // AXI-Lite 配置域，允许与像素时钟异步
     input  wire       rst_n,
     // 像素输入（解码后 RGB 流）
     input  wire       in_vs,
@@ -53,32 +49,45 @@ module vision_top #(
     output wire       cop_vs,
     output wire       cop_hs,
     output wire       cop_de,
-    output wire [7:0] cop_y
+    output wire [7:0] cop_y,
+    output reg display_vs,display_hs,display_de,
+    output reg [23:0] display_rgb,
+    output reg [31:0] display_frame_id,
+    output wire [31:0] active_config_id,
+    output wire [31:0] cop_frame_id,cop_config_id,snapshot_drop_count
 );
     wire [16*32-1:0] regs_flat;
-    axi_regs #(.NREG(16), .AW(7), .RESV_BASE(11)) u_regs (
-        .clk(s_axi_aclk), .rst_n(rst_n),
+    wire pixel_reset,axi_reset;
+    reset_sync u_pixel_reset(.clk(clk),.arst_n(rst_n),.rst_n(pixel_reset));
+    reset_sync u_axi_reset(.clk(s_axi_aclk),.arst_n(rst_n),.rst_n(axi_reset));
+    wire [351:0] active_cfg;
+    wire cfg_commit,cfg_busy;
+    wire [31:0] cfg_applied,cfg_id;
+    config_bridge u_config(.src_clk(s_axi_aclk),.dst_clk(clk),.rst_n(rst_n),
+        .src_commit(cfg_commit),.src_data(regs_flat[351:0]),.dst_frame(in_vs),
+        .src_busy(cfg_busy),.src_applied(cfg_applied),.dst_data(active_cfg),.dst_id(cfg_id));
+    axi_regs #(.NREG(16), .AW(7), .RESV_BASE(11),.ATOMIC_CONFIG(1)) u_regs (
+        .clk(s_axi_aclk), .rst_n(axi_reset),
         .awvalid(awvalid), .awready(awready), .awaddr(awaddr),
         .wvalid(wvalid), .wready(wready), .wdata(wdata), .wstrb(wstrb),
         .bvalid(bvalid), .bready(bready), .bresp(bresp),
         .arvalid(arvalid), .arready(arready), .araddr(araddr),
         .rvalid(rvalid), .rready(rready), .rdata(rdata), .rresp(rresp),
-        .regs_flat(regs_flat)
+        .regs_flat(regs_flat),.cfg_commit(cfg_commit),.cfg_busy(cfg_busy),.cfg_applied(cfg_applied)
     );
-    wire [31:0] r0_aclk = regs_flat[0*32 +: 32];
-    // R0 开关位 s_axi_aclk → pclk 2FF 同步（D10：标量开关 2FF；多字节参数靠帧首锁存吸收）
-    reg [3:0] r0_meta, r0_sync;
-    always @(posedge clk or negedge rst_n) begin
-        if (!rst_n) begin
-            r0_meta <= 4'h0; r0_sync <= 4'h0;
+    assign active_config_id=cfg_id;
+    // 彩色原图独立显示，分析开关/缩放/消费反压均不影响该路径。
+    always @(posedge clk or negedge pixel_reset) begin
+        if(!pixel_reset) begin
+            display_vs<=0;display_hs<=0;display_de<=0;display_rgb<=0;display_frame_id<=0;
         end else begin
-            r0_meta <= r0_aclk[3:0];
-            r0_sync <= r0_meta;
+            display_vs<=in_vs;display_hs<=in_hs;display_de<=in_de;display_rgb<=in_rgb;
+            if(in_vs) display_frame_id<=display_frame_id+1;
         end
     end
-    wire gauss_en  = r0_sync[0];
-    wire scaler_en = r0_sync[1];
-    wire osd_en    = r0_sync[2];
+    wire gauss_en  = active_cfg[0];
+    wire scaler_en = active_cfg[1];
+    wire osd_en    = active_cfg[2];
 
     // ---- 级 0：RGB→灰度（恒接） ----
     wire       g0_vs, g0_hs, g0_de;
@@ -92,23 +101,14 @@ module vision_top #(
     wire       g1_vs, g1_hs, g1_de;
     wire [7:0] g1_y;
     gaussian_3x3 #(.WIDTH(SW), .HEIGHT(SH)) u_gauss (
-        .clk(clk), .rst_n(rst_n),
+        .clk(clk), .rst_n(pixel_reset),
         .in_vs(g0_vs), .in_hs(g0_hs), .in_de(g0_de), .in_y(g0_y),
         .out_vs(g1_vs), .out_hs(g1_hs), .out_de(g1_de), .out_g(g1_y)
     );
 
     // ---- 拓扑锁存（帧首；帧内恒定） ----
-    reg t_gauss, t_scaler, t_osd, t_sobel;
-    always @(posedge clk or negedge rst_n) begin
-        if (!rst_n) begin
-            t_gauss <= 0; t_scaler <= 0; t_osd <= 0; t_sobel <= 0;
-        end else if (in_vs) begin
-            t_gauss  <= gauss_en;
-            t_scaler <= scaler_en;
-            t_osd    <= osd_en;
-            t_sobel  <= r0_sync[3];
-        end
-    end
+    // bridge 已在帧首整体锁存；这里再锁存会错误地多延迟一帧。
+    wire t_gauss=gauss_en,t_scaler=scaler_en,t_osd=osd_en,t_sobel=active_cfg[3];
 
     // ---- mux 1：高斯旁路 ----
     wire       m1_vs = t_gauss  ? g1_vs : g0_vs;
@@ -120,7 +120,7 @@ module vision_top #(
     wire       e_vs, e_hs, e_de;
     wire [7:0] e_y;
     sobel #(.WIDTH(SW), .HEIGHT(SH)) u_sobel (
-        .clk(clk), .rst_n(rst_n),
+        .clk(clk), .rst_n(pixel_reset),
         .in_vs(m1_vs), .in_hs(m1_hs), .in_de(m1_de), .in_y(m1_y),
         .out_vs(e_vs), .out_hs(e_hs), .out_de(e_de), .out_g(e_y)
     );
@@ -135,7 +135,7 @@ module vision_top #(
     wire       s_vs, s_hs, s_de;
     wire [7:0] s_y;
     scaler #(.SW(SW), .SH(SH), .DW(DW), .DH(DH), .NLINES(NLINES)) u_scaler (
-        .clk(clk), .rst_n(rst_n),
+        .clk(clk), .rst_n(pixel_reset),
         .in_vs(m1b_vs), .in_hs(m1b_hs), .in_de(m1b_de), .in_y(m1b_y),
         .out_vs(s_vs), .out_hs(s_hs), .out_de(s_de), .out_y(s_y)
     );
@@ -144,25 +144,27 @@ module vision_top #(
     wire       cw_hs = t_scaler ? s_hs : 1'b0;
     wire       cw_de = t_scaler ? s_de : 1'b0;
     cop_buf #(.DW(DW), .DH(DH)) u_copbuf (
-        .clk(clk), .rst_n(rst_n),
+        .clk(clk), .rst_n(pixel_reset),
         .in_vs(cw_vs), .in_hs(cw_hs), .in_de(cw_de), .in_y(s_y),
         .cop_ready(cop_ready),
         .out_vs(cop_vs), .out_hs(cop_hs), .out_de(cop_de), .out_y(cop_y),
-        .frame_done(), .buf_full()
+        .frame_done(), .buf_full(),
+        .in_frame_id(display_frame_id),.in_config_id(cfg_id),
+        .out_frame_id(cop_frame_id),.out_config_id(cop_config_id),.drop_count(snapshot_drop_count)
     );
 
     // ---- 级 3：OSD 叠加（框参数 = R1..R10，坐标系 = 全分辨率显示图） ----
     wire       o_vs, o_hs, o_de;
     wire [7:0] o_y;
     osd_overlay u_osd (
-        .clk(clk), .rst_n(rst_n),
+        .clk(clk), .rst_n(pixel_reset),
         .in_vs(m1b_vs), .in_hs(m1b_hs), .in_de(m1b_de), .in_y(m1b_y),
-        .box_x0(regs_flat[1*32 +: 16]), .box_y0(regs_flat[2*32 +: 16]),
-        .box_x1(regs_flat[3*32 +: 16]), .box_y1(regs_flat[4*32 +: 16]),
-        .box_color(regs_flat[5*32 +: 8]),
-        .roi_x0(regs_flat[6*32 +: 16]), .roi_y0(regs_flat[7*32 +: 16]),
-        .roi_x1(regs_flat[8*32 +: 16]), .roi_y1(regs_flat[9*32 +: 16]),
-        .roi_color(regs_flat[10*32 +: 8]),
+        .box_x0(active_cfg[1*32 +: 16]), .box_y0(active_cfg[2*32 +: 16]),
+        .box_x1(active_cfg[3*32 +: 16]), .box_y1(active_cfg[4*32 +: 16]),
+        .box_color(active_cfg[5*32 +: 8]),
+        .roi_x0(active_cfg[6*32 +: 16]), .roi_y0(active_cfg[7*32 +: 16]),
+        .roi_x1(active_cfg[8*32 +: 16]), .roi_y1(active_cfg[9*32 +: 16]),
+        .roi_color(active_cfg[10*32 +: 8]),
         .out_vs(o_vs), .out_hs(o_hs), .out_de(o_de), .out_y(o_y)
     );
 
