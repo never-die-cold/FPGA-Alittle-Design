@@ -7,8 +7,9 @@
 //   两路径在 sobel 之后分叉——scaler 不再串在显示路径里（224 小图不上屏）。
 // R0 位定义 v0.2：bit0 gauss_en / bit1 scaler_en（快照使能）/ bit2 osd_en / bit3 sobel_en。
 // 拓扑切换语义：路径选择在输入帧首 in_vs 锁存，帧内恒定；每帧自洽，帧间可变。
-// HDMI 解码/编码不在本单元：输入为归一化后的 RGB 像素流（in_align），输出为处理后的
-//   灰度流；单时钟域（与 axi_regs 同，跨时钟见 design_v0 §3.1 D10 口径）。
+// 时钟域：像素流全部在 pclk；axi_regs 在 s_axi_aclk（PS AXI_GP 域）——R0 开关位经
+//   2FF 同步进 pclk（帧首锁存前）；box/roi 多字节参数沿用 D10 口径：帧首锁存 +
+//   帧边界生效吸收跨时钟位偏差（写入远快于帧周期）。HDMI 解码/编码不在本单元。
 module vision_top #(
     parameter SW = 16,            // 源宽（= gaussian 行宽）
     parameter SH = 8,
@@ -16,7 +17,8 @@ module vision_top #(
     parameter DH = 16,
     parameter NLINES = 16
 )(
-    input  wire       clk,
+    input  wire       clk,          // pclk：像素流域
+    input  wire       s_axi_aclk,   // AXI-Lite 配置域（板级 = PS AXI_GP；仿真与 clk 同源）
     input  wire       rst_n,
     // 像素输入（解码后 RGB 流）
     input  wire       in_vs,
@@ -54,7 +56,7 @@ module vision_top #(
 );
     wire [16*32-1:0] regs_flat;
     axi_regs #(.NREG(16), .AW(7), .RESV_BASE(11)) u_regs (
-        .clk(clk), .rst_n(rst_n),
+        .clk(s_axi_aclk), .rst_n(rst_n),
         .awvalid(awvalid), .awready(awready), .awaddr(awaddr),
         .wvalid(wvalid), .wready(wready), .wdata(wdata), .wstrb(wstrb),
         .bvalid(bvalid), .bready(bready), .bresp(bresp),
@@ -62,10 +64,20 @@ module vision_top #(
         .rvalid(rvalid), .rready(rready), .rdata(rdata), .rresp(rresp),
         .regs_flat(regs_flat)
     );
-    wire [31:0] r0 = regs_flat[0*32 +: 32];
-    wire gauss_en  = r0[0];
-    wire scaler_en = r0[1];
-    wire osd_en    = r0[2];
+    wire [31:0] r0_aclk = regs_flat[0*32 +: 32];
+    // R0 开关位 s_axi_aclk → pclk 2FF 同步（D10：标量开关 2FF；多字节参数靠帧首锁存吸收）
+    reg [3:0] r0_meta, r0_sync;
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            r0_meta <= 4'h0; r0_sync <= 4'h0;
+        end else begin
+            r0_meta <= r0_aclk[3:0];
+            r0_sync <= r0_meta;
+        end
+    end
+    wire gauss_en  = r0_sync[0];
+    wire scaler_en = r0_sync[1];
+    wire osd_en    = r0_sync[2];
 
     // ---- 级 0：RGB→灰度（恒接） ----
     wire       g0_vs, g0_hs, g0_de;
@@ -93,7 +105,7 @@ module vision_top #(
             t_gauss  <= gauss_en;
             t_scaler <= scaler_en;
             t_osd    <= osd_en;
-            t_sobel  <= r0[3];
+            t_sobel  <= r0_sync[3];
         end
     end
 

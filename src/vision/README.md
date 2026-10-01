@@ -16,7 +16,7 @@ HDMI 视频流逐像素实时处理：灰度化 → 3×3 高斯滤波 → 双线
 | `in_align.v` | 已实现 | 2026-10-01 新增：ADV7611 解码流归一到 §3.1 流约定（hs/vs 重定时、撞拍让路） |
 | `osd_overlay.v` | 已实现 | box/roi 双框叠加、帧首参数锁存 |
 | `axi_regs.v` | 已实现 | AXI-Lite 16 寄存器；`AW` 须满足 `2^AW > NREG*4` |
-| `vision_top.v` | 已实现 | v0.2：gray 恒接 + gauss/sobel/scaler/osd 开关（帧首锁存），6 帧 tb 1024 px 位精确 |
+| `vision_top.v` | 已实现 | v0.3 双路径：显示 gray→[gauss]→[sobel]→[osd] 全分辨率直通 + 快照 [scaler]→cop 喂模块三；双时钟域 R0 位 2FF；6 帧 tb 双通道位精确 |
 
 实现口径见 [design_v0.md](design_v0.md) §3.1/§3.2；接口契约仍为草案，10/5 评审后升格冻结。
 
