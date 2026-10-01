@@ -14,10 +14,13 @@ Part B 收口前（10/2–10/4）只做文档与测试数据准备，不写 RTL�
 ## 2. 数据通路（直通架构，A2 的对照项之二）
 
 ```text
-ADV7611 HDMI IN ──像素时钟域──> 输入对齐/24bit RGB ──> rgb2gray ──> gaussian_3x3 ──> scaler ──> [sobel 可选] ──> osd_overlay ──> HDMI OUT
+ADV7611 HDMI IN ──像素时钟域──> 输入对齐/24bit RGB ──> rgb2gray ──> gaussian_3x3 ──> [sobel 可选] ──> scaler ──> osd_overlay ──> HDMI OUT
                                    |                                                                                    |
                                    └────────────── axi_regs（PS/AXI-Lite 参数：链路开关、系数、目标尺寸、ROI）──────────────┘
 ```
+
+> 注：sobel 位置 2026-09-30 决策单 D7 定为缩放前（gaussian 之后）——全分辨率上做边缘，
+> 缩放后 224 小图边缘信息已损失；原初稿画在 scaler 后，已按 D7 更新。
 
 - 默认**免帧缓存直通**（对齐 Ultra-Vision 创新点 1 与 A2）：全链在输入像素时钟域逐像素推进，逐像素延迟固定可测。
 - A2 对比项保留帧缓存路径（经 PS DDR）作为测量档，不在 M2 主线实现，10/5 后按人力定。
@@ -57,6 +60,8 @@ ADV7611 HDMI IN ──像素时钟域──> 输入对齐/24bit RGB ──> rgb2
 - `tb_chain.v` / `tb_fullchain.v`：两级与三级（rgb2gray→gaussian→scaler）级联冒烟；末端对拍 `data/golden/vision/fullchain/expected_fullchain.hex`，中间级同时对拍单级 golden。
 - `osd_overlay.v`：灰度流直通 + 两个 1px 描边框（box 检测框 / roi），命中像素以各自颜色替换、重叠 box 优先；**参数在帧首 vs 锁存**——帧内改参数不影响当前帧（A4 动效换帧生效语义），tb 以双帧 golden 验证锁存。黄金参考 `data/golden/vision/osd/`。
 - `axi_regs.v`：AXI-Lite 从机参数寄存器堆（NREG=16，映射 v0.1 见模块头注释：R0 控制开关 / R1–R5 检测框 / R6–R10 ROI / R11–R15 保留）。要点：**AW 默认 7，须满足 2^AW > NREG*4**——AW=6 时地址空间恰好被寄存器占满，越界判别永远无法触发（tb 实测教训，2026-09-29）；保留区写忽略读 0；wstrb 字节使能；读写通道序列化握手；复位全零（control 默认全关，防 X 传播）。单元级单时钟域，PS↔PL 跨时钟由 vision_top 评审定。黄金参考无（协议 tb：BFM 确定性拍数驱动）。
+- `in_align.v`（2026-10-01 新增）：HDMI 输入归一化——ADV7611 解码流（pclk 同步并行 RGB + de/hs/vs，极性/位置随源）归一到 §3.1 流约定：de/rgb 直通；vs 边沿单拍化；hs 重定时为 de 拉低后第 HS_DLY 拍（默认 3，间隔 ≥3 且距下行首 de ≥1）；vs/hs 撞拍时 hs 让路顺延一拍不丢失。约束：源行消隐 ≥ HS_DLY+2 拍、raw vs 在场消隐内不与 de 重叠。tb_in_align 以丑流（hs 搭行尾 de、宽脉冲 vs、人为撞拍）验证全部间隔规则。
+- `vision_top.v` v0.2（2026-10-01）：拓扑 rgb2gray（恒接）→ [gaussian] → [sobel] → [scaler] → [osd]，全部旁路 mux 帧首 in_vs 锁存。**R0 位定义 v0.2：bit0 gauss_en / bit1 scaler_en / bit2 osd_en / bit3 sobel_en**（sobel 串接于高斯 mux 后、scaler 前，可与 bit0 自由组合；bit0=0&bit3=1 即对 raw gray 做边缘）。tb_top 六帧拓扑序列 1024 px 位精确。
 - 回归入口：`bash sim/scripts/run_vision_iverilog.sh [rgb2gray|linebuf|gaussian|scaler|sobel|chain|fullchain|osd|axi|all]`（模块二独立 harness，不进模块一 `all`，tb 在 `sim/vision/`）。
 
 ### 3.2 级间标记约定 v0.2（tb_fullchain 通过后确立，10/5 评审确认）
@@ -110,3 +115,4 @@ ADV7611 HDMI IN ──像素时钟域──> 输入对齐/24bit RGB ──> rgb2
 |:---|:---|:---|
 | 2026-09-29 | 首版草案：模块划分/接口初稿/定点参数/验证策略/开放问题，供 10/5 前评审 | never-die-cold（模块二 RTL） |
 | 2026-09-30 | §5.0 ② scaler 插值链切拍实施（错半拍预寻址，WNS −0.534≈94.9 MHz 达标 720p60）；§3.1 scaler 口径同步 | never-die-cold（模块二 RTL） |
+| 2026-10-01 | sobel 接入 vision_top（D7 缩放前，R0 位定义 v0.2）；新增 in_align 输入归一化模块；OOC 新增 real75（74.25 MHz）随访档 | never-die-cold（模块二 RTL） |
