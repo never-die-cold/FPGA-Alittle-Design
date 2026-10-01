@@ -20,7 +20,9 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
 - 所有 notebook 从头运行（Restart & Run All）必须无报错
 - 采集脚本通用部分尽量与题目解耦，作为通用 PYNQ Skill 的原料
 
-> 状态：M2 原型已起步（2026-10-01）——`vision_regs.py`（寄存器映射绑定，mock 自测 6/6）、
-> `vision_demo.py`（A1/A4 演示序列，上板当日运行）、`board/adv7611_init.py`（I2C/EDID 骨架，
-> 寄存器值表待对照 ADI 官方脚本核对后启用，EDID 生成已自检）；M3 应用闭环、M4 发布包的
-> 收口时间与验收以主计划为准。
+> 状态（2026-10-02）：M2 离板软件栈已闭环——`vision_regs.py`（寄存器映射 + commit/wait_applied
+> 原子配置协议，R11 提交/R12 确认，mock 协议测试 PASS）、`vision_protocol.py`/`vision_mock_service.py`
+> （定位报文契约 + 本地 HTTP mock，供 EXE 联调）、`vision_demo.py`（演示序列，显式 commit，上板当日
+> 运行）、Windows EXE 原型见 [../vision_client/README.md](../vision_client/README.md)。
+> `board/adv7611_init.py` 仅为外接接收器示例（PYNQ-Z2 无 ADV7611，不用于本板）。
+> 真实 MMIO 未验证（需上板）；M3 应用闭环、M4 发布包的收口时间与验收以主计划为准。

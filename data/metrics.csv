@@ -7,7 +7,7 @@ RISC-V benchmark v0.1 CPI,核级基准(仿真),2.860,CPI,iverilog 13.0；固定�
 RISC-V SoC 40MHz WNS,SoC 实现,1.153,ns,Vivado 2026.1；xc7z020clg400-1；pynq_z2_top post-route；core_clk_40 周期 25 ns；setup/hold 均通过；未下载上板,1 次（2026-09-28）,build/reports/soc_timing_impl.rpt；data/logs/2026-09-28-partA-closure/vivado-soc.log
 RISC-V SoC 资源占用,SoC 实现,LUT 6276 / FF 440 / BRAM 8 / DSP 0,个,Vivado 2026.1；pynq_z2_top post-route；IMEM/DMEM 32KB；DMEM 异步读实现为分布式 RAM,1 次（2026-09-28）,build/reports/soc_utilization_impl.rpt
 PicoRV32 对照 LUT / Fmax（同器件同工具 OOC）,对比实测,,LUT / MHz,计划：Vivado 2026.1；xc7z020clg400-1；OOC post-route；约束递减收敛法；regular+large 两配置；M1 收口后执行（docs/core_comparison.md §4.4）,,
-图像预处理延迟,预处理(仿真),显示路径 gray 1 / gauss 25 / gauss+sobel 49（单元档拍）,拍（cycles）,tb_top v0.3 实测（iverilog 13.0；SW=16 单元档；首 in_de→首 out_de 周期差）；模型 = 窗口级 1 行结构滞后（3×3 窗口需下一行流入才能算当前行）+ 常数拍；行周期单元档 21 拍、真实 720p 为 1650 拍（74.25MHz 下 gauss 路径 ≈22.3us）；§3.2 每级 3 拍为稳态标记滞后（另一口径）；scaler 快照路径为吞吐型不适用延迟口径,6 帧各 1 次（tb 断言）,data/logs/2026-10-01-vision-m2-sprint/vision-all-11tb-v03.log
+图像预处理延迟,预处理(仿真),显示路径 gray 1 / gauss 25 / gauss+sobel 50（单元档拍；2026-10-02 sobel 打拍后）,拍（cycles）,tb_top v0.3 实测（iverilog 13.0；SW=16 单元档；首 in_de→首 out_de 周期差）；模型 = 窗口级 1 行结构滞后（3×3 窗口需下一行流入才能算当前行）+ 常数拍；行周期单元档 21 拍、真实 720p 为 1650 拍（74.25MHz 下 gauss 路径 ≈22.3us）；§3.2 每级 3 拍为稳态标记滞后（另一口径）；scaler 快照路径为吞吐型不适用延迟口径,6 帧各 1 次（tb 断言）,data/logs/2026-10-01-vision-m2-sprint/vision-all-11tb-v03.log；2026-10-02 复验 data/logs/2026-10-02-vision-offboard/sobel-retime.log
 直通 vs 帧缓存架构对比（延迟/带宽/资源）,,,,,,
 端到端帧延迟（采集→OSD 显示）,,,,,,
 演示动效帧率（OSD/调参面板）,,,,,,
