@@ -1,0 +1,3 @@
+== tb_cop_buf_stress ==
+PASS: cop_buf distinct frames, simultaneous start/commit, congestion, drain and reset
+vision/tb_cop_buf_stress.v:66: $finish called at 8850000 (1ps)

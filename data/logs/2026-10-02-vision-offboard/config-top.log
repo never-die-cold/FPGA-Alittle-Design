@@ -1,0 +1,8 @@
+== tb_top ==
+../src/vision/scaler.v:105: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+../src/vision/scaler.v:106: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+../src/vision/scaler.v:118: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+../src/vision/scaler.v:119: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+PASS: vision_top v0.3 6 frames dual-path, display 768 px + cop 512 px, 0 errors (frame-latch verified)
+PASS: A5 latency gray=1 gauss=25 gauss+sobel=49 cycles (1-row window lag model match), scaler throughput-based
+vision/tb_top.v:226: $finish called at 136900000 (1ps)

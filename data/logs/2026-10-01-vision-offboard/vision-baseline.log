@@ -1,0 +1,38 @@
+== tb_rgb2gray ==
+vision/tb_rgb2gray.v:12: warning: Instantiating module rgb2gray with dangling input port 2 (in_vs) floating.
+vision/tb_rgb2gray.v:12: warning: Instantiating module rgb2gray with dangling input port 3 (in_hs) floating.
+PASS: rgb2gray 128 px, 0 errors
+vision/tb_rgb2gray.v:44: $finish called at 1340000 (1ps)
+== tb_line_buffer ==
+PASS: line_buffer sync-read, read-before-write, addressing
+vision/tb_line_buffer.v:60: $finish called at 360000 (1ps)
+== tb_gaussian3x3 ==
+PASS: gaussian3x3 128 px, 0 errors
+vision/tb_gaussian3x3.v:55: $finish called at 2140000 (1ps)
+== tb_scaler ==
+../src/vision/scaler.v:95: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+../src/vision/scaler.v:96: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+PASS: scaler 16x8->32x16, 512 px, 0 errors
+vision/tb_scaler.v:69: $finish called at 14740000 (1ps)
+== tb_sobel ==
+PASS: sobel 128 px, 0 errors
+vision/tb_sobel.v:55: $finish called at 2140000 (1ps)
+== tb_chain ==
+PASS: chain rgb2gray->gaussian, gray 128 px + gauss 128 px, 0 errors
+vision/tb_chain.v:76: $finish called at 2140000 (1ps)
+== tb_fullchain ==
+../src/vision/scaler.v:95: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+../src/vision/scaler.v:96: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+PASS: fullchain gray 128 + gauss 128 + scaler 512 px, 0 errors
+vision/tb_fullchain.v:96: $finish called at 15740000 (1ps)
+== tb_osd ==
+PASS: osd 2 frames 256 px, 0 errors (param latch at vs verified)
+vision/tb_osd.v:90: $finish called at 3500000 (1ps)
+== tb_axi_regs ==
+PASS: axi_regs rw/strb/reserved/oob/flat, 0 errors
+vision/tb_axi_regs.v:119: $finish called at 460000 (1ps)
+== tb_top ==
+../src/vision/scaler.v:95: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+../src/vision/scaler.v:96: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+PASS: vision_top 4 frames gray/gauss/gray/full, 896 px, 0 errors (frame-latch verified)
+vision/tb_top.v:147: $finish called at 93000000 (1ps)

@@ -1,0 +1,4 @@
+== tb_cop_buf_stress ==
+FATAL: vision/tb_cop_buf_stress.v:15: FAIL: write overlaps active replay bank
+       Time: 1145000  Scope: tb_cop_buf_stress
+ERROR: simulation gate rejected build/vision/tb_cop_buf_stress.log

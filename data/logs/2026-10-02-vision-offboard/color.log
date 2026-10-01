@@ -1,0 +1,7 @@
+== tb_top_color ==
+../src/vision/scaler.v:105: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:106: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:118: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:119: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+PASS: RGB display 256 pixels exact, all analysis enables, stalled consumer, frame IDs
+vision/tb_top_color.v:49: $finish called at 23550000 (1ps)

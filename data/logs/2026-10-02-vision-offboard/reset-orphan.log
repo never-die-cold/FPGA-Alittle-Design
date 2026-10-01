@@ -1,0 +1,10 @@
+== tb_cop_buf_stress ==
+PASS: cop_buf distinct frames, simultaneous start/commit, congestion, drain and reset
+vision/tb_cop_buf_stress.v:73: $finish called at 10210000 (1ps)
+== tb_video_pipeline ==
+../src/vision/scaler.v:105: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:106: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:118: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:119: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+PASS: raw HDMI parallel sync/color passthrough + normalized analysis, 2 snapshots with frame/config IDs
+vision/tb_video_pipeline.v:52: $finish called at 10240000 (1ps)

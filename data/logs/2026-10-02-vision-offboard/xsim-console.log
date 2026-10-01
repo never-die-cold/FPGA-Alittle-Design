@@ -1,0 +1,362 @@
+== tb_rgb2gray ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Fri Oct  2 00:18:34 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_rgb2gray_xsim/xsim_script.tcl
+# xsim {tb_rgb2gray_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: rgb2gray 128 px, 0 errors
+$finish called at time : 1340 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_rgb2gray.v" Line 44
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct  2 00:18:36 2026...
+== tb_line_buffer ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Fri Oct  2 00:18:38 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_line_buffer_xsim/xsim_script.tcl
+# xsim {tb_line_buffer_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: line_buffer sync-read, read-before-write, addressing
+$finish called at time : 360 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_line_buffer.v" Line 60
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct  2 00:18:40 2026...
+== tb_gaussian3x3 ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Fri Oct  2 00:18:43 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_gaussian3x3_xsim/xsim_script.tcl
+# xsim {tb_gaussian3x3_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: gaussian3x3 128 px, 0 errors
+$finish called at time : 2140 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_gaussian3x3.v" Line 55
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct  2 00:18:45 2026...
+== tb_scaler ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Fri Oct  2 00:18:47 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_scaler_xsim/xsim_script.tcl
+# xsim {tb_scaler_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: scaler 16x8->32x16, 512 px, 0 errors
+$finish called at time : 14740 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_scaler.v" Line 69
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct  2 00:18:49 2026...
+== tb_scaler_ds ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Fri Oct  2 00:18:52 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_scaler_ds_xsim/xsim_script.tcl
+# xsim {tb_scaler_ds_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: scaler_ds 32x16->8x4 downscale, 32 px, 0 errors (slot reuse exercised)
+$finish called at time : 18980 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_scaler_ds.v" Line 71
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct  2 00:18:54 2026...
+== tb_sobel ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Fri Oct  2 00:18:56 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_sobel_xsim/xsim_script.tcl
+# xsim {tb_sobel_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: sobel 128 px, 0 errors
+$finish called at time : 2140 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_sobel.v" Line 55
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct  2 00:18:58 2026...
+== tb_chain ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Fri Oct  2 00:19:01 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_chain_xsim/xsim_script.tcl
+# xsim {tb_chain_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: chain rgb2gray->gaussian, gray 128 px + gauss 128 px, 0 errors
+$finish called at time : 2140 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_chain.v" Line 76
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct  2 00:19:03 2026...
+== tb_fullchain ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Fri Oct  2 00:19:05 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_fullchain_xsim/xsim_script.tcl
+# xsim {tb_fullchain_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: fullchain gray 128 + gauss 128 + scaler 512 px, 0 errors
+$finish called at time : 15740 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_fullchain.v" Line 96
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct  2 00:19:07 2026...
+== tb_osd ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Fri Oct  2 00:19:10 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_osd_xsim/xsim_script.tcl
+# xsim {tb_osd_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: osd 2 frames 256 px, 0 errors (param latch at vs verified)
+$finish called at time : 3500 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_osd.v" Line 90
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct  2 00:19:12 2026...
+== tb_axi_regs ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Fri Oct  2 00:19:14 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_axi_regs_xsim/xsim_script.tcl
+# xsim {tb_axi_regs_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: axi_regs rw/strb/reserved/oob/flat, 0 errors
+$finish called at time : 460 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_axi_regs.v" Line 119
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct  2 00:19:16 2026...
+== tb_in_align ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Fri Oct  2 00:19:18 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_in_align_xsim/xsim_script.tcl
+# xsim {tb_in_align_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: in_align 3 frames, 384 px passthrough, 24 hs/4 vs, spacing OK (vs/hs collision deferred)
+$finish called at time : 5780 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_in_align.v" Line 137
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct  2 00:19:20 2026...
+== tb_cop_buf ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Fri Oct  2 00:19:22 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_cop_buf_xsim/xsim_script.tcl
+# xsim {tb_cop_buf_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: cop_buf 3 frames ping-pong, 96 px replay = golden, ready-gate + concurrent write verified
+$finish called at time : 5390 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_cop_buf.v" Line 89
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct  2 00:19:24 2026...
+== tb_top ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Fri Oct  2 00:19:28 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_top_xsim/xsim_script.tcl
+# xsim {tb_top_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: vision_top v0.3 6 frames dual-path, display 768 px + cop 512 px, 0 errors (frame-latch verified)
+PASS: A5 latency gray=1 gauss=25 gauss+sobel=50 cycles (window lag + pipelined arithmetic), scaler throughput-based
+$finish called at time : 136940 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_top.v" Line 227
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct  2 00:19:30 2026...
+== tb_cop_buf_stress ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Fri Oct  2 00:19:33 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_cop_buf_stress_xsim/xsim_script.tcl
+# xsim {tb_cop_buf_stress_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: cop_buf distinct frames, simultaneous start/commit, congestion, drain and reset
+$finish called at time : 8850 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_cop_buf_stress.v" Line 66
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct  2 00:19:35 2026...
+== tb_axi_split ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Fri Oct  2 00:19:37 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_axi_split_xsim/xsim_script.tcl
+# xsim {tb_axi_split_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: AXI AW-before-W/W-before-AW, response backpressure, captured payload
+$finish called at time : 300 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_axi_split.v" Line 44
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct  2 00:19:39 2026...
+== tb_config_bridge ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Fri Oct  2 00:19:41 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_config_bridge_xsim/xsim_script.tcl
+# xsim {tb_config_bridge_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: config CDC async clocks, atomic bundle, busy reject, frame apply, ack, reset
+$finish called at time : 700 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_config_bridge.v" Line 43
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct  2 00:19:43 2026...
+== tb_top_async ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Fri Oct  2 00:19:47 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_top_async_xsim/xsim_script.tcl
+# xsim {tb_top_async_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: top async config staging, busy SLVERR, atomic frame apply, status epoch
+$finish called at time : 780 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_top_async.v" Line 56
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct  2 00:19:49 2026...
+== tb_top_color ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Fri Oct  2 00:19:52 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_top_color_xsim/xsim_script.tcl
+# xsim {tb_top_color_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: RGB display 256 pixels exact, all analysis enables, stalled consumer, frame IDs
+$finish called at time : 23590 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_top_color.v" Line 50
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct  2 00:19:54 2026...
+== tb_video_pipeline ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Fri Oct  2 00:19:58 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_video_pipeline_xsim/xsim_script.tcl
+# xsim {tb_video_pipeline_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: raw HDMI parallel sync/color passthrough + normalized analysis, 2 snapshots with frame/config IDs
+$finish called at time : 10240 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_video_pipeline.v" Line 52
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct  2 00:20:00 2026...
+== tb_video_real ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Fri Oct  2 00:20:05 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_video_real_xsim/xsim_script.tcl
+# xsim {tb_video_real_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: 720p timing 2 consecutive frames, 1843200 RGB px + 100352 snapshot px, 448 rows, IDs exact, no drops
+$finish called at time : 25350240 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_video_real.v" Line 58
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Oct  2 00:20:11 2026...
+== XSim 全部完成（all）==

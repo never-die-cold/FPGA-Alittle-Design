@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# External ADV7611 receiver example only. PYNQ-Z2 HDMI is wired directly to PL;
+# do not run this script for the PYNQ-Z2 on-board HDMI connectors.
 """adv7611_init —— PYNQ-Z2 HDMI IN（ADV7611）I2C 初始化 + EDID（上板验线用，M2）
 
 状态：**骨架，上板验线时启用**。寄存器值表须对照 ADI 官方推荐脚本逐条核对后

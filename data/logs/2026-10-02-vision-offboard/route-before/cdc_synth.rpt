@@ -1,0 +1,90 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Fri Oct  2 00:15:26 2026
+| Host         : never-die-cold running 64-bit major release  (build 9200)
+| Command      : report_cdc -details -file data/logs/2026-10-02-vision-offboard/route/cdc_synth.rpt
+| Design       : video_pipeline
+| Device       : 7z020-clg400
+| Speed File   : -1  PRODUCTION 1.12 2019-11-22
+| Design State : Synthesized
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+CDC Report
+
+ID      Severity  Count  Description
+------  --------  -----  -------------------------------------------------------
+CDC-3   Info          2  1-bit synchronized with ASYNC_REG property
+CDC-9   Info          5  Asynchronous reset synchronized with ASYNC_REG property
+CDC-15  Warning      35  Clock enable controlled CDC structure detected
+
+Source Clock: input port clock
+Destination Clock: axi_clk
+CDC Type: No Common Primary Clock
+
+Row  ID     Severity  Description                                              Depth  Exception   Source (From)  Destination (To)
+---  -----  --------  -------------------------------------------------------  -----  ----------  -------------  -----------------------------------------------------
+  1  CDC-9  Info      Asynchronous reset synchronized with ASYNC_REG property      2  False Path  rst_n          u_vision/u_axi_reset/release_pipe_reg[0]/CLR
+  2  CDC-9  Info      Asynchronous reset synchronized with ASYNC_REG property      2  False Path  rst_n          u_vision/u_config/u_src_reset/release_pipe_reg[0]/CLR
+
+Source Clock: pclk
+Destination Clock: axi_clk
+CDC Type: No Common Primary Clock
+
+Row  ID     Severity  Description                                 Depth  Exception   Source (From)                        Destination (To)
+---  -----  --------  ------------------------------------------  -----  ----------  -----------------------------------  --------------------------------
+  1  CDC-3  Info      1-bit synchronized with ASYNC_REG property      2  False Path  u_vision/u_config/acknowledge_reg/C  u_vision/u_config/ack_meta_reg/D
+
+Source Clock: axi_clk
+Destination Clock: pclk
+CDC Type: No Common Primary Clock
+
+Row  ID      Severity  Description                                     Depth  Exception                Source (From)                         Destination (To)
+---  ------  --------  ----------------------------------------------  -----  -----------------------  ------------------------------------  -----------------------------------
+  1  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_data_reg[0]/C  u_vision/u_config/dst_data_reg[0]/D
+  2  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_data_reg[1]/C  u_vision/u_config/dst_data_reg[1]/D
+  3  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_data_reg[3]/C  u_vision/u_config/dst_data_reg[3]/D
+  4  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[0]/C    u_vision/u_config/dst_id_reg[0]/D
+  5  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[1]/C    u_vision/u_config/dst_id_reg[1]/D
+  6  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[2]/C    u_vision/u_config/dst_id_reg[2]/D
+  7  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[3]/C    u_vision/u_config/dst_id_reg[3]/D
+  8  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[4]/C    u_vision/u_config/dst_id_reg[4]/D
+  9  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[5]/C    u_vision/u_config/dst_id_reg[5]/D
+ 10  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[6]/C    u_vision/u_config/dst_id_reg[6]/D
+ 11  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[7]/C    u_vision/u_config/dst_id_reg[7]/D
+ 12  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[8]/C    u_vision/u_config/dst_id_reg[8]/D
+ 13  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[9]/C    u_vision/u_config/dst_id_reg[9]/D
+ 14  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[10]/C   u_vision/u_config/dst_id_reg[10]/D
+ 15  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[11]/C   u_vision/u_config/dst_id_reg[11]/D
+ 16  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[12]/C   u_vision/u_config/dst_id_reg[12]/D
+ 17  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[13]/C   u_vision/u_config/dst_id_reg[13]/D
+ 18  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[14]/C   u_vision/u_config/dst_id_reg[14]/D
+ 19  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[15]/C   u_vision/u_config/dst_id_reg[15]/D
+ 20  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[16]/C   u_vision/u_config/dst_id_reg[16]/D
+ 21  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[17]/C   u_vision/u_config/dst_id_reg[17]/D
+ 22  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[18]/C   u_vision/u_config/dst_id_reg[18]/D
+ 23  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[19]/C   u_vision/u_config/dst_id_reg[19]/D
+ 24  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[20]/C   u_vision/u_config/dst_id_reg[20]/D
+ 25  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[21]/C   u_vision/u_config/dst_id_reg[21]/D
+ 26  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[22]/C   u_vision/u_config/dst_id_reg[22]/D
+ 27  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[23]/C   u_vision/u_config/dst_id_reg[23]/D
+ 28  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[24]/C   u_vision/u_config/dst_id_reg[24]/D
+ 29  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[25]/C   u_vision/u_config/dst_id_reg[25]/D
+ 30  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[26]/C   u_vision/u_config/dst_id_reg[26]/D
+ 31  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[27]/C   u_vision/u_config/dst_id_reg[27]/D
+ 32  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[28]/C   u_vision/u_config/dst_id_reg[28]/D
+ 33  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[29]/C   u_vision/u_config/dst_id_reg[29]/D
+ 34  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[30]/C   u_vision/u_config/dst_id_reg[30]/D
+ 35  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  u_vision/u_config/hold_id_reg[31]/C   u_vision/u_config/dst_id_reg[31]/D
+ 36  CDC-3   Info      1-bit synchronized with ASYNC_REG property          2  False Path               u_vision/u_config/request_reg/C       u_vision/u_config/req_meta_reg/D
+
+Source Clock: input port clock
+Destination Clock: pclk
+CDC Type: No Common Primary Clock
+
+Row  ID     Severity  Description                                              Depth  Exception   Source (From)  Destination (To)
+---  -----  --------  -------------------------------------------------------  -----  ----------  -------------  -----------------------------------------------------
+  1  CDC-9  Info      Asynchronous reset synchronized with ASYNC_REG property      2  False Path  rst_n          u_reset/release_pipe_reg[0]/CLR
+  2  CDC-9  Info      Asynchronous reset synchronized with ASYNC_REG property      2  False Path  rst_n          u_vision/u_config/u_dst_reset/release_pipe_reg[0]/CLR
+  3  CDC-9  Info      Asynchronous reset synchronized with ASYNC_REG property      2  False Path  rst_n          u_vision/u_pixel_reset/release_pipe_reg[0]/CLR
+

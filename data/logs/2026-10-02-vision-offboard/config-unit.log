@@ -1,0 +1,3 @@
+== tb_config_bridge ==
+PASS: config CDC async clocks, atomic bundle, busy reject, frame apply, ack, reset
+vision/tb_config_bridge.v:42: $finish called at 658000 (1ps)

@@ -1,56 +1,59 @@
-# src/vision —— HDMI 图像预处理流水线 RTL
+# 模块二：彩色视频直通与分析快照
 
-HDMI 视频流逐像素实时处理：灰度化 → 3×3 高斯滤波 → 双线性缩放 → 可选 Sobel 边缘。
+正式目标为 PYNQ-Z2、1280×720@60、RGB888；224×224 是模块三输入的占位尺寸。
+当前接口见 [design_v0.md](design_v0.md)，离板证据见
+[本轮记录](../../data/logs/2026-10-02-vision-offboard/README.md)。
 
-## 当前状态（2026-09-29，单元级超前完成）
+```text
+HDMI IN → dvi2rgb → 彩色原图直通 → rgb2dvi → HDMI OUT → USB 采集卡 → Windows EXE
+                   └→ 归一化 → 灰度 → 高斯/边缘 → 缩放 → 双帧缓冲 → cop_* / 调试 ILA
+PS AXI-Lite → 暂存参数 → R11 提交 → 帧首整组生效 → R12 配置号确认
+```
 
-回归入口 `bash sim/scripts/run_vision_iverilog.sh all`，10/10 tb PASS；日志 `data/logs/2026-09-29-vision-m2-kickoff/vision-all-10tb.log`。
+PYNQ-Z2 HDMI 直接连 PL，没有 ADV7611。物理工程固定 Digilent IP 提交
+`f4613fff005b098065fd5d619a2b88e55720a423`，官方 PYNQ v3.0.1 引脚和 PS 配置经 SHA256 核对。
+Digilent 并行视频字节顺序是 R,B,G，`vision_axi.v` 双向转换为内部 R,G,B。
 
-| 模块 | 状态 | 要点 |
-|:---|:---|:---|
-| `rgb2gray.v` | 已实现 | BT.601 定点，黄金参考逐像素对拍 |
-| `line_buffer.v` | 已实现 | 同步读、同拍同址先读后写（旧值） |
-| `gaussian_3x3.v` | 已实现 | 双行缓存轮替、边界钳位、vblank 冲刷末行 |
-| `scaler.v` | 已实现 | 16.16 定点双线性、行槽滑动、自产 `out_vs/out_hs` 标记；2026-09-30 插值链切拍（错半拍预寻址），real 档 OOC ≈94.9 MHz，720p60 达标 |
-| `sobel.v` | 已实现 | Gx/Gy L1 幅值饱和；2026-10-01 接入 `vision_top`（gaussian 后、scaler 前，R0 bit3） |
-| `in_align.v` | 已实现 | 2026-10-01 新增：ADV7611 解码流归一到 §3.1 流约定（hs/vs 重定时、撞拍让路） |
-| `cop_buf.v` | 已实现 | 2026-10-01 新增：快照帧乒乓缓冲（cop_ready 反压，§7 占位实现，契约后换封装） |
-| `osd_overlay.v` | 已实现 | box/roi 双框叠加、帧首参数锁存 |
-| `axi_regs.v` | 已实现 | AXI-Lite 16 寄存器；`AW` 须满足 `2^AW > NREG*4` |
-| `vision_top.v` | 已实现 | v0.3 双路径：显示 gray→[gauss]→[sobel]→[osd] 全分辨率直通 + 快照 [scaler]→cop 喂模块三；双时钟域 R0 位 2FF；6 帧 tb 双通道位精确 |
+## 已实现与验证
 
-实现口径见 [design_v0.md](design_v0.md) §3.1/§3.2；接口契约仍为草案，10/5 评审后升格冻结。
+- 22 个仓库内 RTL tb：Icarus 和 XSim 同判据通过；含真实 720p 两帧，
+  1,843,200 显示像素、100,352 快照像素、448 行及帧/配置号精确核对。
+- AXI AW/W 独立握手、响应反压；整组配置请求/确认；不同频率时钟测试。
+- 显示 RGB/原始同步波形恒延迟直通；分析使用内部单拍行尾/帧首标记。
+- 双帧缓冲争用修复：读启动与写完成同拍也保护读银行；拥塞、覆盖、排空、复位测试。
+- Sobel 增加一级流水；单元首像素延迟 gray=1、gauss=25、gray+sobel=26、gauss+sobel=50 拍。
+  灰度诊断口延迟不能当作彩色 HDMI 延迟。
+- `video_pipeline` 内部 post-route：WNS +0.330 ns / WHS +0.027 ns，像素周期13.468ns、
+  AXI周期10ns；1985 LUT、1515 寄存器、38 BRAM tile、0 DSP。
+- PS 配置绑定、定位/逐目标裁剪黄金参考、明确标为 MOCK 的 HTTP 接口和 Windows EXE 原型。
 
-## 验证与复现（watercopper 评审入口）
+## 一键入口
 
-全部验证可由仓库内脚本一键复现（前置：MSYS2 UCRT64 的 iverilog 13.0+；OOC 另需 Vivado 2026.1）：
+在仓库根目录、MSYS2 UCRT64 shell 中运行：
 
-| 步骤 | 命令 | 期望 |
-|:---|:---|:---|
-| 黄金参考再生成 | `python data/golden/vision/rgb2gray/gen_rgb2gray.py`（另 gaussian3x3/scaler/sobel/osd/fullchain 各自目录下 `gen_*.py`） | 每个 `PASS`（含定点 vs 浮点自检） |
-| 单元+链路回归 | `bash sim/scripts/run_vision_iverilog.sh all` | 10/10 tb `PASS`，逐像素 0 错误 |
-| 单项回归 | `bash sim/scripts/run_vision_iverilog.sh <rgb2gray\|linebuf\|gaussian\|scaler\|sobel\|chain\|fullchain\|osd\|axi\|top>` | 对应 tb `PASS` |
-| OOC 综合（单元参数） | `bash sim/scripts/run_vivado_vision_ooc.sh unit` | 各模块 `OOC_RESULT` 行 |
-| OOC 综合（720p 行宽） | `bash sim/scripts/run_vivado_vision_ooc.sh real` | 同上，含 BRAM 推断 |
-| OOC 综合（720p60 达标随访） | `vivado -mode batch -source sim/scripts/synth_vision_ooc.tcl -tclargs <module> real75` | WNS ≥ 0 即 74.25 MHz 达标 |
-| XSim 对拍（同判据复跑） | `bash sim/scripts/run_vision_xsim.sh all` | 11/11 tb `PASS`（与 iverilog 同判据） |
+```bash
+bash sim/scripts/run_iverilog.sh all          # 核、CoreMark、门禁、视觉、stdlib Python
+bash sim/scripts/run_iverilog.sh vision all   # 22 个视觉 tb
+bash sim/scripts/run_iverilog.sh vision_python
+bash sim/scripts/run_vision_xsim.sh all
+bash sim/scripts/run_vivado_vision_impl.sh    # 并行边界 OOC 布线
+bash sim/scripts/fetch_hdmi_ip.sh             # 固定第三方源，首次需要网络
+bash sim/scripts/run_vivado_hdmi.sh           # 全物理 HDMI 工程，离板生成 bitstream
+```
 
-验证方法：每个处理模块由 `data/golden/vision/<模块>/gen_*.py` 生成输入 hex 与期望 hex，tb 逐像素 `!==` 比对，错 1 像素即 FAIL；链路 tb（chain/fullchain/top）中间级与末端同时对拍；OSD 双帧 golden 验证"参数帧首锁存"；tb_scaler 含标记协议断言（vs 每帧 1 次、hs 每行 1 次、vs 先于首个 de）。tb 清单与断言点见 [design_v0.md](design_v0.md) §3.1。
+`VISION_PYTHON` 可指定 Python 路径；`VISION_VIVADO_BIN` 可指定 Vivado bin 目录。
+默认 Vivado 路径为 `/d/Vivado_downloads/2026.1/Vivado/bin`。
+物理输出在 `sim/build/hdmi-project/`；脚本不会打开 Hardware Manager 或下载板卡。
+EXE 构建和接口原型操作见 [客户端说明](../vision_client/README.md)。
 
-评审关注点（模块二特有的坑，均有 tb 用例覆盖）：line_buffer 先读后写语义、gaussian 末行 vblank 冲刷 + 合成 hs、直通行尾 hs 门控（输入行 0 的 hs 不对应输出行）、scaler 发射/写入解耦与多帧复位、axi_regs 地址空间约束 `2^AW > NREG*4`。
+## 验收边界
 
-## 未完成
+内部 OOC 正余量不证明 TMDS 引脚、电缆、相机和采集卡闭环。全物理工程状态与余量
+以本轮证据记录为准，不能沿用历史综合值。实际下载、相机锁定、源断连/重连、
+EDID 兼容、采集卡显示、端到端延迟及 DDR 对照实测仍需上板。
 
-- HDMI 输入/输出通路选型（ADV7611 I2C/EDID vs Vivado IP）、分辨率/色彩空间、pclk 频率——见 [design_v0.md](design_v0.md) §5。
-- 缩放目标尺寸待模块三网络输入拍板；`sobel` 接入位置待评审。
-- PS↔PL 跨时钟、A2 直通 vs 帧缓存对比、端到端指标与上板演示（10/12 M2 验收）。
+灰度 `out_*` 的 OSD 是诊断能力；HDMI 主显示保留彩色原图。EXE 模拟框不是物体检测；
+UVC 原型显示 `UNASSOCIATED`，在硬件帧关联未完成前不叠加网络框。
 
-## 设计要求
-
-- 全流水无帧缓存依赖，像素级延迟固定可测
-- 参数经 AXI-Lite 由 PS / RISC-V 动态配置
-
-## 设计参考
-
-- 往届获奖作品深度拆解：[docs/track_research.md](../../docs/track_research.md)——Ultra-Vision（2024 易灵思国一）的乒乓缓冲、尺寸切换延迟对齐、数据修饰模块、输出画布填充与 ADV7611/EDID 初始化链路
-- 演示层升级任务（A1 参数化链路、A2 直通 vs 帧缓存对比、A4 OSD 动效）：[docs/proposal_upgrade.md](../../docs/proposal_upgrade.md)
+未实现 / 未接入：正式 CNN/协处理器、实际定位部署、工单检查服务、真实识别结果与
+采集卡画面关联。它们属于模块三应用交接，整帧快照不代表逐目标硬件裁剪已经完成。

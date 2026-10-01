@@ -1,0 +1,6 @@
+== tb_axi_split ==
+PASS: AXI AW-before-W/W-before-AW, response backpressure, captured payload
+vision/tb_axi_split.v:44: $finish called at 300000 (1ps)
+== tb_axi_regs ==
+PASS: axi_regs rw/strb/reserved/oob/flat, 0 errors
+vision/tb_axi_regs.v:119: $finish called at 460000 (1ps)
