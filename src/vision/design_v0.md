@@ -121,11 +121,18 @@ ADV7611 HDMI IN ──像素时钟域──> 输入对齐/24bit RGB ──> rgb2
 
 ## 6. 验证策略与黄金参考需求单（给 watercopper）
 
-- 逐模块 tb：Python 黄金参考生成输入 hex 与期望 hex，tb 逐像素比对（`data/golden/` 归档生成脚本与数据）。
+> 2026-10-01 分工变更：never-die-cold 兜底测试数据项（用户确认"watercopper 的我也能做"），以下为闭环状态。
+
+- 逐模块 tb：Python 黄金参考生成输入 hex 与期望 hex，tb 逐像素比对（`data/golden/` 归档生成脚本与数据）。✅ 持续执行
 - 黄金参考需求：`rgb2gray`、`gaussian_3x3`（含边界填充）、`scaler`（两组尺寸档）各一份 Python 脚本 + 测试图（≥3 张：含斜线/棋盘/人脸纹理），输出 `data/golden/vision/<module>/`。
-- 波形专项：帧边界切换参数不撕裂；`de` 无效期各级无输出副作用。
+  - ✅ scaler 两组尺寸档：放大档 16x8→32x16（既有）+ **缩小档 32x16→8x4**（`scaler_ds/`，行槽复用路径首次覆盖，iverilog+XSim 双口径 PASS）
+  - 🟡 真实测试图：替换通路已就绪（`data/scripts/img2hex.py`，任意图→指定尺寸 BT.601 灰度 hex）；真实照片待拍（自拍斜线/棋盘/人脸纹理各一，img2hex 入库即可）
+- 波形专项：帧边界切换参数不撕裂；`de` 无效期各级无输出副作用。✅ 已有等价覆盖——前者 = tb_top 帧锁存验证（帧内改 R0 当前帧不变），后者 = 逐帧**精确**像素计数（任何 de 无效期副作用都会使计数或 golden 比对 FAIL）
 - A5 指标采集：逐像素延迟（理论值 vs 波形实测）、端到端帧延迟、资源（LUT/BRAM/DSP）。
-- XSim 对拍口径沿用 Part B（`docs/partB-verify-plan.md` §6）：iverilog 全 PASS 后 XSim 复跑同判据。**✅ 已执行（2026-10-01）**：11/11 tb 在 XSim 下同判据 PASS，一键入口 `bash sim/scripts/run_vision_xsim.sh all`，证据 `data/logs/2026-10-01-vision-m2-sprint/xsim-all-11tb.log`。
+  - ✅ 逐像素延迟：tb_top 断言实测（窗口级 1 行结构滞后模型，metrics.csv 已填）
+  - ⬜ 端到端帧延迟：需上板（OSD 帧计数/GPIO 打点，board/hardware.md §3.4 口径）
+  - ✅ 资源：OOC utilization rpt 两批（unit/real/real75）
+- XSim 对拍口径沿用 Part B（`docs/partB-verify-plan.md` §6）：iverilog 全 PASS 后 XSim 复跑同判据。**✅ 已执行（2026-10-01）**：12/12 tb 在 XSim 下同判据 PASS，一键入口 `bash sim/scripts/run_vision_xsim.sh all`，证据 `data/logs/2026-10-01-vision-m2-sprint/`。
 
 ## 7. 与模块三的衔接（给 jianglibo 的对齐点）
 

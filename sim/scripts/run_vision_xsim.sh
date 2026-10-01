@@ -11,6 +11,7 @@ case "$MODE" in
     linebuf)  TBS=(tb_line_buffer) ;;
     gaussian) TBS=(tb_gaussian3x3) ;;
     scaler)   TBS=(tb_scaler) ;;
+    scaler_ds) TBS=(tb_scaler_ds) ;;
     sobel)    TBS=(tb_sobel) ;;
     chain)    TBS=(tb_chain) ;;
     fullchain) TBS=(tb_fullchain) ;;
@@ -18,7 +19,7 @@ case "$MODE" in
     axi)      TBS=(tb_axi_regs) ;;
     align)    TBS=(tb_in_align) ;;
     top)      TBS=(tb_top) ;;
-    all)      TBS=(tb_rgb2gray tb_line_buffer tb_gaussian3x3 tb_scaler tb_sobel tb_chain tb_fullchain tb_osd tb_axi_regs tb_in_align tb_top) ;;
+    all)      TBS=(tb_rgb2gray tb_line_buffer tb_gaussian3x3 tb_scaler tb_scaler_ds tb_sobel tb_chain tb_fullchain tb_osd tb_axi_regs tb_in_align tb_top) ;;
     *)        echo "用法: bash sim/scripts/run_vision_xsim.sh [单项|all]"; exit 1 ;;
 esac
 cd "$(dirname "$0")/.."    # -> sim/（tb 内 $readmemh 用 ../data/golden/... 相对此目录）

@@ -43,3 +43,15 @@
 ## 5. 理解门槛豁免留痕（gufa/understand-gate）
 
 用户 2026-10-01 明示「理解题我最后一块做，我先越权全部跑完」——按 gufa-programming 失效条件第 3/4 条执行快速推进，**逐段讲解随各 commit message 落档，3 道理解题（rd_addr 空闲分支、cap pend 感知、x_acc 复位值）收尾补做**，题目与答案将追加至本文件「理解门槛」章节。
+
+## 6. 补记（2026-10-01 晚，PR #48 后续）
+
+- **push + PR**：dev/vision 推远端，PR #48 开出（base main），按约定不合自行 merge。
+- **A5 真发现**：tb_top 延迟断言首跑 FAIL 揭示窗口级帧首像素延迟 =「1 行结构滞后 + 常数拍」（3×3 窗口需下一行流入才能算当前行），与 §3.2 稳态标记滞后（每级 3 拍）是两个口径——§4 已修正，metrics.csv 图像预处理延迟行由占位填实。
+- **XSim 对拍闭环**：Part B §6 口径执行，全套同判据 PASS；踩坑：xvlog 默认入库 `work` 而非 `worklib`（xelab 顶层须写 `work.tb_x`）；按可复现红线落脚本 `run_vision_xsim.sh`。
+- **寄存器映射表 v1.0 草案**入 design_v0 §3.3（R0 位定义 v0.2 / R1-R10 框参数 / R11-15 保留）。
+- **分工变更**：用户明示「watercopper 的我也能做」——测试数据项由 never-die-cold 兜底：
+  - ✅ scaler 缩小档 golden（32x16→8x4，`scaler_ds/`，行槽复用路径首次覆盖，iverilog+XSim 双口径 PASS，回归升至 12 tb）
+  - ✅ 真实图替换通路 `data/scripts/img2hex.py`（PIL，任意图→指定尺寸 BT.601 灰度 hex）；真实照片待拍
+  - ✅ 波形专项两项经核实已有等价覆盖（tb_top 帧锁存 + 逐帧精确计数），需求单标注闭环
+- 回归现状：iverilog 12/12 PASS（`vision-all-12tb.log`）；XSim 同判据。
