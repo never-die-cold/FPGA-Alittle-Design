@@ -1,8 +1,9 @@
 `timescale 1ns/1ps
-// vision_top —— 模块二流水线顶层（v0.1 骨架）
-// 链路：rgb2gray（恒接）→ [gaussian] → [scaler] → [osd]，方括号为 R0 开关可控级。
-// R0 位定义 v0.1：bit0 gauss_en / bit1 scaler_en / bit2 osd_en / bit3 sobel_en（预留，
-//   sobel 接入位置待 10/5 评审：置于缩放后则参数需随输出尺寸走）。
+// vision_top —— 模块二流水线顶层（v0.2：sobel 已接入）
+// 链路：rgb2gray（恒接）→ [gaussian] → [sobel] → [scaler] → [osd]，方括号为 R0 开关可控级。
+// R0 位定义 v0.2：bit0 gauss_en / bit1 scaler_en / bit2 osd_en / bit3 sobel_en——
+//   sobel 串接于高斯旁路 mux 之后、scaler 之前（2026-09-30 决策单 D7：全分辨率上做边缘，
+//   缩放后小图边缘信息已损失；bit3 可与 bit0 自由组合，bit0=0&bit3=1 即对 raw gray 做 sobel）。
 // 拓扑切换语义：路径选择在输入帧首 in_vs 锁存，帧内恒定——直通与处理级延迟不同，
 //   帧内切换会撕裂；每帧自洽（输出 vs/hs/de 由所选路径自产），帧间可变。
 // HDMI 解码/编码不在本单元：输入为解码后的 RGB 像素流（ADV7611 选型 10/5 拍板，
@@ -78,14 +79,15 @@ module vision_top #(
     );
 
     // ---- 拓扑锁存（帧首；帧内恒定） ----
-    reg t_gauss, t_scaler, t_osd;
+    reg t_gauss, t_scaler, t_osd, t_sobel;
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            t_gauss <= 0; t_scaler <= 0; t_osd <= 0;
+            t_gauss <= 0; t_scaler <= 0; t_osd <= 0; t_sobel <= 0;
         end else if (in_vs) begin
             t_gauss  <= gauss_en;
             t_scaler <= scaler_en;
             t_osd    <= osd_en;
+            t_sobel  <= r0[3];
         end
     end
 
@@ -95,20 +97,35 @@ module vision_top #(
     wire       m1_de = t_gauss  ? g1_de : g0_de;
     wire [7:0] m1_y  = t_gauss  ? g1_y  : g0_y;
 
+    // ---- 级 1b：Sobel 边缘（窗口装配/冲刷与 gaussian 同构，3 拍延迟） ----
+    wire       e_vs, e_hs, e_de;
+    wire [7:0] e_y;
+    sobel #(.WIDTH(SW), .HEIGHT(SH)) u_sobel (
+        .clk(clk), .rst_n(rst_n),
+        .in_vs(m1_vs), .in_hs(m1_hs), .in_de(m1_de), .in_y(m1_y),
+        .out_vs(e_vs), .out_hs(e_hs), .out_de(e_de), .out_g(e_y)
+    );
+
+    // ---- mux 1b：sobel 旁路 ----
+    wire       m1b_vs = t_sobel ? e_vs  : m1_vs;
+    wire       m1b_hs = t_sobel ? e_hs  : m1_hs;
+    wire       m1b_de = t_sobel ? e_de  : m1_de;
+    wire [7:0] m1b_y  = t_sobel ? e_y   : m1_y;
+
     // ---- 级 2：双线性缩放 ----
     wire       s_vs, s_hs, s_de;
     wire [7:0] s_y;
     scaler #(.SW(SW), .SH(SH), .DW(DW), .DH(DH), .NLINES(NLINES)) u_scaler (
         .clk(clk), .rst_n(rst_n),
-        .in_vs(m1_vs), .in_hs(m1_hs), .in_de(m1_de), .in_y(m1_y),
+        .in_vs(m1b_vs), .in_hs(m1b_hs), .in_de(m1b_de), .in_y(m1b_y),
         .out_vs(s_vs), .out_hs(s_hs), .out_de(s_de), .out_y(s_y)
     );
 
-    // ---- mux 2：缩放旁路 ----
-    wire       m2_vs = t_scaler ? s_vs : m1_vs;
-    wire       m2_hs = t_scaler ? s_hs : m1_hs;
-    wire       m2_de = t_scaler ? s_de : m1_de;
-    wire [7:0] m2_y  = t_scaler ? s_y  : m1_y;
+    // ---- mux 2：缩放旁路（else 分支 = m1b，即 sobel 之后的流；漏改会绕过 sobel） ----
+    wire       m2_vs = t_scaler ? s_vs : m1b_vs;
+    wire       m2_hs = t_scaler ? s_hs : m1b_hs;
+    wire       m2_de = t_scaler ? s_de : m1b_de;
+    wire [7:0] m2_y  = t_scaler ? s_y  : m1b_y;
 
     // ---- 级 3：OSD 叠加（框参数 = R1..R10，输出图坐标系） ----
     wire       o_vs, o_hs, o_de;

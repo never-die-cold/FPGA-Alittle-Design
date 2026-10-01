@@ -1,10 +1,12 @@
 `timescale 1ns/1ps
-// vision_top 专项 tb：四帧拓扑序列 + 帧内改 R0 锁存验证
+// vision_top 专项 tb：六帧拓扑序列 + 帧内改 R0 锁存验证
 //   帧 1：R0=0（gray only）          → 对拍 gray golden（128px）
 //   帧 2：R0=gauss_en                → 对拍 gaussian golden（128px）；
 //         第 4 行后帧内写 R0=0       → 帧 2 输出不变（拓扑帧锁存）
 //   帧 3：拓扑=gray（帧 2 所写生效）  → 对拍 gray golden（128px）
 //   帧 4：R0=gauss|scaler（osd 关）   → 对拍 fullchain golden（512px）
+//   帧 5：R0=gauss|sobel             → 对拍 gauss_sobel golden（128px，2026-09-30 sobel 接入）
+//   帧 6：R0=sobel（bit0=0）         → 对拍 gray_sobel golden（128px，raw gray 上做边缘）
 module tb_top;
     reg clk, rst_n, in_vs, in_hs, in_de;
     reg [23:0] in_rgb;
@@ -18,12 +20,14 @@ module tb_top;
     wire out_vs, out_hs, out_de;
     wire [7:0] out_y;
     integer fidx, f, l, c, errors;
-    integer fcnt [0:3];
+    integer fcnt [0:5];
     reg [7:0] expv;
     reg [23:0] rgb      [0:127];
     reg [7:0]  expA     [0:127];   // gray golden
     reg [7:0]  expB     [0:127];   // gaussian golden
     reg [7:0]  expD     [0:511];   // fullchain golden
+    reg [7:0]  expC     [0:127];   // gauss|sobel golden
+    reg [7:0]  expE     [0:127];   // gray|sobel golden
 
     vision_top #(.SW(16), .SH(8), .DW(32), .DH(16), .NLINES(16)) dut (
         .clk(clk), .rst_n(rst_n),
@@ -84,6 +88,8 @@ module tb_top;
                 0, 2: v = expA[i];
                 1:    v = expB[i];
                 3:    v = expD[i];
+                4:    v = expC[i];
+                5:    v = expE[i];
                 default: v = 8'hxx;
             endcase
         end
@@ -107,10 +113,13 @@ module tb_top;
         awaddr = 0; araddr = 0; wdata = 0; wstrb = 0;
         fidx = 0; errors = 0;
         fcnt[0] = 0; fcnt[1] = 0; fcnt[2] = 0; fcnt[3] = 0;
+        fcnt[4] = 0; fcnt[5] = 0;
         $readmemh("../data/golden/vision/rgb2gray/input_rgb.hex", rgb);
         $readmemh("../data/golden/vision/rgb2gray/expected_y.hex", expA);
         $readmemh("../data/golden/vision/gaussian3x3/expected_y.hex", expB);
         $readmemh("../data/golden/vision/fullchain/expected_fullchain.hex", expD);
+        $readmemh("../data/golden/vision/fullchain/expected_gauss_sobel.hex", expC);
+        $readmemh("../data/golden/vision/fullchain/expected_gray_sobel.hex", expE);
         repeat (4) @(negedge clk);
         rst_n = 1;
 
@@ -137,13 +146,24 @@ module tb_top;
         axi_write(7'h00, 32'h3);
         do_frame;
         repeat (2600) @(negedge clk);
+        fidx = 4;
+        // 帧 5：gauss + sobel（边缘接在高斯后，全分辨率）
+        axi_write(7'h00, 32'h9);
+        do_frame;
+        repeat (2000) @(negedge clk);
+        fidx = 5;
+        // 帧 6：仅 sobel（bit0=0、bit3=1，对 raw gray 做边缘）
+        axi_write(7'h00, 32'h8);
+        do_frame;
+        repeat (2000) @(negedge clk);
 
-        if (fcnt[0] !== 128 || fcnt[1] !== 128 || fcnt[2] !== 128 || fcnt[3] !== 512 || errors !== 0) begin
-            $display("FAIL: fcnt=%0d/%0d/%0d/%0d errors=%0d (expect 128/128/128/512/0)",
-                     fcnt[0], fcnt[1], fcnt[2], fcnt[3], errors);
+        if (fcnt[0] !== 128 || fcnt[1] !== 128 || fcnt[2] !== 128 || fcnt[3] !== 512
+            || fcnt[4] !== 128 || fcnt[5] !== 128 || errors !== 0) begin
+            $display("FAIL: fcnt=%0d/%0d/%0d/%0d/%0d/%0d errors=%0d (expect 128/128/128/512/128/128/0)",
+                     fcnt[0], fcnt[1], fcnt[2], fcnt[3], fcnt[4], fcnt[5], errors);
             $fatal(1);
         end
-        $display("PASS: vision_top 4 frames gray/gauss/gray/full, 896 px, 0 errors (frame-latch verified)");
+        $display("PASS: vision_top 6 frames gray/gauss/gray/full/gs_sobel/gray_sobel, 1024 px, 0 errors (frame-latch verified)");
         $finish;
     end
 endmodule
