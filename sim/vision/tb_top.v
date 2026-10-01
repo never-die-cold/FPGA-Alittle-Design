@@ -38,6 +38,7 @@ module tb_top;
     vision_top #(.SW(16), .SH(8), .DW(32), .DH(16), .NLINES(16)) dut (
         .clk(clk), .s_axi_aclk(clk), .rst_n(rst_n),
         .in_vs(in_vs), .in_hs(in_hs), .in_de(in_de), .in_rgb(in_rgb),
+        .cop_ready(1'b1),
         .awvalid(awvalid), .awready(awready), .awaddr(awaddr),
         .wvalid(wvalid), .wready(wready), .wdata(wdata), .wstrb(wstrb),
         .bvalid(bvalid), .bready(bready), .bresp(bresp),

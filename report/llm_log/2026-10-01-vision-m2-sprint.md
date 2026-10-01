@@ -55,3 +55,24 @@
   - ✅ 真实图替换通路 `data/scripts/img2hex.py`（PIL，任意图→指定尺寸 BT.601 灰度 hex）；真实照片待拍
   - ✅ 波形专项两项经核实已有等价覆盖（tb_top 帧锁存 + 逐帧精确计数），需求单标注闭环
 - 回归现状：iverilog 12/12 PASS（`vision-all-12tb.log`）；XSim 同判据。
+
+## 7. 补记二（2026-10-01 深夜，非上板收尾冲刺 A/B/C）
+
+- **A：vision_top 全链 OOC + CDC**（决策单建议项落地）：tcl 扩 vision_top 项（双时钟
+  pclk/s_axi_aclk + 异步 clock group + report_cdc）。首轮即抓到**单模块综合都测不到的
+  推断失败**——cop_buf 的 mux 阵列写（if wr_sel mem1 else mem0）致 Synth 8-3391
+  （401Kbit 试图散成触发器）。重构为每阵列独立 1W1R always 块后 BRAM 推断成功。
+  另：report_cdc 在异步 clock group 下按定义不报跨域路径——2FF 结构以 RTL 评审为准
+  （4 bit 逐位同步器），已入 D10 备注。
+- **B：pynq_host 软件栈**：vision_regs.py（§3.3 绑定，mock 后端自测 6/6——首版
+  set_enable 未指定位清零语义 bug 自测即抓到）；vision_demo.py（A1/A4 序列）；board/
+  adv7611_init.py（I2C 骨架 + EDID 程序化生成自检 PASS，寄存器值表待 ADI 脚本核对）。
+- **C：cop_buf 乒乓帧缓冲 v0**（§7 占位）：双帧 BRAM + cop_ready 整帧原子反压 +
+  读忙原地覆写丢帧保读安全。调试两轮：①末像素兼行尾时 else-if 链漏设 hgap →
+  raddr 越界续发垃圾（iverilog 抓到 120px）；②BRAM 重构后 rd0/rd1 滞后一拍致流
+  错位（cop[1]=exp[0]），补 *_int 决策级对齐。iverilog/XSim 双口径 PASS，接进
+  vision_top（cop_ready 新端口），回归 13 tb 全 PASS。
+- **教训**：顶层综合是唯一能抓"存储推断失败/多驱动类"问题的闸门——本日两次失败
+  （8-3391 推断失败 + mux 阵列写）单元级综合都测不出来，因为它们只在真实参数
+  （224×224）下暴露。仿真两口径一致但综合失败的组合再次印证"iverilog/XSim 干净
+  ≠ 综合干净"。

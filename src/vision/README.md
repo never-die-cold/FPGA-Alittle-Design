@@ -14,6 +14,7 @@ HDMI 视频流逐像素实时处理：灰度化 → 3×3 高斯滤波 → 双线
 | `scaler.v` | 已实现 | 16.16 定点双线性、行槽滑动、自产 `out_vs/out_hs` 标记；2026-09-30 插值链切拍（错半拍预寻址），real 档 OOC ≈94.9 MHz，720p60 达标 |
 | `sobel.v` | 已实现 | Gx/Gy L1 幅值饱和；2026-10-01 接入 `vision_top`（gaussian 后、scaler 前，R0 bit3） |
 | `in_align.v` | 已实现 | 2026-10-01 新增：ADV7611 解码流归一到 §3.1 流约定（hs/vs 重定时、撞拍让路） |
+| `cop_buf.v` | 已实现 | 2026-10-01 新增：快照帧乒乓缓冲（cop_ready 反压，§7 占位实现，契约后换封装） |
 | `osd_overlay.v` | 已实现 | box/roi 双框叠加、帧首参数锁存 |
 | `axi_regs.v` | 已实现 | AXI-Lite 16 寄存器；`AW` 须满足 `2^AW > NREG*4` |
 | `vision_top.v` | 已实现 | v0.3 双路径：显示 gray→[gauss]→[sobel]→[osd] 全分辨率直通 + 快照 [scaler]→cop 喂模块三；双时钟域 R0 位 2FF；6 帧 tb 双通道位精确 |

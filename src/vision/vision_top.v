@@ -48,7 +48,8 @@ module vision_top #(
     output wire       out_hs,
     output wire       out_de,
     output wire [7:0] out_y,
-    // 快照输出（scaler 缩放流，= 模块三 CNN 输入尺寸；R0 bit1 使能）
+    // 快照输出（scaler 缩放流经乒乓帧缓冲，= 模块三 CNN 输入尺寸；R0 bit1 使能）
+    input  wire       cop_ready,    // cop 消费侧反压（=1 允许下一帧回放；§7 占位接口）
     output wire       cop_vs,
     output wire       cop_hs,
     output wire       cop_de,
@@ -138,10 +139,17 @@ module vision_top #(
         .in_vs(m1b_vs), .in_hs(m1b_hs), .in_de(m1b_de), .in_y(m1b_y),
         .out_vs(s_vs), .out_hs(s_hs), .out_de(s_de), .out_y(s_y)
     );
-    assign cop_vs = t_scaler ? s_vs : 1'b0;
-    assign cop_hs = t_scaler ? s_hs : 1'b0;
-    assign cop_de = t_scaler ? s_de : 1'b0;
-    assign cop_y  = s_y;
+    // 快照流帧首锁存门控后落乒乓帧缓冲（§7：乒乓行组缓冲占位实现，cop 契约定稿换封装）
+    wire       cw_vs = t_scaler ? s_vs : 1'b0;
+    wire       cw_hs = t_scaler ? s_hs : 1'b0;
+    wire       cw_de = t_scaler ? s_de : 1'b0;
+    cop_buf #(.DW(DW), .DH(DH)) u_copbuf (
+        .clk(clk), .rst_n(rst_n),
+        .in_vs(cw_vs), .in_hs(cw_hs), .in_de(cw_de), .in_y(s_y),
+        .cop_ready(cop_ready),
+        .out_vs(cop_vs), .out_hs(cop_hs), .out_de(cop_de), .out_y(cop_y),
+        .frame_done(), .buf_full()
+    );
 
     // ---- 级 3：OSD 叠加（框参数 = R1..R10，坐标系 = 全分辨率显示图） ----
     wire       o_vs, o_hs, o_de;

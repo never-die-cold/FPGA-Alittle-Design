@@ -18,8 +18,9 @@ case "$MODE" in
     osd)      TBS=(tb_osd) ;;
     axi)      TBS=(tb_axi_regs) ;;
     align)    TBS=(tb_in_align) ;;
+    copbuf)   TBS=(tb_cop_buf) ;;
     top)      TBS=(tb_top) ;;
-    all)      TBS=(tb_rgb2gray tb_line_buffer tb_gaussian3x3 tb_scaler tb_scaler_ds tb_sobel tb_chain tb_fullchain tb_osd tb_axi_regs tb_in_align tb_top) ;;
+    all)      TBS=(tb_rgb2gray tb_line_buffer tb_gaussian3x3 tb_scaler tb_scaler_ds tb_sobel tb_chain tb_fullchain tb_osd tb_axi_regs tb_in_align tb_cop_buf tb_top) ;;
     *)        echo "用法: bash sim/scripts/run_vision_xsim.sh [单项|all]"; exit 1 ;;
 esac
 cd "$(dirname "$0")/.."    # -> sim/（tb 内 $readmemh 用 ../data/golden/... 相对此目录）

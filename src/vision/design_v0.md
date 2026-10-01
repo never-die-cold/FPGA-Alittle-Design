@@ -64,7 +64,8 @@ ADV7611 HDMI IN ──像素时钟域──> 输入对齐/24bit RGB ──> rgb2
 - `osd_overlay.v`：灰度流直通 + 两个 1px 描边框（box 检测框 / roi），命中像素以各自颜色替换、重叠 box 优先；**参数在帧首 vs 锁存**——帧内改参数不影响当前帧（A4 动效换帧生效语义），tb 以双帧 golden 验证锁存。黄金参考 `data/golden/vision/osd/`。
 - `axi_regs.v`：AXI-Lite 从机参数寄存器堆（NREG=16，映射 v0.1 见模块头注释：R0 控制开关 / R1–R5 检测框 / R6–R10 ROI / R11–R15 保留）。要点：**AW 默认 7，须满足 2^AW > NREG*4**——AW=6 时地址空间恰好被寄存器占满，越界判别永远无法触发（tb 实测教训，2026-09-29）；保留区写忽略读 0；wstrb 字节使能；读写通道序列化握手；复位全零（control 默认全关，防 X 传播）。单元级单时钟域，PS↔PL 跨时钟由 vision_top 评审定。黄金参考无（协议 tb：BFM 确定性拍数驱动）。
 - `in_align.v`（2026-10-01 新增）：HDMI 输入归一化——ADV7611 解码流（pclk 同步并行 RGB + de/hs/vs，极性/位置随源）归一到 §3.1 流约定：de/rgb 直通；vs 边沿单拍化；hs 重定时为 de 拉低后第 HS_DLY 拍（默认 3，间隔 ≥3 且距下行首 de ≥1）；vs/hs 撞拍时 hs 让路顺延一拍不丢失。约束：源行消隐 ≥ HS_DLY+2 拍、raw vs 在场消隐内不与 de 重叠。tb_in_align 以丑流（hs 搭行尾 de、宽脉冲 vs、人为撞拍）验证全部间隔规则。
-- `vision_top.v` v0.3（2026-10-01）：**双路径拓扑**——显示 rgb2gray（恒接）→ [gaussian] → [sobel] → [osd] → out_*（全分辨率）；快照分支 sobel 后分叉 → [scaler] → cop_*（DW×DH，R0 bit1 使能，M3 接乒乓行组缓冲）。全部旁路 mux 帧首 in_vs 锁存。**R0 位定义 v0.2：bit0 gauss_en / bit1 scaler_en（快照使能）/ bit2 osd_en / bit3 sobel_en**（sobel 串接于高斯 mux 后，可与 bit0 自由组合；bit0=0&bit3=1 即对 raw gray 做边缘）。时钟域：像素流 pclk、axi_regs s_axi_aclk（PS AXI_GP），R0 开关位 2FF 同步进 pclk，box/roi 多字节参数按 D10 帧首锁存口径。tb_top 六帧双通道 768+512 px 位精确。
+- `cop_buf.v`（2026-10-01 新增，§7 占位实现）：快照帧乒乓缓冲——scaler 流写入双帧 BRAM（2×DW·DH·8bit），读侧 1 像素/拍整帧原子回放为 vs/hs/de 流；`cop_ready` 反压控帧启动（帧内不中断）；读忙且目标=读缓冲时写侧原地覆写（丢帧保读安全）；末行 hs 走完才收（finishing）。**接口为占位**：cop 契约（10/5）定稿后按 §7 换封装（valid/de vs AXI-Stream），存储体不动。tb_cop_buf 验 3 帧乒乓 + ready 门控 + 读时并发写，iverilog/XSim 双口径 PASS。调试实录：末像素兼行尾时 else-if 链漏设 hgap → raddr 越界续发（iverilog 抓到 120px/XSim 行为不同），修正为行尾判据主、帧尾置 finishing。
+- `vision_top.v` v0.3（2026-10-01）：**双路径拓扑**——显示 rgb2gray（恒接）→ [gaussian] → [sobel] → [osd] → out_*（全分辨率）；快照分支 sobel 后分叉 → [scaler] → **cop_buf 乒乓帧缓冲** → cop_*（DW×DH，R0 bit1 使能，新增 `cop_ready` 反压端口）。全部旁路 mux 帧首 in_vs 锁存。**R0 位定义 v0.2：bit0 gauss_en / bit1 scaler_en（快照使能）/ bit2 osd_en / bit3 sobel_en**（sobel 串接于高斯 mux 后，可与 bit0 自由组合；bit0=0&bit3=1 即对 raw gray 做边缘）。时钟域：像素流 pclk、axi_regs s_axi_aclk（PS AXI_GP），R0 开关位 2FF 同步进 pclk，box/roi 多字节参数按 D10 帧首锁存口径。tb_top 六帧双通道 768+512 px 位精确。全链 OOC real75（含 cop_buf）WNS **+2.9**@13.468ns。
 - 回归入口：`bash sim/scripts/run_vision_iverilog.sh [rgb2gray|linebuf|gaussian|scaler|sobel|chain|fullchain|osd|axi|all]`（模块二独立 harness，不进模块一 `all`，tb 在 `sim/vision/`）。
 
 ### 3.2 级间标记约定 v0.2（tb_fullchain 通过后确立，10/5 评审确认）
@@ -137,6 +138,7 @@ ADV7611 HDMI IN ──像素时钟域──> 输入对齐/24bit RGB ──> rgb2
 ## 7. 与模块三的衔接（给 jianglibo 的对齐点）
 
 - `scaler` 输出尺寸 = CNN 输入尺寸；输出侧先落**乒乓行组缓冲**（BRAM）再喂 `cop_top`，接口形态（简单 valid/de vs AXI-Stream）等 `src/coprocessor/` 契约定稿后回写本文。
+  **2026-10-01 预实现**：`cop_buf.v`（乒乓帧缓冲 + cop_ready 反压）已落地并通过双口径 tb——契约冻结时若接口形态不同，仅需改 cop_buf 读侧封装（存储与写侧不动）；M3 可参照 tb_cop_buf 的 vs/hs/de 消费时序设计。
 - A3 软/硬推理切换：PS 软件版与协处理器版同屏对比，依赖模块三暴露"推理完成"信号到 OSD 显示延迟数值。
 - 权重加载：训练侧产出 hex 的位宽/排布必须与 `cop_top` 权重存储一致——见 `docs/module3-model-training.md`，训练侧在拿到协处理器契约前先按"INT8、权重排布可参数化"准备。
 
