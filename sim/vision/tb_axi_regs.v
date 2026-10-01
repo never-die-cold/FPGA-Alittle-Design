@@ -21,7 +21,7 @@ module tb_axi_regs;
         .bvalid(bvalid), .bready(bready), .bresp(bresp),
         .arvalid(arvalid), .arready(arready), .araddr(araddr),
         .rvalid(rvalid), .rready(rready), .rdata(rdata), .rresp(rresp),
-        .regs_flat(regs_flat)
+        .regs_flat(regs_flat),.cfg_busy(1'b0),.cfg_applied(32'b0)
     );
     always #5 clk = ~clk;
 
