@@ -17,12 +17,17 @@
 #   bash sim/scripts/run_iverilog.sh soc      # hello_v0 SoC + tohost LED 自检
 #   bash sim/scripts/run_iverilog.sh soc_check # SoC 预载 + 计时器端到端自检
 #   bash sim/scripts/run_iverilog.sh bench    # benchmark v0.1 + CPI 统计
+#   bash sim/scripts/run_iverilog.sh vision [单项|all] # 视觉专项；all 含核与视觉
+#   bash sim/scripts/run_iverilog.sh vision_gate # 视觉回归失败门禁自检
 # 前置：PATH 中含 MSYS2 ucrt64 的 iverilog / vvp（13.0+）
 set -u
 
 MODE="${1:-all}"
 
 case "$MODE" in
+    vision) exec bash "$(dirname "$0")/run_vision_iverilog.sh" "${2:-all}" ;;
+    vision_gate) exec bash "$(dirname "$0")/test_vision_gate.sh" ;;
+    vision_python) exec bash "$(dirname "$0")/run_vision_python.sh" ;;
     v0)  TBS=(riscv/tb_core_smoke.v riscv/tb_core_test.v) ;;
     fwd) TBS=(riscv/tb_core_fwd.v) ;;
     decode) TBS=(riscv/tb_decode.v) ;;
@@ -89,3 +94,8 @@ for tb in "${TBS[@]}"; do
         vvp "build/$name.vvp" || exit 1
     fi
 done
+if [ "$MODE" = "all" ]; then
+    bash scripts/test_vision_gate.sh || exit 1
+    bash scripts/run_vision_iverilog.sh all || exit 1
+    bash scripts/run_vision_python.sh || exit 1
+fi
