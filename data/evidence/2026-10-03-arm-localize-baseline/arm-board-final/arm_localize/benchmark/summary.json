@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "mode": "SYNTHETIC_FILE_REFERENCE",
+  "utc": "2026-09-21T05:26:59.033332+00:00",
+  "warmup": 1,
+  "repeats": 5,
+  "crop_size": [
+    64,
+    64
+  ],
+  "p95_method": "nearest-rank; five samples means p95=max",
+  "cases": [
+    {
+      "name": "tiny",
+      "width": 12,
+      "height": 8,
+      "targets": 2,
+      "samples": [
+        {
+          "result": "run-1p9nq39b/tiny/sample-00.json",
+          "locate": 1.262825,
+          "crop": 262.419243,
+          "total_call": 408.821421
+        },
+        {
+          "result": "run-1p9nq39b/tiny/sample-01.json",
+          "locate": 1.259218,
+          "crop": 261.655754,
+          "total_call": 410.32931
+        },
+        {
+          "result": "run-1p9nq39b/tiny/sample-02.json",
+          "locate": 1.259624,
+          "crop": 267.560308,
+          "total_call": 427.138308
+        },
+        {
+          "result": "run-1p9nq39b/tiny/sample-03.json",
+          "locate": 1.36712,
+          "crop": 258.396609,
+          "total_call": 404.152301
+        },
+        {
+          "result": "run-1p9nq39b/tiny/sample-04.json",
+          "locate": 1.252375,
+          "crop": 267.306258,
+          "total_call": 412.722079
+        }
+      ],
+      "stats_ms": {
+        "locate": {
+          "min": 1.252375,
+          "median": 1.259624,
+          "p95": 1.36712,
+          "max": 1.36712
+        },
+        "crop": {
+          "min": 258.396609,
+          "median": 262.419243,
+          "p95": 267.560308,
+          "max": 267.560308
+        },
+        "total_call": {
+          "min": 404.152301,
+          "median": 410.32931,
+          "p95": 427.138308,
+          "max": 427.138308
+        }
+      }
+    },
+    {
+      "name": "720p_empty",
+      "width": 1280,
+      "height": 720,
+      "targets": 0,
+      "samples": [
+        {
+          "result": "run-1p9nq39b/720p_empty/sample-00.json",
+          "locate": 4214.908012,
+          "crop": 0.04451,
+          "total_call": 6211.194791
+        },
+        {
+          "result": "run-1p9nq39b/720p_empty/sample-01.json",
+          "locate": 4200.001514,
+          "crop": 0.044228,
+          "total_call": 6214.897492
+        },
+        {
+          "result": "run-1p9nq39b/720p_empty/sample-02.json",
+          "locate": 4215.520535,
+          "crop": 0.043059,
+          "total_call": 6284.92636
+        },
+        {
+          "result": "run-1p9nq39b/720p_empty/sample-03.json",
+          "locate": 4199.025187,
+          "crop": 0.044548,
+          "total_call": 6266.734378
+        },
+        {
+          "result": "run-1p9nq39b/720p_empty/sample-04.json",
+          "locate": 4209.352714,
+          "crop": 0.044455,
+          "total_call": 6231.567142
+        }
+      ],
+      "stats_ms": {
+        "locate": {
+          "min": 4199.025187,
+          "median": 4209.352714,
+          "p95": 4215.520535,
+          "max": 4215.520535
+        },
+        "crop": {
+          "min": 0.043059,
+          "median": 0.044455,
+          "p95": 0.044548,
+          "max": 0.044548
+        },
+        "total_call": {
+          "min": 6211.194791,
+          "median": 6231.567142,
+          "p95": 6284.92636,
+          "max": 6284.92636
+        }
+      }
+    },
+    {
+      "name": "720p_six",
+      "width": 1280,
+      "height": 720,
+      "targets": 6,
+      "samples": [
+        {
+          "result": "run-1p9nq39b/720p_six/sample-00.json",
+          "locate": 4702.640344,
+          "crop": 851.108011,
+          "total_call": 7893.329798
+        },
+        {
+          "result": "run-1p9nq39b/720p_six/sample-01.json",
+          "locate": 4715.317882,
+          "crop": 849.069796,
+          "total_call": 7963.696905
+        },
+        {
+          "result": "run-1p9nq39b/720p_six/sample-02.json",
+          "locate": 4701.364566,
+          "crop": 864.482958,
+          "total_call": 7894.934665
+        },
+        {
+          "result": "run-1p9nq39b/720p_six/sample-03.json",
+          "locate": 4699.774283,
+          "crop": 845.441285,
+          "total_call": 7957.320635
+        },
+        {
+          "result": "run-1p9nq39b/720p_six/sample-04.json",
+          "locate": 4715.214966,
+          "crop": 844.091186,
+          "total_call": 7891.205625
+        }
+      ],
+      "stats_ms": {
+        "locate": {
+          "min": 4699.774283,
+          "median": 4702.640344,
+          "p95": 4715.317882,
+          "max": 4715.317882
+        },
+        "crop": {
+          "min": 844.091186,
+          "median": 849.069796,
+          "p95": 864.482958,
+          "max": 864.482958
+        },
+        "total_call": {
+          "min": 7891.205625,
+          "median": 7894.934665,
+          "p95": 7963.696905,
+          "max": 7963.696905
+        }
+      }
+    }
+  ],
+  "runtime": {
+    "system": "Linux",
+    "machine": "armv7l",
+    "python": "3.10.4"
+  },
+  "reference_sha256": "2b9c2b2af41b3d560359aafa1d06ec708a492c36328f3173b5e606f00fd6a073"
+}

@@ -1,0 +1,188 @@
+{
+  "frame_id": 7,
+  "config_id": 3,
+  "width": 12,
+  "height": 8,
+  "status": "LOCATION_ONLY",
+  "targets": [
+    {
+      "target_id": 0,
+      "frame_id": 7,
+      "config_id": 3,
+      "bbox": [
+        1,
+        1,
+        2,
+        4
+      ],
+      "area": 8,
+      "touches_border": false
+    },
+    {
+      "target_id": 1,
+      "frame_id": 7,
+      "config_id": 3,
+      "bbox": [
+        7,
+        2,
+        9,
+        5
+      ],
+      "area": 12,
+      "touches_border": false
+    }
+  ],
+  "schema_version": 1,
+  "mode": "FILE_REFERENCE",
+  "crops": [
+    {
+      "target_id": 0,
+      "frame_id": 7,
+      "config_id": 3,
+      "bbox": [
+        1,
+        1,
+        2,
+        4
+      ],
+      "area": 8,
+      "touches_border": false,
+      "pixels": [
+        [
+          20,
+          20,
+          20,
+          20
+        ],
+        [
+          20,
+          20,
+          20,
+          20
+        ],
+        [
+          20,
+          20,
+          20,
+          20
+        ]
+      ],
+      "pixel_format": "GRAY8",
+      "input_size": [
+        4,
+        3
+      ]
+    },
+    {
+      "target_id": 1,
+      "frame_id": 7,
+      "config_id": 3,
+      "bbox": [
+        7,
+        2,
+        9,
+        5
+      ],
+      "area": 12,
+      "touches_border": false,
+      "pixels": [
+        [
+          30,
+          30,
+          30,
+          30
+        ],
+        [
+          30,
+          30,
+          30,
+          30
+        ],
+        [
+          30,
+          30,
+          30,
+          30
+        ]
+      ],
+      "pixel_format": "GRAY8",
+      "input_size": [
+        4,
+        3
+      ]
+    }
+  ],
+  "crop_size": [
+    4,
+    3
+  ],
+  "source": {
+    "name": "two_targets.json",
+    "sha256": "6a28cfa975586bf71a2b8e979896cccbc2d108801d46063d860421f874be96cd"
+  },
+  "parameters": {
+    "threshold": 96,
+    "min_area": 8,
+    "max_targets": 16
+  },
+  "runtime": {
+    "system": "Linux",
+    "machine": "armv7l",
+    "python": "3.10.4"
+  },
+  "reference_sha256": "2b9c2b2af41b3d560359aafa1d06ec708a492c36328f3173b5e606f00fd6a073",
+  "timing_ms": {
+    "locate": 1.298141,
+    "crop": 1.128794
+  },
+  "artifacts": [
+    {
+      "target_id": 0,
+      "frame_id": 7,
+      "config_id": 3,
+      "bbox": [
+        1,
+        1,
+        2,
+        4
+      ],
+      "pixel_format": "GRAY8",
+      "size": [
+        4,
+        3
+      ],
+      "pgm": {
+        "path": "result-crops-txhvj155/target_000.pgm",
+        "sha256": "54c75411bd7638b2c5d4f2a329e5bf2ae1c5191b3c799c205fe0aad52f12a348"
+      },
+      "hex": {
+        "path": "result-crops-txhvj155/target_000.hex",
+        "sha256": "49177673c0579eadc9408c5a54a7d893694f1a66d3899be9f912eeff16fab50c"
+      }
+    },
+    {
+      "target_id": 1,
+      "frame_id": 7,
+      "config_id": 3,
+      "bbox": [
+        7,
+        2,
+        9,
+        5
+      ],
+      "pixel_format": "GRAY8",
+      "size": [
+        4,
+        3
+      ],
+      "pgm": {
+        "path": "result-crops-txhvj155/target_001.pgm",
+        "sha256": "54e6a25edd3b88909b1ad86cf168d6b00ee012cf5e724e0f9e6992d6d04adc10"
+      },
+      "hex": {
+        "path": "result-crops-txhvj155/target_001.hex",
+        "sha256": "d9958ae5248655fd5774b377577f82db068c27322ca3a51c5577effb50ccc1b8"
+      }
+    }
+  ]
+}

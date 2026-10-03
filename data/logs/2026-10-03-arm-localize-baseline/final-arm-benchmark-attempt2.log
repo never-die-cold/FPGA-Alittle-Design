@@ -1,0 +1,19 @@
+PASS: portable package hashes, exact localization/crops and PGM/hex
+PASS: file reference status=LOCATION_ONLY targets=2 crops=2
+INFO: tiny sample=1/5 total_ms=414.452
+INFO: tiny sample=2/5 total_ms=404.009
+INFO: tiny sample=3/5 total_ms=396.205
+INFO: tiny sample=4/5 total_ms=394.751
+INFO: tiny sample=5/5 total_ms=401.722
+INFO: 720p_empty sample=1/5 total_ms=6162.979
+INFO: 720p_empty sample=2/5 total_ms=6158.935
+INFO: 720p_empty sample=3/5 total_ms=6235.051
+INFO: 720p_empty sample=4/5 total_ms=6214.414
+INFO: 720p_empty sample=5/5 total_ms=6183.657
+INFO: 720p_six sample=1/5 total_ms=7782.746
+INFO: 720p_six sample=2/5 total_ms=7864.565
+INFO: 720p_six sample=3/5 total_ms=7736.748
+INFO: 720p_six sample=4/5 total_ms=7868.743
+INFO: 720p_six sample=5/5 total_ms=7804.176
+PASS: synthetic benchmark 3 cases, warmup=1, repeats=5
+exit_code=0

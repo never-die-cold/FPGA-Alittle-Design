@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "mode": "SYNTHETIC_FILE_REFERENCE",
+  "utc": "2026-09-21T05:20:41.223059+00:00",
+  "warmup": 1,
+  "repeats": 5,
+  "crop_size": [
+    64,
+    64
+  ],
+  "p95_method": "nearest-rank; five samples means p95=max",
+  "cases": [
+    {
+      "name": "tiny",
+      "width": 12,
+      "height": 8,
+      "targets": 2,
+      "samples": [
+        {
+          "result": "run-nph60lvw/tiny/sample-00.json",
+          "locate": 1.244899,
+          "crop": 260.601088,
+          "total_call": 414.451642
+        },
+        {
+          "result": "run-nph60lvw/tiny/sample-01.json",
+          "locate": 1.633311,
+          "crop": 260.287415,
+          "total_call": 404.009279
+        },
+        {
+          "result": "run-nph60lvw/tiny/sample-02.json",
+          "locate": 1.252504,
+          "crop": 254.887009,
+          "total_call": 396.205113
+        },
+        {
+          "result": "run-nph60lvw/tiny/sample-03.json",
+          "locate": 1.342615,
+          "crop": 253.558468,
+          "total_call": 394.751119
+        },
+        {
+          "result": "run-nph60lvw/tiny/sample-04.json",
+          "locate": 1.248431,
+          "crop": 260.929605,
+          "total_call": 401.722221
+        }
+      ],
+      "stats_ms": {
+        "locate": {
+          "min": 1.244899,
+          "median": 1.252504,
+          "p95": 1.633311,
+          "max": 1.633311
+        },
+        "crop": {
+          "min": 253.558468,
+          "median": 260.287415,
+          "p95": 260.929605,
+          "max": 260.929605
+        },
+        "total_call": {
+          "min": 394.751119,
+          "median": 401.722221,
+          "p95": 414.451642,
+          "max": 414.451642
+        }
+      }
+    },
+    {
+      "name": "720p_empty",
+      "width": 1280,
+      "height": 720,
+      "targets": 0,
+      "samples": [
+        {
+          "result": "run-nph60lvw/720p_empty/sample-00.json",
+          "locate": 4182.404314,
+          "crop": 0.044209,
+          "total_call": 6162.979111
+        },
+        {
+          "result": "run-nph60lvw/720p_empty/sample-01.json",
+          "locate": 4163.542517,
+          "crop": 0.04285,
+          "total_call": 6158.934619
+        },
+        {
+          "result": "run-nph60lvw/720p_empty/sample-02.json",
+          "locate": 4185.0272,
+          "crop": 0.045194,
+          "total_call": 6235.051104
+        },
+        {
+          "result": "run-nph60lvw/720p_empty/sample-03.json",
+          "locate": 4164.789169,
+          "crop": 0.044843,
+          "total_call": 6214.413683
+        },
+        {
+          "result": "run-nph60lvw/720p_empty/sample-04.json",
+          "locate": 4188.205729,
+          "crop": 0.045447,
+          "total_call": 6183.65716
+        }
+      ],
+      "stats_ms": {
+        "locate": {
+          "min": 4163.542517,
+          "median": 4182.404314,
+          "p95": 4188.205729,
+          "max": 4188.205729
+        },
+        "crop": {
+          "min": 0.04285,
+          "median": 0.044843,
+          "p95": 0.045447,
+          "max": 0.045447
+        },
+        "total_call": {
+          "min": 6158.934619,
+          "median": 6183.65716,
+          "p95": 6235.051104,
+          "max": 6235.051104
+        }
+      }
+    },
+    {
+      "name": "720p_six",
+      "width": 1280,
+      "height": 720,
+      "targets": 6,
+      "samples": [
+        {
+          "result": "run-nph60lvw/720p_six/sample-00.json",
+          "locate": 4656.374768,
+          "crop": 837.294817,
+          "total_call": 7782.746247
+        },
+        {
+          "result": "run-nph60lvw/720p_six/sample-01.json",
+          "locate": 4685.080615,
+          "crop": 822.820756,
+          "total_call": 7864.564752
+        },
+        {
+          "result": "run-nph60lvw/720p_six/sample-02.json",
+          "locate": 4651.103132,
+          "crop": 821.358159,
+          "total_call": 7736.748487
+        },
+        {
+          "result": "run-nph60lvw/720p_six/sample-03.json",
+          "locate": 4659.98955,
+          "crop": 829.102134,
+          "total_call": 7868.743404
+        },
+        {
+          "result": "run-nph60lvw/720p_six/sample-04.json",
+          "locate": 4692.343298,
+          "crop": 822.444983,
+          "total_call": 7804.175607
+        }
+      ],
+      "stats_ms": {
+        "locate": {
+          "min": 4651.103132,
+          "median": 4659.98955,
+          "p95": 4692.343298,
+          "max": 4692.343298
+        },
+        "crop": {
+          "min": 821.358159,
+          "median": 822.820756,
+          "p95": 837.294817,
+          "max": 837.294817
+        },
+        "total_call": {
+          "min": 7736.748487,
+          "median": 7804.175607,
+          "p95": 7868.743404,
+          "max": 7868.743404
+        }
+      }
+    }
+  ],
+  "runtime": {
+    "system": "Linux",
+    "machine": "armv7l",
+    "python": "3.10.4"
+  },
+  "reference_sha256": "2b9c2b2af41b3d560359aafa1d06ec708a492c36328f3173b5e606f00fd6a073"
+}

@@ -1,0 +1,17 @@
+INFO: tiny sample=1/5 total_ms=24.455
+INFO: tiny sample=2/5 total_ms=22.357
+INFO: tiny sample=3/5 total_ms=21.385
+INFO: tiny sample=4/5 total_ms=21.850
+INFO: tiny sample=5/5 total_ms=19.641
+INFO: 720p_empty sample=1/5 total_ms=198.536
+INFO: 720p_empty sample=2/5 total_ms=216.464
+INFO: 720p_empty sample=3/5 total_ms=221.854
+INFO: 720p_empty sample=4/5 total_ms=268.378
+INFO: 720p_empty sample=5/5 total_ms=272.427
+INFO: 720p_six sample=1/5 total_ms=269.305
+INFO: 720p_six sample=2/5 total_ms=270.137
+INFO: 720p_six sample=3/5 total_ms=279.695
+INFO: 720p_six sample=4/5 total_ms=263.548
+INFO: 720p_six sample=5/5 total_ms=245.924
+PASS: synthetic benchmark 3 cases, warmup=1, repeats=5
+exit_code=0

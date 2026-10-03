@@ -1,0 +1,7 @@
+PASS: PS configuration staging/commit/ack/busy/timeout/epoch wrap mock protocol
+PASS: localization empty/multiple/non-grid/noise/limit/border + per-target crop/resize/frame metadata
+PASS: M2 HTTP mock config/status/location + frame/config/session/stale/error contract
+PASS: file localization exact boxes/crops, metadata, empty/recheck and invalid input
+PASS: PGM/hex exact row order, hashes, target association and stale manifest isolation
+PASS: ARM portable package E:\Projects\FPGA-Alittle-Design\sim\build\arm-localize-package-test.tar.gz
+PASS: isolated portable package, missing/tampered file gate and retained benchmark samples
