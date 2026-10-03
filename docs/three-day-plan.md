@@ -55,7 +55,7 @@
 - 验证：`run_iverilog.sh mem_wb`、`v1_flow`、`all`；预期既有 RV32IM/tohost 不回归。
 - 理解题：为何 MEM+WB 无 hold？为何 `dmem_we` 必须包含 `mem_valid`？
 
-### D1.3 接入 ID+EX、转发与 hazard（D1.3a 已完成；ID+EX 替换待 D1.3b）
+### D1.3 接入 ID+EX、转发与 hazard（D1.3a/b 已实现并验证，待理解门槛）
 
 - 改：`core_top.v` 先接 regfile→forwarding→`id_ex_stage` 数据面，再接 `hazard` 的
   `front_stall/ex_accept/redirect/mem_in_valid` 控制面；对外存储器端口保持不变。
@@ -143,6 +143,9 @@
 - D1.2a（已通过）：为什么 regfile/DMEM 写使能都必须包含 `mem_valid`？
 - D1.3a（已通过）：为什么 redirect 必须经过 `ex_accept` 门控？
 - D1.3a（已通过）：为什么 load-use 要停 1 拍，而普通 ALU RAW 可以通过转发零停顿？
+- D1.3b：为什么组合 `id_ex_stage` 不会增加第四级？
+- D1.3b：为什么 `branch_taken/jump_taken` 仍必须经过 hazard 的 `ex_accept`？
+- D1.3b：为什么 store data 必须用转发后的 rs2 并捕获进 MEM+WB？
 
 ## 7. 用户回来后必须拍板 / 回答
 

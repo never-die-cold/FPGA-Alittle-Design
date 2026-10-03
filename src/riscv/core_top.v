@@ -1,5 +1,5 @@
-// core_top.v —— RV32IM 两级流水核顶层：IF / ID+EX+MEM+WB
-// 对外接口见 src/riscv/design_v0.md §5.7；v0 特性见 §2（无 RAW/load-use 停顿，跳转 1 拍气泡）
+// core_top.v -- RV32IM v1 three-stage core: IF / ID+EX / MEM+WB
+// External ports stay compatible with design_v0; v1 contract is design_v1.md.
 module core_top #(
     parameter ENABLE_FORWARDING = 1'b1
 ) (
@@ -20,7 +20,7 @@ module core_top #(
     wire        stall;
     wire        branch_taken, jump_taken, flush;
     wire        data_stall, front_stall, ex_accept, redirect, mem_in_valid;
-    wire [31:0] pc_target, branch_target;
+    wire [31:0] pc_target;
     wire [31:0] instr;
     wire        instr_valid;
 
@@ -50,42 +50,13 @@ module core_top #(
         .pc_id     (pc_id)
     );
 
-    // ---------- 译码 ----------
-    wire [4:0]  rs1_addr, rs2_addr, rd_addr;
-    wire [31:0] imm;
-    wire [2:0]  imm_type;
-    wire [3:0]  alu_op;
-    wire [1:0]  alu_a_sel, alu_b_sel, wb_sel;
-    wire        reg_write, mem_read, mem_write, sign_ext;
-    wire [1:0]  mask_sel;
-    wire [2:0]  branch_type;
-    wire [1:0]  jump_type;
-    wire [2:0]  muldiv_op;
-    wire        muldiv_valid, uses_rs1, uses_rs2;
-
-    decode u_decode (
-        .instr      (instr),
-        .rs1_addr   (rs1_addr),
-        .rs2_addr   (rs2_addr),
-        .rd_addr    (rd_addr),
-        .imm        (imm),
-        .imm_type   (imm_type),
-        .alu_op     (alu_op),
-        .alu_a_sel  (alu_a_sel),
-        .alu_b_sel  (alu_b_sel),
-        .wb_sel     (wb_sel),
-        .reg_write  (reg_write),
-        .mem_read   (mem_read),
-        .mem_write  (mem_write),
-        .mask_sel   (mask_sel),
-        .sign_ext   (sign_ext),
-        .branch_type(branch_type),
-        .jump_type  (jump_type),
-        .muldiv_valid(muldiv_valid),
-        .muldiv_op  (muldiv_op),
-        .uses_rs1   (uses_rs1),
-        .uses_rs2   (uses_rs2)
-    );
+    // ---------- ID+EX interface ----------
+    wire [4:0] rs1_addr, rs2_addr, rd_addr;
+    wire [2:0] muldiv_op;
+    wire muldiv_valid, uses_rs1, uses_rs2;
+    wire [31:0] redirect_target, ex_result, ex_addr, ex_store_data;
+    wire ex_reg_write, ex_mem_read, ex_mem_write, ex_sign_ext;
+    wire [1:0] ex_wb_sel, ex_mask_sel;
 
     // ---------- 寄存器堆 ----------
     wire [31:0] rdata1, rdata2, rs1_fwd, rs2_fwd, wb_data;
@@ -158,46 +129,29 @@ module core_top #(
         .redirect(redirect), .if_flush(), .mem_in_valid(mem_in_valid)
     );
 
-    // ---------- ALU ----------
-    wire [31:0] alu_a = (alu_a_sel == 2'b01) ? pc_id :
-                        (alu_a_sel == 2'b10) ? 32'd0 : rs1_fwd;
-    wire [31:0] alu_b = (alu_b_sel == 2'b00) ? rs2_fwd : imm;
-    wire [31:0] alu_y;
-    wire        alu_zero, alu_lt, alu_ltu;
-
-    alu u_alu (
-        .a     (alu_a),
-        .b     (alu_b),
-        .alu_op(alu_op),
-        .y     (alu_y),
-        .zero  (alu_zero),
-        .lt    (alu_lt),
-        .ltu   (alu_ltu)
+    // ---------- combinational ID+EX ----------
+    id_ex_stage u_id_ex (
+        .in_valid(instr_valid), .in_pc(pc_id), .in_instr(instr),
+        .rs1_value(rs1_fwd), .rs2_value(rs2_fwd), .muldiv_result(muldiv_result),
+        .rs1_addr(rs1_addr), .rs2_addr(rs2_addr), .rd_addr(rd_addr),
+        .uses_rs1(uses_rs1), .uses_rs2(uses_rs2),
+        .muldiv_valid(muldiv_valid), .muldiv_op(muldiv_op),
+        .branch_taken(branch_taken), .jump_taken(jump_taken),
+        .redirect_target(redirect_target),
+        .ex_result(ex_result), .ex_addr(ex_addr), .ex_store_data(ex_store_data),
+        .ex_reg_write(ex_reg_write), .ex_mem_read(ex_mem_read),
+        .ex_mem_write(ex_mem_write), .ex_wb_sel(ex_wb_sel),
+        .ex_mask_sel(ex_mask_sel), .ex_sign_ext(ex_sign_ext)
     );
-
-    // ---------- 分支/跳转裁决 ----------
-    assign branch_target = pc_id + imm;
-
-    wire cond_taken = (branch_type == 3'd1) ?  alu_zero :
-                      (branch_type == 3'd2) ? ~alu_zero :
-                      (branch_type == 3'd3) ?  alu_lt   :
-                      (branch_type == 3'd4) ? ~alu_lt   :
-                      (branch_type == 3'd5) ?  alu_ltu  :
-                      (branch_type == 3'd6) ? ~alu_ltu  : 1'b0;
-
-    assign branch_taken = (branch_type != 3'd0) && cond_taken;
-    assign jump_taken   = (jump_type != 2'd0);
-    assign pc_target    = (jump_type == 2'd2) ? (alu_y & 32'hFFFF_FFFE) : branch_target;
+    assign pc_target = redirect_target;
 
     // ---------- ID+EX / MEM+WB boundary ----------
-    wire [31:0] ex_result = (wb_sel == 2'b10) ? (pc_id + 32'd4) :
-                            (wb_sel == 2'b11) ? muldiv_result : alu_y;
     mem_wb_stage u_mem_wb (
         .clk(clk), .rst_n(rst_n), .in_valid(mem_in_valid),
         .in_instr(instr), .in_pc(pc_id), .in_rd(rd_addr),
-        .in_result(ex_result), .in_addr(alu_y), .in_store_data(rs2_fwd),
-        .in_reg_write(reg_write), .in_mem_read(mem_read), .in_mem_write(mem_write),
-        .in_wb_sel(wb_sel), .in_mask_sel(mask_sel), .in_sign_ext(sign_ext),
+        .in_result(ex_result), .in_addr(ex_addr), .in_store_data(ex_store_data),
+        .in_reg_write(ex_reg_write), .in_mem_read(ex_mem_read), .in_mem_write(ex_mem_write),
+        .in_wb_sel(ex_wb_sel), .in_mask_sel(ex_mask_sel), .in_sign_ext(ex_sign_ext),
         .mem_valid(mem_valid), .mem_instr(mem_instr), .mem_pc(mem_pc), .mem_rd(mem_rd),
         .mem_result(mem_result), .mem_addr(mem_addr), .mem_store_data(mem_store_data),
         .mem_reg_write(mem_reg_write), .mem_mem_read(mem_mem_read),
