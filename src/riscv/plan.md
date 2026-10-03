@@ -49,7 +49,7 @@ RTL 可独立自测后交付配置和已知问题，验证线复验并反馈缺�
 - [x] 存储扩容 32KB（8B/8C/9A/9B 已合入）；[x] SoC 计时计数器与 DMEM 镜像预载（RTL、端到端仿真、40 MHz 实现通过）
 - [x] 基线 CPI、CoreMark/LUT 与 SoC 资源补录 `data/metrics.csv`
 - [x] `dev/rtl` Part A 分支 PR 合并（PR #32，2026-09-23；原计划 9/27 周合并）
-- [ ] gate #19 复核签字（9/27）
+- [x] gate #19 复核签字（9/27；2026-10-03 随 issue #19 关闭补记，证据见 issue 评论）
 - [x] benchmark v0.1 / CPI harness / v0 metrics 入档；[ ] CoreMark 四档对比待 Part B/C 完成后补齐
 
 ### 3.3 引用兼容说明
