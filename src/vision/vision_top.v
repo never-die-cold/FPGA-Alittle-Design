@@ -15,7 +15,9 @@ module vision_top #(
 )(
     input  wire       clk,          // pclk：像素流域
     input  wire       s_axi_aclk,   // AXI-Lite 配置域，允许与像素时钟异步
-    input  wire       rst_n,
+    input  wire       rst_n,        // 像素域复位（顶层可并入 video_locked）
+    input  wire       axi_rst_n,    // AXI 域复位：仅 PS 复位，不得并入 video_locked——
+                                  // 锁定丢失时在途 AXI 响应必须照常完成（2026-10-03 上板挂死）
     // 像素输入（解码后 RGB 流）
     input  wire       in_vs,
     input  wire       in_hs,
@@ -59,11 +61,12 @@ module vision_top #(
     wire [16*32-1:0] regs_flat;
     wire pixel_reset,axi_reset;
     reset_sync u_pixel_reset(.clk(clk),.arst_n(rst_n),.rst_n(pixel_reset));
-    reset_sync u_axi_reset(.clk(s_axi_aclk),.arst_n(rst_n),.rst_n(axi_reset));
+    reset_sync u_axi_reset(.clk(s_axi_aclk),.arst_n(axi_rst_n),.rst_n(axi_reset));
     wire [351:0] active_cfg;
     wire cfg_commit,cfg_busy;
     wire [31:0] cfg_applied,cfg_id;
-    config_bridge u_config(.src_clk(s_axi_aclk),.dst_clk(clk),.rst_n(rst_n),
+    // 桥与从机同属 AXI 域：锁定丢失不清请求/已应用配置，恢复后未确认提交在首帧生效。
+    config_bridge u_config(.src_clk(s_axi_aclk),.dst_clk(clk),.rst_n(axi_rst_n),
         .src_commit(cfg_commit),.src_data(regs_flat[351:0]),.dst_frame(in_vs),
         .src_busy(cfg_busy),.src_applied(cfg_applied),.dst_data(active_cfg),.dst_id(cfg_id));
     axi_regs #(.NREG(16), .AW(7), .RESV_BASE(11),.ATOMIC_CONFIG(1)) u_regs (

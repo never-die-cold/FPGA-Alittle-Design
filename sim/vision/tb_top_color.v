@@ -9,7 +9,7 @@ module tb_top_color;
     wire [31:0] fid,cfg;
     integer pixels=0,frame_count=0,f,l,c;
     vision_top #(.DW(8),.DH(4),.NLINES(8)) dut(
-        .clk(clk),.s_axi_aclk(clk),.rst_n(rst_n),.in_vs(vs),.in_hs(hs),.in_de(de),.in_rgb(rgb),
+        .clk(clk),.s_axi_aclk(clk),.rst_n(rst_n),.axi_rst_n(rst_n),.in_vs(vs),.in_hs(hs),.in_de(de),.in_rgb(rgb),
         .awvalid(av),.awaddr(addr),.wvalid(wv),.wdata(value),.wstrb(4'hf),.bready(br),
         .arvalid(1'b0),.araddr(7'b0),.rready(1'b1),.cop_ready(1'b0),
         .display_vs(dvs),.display_hs(dhs),.display_de(dde),.display_rgb(drgb),

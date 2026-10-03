@@ -7,7 +7,7 @@ module tb_top_async;
     wire [1:0] bp,rp;
     wire [31:0] rd;
     vision_top #(.DW(8),.DH(4),.NLINES(8)) dut(
-        .clk(clk),.s_axi_aclk(aclk),.rst_n(rst_n),.in_vs(vs),.in_hs(1'b0),.in_de(1'b0),.in_rgb(24'b0),
+        .clk(clk),.s_axi_aclk(aclk),.rst_n(rst_n),.axi_rst_n(rst_n),.in_vs(vs),.in_hs(1'b0),.in_de(1'b0),.in_rgb(24'b0),
         .awvalid(av),.awready(awr),.awaddr(aa),.wvalid(wv),.wready(wr),.wdata(wd),.wstrb(4'hf),
         .bvalid(bv),.bready(br),.bresp(bp),.arvalid(arv),.arready(arr),.araddr(ra),
         .rvalid(rv),.rready(rr),.rdata(rd),.rresp(rp),.cop_ready(1'b1));

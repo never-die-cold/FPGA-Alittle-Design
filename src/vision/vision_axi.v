@@ -1,5 +1,8 @@
 `timescale 1ns/1ps
 // Vivado AXI-Lite wrapper; Digilent video byte order is R,B,G, internal is R,G,B.
+// 复位拓扑：像素域 rst_n 并入 video_locked（断源即复位视频通路）；AXI 域 axi_rst_n
+// 只随 s_axi_aresetn——锁定丢失时在途 AXI 响应照常完成，已提交配置保留
+// （2026-10-03 上板实测：video_locked 波及 AXI 从机会挂死 PS 总线）。
 module vision_axi(
     (* X_INTERFACE_INFO="xilinx.com:signal:clock:1.0 s_axi_aclk CLK",
        X_INTERFACE_PARAMETER="ASSOCIATED_BUSIF s_axi, ASSOCIATED_RESET s_axi_aresetn" *)
@@ -29,7 +32,7 @@ module vision_axi(
     assign video_rbg={rgb[23:16],rgb[7:0],rgb[15:8]};
     assign snapshot_debug={drops,config_id,frame_id,cop_vs,cop_hs,cop_de,cop_y};
     video_pipeline u_pipeline(.pclk(pclk),.s_axi_aclk(s_axi_aclk),
-        .rst_n(s_axi_aresetn && video_locked),
+        .rst_n(s_axi_aresetn && video_locked),.axi_rst_n(s_axi_aresetn),
         .raw_vs(raw_vs),.raw_hs(raw_hs),.raw_de(raw_de),
         .raw_rgb({raw_rbg[23:16],raw_rbg[7:0],raw_rbg[15:8]}),
         .video_vs(video_vs),.video_hs(video_hs),.video_de(video_de),.video_rgb(rgb),

@@ -4,7 +4,7 @@
 module video_pipeline #(
     parameter SW=1280,SH=720,DW=224,DH=224,NLINES=8,VS_POL=1'b1
 )(
-    input wire pclk,s_axi_aclk,rst_n,
+    input wire pclk,s_axi_aclk,rst_n,axi_rst_n,
     input wire raw_vs,raw_hs,raw_de,
     input wire [23:0] raw_rgb,
     input wire awvalid,wvalid,bready,arvalid,rready,
@@ -36,7 +36,7 @@ module video_pipeline #(
         else begin video_vs<=raw_vs;video_hs<=raw_hs;video_de<=raw_de;video_rgb<=raw_rgb;end
     end
     vision_top #(.SW(SW),.SH(SH),.DW(DW),.DH(DH),.NLINES(NLINES)) u_vision(
-        .clk(pclk),.s_axi_aclk(s_axi_aclk),.rst_n(rst_n),
+        .clk(pclk),.s_axi_aclk(s_axi_aclk),.rst_n(rst_n),.axi_rst_n(axi_rst_n),
         .in_vs(normalized_vs),.in_hs(normalized_hs && seen_frame),.in_de(normalized_de && seen_frame),.in_rgb(normalized_rgb),
         .awvalid(awvalid),.awready(awready),.awaddr(awaddr),.wvalid(wvalid),.wready(wready),
         .wdata(wdata),.wstrb(wstrb),.bvalid(bvalid),.bready(bready),.bresp(bresp),
