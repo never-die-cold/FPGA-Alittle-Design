@@ -154,10 +154,10 @@ edgesight/
 ├── LICENSE              # MIT 协议
 ├── src/                 # 设计源码（RTL / 固件 / PS 侧软件）
 │   ├── riscv/           # RISC-V 核 RTL（v0 已收口；v1 契约冻结、RTL 进行中；含 SoC 外壳）
-│   ├── vision/          # HDMI 预处理流水线 RTL（单元级已完成 10/10 PASS）
+│   ├── vision/          # HDMI 预处理流水线 RTL（离板收口：22 tb 同判据 + 物理 HDMI bit/XSA 已产出）
 │   ├── coprocessor/     # CNN 推理协处理器 RTL（M1 验收后主力转入）
 │   ├── riscv_fw/        # RISC-V 裸机固件（冒烟 / 逐指令自检 / 后续 benchmark）
-│   └── pynq_host/       # PS 侧服务与 Jupyter 调试：配置、结果通信、基线（占位）
+│   └── pynq_host/       # PS 侧服务与调试：寄存器配置协议、mock 服务（真实板端接入待上板）
 ├── sim/                 # testbench、仿真脚本（scripts/ 一键 iverilog；tools/ 含 RV32I 编解码自测）
 ├── build/               # Vivado 可复现构建 tcl + 综合/实现报告
 ├── board/               # 上板工程、运行脚本、实测输出（占位）

@@ -1,0 +1,285 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Fri Oct  2 00:49:17 2026
+| Host         : never-die-cold running 64-bit major release  (build 9200)
+| Command      : report_drc -file data/logs/2026-10-02-vision-offboard/hdmi/drc.rpt
+| Design       : vision_wrapper
+| Device       : xc7z020clg400-1
+| Speed File   : -1
+| Design State : Fully Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Report DRC
+
+Table of Contents
+-----------------
+1. REPORT SUMMARY
+2. REPORT DETAILS
+
+1. REPORT SUMMARY
+-----------------
+            Netlist: netlist
+          Floorplan: impl_1
+      Design limits: <entire design considered>
+           Ruledeck: default
+             Max checks: <unlimited>
+             Checks found: 46
++-----------+----------+----------------------------+--------+
+| Rule      | Severity | Description                | Checks |
++-----------+----------+----------------------------+--------+
+| CHECK-3   | Warning  | Report rule limit reached  | 2      |
+| PDCN-1569 | Warning  | LUT equation term check    | 3      |
+| REQP-1839 | Warning  | RAMB36 async control check | 20     |
+| REQP-1840 | Warning  | RAMB18 async control check | 20     |
+| RTSTAT-10 | Warning  | No routable loads          | 1      |
++-----------+----------+----------------------------+--------+
+
+2. REPORT DETAILS
+-----------------
+CHECK-3#1 Warning
+Report rule limit reached  
+REQP-1839 rule limit reached: 20 violations have been found.
+Related violations: <none>
+
+CHECK-3#2 Warning
+Report rule limit reached  
+REQP-1840 rule limit reached: 20 violations have been found.
+Related violations: <none>
+
+PDCN-1569#1 Warning
+LUT equation term check  
+Used physical LUT pin 'A1' of cell dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_N_EXT_BSCAN.bscan_switch/temp_curid[31]_i_1 (pin dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_N_EXT_BSCAN.bscan_switch/temp_curid[31]_i_1/I1) in site SLICE_X64Y106 is not included in the LUT equation: 'O5=(A3*A5)+(A3*(~A5)*(~A2))+((~A3))'. If this cell is a user instantiated LUT in the design, please remove connectivity to the pin or change the equation and/or INIT string of the LUT to prevent this issue. If the cell is inferred or IP created LUT, please regenerate the IP and/or resynthesize the design to attempt to correct the issue.
+Related violations: <none>
+
+PDCN-1569#2 Warning
+LUT equation term check  
+Used physical LUT pin 'A4' of cell dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_N_EXT_BSCAN.bscan_switch/temp_curid[31]_i_1 (pin dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_N_EXT_BSCAN.bscan_switch/temp_curid[31]_i_1/I0) in site SLICE_X64Y106 is not included in the LUT equation: 'O5=(A3*A5)+(A3*(~A5)*(~A2))+((~A3))'. If this cell is a user instantiated LUT in the design, please remove connectivity to the pin or change the equation and/or INIT string of the LUT to prevent this issue. If the cell is inferred or IP created LUT, please regenerate the IP and/or resynthesize the design to attempt to correct the issue.
+Related violations: <none>
+
+PDCN-1569#3 Warning
+LUT equation term check  
+Used physical LUT pin 'A5' of cell dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_N_EXT_BSCAN.id_state[0]_i_1 (pin dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_N_EXT_BSCAN.id_state[0]_i_1/I0) in site SLICE_X65Y116 is not included in the LUT equation: 'O6=(A6+~A6)*((A2))'. If this cell is a user instantiated LUT in the design, please remove connectivity to the pin or change the equation and/or INIT string of the LUT to prevent this issue. If the cell is inferred or IP created LUT, please regenerate the IP and/or resynthesize the design to attempt to correct the issue.
+Related violations: <none>
+
+REQP-1839#1 Warning
+RAMB36 async control check  
+The RAMB36E1 vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0 has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[14] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_addr[14]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_col_reg[5]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#2 Warning
+RAMB36 async control check  
+The RAMB36E1 vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0 has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[14] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_addr[14]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_col_reg[6]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#3 Warning
+RAMB36 async control check  
+The RAMB36E1 vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0 has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[14] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_addr[14]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_col_reg[7]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#4 Warning
+RAMB36 async control check  
+The RAMB36E1 vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0 has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[14] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_addr[14]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_row_reg[0]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#5 Warning
+RAMB36 async control check  
+The RAMB36E1 vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0 has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[14] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_addr[14]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_row_reg[1]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#6 Warning
+RAMB36 async control check  
+The RAMB36E1 vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0 has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[14] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_addr[14]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_row_reg[2]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#7 Warning
+RAMB36 async control check  
+The RAMB36E1 vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0 has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[14] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_addr[14]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_row_reg[3]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#8 Warning
+RAMB36 async control check  
+The RAMB36E1 vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0 has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[14] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_addr[14]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_row_reg[4]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#9 Warning
+RAMB36 async control check  
+The RAMB36E1 vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0 has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[14] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_addr[14]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_row_reg[5]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#10 Warning
+RAMB36 async control check  
+The RAMB36E1 vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0 has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_addr[15]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_col_reg[5]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#11 Warning
+RAMB36 async control check  
+The RAMB36E1 vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0 has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_addr[15]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_col_reg[6]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#12 Warning
+RAMB36 async control check  
+The RAMB36E1 vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0 has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_addr[15]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_col_reg[7]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#13 Warning
+RAMB36 async control check  
+The RAMB36E1 vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0 has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_addr[15]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_row_reg[0]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#14 Warning
+RAMB36 async control check  
+The RAMB36E1 vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0 has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_addr[15]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_row_reg[1]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#15 Warning
+RAMB36 async control check  
+The RAMB36E1 vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0 has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_addr[15]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_row_reg[2]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#16 Warning
+RAMB36 async control check  
+The RAMB36E1 vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0 has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_addr[15]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_row_reg[3]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#17 Warning
+RAMB36 async control check  
+The RAMB36E1 vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0 has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_addr[15]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_row_reg[4]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#18 Warning
+RAMB36 async control check  
+The RAMB36E1 vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0 has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_addr[15]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_row_reg[5]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#19 Warning
+RAMB36 async control check  
+The RAMB36E1 vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0 has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_addr[15]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_row_reg[6]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#20 Warning
+RAMB36 async control check  
+The RAMB36E1 vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0 has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_addr[15]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_copbuf/wr_row_reg[7]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#1 Warning
+RAMB18 async control check  
+The RAMB18E1 vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg/ADDRARDADDR[10] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/ADDRARDADDR[7]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/x_reg[0]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#2 Warning
+RAMB18 async control check  
+The RAMB18E1 vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg/ADDRARDADDR[10] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/ADDRARDADDR[7]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/x_reg[10]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#3 Warning
+RAMB18 async control check  
+The RAMB18E1 vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg/ADDRARDADDR[10] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/ADDRARDADDR[7]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/x_reg[11]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#4 Warning
+RAMB18 async control check  
+The RAMB18E1 vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg/ADDRARDADDR[10] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/ADDRARDADDR[7]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/x_reg[1]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#5 Warning
+RAMB18 async control check  
+The RAMB18E1 vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg/ADDRARDADDR[10] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/ADDRARDADDR[7]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/x_reg[2]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#6 Warning
+RAMB18 async control check  
+The RAMB18E1 vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg/ADDRARDADDR[10] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/ADDRARDADDR[7]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/x_reg[3]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#7 Warning
+RAMB18 async control check  
+The RAMB18E1 vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg/ADDRARDADDR[11] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/ADDRARDADDR[8]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/x_reg[0]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#8 Warning
+RAMB18 async control check  
+The RAMB18E1 vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg/ADDRARDADDR[11] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/ADDRARDADDR[8]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/x_reg[10]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#9 Warning
+RAMB18 async control check  
+The RAMB18E1 vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg/ADDRARDADDR[11] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/ADDRARDADDR[8]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/x_reg[11]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#10 Warning
+RAMB18 async control check  
+The RAMB18E1 vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg/ADDRARDADDR[11] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/ADDRARDADDR[8]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/x_reg[1]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#11 Warning
+RAMB18 async control check  
+The RAMB18E1 vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg/ADDRARDADDR[11] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/ADDRARDADDR[8]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/x_reg[2]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#12 Warning
+RAMB18 async control check  
+The RAMB18E1 vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg/ADDRARDADDR[11] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/ADDRARDADDR[8]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/x_reg[3]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#13 Warning
+RAMB18 async control check  
+The RAMB18E1 vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg/ADDRARDADDR[11] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/ADDRARDADDR[8]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/x_reg[4]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#14 Warning
+RAMB18 async control check  
+The RAMB18E1 vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg/ADDRARDADDR[11] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/ADDRARDADDR[8]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/x_reg[5]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#15 Warning
+RAMB18 async control check  
+The RAMB18E1 vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg/ADDRARDADDR[11] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/ADDRARDADDR[8]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/x_reg[6]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#16 Warning
+RAMB18 async control check  
+The RAMB18E1 vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg/ADDRARDADDR[11] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/ADDRARDADDR[8]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/x_reg[7]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#17 Warning
+RAMB18 async control check  
+The RAMB18E1 vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg/ADDRARDADDR[11] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/ADDRARDADDR[8]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/x_reg[8]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#18 Warning
+RAMB18 async control check  
+The RAMB18E1 vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg/ADDRARDADDR[11] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/ADDRARDADDR[8]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/x_reg[9]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#19 Warning
+RAMB18 async control check  
+The RAMB18E1 vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg/ADDRARDADDR[12] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/ADDRARDADDR[9]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/x_reg[9]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#20 Warning
+RAMB18 async control check  
+The RAMB18E1 vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg has an input control pin vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/mem_reg/ADDRARDADDR[13] (net: vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/lb0/ADDRARDADDR[10]) which is driven by a register (vision_i/pipe/inst/u_pipeline/u_vision/u_sobel/x_reg[10]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+RTSTAT-10#1 Warning
+No routable loads  
+25 net(s) have no routable loads. The problem bus(es) and/or net(s) are dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD1/ctl_reg_en_2[1],
+dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/SUBCORE_FIFO.xsdbm_v3_0_6_rdfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.gr1_int.rfwft/aempty_fwft_i,
+dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/SUBCORE_FIFO.xsdbm_v3_0_6_rdfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gras.rsts/ram_empty_i,
+dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/SUBCORE_FIFO.xsdbm_v3_0_6_rdfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/grhf.rhf/underflow,
+dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/SUBCORE_FIFO.xsdbm_v3_0_6_rdfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.wr/gwhf.whf/overflow,
+dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/SUBCORE_FIFO.xsdbm_v3_0_6_rdfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.wr_rst_reg[2],
+dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_6_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/grhf.rhf/underflow,
+dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_6_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.wr/gwas.wsts/ram_full_i,
+dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_6_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.wr/gwhf.whf/overflow,
+dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_6_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.rd_rst_reg[0],
+dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_6_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.wr_rst_reg[2],
+dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD7_CTL/ctl_reg[2:0],
+dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD7_CTL/ctl_reg_en_2[1],
+dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_N_EXT_BSCAN.bscan_inst/TMS,
+dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_N_EXT_BSCAN.bscan_switch/m_bscan_capture[0]
+ (the first 15 of 23 listed).
+Related violations: <none>
+
+

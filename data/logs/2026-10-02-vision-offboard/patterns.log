@@ -1,0 +1,7 @@
+== tb_patterns ==
+../src/vision/scaler.v:105: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:106: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:118: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:119: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+PASS: 3 synthetic nonconstant RGB scenes -> gaussian/scaler/cop_buf, 96 pixels + IDs exact
+vision/tb_patterns.v:54: $finish called at 14550000 (1ps)

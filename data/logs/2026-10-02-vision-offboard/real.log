@@ -1,0 +1,7 @@
+== tb_video_real ==
+../src/vision/scaler.v:105: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:106: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:118: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:119: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+PASS: 720p timing 2 consecutive frames, 1843200 RGB px + 100352 snapshot px, 448 rows, IDs exact, no drops
+vision/tb_video_real.v:58: $finish called at 25350240000 (1ps)

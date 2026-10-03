@@ -1,0 +1,33 @@
+Collecting opencv-python==4.12.0.88
+  Downloading opencv_python-4.12.0.88-cp37-abi3-win_amd64.whl.metadata (19 kB)
+Collecting pyinstaller==6.16.0
+  Downloading pyinstaller-6.16.0-py3-none-win_amd64.whl.metadata (8.5 kB)
+Collecting numpy<2.3.0,>=2 (from opencv-python==4.12.0.88)
+  Downloading numpy-2.2.6-cp312-cp312-win_amd64.whl.metadata (60 kB)
+Collecting altgraph (from pyinstaller==6.16.0)
+  Using cached altgraph-0.17.5-py2.py3-none-any.whl.metadata (7.5 kB)
+Collecting packaging>=22.0 (from pyinstaller==6.16.0)
+  Using cached packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+Collecting pefile!=2024.8.26,>=2022.5.30 (from pyinstaller==6.16.0)
+  Downloading pefile-2023.2.7-py3-none-any.whl.metadata (1.4 kB)
+Collecting pyinstaller-hooks-contrib>=2025.8 (from pyinstaller==6.16.0)
+  Downloading pyinstaller_hooks_contrib-2026.8-py3-none-any.whl.metadata (16 kB)
+Collecting pywin32-ctypes>=0.2.1 (from pyinstaller==6.16.0)
+  Using cached pywin32_ctypes-0.2.3-py3-none-any.whl.metadata (3.9 kB)
+Collecting setuptools>=42.0.0 (from pyinstaller==6.16.0)
+  Using cached setuptools-84.0.0-py3-none-any.whl.metadata (6.6 kB)
+Downloading opencv_python-4.12.0.88-cp37-abi3-win_amd64.whl (39.0 MB)
+   ---------------------------------------- 39.0/39.0 MB 14.1 MB/s  0:00:03
+Downloading pyinstaller-6.16.0-py3-none-win_amd64.whl (1.4 MB)
+   ---------------------------------------- 1.4/1.4 MB 17.7 MB/s  0:00:00
+Downloading numpy-2.2.6-cp312-cp312-win_amd64.whl (12.6 MB)
+   ---------------------------------------- 12.6/12.6 MB 22.0 MB/s  0:00:00
+Using cached packaging-26.3-py3-none-any.whl (129 kB)
+Downloading pefile-2023.2.7-py3-none-any.whl (71 kB)
+Downloading pyinstaller_hooks_contrib-2026.8-py3-none-any.whl (462 kB)
+Using cached pywin32_ctypes-0.2.3-py3-none-any.whl (30 kB)
+Using cached setuptools-84.0.0-py3-none-any.whl (818 kB)
+Using cached altgraph-0.17.5-py2.py3-none-any.whl (21 kB)
+Installing collected packages: altgraph, setuptools, pywin32-ctypes, pefile, packaging, numpy, pyinstaller-hooks-contrib, opencv-python, pyinstaller
+
+Successfully installed altgraph-0.17.5 numpy-2.2.6 opencv-python-4.12.0.88 packaging-26.3 pefile-2023.2.7 pyinstaller-6.16.0 pyinstaller-hooks-contrib-2026.8 pywin32-ctypes-0.2.3 setuptools-84.0.0

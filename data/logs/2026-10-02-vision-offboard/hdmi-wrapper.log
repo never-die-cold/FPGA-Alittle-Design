@@ -1,0 +1,7 @@
+== tb_vision_axi ==
+../src/vision/scaler.v:105: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:106: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:118: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:119: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+PASS: AXI HDMI wrapper RBG/RGB/raw sync + lock-loss reset
+vision/tb_vision_axi.v:36: $finish called at 510000 (1ps)

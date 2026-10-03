@@ -1,0 +1,254 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Fri Oct  2 00:16:36 2026
+| Host         : never-die-cold running 64-bit major release  (build 9200)
+| Command      : report_drc -file data/logs/2026-10-02-vision-offboard/route/drc.rpt
+| Design       : video_pipeline
+| Device       : xc7z020clg400-1
+| Speed File   : -1
+| Design State : Fully Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Report DRC
+
+Table of Contents
+-----------------
+1. REPORT SUMMARY
+2. REPORT DETAILS
+
+1. REPORT SUMMARY
+-----------------
+            Netlist: video_pipeline
+          Floorplan: design_1
+      Design limits: <entire design considered>
+           Ruledeck: default
+             Max checks: <unlimited>
+             Checks found: 43
++-----------+----------+----------------------------+--------+
+| Rule      | Severity | Description                | Checks |
++-----------+----------+----------------------------+--------+
+| CHECK-3   | Warning  | Report rule limit reached  | 2      |
+| REQP-1839 | Warning  | RAMB36 async control check | 20     |
+| REQP-1840 | Warning  | RAMB18 async control check | 20     |
+| ZPS7-1    | Warning  | PS7 block required         | 1      |
++-----------+----------+----------------------------+--------+
+
+2. REPORT DETAILS
+-----------------
+CHECK-3#1 Warning
+Report rule limit reached  
+REQP-1839 rule limit reached: 20 violations have been found.
+Related violations: <none>
+
+CHECK-3#2 Warning
+Report rule limit reached  
+REQP-1840 rule limit reached: 20 violations have been found.
+Related violations: <none>
+
+REQP-1839#1 Warning
+RAMB36 async control check  
+The RAMB36E1 u_vision/u_copbuf/mem0_reg_0_0 has an input control pin u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[14] (net: u_vision/u_copbuf/wr_addr[14]) which is driven by a register (u_vision/u_copbuf/wr_col_reg[5]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#2 Warning
+RAMB36 async control check  
+The RAMB36E1 u_vision/u_copbuf/mem0_reg_0_0 has an input control pin u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[14] (net: u_vision/u_copbuf/wr_addr[14]) which is driven by a register (u_vision/u_copbuf/wr_col_reg[6]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#3 Warning
+RAMB36 async control check  
+The RAMB36E1 u_vision/u_copbuf/mem0_reg_0_0 has an input control pin u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[14] (net: u_vision/u_copbuf/wr_addr[14]) which is driven by a register (u_vision/u_copbuf/wr_col_reg[7]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#4 Warning
+RAMB36 async control check  
+The RAMB36E1 u_vision/u_copbuf/mem0_reg_0_0 has an input control pin u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[14] (net: u_vision/u_copbuf/wr_addr[14]) which is driven by a register (u_vision/u_copbuf/wr_row_reg[0]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#5 Warning
+RAMB36 async control check  
+The RAMB36E1 u_vision/u_copbuf/mem0_reg_0_0 has an input control pin u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[14] (net: u_vision/u_copbuf/wr_addr[14]) which is driven by a register (u_vision/u_copbuf/wr_row_reg[1]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#6 Warning
+RAMB36 async control check  
+The RAMB36E1 u_vision/u_copbuf/mem0_reg_0_0 has an input control pin u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[14] (net: u_vision/u_copbuf/wr_addr[14]) which is driven by a register (u_vision/u_copbuf/wr_row_reg[2]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#7 Warning
+RAMB36 async control check  
+The RAMB36E1 u_vision/u_copbuf/mem0_reg_0_0 has an input control pin u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[14] (net: u_vision/u_copbuf/wr_addr[14]) which is driven by a register (u_vision/u_copbuf/wr_row_reg[3]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#8 Warning
+RAMB36 async control check  
+The RAMB36E1 u_vision/u_copbuf/mem0_reg_0_0 has an input control pin u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[14] (net: u_vision/u_copbuf/wr_addr[14]) which is driven by a register (u_vision/u_copbuf/wr_row_reg[4]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#9 Warning
+RAMB36 async control check  
+The RAMB36E1 u_vision/u_copbuf/mem0_reg_0_0 has an input control pin u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[14] (net: u_vision/u_copbuf/wr_addr[14]) which is driven by a register (u_vision/u_copbuf/wr_row_reg[5]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#10 Warning
+RAMB36 async control check  
+The RAMB36E1 u_vision/u_copbuf/mem0_reg_0_0 has an input control pin u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: u_vision/u_copbuf/wr_addr[15]) which is driven by a register (u_vision/u_copbuf/wr_col_reg[5]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#11 Warning
+RAMB36 async control check  
+The RAMB36E1 u_vision/u_copbuf/mem0_reg_0_0 has an input control pin u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: u_vision/u_copbuf/wr_addr[15]) which is driven by a register (u_vision/u_copbuf/wr_col_reg[6]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#12 Warning
+RAMB36 async control check  
+The RAMB36E1 u_vision/u_copbuf/mem0_reg_0_0 has an input control pin u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: u_vision/u_copbuf/wr_addr[15]) which is driven by a register (u_vision/u_copbuf/wr_col_reg[7]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#13 Warning
+RAMB36 async control check  
+The RAMB36E1 u_vision/u_copbuf/mem0_reg_0_0 has an input control pin u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: u_vision/u_copbuf/wr_addr[15]) which is driven by a register (u_vision/u_copbuf/wr_row_reg[0]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#14 Warning
+RAMB36 async control check  
+The RAMB36E1 u_vision/u_copbuf/mem0_reg_0_0 has an input control pin u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: u_vision/u_copbuf/wr_addr[15]) which is driven by a register (u_vision/u_copbuf/wr_row_reg[1]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#15 Warning
+RAMB36 async control check  
+The RAMB36E1 u_vision/u_copbuf/mem0_reg_0_0 has an input control pin u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: u_vision/u_copbuf/wr_addr[15]) which is driven by a register (u_vision/u_copbuf/wr_row_reg[2]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#16 Warning
+RAMB36 async control check  
+The RAMB36E1 u_vision/u_copbuf/mem0_reg_0_0 has an input control pin u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: u_vision/u_copbuf/wr_addr[15]) which is driven by a register (u_vision/u_copbuf/wr_row_reg[3]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#17 Warning
+RAMB36 async control check  
+The RAMB36E1 u_vision/u_copbuf/mem0_reg_0_0 has an input control pin u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: u_vision/u_copbuf/wr_addr[15]) which is driven by a register (u_vision/u_copbuf/wr_row_reg[4]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#18 Warning
+RAMB36 async control check  
+The RAMB36E1 u_vision/u_copbuf/mem0_reg_0_0 has an input control pin u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: u_vision/u_copbuf/wr_addr[15]) which is driven by a register (u_vision/u_copbuf/wr_row_reg[5]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#19 Warning
+RAMB36 async control check  
+The RAMB36E1 u_vision/u_copbuf/mem0_reg_0_0 has an input control pin u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: u_vision/u_copbuf/wr_addr[15]) which is driven by a register (u_vision/u_copbuf/wr_row_reg[6]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1839#20 Warning
+RAMB36 async control check  
+The RAMB36E1 u_vision/u_copbuf/mem0_reg_0_0 has an input control pin u_vision/u_copbuf/mem0_reg_0_0/ADDRARDADDR[15] (net: u_vision/u_copbuf/wr_addr[15]) which is driven by a register (u_vision/u_copbuf/wr_row_reg[7]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#1 Warning
+RAMB18 async control check  
+The RAMB18E1 u_vision/u_scaler/gen_slot[0].lb/mem_reg has an input control pin u_vision/u_scaler/gen_slot[0].lb/mem_reg/ADDRARDADDR[10] (net: u_vision/u_scaler/gen_slot[0].lb/Q[7]) which is driven by a register (u_vision/u_scaler/wx_reg[7]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#2 Warning
+RAMB18 async control check  
+The RAMB18E1 u_vision/u_scaler/gen_slot[0].lb/mem_reg has an input control pin u_vision/u_scaler/gen_slot[0].lb/mem_reg/ADDRARDADDR[11] (net: u_vision/u_scaler/gen_slot[0].lb/Q[8]) which is driven by a register (u_vision/u_scaler/wx_reg[8]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#3 Warning
+RAMB18 async control check  
+The RAMB18E1 u_vision/u_scaler/gen_slot[0].lb/mem_reg has an input control pin u_vision/u_scaler/gen_slot[0].lb/mem_reg/ADDRARDADDR[12] (net: u_vision/u_scaler/gen_slot[0].lb/Q[9]) which is driven by a register (u_vision/u_scaler/wx_reg[9]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#4 Warning
+RAMB18 async control check  
+The RAMB18E1 u_vision/u_scaler/gen_slot[0].lb/mem_reg has an input control pin u_vision/u_scaler/gen_slot[0].lb/mem_reg/ADDRARDADDR[13] (net: u_vision/u_scaler/gen_slot[0].lb/Q[10]) which is driven by a register (u_vision/u_scaler/wx_reg[10]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#5 Warning
+RAMB18 async control check  
+The RAMB18E1 u_vision/u_scaler/gen_slot[0].lb/mem_reg has an input control pin u_vision/u_scaler/gen_slot[0].lb/mem_reg/ADDRARDADDR[3] (net: u_vision/u_scaler/gen_slot[0].lb/Q[0]) which is driven by a register (u_vision/u_scaler/wx_reg[0]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#6 Warning
+RAMB18 async control check  
+The RAMB18E1 u_vision/u_scaler/gen_slot[0].lb/mem_reg has an input control pin u_vision/u_scaler/gen_slot[0].lb/mem_reg/ADDRARDADDR[4] (net: u_vision/u_scaler/gen_slot[0].lb/Q[1]) which is driven by a register (u_vision/u_scaler/wx_reg[1]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#7 Warning
+RAMB18 async control check  
+The RAMB18E1 u_vision/u_scaler/gen_slot[0].lb/mem_reg has an input control pin u_vision/u_scaler/gen_slot[0].lb/mem_reg/ADDRARDADDR[5] (net: u_vision/u_scaler/gen_slot[0].lb/Q[2]) which is driven by a register (u_vision/u_scaler/wx_reg[2]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#8 Warning
+RAMB18 async control check  
+The RAMB18E1 u_vision/u_scaler/gen_slot[0].lb/mem_reg has an input control pin u_vision/u_scaler/gen_slot[0].lb/mem_reg/ADDRARDADDR[6] (net: u_vision/u_scaler/gen_slot[0].lb/Q[3]) which is driven by a register (u_vision/u_scaler/wx_reg[3]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#9 Warning
+RAMB18 async control check  
+The RAMB18E1 u_vision/u_scaler/gen_slot[0].lb/mem_reg has an input control pin u_vision/u_scaler/gen_slot[0].lb/mem_reg/ADDRARDADDR[7] (net: u_vision/u_scaler/gen_slot[0].lb/Q[4]) which is driven by a register (u_vision/u_scaler/wx_reg[4]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#10 Warning
+RAMB18 async control check  
+The RAMB18E1 u_vision/u_scaler/gen_slot[0].lb/mem_reg has an input control pin u_vision/u_scaler/gen_slot[0].lb/mem_reg/ADDRARDADDR[8] (net: u_vision/u_scaler/gen_slot[0].lb/Q[5]) which is driven by a register (u_vision/u_scaler/wx_reg[5]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#11 Warning
+RAMB18 async control check  
+The RAMB18E1 u_vision/u_scaler/gen_slot[0].lb/mem_reg has an input control pin u_vision/u_scaler/gen_slot[0].lb/mem_reg/ADDRARDADDR[9] (net: u_vision/u_scaler/gen_slot[0].lb/Q[6]) which is driven by a register (u_vision/u_scaler/wx_reg[6]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#12 Warning
+RAMB18 async control check  
+The RAMB18E1 u_vision/u_scaler/gen_slot[0].lb/mem_reg has an input control pin u_vision/u_scaler/gen_slot[0].lb/mem_reg/ADDRBWRADDR[13] (net: u_vision/u_scaler/gen_slot[0].lb/ADDRBWRADDR[10]) which is driven by a register (u_vision/u_scaler/emitting_reg) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#13 Warning
+RAMB18 async control check  
+The RAMB18E1 u_vision/u_scaler/gen_slot[0].lb/mem_reg has an input control pin u_vision/u_scaler/gen_slot[0].lb/mem_reg/ADDRBWRADDR[13] (net: u_vision/u_scaler/gen_slot[0].lb/ADDRBWRADDR[10]) which is driven by a register (u_vision/u_scaler/ph_reg) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#14 Warning
+RAMB18 async control check  
+The RAMB18E1 u_vision/u_scaler/gen_slot[0].lb/mem_reg has an input control pin u_vision/u_scaler/gen_slot[0].lb/mem_reg/ADDRBWRADDR[13] (net: u_vision/u_scaler/gen_slot[0].lb/ADDRBWRADDR[10]) which is driven by a register (u_vision/u_scaler/x_acc_reg[0]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#15 Warning
+RAMB18 async control check  
+The RAMB18E1 u_vision/u_scaler/gen_slot[0].lb/mem_reg has an input control pin u_vision/u_scaler/gen_slot[0].lb/mem_reg/ADDRBWRADDR[13] (net: u_vision/u_scaler/gen_slot[0].lb/ADDRBWRADDR[10]) which is driven by a register (u_vision/u_scaler/x_acc_reg[10]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#16 Warning
+RAMB18 async control check  
+The RAMB18E1 u_vision/u_scaler/gen_slot[0].lb/mem_reg has an input control pin u_vision/u_scaler/gen_slot[0].lb/mem_reg/ADDRBWRADDR[13] (net: u_vision/u_scaler/gen_slot[0].lb/ADDRBWRADDR[10]) which is driven by a register (u_vision/u_scaler/x_acc_reg[11]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#17 Warning
+RAMB18 async control check  
+The RAMB18E1 u_vision/u_scaler/gen_slot[0].lb/mem_reg has an input control pin u_vision/u_scaler/gen_slot[0].lb/mem_reg/ADDRBWRADDR[13] (net: u_vision/u_scaler/gen_slot[0].lb/ADDRBWRADDR[10]) which is driven by a register (u_vision/u_scaler/x_acc_reg[12]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#18 Warning
+RAMB18 async control check  
+The RAMB18E1 u_vision/u_scaler/gen_slot[0].lb/mem_reg has an input control pin u_vision/u_scaler/gen_slot[0].lb/mem_reg/ADDRBWRADDR[13] (net: u_vision/u_scaler/gen_slot[0].lb/ADDRBWRADDR[10]) which is driven by a register (u_vision/u_scaler/x_acc_reg[13]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#19 Warning
+RAMB18 async control check  
+The RAMB18E1 u_vision/u_scaler/gen_slot[0].lb/mem_reg has an input control pin u_vision/u_scaler/gen_slot[0].lb/mem_reg/ADDRBWRADDR[13] (net: u_vision/u_scaler/gen_slot[0].lb/ADDRBWRADDR[10]) which is driven by a register (u_vision/u_scaler/x_acc_reg[14]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+REQP-1840#20 Warning
+RAMB18 async control check  
+The RAMB18E1 u_vision/u_scaler/gen_slot[0].lb/mem_reg has an input control pin u_vision/u_scaler/gen_slot[0].lb/mem_reg/ADDRBWRADDR[13] (net: u_vision/u_scaler/gen_slot[0].lb/ADDRBWRADDR[10]) which is driven by a register (u_vision/u_scaler/x_acc_reg[15]) that has an active asychronous set or reset. This may cause corruption of the memory contents and/or read values when the set/reset is asserted and is not analyzed by the default static timing analysis. It is suggested to eliminate the use of a set/reset to registers driving this RAMB pin or else use a synchronous reset in which the assertion of the reset is timed by default.
+Related violations: <none>
+
+ZPS7-1#1 Warning
+PS7 block required  
+The PS7 cell must be used in this Zynq design in order to enable correct default configuration.
+Related violations: <none>
+
+

@@ -1,0 +1,6 @@
+conv1 w_scale=4.228747e-03
+conv2 w_scale=2.488815e-03
+fc w_scale=2.562585e-03
+act_scale in[conv1]=7.801197e-03
+act_scale in[conv2]=1.427663e-02
+act_scale in[fc]=2.862122e-02

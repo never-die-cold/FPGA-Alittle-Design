@@ -1,0 +1,417 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Fri Oct  2 00:16:34 2026
+| Host         : never-die-cold running 64-bit major release  (build 9200)
+| Command      : check_timing -verbose -file data/logs/2026-10-02-vision-offboard/route/check_timing.rpt
+| Design       : video_pipeline
+| Device       : 7z020-clg400
+| Speed File   : -1  PRODUCTION 1.12 2019-11-22
+| Design State : Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+
+check_timing report
+
+Table of Contents
+-----------------
+1. checking no_clock (0)
+2. checking constant_clock (0)
+3. checking pulse_width_clock (0)
+4. checking unconstrained_internal_endpoints (0)
+5. checking no_input_delay (80)
+6. checking no_output_delay (236)
+7. checking multiple_clock (0)
+8. checking generated_clocks (0)
+9. checking loops (0)
+10. checking partial_input_delay (0)
+11. checking partial_output_delay (0)
+12. checking latch_loops (0)
+
+1. checking no_clock (0)
+------------------------
+ There are 0 register/latch pins with no clock.
+
+
+2. checking constant_clock (0)
+------------------------------
+ There are 0 register/latch pins with constant_clock.
+
+
+3. checking pulse_width_clock (0)
+---------------------------------
+ There are 0 register/latch pins which need pulse_width check
+
+
+4. checking unconstrained_internal_endpoints (0)
+------------------------------------------------
+ There are 0 pins that are not constrained for maximum delay.
+
+ There are 0 pins that are not constrained for maximum delay due to constant clock.
+
+
+5. checking no_input_delay (80)
+-------------------------------
+ There are 79 input ports with no input delay specified. (HIGH)
+
+araddr[2]
+araddr[3]
+araddr[4]
+araddr[5]
+araddr[6]
+arvalid
+awaddr[2]
+awaddr[3]
+awaddr[4]
+awaddr[5]
+awaddr[6]
+awvalid
+bready
+cop_ready
+raw_de
+raw_hs
+raw_rgb[0]
+raw_rgb[10]
+raw_rgb[11]
+raw_rgb[12]
+raw_rgb[13]
+raw_rgb[14]
+raw_rgb[15]
+raw_rgb[16]
+raw_rgb[17]
+raw_rgb[18]
+raw_rgb[19]
+raw_rgb[1]
+raw_rgb[20]
+raw_rgb[21]
+raw_rgb[22]
+raw_rgb[23]
+raw_rgb[2]
+raw_rgb[3]
+raw_rgb[4]
+raw_rgb[5]
+raw_rgb[6]
+raw_rgb[7]
+raw_rgb[8]
+raw_rgb[9]
+raw_vs
+rready
+wdata[0]
+wdata[10]
+wdata[11]
+wdata[12]
+wdata[13]
+wdata[14]
+wdata[15]
+wdata[16]
+wdata[17]
+wdata[18]
+wdata[19]
+wdata[1]
+wdata[20]
+wdata[21]
+wdata[22]
+wdata[23]
+wdata[24]
+wdata[25]
+wdata[26]
+wdata[27]
+wdata[28]
+wdata[29]
+wdata[2]
+wdata[30]
+wdata[31]
+wdata[3]
+wdata[4]
+wdata[5]
+wdata[6]
+wdata[7]
+wdata[8]
+wdata[9]
+wstrb[0]
+wstrb[1]
+wstrb[2]
+wstrb[3]
+wvalid
+
+ There is 1 input port with no input delay but user has a false path constraint. (MEDIUM)
+
+rst_n
+
+
+6. checking no_output_delay (236)
+---------------------------------
+ There are 236 ports with no output delay specified. (HIGH)
+
+active_config_id[0]
+active_config_id[10]
+active_config_id[11]
+active_config_id[12]
+active_config_id[13]
+active_config_id[14]
+active_config_id[15]
+active_config_id[16]
+active_config_id[17]
+active_config_id[18]
+active_config_id[19]
+active_config_id[1]
+active_config_id[20]
+active_config_id[21]
+active_config_id[22]
+active_config_id[23]
+active_config_id[24]
+active_config_id[25]
+active_config_id[26]
+active_config_id[27]
+active_config_id[28]
+active_config_id[29]
+active_config_id[2]
+active_config_id[30]
+active_config_id[31]
+active_config_id[3]
+active_config_id[4]
+active_config_id[5]
+active_config_id[6]
+active_config_id[7]
+active_config_id[8]
+active_config_id[9]
+arready
+awready
+bresp[1]
+bvalid
+cop_config_id[0]
+cop_config_id[10]
+cop_config_id[11]
+cop_config_id[12]
+cop_config_id[13]
+cop_config_id[14]
+cop_config_id[15]
+cop_config_id[16]
+cop_config_id[17]
+cop_config_id[18]
+cop_config_id[19]
+cop_config_id[1]
+cop_config_id[20]
+cop_config_id[21]
+cop_config_id[22]
+cop_config_id[23]
+cop_config_id[24]
+cop_config_id[25]
+cop_config_id[26]
+cop_config_id[27]
+cop_config_id[28]
+cop_config_id[29]
+cop_config_id[2]
+cop_config_id[30]
+cop_config_id[31]
+cop_config_id[3]
+cop_config_id[4]
+cop_config_id[5]
+cop_config_id[6]
+cop_config_id[7]
+cop_config_id[8]
+cop_config_id[9]
+cop_de
+cop_frame_id[0]
+cop_frame_id[10]
+cop_frame_id[11]
+cop_frame_id[12]
+cop_frame_id[13]
+cop_frame_id[14]
+cop_frame_id[15]
+cop_frame_id[16]
+cop_frame_id[17]
+cop_frame_id[18]
+cop_frame_id[19]
+cop_frame_id[1]
+cop_frame_id[20]
+cop_frame_id[21]
+cop_frame_id[22]
+cop_frame_id[23]
+cop_frame_id[24]
+cop_frame_id[25]
+cop_frame_id[26]
+cop_frame_id[27]
+cop_frame_id[28]
+cop_frame_id[29]
+cop_frame_id[2]
+cop_frame_id[30]
+cop_frame_id[31]
+cop_frame_id[3]
+cop_frame_id[4]
+cop_frame_id[5]
+cop_frame_id[6]
+cop_frame_id[7]
+cop_frame_id[8]
+cop_frame_id[9]
+cop_hs
+cop_vs
+cop_y[0]
+cop_y[1]
+cop_y[2]
+cop_y[3]
+cop_y[4]
+cop_y[5]
+cop_y[6]
+cop_y[7]
+display_frame_id[0]
+display_frame_id[10]
+display_frame_id[11]
+display_frame_id[12]
+display_frame_id[13]
+display_frame_id[14]
+display_frame_id[15]
+display_frame_id[16]
+display_frame_id[17]
+display_frame_id[18]
+display_frame_id[19]
+display_frame_id[1]
+display_frame_id[20]
+display_frame_id[21]
+display_frame_id[22]
+display_frame_id[23]
+display_frame_id[24]
+display_frame_id[25]
+display_frame_id[26]
+display_frame_id[27]
+display_frame_id[28]
+display_frame_id[29]
+display_frame_id[2]
+display_frame_id[30]
+display_frame_id[31]
+display_frame_id[3]
+display_frame_id[4]
+display_frame_id[5]
+display_frame_id[6]
+display_frame_id[7]
+display_frame_id[8]
+display_frame_id[9]
+rdata[0]
+rdata[10]
+rdata[11]
+rdata[12]
+rdata[13]
+rdata[14]
+rdata[15]
+rdata[16]
+rdata[17]
+rdata[18]
+rdata[19]
+rdata[1]
+rdata[20]
+rdata[21]
+rdata[22]
+rdata[23]
+rdata[24]
+rdata[25]
+rdata[26]
+rdata[27]
+rdata[28]
+rdata[29]
+rdata[2]
+rdata[30]
+rdata[31]
+rdata[3]
+rdata[4]
+rdata[5]
+rdata[6]
+rdata[7]
+rdata[8]
+rdata[9]
+rvalid
+snapshot_drop_count[0]
+snapshot_drop_count[10]
+snapshot_drop_count[11]
+snapshot_drop_count[12]
+snapshot_drop_count[13]
+snapshot_drop_count[14]
+snapshot_drop_count[15]
+snapshot_drop_count[16]
+snapshot_drop_count[17]
+snapshot_drop_count[18]
+snapshot_drop_count[19]
+snapshot_drop_count[1]
+snapshot_drop_count[20]
+snapshot_drop_count[21]
+snapshot_drop_count[22]
+snapshot_drop_count[23]
+snapshot_drop_count[24]
+snapshot_drop_count[25]
+snapshot_drop_count[26]
+snapshot_drop_count[27]
+snapshot_drop_count[28]
+snapshot_drop_count[29]
+snapshot_drop_count[2]
+snapshot_drop_count[30]
+snapshot_drop_count[31]
+snapshot_drop_count[3]
+snapshot_drop_count[4]
+snapshot_drop_count[5]
+snapshot_drop_count[6]
+snapshot_drop_count[7]
+snapshot_drop_count[8]
+snapshot_drop_count[9]
+video_de
+video_hs
+video_rgb[0]
+video_rgb[10]
+video_rgb[11]
+video_rgb[12]
+video_rgb[13]
+video_rgb[14]
+video_rgb[15]
+video_rgb[16]
+video_rgb[17]
+video_rgb[18]
+video_rgb[19]
+video_rgb[1]
+video_rgb[20]
+video_rgb[21]
+video_rgb[22]
+video_rgb[23]
+video_rgb[2]
+video_rgb[3]
+video_rgb[4]
+video_rgb[5]
+video_rgb[6]
+video_rgb[7]
+video_rgb[8]
+video_rgb[9]
+video_vs
+wready
+
+ There are 0 ports with no output delay but user has a false path constraint
+
+ There are 0 ports with no output delay but with a timing clock defined on it or propagating through it
+
+
+7. checking multiple_clock (0)
+------------------------------
+ There are 0 register/latch pins with multiple clocks.
+
+
+8. checking generated_clocks (0)
+--------------------------------
+ There are 0 generated clocks that are not connected to a clock source.
+
+
+9. checking loops (0)
+---------------------
+ There are 0 combinational loops in the design.
+
+
+10. checking partial_input_delay (0)
+------------------------------------
+ There are 0 input ports with partial input delay specified.
+
+
+11. checking partial_output_delay (0)
+-------------------------------------
+ There are 0 ports with partial output delay specified.
+
+
+12. checking latch_loops (0)
+----------------------------
+ There are 0 combinational latch loops in the design through latch input
+
+

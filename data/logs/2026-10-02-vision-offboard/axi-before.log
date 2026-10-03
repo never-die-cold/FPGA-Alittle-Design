@@ -1,0 +1,4 @@
+== tb_axi_split ==
+FATAL: vision/tb_axi_split.v:25: FAIL: split AXI order=0 bvalid=0 value=00000000
+       Time: 100000  Scope: tb_axi_split.split_write
+ERROR: simulation gate rejected build/vision/tb_axi_split.log

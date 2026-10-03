@@ -1,0 +1,21 @@
+PASS: injected
+CASE: pass result=0 wanted=accept
+FAIL: injected
+ERROR: simulation gate rejected build/vision/gate/fail_zero.log
+CASE: fail_zero result=1 wanted=reject
+PASS: injected
+FAIL: injected
+ERROR: simulation gate rejected build/vision/gate/mixed.log
+CASE: mixed result=1 wanted=reject
+FATAL: injected
+ERROR: simulation gate rejected build/vision/gate/fatal.log
+CASE: fatal result=1 wanted=reject
+INFO: no verdict
+ERROR: simulation gate rejected build/vision/gate/no_pass.log
+CASE: no_pass result=1 wanted=reject
+PASS: injected
+ERROR: simulation gate rejected build/vision/gate/process_failed.log
+CASE: process_failed result=1 wanted=reject
+ERROR: missing testbench build/vision/gate/not-a-testbench.v
+CASE: missing_tb result=1 wanted=reject
+PASS: vision gate 7 cases (PASS/FAIL/fatal/exit/missing tb)
