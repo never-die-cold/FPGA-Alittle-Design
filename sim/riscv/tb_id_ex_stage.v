@@ -9,7 +9,20 @@ module tb_id_ex_stage;
     wire ex_reg_write, ex_mem_read, ex_mem_write, ex_sign_ext;
     wire [1:0] ex_wb_sel, ex_mask_sel;
     integer checks;
-    id_ex_stage dut (.*);
+    id_ex_stage dut (
+        .in_valid(in_valid), .in_pc(in_pc), .in_instr(in_instr),
+        .rs1_value(rs1_value), .rs2_value(rs2_value),
+        .muldiv_result(muldiv_result),
+        .rs1_addr(rs1_addr), .rs2_addr(rs2_addr), .rd_addr(rd_addr),
+        .uses_rs1(uses_rs1), .uses_rs2(uses_rs2),
+        .muldiv_valid(muldiv_valid), .muldiv_op(muldiv_op),
+        .branch_taken(branch_taken), .jump_taken(jump_taken),
+        .redirect_target(redirect_target), .ex_result(ex_result),
+        .ex_addr(ex_addr), .ex_store_data(ex_store_data),
+        .ex_reg_write(ex_reg_write), .ex_mem_read(ex_mem_read),
+        .ex_mem_write(ex_mem_write), .ex_wb_sel(ex_wb_sel),
+        .ex_mask_sel(ex_mask_sel), .ex_sign_ext(ex_sign_ext)
+    );
     task check; input ok; begin checks=checks+1; if (ok !== 1'b1) begin
         $display("FAIL: ID+EX case %0d", checks); $fatal(1); end end endtask
 

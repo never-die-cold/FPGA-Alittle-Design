@@ -17,7 +17,17 @@ module id_ex_stage (
     wire [3:0] alu_op; wire [1:0] alu_a_sel, alu_b_sel;
     wire [1:0] wb_sel, mask_sel, jump_type;
     wire reg_write, mem_read, mem_write, sign_ext;
-    decode u_decode (.*);
+    decode u_decode (
+        .instr(instr),
+        .rs1_addr(rs1_addr), .rs2_addr(rs2_addr), .rd_addr(rd_addr),
+        .imm(imm), .imm_type(imm_type), .alu_op(alu_op),
+        .alu_a_sel(alu_a_sel), .alu_b_sel(alu_b_sel), .wb_sel(wb_sel),
+        .reg_write(reg_write), .mem_read(mem_read), .mem_write(mem_write),
+        .mask_sel(mask_sel), .sign_ext(sign_ext),
+        .branch_type(branch_type), .jump_type(jump_type),
+        .uses_rs1(uses_rs1), .uses_rs2(uses_rs2),
+        .muldiv_valid(muldiv_valid), .muldiv_op(muldiv_op)
+    );
 
     wire [31:0] alu_a = (alu_a_sel == 2'b01) ? in_pc :
                             (alu_a_sel == 2'b10) ? 32'd0 : rs1_value;
