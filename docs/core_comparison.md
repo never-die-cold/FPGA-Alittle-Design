@@ -1,6 +1,6 @@
 # 核性能对比计划：自研核 vs PicoRV32 vs E203
 
-> 状态：🚧 执行中（2026-09-21 决策，M1 收口后出数据）
+> 状态：🚧 执行中（2026-09-21 决策）；PicoRV32 Fmax/资源实测已提前完成（2026-10-03，验证线），CoreMark 四档待 M1 后
 > 决策记录：[`report/llm_log/2026-09-21-narrative-architecture-fix.md`](../report/llm_log/2026-09-21-narrative-architecture-fix.md)
 > 本文回答答辩必问题："PicoRV32/E203 现成且更成熟，你们自研的差异化优势是什么？"——用数据回答，不用情怀。
 
@@ -20,7 +20,9 @@
 
 | 核 | LUT | Fmax | CPI | DMIPS/MHz | 来源与口径 |
 |:---|---:|---:|---:|---:|:---|
-| 本项目 v0（两级） | 846（不含存储器） | 86.8 MHz（post-route，WNS -1.53@10ns） | ≈1（设计推导，待 CoreMark 实测） | 未测 | `data/metrics.csv` |
+| 本项目 v0（两级） | 1606 | 83.8 MHz（post-route，WNS −1.935@10ns；2026-09-28 重综合口径，2026-10-03 同脚本复现逐位一致） | ≈1（设计推导，待 CoreMark 实测） | 未测 | `data/metrics.csv`、[对比实测](../data/logs/2026-10-03-picorv32-compare/README.md) |
+| PicoRV32 (regular) **本仓实测** | 905 | **194.6 MHz**（post-route WNS −0.139@5ns，收敛 ≈192–195） | 4–5（引用作者自述，未重跑） | 未测 | [2026-10-03 对比实测](../data/logs/2026-10-03-picorv32-compare/README.md)，OOC 同法 |
+| PicoRV32 (large，含 M) **本仓实测** | 2006 | **134.3 MHz**（post-route WNS −0.445@7ns） | — | — | 同上 |
 | PicoRV32 (regular) | ~904 | ~196–200 MHz（Artix-7 -1 级 post-route，作者精调约束） | 4–5（作者自述） | 0.309 | 官方 README + JIPS 论文 |
 | PicoRV32 (large，含 M) | ~2019 | 同上量级 | — | — | 官方 README |
 | 蜂鸟 E203 | 4153 | 41.7 MHz（**综合口径，非实现**） | ≈1 | 1.61（社区移植 50MHz 实测） | JIPS 论文 / 社区移植 |
@@ -46,6 +48,6 @@
 ## 5. 产出物
 
 - [ ] `data/metrics.csv` 增行：CoreMark/MHz（四档）+ CoreMark/LUT
-- [ ] `data/logs/`：iverilog 跑分原始日志 + PicoRV32 OOC timing/utilization 报告
-- [ ] 本文档 §2 表更新为实测数字 + PicoRV32 实测行
+- [ ] `data/logs/`：iverilog 跑分原始日志 + PicoRV32 OOC timing/utilization 报告（PicoRV32 部分 ✅ 2026-10-03：`data/logs/2026-10-03-picorv32-compare/`）
+- [x] 本文档 §2 表更新为实测数字 + PicoRV32 实测行（2026-10-03，Fmax/资源列；CPI/DMIPS 引用公开口径）
 - [ ] README「为什么自研核」段落数据刷新（当前为计划口径占位）
