@@ -1,6 +1,7 @@
 # Part B 未来三日可执行计划
 
-> 编制日期：2026-10-04；工作分支：`codex/fix-implicit-ports`。
+> ⚠️ 推送前待办：本地 `dev/rtl` 与 `origin/dev/rtl` 已分叉；恢复推送前必须先执行 `git pull --rebase origin dev/rtl`，禁止强推。
+> 编制日期：2026-10-04；工作分支：`dev/rtl`。
 > 依据：`design_v1.md` 冻结契约、`src/riscv/plan.md §4.2/§4.3`、`docs/partB-verify-plan.md`。
 > 纪律：每个 RTL 小步净改动不超过 100 行；先写/改仓库内 tb，再改 RTL；每步跑单项、`all` 和 `git diff --check`。
 
@@ -38,7 +39,7 @@
 
 ## 2. D1：三级核功能集成
 
-### D1.1 先建立整核红灯用例（预计 70–90 行）
+### D1.1 先建立整核红灯用例（✅ 红灯已建立，2026-10-04）
 
 - 改：新增 `sim/riscv/tb_core_v1_flow.v`；给 `run_iverilog.sh` 增 `v1_flow` 模式。
 - 覆盖：复位空槽、连续 ALU RAW、load-use、taken/not-taken、store 恰好一次提交。
@@ -135,7 +136,12 @@
 - timescale 继承警告为既有技术债；本次 `-g2001` 综合代理采用 RTL-only 编译零 warning，
   不把清理全部 timescale 混入核心集成小步。
 
-## 6. 用户回来后必须拍板 / 回答
+## 6. 待用户回答（自主模式不阻塞）
+
+- D1.1：为什么气泡必须用 `valid=0`，不能只把指令改成 NOP？
+- D1.1：为什么 stall 时不能 hold MEM+WB，而要让旧指令提交一次后排空？
+
+## 7. 用户回来后必须拍板 / 回答
 
 1. 确认任务中的 `WNS≤0` 是笔误，继续以冻结的 `WNS≥0` 为门禁。
 2. Part C 是否另建独立验收计划，还是继续以 `plan.md §4.3 + design_v1.md` 为唯一执行入口。

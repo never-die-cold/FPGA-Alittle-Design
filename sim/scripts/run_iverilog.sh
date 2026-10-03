@@ -35,6 +35,7 @@ case "$MODE" in
     hazard) TBS=(riscv/tb_hazard.v) ;;
     mem_wb) TBS=(riscv/tb_mem_wb_stage.v) ;;
     id_ex) TBS=(riscv/tb_id_ex_stage.v) ;;
+    v1_flow) TBS=(riscv/tb_core_v1_flow.v) ;;
     muldiv) TBS=(riscv/tb_muldiv.v) ;;
     rv32im) TBS=(riscv/tb_core_muldiv.v) ;;
     imem) TBS=(riscv/tb_imem.v) ;;
@@ -44,7 +45,7 @@ case "$MODE" in
     soc_check) TBS=(riscv/tb_soc_check.v) ;;
     bench) TBS=(riscv/tb_core_coremark.v) ;;
     all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_fwd.v riscv/tb_decode.v riscv/tb_forwarding.v riscv/tb_hazard.v riscv/tb_mem_wb_stage.v riscv/tb_id_ex_stage.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_core_coremark.v riscv/tb_soc_top.v riscv/tb_soc_check.v) ;;
-    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|decode|forwarding|hazard|mem_wb|id_ex|muldiv|rv32im|imem|dmem|coremark|soc|soc_check|bench|all]"; exit 1 ;;
+    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|decode|forwarding|hazard|mem_wb|id_ex|v1_flow|muldiv|rv32im|imem|dmem|coremark|soc|soc_check|bench|all]"; exit 1 ;;
 esac
 
 cd "$(dirname "$0")/.."          # -> sim/
