@@ -1,0 +1,123 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Sat Oct  3 12:18:32 2026
+| Host         : never-die-cold running 64-bit major release  (build 9200)
+| Command      : report_cdc -details -file data/logs/2026-10-02-vision-offboard/hdmi/cdc.rpt
+| Design       : vision_wrapper
+| Device       : 7z020-clg400
+| Speed File   : -1  PRODUCTION 1.12 2019-11-22
+| Design State : Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+CDC Report
+
+ID      Severity  Count  Description
+------  --------  -----  -------------------------------------------------------
+CDC-3   Info         17  1-bit synchronized with ASYNC_REG property
+CDC-7   Critical      3  Asynchronous reset unknown CDC circuitry
+CDC-9   Info          2  Asynchronous reset synchronized with ASYNC_REG property
+CDC-11  Critical      2  Fan-out from launch flop to destination clock
+CDC-15  Warning      35  Clock enable controlled CDC structure detected
+
+Source Clock: clk_fpga_0
+Destination Clock: PixelClk_int
+CDC Type: No Common Primary Clock
+
+Row  ID      Severity  Description                                     Depth  Exception                Source (From)                                                       Destination (To)
+---  ------  --------  ----------------------------------------------  -----  -----------------------  ------------------------------------------------------------------  -----------------------------------------------------------------
+  1  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_data_reg[0]/C  vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_data_reg[0]/D
+  2  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_data_reg[1]/C  vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_data_reg[1]/D
+  3  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_data_reg[3]/C  vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_data_reg[3]/D
+  4  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[0]/C    vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[0]/D
+  5  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[1]/C    vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[1]/D
+  6  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[2]/C    vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[2]/D
+  7  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[3]/C    vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[3]/D
+  8  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[4]/C    vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[4]/D
+  9  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[5]/C    vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[5]/D
+ 10  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[6]/C    vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[6]/D
+ 11  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[7]/C    vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[7]/D
+ 12  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[8]/C    vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[8]/D
+ 13  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[9]/C    vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[9]/D
+ 14  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[10]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[10]/D
+ 15  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[11]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[11]/D
+ 16  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[12]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[12]/D
+ 17  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[13]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[13]/D
+ 18  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[14]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[14]/D
+ 19  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[15]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[15]/D
+ 20  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[16]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[16]/D
+ 21  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[17]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[17]/D
+ 22  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[18]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[18]/D
+ 23  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[19]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[19]/D
+ 24  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[20]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[20]/D
+ 25  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[21]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[21]/D
+ 26  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[22]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[22]/D
+ 27  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[23]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[23]/D
+ 28  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[24]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[24]/D
+ 29  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[25]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[25]/D
+ 30  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[26]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[26]/D
+ 31  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[27]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[27]/D
+ 32  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[28]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[28]/D
+ 33  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[29]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[29]/D
+ 34  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[30]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[30]/D
+ 35  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[31]/C   vision_i/pipe/inst/u_pipeline/u_vision/u_config/dst_id_reg[31]/D
+ 36  CDC-3   Info      1-bit synchronized with ASYNC_REG property          2  False Path               vision_i/pipe/inst/u_pipeline/u_vision/u_config/request_reg/C       vision_i/pipe/inst/u_pipeline/u_vision/u_config/req_meta_reg/D
+
+Source Clock: clk_fpga_2
+Destination Clock: PixelClk_int
+CDC Type: No Common Primary Clock
+
+Row  ID      Severity  Description                                    Depth  Exception   Source (From)                                                    Destination (To)
+---  ------  --------  ---------------------------------------------  -----  ----------  ---------------------------------------------------------------  -----------------------------------------------------------------------------------
+  1  CDC-3   Info      1-bit synchronized with ASYNC_REG property         2  False Path  vision_i/rx/U0/DataDecoders[0].DecoderX/SyncBaseOvf/iIn_q_reg/C  vision_i/rx/U0/DataDecoders[0].DecoderX/SyncBaseOvf/SyncAsyncx/oSyncStages_reg[0]/D
+  2  CDC-3   Info      1-bit synchronized with ASYNC_REG property         2  False Path  vision_i/rx/U0/DataDecoders[1].DecoderX/SyncBaseOvf/iIn_q_reg/C  vision_i/rx/U0/DataDecoders[1].DecoderX/SyncBaseOvf/SyncAsyncx/oSyncStages_reg[0]/D
+  3  CDC-3   Info      1-bit synchronized with ASYNC_REG property         2  False Path  vision_i/rx/U0/DataDecoders[2].DecoderX/SyncBaseOvf/iIn_q_reg/C  vision_i/rx/U0/DataDecoders[2].DecoderX/SyncBaseOvf/SyncAsyncx/oSyncStages_reg[0]/D
+  4  CDC-11  Critical  Fan-out from launch flop to destination clock      2  False Path  vision_i/rx/U0/TMDS_ClockingX/aLocked_reg/C                      vision_i/rx/U0/LockLostReset/SyncAsyncx/oSyncStages_reg[0]/PRE
+  5  CDC-11  Critical  Fan-out from launch flop to destination clock      2  False Path  vision_i/rx/U0/TMDS_ClockingX/aLocked_reg/C                      vision_i/rx/U0/LockedSync/SyncAsyncx/oSyncStages_reg[0]/CLR
+
+Source Clock: dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_N_EXT_BSCAN.bscan_inst/SERIES7_BSCAN.bscan_inst/TCK
+Destination Clock: PixelClk_int
+CDC Type: No Common Primary Clock
+
+Row  ID     Severity  Description                                              Depth  Exception   Source (From)                                                                                            Destination (To)
+---  -----  --------  -------------------------------------------------------  -----  ----------  -------------------------------------------------------------------------------------------------------  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  1  CDC-3  Info      1-bit synchronized with ASYNC_REG property                   2  False Path  dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD1/icn_cmd_en_temp_reg/C       dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD1/ctl_reg_en_1_reg[0]/D
+  2  CDC-3  Info      1-bit synchronized with ASYNC_REG property                   2  False Path  dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD2/icn_cmd_en_temp_reg/C       dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD2/stat_reg_ld_reg[0]/D
+  3  CDC-3  Info      1-bit synchronized with ASYNC_REG property                   2  False Path  dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD3/icn_cmd_en_temp_reg/C       dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD3/stat_reg_ld_reg[0]/D
+  4  CDC-3  Info      1-bit synchronized with ASYNC_REG property                   2  False Path  dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD4/icn_cmd_en_temp_reg/C       dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD4/ctl_reg_en_1_reg[0]/D
+  5  CDC-3  Info      1-bit synchronized with ASYNC_REG property                   2  False Path  dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD5/icn_cmd_en_temp_reg/C       dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD5/ctl_reg_en_1_reg[0]/D
+  6  CDC-9  Info      Asynchronous reset synchronized with ASYNC_REG property      2  False Path  dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/wrdata_rst_reg/C                   dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_6_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.rst_rd_reg1_reg/PRE
+  7  CDC-3  Info      1-bit synchronized with ASYNC_REG property                   2  False Path  dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD7_CTL/icn_cmd_en_temp_reg/C   dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD7_CTL/ctl_reg_en_1_reg[0]/D
+  8  CDC-3  Info      1-bit synchronized with ASYNC_REG property                   2  False Path  dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD7_STAT/icn_cmd_en_temp_reg/C  dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD7_STAT/stat_reg_ld_reg[0]/D
+  9  CDC-3  Info      1-bit synchronized with ASYNC_REG property                   2  False Path  dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/icn_cmd_en_reg[5]/C                dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/icn_cmd_en_5_temp_reg/D
+
+Source Clock: PixelClk_int
+Destination Clock: clk_fpga_0
+CDC Type: No Common Primary Clock
+
+Row  ID     Severity  Description                                 Depth  Exception   Source (From)                                                      Destination (To)
+---  -----  --------  ------------------------------------------  -----  ----------  -----------------------------------------------------------------  --------------------------------------------------------------
+  1  CDC-3  Info      1-bit synchronized with ASYNC_REG property      2  False Path  vision_i/pipe/inst/u_pipeline/u_vision/u_config/acknowledge_reg/C  vision_i/pipe/inst/u_pipeline/u_vision/u_config/ack_meta_reg/D
+
+Source Clock: PixelClk_int
+Destination Clock: clk_fpga_2
+CDC Type: No Common Primary Clock
+
+Row  ID     Severity  Description                                 Depth  Exception   Source (From)                                                    Destination (To)
+---  -----  --------  ------------------------------------------  -----  ----------  ---------------------------------------------------------------  -----------------------------------------------------------------------------------
+  1  CDC-7  Critical  Asynchronous reset unknown CDC circuitry        0  False Path  vision_i/rx/U0/LockLostReset/SyncAsyncx/oSyncStages_reg[1]/C     vision_i/rx/U0/DataDecoders[0].DecoderX/SyncBaseOvf/iIn_q_reg/CLR
+  2  CDC-7  Critical  Asynchronous reset unknown CDC circuitry        0  False Path  vision_i/rx/U0/LockLostReset/SyncAsyncx/oSyncStages_reg[1]/C     vision_i/rx/U0/DataDecoders[1].DecoderX/SyncBaseOvf/iIn_q_reg/CLR
+  3  CDC-7  Critical  Asynchronous reset unknown CDC circuitry        0  False Path  vision_i/rx/U0/LockLostReset/SyncAsyncx/oSyncStages_reg[1]/C     vision_i/rx/U0/DataDecoders[2].DecoderX/SyncBaseOvf/iIn_q_reg/CLR
+  4  CDC-3  Info      1-bit synchronized with ASYNC_REG property      2  False Path  vision_i/rx/U0/DataDecoders[0].DecoderX/SyncBaseRst/iIn_q_reg/C  vision_i/rx/U0/DataDecoders[0].DecoderX/SyncBaseRst/SyncAsyncx/oSyncStages_reg[0]/D
+  5  CDC-3  Info      1-bit synchronized with ASYNC_REG property      2  False Path  vision_i/rx/U0/DataDecoders[1].DecoderX/SyncBaseRst/iIn_q_reg/C  vision_i/rx/U0/DataDecoders[1].DecoderX/SyncBaseRst/SyncAsyncx/oSyncStages_reg[0]/D
+  6  CDC-3  Info      1-bit synchronized with ASYNC_REG property      2  False Path  vision_i/rx/U0/DataDecoders[2].DecoderX/SyncBaseRst/iIn_q_reg/C  vision_i/rx/U0/DataDecoders[2].DecoderX/SyncBaseRst/SyncAsyncx/oSyncStages_reg[0]/D
+
+Source Clock: PixelClk_int
+Destination Clock: dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_N_EXT_BSCAN.bscan_inst/SERIES7_BSCAN.bscan_inst/TCK
+CDC Type: No Common Primary Clock
+
+Row  ID     Severity  Description                                              Depth  Exception   Source (From)                                                                                  Destination (To)
+---  -----  --------  -------------------------------------------------------  -----  ----------  ---------------------------------------------------------------------------------------------  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  1  CDC-9  Info      Asynchronous reset synchronized with ASYNC_REG property      2  False Path  dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/rddata_rst_reg/C         dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/SUBCORE_FIFO.xsdbm_v3_0_6_rdfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.rst_rd_reg1_reg/PRE
+  2  CDC-3  Info      1-bit synchronized with ASYNC_REG property                   2  False Path  dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD1/ctl_reg_reg[0]/C  dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/ma_rst_1_reg/D
+

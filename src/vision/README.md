@@ -49,8 +49,19 @@ EXE 构建和接口原型操作见 [客户端说明](../vision_client/README.md)
 ## 验收边界
 
 内部 OOC 正余量不证明 TMDS 引脚、电缆、相机和采集卡闭环。全物理工程状态与余量
-以本轮证据记录为准，不能沿用历史综合值。实际下载、相机锁定、源断连/重连、
-EDID 兼容、采集卡显示、端到端延迟及 DDR 对照实测仍需上板。
+以本轮证据记录为准，不能沿用历史综合值。
+
+上板实测（2026-10-03，证据 [../../data/logs/2026-10-03-vision-onboard/README.md](../../data/logs/2026-10-03-vision-onboard/README.md)）：
+实机 bit 下载、真实源锁定（笔记本 720p）、HDMI OUT→采集卡闭环彩色直通（色彩无
+通道错乱）、PS 真实 MMIO 原子配置（65 次 commit 全帧首确认）、经采集卡端到端
+延迟上界 125 ms（含采集卡缓冲，不计指标口径）、EXE 接真实采集卡源——**已成立**。
+
+断连实测暴露并修复一个真 bug：`video_locked` 曾连带复位 AXI 从机，源断开瞬间
+PS 总线挂死（串口/网口同死）。修复为双复位拓扑（axi_rst_n 只随 s_axi_aresetn，
+见 design_v0 §vision_axi 条目），tb_axi_lock_reset 定向覆盖，全量回归 48 PASS，
+重建 bit 布线后 WNS +0.956。**修复后拔插复测已过**：NO_VIDEO 干净检测 → pending
+提交恢复后首帧应用 → 全程串口/网口在线零挂死。真实 HDMI 摄像头源、EDID 换源、
+DDR 对照仍待实测。
 
 灰度 `out_*` 的 OSD 是诊断能力；HDMI 主显示保留彩色原图。EXE 模拟框不是物体检测；
 UVC 原型显示 `UNASSOCIATED`，在硬件帧关联未完成前不叠加网络框。

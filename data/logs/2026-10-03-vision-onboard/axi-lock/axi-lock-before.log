@@ -1,0 +1,9 @@
+== tb_axi_lock_reset ==
+../src/vision/scaler.v:105: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:106: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:118: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:119: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+INFO baseline write/read ok
+FATAL: vision/tb_axi_lock_reset.v:92: write response lost on lock drop (PS bus hang repro)
+       Time: 910000  Scope: tb_axi_lock_reset.w_inflight
+ERROR: simulation gate rejected build/vision/tb_axi_lock_reset.log

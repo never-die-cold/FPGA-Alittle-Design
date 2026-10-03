@@ -1,0 +1,10 @@
+== tb_axi_lock_reset ==
+../src/vision/scaler.v:105: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:106: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:118: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:119: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+INFO baseline write/read ok
+INFO in-flight write completed across lock drop
+INFO bready=0 pending write survived lock drop
+PASS: AXI slave survives video lock drop with in-flight transactions
+vision/tb_axi_lock_reset.v:144: $finish called at 490000 (1ps)
