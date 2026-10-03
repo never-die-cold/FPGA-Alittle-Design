@@ -25,9 +25,9 @@ PYNQ-Z2 PROG-UART ──Micro-USB──▶ 笔记本（串口日志 + 下载/调
 
 | 优先级 | 物品 | 规格/说明 |
 |:---:|:---|:---|
-| 🔴 待购 | **HDMI 输出摄像头/相机**：树莓派 4B（已有）+ **Camera Module 3**（标准 75°、AF 自动对焦、日光版，含 15pin CSI 排线） | 输出 1280×720@60 RGB444；Pi 侧锁 720p60（config.txt `hdmi_group=1`/`hdmi_mode=4` 或 PL EDID 协商）；不要 120° Wide / NoIR；旧款 CM2 固定焦距不适合桌面近摄 |
-| 🔴 待购 | micro-HDMI→HDMI-A 公对公短线 0.3–0.5m | Pi 4B 视频口为 micro-HDMI，插 HDMI0（靠 USB-C 电源的口）；买直头，不要转接头 |
-| 🟡 待购 | 树莓派 4B USB-C 5V/3A 电源适配器 | Pi 独立供电，不从 PYNQ USB host 取电（§3.7）；不能用 5V/2A 手机头 |
+| ✅ 已购 | **HDMI 输出摄像头/相机**：树莓派 4B（已有）+ **Camera Module 3**（标准 75°、AF 自动对焦、日光版，含 15pin CSI 排线） | 输出 1280×720@60 RGB444；Pi 侧锁 720p60（config.txt `hdmi_group=1`/`hdmi_mode=4` 或 PL EDID 协商）；不要 120° Wide / NoIR；旧款 CM2 固定焦距不适合桌面近摄 |
+| ✅ 已购 | micro-HDMI→HDMI-A 公对公短线 0.3–0.5m | Pi 4B 视频口为 micro-HDMI，插 HDMI0（靠 USB-C 电源的口）；买直头，不要转接头 |
+| ✅ 已购 | 树莓派 4B USB-C 5V/3A 电源适配器 | Pi 独立供电，不从 PYNQ USB host 取电（§3.7）；不能用 5V/2A 手机头 |
 | ✅ 已购 | HDMI 线 ×2 | 标准 Type-A 公对公；1–2 m 短线更稳 |
 | ✅ 已购 | USB 视频采集卡 | UVC 免驱；支持 720p60（YUY2）或 1080p30（MJPEG）即可 |
 | 🟡 备用 | 笔记本 HDMI 扩展输出 | 开发调试源（测试图/视频）；正式演示不使用 |
@@ -72,5 +72,5 @@ hdmi_in.tie(hdmi_out)   # 直通：采集窗口应立即看到笔记本画面
 ## 5. 状态
 
 - 接线方案：📌 已定（2026-09-20 笔记本源 + 采集卡显示；2026-09-21 修订为真实 HDMI 相机源；**2026-10-03 定案：树莓派 4B + Camera Module 3**，micro-HDMI(HDMI0)→HDMI IN；笔记本 HDMI 输出降级为开发调试源）
-- 采购：✅ 已购：HDMI 线 ×2 / USB 采集卡 / 12V 电源适配器；⛔ 待购：Camera Module 3（标准 75° AF 日光版，含 15pin CSI 排线）/ micro-HDMI→HDMI-A 短线 / 树莓派 4B USB-C 5V/3A 电源（建议加桌面支架）；负责人：待认领
+- 采购：✅ 已购（2026-10-03）：HDMI 线 ×2 / USB 采集卡 / 12V 电源适配器 / Camera Module 3（标准 75° AF 日光版，含 15pin CSI 排线）/ micro-HDMI→HDMI-A 短线 / 树莓派 4B USB-C 5V/3A 电源；到货待收，验线照 §4 执行；负责人：never-die-cold
 - 验线：⬜ 未开始（线到后执行 §4）
