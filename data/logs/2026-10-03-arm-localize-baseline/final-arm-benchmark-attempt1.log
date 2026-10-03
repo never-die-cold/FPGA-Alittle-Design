@@ -1,0 +1,26 @@
+tar: arm_localize/arm_localize.py: time stamp 2026-10-03 06:40:06.0638225 is 1041722.99640348 s in the future
+tar: arm_localize/arm_localize_selftest.py: time stamp 2026-10-03 06:40:06.064822 is 1041722.996490383 s in the future
+tar: arm_localize/arm_localize_bench.py: time stamp 2026-10-03 06:40:06.066821 is 1041722.997784965 s in the future
+tar: arm_localize/reference.py: time stamp 2026-10-03 06:40:06.0678215 is 1041722.998148425 s in the future
+tar: arm_localize/two_targets.json: time stamp 2026-10-03 06:40:06.0688212 is 1041722.998601897 s in the future
+tar: arm_localize/README.md: time stamp 2026-10-03 06:40:06.069822 is 1041722.999047072 s in the future
+tar: arm_localize/manifest.json: time stamp 2026-10-03 06:40:06.1480024 is 1041723.076644999 s in the future
+PASS: portable package hashes, exact localization/crops and PGM/hex
+PASS: file reference status=LOCATION_ONLY targets=2 crops=2
+INFO: tiny sample=1/5 total_ms=395.045
+INFO: tiny sample=2/5 total_ms=396.727
+INFO: tiny sample=3/5 total_ms=394.698
+INFO: tiny sample=4/5 total_ms=393.184
+INFO: tiny sample=5/5 total_ms=423.606
+INFO: 720p_empty sample=1/5 total_ms=6095.673
+INFO: 720p_empty sample=2/5 total_ms=6062.598
+INFO: 720p_empty sample=3/5 total_ms=6136.777
+INFO: 720p_empty sample=4/5 total_ms=6147.081
+INFO: 720p_empty sample=5/5 total_ms=6038.656
+INFO: 720p_six sample=1/5 total_ms=7833.833
+INFO: 720p_six sample=2/5 total_ms=7834.229
+INFO: 720p_six sample=3/5 total_ms=7900.041
+INFO: 720p_six sample=4/5 total_ms=7875.945
+INFO: 720p_six sample=5/5 total_ms=7889.369
+PASS: synthetic benchmark 3 cases, warmup=1, repeats=5
+exit_code=0

@@ -19,7 +19,7 @@ for name in ("vision.bit", "vision.hwh"):
     print(f"extract {name}")
 PY
 
-cp "$REPO_ROOT"/src/pynq_host/{vision_regs.py,vision_demo.py,m2_onboard.py,watch_video.py} "$OUT/"
+cp "$REPO_ROOT"/src/pynq_host/{vision_regs.py,vision_demo.py,m2_onboard.py} "$OUT/"
 cp "$REPO_ROOT"/src/pynq_host/ONBOARD.md "$OUT/RUNBOOK.md"
 ls -la "$OUT"
 echo "board_pkg ready: $OUT"

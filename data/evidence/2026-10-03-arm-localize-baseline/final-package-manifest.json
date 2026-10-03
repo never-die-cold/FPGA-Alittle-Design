@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "base_commit": "8a2384c196d13e2dab7ce31c873fed2a77f632c5",
+  "files": {
+    "arm_localize.py": "d31abca31b25bdcaffc51e4ce2efe7e000b6e62a09afc39acd69d5460e340061",
+    "arm_localize_selftest.py": "a071d8183c5c4514b67b1002a08639db1f0e82e64a7a6c37622d6f071130d834",
+    "arm_localize_bench.py": "4c34139cd7a056a13c39796c21a4b32571be953fcd603b1815d90e5c7c8388ed",
+    "reference.py": "2b9c2b2af41b3d560359aafa1d06ec708a492c36328f3173b5e606f00fd6a073",
+    "two_targets.json": "6a28cfa975586bf71a2b8e979896cccbc2d108801d46063d860421f874be96cd",
+    "README.md": "c32b79f13db44204f2e2cbc4a2d096b1f01497d4ab589247348003a600cd2d29"
+  }
+}

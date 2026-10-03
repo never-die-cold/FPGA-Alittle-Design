@@ -1,0 +1,35 @@
+{
+  "frame_id": 101,
+  "config_id": 7,
+  "width": 1280,
+  "height": 720,
+  "status": "LOCATION_ONLY",
+  "targets": [],
+  "schema_version": 1,
+  "mode": "FILE_REFERENCE",
+  "crops": [],
+  "crop_size": [
+    64,
+    64
+  ],
+  "source": {
+    "name": "input.json",
+    "sha256": "3c6c4f6d25050ff02e03b868f09f6dea39eb4b27d15c74347ce40fa84587e19a"
+  },
+  "parameters": {
+    "threshold": 96,
+    "min_area": 8,
+    "max_targets": 16
+  },
+  "runtime": {
+    "system": "Windows",
+    "machine": "AMD64",
+    "python": "3.12.14"
+  },
+  "reference_sha256": "2b9c2b2af41b3d560359aafa1d06ec708a492c36328f3173b5e606f00fd6a073",
+  "timing_ms": {
+    "locate": 121.4304,
+    "crop": 0.0071
+  },
+  "artifacts": []
+}

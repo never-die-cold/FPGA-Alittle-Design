@@ -1,0 +1,14 @@
+tracked_exit_code=0
+src/pynq_host/arm_localize.py: whitespace clean
+src/pynq_host/arm_localize_selftest.py: whitespace clean
+src/pynq_host/arm_localize_bench.py: whitespace clean
+sim/scripts/make_arm_localize_pkg.py: whitespace clean
+sim/vision/test_arm_localize.py: whitespace clean
+sim/vision/test_arm_localize_package.py: whitespace clean
+sim/vision/compare_arm_localize_bench.py: whitespace clean
+docs/arm-localize-baseline-plan.md: whitespace clean
+docs/arm-localize-runbook.md: whitespace clean
+docs/arm-localize-results.md: whitespace clean
+docs/arm-localize-walkthrough.md: whitespace clean
+report/llm_log/2026-10-03-arm-localize-baseline.md: whitespace clean
+data/evidence/2026-10-03-arm-localize-baseline/README.md: whitespace clean

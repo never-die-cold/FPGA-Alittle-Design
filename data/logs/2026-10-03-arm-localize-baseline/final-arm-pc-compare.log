@@ -1,0 +1,3 @@
+PASS: file localization exact boxes/crops, metadata, empty/recheck and invalid input
+PASS: PGM/hex exact row order, hashes, target association and stale manifest isolation
+PASS: ARM/PC boxes, crop pixels, parameters and input/reference hashes match

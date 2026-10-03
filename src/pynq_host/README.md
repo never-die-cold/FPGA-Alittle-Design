@@ -26,6 +26,7 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
 > （定位报文契约 + 本地 HTTP mock，供 EXE 联调）；Windows EXE 原型已接真实采集卡源
 > （`vision_preview.exe --source 1`，横幅正确无假框）。证据见
 > [../../data/logs/2026-10-03-vision-onboard/README.md](../../data/logs/2026-10-03-vision-onboard/README.md)。
-> 板端分步自检 `m2_onboard.py`（env/load/smoke/demo）、断连监视 `watch_video.py`、
+> 板端分步自检 `m2_onboard.py`（env/load/smoke/demo）、断连监视 `onboard_smoke.py watch`
+> （STREAM/STALL/BUSY 事件 + WATCH-SUMMARY，含 watch-mock 离板自测）、
 > 接线与环境备忘见 [ONBOARD.md](ONBOARD.md)。源断连/重连实测待补。
 > `board/adv7611_init.py` 仅为外接接收器示例（PYNQ-Z2 无 ADV7611，不用于本板）。

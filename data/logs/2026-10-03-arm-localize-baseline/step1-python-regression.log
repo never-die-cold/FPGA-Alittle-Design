@@ -1,0 +1,5 @@
+PASS: PS configuration staging/commit/ack/busy/timeout/epoch wrap mock protocol
+PASS: localization empty/multiple/non-grid/noise/limit/border + per-target crop/resize/frame metadata
+PASS: M2 HTTP mock config/status/location + frame/config/session/stale/error contract
+PASS: file localization exact boxes/crops, metadata, empty/recheck and invalid input
+exit_code=0

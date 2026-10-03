@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "mode": "SYNTHETIC_FILE_REFERENCE",
+  "utc": "2026-10-03T06:49:23.190174+00:00",
+  "warmup": 1,
+  "repeats": 5,
+  "crop_size": [
+    64,
+    64
+  ],
+  "p95_method": "nearest-rank; five samples means p95=max",
+  "cases": [
+    {
+      "name": "tiny",
+      "width": 12,
+      "height": 8,
+      "targets": 2,
+      "samples": [
+        {
+          "result": "run-15c1q9l_/tiny/sample-00.json",
+          "locate": 0.1155,
+          "crop": 6.3588,
+          "total_call": 24.4547
+        },
+        {
+          "result": "run-15c1q9l_/tiny/sample-01.json",
+          "locate": 0.0517,
+          "crop": 4.8027,
+          "total_call": 22.3569
+        },
+        {
+          "result": "run-15c1q9l_/tiny/sample-02.json",
+          "locate": 0.0693,
+          "crop": 6.7432,
+          "total_call": 21.3848
+        },
+        {
+          "result": "run-15c1q9l_/tiny/sample-03.json",
+          "locate": 0.0627,
+          "crop": 6.694,
+          "total_call": 21.8502
+        },
+        {
+          "result": "run-15c1q9l_/tiny/sample-04.json",
+          "locate": 0.0374,
+          "crop": 4.0688,
+          "total_call": 19.6411
+        }
+      ],
+      "stats_ms": {
+        "locate": {
+          "min": 0.0374,
+          "median": 0.0627,
+          "p95": 0.1155,
+          "max": 0.1155
+        },
+        "crop": {
+          "min": 4.0688,
+          "median": 6.3588,
+          "p95": 6.7432,
+          "max": 6.7432
+        },
+        "total_call": {
+          "min": 19.6411,
+          "median": 21.8502,
+          "p95": 24.4547,
+          "max": 24.4547
+        }
+      }
+    },
+    {
+      "name": "720p_empty",
+      "width": 1280,
+      "height": 720,
+      "targets": 0,
+      "samples": [
+        {
+          "result": "run-15c1q9l_/720p_empty/sample-00.json",
+          "locate": 105.9943,
+          "crop": 0.007,
+          "total_call": 198.5357
+        },
+        {
+          "result": "run-15c1q9l_/720p_empty/sample-01.json",
+          "locate": 117.7615,
+          "crop": 0.0071,
+          "total_call": 216.4636
+        },
+        {
+          "result": "run-15c1q9l_/720p_empty/sample-02.json",
+          "locate": 126.6167,
+          "crop": 0.0066,
+          "total_call": 221.854
+        },
+        {
+          "result": "run-15c1q9l_/720p_empty/sample-03.json",
+          "locate": 152.4984,
+          "crop": 0.006,
+          "total_call": 268.3781
+        },
+        {
+          "result": "run-15c1q9l_/720p_empty/sample-04.json",
+          "locate": 167.3473,
+          "crop": 0.0084,
+          "total_call": 272.4268
+        }
+      ],
+      "stats_ms": {
+        "locate": {
+          "min": 105.9943,
+          "median": 126.6167,
+          "p95": 167.3473,
+          "max": 167.3473
+        },
+        "crop": {
+          "min": 0.006,
+          "median": 0.007,
+          "p95": 0.0084,
+          "max": 0.0084
+        },
+        "total_call": {
+          "min": 198.5357,
+          "median": 221.854,
+          "p95": 272.4268,
+          "max": 272.4268
+        }
+      }
+    },
+    {
+      "name": "720p_six",
+      "width": 1280,
+      "height": 720,
+      "targets": 6,
+      "samples": [
+        {
+          "result": "run-15c1q9l_/720p_six/sample-00.json",
+          "locate": 130.3069,
+          "crop": 20.5134,
+          "total_call": 269.3048
+        },
+        {
+          "result": "run-15c1q9l_/720p_six/sample-01.json",
+          "locate": 127.5295,
+          "crop": 22.6739,
+          "total_call": 270.1375
+        },
+        {
+          "result": "run-15c1q9l_/720p_six/sample-02.json",
+          "locate": 145.1627,
+          "crop": 21.1004,
+          "total_call": 279.695
+        },
+        {
+          "result": "run-15c1q9l_/720p_six/sample-03.json",
+          "locate": 121.1668,
+          "crop": 19.7669,
+          "total_call": 263.5484
+        },
+        {
+          "result": "run-15c1q9l_/720p_six/sample-04.json",
+          "locate": 122.2614,
+          "crop": 17.2908,
+          "total_call": 245.9237
+        }
+      ],
+      "stats_ms": {
+        "locate": {
+          "min": 121.1668,
+          "median": 127.5295,
+          "p95": 145.1627,
+          "max": 145.1627
+        },
+        "crop": {
+          "min": 17.2908,
+          "median": 20.5134,
+          "p95": 22.6739,
+          "max": 22.6739
+        },
+        "total_call": {
+          "min": 245.9237,
+          "median": 269.3048,
+          "p95": 279.695,
+          "max": 279.695
+        }
+      }
+    }
+  ],
+  "runtime": {
+    "system": "Windows",
+    "machine": "AMD64",
+    "python": "3.12.14"
+  },
+  "reference_sha256": "2b9c2b2af41b3d560359aafa1d06ec708a492c36328f3173b5e606f00fd6a073"
+}

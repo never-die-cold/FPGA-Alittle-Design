@@ -1,0 +1,8 @@
+tracked_exit_code=0
+src/pynq_host/arm_localize.py exit_code=1
+tracked_exit_code=0
+src/pynq_host/arm_localize.py: whitespace clean (no-index diff exit=1)
+sim/vision/test_arm_localize.py: whitespace clean (no-index diff exit=1)
+docs/arm-localize-baseline-plan.md: whitespace clean (no-index diff exit=1)
+report/llm_log/2026-10-03-arm-localize-baseline.md: whitespace clean (no-index diff exit=1)
+data/evidence/2026-10-03-arm-localize-baseline/README.md: whitespace clean (no-index diff exit=1)
