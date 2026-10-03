@@ -20,9 +20,12 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
 - 所有 notebook 从头运行（Restart & Run All）必须无报错
 - 采集脚本通用部分尽量与题目解耦，作为通用 PYNQ Skill 的原料
 
-> 状态（2026-10-02）：M2 离板软件栈已闭环——`vision_regs.py`（寄存器映射 + commit/wait_applied
-> 原子配置协议，R11 提交/R12 确认，mock 协议测试 PASS）、`vision_protocol.py`/`vision_mock_service.py`
-> （定位报文契约 + 本地 HTTP mock，供 EXE 联调）、`vision_demo.py`（演示序列，显式 commit，上板当日
-> 运行）、Windows EXE 原型见 [../vision_client/README.md](../vision_client/README.md)。
+> 状态（2026-10-03）：M2 离板软件栈已闭环并完成首次实机验证——`vision_regs.py`（寄存器映射 +
+> commit/wait_applied 原子配置协议，R11 提交/R12 确认）真实 MMIO 上板 PASS（配置号 0→2 帧首确认），
+> `vision_demo.py` 实机演示序列 PASS（65 次 commit 全确认）；`vision_protocol.py`/`vision_mock_service.py`
+> （定位报文契约 + 本地 HTTP mock，供 EXE 联调）；Windows EXE 原型已接真实采集卡源
+> （`vision_preview.exe --source 1`，横幅正确无假框）。证据见
+> [../../data/logs/2026-10-03-vision-onboard/README.md](../../data/logs/2026-10-03-vision-onboard/README.md)。
+> 板端分步自检 `m2_onboard.py`（env/load/smoke/demo）、断连监视 `watch_video.py`、
+> 接线与环境备忘见 [ONBOARD.md](ONBOARD.md)。源断连/重连实测待补。
 > `board/adv7611_init.py` 仅为外接接收器示例（PYNQ-Z2 无 ADV7611，不用于本板）。
-> 真实 MMIO 未验证（需上板）；M3 应用闭环、M4 发布包的收口时间与验收以主计划为准。
