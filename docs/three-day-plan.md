@@ -47,7 +47,7 @@
 - 交付：最小失败日志落 `data/logs/<date>-partB-v1/`。
 - 理解题：为何气泡必须用 `valid=0`？为何 stall 不能 hold MEM+WB？
 
-### D1.2 接入提交边界与唯一副作用点（每次补丁 70–95 行）
+### D1.2 接入提交边界与唯一副作用点（D1.2a 已完成；宽度专项待 D1.2b）
 
 - 改：`core_top.v` 增默认开启的 `ENABLE_FORWARDING`；例化 `mem_wb_stage`；把 regfile/DMEM
   写使能收敛到 `mem_valid`；load 扩展和 store lane 使用寄存后的地址/数据。
@@ -55,7 +55,7 @@
 - 验证：`run_iverilog.sh mem_wb`、`v1_flow`、`all`；预期既有 RV32IM/tohost 不回归。
 - 理解题：为何 MEM+WB 无 hold？为何 `dmem_we` 必须包含 `mem_valid`？
 
-### D1.3 接入 ID+EX、转发与 hazard（分两次，每次 60–95 行）
+### D1.3 接入 ID+EX、转发与 hazard（D1.3a 已完成；ID+EX 替换待 D1.3b）
 
 - 改：`core_top.v` 先接 regfile→forwarding→`id_ex_stage` 数据面，再接 `hazard` 的
   `front_stall/ex_accept/redirect/mem_in_valid` 控制面；对外存储器端口保持不变。
@@ -136,10 +136,13 @@
 - timescale 继承警告为既有技术债；本次 `-g2001` 综合代理采用 RTL-only 编译零 warning，
   不把清理全部 timescale 混入核心集成小步。
 
-## 6. 待用户回答（自主模式不阻塞）
+## 6. 理解门槛（回答通过后才进入下一步）
 
 - D1.1：为什么气泡必须用 `valid=0`，不能只把指令改成 NOP？
 - D1.1：为什么 stall 时不能 hold MEM+WB，而要让旧指令提交一次后排空？
+- D1.2a（已通过）：为什么 regfile/DMEM 写使能都必须包含 `mem_valid`？
+- D1.3a（已通过）：为什么 redirect 必须经过 `ex_accept` 门控？
+- D1.3a（已通过）：为什么 load-use 要停 1 拍，而普通 ALU RAW 可以通过转发零停顿？
 
 ## 7. 用户回来后必须拍板 / 回答
 
@@ -148,4 +151,4 @@
 3. Windows XSim/Vivado 和 PYNQ-Z2 实机由谁、在哪个时间窗执行；无人执行前均标未验证/待上板。
 4. `.*` 修复理解题：为什么显式端口比全局 `read_verilog -sv` 更稳？为什么 Icarus `-g2012`
    PASS 不能证明 Vivado 默认解析通过？为什么测试平台也同步展开端口？
-5. 三日实现理解题集中采用各小步所列问题；逐题通过后才允许合入，当前自主分支 commit 不 merge。
+5. 三日实现理解题集中采用各小步所列问题；逐题通过后才允许本地 commit；当前禁止 push。
