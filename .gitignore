@@ -53,3 +53,7 @@ report/llm_log/digest.md
 
 # --- Vivado 附带产物（PS 配置摘要等，不入库） ---
 NA/
+
+# --- 核对比 Fmax 跑分产物（正式证据归档 data/logs/2026-10-03-picorv32-compare/） ---
+build/run/
+build/reports/fmax/
