@@ -61,4 +61,5 @@ axi_regs/config_bridge——PS 轮询的在途 AXI 事务响应永不返回（BR
 
 PC 侧（仓库内工具在 `sim/build/tools/`，构建产物不入库）：
 `grab_capture.py`（UVC 抓帧）、`screen_probe.py`（活性/延迟探针）、`screenshot.ps1`（截屏）。
-板侧四步见 `src/pynq_host/m2_onboard.py`；断连监视 `src/pynq_host/watch_video.py`。
+板侧四步见 `src/pynq_host/m2_onboard.py`；断连监视 `src/pynq_host/watch_video.py`
+（后注：该工具 2026-10-03 并入 `onboard_smoke.py watch` 后删除，本日志所记为当时所用）。

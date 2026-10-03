@@ -41,5 +41,6 @@
 - **load 之后等 2-3 秒再 smoke**：bit 重载后 dvi2rgb 重锁有竞争，紧跟 load 的
   commit 会 NOVIDEO（已实测复现一次，等待后复跑 PASS）。
 - bit 为易失配置：断电后重新执行 load 即可，无需重传文件。
-- 视频在位监视：`sudo … python3 watch_video.py [秒]`（周期 commit 探测，打印
-  VIDEO_OK/NO_VIDEO 状态变化，用于断连/重连实测）。
+- 视频在位/断连监视：`sudo … python3 onboard_smoke.py watch [秒]`（周期 commit 探测
+  R12 帧首确认，打印 STREAM/STALL/BUSY 事件与 WATCH-SUMMARY，退出码可判）。
+  原 `watch_video.py` 已并入该子命令并删除。

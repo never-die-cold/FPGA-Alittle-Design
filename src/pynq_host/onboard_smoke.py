@@ -7,7 +7,8 @@
   python3 onboard_smoke.py video   # 阶段3: commit/确认 R12 递增（需 HDMI 源在出图）
   python3 onboard_smoke.py all     # 三阶连跑
   python3 onboard_smoke.py watch [秒=60]   # 断连重连观测：周期 commit 产生 R12 确认心跳，
-                            # 运行中拔/插 HDMI，期望 STREAM → STALL → STREAM
+                            # 运行中拔/插 HDMI，期望 STREAM → STALL/BUSY → STREAM
+                            # （STALL=commit 超时；BUSY=在途提交被拒，非断流，单独计数）
   python3 onboard_smoke.py watch-mock      # 离板逻辑自测：假后端脚本化 2s 拔/4s 插，应 PASS(W)
 退出码 = 首个失败阶段号（watch/watch-mock 为 9，全过 0）。阶段3 无视频时必然失败（commit 超时），
 属预期现象，不是回归——先接好 HDMI 源（1280x720）再跑 video/all。
@@ -79,34 +80,46 @@ def stage_watch(seconds, backend=None):
     """断连重连观测：周期 commit 为心跳——R12 是配置确认号，无提交不自增。
 
     在流 = commit 在帧首被确认（R12 达到期望值，≤1 帧周期）；
-    断流 = commit 超时（挂起提交在流恢复后帧首补确认，busy 拒绝按断流计）。
-    事件行与 WATCH-SUMMARY 供串口存证。backend 供 watch-mock 注入假硬件。
+    断流 = commit 超时（挂起提交在流恢复后帧首补确认）；
+    BUSY = 在途提交未消费时重复提交被拒（R11 busy，vision_regs.commit 抛
+    RuntimeError），非断流，单独计数供存证。其余异常不算 STALL，直接抛给
+    FAIL(W)——MMIO 类硬故障不能伪装成断流（上板挂死教训）。
+    print 全部带 flush，nohup/重定向可实时 tail。backend 供 watch-mock 注入。
     """
     import time
     from vision_regs import VisionRegs
     v = VisionRegs(base=AXI_REGS_BASE, backend=backend)
     last = None
-    saw_stream = saw_stall = False
+    saw_stream = saw_stall = saw_busy = False
     t0 = time.time()
     while time.time() - t0 < seconds:
         ok = False
+        state = "STALL"
         try:
             expected = v.commit(timeout=1.0)
             ok = v.status()["applied_config_id"] == expected
-        except Exception:
-            ok = False
+            state = "STREAM" if ok else "STALL"
+        except TimeoutError:
+            state = "STALL"
+        except RuntimeError:
+            state = "BUSY"
+            saw_busy = True
         saw_stream |= ok
         saw_stall |= not ok
-        if ok != last:
-            print(f"EVENT({time.time() - t0:.1f}s): {'STREAM' if ok else 'STALL'}")
-            last = ok
+        if state != last:
+            print(f"EVENT({time.time() - t0:.1f}s): {state}", flush=True)
+            last = state
         time.sleep(0.5)
-    print(f"WATCH-SUMMARY: saw_stream={saw_stream} saw_stall={saw_stall} end_stream={last}")
+    print(f"WATCH-SUMMARY: saw_stream={saw_stream} saw_stall={saw_stall} "
+          f"saw_busy={saw_busy} end_stream={last}", flush=True)
     if not saw_stream:
         raise RuntimeError("全程未观测到视频流（确认 HDMI 源 1280x720 在出图再跑）")
-    if saw_stall and not last:
-        raise RuntimeError("观测到断流且未恢复")
-    print(f"PASS(W): 观测 {seconds}s 完成（{'断流后已恢复' if saw_stall else '持续在流'}）")
+    if saw_stall and last != "STREAM":
+        # last 是状态字符串，真值判断恒真——必须显式比较（首轮实现曾用 not last，致
+        # 收尾停在 STALL/BUSY 也 PASS，由理解门槛问答抓出）
+        raise RuntimeError(f"观测到断流/busy 未恢复（end={last}）")
+    print(f"PASS(W): 观测 {seconds}s 完成（{'断流后已恢复' if saw_stall else '持续在流'}）",
+          flush=True)
 
 
 def _fake_replug_backend():
@@ -160,7 +173,7 @@ def main():
             else:
                 stage_watch(6, backend=_fake_replug_backend())
         except Exception as e:
-            print(f"FAIL(W): {type(e).__name__}: {e}")
+            print(f"FAIL(W): {type(e).__name__}: {e}", flush=True)
             return 9
         return 0
     if cmd not in STAGES:
