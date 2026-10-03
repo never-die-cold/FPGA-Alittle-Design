@@ -74,3 +74,4 @@ hdmi_in.tie(hdmi_out)   # 直通：采集窗口应立即看到笔记本画面
 - 接线方案：📌 已定（2026-09-20 笔记本源 + 采集卡显示；2026-09-21 修订为真实 HDMI 相机源；**2026-10-03 定案：树莓派 4B + Camera Module 3**，micro-HDMI(HDMI0)→HDMI IN；笔记本 HDMI 输出降级为开发调试源）
 - 采购：✅ 已购（2026-10-03）：HDMI 线 ×2 / USB 采集卡 / 12V 电源适配器 / Camera Module 3（标准 75° AF 日光版，含 15pin CSI 排线）/ micro-HDMI→HDMI-A 短线 / 树莓派 4B USB-C 5V/3A 电源；到货待收，验线照 §4 执行；负责人：never-die-cold
 - 验线：⬜ 未开始（线到后执行 §4）
+- 开发期角色：Pi 兼任回放源 / arm_localize 交叉基准 / EXE mock 服务宿主（R1–R3，runbook 见 [docs/pi-dev-roles.md](../docs/pi-dev-roles.md)）；Pi 不进产品分析路径、不产生数据集像素。系统用项目专用 microSD（另配，Raspberry Pi OS Lite 32-bit），输出锁 720p60

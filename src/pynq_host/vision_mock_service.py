@@ -1,4 +1,7 @@
-"""Local M2 API mock. No MMIO, board access, inference or batch counting."""
+"""Local M2 API mock. No MMIO, board access, inference or batch counting.
+
+默认绑定 127.0.0.1；--host 0.0.0.0 供 EXE 远程联调（服务托管在他机，如 Pi）时使用。
+mock 结果仅供界面联调，不代表板上识别（plan.md §3.4）。"""
 import argparse
 import json
 import threading
@@ -71,6 +74,9 @@ def make_server(host="127.0.0.1", port=8765):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument("--host", default="127.0.0.1",
+                        help="绑定地址；0.0.0.0 = 允许他机（EXE 联调机）访问")
     args = parser.parse_args()
-    print(f"MOCK ONLY: http://127.0.0.1:{args.port}/v1/status", flush=True)
-    make_server(port=args.port).serve_forever()
+    shown = "127.0.0.1" if args.host == "0.0.0.0" else args.host
+    print(f"MOCK ONLY: http://{shown}:{args.port}/v1/status", flush=True)
+    make_server(host=args.host, port=args.port).serve_forever()
