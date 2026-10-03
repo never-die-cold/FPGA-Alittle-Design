@@ -36,7 +36,7 @@ module tb_top;
     reg [7:0]  expE     [0:127];   // gray|sobel golden
 
     vision_top #(.SW(16), .SH(8), .DW(32), .DH(16), .NLINES(16)) dut (
-        .clk(clk), .s_axi_aclk(clk), .rst_n(rst_n),
+        .clk(clk), .s_axi_aclk(clk), .rst_n(rst_n), .axi_rst_n(rst_n),
         .in_vs(in_vs), .in_hs(in_hs), .in_de(in_de), .in_rgb(in_rgb),
         .cop_ready(1'b1),
         .awvalid(awvalid), .awready(awready), .awaddr(awaddr),

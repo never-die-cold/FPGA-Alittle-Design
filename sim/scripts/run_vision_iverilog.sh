@@ -30,6 +30,7 @@ case "$MODE" in
     pipeline) TBS=(vision/tb_video_pipeline.v) ;;
     real) TBS=(vision/tb_video_real.v) ;;
     hdmi_wrapper) TBS=(vision/tb_vision_axi.v) ;;
+    axi_lock) TBS=(vision/tb_axi_lock_reset.v) ;;
     patterns) TBS=(vision/tb_patterns.v) ;;
     align)    TBS=(vision/tb_in_align.v) ;;
     copbuf)   TBS=(vision/tb_cop_buf.v) ;;
@@ -41,6 +42,7 @@ esac
 if [ "$MODE" = all ]; then TBS+=(vision/tb_cop_buf_stress.v vision/tb_axi_split.v vision/tb_config_bridge.v vision/tb_top_async.v vision/tb_top_color.v); fi
 if [ "$MODE" = all ]; then TBS+=(vision/tb_video_pipeline.v vision/tb_video_real.v); fi
 if [ "$MODE" = all ]; then TBS+=(vision/tb_vision_axi.v); fi
+if [ "$MODE" = all ]; then TBS+=(vision/tb_axi_lock_reset.v); fi
 if [ "$MODE" = all ]; then TBS+=(vision/tb_patterns.v); fi
 
 cd "$(dirname "$0")/.." || exit 1  # -> sim/

@@ -13,7 +13,7 @@ module tb_patterns;
     reg [7:0] expected[0:95];
     integer n=0,frames=0,rows=0,f,x,y;
     vision_top #(.SW(16),.SH(8),.DW(8),.DH(4),.NLINES(8)) dut(
-        .clk(clk),.s_axi_aclk(aclk),.rst_n(rst_n),.in_vs(vs),.in_hs(hs),.in_de(de),.in_rgb(rgb),
+        .clk(clk),.s_axi_aclk(aclk),.rst_n(rst_n),.axi_rst_n(rst_n),.in_vs(vs),.in_hs(hs),.in_de(de),.in_rgb(rgb),
         .awvalid(av),.awready(awr),.awaddr(addr),.wvalid(wv),.wready(wr),.wdata(data),.wstrb(4'hf),
         .bvalid(bv),.bready(1'b1),.arvalid(1'b0),.araddr(7'b0),.rready(1'b1),
         .cop_ready(1'b1),.cop_vs(cv),.cop_hs(ch),.cop_de(cd),.cop_y(cy),

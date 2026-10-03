@@ -10,7 +10,7 @@ module tb_video_real;
     wire [31:0] fid,cid,drops;
     integer f,l,c,display_px=0,cop_px=0,cop_frames=0,rows=0;
     video_pipeline dut(
-        .pclk(clk),.s_axi_aclk(aclk),.rst_n(rst_n),.raw_vs(vs),.raw_hs(hs),.raw_de(de),.raw_rgb(rgb),
+        .pclk(clk),.s_axi_aclk(aclk),.rst_n(rst_n),.axi_rst_n(rst_n),.raw_vs(vs),.raw_hs(hs),.raw_de(de),.raw_rgb(rgb),
         .awvalid(av),.awaddr(addr),.wvalid(wv),.wdata(data),.wstrb(4'hf),.bready(br),
         .arvalid(1'b0),.araddr(7'b0),.rready(1'b1),.cop_ready(1'b1),
         .video_vs(vvs),.video_hs(vhs),.video_de(vde),.video_rgb(vrgb),
