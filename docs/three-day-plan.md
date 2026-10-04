@@ -63,7 +63,7 @@
 - 验证：`forwarding`、`hazard`、`v1_flow`、`all`；检查 `redirect && front_stall==0`。
 - 理解题：为什么 redirect 必须由 `ex_accept` 门控？EX/MEM/WB 三来源为何不是三级之外的新级？
 
-### D1.4 接入 muldiv 等待与统一写回（D1.4a 已通过；D1.4b 待开始）
+### D1.4 接入 muldiv 等待与统一写回（✅ D1.4a/b 已验证并通过理解门槛）
 
 - 改：`core_top.v` 实现单拍 start、粘滞 pending、start 拍立即 front stall、done 进 MEM+WB。
 - tb：扩 `tb_core_v1_flow.v`，统计 start=1 次、等待期 0 次提交、结果写回 1 次、紧随消费者正确。
@@ -152,6 +152,9 @@
 - D1.4a（已通过）：为什么 start 当拍必须立即 `front_stall=1`，不能等 `busy`？
 - D1.4a（已通过）：为什么等待期 `mem_valid=0`，但较老的 x2 仍应恰好提交一次？
 - D1.4a（已通过）：为什么 done 被接受前 `muldiv_pending` 必须保持为 1？
+- D1.4b（已通过）：为什么 done 拍只捕获结果，不能直接写 x3？
+- D1.4b（已通过）：紧随的 `addi x4,x3,1` 从哪里取得 21，为什么不需额外停顿？
+- D1.4b（已通过）：为什么要同时检查写回值和 x3/x4 各恰好写一次？
 
 ## 7. 用户回来后必须拍板 / 回答
 
