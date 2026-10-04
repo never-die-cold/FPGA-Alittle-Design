@@ -4,10 +4,12 @@
 //   [+hex=路径] [+exp_tohost=N] [+exp_exit=N] [+max_cycles=N] [+timer_addr=HEX] [+vcd]
 //   [+exp_iter=N] [+exp_seedcrc=HEX] [+exp_crclist=HEX] [+exp_crcmatrix=HEX] [+exp_crcstate=HEX] [+exp_crcfinal=HEX]
 // 默认固件 ../src/riscv_fw/coremark.hex；未入库前可用 +hex=../src/riscv_fw/hello.hex 冒烟
-// 判据：观察到写 tohost_exit(0x8000_3FF4) 即结束；核对 exit/tohost 后打印 cycles/instrs/bubbles/CPI
+// 判据：观察到写 tohost_exit(0x8000_3FF4) 即结束；按 MEM+WB valid 统计 retired/CPI
 // 观测块（契约 docs/coremark.md §4.3）：镜像自带 MAGIC 时自动 dump 11 字并按 +exp_* 判据校验
 // 存储模型：8192×32、addr[14:2]（design_v0.md §3.3 冻结契约）
-module tb_core_coremark;
+module tb_core_coremark #(
+    parameter [0:0] ENABLE_FORWARDING = 1'b1
+);
 
     localparam integer CLK_PERIOD   = 10;
     localparam integer RESET_CYCLES = 8;
@@ -45,8 +47,8 @@ module tb_core_coremark;
     wire [12:0] dmem_idx = dmem_addr[14:2];
 
     // ---- 周期 / 退休指令 / 气泡统计 + 结束监视 ----
-    // 注：instr_valid/stall 为 v0 两级核内部信号，Part B 重构后需同步
-    reg [31:0] cycle_count = 0, instr_count = 0, bubble_count = 0;
+    // 统计窗口冻结在首次 tohost_exit 写；终止后的自旋指令不得计入。
+    reg [31:0] cycle_count = 0, retired_count = 0, bubble_count = 0;
     integer tohost_seen = 0, exit_seen = 0;
     reg [31:0] tohost_val = 0, exit_val = 0;
     reg [63:0] cpi_x1000 = 0;
@@ -66,16 +68,20 @@ module tb_core_coremark;
 
     always #(CLK_PERIOD / 2) clk = ~clk;
 
-    core_top dut (
+    core_top #(.ENABLE_FORWARDING(ENABLE_FORWARDING)) dut (
         .clk(clk), .rst_n(rst_n), .imem_addr(imem_addr), .imem_rdata(imem_rdata),
         .dmem_addr(dmem_addr), .dmem_wdata(dmem_wdata), .dmem_be(dmem_be),
         .dmem_we(dmem_we), .dmem_rdata(dmem_rdata)
     );
 
     always @(posedge clk) if (rst_n) begin
-        cycle_count = cycle_count + 1;
-        if (dut.instr_valid && !dut.stall) instr_count = instr_count + 1;
-        if (!dut.instr_valid) bubble_count = bubble_count + 1;
+        if (!exit_seen) begin
+            cycle_count = cycle_count + 1;
+            if (dut.mem_valid) retired_count = retired_count + 1;
+            if (!dut.mem_valid) bubble_count = bubble_count + 1;
+            if (dut.mem_valid && $test$plusargs("trace_retire"))
+                $display("RETIRE pc=%08x instr=%08x", dut.mem_pc, dut.mem_instr);
+        end
         if (dmem_we && (dmem_idx == TOHOST_IDX)) begin
             tohost_seen = 1;
             tohost_val  = dmem_wdata;
@@ -129,8 +135,9 @@ module tb_core_coremark;
                      max_cycles, imem_addr, tohost_seen, tohost_val);
             $fatal(1);
         end
-        $display("== coremark hex=%0s exit=%0d tohost=%0d cycles=%0d instrs=%0d bubbles=%0d",
-                 hex_file, exit_val, tohost_val, cycle_count, instr_count, bubble_count);
+        $display("== coremark mode=%0d hex=%0s exit=%0d tohost=%0d cycles=%0d retired=%0d bubbles=%0d",
+                 ENABLE_FORWARDING, hex_file, exit_val, tohost_val,
+                 cycle_count, retired_count, bubble_count);
         if (exit_val !== exp_exit) begin
             $display("FAIL: exit 期望 %0d 实际 %0d", exp_exit, exit_val);
             errors = errors + 1;
@@ -161,9 +168,12 @@ module tb_core_coremark;
             errors = errors + 1;
         end
         if (errors != 0) $fatal(1, "FAIL: %0d 项不符", errors);
-        cpi_x1000 = (instr_count != 0) ? (({32'b0, cycle_count} * 64'd1000) / {32'b0, instr_count}) : 64'd0;
-        $display("PASS: coremark cycles=%0d instrs=%0d bubbles=%0d cpi=%0d.%03d",
-                 cycle_count, instr_count, bubble_count, cpi_x1000 / 1000, cpi_x1000 % 1000);
+        cpi_x1000 = (retired_count != 0) ?
+                    ((({32'b0, cycle_count} * 64'd1000) + (retired_count / 2)) /
+                     {32'b0, retired_count}) : 64'd0;
+        $display("PASS: coremark mode=%0d cycles=%0d retired=%0d bubbles=%0d cpi=%0d.%03d",
+                 ENABLE_FORWARDING, cycle_count, retired_count, bubble_count,
+                 cpi_x1000 / 1000, cpi_x1000 % 1000);
         $finish;
     end
 endmodule

@@ -22,9 +22,11 @@
 #   bash sim/scripts/run_iverilog.sh imem     # 32KB 同步读指令存储器模块级自检
 #   bash sim/scripts/run_iverilog.sh dmem     # 32KB 异步读数据存储器模块级自检
 #   bash sim/scripts/run_iverilog.sh coremark # CoreMark 2K/32 迭代 + golden 判据
+#   bash sim/scripts/run_iverilog.sh coremark_fwd|coremark_nofwd # CoreMark CPI 双档
 #   bash sim/scripts/run_iverilog.sh soc      # hello_v0 SoC + tohost LED 自检
 #   bash sim/scripts/run_iverilog.sh soc_check # SoC 预载 + 计时器端到端自检
 #   bash sim/scripts/run_iverilog.sh bench    # benchmark v0.1 + CPI 统计
+#   bash sim/scripts/run_iverilog.sh bench_fwd|bench_nofwd # benchmark CPI 双档
 #   bash sim/scripts/run_iverilog.sh vision [单项|all] # 视觉专项；all 含核与视觉
 #   bash sim/scripts/run_iverilog.sh vision_gate # 视觉回归失败门禁自检
 # 前置：PATH 中含 MSYS2 ucrt64 的 iverilog / vvp（13.0+）
@@ -58,11 +60,15 @@ case "$MODE" in
     imem) TBS=(riscv/tb_imem.v) ;;
     dmem) TBS=(riscv/tb_dmem.v) ;;
     coremark) TBS=(riscv/tb_core_coremark.v) ;;
+    coremark_fwd) TBS=(riscv/tb_core_coremark.v); IVERILOG_ARGS=(-Ptb_core_coremark.ENABLE_FORWARDING=1) ;;
+    coremark_nofwd) TBS=(riscv/tb_core_coremark.v); IVERILOG_ARGS=(-Ptb_core_coremark.ENABLE_FORWARDING=0) ;;
     soc) TBS=(riscv/tb_soc_top.v) ;;
     soc_check) TBS=(riscv/tb_soc_check.v) ;;
     bench) TBS=(riscv/tb_core_coremark.v) ;;
+    bench_fwd) TBS=(riscv/tb_core_coremark.v); IVERILOG_ARGS=(-Ptb_core_coremark.ENABLE_FORWARDING=1) ;;
+    bench_nofwd) TBS=(riscv/tb_core_coremark.v); IVERILOG_ARGS=(-Ptb_core_coremark.ENABLE_FORWARDING=0) ;;
     all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_v1_mem.v riscv/tb_decode.v riscv/tb_forwarding.v riscv/tb_hazard.v riscv/tb_mem_wb_stage.v riscv/tb_id_ex_stage.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_core_coremark.v riscv/tb_soc_top.v riscv/tb_soc_check.v) ;;
-    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|v1_fwd|v1_nofwd|v1_hazard_fwd|v1_hazard_nofwd|v1_muldiv_fwd|v1_muldiv_nofwd|decode|forwarding|hazard|mem_wb|id_ex|v1_flow|v1_mem|v1_muldiv_flow|muldiv|rv32im|imem|dmem|coremark|soc|soc_check|bench|all]"; exit 1 ;;
+    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|v1_fwd|v1_nofwd|v1_hazard_fwd|v1_hazard_nofwd|v1_muldiv_fwd|v1_muldiv_nofwd|decode|forwarding|hazard|mem_wb|id_ex|v1_flow|v1_mem|v1_muldiv_flow|muldiv|rv32im|imem|dmem|coremark|coremark_fwd|coremark_nofwd|soc|soc_check|bench|bench_fwd|bench_nofwd|all]"; exit 1 ;;
 esac
 
 cd "$(dirname "$0")/.."          # -> sim/
@@ -99,7 +105,7 @@ for tb in "${TBS[@]}"; do
     echo "== $name =="
     iverilog -g2012 -Wall "${IVERILOG_ARGS[@]}" -s "$name" -o "build/$name.vvp" "$tb" "${RTL_FILES[@]}" || exit 1
     if [ "$name" = "tb_core_coremark" ]; then
-        if [ "$MODE" = "bench" ]; then
+        if [[ "$MODE" = bench* ]]; then
             vvp "build/$name.vvp" "${BENCH_ARGS[@]}" || exit 1
         else
             vvp "build/$name.vvp" "${COREMARK_ARGS[@]}" || exit 1
