@@ -4,6 +4,8 @@
 #   bash sim/scripts/run_iverilog.sh          # 全量回归（含 CoreMark，约 2,100 万周期）
 #   bash sim/scripts/run_iverilog.sh v0       # v0 回归集合（冒烟 + 逐指令自检）
 #   bash sim/scripts/run_iverilog.sh fwd      # 转发专项（数据冒险 / 分支气泡，v0 对照档）
+#   bash sim/scripts/run_iverilog.sh v1_fwd   # v1 三级核，转发开启
+#   bash sim/scripts/run_iverilog.sh v1_nofwd # v1 三级核，转发关闭
 #   bash sim/scripts/run_iverilog.sh decode   # 译码源操作数使用标志
 #   bash sim/scripts/run_iverilog.sh forwarding # 转发选择器单元自检
 #   bash sim/scripts/run_iverilog.sh hazard    # 冒险与重定向控制自检
@@ -25,6 +27,7 @@
 set -u
 
 MODE="${1:-all}"
+IVERILOG_ARGS=()
 
 case "$MODE" in
     vision) exec bash "$(dirname "$0")/run_vision_iverilog.sh" "${2:-all}" ;;
@@ -32,6 +35,8 @@ case "$MODE" in
     vision_python) exec bash "$(dirname "$0")/run_vision_python.sh" ;;
     v0)  TBS=(riscv/tb_core_smoke.v riscv/tb_core_test.v) ;;
     fwd) TBS=(riscv/tb_core_fwd.v) ;;
+    v1_fwd) TBS=(riscv/tb_core_fwd.v); IVERILOG_ARGS=(-Ptb_core_fwd.ENABLE_FORWARDING=1) ;;
+    v1_nofwd) TBS=(riscv/tb_core_fwd.v); IVERILOG_ARGS=(-Ptb_core_fwd.ENABLE_FORWARDING=0) ;;
     decode) TBS=(riscv/tb_decode.v) ;;
     forwarding) TBS=(riscv/tb_forwarding.v) ;;
     hazard) TBS=(riscv/tb_hazard.v) ;;
@@ -48,8 +53,8 @@ case "$MODE" in
     soc) TBS=(riscv/tb_soc_top.v) ;;
     soc_check) TBS=(riscv/tb_soc_check.v) ;;
     bench) TBS=(riscv/tb_core_coremark.v) ;;
-    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_fwd.v riscv/tb_core_v1_mem.v riscv/tb_core_v1_muldiv_flow.v riscv/tb_decode.v riscv/tb_forwarding.v riscv/tb_hazard.v riscv/tb_mem_wb_stage.v riscv/tb_id_ex_stage.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_core_coremark.v riscv/tb_soc_top.v riscv/tb_soc_check.v) ;;
-    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|decode|forwarding|hazard|mem_wb|id_ex|v1_flow|v1_mem|v1_muldiv_flow|muldiv|rv32im|imem|dmem|coremark|soc|soc_check|bench|all]"; exit 1 ;;
+    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_v1_mem.v riscv/tb_core_v1_muldiv_flow.v riscv/tb_decode.v riscv/tb_forwarding.v riscv/tb_hazard.v riscv/tb_mem_wb_stage.v riscv/tb_id_ex_stage.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_core_coremark.v riscv/tb_soc_top.v riscv/tb_soc_check.v) ;;
+    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|v1_fwd|v1_nofwd|decode|forwarding|hazard|mem_wb|id_ex|v1_flow|v1_mem|v1_muldiv_flow|muldiv|rv32im|imem|dmem|coremark|soc|soc_check|bench|all]"; exit 1 ;;
 esac
 
 cd "$(dirname "$0")/.."          # -> sim/
@@ -84,7 +89,7 @@ for tb in "${TBS[@]}"; do
     [ -f "$tb" ] || continue
     name=$(basename "$tb" .v)
     echo "== $name =="
-    iverilog -g2012 -Wall -s "$name" -o "build/$name.vvp" "$tb" "${RTL_FILES[@]}" || exit 1
+    iverilog -g2012 -Wall "${IVERILOG_ARGS[@]}" -s "$name" -o "build/$name.vvp" "$tb" "${RTL_FILES[@]}" || exit 1
     if [ "$name" = "tb_core_coremark" ]; then
         if [ "$MODE" = "bench" ]; then
             vvp "build/$name.vvp" "${BENCH_ARGS[@]}" || exit 1
@@ -100,6 +105,8 @@ for tb in "${TBS[@]}"; do
     fi
 done
 if [ "$MODE" = "all" ]; then
+    bash scripts/run_iverilog.sh v1_fwd || exit 1
+    bash scripts/run_iverilog.sh v1_nofwd || exit 1
     bash scripts/test_vision_gate.sh || exit 1
     bash scripts/run_vision_iverilog.sh all || exit 1
     bash scripts/run_vision_python.sh || exit 1
