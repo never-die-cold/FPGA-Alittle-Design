@@ -1,11 +1,12 @@
 `timescale 1ns / 1ps
-// tb_arch_test.v —— riscv-arch-test 签名比对 testbench（PYNQ-Z2 自研 v0 核）
+// tb_arch_test.v —— riscv-arch-test 签名比对 testbench（PYNQ-Z2 自研核）
 // 用法（由 sim/scripts/run_arch_test.sh 调用）：
 //   vvp tb_arch_test.vvp +hex=<镜像hex> +ref=<参考签名> +ref_len=<n> \
 //       +sig_start=<字节地址> +cycles=<n> +sig_out=<输出文件> +name=<测试名>
 // 语义：统一镜像同时预载 imem 与 dmem（数据区初值可见）；跑固定周期后读签名区，
 //       逐字比对参考签名，写 .signature.output；PASS/FAIL 自检（FAIL 非零退出）
 module tb_arch_test;
+    parameter [0:0] ENABLE_FORWARDING = 1'b1;
 
     localparam integer CLK_PERIOD   = 10;
     localparam integer RESET_CYCLES = 8;
@@ -24,7 +25,7 @@ module tb_arch_test;
     integer ref_len    = 0;
     integer run_cycles = 200000;
 
-    // ---- core_top 接口（design_v0.md §5.7）----
+    // ---- core_top 接口（v0/v1 对外端口保持一致）----
     wire [31:0] imem_addr;
     reg  [31:0] imem_rdata;
     wire [31:0] dmem_addr;
@@ -52,7 +53,7 @@ module tb_arch_test;
 
     always #(CLK_PERIOD / 2) clk = ~clk;
 
-    core_top dut (
+    core_top #(.ENABLE_FORWARDING(ENABLE_FORWARDING)) dut (
         .clk        (clk),
         .rst_n      (rst_n),
         .imem_addr  (imem_addr),
