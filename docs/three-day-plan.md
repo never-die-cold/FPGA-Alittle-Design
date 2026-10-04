@@ -63,7 +63,7 @@
 - 验证：`forwarding`、`hazard`、`v1_flow`、`all`；检查 `redirect && front_stall==0`。
 - 理解题：为什么 redirect 必须由 `ex_accept` 门控？EX/MEM/WB 三来源为何不是三级之外的新级？
 
-### D1.4 接入 muldiv 等待与统一写回（预计 60–85 行）
+### D1.4 接入 muldiv 等待与统一写回（D1.4a 已通过；D1.4b 待开始）
 
 - 改：`core_top.v` 实现单拍 start、粘滞 pending、start 拍立即 front stall、done 进 MEM+WB。
 - tb：扩 `tb_core_v1_flow.v`，统计 start=1 次、等待期 0 次提交、结果写回 1 次、紧随消费者正确。
@@ -149,6 +149,9 @@
 - D1.2b（已通过）：`sb` 的 byte enable 如何选择 offset 0/2/3 对应字节车道？
 - D1.2b（已通过）：`lb` 与 `lbu` 为什么分别执行符号扩展和零扩展？
 - D1.2b（已通过）：复位期零写与全程恰好 11 次写如何抓漏提交和重复提交？
+- D1.4a（已通过）：为什么 start 当拍必须立即 `front_stall=1`，不能等 `busy`？
+- D1.4a（已通过）：为什么等待期 `mem_valid=0`，但较老的 x2 仍应恰好提交一次？
+- D1.4a（已通过）：为什么 done 被接受前 `muldiv_pending` 必须保持为 1？
 
 ## 7. 用户回来后必须拍板 / 回答
 
