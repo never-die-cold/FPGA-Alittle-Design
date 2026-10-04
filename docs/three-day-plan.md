@@ -47,7 +47,7 @@
 - 交付：最小失败日志落 `data/logs/<date>-partB-v1/`。
 - 理解题：为何气泡必须用 `valid=0`？为何 stall 不能 hold MEM+WB？
 
-### D1.2 接入提交边界与唯一副作用点（D1.2a 已完成；宽度专项待 D1.2b）
+### D1.2 接入提交边界与唯一副作用点（✅ D1.2a/b 已验证并通过理解门槛）
 
 - 改：`core_top.v` 增默认开启的 `ENABLE_FORWARDING`；例化 `mem_wb_stage`；把 regfile/DMEM
   写使能收敛到 `mem_valid`；load 扩展和 store lane 使用寄存后的地址/数据。
@@ -146,6 +146,9 @@
 - D1.3b（已通过）：为什么组合 `id_ex_stage` 不会增加第四级？
 - D1.3b（已通过）：为什么 `branch_taken/jump_taken` 仍必须经过 hazard 的 `ex_accept`？
 - D1.3b（已通过）：为什么 store data 必须用转发后的 rs2 并捕获进 MEM+WB？
+- D1.2b（已通过）：`sb` 的 byte enable 如何选择 offset 0/2/3 对应字节车道？
+- D1.2b（已通过）：`lb` 与 `lbu` 为什么分别执行符号扩展和零扩展？
+- D1.2b（已通过）：复位期零写与全程恰好 11 次写如何抓漏提交和重复提交？
 
 ## 7. 用户回来后必须拍板 / 回答
 

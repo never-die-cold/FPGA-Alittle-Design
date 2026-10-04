@@ -9,6 +9,7 @@
 #   bash sim/scripts/run_iverilog.sh hazard    # 冒险与重定向控制自检
 #   bash sim/scripts/run_iverilog.sh mem_wb    # MEM+WB 边界寄存器自检
 #   bash sim/scripts/run_iverilog.sh id_ex     # ID+EX 组合级自检
+#   bash sim/scripts/run_iverilog.sh v1_mem    # v1 整核访存宽度与扩展自检
 #   bash sim/scripts/run_iverilog.sh muldiv   # RV32M 乘除单元模块级自检
 #   bash sim/scripts/run_iverilog.sh rv32im   # RV32IM 固件整核冒烟
 #   bash sim/scripts/run_iverilog.sh imem     # 32KB 同步读指令存储器模块级自检
@@ -36,6 +37,7 @@ case "$MODE" in
     mem_wb) TBS=(riscv/tb_mem_wb_stage.v) ;;
     id_ex) TBS=(riscv/tb_id_ex_stage.v) ;;
     v1_flow) TBS=(riscv/tb_core_v1_flow.v) ;;
+    v1_mem) TBS=(riscv/tb_core_v1_mem.v) ;;
     muldiv) TBS=(riscv/tb_muldiv.v) ;;
     rv32im) TBS=(riscv/tb_core_muldiv.v) ;;
     imem) TBS=(riscv/tb_imem.v) ;;
@@ -44,8 +46,8 @@ case "$MODE" in
     soc) TBS=(riscv/tb_soc_top.v) ;;
     soc_check) TBS=(riscv/tb_soc_check.v) ;;
     bench) TBS=(riscv/tb_core_coremark.v) ;;
-    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_fwd.v riscv/tb_decode.v riscv/tb_forwarding.v riscv/tb_hazard.v riscv/tb_mem_wb_stage.v riscv/tb_id_ex_stage.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_core_coremark.v riscv/tb_soc_top.v riscv/tb_soc_check.v) ;;
-    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|decode|forwarding|hazard|mem_wb|id_ex|v1_flow|muldiv|rv32im|imem|dmem|coremark|soc|soc_check|bench|all]"; exit 1 ;;
+    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_fwd.v riscv/tb_core_v1_mem.v riscv/tb_decode.v riscv/tb_forwarding.v riscv/tb_hazard.v riscv/tb_mem_wb_stage.v riscv/tb_id_ex_stage.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_core_coremark.v riscv/tb_soc_top.v riscv/tb_soc_check.v) ;;
+    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|decode|forwarding|hazard|mem_wb|id_ex|v1_flow|v1_mem|muldiv|rv32im|imem|dmem|coremark|soc|soc_check|bench|all]"; exit 1 ;;
 esac
 
 cd "$(dirname "$0")/.."          # -> sim/
