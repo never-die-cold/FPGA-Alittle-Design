@@ -104,7 +104,7 @@
 
 ## 4. D3：CPI、跨工具、时序与交付证据
 
-### D3.1 冻结 retire/CPI 口径（D3.1a ✅ 口径自检及理解门槛通过）
+### D3.1 冻结 retire/CPI 口径（D3.1a ✅；D3.1b 实测 8.14%，25% 门禁未通过）
 
 - 改：`tb_core_coremark.v` 改按 `dut.wb_valid` 计 retired；同一 tb/hex/终止条件跑两档；
   `cpi_harness.py` 只在输出格式确需适配时修改。
