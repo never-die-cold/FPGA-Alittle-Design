@@ -15,6 +15,8 @@
 #   bash sim/scripts/run_iverilog.sh id_ex     # ID+EX 组合级自检
 #   bash sim/scripts/run_iverilog.sh v1_mem    # v1 整核访存宽度与扩展自检
 #   bash sim/scripts/run_iverilog.sh v1_muldiv_flow # v1 M 启动/等待流控自检
+#   bash sim/scripts/run_iverilog.sh v1_muldiv_fwd   # v1 M 流控，转发开启
+#   bash sim/scripts/run_iverilog.sh v1_muldiv_nofwd # v1 M 流控，转发关闭
 #   bash sim/scripts/run_iverilog.sh muldiv   # RV32M 乘除单元模块级自检
 #   bash sim/scripts/run_iverilog.sh rv32im   # RV32IM 固件整核冒烟
 #   bash sim/scripts/run_iverilog.sh imem     # 32KB 同步读指令存储器模块级自检
@@ -49,6 +51,8 @@ case "$MODE" in
     v1_flow) TBS=(riscv/tb_core_v1_flow.v) ;;
     v1_mem) TBS=(riscv/tb_core_v1_mem.v) ;;
     v1_muldiv_flow) TBS=(riscv/tb_core_v1_muldiv_flow.v) ;;
+    v1_muldiv_fwd) TBS=(riscv/tb_core_v1_muldiv_flow.v); IVERILOG_ARGS=(-Ptb_core_v1_muldiv_flow.ENABLE_FORWARDING=1) ;;
+    v1_muldiv_nofwd) TBS=(riscv/tb_core_v1_muldiv_flow.v); IVERILOG_ARGS=(-Ptb_core_v1_muldiv_flow.ENABLE_FORWARDING=0) ;;
     muldiv) TBS=(riscv/tb_muldiv.v) ;;
     rv32im) TBS=(riscv/tb_core_muldiv.v) ;;
     imem) TBS=(riscv/tb_imem.v) ;;
@@ -57,8 +61,8 @@ case "$MODE" in
     soc) TBS=(riscv/tb_soc_top.v) ;;
     soc_check) TBS=(riscv/tb_soc_check.v) ;;
     bench) TBS=(riscv/tb_core_coremark.v) ;;
-    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_v1_mem.v riscv/tb_core_v1_muldiv_flow.v riscv/tb_decode.v riscv/tb_forwarding.v riscv/tb_hazard.v riscv/tb_mem_wb_stage.v riscv/tb_id_ex_stage.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_core_coremark.v riscv/tb_soc_top.v riscv/tb_soc_check.v) ;;
-    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|v1_fwd|v1_nofwd|v1_hazard_fwd|v1_hazard_nofwd|decode|forwarding|hazard|mem_wb|id_ex|v1_flow|v1_mem|v1_muldiv_flow|muldiv|rv32im|imem|dmem|coremark|soc|soc_check|bench|all]"; exit 1 ;;
+    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_v1_mem.v riscv/tb_decode.v riscv/tb_forwarding.v riscv/tb_hazard.v riscv/tb_mem_wb_stage.v riscv/tb_id_ex_stage.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_core_coremark.v riscv/tb_soc_top.v riscv/tb_soc_check.v) ;;
+    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|v1_fwd|v1_nofwd|v1_hazard_fwd|v1_hazard_nofwd|v1_muldiv_fwd|v1_muldiv_nofwd|decode|forwarding|hazard|mem_wb|id_ex|v1_flow|v1_mem|v1_muldiv_flow|muldiv|rv32im|imem|dmem|coremark|soc|soc_check|bench|all]"; exit 1 ;;
 esac
 
 cd "$(dirname "$0")/.."          # -> sim/
@@ -113,6 +117,8 @@ if [ "$MODE" = "all" ]; then
     bash scripts/run_iverilog.sh v1_nofwd || exit 1
     bash scripts/run_iverilog.sh v1_hazard_fwd || exit 1
     bash scripts/run_iverilog.sh v1_hazard_nofwd || exit 1
+    bash scripts/run_iverilog.sh v1_muldiv_fwd || exit 1
+    bash scripts/run_iverilog.sh v1_muldiv_nofwd || exit 1
     bash scripts/test_vision_gate.sh || exit 1
     bash scripts/run_vision_iverilog.sh all || exit 1
     bash scripts/run_vision_python.sh || exit 1

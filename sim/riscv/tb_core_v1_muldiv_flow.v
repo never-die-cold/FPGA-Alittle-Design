@@ -1,6 +1,7 @@
 `timescale 1ns / 1ps
-// D1.4a: observe single start, immediate front stall and MEM+WB drain.
+// D1.4/D2.2b: single M flow plus forwarding on/off RAW boundaries.
 module tb_core_v1_muldiv_flow;
+    parameter [0:0] ENABLE_FORWARDING = 1'b1;
     reg clk = 0, rst_n = 0;
     reg [31:0] imem_rdata;
     wire [31:0] imem_addr, dmem_addr, dmem_wdata;
@@ -9,14 +10,14 @@ module tb_core_v1_muldiv_flow;
     reg [31:0] imem [0:8191];
     integer i, cycles = 0, starts = 0, busy_cycles = 0;
     integer dones = 0, x2_writes = 0, x3_writes = 0, x4_writes = 0;
-    integer data_stalls = 0, errors = 0;
+    integer data_stalls = 0, pre_stalls = 0, post_stalls = 0, errors = 0;
     reg [31:0] held_pc;
     reg started = 0;
 
     always #5 clk = ~clk;
     always @(posedge clk) imem_rdata <= imem[imem_addr[14:2]];
 
-    core_top #(.ENABLE_FORWARDING(1'b1)) dut (
+    core_top #(.ENABLE_FORWARDING(ENABLE_FORWARDING)) dut (
         .clk(clk), .rst_n(rst_n), .imem_addr(imem_addr), .imem_rdata(imem_rdata),
         .dmem_addr(dmem_addr), .dmem_wdata(dmem_wdata), .dmem_be(dmem_be),
         .dmem_we(dmem_we), .dmem_rdata(32'd0)
@@ -62,7 +63,14 @@ module tb_core_v1_muldiv_flow;
             x4_writes = x4_writes + 1;
             if (dut.wb_data !== 32'd22) begin $display("FAIL: x4 data=%0d", dut.wb_data); errors = errors + 1; end
         end
-        if (dut.data_stall) data_stalls = data_stalls + 1;
+        if (dut.data_stall) begin
+            data_stalls = data_stalls + 1;
+            if (!started) pre_stalls = pre_stalls + 1;
+            else post_stalls = post_stalls + 1;
+            if (dut.muldiv_start || !dut.front_stall || dut.mem_in_valid) begin
+                $display("FAIL: RAW stall leaked start/accept"); errors = errors + 1;
+            end
+        end
     end
 
     initial begin
@@ -80,10 +88,16 @@ module tb_core_v1_muldiv_flow;
         if (x2_writes != 1) begin $display("FAIL: old x2 commit expected 1 got %0d", x2_writes); errors = errors + 1; end
         if (x3_writes != 1) begin $display("FAIL: x3 writes expected 1 got %0d", x3_writes); errors = errors + 1; end
         if (x4_writes != 1) begin $display("FAIL: x4 writes expected 1 got %0d", x4_writes); errors = errors + 1; end
-        if (data_stalls != 0) begin $display("FAIL: unexpected data stalls=%0d", data_stalls); errors = errors + 1; end
+        if (ENABLE_FORWARDING && (data_stalls != 0 || pre_stalls != 0 || post_stalls != 0)) begin
+            $display("FAIL: fwd stalls total/pre/post=%0d/%0d/%0d", data_stalls, pre_stalls, post_stalls); errors = errors + 1;
+        end
+        if (!ENABLE_FORWARDING && (data_stalls != 2 || pre_stalls != 1 || post_stalls != 1)) begin
+            $display("FAIL: nofwd stalls total/pre/post=%0d/%0d/%0d", data_stalls, pre_stalls, post_stalls); errors = errors + 1;
+        end
         if (errors == 0)
-            $display("PASS: v1 muldiv flow start=%0d busy=%0d done=%0d x2/x3/x4=%0d/%0d/%0d stalls=%0d",
-                     starts, busy_cycles, dones, x2_writes, x3_writes, x4_writes, data_stalls);
+            $display("PASS: v1 muldiv mode=%0d start=%0d busy=%0d done=%0d x2/x3/x4=%0d/%0d/%0d stalls=%0d/%0d/%0d",
+                     ENABLE_FORWARDING, starts, busy_cycles, dones, x2_writes, x3_writes, x4_writes,
+                     data_stalls, pre_stalls, post_stalls);
         else $fatal(1, "FAIL: v1 muldiv flow errors=%0d", errors);
         $finish;
     end
