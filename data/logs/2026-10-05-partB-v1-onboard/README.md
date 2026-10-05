@@ -67,9 +67,27 @@ PASS: RISC-V XSim mode all
 | BTN0 按下 | `0000` | ✅ `0000` |
 | BTN0 松开 | 依赖旧 DMEM（契约 §4 允许） | `0001`（与 Part A 一致） |
 
+## 结果 5：v1 核 OOC Fmax（约束递减收敛，M4 前置口径）
+
+方法：`build/build_fmax.tcl`（OOC post-route、默认 directive、同器件/Vivado，`Fmax = 1/(period − WNS)`），与 v0 基线同法可比（`docs/core_comparison.md` §3）。
+
+| period (ns) | WNS (ns) | 报告 Fmax (MHz) |
+|:---:|:---:|:---:|
+| 15.000 | +1.342 | 73.2 |
+| 13.700 | +0.464 | 75.6 |
+| 13.200 | +0.301 | 77.5 |
+| 12.500 | +0.312 | 82.0 |
+| 12.150 | −0.152 | 81.3 |
+| 10.000 | −1.935 | 83.8 |
+
+- 过零点在 **12.5 ns（+0.312）与 12.15 ns（−0.152）之间**，约 **12.3 ns** → **v1 core Fmax ≈ 81 MHz**。
+- 对比 v0 基线 **86.8 MHz**（tag `partA-v0`）→ **v1 主频略降**（与"优化不如预期"一致）。
+- 原始日志：`fmax/v1_*.log`；报告：`build/reports/fmax/v1_*`（构建设备，不入本目录）。
+
 ## 结论
 
 - **v1 三级流水功能"优化不改语义"**：XSim 两档全 PASS，上板 LED = `1101`（与 v0 一致）→ **v1 已上板 PASS**（40 MHz 档）。
+- **Fmax**：v1 核 OOC ≈ **81 MHz**（v0 基线 86.8 MHz，略降）；SoC 40 MHz 档通过、125 MHz 档 FAIL。
 - **时序**：40 MHz 档 WNS +4.850 通过；**125 MHz 档 FAIL 保留**（非阻塞加分项，未达标）。
 - 已知（团队/bench）：转发 CPI 增益 **8.14%**，原 25% 门禁 FAIL 保留，新门禁 ≥8.0%。
 
@@ -78,8 +96,9 @@ PASS: RISC-V XSim mode all
 1. `git switch` 到 `dev/rtl@85b94a5`
 2. 功能：`sim\scripts\run_riscv_xsim.bat all`
 3. 构建：`vivado -mode batch -source build/build_soc.tcl -tclargs 40`（及 `125`）
-4. 上板：`board\scripts\program_soc.bat build\run\soc_40mhz\pynq_z2_soc_40mhz.bit`
-5. 观察 LED = `1101`
+4. Fmax：`vivado -mode batch -source build/build_fmax.tcl -tclargs core_top <label> <period_ns> src\riscv`（逐轮收紧周期至过零）
+5. 上板：`board\scripts\program_soc.bat build\run\soc_40mhz\pynq_z2_soc_40mhz.bit`
+6. 观察 LED = `1101`
 
 ## 边界
 
