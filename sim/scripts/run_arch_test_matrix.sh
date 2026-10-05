@@ -16,6 +16,8 @@ prefix="${RISCV_PREFIX:-riscv32-unknown-elf-}"
 if ! command -v "${prefix}gcc" >/dev/null 2>&1; then prefix="riscv64-unknown-elf-"; fi
 {
     echo "repo_commit=$(git -C "$repo" rev-parse HEAD)"
+    printf "rtl_sim_diff_sha256="
+    git -C "$repo" diff -- src/riscv sim/riscv sim/scripts | sha256sum | cut -d' ' -f1
     echo "suite_commit=$(git -C "$suite" rev-parse HEAD)"
     "${prefix}gcc" --version | head -n 1
     iverilog -V 2>&1 | head -n 1

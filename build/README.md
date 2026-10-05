@@ -15,6 +15,17 @@ Vivado 构建脚本与综合/实现报告，保证工程可由他人从零复现
 vivado -mode batch -source build/build.tcl
 ```
 
+Part B SoC 双频档从仓库根目录运行；两档使用同一 RTL/XDC，只改变顶层分频参数：
+
+```bat
+D:\vivado\2026.1\Vivado\bin\vivado.bat -mode batch -source build/build_soc.tcl -tclargs 40
+D:\vivado\2026.1\Vivado\bin\vivado.bat -mode batch -source build/build_soc.tcl -tclargs 125
+```
+
+报告分别写入 `build/reports/soc_40mhz/` 与 `soc_125mhz/`，位流分别写入
+`build/run/soc_40mhz/` 与 `soc_125mhz/`。脚本在时钟对象、未约束路径、WNS 或 DRC
+门禁失败时停止，不生成该档位流。125 MHz 未过只能记录实际结果，不能写成已达标。
+
 > v0 核暂无板级顶层，采用 **out_of_context（OOC）** 模式做核级基线：
 > 直接做含 I/O 的实现会因顶层端口（166）超过 CLG400 可用引脚（125）而报 Place 30-58；
 > bitstream 流程待 SoC 顶层就位后（M3）再挂接。

@@ -83,7 +83,7 @@ module tb_core_v1_muldiv_flow;
         repeat (4) @(posedge clk); rst_n = 1;
         repeat (100) @(posedge clk); #1;
         if (starts != 1) begin $display("FAIL: starts expected 1 got %0d", starts); errors = errors + 1; end
-        if (busy_cycles != 32) begin $display("FAIL: busy cycles expected 32 got %0d", busy_cycles); errors = errors + 1; end
+        if (busy_cycles != 16) begin $display("FAIL: busy cycles expected 16 got %0d", busy_cycles); errors = errors + 1; end
         if (dones != 1) begin $display("FAIL: done pulses expected 1 got %0d", dones); errors = errors + 1; end
         if (x2_writes != 1) begin $display("FAIL: old x2 commit expected 1 got %0d", x2_writes); errors = errors + 1; end
         if (x3_writes != 1) begin $display("FAIL: x3 writes expected 1 got %0d", x3_writes); errors = errors + 1; end

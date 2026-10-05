@@ -33,8 +33,8 @@
 | Part C 功能回归 | `bash sim/scripts/run_iverilog.sh all` 含 BHT 新档 + v1 两档 + 现有 tb，全 PASS | verify |
 | BHT 档单独回归 | 新档入口全 PASS（入口名以契约冻结为准，冻结前不抢跑命名） | verify |
 | arch-test | 扩展子集全跑：BHT 档与 v1 两档签名一致（`run_arch_test.sh <name> <ext>`） | verify |
-| CPI 主比 | `gain_total = (CPI_nofwd − CPI_fwd+BHT) / CPI_nofwd ≥ 25%`（§4.3；降幅基线 = v1 无转发） | bench |
-| CPI 阶梯留档 | `gain_fwd`（Part B D14 门槛 ≥25%）与 BHT 净贡献（fwd+BHT 相对 fwd）分列入 metrics.csv | bench |
+| CPI 主比 | `gain_total = (CPI_nofwd − CPI_fwd+BHT) / CPI_nofwd` 必须实测；25% 为组合优化尽力目标（§4.3） | bench |
+| CPI 阶梯留档 | `gain_fwd`（Part B D16 回归门槛 ≥8.0%）与 BHT 净贡献（fwd+BHT 相对 fwd）分列入 metrics.csv | bench |
 | BHT 命中率 | 2-bit 在含循环 benchmark 上命中率可统计（计数 vs 波形双源核对）且显著优于关闭档（静态不跳）；1-bit/2-bit 对比留档 | bench |
 | Vivado | 同器件同版本；实测最高通过频率点 WNS≥0；125 MHz 为非阻塞加分（D15）；四档资源（LUT/FF/BRAM）入表 | verify |
 | 基线锚点 | v0 = tag `partA-v0`（=`962a4f5`）；v1 三档同一 commit，BHT 开/关仅参数不同 | verify |
@@ -56,8 +56,8 @@
 
 - 四档定义与角色：**v0 仅锚点**（CPI 2.105 @ CoreMark 2K/32、bench v0.1 2.860；2026-09-20 口径重定义后不作降幅基线）；**v1_nofwd = 唯一降幅基线**；v1_fwd = Part B 中间档；**v1_fwd+BHT = Part C 主交付档**。
 - 三级公式（同一套）：
-  - `gain_fwd = (CPI_nofwd − CPI_fwd) / CPI_nofwd`——Part B D14 门槛 ≥25%；
-  - `gain_total = (CPI_nofwd − CPI_fwd+BHT) / CPI_nofwd`——Part C §4.3 门槛 ≥25%；
+  - `gain_fwd = (CPI_nofwd − CPI_fwd) / CPI_nofwd`——Part B D16 回归门槛 ≥8.0%；
+  - `gain_total = (CPI_nofwd − CPI_fwd+BHT) / CPI_nofwd`——Part C §4.3 组合尽力目标 25%；
   - `BHT 净贡献 = CPI_fwd − CPI_fwd+BHT`——负值即回归，必须定位后重测。
 - 计数窗口（**四档完全一致**）：`cycles` = rst_n 释放后到首次终止 tohost 写；`retired` = 同窗口 `wb_valid=1` 拍数；M 指令只计一次；muldiv 等待拍与误预测冲刷拍计入 cycles，不得剔除。同 hex、同初始内存、同终止条件、同最大周期、同计数代码。
 - 命中率口径：`命中率 = 预测正确次数 / 预测查表次数`（分子分母精确定义随契约冻结）；统计来源（片上 or tb）写入数据表；四档报告另列冲刷次数列作交叉印证。

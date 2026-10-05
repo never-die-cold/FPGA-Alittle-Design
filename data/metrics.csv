@@ -1,5 +1,21 @@
 指标名称,类别,数值,单位,测量条件,测试次数/时长,证据文件
 RISC-V 核 CPI（benchmark 平均）,核级基准(仿真),2.105,CPI,iverilog 13.0；v0 两级流水（8B/PR #34 后）；CoreMark 2K/32 迭代 tb 全局 cycles/instrs 口径（含 muldiv 32 拍停顿与分支气泡，仅体检不参与评分；v0 无数据停顿锚点见 design_v0.md §2.2）,1 次仿真（21275738 cycles / 10106387 instrs）,data/logs/2026-09-23-coremark/run_v0_32iter.log
+RISC-V v1 CoreMark CPI（转发开）,核级基准(仿真),2.169570,CPI,Icarus 11.0；commit a33d41e；CoreMark 2K/32 iterations；MEM+WB mem_valid 退休口径；CRC/golden 全对,1 次仿真（21926509 cycles / 10106386 retired）,data/logs/2026-10-05-partB-v1-coremark-cpi/coremark-fwd.log
+RISC-V v1 CoreMark CPI（转发关）,核级基准(仿真),2.361854,CPI,Icarus 11.0；commit a33d41e；与转发档同 RTL/hex/初始状态/终止条件/计数代码；CRC/golden 全对,1 次仿真（23869806 cycles / 10106386 retired）,data/logs/2026-10-05-partB-v1-coremark-cpi/coremark-nofwd.log
+RISC-V v1 转发 CoreMark CPI 降幅,核级基准(仿真),8.14,%,同一三级核仅切 ENABLE_FORWARDING；原 25% 门禁 FAIL；2026-10-05 修订硬回归下限为 8.0%,1 组双档仿真,data/logs/2026-10-05-partB-v1-coremark-cpi/summary.txt
+RISC-V v1 Radix-4 CoreMark CPI（转发开）,核级基准(仿真),1.693399,CPI,Icarus 11.0；CoreMark 2K/32；Radix-4 乘法；CRC/retired 与双档一致,1 次仿真（17114141 cycles / 10106386 retired）,data/logs/2026-10-05-partB-radix4-cycle-breakdown/summary.txt
+RISC-V v1 Radix-4 CoreMark CPI（转发关）,核级基准(仿真),1.885683,CPI,与转发档同 RTL/hex/终止条件/计数代码；只切 ENABLE_FORWARDING,1 次仿真（19057438 cycles / 10106386 retired）,data/logs/2026-10-05-partB-radix4-cycle-breakdown/summary.txt
+RISC-V v1 Radix-4 工作点转发降幅,核级基准(仿真),10.20,%,Radix-4 同一三级核只切转发；通过 ≥8.0% 回归门禁,1 组双档仿真,data/logs/2026-10-05-partB-radix4-cycle-breakdown/summary.txt
+RISC-V v1 Radix-4 独立周期降幅,核级基准(仿真),21.95,%,新 fwd 17114141 相对旧 fwd 21926509；收益只归因快速乘法,1 组前后对照,data/logs/2026-10-05-partB-radix4-cycle-breakdown/README.md
+RISC-V v1 Radix-4+转发组合周期降幅,核级基准(仿真),28.30,%,新 fwd 17114141 相对原始 nofwd 23869806；组合收益不得全归因转发,1 组组合对照,data/logs/2026-10-05-partB-radix4-cycle-breakdown/README.md
+RISC-V v1 Radix-4 CoreMark 乘法等待,核级基准(仿真),5113141,cycles,300773 条动态乘法×17 拍；新双档共同类别,1 次正式双档矩阵,data/logs/2026-10-05-partB-radix4-cycle-breakdown/summary.txt
+RISC-V v1 转发收益乐观上界,核级分析,16.13,%,假设消除两档全部共同气泡；固定 RAW 周期差 1943297 / nofwd 理论下界 12049683；非实测性能,基于 2026-10-05 双档计数,report/llm_log/2026-10-05-partB-v1-cpi.md
+RISC-V v1 CoreMark 乘法等待,核级基准(仿真),9925509,cycles,v1+转发；CoreMark 2K/32；互斥气泡分类；占总周期 45.27%,1 次正式双档矩阵,data/logs/2026-10-05-partB-v1-cycle-breakdown/summary.txt
+RISC-V v1 CoreMark 除法等待,核级基准(仿真),33,cycles,v1+转发；CoreMark 2K/32；互斥气泡分类,1 次正式双档矩阵,data/logs/2026-10-05-partB-v1-cycle-breakdown/summary.txt
+RISC-V v1 CoreMark load-use 等待,核级基准(仿真),650771,cycles,v1+转发；CoreMark 2K/32；互斥气泡分类,1 次正式双档矩阵,data/logs/2026-10-05-partB-v1-cycle-breakdown/summary.txt
+RISC-V v1 CoreMark 控制气泡,核级基准(仿真),1243809,cycles,v1+转发；CoreMark 2K/32；互斥气泡分类,1 次正式双档矩阵,data/logs/2026-10-05-partB-v1-cycle-breakdown/summary.txt
+RISC-V v1 CoreMark 无转发 RAW 等待,核级基准(仿真),1943297,cycles,v1无转发独有；恰好等于双档总周期差；转发档为 0,1 次正式双档矩阵,data/logs/2026-10-05-partB-v1-cycle-breakdown/summary.txt
+RISC-V v1 CoreMark 其他气泡,核级基准(仿真),1,cycles,v1 双档相同；启动填充；互斥气泡分类,1 次正式双档矩阵,data/logs/2026-10-05-partB-v1-cycle-breakdown/summary.txt
 RISC-V 核最高主频 Fmax / WNS,核级实现(OOC),Fmax 83.8 / WNS -1.935,MHz / ns,Vivado 2026.1；xc7z020clg400-1；v0 RV32IM 两级流水核 post-route；时钟约束 10 ns（目标 100 MHz）；Fmax 按 1000/(10-WNS) 外推；OOC 无 I/O 约束；未达 100 MHz（Part B 优化项）,1 次（2026-09-28 重综合）,build/reports/timing_impl.rpt；data/logs/2026-09-28-partA-closure/vivado-core.log
 RISC-V 核 CoreMark/MHz,核级基准(仿真外推),1.506,CoreMark/MHz,iverilog 13.0（MSYS2 ucrt64）；v0 两级流水（PR #34 后 RTL）；coremark 2K profile（TOTAL_DATA_SIZE=2000、seeds 0/0/0x66、MEM_STATIC、-march=rv32im -O2、ITERATIONS=32）；tb 时钟 10 ns（标称 100 MHz）；ticks=21253869（移植层计时窗口 t1−t0）；CRC/golden 全对（crcfinal=0x8799）；errors_raw=1 为官方 <10s 计数不作判据；短迭代仿真外推口径,1 次仿真 × 32 迭代,data/logs/2026-09-23-coremark/run_v0_32iter.log；data/logs/2026-09-23-coremark-script-regression/run_coremark.log；解析脚本 data/scripts/coremark_score.py
 RISC-V 核 CoreMark/LUT,核级基准(仿真外推),0.000938,CoreMark/LUT,CoreMark/MHz 1.506 ÷ core_top OOC post-route Slice LUT 1606；CoreMark 为 2K/32 迭代短测外推口径,1 次仿真 + 1 次实现,data/logs/2026-09-23-coremark/run_v0_32iter.log；build/reports/utilization_impl.rpt

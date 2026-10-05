@@ -6,9 +6,11 @@
 set_property -dict {PACKAGE_PIN H16 IOSTANDARD LVCMOS33} [get_ports {clk}]
 create_clock -name sys_clk_125 -period 8.000 -waveform {0.000 4.000} [get_ports {clk}]
 
-# MMCME2_BASE：125 MHz * 8 / 25 = 40 MHz。
-create_generated_clock -name core_clk_40 \
-    -source [get_pins {u_mmcm/CLKIN1}] -multiply_by 8 -divide_by 25 \
+# build_soc.tcl 设置档位；单独读取 XDC 时安全回落到 40 MHz。
+if {![info exists core_clk_divide]} {set core_clk_divide 25}
+if {![info exists core_clk_name]}   {set core_clk_name core_clk_40}
+create_generated_clock -name $core_clk_name \
+    -source [get_pins {u_mmcm/CLKIN1}] -multiply_by 8 -divide_by $core_clk_divide \
     [get_pins {u_mmcm/CLKOUT0}]
 
 # BTN0：高电平按下；四个用户 LED：高电平点亮。

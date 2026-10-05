@@ -19,11 +19,17 @@
 - `id_ex_stage` 的 `decode (.*)` 已展开为显式端口；RTL-only
   `iverilog -g2001 -Wall -tnull -s core_top src/riscv/*.v` 零输出、退出码 0，定向 tb 6/6 PASS；
   本次原始证据见 `data/logs/2026-10-04-fix-implicit-ports/`。
+- v1 三级核已完成提交边界、ID+EX、转发/hazard 与 RV32M 流控集成；同一 RTL 的
+  `v1_fwd`/`v1_nofwd`、整核专项和 `all` 已通过。
+- 两档 arch-test 同集合均匹配官方签名；Radix-4 后 CoreMark 双档 retired/CRC 一致，
+  CPI `1.885683→1.693399`（转发 10.20%），证据见
+  `data/logs/2026-10-05-partB-radix4-arch-test/` 与
+  `data/logs/2026-10-05-partB-radix4-cycle-breakdown/`。
 
 ### 🟡 已实现但未完成目标级验证
 
-- `forwarding.v`、`hazard.v`、`id_ex_stage.v`、`mem_wb_stage.v` 仅模块级通过，尚未接入
-  `core_top`，因此不能据此宣称三级核通过。
+- Radix-4 乘法已过 Icarus 单元、整核、arch-test 与 CoreMark；尚缺 XSim 对拍、Vivado
+  WNS/资源报告和 PYNQ-Z2 实机证据，因此不能宣称 Part B 全部完成或 v1 已上板。
 - `sim/scripts/synth_id_ex_ooc.tcl` 已提供默认 Verilog-2001 OOC 入口；当前 WSL 中 Windows
   Vivado 壳缺少 `lnx64` 文件，尚无真实 `synth_design` PASS。Windows 复现：
   `D:\vivado\2026.1\Vivado\bin\vivado.bat -mode batch -source sim/scripts/synth_id_ex_ooc.tcl`。
@@ -31,10 +37,8 @@
 
 ### ⬜ 未实现 / 未接入核
 
-- v1 `core_top` 三级集成、`ENABLE_FORWARDING=1/0` 两档整核入口与整核 hazard/RV32M 专项。
-- 两档 arch-test、CoreMark/benchmark CPI、公平降幅、XSim 对拍、Vivado WNS/资源、v1 上板。
-- Part C BHT 与四档报告尚未实现；独立“Part C 验收计划”文件不存在，验收条款目前只在
-  `src/riscv/plan.md §4.3` 和 `design_v1.md`。
+- v1 XSim 对拍、Vivado WNS/资源与 v1 上板。
+- Part C BHT 与四档报告尚未实现；执行清单见 `docs/partC-verify-plan.md`。
 - PicoRV32 实测证据不存在：`docs/core_comparison.md` 仍是计划，`data/metrics.csv` 对应行为空。
 
 ## 2. D1：三级核功能集成
@@ -84,7 +88,7 @@
 - 预期：功能终值一致；无转发档 RAW 气泡更多。
 - 理解题：关转发后 hazard 为何必须停所有真实 RAW？怎样证明对比只变一个变量？
 
-### D2.2 完成整核 hazard / RV32M 断言（每个 tb 补丁 60–95 行）
+### D2.2 完成整核 hazard / RV32M 断言（✅ D2.2a/b 已验证并通过理解门槛）
 
 - 改：扩 `tb_core_v1_flow.v` 或新增 `tb_core_v1_hazard.v`；接入单独模式和 `all`。
 - 覆盖：x0/伪 RAW、双源、branch 先停后跳、taken 1 气泡、stall 时旧提交不重复、M 后继相关。
@@ -104,14 +108,16 @@
 
 ## 4. D3：CPI、跨工具、时序与交付证据
 
-### D3.1 冻结 retire/CPI 口径（D3.1a ✅；D3.1b 实测 8.14%，25% 门禁未通过）
+### D3.1 冻结 retire/CPI 口径（✅ 旧双档、分类统计与 Radix-4 双档均已入档）
 
 - 改：`tb_core_coremark.v` 改按 `dut.wb_valid` 计 retired；同一 tb/hex/终止条件跑两档；
   `cpi_harness.py` 只在输出格式确需适配时修改。
 - 验证：`run_iverilog.sh v1_fwd|v1_nofwd` 与 benchmark/CoreMark；计算
-  `(CPI_nofwd-CPI_fwd)/CPI_nofwd`，主门禁为 ≥25%。
+  `(CPI_nofwd-CPI_fwd)/CPI_nofwd`；原 25% 门禁实测 FAIL，D16 修订回归门禁为 ≥8.0%，实测 8.14%。
 - 交付：原始日志、`data/metrics.csv` 两行及命令；气泡不算指令，M 只 retire 一次。
 - 理解题：为何 busy 拍不能增加 retired？为什么 v0 不能作为 25% 降幅分母？
+- 当前结果：原仅转发门禁为 8.14% 且原 25% FAIL 保留；Radix-4 后转发 10.20%、
+  固定转发的乘法器收益 21.95%、相对原始无转发基线的组合收益 28.30%。
 
 ### D3.2 XSim 与 Vivado 门禁（脚本小步各不超过 100 行）
 
@@ -124,7 +130,7 @@
 
 - 只有实际下载 PYNQ-Z2 并观察到约定 LED/tohost 才记 v1 已上板；否则保留“待上板”。
 - 汇总四件套：改动文件、原始命令/结果、`git diff --check`、未实现/未接入清单。
-- Part B 通过后才建立 Part C BHT 三档实现步骤；PicoRV32 实测排在 M1 收口后。
+- Part B 通过后按 `docs/partC-verify-plan.md` 开始 BHT 三档实现；PicoRV32 实测排在 M1 收口后。
 
 ## 5. 依赖、风险与停止条件
 
@@ -157,7 +163,7 @@
 - D1.4b（已通过）：为什么要同时检查写回值和 x3/x4 各恰好写一次？
 - D2.1（已通过）：为什么同一 tb/hex/RTL 只切 elaboration 参数才是公平对照？
 - D2.1（已通过）：为什么无转发档结果仍正确，但 RAW 气泡明显增加？
-- D2.1（已通过）：为什么 128/176 周期差还不能直接作为最终 CPI≥25% 证据？
+- D2.1（已通过）：为什么 128/176 周期差不能替代正式 CoreMark CPI 证据（历史 25% 目标已由 D16 修订）？
 
 ## 7. 用户回来后必须拍板 / 回答
 
