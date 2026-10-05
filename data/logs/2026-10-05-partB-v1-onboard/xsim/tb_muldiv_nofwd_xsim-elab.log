@@ -1,0 +1,24 @@
+Vivado Simulator v2026.1
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: D:/vivado/2026.1/Vivado/bin/unwrapped/win64.o/xelab.exe work.tb_core_v1_muldiv_flow -generic_top ENABLE_FORWARDING=0 -s tb_muldiv_nofwd_xsim 
+Multi-threading is on. Using 12 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pc
+Compiling module work.if_stage
+Compiling module work.regfile
+Compiling module work.muldiv
+Compiling module work.forwarding
+Compiling module work.hazard
+Compiling module work.decode
+Compiling module work.alu
+Compiling module work.id_ex_stage
+Compiling module work.mem_wb_stage
+Compiling module work.core_top(ENABLE_FORWARDING=1'b0)
+Compiling module work.tb_core_v1_muldiv_flow(ENABLE_FO...
+Built simulation snapshot tb_muldiv_nofwd_xsim
