@@ -12,8 +12,10 @@ test_name="${1:-add-01}"
 device="${2:-I}"
 mode="${3:-fwd}"
 case "$mode" in
-    fwd) enable_forwarding=1 ;;
-    nofwd) enable_forwarding=0 ;;
+    fwd)   enable_forwarding=1; bht_mode=0 ;;
+    nofwd) enable_forwarding=0; bht_mode=0 ;;
+    bht1)  enable_forwarding=1; bht_mode=1 ;;
+    bht2)  enable_forwarding=1; bht_mode=2 ;;
     *) echo "ERROR: 转发模式必须是 fwd 或 nofwd，实际为 $mode" >&2; exit 1 ;;
 esac
 xl=32
@@ -98,7 +100,7 @@ echo "== [3/4] 镜像转换（bin -> hex）=="
 $PY "$repo/src/riscv_fw/bin2hex.py" "$work/$test_name.bin" "$work/$test_name.hex"
 
 echo "== [4/4] 仿真与签名比对（$cycles 周期）=="
-iverilog -g2012 -Ptb_arch_test.ENABLE_FORWARDING="$enable_forwarding" -s tb_arch_test \
+iverilog -g2012 -Ptb_arch_test.ENABLE_FORWARDING="$enable_forwarding" -Ptb_arch_test.BHT_MODE="$bht_mode" -s tb_arch_test \
     -o "$work/tb_arch_test.vvp" "$sim/riscv/tb_arch_test.v" "$repo"/src/riscv/*.v
 
 sig_out_abs="$work/rv${xl}i_m/$device/$test_name.$mode.signature.output"
