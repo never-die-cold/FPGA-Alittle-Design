@@ -25,8 +25,15 @@ python src/pynq_host/vision_mock_service.py
 sim/build/vision-client/dist/vision_preview/vision_preview.exe --mock --endpoint http://127.0.0.1:8765
 ```
 
-采集卡接入后的验收入口为 `vision_preview.exe --source 0`，按 q 或 Esc 退出。
+采集卡接入后的验收入口为 `vision_preview.exe --source 0`，按 q 或 Esc 退出，按 c 立即触发一轮检查。
 设备索引需现场确认。当前没有验证实际 UVC 格式、驱动与目标电脑兼容性。
+
+轮次叠加模式（契约见 [docs/vision-sync-protocol-decisions.md](../../docs/vision-sync-protocol-decisions.md)）：
+`--source 0 --endpoint http://<host>:8765` —— 采集卡视频 + 结果服务轮次叠加。启动握手失败立即
+退出；每 `--interval`（默认 0.5s，启动校验必须小于 `--max-age`，否则每轮结果在下轮触发前过期、
+画面周期性空窗）触发一轮 `POST /v1/check`；结果按 D3 判据（会话 + 配置号 + 年龄窗 `--max-age`
+默认 1.0s）有效才叠框，过期/断联撤框显示 WAITING；连续 3 次 HTTP 失败自动重新握手（D5）。
+横幅常显 `MOCK ONLY | ROUND n | age | targets`。
 
 ## 模拟接口 v1
 
@@ -34,8 +41,12 @@ sim/build/vision-client/dist/vision_preview/vision_preview.exe --mock --endpoint
 - GET `/v1/latest`：版本、session_id、frame_id、config_id、原图宽高、UTC Unix 时间戳、
   status=LOCATION_ONLY、目标序号和原图闭区间 bbox `[x0,y0,x1,y1]`；最多16目标。
 - POST `/v1/config`：JSON `{"control":3}`，只允许低四位；返回模拟 applied_config_id。
+- POST `/v1/check`（v1.1 新增）：触发一轮检查；body 可选 `{"trigger_ref":"..."}`（未知字段 400，
+  空 body 合法），返回带自增 check_id 的定位报文并回显 trigger_ref（D2）。`/v1/latest` 保留为
+  调试拉取口（帧号随轮询推进，携带当前 check_id）。
 - 不认识的路径404；错误 JSON/参数400。服务默认仅绑定127.0.0.1，且不访问 MMIO。
 
-`vision_protocol.py` 验证类型、坐标、编号和状态。帧关联必须同时匹配会话、帧号、配置号，
-并检查过期时间；复位/重连需要新会话。设备服务尚未实现，这里的立即确认只模拟 API 形态，
-真实 PS 配置仍必须用 `VisionRegs.commit()` 等待 R12 生效。
+`vision_protocol.py` 验证类型、坐标、编号和状态。结果有效性按 D3 = 会话 + 配置号 + 年龄窗
+（frame_id 只透传展示、不参与匹配——EXE 无法把结果帧号对应到采集卡画面）；复位/重连需要新会话。
+设备服务尚未实现，这里的立即确认只模拟 API 形态，真实 PS 配置仍必须用 `VisionRegs.commit()`
+等待 R12 生效（NC 负责，见决策单 D7）。
