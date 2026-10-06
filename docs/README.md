@@ -36,6 +36,7 @@
 | RISC-V 核专项计划与看板 | `src/riscv/plan.md`、`src/riscv/plan_calendar.md` |
 | Part B 验证与验收执行清单 | `docs/partB-verify-plan.md` |
 | 模块三训练与量化前期 | `docs/module3-model-training.md` |
+| 视频/结果同步协议决策单 | `docs/vision-sync-protocol-decisions.md` |
 | 接口定义（唯一权威） | `src/riscv/design_v0.md` |
 | 指标数值 | `data/metrics.csv` |
 | 证据（golden、源码溯源） | `data/evidence/`、`data/golden/` |

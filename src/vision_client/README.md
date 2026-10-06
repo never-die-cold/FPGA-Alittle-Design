@@ -9,7 +9,9 @@
 Windows PowerShell，仓库根目录：
 
 ```powershell
-pwsh -File sim/scripts/build_vision_client.ps1 -Python python
+# pwsh 7 未安装时用 Windows PowerShell 5.1（脚本兼容）；-ExecutionPolicy Bypass 仅对本次调用放行。
+# python 命令若被微软商店占位 stub 占用（where python 指向 WindowsApps），用 py 启动器指向真实解释器。
+powershell -ExecutionPolicy Bypass -File sim/scripts/build_vision_client.ps1 -Python py
 sim/build/vision-client/dist/vision_preview/vision_preview.exe --selftest
 sim/build/vision-client/dist/vision_preview/vision_preview.exe --mock
 ```
