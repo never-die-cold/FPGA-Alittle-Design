@@ -1,11 +1,21 @@
-"""M2 interface prototype: mock location packets, never classification/check verdicts."""
+"""M2 interface prototype: mock location packets, never classification/check verdicts.
+
+schema v1.1（docs/vision-sync-protocol-decisions.md D2/D3/D6）：
+- 新增必填 check_id：检查轮次标识，服务端生成、uint32 单调回绕（D2）。
+- trigger_ref 可选回显字段：EXE 触发时携带，服务端原样返回（D2）。
+- 有效性判据（D3）= session_id + config_id + created_at 年龄；frame_id 仅透传展示，
+  不参与匹配——EXE 无法把结果帧号对应到采集卡画面（决策单 §1）。
+"""
 import math
 import time
 
 VERSION = 1
+MAX_TARGETS = 16
+MAX_TRIGGER_REF_LEN = 64
 
 
 def uint(value, name):
+    """uint32 校验。type() is 严格判型：bool 是 int 的子类，用 type() 挡住 True/False 冒充 0/1。"""
     if type(value) is not int or not 0 <= value <= 0xFFFFFFFF:
         raise ValueError(f"invalid {name}")
     return value
@@ -16,8 +26,11 @@ def validate_packet(packet):
         raise ValueError("only explicitly marked M2 mock packets are supported")
     if not isinstance(packet.get("session_id"), str) or not packet["session_id"]:
         raise ValueError("missing session_id")
-    for name in ("frame_id", "config_id"):
+    for name in ("frame_id", "config_id", "check_id"):
         uint(packet.get(name), name)
+    ref = packet.get("trigger_ref")
+    if ref is not None and (not isinstance(ref, str) or not 0 < len(ref) <= MAX_TRIGGER_REF_LEN):
+        raise ValueError("invalid trigger_ref")
     w, h = packet.get("width"), packet.get("height")
     if type(w) is not int or type(h) is not int or not (1 <= w <= 4096 and 1 <= h <= 2160):
         raise ValueError("invalid dimensions")
@@ -26,7 +39,7 @@ def validate_packet(packet):
         raise ValueError("invalid timestamp")
     if packet.get("status") != "LOCATION_ONLY" or not isinstance(packet.get("targets"), list):
         raise ValueError("not a location-only packet")
-    if len(packet["targets"]) > 16:
+    if len(packet["targets"]) > MAX_TARGETS:
         raise ValueError("target limit")
     ids = set()
     for target in packet["targets"]:
@@ -45,16 +58,21 @@ def validate_packet(packet):
     return packet
 
 
-def mock_packet(session_id, frame_id, config_id):
-    return validate_packet({"version": VERSION, "mode": "MOCK", "session_id": session_id,
-        "frame_id": frame_id, "config_id": config_id, "width": 1280, "height": 720,
+def mock_packet(session_id, frame_id, config_id, check_id, trigger_ref=None):
+    payload = {"version": VERSION, "mode": "MOCK", "session_id": session_id,
+        "frame_id": frame_id, "config_id": config_id, "check_id": check_id,
+        "width": 1280, "height": 720,
         "created_at": time.time(), "status": "LOCATION_ONLY",
         "targets": [{"target_id": 0, "bbox": [180, 170, 339, 289]},
-                    {"target_id": 1, "bbox": [730, 400, 929, 559]}]})
+                    {"target_id": 1, "bbox": [730, 400, 929, 559]}]}
+    if trigger_ref is not None:
+        payload["trigger_ref"] = trigger_ref
+    return validate_packet(payload)
 
 
-def is_current(packet, session_id, frame_id, config_id, max_age=1.0):
+def is_current(packet, session_id, config_id, max_age=1.0):
+    """D3 判据：会话一致 + 配置一致 + 年龄窗内。frame_id 不参与匹配。"""
     validate_packet(packet)
     age = time.time() - packet["created_at"]
-    return (packet["session_id"] == session_id and packet["frame_id"] == frame_id
-            and packet["config_id"] == config_id and 0 <= age <= max_age)
+    return (packet["session_id"] == session_id and packet["config_id"] == config_id
+            and 0 <= age <= max_age)

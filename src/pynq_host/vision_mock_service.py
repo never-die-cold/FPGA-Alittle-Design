@@ -1,7 +1,10 @@
 """Local M2 API mock. No MMIO, board access, inference or batch counting.
 
 默认绑定 127.0.0.1；--host 0.0.0.0 供 EXE 远程联调（服务托管在他机，如 Pi）时使用。
-mock 结果仅供界面联调，不代表板上识别（plan.md §3.4）。"""
+mock 结果仅供界面联调，不代表板上识别（plan.md §3.4）。
+schema v1.1（docs/vision-sync-protocol-decisions.md）：POST /v1/check 触发一轮检查，
+check_id 单调回绕；/v1/latest 保留为调试拉取口（帧号随轮询推进，携带当前 check_id）。
+"""
 import argparse
 import json
 import threading
@@ -15,13 +18,22 @@ class State:
         self.session_id = str(uuid.uuid4())
         self.config_id = 0
         self.frame_id = 0
+        self.check_id = 0
         self.control = 0
         self.lock = threading.Lock()
 
     def latest(self):
         with self.lock:
             self.frame_id = (self.frame_id + 1) & 0xFFFFFFFF
-            return mock_packet(self.session_id, self.frame_id, self.config_id)
+            return mock_packet(self.session_id, self.frame_id, self.config_id, self.check_id)
+
+    def check(self, trigger_ref):
+        """D2：一轮检查 = 触发一次 → 抓一帧快照 → 回包（mock 即时完成）。"""
+        with self.lock:
+            self.frame_id = (self.frame_id + 1) & 0xFFFFFFFF
+            self.check_id = (self.check_id + 1) & 0xFFFFFFFF
+            return mock_packet(self.session_id, self.frame_id, self.config_id,
+                               self.check_id, trigger_ref)
 
     def configure(self, request):
         if not isinstance(request, dict) or set(request) != {"control"}:
@@ -35,6 +47,19 @@ class State:
             return {"mode": "MOCK", "applied_config_id": self.config_id}
 
 
+def parse_trigger_ref(body):
+    """请求体可选：无 body / {} / {"trigger_ref": "..."}；未知字段拒绝（D6 严格校验）。"""
+    if not body:
+        return None
+    request = json.loads(body)
+    if not isinstance(request, dict) or set(request) - {"trigger_ref"}:
+        raise ValueError("expected trigger_ref only")
+    ref = request.get("trigger_ref")
+    if ref is not None and (not isinstance(ref, str) or not 0 < len(ref) <= 64):
+        raise ValueError("invalid trigger_ref")
+    return ref
+
+
 def make_server(host="127.0.0.1", port=8765):
     state = State()
     class Handler(BaseHTTPRequestHandler):
@@ -46,6 +71,12 @@ def make_server(host="127.0.0.1", port=8765):
             self.end_headers()
             self.wfile.write(data)
 
+        def read_body(self):
+            length = int(self.headers.get("Content-Length", "0"))
+            if not 0 <= length <= 4096:
+                raise ValueError("body size")
+            return self.rfile.read(length) if length else b""
+
         def do_GET(self):
             if self.path == "/v1/latest":
                 self.reply(200, state.latest())
@@ -55,14 +86,17 @@ def make_server(host="127.0.0.1", port=8765):
                 self.reply(404, {"error": "unknown route"})
 
         def do_POST(self):
-            if self.path != "/v1/config":
+            if self.path not in ("/v1/config", "/v1/check"):
                 self.reply(404, {"error": "unknown route"})
                 return
             try:
-                length = int(self.headers.get("Content-Length", "0"))
-                if not 0 < length <= 4096:
-                    raise ValueError("body size")
-                self.reply(200, state.configure(json.loads(self.rfile.read(length))))
+                body = self.read_body()
+                if self.path == "/v1/check":
+                    self.reply(200, state.check(parse_trigger_ref(body)))
+                else:
+                    if not body:
+                        raise ValueError("body size")
+                    self.reply(200, state.configure(json.loads(body)))
             except (ValueError, TypeError) as error:
                 self.reply(400, {"error": str(error)})
 

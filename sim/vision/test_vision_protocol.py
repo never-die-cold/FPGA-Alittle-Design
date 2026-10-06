@@ -7,24 +7,46 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src/pynq_host"))
-from vision_protocol import mock_packet, validate_packet, is_current
+from vision_protocol import mock_packet, validate_packet, is_current, MAX_TRIGGER_REF_LEN
 from vision_mock_service import make_server
 
 
+def post_json(base, path, body):
+    request = urllib.request.Request(base + path, body, {"Content-Type": "application/json"})
+    with urllib.request.urlopen(request, timeout=2) as response:
+        return json.load(response)
+
+
 def main():
-    packet = mock_packet("session-a", 10, 2)
-    assert is_current(packet, "session-a", 10, 2)
-    assert not is_current(packet, "session-b", 10, 2)
-    assert not is_current(packet, "session-a", 9, 2)
-    assert not is_current(packet, "session-a", 10, 1)
+    packet = mock_packet("session-a", 10, 2, 7)
+    # D3 判据：session + config_id + 年龄；frame_id 不参与（仅换帧号仍判当前）
+    assert is_current(packet, "session-a", 2)
+    assert is_current({**packet, "frame_id": 999}, "session-a", 2)
+    assert not is_current(packet, "session-b", 2)
+    assert not is_current(packet, "session-a", 1)
     for age in (-5, 5):
         stale = {**packet, "created_at": time.time()-age}
-        assert not is_current(stale, "session-a", 10, 2)
-    for field, value in (("mode", "HARDWARE"), ("frame_id", True), ("created_at", float("nan"))):
+        assert not is_current(stale, "session-a", 2)
+    for field, value in (("mode", "HARDWARE"), ("frame_id", True), ("created_at", float("nan")),
+                         ("check_id", None), ("check_id", True)):
         bad = {**packet, field: value}
         try:
             validate_packet(bad)
             raise AssertionError("bad packet accepted")
+        except ValueError:
+            pass
+    missing = {k: v for k, v in packet.items() if k != "check_id"}
+    try:
+        validate_packet(missing)
+        raise AssertionError("packet without check_id accepted")
+    except ValueError:
+        pass
+    echoed = mock_packet("s", 1, 0, 1, "ref-1")
+    assert echoed["trigger_ref"] == "ref-1"
+    for ref in (123, "", "x" * (MAX_TRIGGER_REF_LEN + 1)):
+        try:
+            validate_packet({**packet, "trigger_ref": ref})
+            raise AssertionError("invalid trigger_ref accepted")
         except ValueError:
             pass
     bad = copy.deepcopy(packet)
@@ -49,7 +71,12 @@ def main():
             assert json.load(response)["applied_config_id"] == 1
         second = validate_packet(get("/v1/latest"))
         assert second["config_id"] == 1 and second["frame_id"] == first["frame_id"]+1
-        for path, body, expected in (("/bad", None, 404), ("/v1/config", b'{"control":16}', 400), ("/v1/config", b'[]', 400)):
+        check = validate_packet(post_json(base, "/v1/check", b'{"trigger_ref":"t-1"}'))
+        assert check["check_id"] == 1 and check["trigger_ref"] == "t-1" and check["config_id"] == 1
+        plain = validate_packet(post_json(base, "/v1/check", b""))
+        assert plain["check_id"] == 2 and "trigger_ref" not in plain
+        for path, body, expected in (("/bad", None, 404), ("/v1/config", b'{"control":16}', 400),
+                                     ("/v1/config", b'[]', 400), ("/v1/check", b'{"other":1}', 400)):
             try:
                 urllib.request.urlopen(urllib.request.Request(base+path, body), timeout=2)
                 raise AssertionError("invalid request accepted")
@@ -59,7 +86,7 @@ def main():
         server.shutdown()
         server.server_close()
         thread.join(timeout=2)
-    print("PASS: M2 HTTP mock config/status/location + frame/config/session/stale/error contract")
+    print("PASS: M2 HTTP mock check/config/status/location + check/config/session/stale/error contract")
 
 
 if __name__ == "__main__":
