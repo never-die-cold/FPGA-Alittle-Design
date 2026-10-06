@@ -1,7 +1,8 @@
 // core_top.v -- RV32IM v1 three-stage core: IF / ID+EX / MEM+WB
 // External ports stay compatible with design_v0; v1 contract is design_v1.md.
 module core_top #(
-    parameter ENABLE_FORWARDING = 1'b1
+    parameter ENABLE_FORWARDING = 1'b1,
+    parameter [1:0] BHT_MODE = 2'd0
 ) (
     input  wire        clk,
     input  wire        rst_n,
@@ -18,15 +19,29 @@ module core_top #(
     wire [31:0] pc, pc_id;
     wire [1:0]  pc_sel;
     wire        stall;
-    wire        branch_taken, jump_taken, flush;
+    wire        branch_valid, branch_taken, jump_taken, flush;
     wire        data_stall, front_stall, ex_accept, redirect, mem_in_valid;
-    wire [31:0] pc_target;
+    wire        branch_resolve, branch_mispredict, jump_redirect, predicted_redirect;
+    wire [31:0] pc_target, fetch_addr, recovery_target;
     wire [31:0] instr;
     wire        instr_valid;
 
-    assign imem_addr = pc;
-    assign flush     = redirect;
-    assign pc_sel    = flush ? 2'b01 : 2'b00;
+    assign branch_resolve = ex_accept && branch_valid;
+    assign branch_mispredict = branch_resolve && (bp_predict_taken != branch_taken);
+    wire bp_lookup_event = (BHT_MODE != 2'd0) && branch_resolve;
+    wire bp_hit_event = bp_lookup_event && !branch_mispredict;
+    wire bp_miss_event = bp_lookup_event && branch_mispredict;
+    assign jump_redirect = ex_accept && jump_taken;
+    assign predicted_redirect = branch_resolve && bp_predict_taken && !branch_mispredict;
+    assign redirect = jump_redirect || branch_mispredict;
+    assign flush = redirect;
+    assign recovery_target = jump_redirect ? redirect_target :
+                             (branch_taken ? redirect_target : (pc_id + 32'd4));
+    assign fetch_addr = redirect ? recovery_target :
+                        (predicted_redirect ? redirect_target : pc);
+    assign imem_addr = fetch_addr;
+    assign pc_sel = (redirect || predicted_redirect) ? 2'b01 : 2'b00;
+    assign pc_target = redirect ? recovery_target : (redirect_target + 32'd4);
 
     pc u_pc (
         .clk      (clk),
@@ -41,7 +56,7 @@ module core_top #(
     if_stage u_if_stage (
         .clk       (clk),
         .rst_n     (rst_n),
-        .pc        (pc),
+        .pc        (fetch_addr),
         .imem_rdata(imem_rdata),
         .flush     (flush),
         .stall     (stall),
@@ -126,7 +141,7 @@ module core_top #(
         .p_valid(mem_valid), .p_we(mem_reg_write), .p_is_load(mem_mem_read), .p_rd(mem_rd),
         .muldiv_wait(muldiv_wait), .branch_taken(branch_taken), .jump_taken(jump_taken),
         .data_stall(data_stall), .front_stall(front_stall), .ex_accept(ex_accept),
-        .redirect(redirect), .if_flush(), .mem_in_valid(mem_in_valid)
+        .redirect(), .if_flush(), .mem_in_valid(mem_in_valid)
     );
 
     // ---------- combinational ID+EX ----------
@@ -136,14 +151,19 @@ module core_top #(
         .rs1_addr(rs1_addr), .rs2_addr(rs2_addr), .rd_addr(rd_addr),
         .uses_rs1(uses_rs1), .uses_rs2(uses_rs2),
         .muldiv_valid(muldiv_valid), .muldiv_op(muldiv_op),
-        .branch_taken(branch_taken), .jump_taken(jump_taken),
+        .branch_valid(branch_valid), .branch_taken(branch_taken), .jump_taken(jump_taken),
         .redirect_target(redirect_target),
         .ex_result(ex_result), .ex_addr(ex_addr), .ex_store_data(ex_store_data),
         .ex_reg_write(ex_reg_write), .ex_mem_read(ex_mem_read),
         .ex_mem_write(ex_mem_write), .ex_wb_sel(ex_wb_sel),
         .ex_mask_sel(ex_mask_sel), .ex_sign_ext(ex_sign_ext)
     );
-    assign pc_target = redirect_target;
+    wire bp_predict_taken;
+    branch_predict #(.BHT_MODE(BHT_MODE)) u_branch_predict (
+        .clk(clk), .rst_n(rst_n), .lookup_valid(instr_valid && branch_valid),
+        .lookup_pc(pc_id), .predict_taken(bp_predict_taken), .lookup_state(),
+        .update_valid(branch_resolve), .update_pc(pc_id), .update_taken(branch_taken)
+    );
 
     // ---------- ID+EX / MEM+WB boundary ----------
     mem_wb_stage u_mem_wb (

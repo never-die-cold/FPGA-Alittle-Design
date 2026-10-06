@@ -8,7 +8,8 @@
 // 观测块（契约 docs/coremark.md §4.3）：镜像自带 MAGIC 时自动 dump 11 字并按 +exp_* 判据校验
 // 存储模型：8192×32、addr[14:2]（design_v0.md §3.3 冻结契约）
 module tb_core_coremark #(
-    parameter [0:0] ENABLE_FORWARDING = 1'b1
+    parameter [0:0] ENABLE_FORWARDING = 1'b1,
+    parameter [1:0] BHT_MODE = 2'd0
 );
 
     localparam integer CLK_PERIOD   = 10;
@@ -56,6 +57,7 @@ module tb_core_coremark #(
     reg [31:0] load_bubbles = 0, raw_bubbles = 0;
     reg [31:0] mul_bubbles = 0, div_bubbles = 0;
     reg [31:0] control_bubbles = 0, other_bubbles = 0;
+    reg [31:0] bp_lookups = 0, bp_hits = 0, bp_misses = 0;
     reg [31:0] classified_count = 0;
     integer tohost_seen = 0, exit_seen = 0;
     reg [31:0] tohost_val = 0, exit_val = 0;
@@ -76,7 +78,7 @@ module tb_core_coremark #(
 
     always #(CLK_PERIOD / 2) clk = ~clk;
 
-    core_top #(.ENABLE_FORWARDING(ENABLE_FORWARDING)) dut (
+    core_top #(.ENABLE_FORWARDING(ENABLE_FORWARDING), .BHT_MODE(BHT_MODE)) dut (
         .clk(clk), .rst_n(rst_n), .imem_addr(imem_addr), .imem_rdata(imem_rdata),
         .dmem_addr(dmem_addr), .dmem_wdata(dmem_wdata), .dmem_be(dmem_be),
         .dmem_we(dmem_we), .dmem_rdata(dmem_rdata)
@@ -86,6 +88,9 @@ module tb_core_coremark #(
         if (!exit_seen) begin
             cycle_count = cycle_count + 1;
             if (dut.mem_valid) retired_count = retired_count + 1;
+            if (dut.bp_lookup_event) bp_lookups = bp_lookups + 1;
+            if (dut.bp_hit_event) bp_hits = bp_hits + 1;
+            if (dut.bp_miss_event) bp_misses = bp_misses + 1;
             if (!dut.mem_valid) begin
                 bubble_count = bubble_count + 1;
                 case (bubble_cause_q)
@@ -179,6 +184,16 @@ module tb_core_coremark #(
         $display("CLASS: mode=%0d mul=%0d div=%0d load_use=%0d raw_nofwd=%0d control=%0d other=%0d classified=%0d",
                  ENABLE_FORWARDING, mul_bubbles, div_bubbles, load_bubbles,
                  raw_bubbles, control_bubbles, other_bubbles, classified_count);
+        $display("BHT: mode=%0d lookup=%0d hit=%0d miss=%0d", BHT_MODE,
+                 bp_lookups, bp_hits, bp_misses);
+        if (bp_hits + bp_misses !== bp_lookups) begin
+            $display("FAIL: BHT hit+miss=%0d != lookup=%0d", bp_hits+bp_misses, bp_lookups);
+            errors = errors + 1;
+        end
+        if (BHT_MODE == 0 && bp_lookups != 0) begin
+            $display("FAIL: BHT 关闭档 lookup 必须为 0，实际 %0d", bp_lookups);
+            errors = errors + 1;
+        end
         if (classified_count !== bubble_count) begin
             $display("FAIL: 分类气泡 %0d != 总气泡 %0d", classified_count, bubble_count);
             errors = errors + 1;
