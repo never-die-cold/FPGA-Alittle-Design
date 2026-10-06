@@ -10,7 +10,7 @@ module tb_core_v1_hazard;
     reg [31:0] imem [0:8191], dmem [0:8191];
     reg expect_flush = 0;
     integer i, cycles = 0, branch_stalls = 0, redirects = 0;
-    integer flush_checks = 0, x6_writes = 0;
+    integer flush_checks = 0, x6_writes = 0, load_rf_checks = 0, alu_bypass_checks = 0;
     integer store0 = 0, store8 = 0, store12 = 0, errors = 0;
 
     always #5 clk = ~clk;
@@ -26,8 +26,18 @@ module tb_core_v1_hazard;
         end
         if ((dut.instr == 32'h00138463) && dut.data_stall) begin
             branch_stalls = branch_stalls + 1;
+            load_rf_checks = load_rf_checks + 1;
+            if (dut.rs1_sel !== 2'b00) begin
+                $display("FAIL: load data entered forwarding mux sel=%b", dut.rs1_sel); errors = errors + 1;
+            end
             if (dut.redirect || dut.mem_in_valid) begin
                 $display("FAIL: load-branch accepted or redirected while stalled"); errors = errors + 1;
+            end
+        end
+        if (ENABLE_FORWARDING && (dut.instr == 32'h00528333)) begin
+            alu_bypass_checks = alu_bypass_checks + 1;
+            if (dut.data_stall || dut.rs1_sel !== 2'b11 || dut.rs2_sel !== 2'b11) begin
+                $display("FAIL: ALU RAW did not use ready bypass"); errors = errors + 1;
             end
         end
         if (expect_flush) begin
@@ -77,6 +87,9 @@ module tb_core_v1_hazard;
             $display("FAIL: redirects/flushes=%0d/%0d", redirects, flush_checks); errors = errors + 1;
         end
         if (x6_writes != 1) begin $display("FAIL: x6 writes=%0d", x6_writes); errors = errors + 1; end
+        if (load_rf_checks != 1 || (ENABLE_FORWARDING && alu_bypass_checks != 1)) begin
+            $display("FAIL: forwarding checks load/alu=%0d/%0d", load_rf_checks, alu_bypass_checks); errors = errors + 1;
+        end
         if (store0 != 1 || store8 != 0 || store12 != 1 || dmem[0] !== 6 || dmem[2] !== 0 || dmem[3] !== 6) begin
             $display("FAIL: stores=%0d/%0d/%0d data=%0d/%0d/%0d", store0, store8, store12, dmem[0], dmem[2], dmem[3]); errors = errors + 1;
         end

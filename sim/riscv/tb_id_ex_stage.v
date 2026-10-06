@@ -25,6 +25,13 @@ module tb_id_ex_stage;
     );
     task check; input ok; begin checks=checks+1; if (ok !== 1'b1) begin
         $display("FAIL: ID+EX case %0d", checks); $fatal(1); end end endtask
+    task check_branch;
+        input [31:0] branch_instr, lhs, rhs; input expected;
+        begin
+            in_instr=branch_instr; rs1_value=lhs; rs2_value=rhs; #1;
+            check(branch_taken === expected);
+        end
+    endtask
 
     initial begin
         checks=0; in_valid=1; in_pc=32'h80000000; muldiv_result=32'h15;
@@ -36,7 +43,17 @@ module tb_id_ex_stage;
               ex_mem_write && !ex_reg_write && ex_mask_sel==2);
         in_instr=32'h00208463; in_pc=32'h80000010; rs1_value=5; rs2_value=5; #1;
         check(branch_taken && !jump_taken && redirect_target==32'h80000018);
-        rs2_value=6; #1; check(!branch_taken);
+        check_branch(32'h00208463, 5, 6, 0);                    // beq
+        check_branch(32'h00209463, 5, 6, 1);                    // bne
+        check_branch(32'h00209463, 5, 5, 0);
+        check_branch(32'h0020c463, 32'h80000000, 1, 1);         // blt signed
+        check_branch(32'h0020c463, 1, 32'h80000000, 0);
+        check_branch(32'h0020d463, 1, 32'h80000000, 1);         // bge signed
+        check_branch(32'h0020d463, 32'h80000000, 1, 0);
+        check_branch(32'h0020e463, 1, 32'h80000000, 1);         // bltu unsigned
+        check_branch(32'h0020e463, 32'h80000000, 1, 0);
+        check_branch(32'h0020f463, 32'h80000000, 1, 1);         // bgeu unsigned
+        check_branch(32'h0020f463, 1, 32'h80000000, 0);
         in_instr=32'h001100e7; in_pc=32'h80000020; rs1_value=32'h1000; #1;
         check(jump_taken && redirect_target==32'h1000 &&
               ex_result==32'h80000024 && rd_addr==1);

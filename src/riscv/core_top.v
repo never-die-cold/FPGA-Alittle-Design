@@ -112,10 +112,10 @@ module core_top #(
         .enable(ENABLE_FORWARDING), .uses_rs1(uses_rs1), .uses_rs2(uses_rs2),
         .rs1_addr(rs1_addr), .rs2_addr(rs2_addr), .rs1_data(rdata1), .rs2_data(rdata2),
         .ex_valid(mem_valid && !mem_mem_read), .ex_we(mem_reg_write), .ex_ready(1'b1),
-        .ex_rd(mem_rd), .ex_data(wb_data),
-        .mem_valid(mem_valid && mem_mem_read), .mem_we(mem_reg_write), .mem_ready(1'b1),
-        .mem_rd(mem_rd), .mem_data(wb_data),
-        .wb_valid(mem_valid), .wb_we(mem_reg_write), .wb_rd(mem_rd), .wb_data(wb_data),
+        .ex_rd(mem_rd), .ex_data(mem_result),
+        .mem_valid(1'b0), .mem_we(1'b0), .mem_ready(1'b0),
+        .mem_rd(5'd0), .mem_data(32'd0),
+        .wb_valid(1'b0), .wb_we(1'b0), .wb_rd(5'd0), .wb_data(32'd0),
         .rs1_fwd(rs1_fwd), .rs2_fwd(rs2_fwd), .rs1_sel(rs1_sel), .rs2_sel(rs2_sel)
     );
 
