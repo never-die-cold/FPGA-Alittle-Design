@@ -5,16 +5,30 @@ set root       [file normalize [file join $script_dir ..]]
 set part       xc7z020clg400-1
 set top        pynq_z2_top
 
-# -tclargs 40|125；省略时保留已验证过的 40 MHz 安全档。
+# -tclargs ?40|125? ?nofwd|fwd|bht1|bht2?
+# 省略时保留已验证过的 40 MHz、转发开启、BHT 关闭安全档。
 set core_clk_mhz 40
-if {$argc == 1} {set core_clk_mhz [lindex $argv 0]}
-if {$argc > 1} {error "Usage: build_soc.tcl ?40|125?"}
+set core_profile fwd
+if {$argc >= 1} {set core_clk_mhz [lindex $argv 0]}
+if {$argc >= 2} {set core_profile [lindex $argv 1]}
+if {$argc > 2} {
+    error "Usage: build_soc.tcl ?40|125? ?nofwd|fwd|bht1|bht2?"
+}
 switch -- $core_clk_mhz {
     40  {set core_clk_divide 25; set core_clk_period 25.000; set core_clk_name core_clk_40}
     125 {set core_clk_divide 8;  set core_clk_period 8.000;  set core_clk_name core_clk_125}
     default {error "Unsupported core clock: $core_clk_mhz MHz (choose 40 or 125)"}
 }
-set profile     soc_${core_clk_mhz}mhz
+switch -- $core_profile {
+    nofwd {set enable_forwarding 0; set bht_mode 0}
+    fwd   {set enable_forwarding 1; set bht_mode 0}
+    bht1  {set enable_forwarding 1; set bht_mode 1}
+    bht2  {set enable_forwarding 1; set bht_mode 2}
+    default {error "Unsupported core profile: $core_profile (choose nofwd, fwd, bht1 or bht2)"}
+}
+# fwd 保留历史目录/位流名；其余档位加后缀，防止证据互相覆盖。
+set profile soc_${core_clk_mhz}mhz
+if {$core_profile ne "fwd"} {append profile _${core_profile}}
 set run_dir     [file join $script_dir run $profile]
 set rep_dir     [file join $script_dir reports $profile]
 
@@ -35,7 +49,9 @@ proc require_clock {name expected_period} {
 read_verilog [glob [file join $root src riscv *.v]]
 read_xdc [file join $script_dir constraints pynq_z2_soc.xdc]
 
-synth_design -top $top -part $part -generic CORE_CLK_DIVIDE=$core_clk_divide
+set core_generics [list CORE_CLK_DIVIDE=$core_clk_divide \
+    ENABLE_FORWARDING=$enable_forwarding BHT_MODE=$bht_mode]
+synth_design -top $top -part $part -generic $core_generics
 require_clock sys_clk_125 8.000
 require_clock $core_clk_name $core_clk_period
 write_checkpoint -force [file join $run_dir post_synth.dcp]
@@ -78,7 +94,7 @@ set bad_drc [get_drc_violations -quiet \
     -filter {SEVERITY == Error || SEVERITY == "Critical Warning"}]
 if {[llength $bad_drc] != 0} {error "DRC errors or critical warnings: $bad_drc"}
 
-set bitstream [file join $run_dir pynq_z2_soc_${core_clk_mhz}mhz.bit]
+set bitstream [file join $run_dir pynq_z2_${profile}.bit]
 write_bitstream -force $bitstream
 if {![file isfile $bitstream] || [file size $bitstream] == 0} {
     error "Bitstream missing or empty: $bitstream"
@@ -87,5 +103,5 @@ if {![file isfile $bitstream] || [file size $bitstream] == 0} {
 set version_file [open [file join $rep_dir soc_vivado_version.txt] w]
 puts $version_file [version -short]
 close $version_file
-puts "BUILD PASSED: $top @ $part, core clock $core_clk_mhz MHz, WNS=$wns ns"
+puts "BUILD PASSED: $top @ $part, core clock $core_clk_mhz MHz, profile=$core_profile, WNS=$wns ns"
 puts "BITSTREAM: $bitstream"

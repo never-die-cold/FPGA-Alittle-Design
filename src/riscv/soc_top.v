@@ -2,7 +2,9 @@
 // 接口与上板冒烟契约见 src/riscv/design_v0.md §5.8
 module soc_top #(
     parameter IMEM_INIT_FILE = "src/riscv_fw/hello_v0.hex",
-    parameter DMEM_INIT_FILE = "src/riscv_fw/hello_v0.hex"
+    parameter DMEM_INIT_FILE = "src/riscv_fw/hello_v0.hex",
+    parameter ENABLE_FORWARDING = 1'b1,
+    parameter [1:0] BHT_MODE = 2'd0
 ) (
     input  wire       clk,
     input  wire       rst_n,
@@ -29,7 +31,10 @@ module soc_top #(
     assign timer_hit  = (dmem_addr == TIMER_ADDR);
     assign dmem_rdata = timer_hit ? cycle_cnt : dmem_rdata_ram;
 
-    core_top u_core (
+    core_top #(
+        .ENABLE_FORWARDING(ENABLE_FORWARDING),
+        .BHT_MODE(BHT_MODE)
+    ) u_core (
         .clk(clk), .rst_n(rst_n),
         .imem_addr(imem_addr), .imem_rdata(imem_rdata),
         .dmem_addr(dmem_addr), .dmem_wdata(dmem_wdata),

@@ -3,7 +3,9 @@
 module pynq_z2_top #(
     parameter integer CORE_CLK_DIVIDE = 25,
     parameter IMEM_INIT_FILE = "src/riscv_fw/hello_v0.hex",
-    parameter DMEM_INIT_FILE = "src/riscv_fw/hello_v0.hex"
+    parameter DMEM_INIT_FILE = "src/riscv_fw/hello_v0.hex",
+    parameter ENABLE_FORWARDING = 1'b1,
+    parameter [1:0] BHT_MODE = 2'd0
 ) (
     input  wire       clk,
     input  wire       btn0,
@@ -57,7 +59,9 @@ module pynq_z2_top #(
 
     soc_top #(
         .IMEM_INIT_FILE(IMEM_INIT_FILE),
-        .DMEM_INIT_FILE(DMEM_INIT_FILE)
+        .DMEM_INIT_FILE(DMEM_INIT_FILE),
+        .ENABLE_FORWARDING(ENABLE_FORWARDING),
+        .BHT_MODE(BHT_MODE)
     ) u_soc (
         .clk(core_clk),
         .rst_n(~reset_pipe[1]),
