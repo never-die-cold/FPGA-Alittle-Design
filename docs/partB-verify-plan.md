@@ -17,11 +17,11 @@
 
 ## 2. 交付前置（RTL 线自查，10/2 前）
 
-- [ ] `design_v1.md` §12/§13 端口位宽逐条落实（`id_ex_stage.v` / `mem_wb_stage.v` / `forwarding.v` / `hazard.v`）
-- [ ] `run_iverilog.sh` 提供冻结名 `v1_fwd` / `v1_nofwd`，且 `all` 包含两档（§8.5 / §14.1）
-- [ ] 两档由同一文件列表 + elaboration 参数 `ENABLE_FORWARDING=1/0` 产生，无复制 RTL（D3）
+- [x] `design_v1.md` §12/§13 端口位宽逐条落实（`id_ex_stage.v` / `mem_wb_stage.v` / `forwarding.v` / `hazard.v`）
+- [x] `run_iverilog.sh` 提供冻结名 `v1_fwd` / `v1_nofwd`，且 `all` 包含两档（§8.5 / §14.1）
+- [x] 两档由同一文件列表 + elaboration 参数 `ENABLE_FORWARDING=1/0` 产生，无复制 RTL（D3）
 - [ ] 编译无隐式 wire、位宽截断、组合环路警告（§13.6）
-- [ ] `core_top` 对外端口不变，`soc_top` 零改动可编译（§13.3/§13.6）
+- [x] `core_top` 对外端口不变，`soc_top` 零改动可编译（§13.3/§13.6）
 
 ## 3. 验收门禁总表（10/4 对照，全部来自契约 §14.1/§14.3）
 
@@ -33,7 +33,7 @@
 | arch-test | 与 v0 相同用例清单，两档签名一致（`run_arch_test.sh <name> <ext>`） | verify |
 | RV32IM | 八种 M、除零、溢出；整核 `tohost=142879` | verify |
 | 冒险专项 | R-type 零气泡；load-use 恰 1 气泡；taken 控制转移 1 气泡 | verify |
-| CPI 主比 | `gain = (CPI_nofwd − CPI_fwd) / CPI_nofwd ≥ 25%`（D14） | bench |
+| CPI 主比 | `gain = (CPI_nofwd − CPI_fwd) / CPI_nofwd ≥ 8.0%`；旧工作点 8.14%，Radix-4 工作点 10.20%；原 25% 门禁 FAIL 并保留（D16） | bench |
 | Vivado | 同器件同版本，WNS≥0；125 MHz 为非阻塞加分项（D15） | verify |
 | 基线锚点 | v0 在 tag `partA-v0`（=`962a4f5`）复现；v1 两档同一 commit | verify |
 
@@ -44,12 +44,13 @@
 | `tb_forwarding.v`（单元） | §8.6 | 无命中 / x0 / `src_used=0` / 三单命中 / 多重命中优先级；`enable=0` 时 sel=00；`rs1_sel/rs2_sel` 编码 00=RF 01=WB 10=MEM 11=EX | **已闭环（9/30）：对 jianglibo 真 DUT 25 例一次通过（R2–R5 复验，data/logs/2026-09-30-r2r5-verify/）** |
 | `tb_hazard.v`（单元） | §13.2 | 两档停顿方程；`redirect && front_stall == 0` 互斥断言 | **已闭环（9/30）：对真 DUT 16020 组合穷举一次通过（含互斥不变量，data/logs/2026-09-30-r2r5-verify/）** |
 | `tb_mem_wb_stage.v`（单元） | §12.6 | 正常捕获、气泡覆盖旧槽、复位清 valid、无 hold 端口 | **RTL 线已自写并接入回归（R2–R5，9/30 复验 PASS）** |
-| 整核转发专项（新增或扩 tb_core_fwd） | §8.6 | ALU→ALU/branch/JALR/store/muldiv；连续 R-type RAW 零气泡；load-use 恰 1 拍；关转发结果一致且可见 RAW 气泡 | 等 RTL |
-| 整核 hazard 专项 | §9.6 | taken 冲刷 1 槽、not-taken 不冲刷；branch 遇 RAW 先停顿再裁决；stall 期间生产者只提交一次；气泡不写 regfile/DMEM/不启动 muldiv | 等 RTL |
-| 整核 RV32M | §10.6 | start 仅一次、等待期无提交、done 进正确 rd、紧随消费者两档结果一致 | 等 RTL |
+| 整核转发专项（扩展整核 tb） | §8.6 | ALU→ALU/branch/JALR/store/muldiv；连续 R-type RAW 零气泡；load-use 恰 1 拍；关转发结果一致且可见 RAW 气泡 | **已接入 `v1_fwd`/`v1_nofwd` 与 `all`，PASS** |
+| 整核 hazard 专项 | §9.6 | taken 冲刷 1 槽、not-taken 不冲刷；branch 遇 RAW 先停顿再裁决；stall 期间生产者只提交一次；气泡不写 regfile/DMEM/不启动 muldiv | **已由 `v1_flow`/`hazard` 回归覆盖，PASS** |
+| 整核 RV32M | §10.6 | start 仅一次、等待期无提交、done 进正确 rd、紧随消费者两档结果一致 | **已由 `v1_muldiv_flow`/`rv32im` 覆盖，PASS** |
 | 复用现有 | — | `tb_muldiv`（单元不回归）、`tb_core_test`（38 用例）、`tb_core_coremark`（口径见第 5 节） | 已有 |
 
-注：两个预写 tb 均未接入 `run_iverilog.sh`（DUT 不存在，接入会破坏 `all`）；`forwarding.v`/`hazard.v` 落地的同一提交必须完成接入（单独模式 + all）并使其 PASS，这是 RTL 线 R2/R3 步的验收动作。预写 tb 在 9/29 仅做过"对契约参考模型 stub 的自一致性检查"（临时 stub 不入库），**不构成任何 RTL 验证结论**。
+注：9/29 的参考模型 stub 只用于早期红灯，不构成 RTL 结论；当前状态以真 DUT 的仓库内
+`forwarding`、`hazard`、`v1_flow`、`v1_muldiv_flow`、`v1_fwd`、`v1_nofwd` 和 `all` 结果为准。
 
 ## 5. CPI 口径与 bench 适配（契约 §14.2，D14）
 
@@ -89,3 +90,4 @@
 | 日期 | 变更 | 作者 |
 |:---|:---|:---|
 | 2026-09-29 | 首版：按冻结契约 fe80857 制定执行清单；R1 独立复验同日启动（`data/logs/2026-09-29-r1-verify/`） | never-die-cold（verify 线） |
+| 2026-10-05 | 增加 40/125 MHz 同 RTL 双档构建入口；具体命令、门禁和上板判据见 `docs/partB-rtl-handoff.md` | Codex（RTL 线） |

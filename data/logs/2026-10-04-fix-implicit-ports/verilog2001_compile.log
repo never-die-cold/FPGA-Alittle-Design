@@ -1,0 +1,6 @@
+$ grep -rn "(\\.\\*)" src/
+no matches
+$ iverilog -g2001 -Wall -tnull -s id_ex_stage src/riscv/id_ex_stage.v src/riscv/decode.v src/riscv/alu.v
+exit_code=0; stdout/stderr empty
+$ iverilog -g2001 -Wall -tnull -s core_top src/riscv/*.v
+exit_code=0; stdout/stderr empty

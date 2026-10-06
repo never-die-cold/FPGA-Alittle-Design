@@ -4,7 +4,7 @@ import re
 import sys
 
 PATTERN = re.compile(
-    r"PASS: coremark cycles=(\d+) instrs=(\d+) bubbles=(\d+) cpi=(\d+)\.(\d+)"
+    r"PASS: coremark mode=(\d+) cycles=(\d+) retired=(\d+) bubbles=(\d+) cpi=(\d+)\.(\d+)"
 )
 
 
@@ -21,17 +21,17 @@ def main(argv):
         print("FAIL: log has no firmware PASS/CPI line")
         return 1
 
-    cycles, instrs, bubbles, _, _ = (int(value) for value in match.groups())
-    if instrs == 0:
+    mode, cycles, retired, bubbles, _, _ = (int(value) for value in match.groups())
+    if retired == 0:
         print("FAIL: retired instruction count is zero")
         return 1
-    cpi = cycles / instrs
+    cpi = cycles / retired
 
-    print(f"PASS: {name} cycles={cycles} instrs={instrs} bubbles={bubbles} cpi={cpi:.3f}")
+    print(f"PASS: {name} mode={mode} cycles={cycles} retired={retired} bubbles={bubbles} cpi={cpi:.3f}")
     print("metrics.csv suggested row:")
     print(
         f"RISC-V {name} CPI,core benchmark,{cpi:.3f},CPI,"
-        f"iverilog; cycles/instrs,{cycles} cycles / {instrs} instrs,{log_path}"
+        f"iverilog; cycles/retired,{cycles} cycles / {retired} retired,{log_path}"
     )
     return 0
 

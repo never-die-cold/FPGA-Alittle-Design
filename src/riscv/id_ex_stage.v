@@ -17,21 +17,34 @@ module id_ex_stage (
     wire [3:0] alu_op; wire [1:0] alu_a_sel, alu_b_sel;
     wire [1:0] wb_sel, mask_sel, jump_type;
     wire reg_write, mem_read, mem_write, sign_ext;
-    decode u_decode (.*);
+    decode u_decode (
+        .instr(instr),
+        .rs1_addr(rs1_addr), .rs2_addr(rs2_addr), .rd_addr(rd_addr),
+        .imm(imm), .imm_type(imm_type), .alu_op(alu_op),
+        .alu_a_sel(alu_a_sel), .alu_b_sel(alu_b_sel), .wb_sel(wb_sel),
+        .reg_write(reg_write), .mem_read(mem_read), .mem_write(mem_write),
+        .mask_sel(mask_sel), .sign_ext(sign_ext),
+        .branch_type(branch_type), .jump_type(jump_type),
+        .uses_rs1(uses_rs1), .uses_rs2(uses_rs2),
+        .muldiv_valid(muldiv_valid), .muldiv_op(muldiv_op)
+    );
 
     wire [31:0] alu_a = (alu_a_sel == 2'b01) ? in_pc :
                             (alu_a_sel == 2'b10) ? 32'd0 : rs1_value;
     wire [31:0] alu_b = (alu_b_sel == 2'b00) ? rs2_value : imm;
-    wire [31:0] alu_y; wire alu_zero, alu_lt, alu_ltu;
+    wire [31:0] alu_y;
     alu u_alu (.a(alu_a), .b(alu_b), .alu_op(alu_op), .y(alu_y),
-               .zero(alu_zero), .lt(alu_lt), .ltu(alu_ltu));
+               .zero(), .lt(), .ltu());
 
-    wire cond_taken = (branch_type == 3'd1) ?  alu_zero :
-                      (branch_type == 3'd2) ? ~alu_zero :
-                      (branch_type == 3'd3) ?  alu_lt :
-                      (branch_type == 3'd4) ? ~alu_lt :
-                      (branch_type == 3'd5) ?  alu_ltu :
-                      (branch_type == 3'd6) ? ~alu_ltu : 1'b0;
+    wire branch_eq  = (rs1_value == rs2_value);
+    wire branch_lt  = ($signed(rs1_value) < $signed(rs2_value));
+    wire branch_ltu = (rs1_value < rs2_value);
+    wire cond_taken = (branch_type == 3'd1) ?  branch_eq :
+                      (branch_type == 3'd2) ? ~branch_eq :
+                      (branch_type == 3'd3) ?  branch_lt :
+                      (branch_type == 3'd4) ? ~branch_lt :
+                      (branch_type == 3'd5) ?  branch_ltu :
+                      (branch_type == 3'd6) ? ~branch_ltu : 1'b0;
     assign branch_taken = (branch_type != 0) && cond_taken;
     assign jump_taken = (jump_type != 0);
     assign redirect_target = (jump_type == 2'd2) ?

@@ -38,6 +38,11 @@
   ④ 待办 / 未接入清单（明确标注「未实现」）。
 - 未经用户确认理解，**不得 `git commit`**（见 `skill/understand-gate/SKILL.md`）。
 
+### 4. 综合语言边界
+- 所有进入综合路径的 RTL 必须能被 Verilog-2001 默认模式解析。
+- 禁止在默认按 Verilog 读取的 RTL 中使用 `.*`、`logic`、`always_ff` 等 SystemVerilog-only
+  语法；仅当综合 Tcl 显式使用 `read_verilog -sv` 且已有综合验证证据时允许例外。
+
 ## 三、参考入口
 
 - 详细清单：`docs/workflow.md`

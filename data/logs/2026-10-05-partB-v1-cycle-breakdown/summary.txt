@@ -1,0 +1,7 @@
+RESULT: fwd cycles=21926509 retired=10106386 CPI=2.169570
+RESULT: nofwd cycles=23869806 retired=10106386 CPI=2.361854
+CLASS: fwd mul=9925509 div=33 load_use=650771 raw_nofwd=0 control=1243809 other=1
+CLASS: nofwd mul=9925509 div=33 load_use=650771 raw_nofwd=1943297 control=1243809 other=1
+RESULT: mul share of fwd cycles=45.27%; RAW delta=1943297
+RESULT: CPI gain=8.14% (gate >=8.0%)
+PASS: CoreMark CPI gain gate

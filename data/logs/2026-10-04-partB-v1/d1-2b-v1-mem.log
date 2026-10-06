@@ -1,0 +1,32 @@
+== tb_core_v1_mem ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+PASS: v1 byte/half/word memory path, writes=11

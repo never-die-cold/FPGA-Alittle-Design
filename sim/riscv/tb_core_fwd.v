@@ -2,10 +2,11 @@
 // tb_core_fwd.v —— 转发专项契约级 testbench（数据冒险气泡 + 分支气泡）
 // 流程：预载 riscv/fwd/fwd_test.hex → 复位 → 运行至结束标记 → 自检 PASS/FAIL
 //   1) 各阶段结果与期望常数比对（R 型连读 / lw→运算 / 循环计数 / 误跳标记）
-//   2) 各阶段气泡计数比对：v0 默认 A=0 B=0 C=5 D=0（design_v0 §2.2 无数据停顿、§2.3 taken 分支 1 拍）
-//      v1 接入时用 +exp_a=0 +exp_b=4 +exp_c=5 +exp_d=0 之类覆盖（见 sim/README.md）
+//   2) 转发开 A/B/C/D=0/4/5/0；转发关 A/B/C/D=14/10/15/3
 // 运行目录约定：在 sim/ 下执行（sim/scripts/run_iverilog.sh fwd）
-module tb_core_fwd;
+module tb_core_fwd #(
+    parameter [0:0] ENABLE_FORWARDING = 1'b1
+);
 
     localparam integer CLK_PERIOD   = 10;                    // 100 MHz
     localparam integer RESET_CYCLES = 8;
@@ -15,11 +16,11 @@ module tb_core_fwd;
     localparam [12:0] MARK_IDX   = 13'h0F80;                 // 0x8000_3E00 >> 2
     localparam [12:0] RESULT_IDX = 13'h0E00;                 // 0x8000_3800 >> 2
 
-    // 气泡期望（默认 = v0 契约；可用 plusargs 覆盖）
-    integer exp_a = 0;                                       // 阶段 A：R 型连读
-    integer exp_b = 0;                                       // 阶段 B：lw→运算
-    integer exp_c = 5;                                       // 阶段 C：taken 分支/跳转次数
-    integer exp_d = 0;                                       // 阶段 D：not-taken 分支
+    // 同一程序只由 elaboration 参数切换转发开关；plusargs 保留调试覆盖能力
+    integer exp_a = ENABLE_FORWARDING ? 0 : 14;
+    integer exp_b = ENABLE_FORWARDING ? 4 : 10;
+    integer exp_c = ENABLE_FORWARDING ? 5 : 15;
+    integer exp_d = ENABLE_FORWARDING ? 0 : 3;
 
     reg clk = 0;
     reg rst_n = 0;
@@ -62,7 +63,7 @@ module tb_core_fwd;
     always #(CLK_PERIOD / 2) clk = ~clk;
 
     // ---- DUT ----
-    core_top dut (
+    core_top #(.ENABLE_FORWARDING(ENABLE_FORWARDING)) dut (
         .clk        (clk),
         .rst_n      (rst_n),
         .imem_addr  (imem_addr),
@@ -75,7 +76,7 @@ module tb_core_fwd;
     );
 
     // ---- 监视：周期 / 气泡 / 阶段标记 ----
-    // 气泡定义：复位释放后 instr_valid==0 的拍（v0 = 分支冲刷注入的 NOP 拍）
+    // 气泡定义：复位释放后 mem_valid==0 的提交空槽（覆盖 data stall 与控制 flush）
     integer cycle_count  = 0;
     integer bubble_count = 0;
     integer marker_seen  = 0;
@@ -86,7 +87,7 @@ module tb_core_fwd;
     always @(posedge clk) begin
         if (rst_n) begin
             cycle_count = cycle_count + 1;
-            if (dut.instr_valid === 1'b0)
+            if (dut.mem_valid === 1'b0)
                 bubble_count = bubble_count + 1;
             if (dmem_we && (dmem_addr[14:2] == MARK_IDX)) begin
                 if (marker_seen <= 8) begin

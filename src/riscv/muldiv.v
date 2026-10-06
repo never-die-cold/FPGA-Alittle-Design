@@ -30,8 +30,11 @@ module muldiv (
     wire b_signed = (op == 3'b001);
     wire [31:0] a_magnitude = (a_signed && a[31]) ? (~a + 32'd1) : a;
     wire [31:0] b_magnitude = (b_signed && b[31]) ? (~b + 32'd1) : b;
-    wire [63:0] product_sum = multiplier[0] ?
-                              (product_acc + multiplicand) : product_acc;
+    wire [63:0] product_addend = (multiplier[1:0] == 2'b00) ? 64'd0 :
+                                 (multiplier[1:0] == 2'b01) ? multiplicand :
+                                 (multiplier[1:0] == 2'b10) ? (multiplicand << 1) :
+                                 (multiplicand + (multiplicand << 1));
+    wire [63:0] product_sum = product_acc + product_addend;
     wire [63:0] final_product = product_neg ?
                                 (~product_sum + 64'd1) : product_sum;
     wire div_signed = (op == 3'b100) || (op == 3'b110);
@@ -91,10 +94,11 @@ module muldiv (
                     remainder_work <= remainder_next;
                 end else begin
                     product_acc <= product_sum;
-                    multiplicand <= multiplicand << 1;
-                    multiplier   <= multiplier >> 1;
+                    multiplicand <= multiplicand << 2;
+                    multiplier   <= multiplier >> 2;
                 end
-                if (count == 5'd31) begin
+                if ((op_r[2] && count == 5'd31) ||
+                    (!op_r[2] && count == 5'd15)) begin
                     if (!op_r[2])
                         result <= (op_r == 3'b000) ?
                                   final_product[31:0] : final_product[63:32];

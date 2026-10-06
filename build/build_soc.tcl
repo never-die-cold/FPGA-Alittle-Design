@@ -2,10 +2,21 @@
 # 用法：vivado -mode batch -source build/build_soc.tcl
 set script_dir [file normalize [file dirname [info script]]]
 set root       [file normalize [file join $script_dir ..]]
-set run_dir    [file join $script_dir run soc]
-set rep_dir    [file join $script_dir reports]
 set part       xc7z020clg400-1
 set top        pynq_z2_top
+
+# -tclargs 40|125；省略时保留已验证过的 40 MHz 安全档。
+set core_clk_mhz 40
+if {$argc == 1} {set core_clk_mhz [lindex $argv 0]}
+if {$argc > 1} {error "Usage: build_soc.tcl ?40|125?"}
+switch -- $core_clk_mhz {
+    40  {set core_clk_divide 25; set core_clk_period 25.000; set core_clk_name core_clk_40}
+    125 {set core_clk_divide 8;  set core_clk_period 8.000;  set core_clk_name core_clk_125}
+    default {error "Unsupported core clock: $core_clk_mhz MHz (choose 40 or 125)"}
+}
+set profile     soc_${core_clk_mhz}mhz
+set run_dir     [file join $script_dir run $profile]
+set rep_dir     [file join $script_dir reports $profile]
 
 file mkdir $run_dir
 file mkdir $rep_dir
@@ -24,9 +35,9 @@ proc require_clock {name expected_period} {
 read_verilog [glob [file join $root src riscv *.v]]
 read_xdc [file join $script_dir constraints pynq_z2_soc.xdc]
 
-synth_design -top $top -part $part
+synth_design -top $top -part $part -generic CORE_CLK_DIVIDE=$core_clk_divide
 require_clock sys_clk_125 8.000
-require_clock core_clk_40 25.000
+require_clock $core_clk_name $core_clk_period
 write_checkpoint -force [file join $run_dir post_synth.dcp]
 report_utilization -file [file join $rep_dir soc_utilization_synth.rpt]
 report_clock_utilization -file [file join $rep_dir soc_clock_utilization_synth.rpt]
@@ -67,7 +78,7 @@ set bad_drc [get_drc_violations -quiet \
     -filter {SEVERITY == Error || SEVERITY == "Critical Warning"}]
 if {[llength $bad_drc] != 0} {error "DRC errors or critical warnings: $bad_drc"}
 
-set bitstream [file join $run_dir pynq_z2_soc.bit]
+set bitstream [file join $run_dir pynq_z2_soc_${core_clk_mhz}mhz.bit]
 write_bitstream -force $bitstream
 if {![file isfile $bitstream] || [file size $bitstream] == 0} {
     error "Bitstream missing or empty: $bitstream"
@@ -76,5 +87,5 @@ if {![file isfile $bitstream] || [file size $bitstream] == 0} {
 set version_file [open [file join $rep_dir soc_vivado_version.txt] w]
 puts $version_file [version -short]
 close $version_file
-puts "BUILD PASSED: $top @ $part, core clock 40 MHz, WNS=$wns ns"
+puts "BUILD PASSED: $top @ $part, core clock $core_clk_mhz MHz, WNS=$wns ns"
 puts "BITSTREAM: $bitstream"

@@ -1,0 +1,4 @@
+RESULT: fwd cycles=21926509 retired=10106386 CPI=2.169570
+RESULT: nofwd cycles=23869806 retired=10106386 CPI=2.361854
+RESULT: CPI gain=8.14% (gate >=25%)
+FAIL: CPI gain below 25%

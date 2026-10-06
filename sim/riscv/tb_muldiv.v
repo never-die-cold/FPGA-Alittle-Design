@@ -26,7 +26,9 @@ module tb_muldiv;
         input [31:0] test_a;
         input [31:0] test_b;
         input [31:0] expected;
+        integer pre_done_cycles;
         begin
+            pre_done_cycles = test_op[2] ? 31 : 15;
             @(negedge clk);
             op = test_op; a = test_a; b = test_b; start = 1'b1;
             @(posedge clk); #1;
@@ -34,7 +36,7 @@ module tb_muldiv;
 
             @(negedge clk);
             start = 1'b0; op = ~test_op; a = ~test_a; b = ~test_b;
-            for (i = 0; i < 31; i = i + 1) begin
+            for (i = 0; i < pre_done_cycles; i = i + 1) begin
                 if (i == 1) start = 1'b1; // busy 时的二次启动必须被忽略
                 else        start = 1'b0;
                 @(posedge clk); #1;
@@ -65,6 +67,18 @@ module tb_muldiv;
         check_op(3'b001, 32'hFFFF_FFFE, 32'd3,         32'hFFFF_FFFF); // mulh
         check_op(3'b010, 32'hFFFF_FFFE, 32'h8000_0000, 32'hFFFF_FFFF); // mulhsu
         check_op(3'b011, 32'hFFFF_FFFF, 32'hFFFF_FFFF, 32'hFFFF_FFFE); // mulhu
+        // Radix-4 digit 0/1/2/3 and a nonzero digit in the next two-bit group.
+        check_op(3'b000, 32'h1234_5678, 32'd0,          32'h0000_0000);
+        check_op(3'b000, 32'h1234_5678, 32'd1,          32'h1234_5678);
+        check_op(3'b000, 32'h1234_5678, 32'd2,          32'h2468_ACF0);
+        check_op(3'b000, 32'h1234_5678, 32'd3,          32'h369D_0368);
+        check_op(3'b000, 32'h1234_5678, 32'd12,         32'hDA74_0DA0);
+        // High-half sign, carry and unsigned boundaries.
+        check_op(3'b001, 32'h8000_0000, 32'h8000_0000, 32'h4000_0000);
+        check_op(3'b001, 32'h8000_0000, 32'hFFFF_FFFF, 32'h0000_0000);
+        check_op(3'b010, 32'hFFFF_FFFF, 32'hFFFF_FFFF, 32'hFFFF_FFFF);
+        check_op(3'b011, 32'hFFFF_FFFF, 32'd3,          32'h0000_0002);
+        check_op(3'b011, 32'h8000_0000, 32'd2,          32'h0000_0001);
         check_op(3'b100, 32'hFFFF_FFF9, 32'd3,         32'hFFFF_FFFE); // div
         check_op(3'b101, 32'hFFFF_FFFF, 32'd2,         32'h7FFF_FFFF); // divu
         check_op(3'b110, 32'hFFFF_FFF9, 32'd3,         32'hFFFF_FFFF); // rem
@@ -79,7 +93,7 @@ module tb_muldiv;
         @(posedge clk); #1 rst_n = 1'b0; #1;
         if (busy || done || result !== 32'd0) $fatal(1, "reset did not cancel operation");
 
-        $display("PASS: muldiv 8 operations, boundaries and handshake");
+        $display("PASS: radix-4 multiply, division, boundaries and handshake");
         $finish;
     end
 endmodule
