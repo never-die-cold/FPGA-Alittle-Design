@@ -3,8 +3,8 @@
 > 是什么：Part C（v1 + 可切换 BHT）交付后的验证、四档数据采集与 M1 收口验收执行清单。
 > 给谁看：never-die-cold（verify+bench 线，执行人）、jianglibo（RTL 线，交付对照）、watercopper（bench/四档指标）、上板负责人（第 7 节简报）。
 > 什么时候读：Part C RTL 交付前对照第 2–4 节备货，交付日按第 8 节逐项执行，10/4 对照第 3 节门禁验收（与 Part B 一并收口，[issue #21](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)）。
-> 唯一权威：`src/riscv/plan.md` §4.3 + `src/riscv/design_v1.md` 冻结版（dev/rtl `fe80857`）中与 Part C 相关条款（§1.3 / §9.4 / §14 / D10 / D15）。
-> ⚠️ 契约现状（2026-10-03 如实标注）：`design_v1.md` 目前只冻结到 Part B（D1–D15），**尚无 Part C 专章**——`branch_predict.v` 端口、BHT 三档切换方式、误预测恢复拍序、命中率统计口径均未冻结。本文件第 4 节断言点为**计划稿**，契约冻结后回填升版；冲突时以契约为准。
+> 唯一权威：`src/riscv/plan.md` §4.3 + `src/riscv/design_v1.md` §16/D17；验收 commit 由 RTL 提交后回填。
+> 契约现状（2026-10-06）：Part C §16/D17 已冻结，BHT RTL、专项 tb 与同 CoreMark 四档入口已完成 Icarus 回归；arch-test/XSim/Vivado/资源/上板仍待验证。
 > 本文档只做执行对照，不复制契约条款；不改 RTL、不改脚本。
 
 ## 1. 角色边界
@@ -18,11 +18,11 @@
 
 ## 2. 交付前置（RTL 线自查，Part C RTL 交付前）
 
-- [ ] **Part B 前置闭合**：`v1_fwd` / `v1_nofwd` 已接入 `run_iverilog.sh`、`all` 全 PASS 且独立复验在案（§4.3 依赖"Part B 的 v1 主体"；当前看板口径=完整三级核未验收，不闭合则 Part C 不开工）
-- [ ] **Part C 契约冻结**：`branch_predict.v` 端口/位宽、BHT 三档（关闭/1-bit/2-bit）切换方式、误预测恢复拍序、命中率统计通道写入 `design_v1.md` 新章节，D10 扩展决策留痕
-- [ ] 三档切换沿用 D3：同一 RTL + 顶层 parameter（脚本传参），禁止复制 RTL 或手改源码生成对照档；四档运行入口名随契约冻结写入 `design_v1.md`
-- [ ] 命中率统计"数据要有来源"（§4.3）：片上计数器或 tb 层次化引用统计二选一写入契约，波形可交叉核对
-- [ ] `core_top` 对外端口不变，`soc_top` 零改动可编译（§13.3/§13.6 沿用）；编译无隐式 wire、位宽截断、组合环路警告
+- [x] **Part B 前置闭合**：`v1_fwd` / `v1_nofwd` 已接入脚本且 `all` 回归通过
+- [x] **Part C 契约冻结**：端口、三档、恢复拍序和统计通道已写入 `design_v1.md` §16/D17
+- [x] 三档由同一 RTL 顶层 parameter 切换，四档入口已冻结并接入脚本
+- [x] 命中率由 tb 层次化单拍事件统计，与 CPI 共用窗口
+- [x] `core_top` 对外端口不变，`soc_top` 零改动可编译；Verilog-2001 核顶编译通过
 - [ ] benchmark 交付物就位：Dhrystone 思路自写整型 benchmark（循环/数组/函数调用/位运算/乘法混编）C 源码 + 编译脚本（`src/riscv_fw/`）+ 反汇编归档
 - [ ] arch-test 扩展子集清单列全（RV32IM 等，不少于 Part B 集合），明确四档运行矩阵（`docs/coremark.md` §6.4 口径）
 
@@ -44,9 +44,9 @@
 
 | tb | 覆盖契约 | 必查断言 | 状态 |
 |:---|:---|:---|:---|
-| `tb_branch_predict.v`（单元） | §4.3 范围 | 关闭档 = 静态不跳 + taken 冲刷（逐拍等价 v1_fwd 现行为）；1-bit / 2-bit 饱和计数器方向翻转、饱和不溢出、误预测后回退；表项初值与更新时机；命中率计数逐拍 = 波形手工计数 | **计划稿：端口级断言待契约冻结后回填；等 RTL** |
-| 整核 BHT 专项（新增或扩 tb_core_fwd） | §4.3 冲刷逻辑 + 命中率 | 误预测：PC 恢复正确路径、错误路径槽 `valid=0` 零副作用（不写 regfile/DMEM、不启动 muldiv）；预测正确零冲刷气泡；1-bit 抖动序列 vs 2-bit 稳定的行为差异；关闭档与 `v1_fwd` 结果一致 | 等 RTL |
-| 命中率统计校验（并入整核专项或独立 tb） | §4.3 | 统计窗口与 CPI 窗口一致或可换算；hit/miss/lookup 三计数自洽（hit+miss=lookup）；关闭档计数不启用或为 0 | 等 RTL |
+| `tb_branch_predict.v`（单元） | §4.3 范围 | 三档初值、更新时机、方向翻转和饱和 | Icarus PASS（21 checks） |
+| `tb_core_bht_flow.v` | §4.3 冲刷逻辑 + 命中率 | 恢复 PC、正确预测零冲刷、错误路径 regfile/DMEM/muldiv 零副作用 | 三档 Icarus PASS |
+| `tb_core_coremark.v` | §4.3 CPI + 命中率 | 同窗口计数；hit+miss=lookup；四档 CRC/retired 一致 | 四档 Icarus PASS；外部复验待执行 |
 | 复用现有 | — | `tb_core_fwd`（转发/气泡，其边界节已预留"Part C 上 BHT 后按命中率变化"对照点）、`tb_core_test`（38 用例）、`tb_core_coremark`（四档同 hex）、`tb_core_muldiv`、`tb_arch_test`；单元 tb 不回归 | 已有 |
 | benchmark / arch-test 备货 | §4.3 | 自写 benchmark 四档同一 hex；arch-test 扩展子集清单；`docs/coremark.md` §6.4 四档矩阵（同 golden，任一档 CRC 不符即该档 FAIL） | bench 线备货 |
 

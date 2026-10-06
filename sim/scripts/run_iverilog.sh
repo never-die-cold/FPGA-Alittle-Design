@@ -4,13 +4,16 @@
 #   bash sim/scripts/run_iverilog.sh          # 全量回归（含 CoreMark，约 2,100 万周期）
 #   bash sim/scripts/run_iverilog.sh v0       # v0 回归集合（冒烟 + 逐指令自检）
 #   bash sim/scripts/run_iverilog.sh fwd      # 转发专项（数据冒险 / 分支气泡，v0 对照档）
-#   bash sim/scripts/run_iverilog.sh v1_fwd   # v1 三级核，转发开启
-#   bash sim/scripts/run_iverilog.sh v1_nofwd # v1 三级核，转发关闭
+#   bash sim/scripts/run_iverilog.sh v1_fwd       # CoreMark：转发开、BHT 关
+#   bash sim/scripts/run_iverilog.sh v1_nofwd     # CoreMark：转发关、BHT 关
+#   bash sim/scripts/run_iverilog.sh v1_fwd_bht1  # CoreMark：转发开、1-bit BHT
+#   bash sim/scripts/run_iverilog.sh v1_fwd_bht2  # CoreMark：转发开、2-bit BHT
 #   bash sim/scripts/run_iverilog.sh v1_hazard_fwd   # v1 整核冒险边界，转发开启
 #   bash sim/scripts/run_iverilog.sh v1_hazard_nofwd # v1 整核冒险边界，转发关闭
 #   bash sim/scripts/run_iverilog.sh decode   # 译码源操作数使用标志
 #   bash sim/scripts/run_iverilog.sh forwarding # 转发选择器单元自检
 #   bash sim/scripts/run_iverilog.sh hazard    # 冒险与重定向控制自检
+#   bash sim/scripts/run_iverilog.sh branch_predict # BHT 三档单元自检
 #   bash sim/scripts/run_iverilog.sh mem_wb    # MEM+WB 边界寄存器自检
 #   bash sim/scripts/run_iverilog.sh id_ex     # ID+EX 组合级自检
 #   bash sim/scripts/run_iverilog.sh v1_mem    # v1 整核访存宽度与扩展自检
@@ -42,13 +45,19 @@ case "$MODE" in
     vision_python) exec bash "$(dirname "$0")/run_vision_python.sh" ;;
     v0)  TBS=(riscv/tb_core_smoke.v riscv/tb_core_test.v) ;;
     fwd) TBS=(riscv/tb_core_fwd.v) ;;
-    v1_fwd) TBS=(riscv/tb_core_fwd.v); IVERILOG_ARGS=(-Ptb_core_fwd.ENABLE_FORWARDING=1) ;;
-    v1_nofwd) TBS=(riscv/tb_core_fwd.v); IVERILOG_ARGS=(-Ptb_core_fwd.ENABLE_FORWARDING=0) ;;
+    v1_fwd) TBS=(riscv/tb_core_coremark.v); IVERILOG_ARGS=(-Ptb_core_coremark.ENABLE_FORWARDING=1 -Ptb_core_coremark.BHT_MODE=0) ;;
+    v1_nofwd) TBS=(riscv/tb_core_coremark.v); IVERILOG_ARGS=(-Ptb_core_coremark.ENABLE_FORWARDING=0 -Ptb_core_coremark.BHT_MODE=0) ;;
+    v1_fwd_bht1) TBS=(riscv/tb_core_coremark.v); IVERILOG_ARGS=(-Ptb_core_coremark.ENABLE_FORWARDING=1 -Ptb_core_coremark.BHT_MODE=1) ;;
+    v1_fwd_bht2) TBS=(riscv/tb_core_coremark.v); IVERILOG_ARGS=(-Ptb_core_coremark.ENABLE_FORWARDING=1 -Ptb_core_coremark.BHT_MODE=2) ;;
     v1_hazard_fwd) TBS=(riscv/tb_core_v1_hazard.v); IVERILOG_ARGS=(-Ptb_core_v1_hazard.ENABLE_FORWARDING=1) ;;
     v1_hazard_nofwd) TBS=(riscv/tb_core_v1_hazard.v); IVERILOG_ARGS=(-Ptb_core_v1_hazard.ENABLE_FORWARDING=0) ;;
     decode) TBS=(riscv/tb_decode.v) ;;
     forwarding) TBS=(riscv/tb_forwarding.v) ;;
     hazard) TBS=(riscv/tb_hazard.v) ;;
+    branch_predict) TBS=(riscv/tb_branch_predict.v) ;;
+    bht_flow|bht_flow_2) TBS=(riscv/tb_core_bht_flow.v); IVERILOG_ARGS=(-Ptb_core_bht_flow.BHT_MODE=2) ;;
+    bht_flow_1) TBS=(riscv/tb_core_bht_flow.v); IVERILOG_ARGS=(-Ptb_core_bht_flow.BHT_MODE=1) ;;
+    bht_flow_off) TBS=(riscv/tb_core_bht_flow.v); IVERILOG_ARGS=(-Ptb_core_bht_flow.BHT_MODE=0) ;;
     mem_wb) TBS=(riscv/tb_mem_wb_stage.v) ;;
     id_ex) TBS=(riscv/tb_id_ex_stage.v) ;;
     v1_flow) TBS=(riscv/tb_core_v1_flow.v) ;;
@@ -69,8 +78,8 @@ case "$MODE" in
     bench) TBS=(riscv/tb_core_coremark.v) ;;
     bench_fwd) TBS=(riscv/tb_core_coremark.v); IVERILOG_ARGS=(-Ptb_core_coremark.ENABLE_FORWARDING=1) ;;
     bench_nofwd) TBS=(riscv/tb_core_coremark.v); IVERILOG_ARGS=(-Ptb_core_coremark.ENABLE_FORWARDING=0) ;;
-    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_pynq_z2_clock_config.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_v1_mem.v riscv/tb_decode.v riscv/tb_forwarding.v riscv/tb_hazard.v riscv/tb_mem_wb_stage.v riscv/tb_id_ex_stage.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_core_coremark.v riscv/tb_soc_top.v riscv/tb_soc_check.v) ;;
-    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|v1_fwd|v1_nofwd|v1_hazard_fwd|v1_hazard_nofwd|v1_muldiv_fwd|v1_muldiv_nofwd|decode|forwarding|hazard|mem_wb|id_ex|v1_flow|v1_mem|v1_muldiv_flow|muldiv|rv32im|imem|dmem|clock_cfg|coremark|coremark_fwd|coremark_nofwd|soc|soc_check|bench|bench_fwd|bench_nofwd|all]"; exit 1 ;;
+    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_pynq_z2_clock_config.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_v1_mem.v riscv/tb_core_fwd.v riscv/tb_decode.v riscv/tb_forwarding.v riscv/tb_hazard.v riscv/tb_branch_predict.v riscv/tb_core_bht_flow.v riscv/tb_mem_wb_stage.v riscv/tb_id_ex_stage.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_soc_top.v riscv/tb_soc_check.v) ;;
+    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|v1_fwd|v1_nofwd|v1_hazard_fwd|v1_hazard_nofwd|v1_muldiv_fwd|v1_muldiv_nofwd|decode|forwarding|hazard|branch_predict|mem_wb|id_ex|v1_flow|v1_mem|v1_muldiv_flow|muldiv|rv32im|imem|dmem|clock_cfg|coremark|coremark_fwd|coremark_nofwd|soc|soc_check|bench|bench_fwd|bench_nofwd|all]"; exit 1 ;;
 esac
 
 cd "$(dirname "$0")/.."          # -> sim/
@@ -121,12 +130,16 @@ for tb in "${TBS[@]}"; do
     fi
 done
 if [ "$MODE" = "all" ]; then
-    bash scripts/run_iverilog.sh v1_fwd || exit 1
     bash scripts/run_iverilog.sh v1_nofwd || exit 1
+    bash scripts/run_iverilog.sh v1_fwd || exit 1
+    bash scripts/run_iverilog.sh v1_fwd_bht1 || exit 1
+    bash scripts/run_iverilog.sh v1_fwd_bht2 || exit 1
     bash scripts/run_iverilog.sh v1_hazard_fwd || exit 1
     bash scripts/run_iverilog.sh v1_hazard_nofwd || exit 1
     bash scripts/run_iverilog.sh v1_muldiv_fwd || exit 1
     bash scripts/run_iverilog.sh v1_muldiv_nofwd || exit 1
+    bash scripts/run_iverilog.sh bht_flow_off || exit 1
+    bash scripts/run_iverilog.sh bht_flow_1 || exit 1
     bash scripts/test_vision_gate.sh || exit 1
     bash scripts/run_vision_iverilog.sh all || exit 1
     bash scripts/run_vision_python.sh || exit 1

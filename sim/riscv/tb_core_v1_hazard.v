@@ -18,6 +18,9 @@ module tb_core_v1_hazard;
     assign dmem_rdata = dmem[dmem_addr[14:2]];
     always @(posedge clk) if (rst_n) begin
         cycles = cycles + 1;
+        if (dut.bp_lookup_event || dut.bp_hit_event || dut.bp_miss_event) begin
+            $display("FAIL: disabled BHT emitted event"); errors = errors + 1;
+        end
         if (dut.redirect && dut.front_stall) begin
             $display("FAIL: redirect during front_stall"); errors = errors + 1;
         end

@@ -5,7 +5,7 @@ module id_ex_stage (
     output wire [4:0] rs1_addr, rs2_addr, rd_addr,
     output wire uses_rs1, uses_rs2, muldiv_valid,
     output wire [2:0] muldiv_op,
-    output wire branch_taken, jump_taken,
+    output wire branch_valid, branch_taken, jump_taken,
     output wire [31:0] redirect_target,
     output wire [31:0] ex_result, ex_addr, ex_store_data,
     output wire ex_reg_write, ex_mem_read, ex_mem_write,
@@ -45,7 +45,8 @@ module id_ex_stage (
                       (branch_type == 3'd4) ? ~branch_lt :
                       (branch_type == 3'd5) ?  branch_ltu :
                       (branch_type == 3'd6) ? ~branch_ltu : 1'b0;
-    assign branch_taken = (branch_type != 0) && cond_taken;
+    assign branch_valid = (branch_type != 0);
+    assign branch_taken = branch_valid && cond_taken;
     assign jump_taken = (jump_type != 0);
     assign redirect_target = (jump_type == 2'd2) ?
                              (alu_y & 32'hffff_fffe) : (in_pc + imm);
