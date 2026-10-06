@@ -49,6 +49,8 @@
 - **发现**：`nofwd` 达 100 MHz（104.7）；**转发 −8MHz、BHT 再 −13MHz，主档 bht2 仅 ~83.6 MHz**——低于 100 MHz 目标、也低于 v0 基线 86.8。bht2 关键路径 `u_if_stage/flush_q_reg → u_pc/pc_reg[30]`（17 级），BHT 信号进入 flush/PC 逻辑拉长了该路径；**BHT 查找/表本身不是主凶**。
 - 报告副本：`reports/fmax/<tier>/`。
 
+**86.8 MHz 实点（v0 基线）复核**：`core_top v1_bht2 @ 11.520 ns` → **WNS = −0.334 ns（约束实测失败）**，外推 Fmax 84.4 MHz；关键路径 `u_if_stage/instr_hold_reg[5] → u_pc/pc_reg[27]`（Data Path 11.860 ns，logic 33.4% / route 66.6%，17 级）→ **确认 BHT2 真违反 v0 基线 86.8 MHz**（非外推），需做 PC/flush 降深度优化（RTL）。报告：`reports/fmax/bht2_11p52ns/`；日志 `fmax_bht2_11p52ns.log`。
+
 ## 结果 4：SoC 主档（bht2）构建与上板 PASS
 
 命令：`build_soc.tcl -tclargs 40 bht2` → `BUILD PASSED, profile=bht2, WNS=+5.599`，位流 `build/run/soc_40mhz_bht2/pynq_z2_soc_40mhz_bht2.bit`，SHA256 `0D670A2315DBBC2D48FBEBCDDE8F99B791686B04D0E65EB7CC6C7A921C829BB9`。
@@ -58,7 +60,8 @@
 ## 未完成 / 缺口
 
 - **arch-test 四档：未做**。原因：① 本机无 riscv 工具链、无 iverilog；② `run_arch_test*.sh` 仅支持 `fwd|nofwd`、**不含 BHT 档**。属工具链/脚本缺口，需 RTL 线补 BHT 档 arch-test 入口或在有工具链的机器上跑。
-- **BHT 档 Vivado 完备性**：本次只做了 @10 ns 单点（四档）+ 主档 40 MHz SoC；四档 Fmax 收敛、SoC 四档未做。
+- **BHT 档 Vivado 完备性**：本次做了四档 @10 ns 单点 + **bht2 @11.520 ns（86.8 MHz）实点**（WNS −0.334，违反 v0 基线）+ 主档 40 MHz SoC；四档 Fmax 收敛、SoC 四档未做。
+- **后续（RTL）**：bht2 违反 v0 基线 → 需 PC/flush 降深度优化（预测是否错误/恢复地址在 ID+EX 并行预算，PC 端只收收敛后的 `recover_valid/recover_pc`，不让 `flush_q` 再串 BHT 比较与多层 PC mux）。
 
 ## 复现
 
