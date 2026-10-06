@@ -1,0 +1,36 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/src/riscv/alu.v" into library work
+INFO: [VRFC 10-311] analyzing module alu
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/src/riscv/core_top.v" into library work
+INFO: [VRFC 10-311] analyzing module core_top
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/src/riscv/decode.v" into library work
+INFO: [VRFC 10-311] analyzing module decode
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/src/riscv/dmem.v" into library work
+INFO: [VRFC 10-311] analyzing module dmem
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/src/riscv/forwarding.v" into library work
+INFO: [VRFC 10-311] analyzing module forwarding
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/src/riscv/hazard.v" into library work
+INFO: [VRFC 10-311] analyzing module hazard
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/src/riscv/id_ex_stage.v" into library work
+INFO: [VRFC 10-311] analyzing module id_ex_stage
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/src/riscv/if_stage.v" into library work
+INFO: [VRFC 10-311] analyzing module if_stage
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/src/riscv/imem.v" into library work
+INFO: [VRFC 10-311] analyzing module imem
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/src/riscv/mem_wb_stage.v" into library work
+INFO: [VRFC 10-311] analyzing module mem_wb_stage
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/src/riscv/muldiv.v" into library work
+INFO: [VRFC 10-311] analyzing module muldiv
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/src/riscv/pc.v" into library work
+INFO: [VRFC 10-311] analyzing module pc
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/src/riscv/pynq_z2_top.v" into library work
+INFO: [VRFC 10-311] analyzing module pynq_z2_top
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/src/riscv/regfile.v" into library work
+INFO: [VRFC 10-311] analyzing module regfile
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/src/riscv/soc_top.v" into library work
+INFO: [VRFC 10-311] analyzing module soc_top
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/riscv/tb_muldiv.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_muldiv
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/riscv/tb_core_fwd.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_core_fwd
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/riscv/tb_core_v1_muldiv_flow.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_core_v1_muldiv_flow

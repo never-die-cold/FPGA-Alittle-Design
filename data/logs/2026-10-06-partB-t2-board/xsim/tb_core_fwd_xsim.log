@@ -1,0 +1,21 @@
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Tue Oct  6 14:21:57 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_core_fwd_xsim/xsim_script.tcl
+# xsim {tb_core_fwd_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+== fwd phase A (R-type RAW) : cycles=28 bubbles=0 (expect 0)
+== fwd phase B (lw->op)     : cycles=26 bubbles=4 (expect 4)
+== fwd phase C (taken)      : cycles=26 bubbles=5 (expect 5)
+== fwd phase D (not-taken)  : cycles=12 bubbles=0 (expect 0)
+PASS: fwd_test 结果全对；气泡 A/B/C/D = 0/4/5/0，总周期 127，总气泡 13
+$finish called at time : 1345 ns : File "D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/riscv/tb_core_fwd.v" Line 197
+exit
+INFO: [Common 17-206] Exiting xsim at Tue Oct  6 14:21:59 2026...

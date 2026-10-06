@@ -1,0 +1,708 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Tue Oct  6 14:09:27 2026
+| Host         : Walter-Cooper running 64-bit major release  (build 9200)
+| Command      : report_timing -delay_type max -max_paths 10 -sort_by group -file D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/build/reports/fmax/v1_t2_11p52ns/timing_worst_paths.rpt
+| Design       : core_top
+| Device       : 7z020-clg400
+| Speed File   : -1  PRODUCTION 1.12 2019-11-22
+| Design State : Routed
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             0.187ns  (required time - arrival time)
+  Source:                 u_if_stage/flush_q_reg/C
+                            (rising edge-triggered cell FDPE clocked by sys_clk  {rise@0.000ns fall@5.760ns period=11.520ns})
+  Destination:            u_pc/pc_reg[13]/D
+                            (rising edge-triggered cell FDCE clocked by sys_clk  {rise@0.000ns fall@5.760ns period=11.520ns})
+  Path Group:             sys_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            11.520ns  (sys_clk rise@11.520ns - sys_clk rise@0.000ns)
+  Data Path Delay:        11.151ns  (logic 2.097ns (18.805%)  route 9.054ns (81.195%))
+  Logic Levels:           9  (LUT4=3 LUT5=2 LUT6=3 RAMD32=1)
+  Clock Path Skew:        -0.177ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.476ns = ( 12.996 - 11.520 ) 
+    Source Clock Delay      (SCD):    1.666ns
+    Clock Pessimism Removal (CPR):    0.013ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock sys_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=596, unset)          1.666     1.666    u_if_stage/clk
+    SLICE_X38Y9          FDPE                                         r  u_if_stage/flush_q_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X38Y9          FDPE (Prop_fdpe_C_Q)         0.518     2.184 f  u_if_stage/flush_q_reg/Q
+                         net (fo=110, routed)         0.882     3.066    u_if_stage/flush_q
+    SLICE_X37Y10         LUT4 (Prop_lut4_I2_O)        0.124     3.190 r  u_if_stage/regs_reg_r2_0_31_0_5_i_5/O
+                         net (fo=40, routed)          0.956     4.146    u_regfile/regs_reg_r2_0_31_0_5/ADDRB0
+    SLICE_X34Y10         RAMD32 (Prop_ramd32_RADR0_O)
+                                                      0.124     4.270 f  u_regfile/regs_reg_r2_0_31_0_5/RAMB_D1/O
+                         net (fo=4, routed)           1.178     5.448    u_if_stage/rdata20[3]
+    SLICE_X37Y11         LUT6 (Prop_lut6_I0_O)        0.124     5.572 f  u_if_stage/multiplier[3]_i_2/O
+                         net (fo=7, routed)           0.997     6.569    u_if_stage/rs2_fwd[3]
+    SLICE_X41Y11         LUT5 (Prop_lut5_I0_O)        0.154     6.723 f  u_if_stage/pc[23]_i_18/O
+                         net (fo=80, routed)          1.646     8.369    u_if_stage/pc[23]_i_18_n_0
+    SLICE_X53Y18         LUT4 (Prop_lut4_I0_O)        0.327     8.696 r  u_if_stage/mem_addr[18]_i_13/O
+                         net (fo=4, routed)           0.988     9.685    u_if_stage/mem_addr[18]_i_13_n_0
+    SLICE_X53Y16         LUT6 (Prop_lut6_I0_O)        0.124     9.809 r  u_if_stage/mem_addr[14]_i_8/O
+                         net (fo=2, routed)           1.101    10.910    u_if_stage/mem_addr[14]_i_8_n_0
+    SLICE_X51Y14         LUT4 (Prop_lut4_I0_O)        0.152    11.062 r  u_if_stage/mem_addr[13]_i_3/O
+                         net (fo=1, routed)           0.642    11.704    u_if_stage/mem_addr[13]_i_3_n_0
+    SLICE_X50Y14         LUT6 (Prop_lut6_I2_O)        0.326    12.030 r  u_if_stage/mem_addr[13]_i_1/O
+                         net (fo=3, routed)           0.663    12.693    u_if_stage/mem_addr[31]_i_7_0[13]
+    SLICE_X51Y15         LUT5 (Prop_lut5_I2_O)        0.124    12.817 r  u_if_stage/pc[13]_i_1/O
+                         net (fo=1, routed)           0.000    12.817    u_pc/D[13]
+    SLICE_X51Y15         FDCE                                         r  u_pc/pc_reg[13]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock sys_clk rise edge)   11.520    11.520 r  <hidden>
+                                                      0.000    11.520 r  clk
+                         net (fo=596, unset)          1.476    12.996    u_pc/clk
+    SLICE_X51Y15         FDCE                                         r  u_pc/pc_reg[13]/C
+                         clock pessimism              0.013    13.009    <hidden>
+                         clock uncertainty           -0.035    12.974    <hidden>
+    SLICE_X51Y15         FDCE (Setup_fdce_C_D)        0.031    13.005    u_pc/pc_reg[13]
+  -------------------------------------------------------------------
+                         required time                         13.005    <hidden>
+                         arrival time                         -12.817    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.187    <hidden>
+
+Slack (MET) :             0.305ns  (required time - arrival time)
+  Source:                 u_if_stage/flush_q_reg/C
+                            (rising edge-triggered cell FDPE clocked by sys_clk  {rise@0.000ns fall@5.760ns period=11.520ns})
+  Destination:            u_mem_wb/mem_result_reg[13]/D
+                            (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.760ns period=11.520ns})
+  Path Group:             sys_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            11.520ns  (sys_clk rise@11.520ns - sys_clk rise@0.000ns)
+  Data Path Delay:        11.148ns  (logic 2.097ns (18.811%)  route 9.051ns (81.189%))
+  Logic Levels:           9  (LUT4=3 LUT5=2 LUT6=3 RAMD32=1)
+  Clock Path Skew:        -0.061ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.490ns = ( 13.010 - 11.520 ) 
+    Source Clock Delay      (SCD):    1.666ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock sys_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=596, unset)          1.666     1.666    u_if_stage/clk
+    SLICE_X38Y9          FDPE                                         r  u_if_stage/flush_q_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X38Y9          FDPE (Prop_fdpe_C_Q)         0.518     2.184 f  u_if_stage/flush_q_reg/Q
+                         net (fo=110, routed)         0.882     3.066    u_if_stage/flush_q
+    SLICE_X37Y10         LUT4 (Prop_lut4_I2_O)        0.124     3.190 r  u_if_stage/regs_reg_r2_0_31_0_5_i_5/O
+                         net (fo=40, routed)          0.956     4.146    u_regfile/regs_reg_r2_0_31_0_5/ADDRB0
+    SLICE_X34Y10         RAMD32 (Prop_ramd32_RADR0_O)
+                                                      0.124     4.270 f  u_regfile/regs_reg_r2_0_31_0_5/RAMB_D1/O
+                         net (fo=4, routed)           1.178     5.448    u_if_stage/rdata20[3]
+    SLICE_X37Y11         LUT6 (Prop_lut6_I0_O)        0.124     5.572 f  u_if_stage/multiplier[3]_i_2/O
+                         net (fo=7, routed)           0.997     6.569    u_if_stage/rs2_fwd[3]
+    SLICE_X41Y11         LUT5 (Prop_lut5_I0_O)        0.154     6.723 f  u_if_stage/pc[23]_i_18/O
+                         net (fo=80, routed)          1.646     8.369    u_if_stage/pc[23]_i_18_n_0
+    SLICE_X53Y18         LUT4 (Prop_lut4_I0_O)        0.327     8.696 r  u_if_stage/mem_addr[18]_i_13/O
+                         net (fo=4, routed)           0.988     9.685    u_if_stage/mem_addr[18]_i_13_n_0
+    SLICE_X53Y16         LUT6 (Prop_lut6_I0_O)        0.124     9.809 r  u_if_stage/mem_addr[14]_i_8/O
+                         net (fo=2, routed)           1.101    10.910    u_if_stage/mem_addr[14]_i_8_n_0
+    SLICE_X51Y14         LUT4 (Prop_lut4_I0_O)        0.152    11.062 r  u_if_stage/mem_addr[13]_i_3/O
+                         net (fo=1, routed)           0.642    11.704    u_if_stage/mem_addr[13]_i_3_n_0
+    SLICE_X50Y14         LUT6 (Prop_lut6_I2_O)        0.326    12.030 r  u_if_stage/mem_addr[13]_i_1/O
+                         net (fo=3, routed)           0.660    12.690    u_if_stage/mem_addr[31]_i_7_0[13]
+    SLICE_X40Y13         LUT5 (Prop_lut5_I4_O)        0.124    12.814 r  u_if_stage/mem_result[13]_i_1/O
+                         net (fo=1, routed)           0.000    12.814    u_mem_wb/mem_result_reg[31]_1[13]
+    SLICE_X40Y13         FDRE                                         r  u_mem_wb/mem_result_reg[13]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock sys_clk rise edge)   11.520    11.520 r  <hidden>
+                                                      0.000    11.520 r  clk
+                         net (fo=596, unset)          1.490    13.010    u_mem_wb/clk
+    SLICE_X40Y13         FDRE                                         r  u_mem_wb/mem_result_reg[13]/C
+                         clock pessimism              0.115    13.125    <hidden>
+                         clock uncertainty           -0.035    13.090    <hidden>
+    SLICE_X40Y13         FDRE (Setup_fdre_C_D)        0.029    13.119    u_mem_wb/mem_result_reg[13]
+  -------------------------------------------------------------------
+                         required time                         13.119    <hidden>
+                         arrival time                         -12.814    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.305    <hidden>
+
+Slack (MET) :             0.386ns  (required time - arrival time)
+  Source:                 u_if_stage/instr_hold_reg[3]/C
+                            (rising edge-triggered cell FDCE clocked by sys_clk  {rise@0.000ns fall@5.760ns period=11.520ns})
+  Destination:            u_mem_wb/mem_addr_reg[31]/D
+                            (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.760ns period=11.520ns})
+  Path Group:             sys_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            11.520ns  (sys_clk rise@11.520ns - sys_clk rise@0.000ns)
+  Data Path Delay:        10.850ns  (logic 3.519ns (32.433%)  route 7.331ns (67.567%))
+  Logic Levels:           13  (CARRY4=4 LUT2=1 LUT3=1 LUT4=1 LUT5=3 LUT6=3)
+  Clock Path Skew:        -0.182ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.471ns = ( 12.991 - 11.520 ) 
+    Source Clock Delay      (SCD):    1.666ns
+    Clock Pessimism Removal (CPR):    0.013ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock sys_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=596, unset)          1.666     1.666    u_if_stage/clk
+    SLICE_X39Y9          FDCE                                         r  u_if_stage/instr_hold_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X39Y9          FDCE (Prop_fdce_C_Q)         0.456     2.122 r  u_if_stage/instr_hold_reg[3]/Q
+                         net (fo=3, routed)           1.188     3.310    u_if_stage/instr_hold[3]
+    SLICE_X39Y9          LUT4 (Prop_lut4_I0_O)        0.152     3.462 r  u_if_stage/mem_reg_write_i_5/O
+                         net (fo=8, routed)           0.782     4.243    u_if_stage/instr[3]
+    SLICE_X39Y9          LUT6 (Prop_lut6_I0_O)        0.326     4.569 f  u_if_stage/lt_carry_i_23/O
+                         net (fo=10, routed)          1.048     5.618    u_if_stage/lt_carry_i_23_n_0
+    SLICE_X38Y11         LUT3 (Prop_lut3_I0_O)        0.146     5.764 f  u_if_stage/lt_carry__0_i_17/O
+                         net (fo=17, routed)          0.864     6.628    u_if_stage/lt_carry__0_i_17_n_0
+    SLICE_X40Y11         LUT5 (Prop_lut5_I4_O)        0.356     6.984 r  u_if_stage/lt_carry__0_i_18/O
+                         net (fo=16, routed)          0.844     7.828    u_if_stage/lt_carry__0_i_18_n_0
+    SLICE_X36Y15         LUT5 (Prop_lut5_I2_O)        0.332     8.160 r  u_if_stage/lt_carry__1_i_15/O
+                         net (fo=9, routed)           0.749     8.909    u_if_stage/lt_carry__1_i_15_n_0
+    SLICE_X45Y17         LUT2 (Prop_lut2_I0_O)        0.124     9.033 r  u_if_stage/y0_carry__3_i_8/O
+                         net (fo=1, routed)           0.000     9.033    u_id_ex/u_alu/mem_addr[16]_i_6_0[0]
+    SLICE_X45Y17         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532     9.565 r  u_id_ex/u_alu/y0_carry__3/CO[3]
+                         net (fo=1, routed)           0.000     9.565    u_id_ex/u_alu/y0_carry__3_n_0
+    SLICE_X45Y18         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.679 r  u_id_ex/u_alu/y0_carry__4/CO[3]
+                         net (fo=1, routed)           0.000     9.679    u_id_ex/u_alu/y0_carry__4_n_0
+    SLICE_X45Y19         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.793 r  u_id_ex/u_alu/y0_carry__5/CO[3]
+                         net (fo=1, routed)           0.000     9.793    u_id_ex/u_alu/y0_carry__5_n_0
+    SLICE_X45Y20         CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.313    10.106 r  u_id_ex/u_alu/y0_carry__6/O[3]
+                         net (fo=1, routed)           0.309    10.415    u_if_stage/data0[31]
+    SLICE_X49Y20         LUT5 (Prop_lut5_I3_O)        0.306    10.721 r  u_if_stage/mem_addr[31]_i_8/O
+                         net (fo=1, routed)           0.403    11.124    u_if_stage/mem_addr[31]_i_8_n_0
+    SLICE_X49Y20         LUT6 (Prop_lut6_I3_O)        0.124    11.248 r  u_if_stage/mem_addr[31]_i_2/O
+                         net (fo=1, routed)           0.549    11.797    u_if_stage/mem_addr[31]_i_2_n_0
+    SLICE_X51Y20         LUT6 (Prop_lut6_I0_O)        0.124    11.921 r  u_if_stage/mem_addr[31]_i_1/O
+                         net (fo=3, routed)           0.595    12.516    u_mem_wb/D[31]
+    SLICE_X51Y20         FDRE                                         r  u_mem_wb/mem_addr_reg[31]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock sys_clk rise edge)   11.520    11.520 r  <hidden>
+                                                      0.000    11.520 r  clk
+                         net (fo=596, unset)          1.471    12.991    u_mem_wb/clk
+    SLICE_X51Y20         FDRE                                         r  u_mem_wb/mem_addr_reg[31]/C
+                         clock pessimism              0.013    13.004    <hidden>
+                         clock uncertainty           -0.035    12.969    <hidden>
+    SLICE_X51Y20         FDRE (Setup_fdre_C_D)       -0.067    12.902    u_mem_wb/mem_addr_reg[31]
+  -------------------------------------------------------------------
+                         required time                         12.902    <hidden>
+                         arrival time                         -12.516    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.386    <hidden>
+
+Slack (MET) :             0.414ns  (required time - arrival time)
+  Source:                 u_if_stage/instr_hold_reg[3]/C
+                            (rising edge-triggered cell FDCE clocked by sys_clk  {rise@0.000ns fall@5.760ns period=11.520ns})
+  Destination:            u_mem_wb/mem_addr_reg[26]/D
+                            (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.760ns period=11.520ns})
+  Path Group:             sys_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            11.520ns  (sys_clk rise@11.520ns - sys_clk rise@0.000ns)
+  Data Path Delay:        11.028ns  (logic 3.577ns (32.437%)  route 7.451ns (67.563%))
+  Logic Levels:           12  (CARRY4=3 LUT2=2 LUT3=1 LUT4=2 LUT5=2 LUT6=2)
+  Clock Path Skew:        -0.072ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.479ns = ( 12.999 - 11.520 ) 
+    Source Clock Delay      (SCD):    1.666ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock sys_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=596, unset)          1.666     1.666    u_if_stage/clk
+    SLICE_X39Y9          FDCE                                         r  u_if_stage/instr_hold_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X39Y9          FDCE (Prop_fdce_C_Q)         0.456     2.122 r  u_if_stage/instr_hold_reg[3]/Q
+                         net (fo=3, routed)           1.188     3.310    u_if_stage/instr_hold[3]
+    SLICE_X39Y9          LUT4 (Prop_lut4_I0_O)        0.152     3.462 r  u_if_stage/mem_reg_write_i_5/O
+                         net (fo=8, routed)           0.782     4.243    u_if_stage/instr[3]
+    SLICE_X39Y9          LUT6 (Prop_lut6_I0_O)        0.326     4.569 f  u_if_stage/lt_carry_i_23/O
+                         net (fo=10, routed)          1.048     5.618    u_if_stage/lt_carry_i_23_n_0
+    SLICE_X38Y11         LUT3 (Prop_lut3_I0_O)        0.146     5.764 f  u_if_stage/lt_carry__0_i_17/O
+                         net (fo=17, routed)          0.864     6.628    u_if_stage/lt_carry__0_i_17_n_0
+    SLICE_X40Y11         LUT5 (Prop_lut5_I4_O)        0.356     6.984 r  u_if_stage/lt_carry__0_i_18/O
+                         net (fo=16, routed)          0.844     7.828    u_if_stage/lt_carry__0_i_18_n_0
+    SLICE_X36Y15         LUT5 (Prop_lut5_I2_O)        0.332     8.160 r  u_if_stage/lt_carry__1_i_15/O
+                         net (fo=9, routed)           0.749     8.909    u_if_stage/lt_carry__1_i_15_n_0
+    SLICE_X45Y17         LUT2 (Prop_lut2_I0_O)        0.124     9.033 r  u_if_stage/y0_carry__3_i_8/O
+                         net (fo=1, routed)           0.000     9.033    u_id_ex/u_alu/mem_addr[16]_i_6_0[0]
+    SLICE_X45Y17         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532     9.565 r  u_id_ex/u_alu/y0_carry__3/CO[3]
+                         net (fo=1, routed)           0.000     9.565    u_id_ex/u_alu/y0_carry__3_n_0
+    SLICE_X45Y18         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.679 r  u_id_ex/u_alu/y0_carry__4/CO[3]
+                         net (fo=1, routed)           0.000     9.679    u_id_ex/u_alu/y0_carry__4_n_0
+    SLICE_X45Y19         CARRY4 (Prop_carry4_CI_O[2])
+                                                      0.239     9.918 r  u_id_ex/u_alu/y0_carry__5/O[2]
+                         net (fo=1, routed)           0.813    10.731    u_if_stage/data0[26]
+    SLICE_X46Y19         LUT2 (Prop_lut2_I1_O)        0.328    11.059 r  u_if_stage/pc[26]_i_5/O
+                         net (fo=1, routed)           0.411    11.470    u_if_stage/pc[26]_i_5_n_0
+    SLICE_X47Y19         LUT6 (Prop_lut6_I1_O)        0.348    11.818 r  u_if_stage/pc[26]_i_2/O
+                         net (fo=3, routed)           0.752    12.570    u_if_stage/pc[26]_i_2_n_0
+    SLICE_X47Y23         LUT4 (Prop_lut4_I0_O)        0.124    12.694 r  u_if_stage/mem_addr[26]_i_1/O
+                         net (fo=1, routed)           0.000    12.694    u_mem_wb/D[26]
+    SLICE_X47Y23         FDRE                                         r  u_mem_wb/mem_addr_reg[26]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock sys_clk rise edge)   11.520    11.520 r  <hidden>
+                                                      0.000    11.520 r  clk
+                         net (fo=596, unset)          1.479    12.999    u_mem_wb/clk
+    SLICE_X47Y23         FDRE                                         r  u_mem_wb/mem_addr_reg[26]/C
+                         clock pessimism              0.115    13.114    <hidden>
+                         clock uncertainty           -0.035    13.079    <hidden>
+    SLICE_X47Y23         FDRE (Setup_fdre_C_D)        0.029    13.108    u_mem_wb/mem_addr_reg[26]
+  -------------------------------------------------------------------
+                         required time                         13.108    <hidden>
+                         arrival time                         -12.694    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.414    <hidden>
+
+Slack (MET) :             0.431ns  (required time - arrival time)
+  Source:                 u_if_stage/instr_hold_reg[3]/C
+                            (rising edge-triggered cell FDCE clocked by sys_clk  {rise@0.000ns fall@5.760ns period=11.520ns})
+  Destination:            u_pc/pc_reg[21]/D
+                            (rising edge-triggered cell FDCE clocked by sys_clk  {rise@0.000ns fall@5.760ns period=11.520ns})
+  Path Group:             sys_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            11.520ns  (sys_clk rise@11.520ns - sys_clk rise@0.000ns)
+  Data Path Delay:        11.016ns  (logic 3.433ns (31.164%)  route 7.583ns (68.836%))
+  Logic Levels:           12  (CARRY4=2 LUT2=1 LUT3=1 LUT4=1 LUT5=4 LUT6=3)
+  Clock Path Skew:        -0.069ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.482ns = ( 13.002 - 11.520 ) 
+    Source Clock Delay      (SCD):    1.666ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock sys_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=596, unset)          1.666     1.666    u_if_stage/clk
+    SLICE_X39Y9          FDCE                                         r  u_if_stage/instr_hold_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X39Y9          FDCE (Prop_fdce_C_Q)         0.456     2.122 r  u_if_stage/instr_hold_reg[3]/Q
+                         net (fo=3, routed)           1.188     3.310    u_if_stage/instr_hold[3]
+    SLICE_X39Y9          LUT4 (Prop_lut4_I0_O)        0.152     3.462 r  u_if_stage/mem_reg_write_i_5/O
+                         net (fo=8, routed)           0.782     4.243    u_if_stage/instr[3]
+    SLICE_X39Y9          LUT6 (Prop_lut6_I0_O)        0.326     4.569 f  u_if_stage/lt_carry_i_23/O
+                         net (fo=10, routed)          1.048     5.618    u_if_stage/lt_carry_i_23_n_0
+    SLICE_X38Y11         LUT3 (Prop_lut3_I0_O)        0.146     5.764 f  u_if_stage/lt_carry__0_i_17/O
+                         net (fo=17, routed)          0.864     6.628    u_if_stage/lt_carry__0_i_17_n_0
+    SLICE_X40Y11         LUT5 (Prop_lut5_I4_O)        0.356     6.984 r  u_if_stage/lt_carry__0_i_18/O
+                         net (fo=16, routed)          0.844     7.828    u_if_stage/lt_carry__0_i_18_n_0
+    SLICE_X36Y15         LUT5 (Prop_lut5_I2_O)        0.332     8.160 r  u_if_stage/lt_carry__1_i_15/O
+                         net (fo=9, routed)           0.749     8.909    u_if_stage/lt_carry__1_i_15_n_0
+    SLICE_X45Y17         LUT2 (Prop_lut2_I0_O)        0.124     9.033 r  u_if_stage/y0_carry__3_i_8/O
+                         net (fo=1, routed)           0.000     9.033    u_id_ex/u_alu/mem_addr[16]_i_6_0[0]
+    SLICE_X45Y17         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532     9.565 r  u_id_ex/u_alu/y0_carry__3/CO[3]
+                         net (fo=1, routed)           0.000     9.565    u_id_ex/u_alu/y0_carry__3_n_0
+    SLICE_X45Y18         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334     9.899 r  u_id_ex/u_alu/y0_carry__4/O[1]
+                         net (fo=1, routed)           0.600    10.499    u_if_stage/data0[21]
+    SLICE_X49Y20         LUT5 (Prop_lut5_I3_O)        0.303    10.802 r  u_if_stage/mem_addr[21]_i_6/O
+                         net (fo=1, routed)           0.452    11.255    u_if_stage/mem_addr[21]_i_6_n_0
+    SLICE_X50Y21         LUT6 (Prop_lut6_I4_O)        0.124    11.379 r  u_if_stage/mem_addr[21]_i_2/O
+                         net (fo=1, routed)           0.452    11.831    u_if_stage/mem_addr[21]_i_2_n_0
+    SLICE_X50Y21         LUT6 (Prop_lut6_I0_O)        0.124    11.955 r  u_if_stage/mem_addr[21]_i_1/O
+                         net (fo=3, routed)           0.603    12.558    u_if_stage/mem_addr[31]_i_7_0[21]
+    SLICE_X44Y21         LUT5 (Prop_lut5_I2_O)        0.124    12.682 r  u_if_stage/pc[21]_i_1/O
+                         net (fo=1, routed)           0.000    12.682    u_pc/D[21]
+    SLICE_X44Y21         FDCE                                         r  u_pc/pc_reg[21]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock sys_clk rise edge)   11.520    11.520 r  <hidden>
+                                                      0.000    11.520 r  clk
+                         net (fo=596, unset)          1.482    13.002    u_pc/clk
+    SLICE_X44Y21         FDCE                                         r  u_pc/pc_reg[21]/C
+                         clock pessimism              0.115    13.117    <hidden>
+                         clock uncertainty           -0.035    13.082    <hidden>
+    SLICE_X44Y21         FDCE (Setup_fdce_C_D)        0.031    13.113    u_pc/pc_reg[21]
+  -------------------------------------------------------------------
+                         required time                         13.113    <hidden>
+                         arrival time                         -12.682    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.431    <hidden>
+
+Slack (MET) :             0.461ns  (required time - arrival time)
+  Source:                 u_if_stage/instr_hold_reg[3]/C
+                            (rising edge-triggered cell FDCE clocked by sys_clk  {rise@0.000ns fall@5.760ns period=11.520ns})
+  Destination:            u_mem_wb/mem_addr_reg[0]/D
+                            (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.760ns period=11.520ns})
+  Path Group:             sys_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            11.520ns  (sys_clk rise@11.520ns - sys_clk rise@0.000ns)
+  Data Path Delay:        10.996ns  (logic 3.118ns (28.356%)  route 7.878ns (71.644%))
+  Logic Levels:           12  (CARRY4=3 LUT3=1 LUT4=2 LUT5=3 LUT6=3)
+  Clock Path Skew:        -0.059ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.492ns = ( 13.012 - 11.520 ) 
+    Source Clock Delay      (SCD):    1.666ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock sys_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=596, unset)          1.666     1.666    u_if_stage/clk
+    SLICE_X39Y9          FDCE                                         r  u_if_stage/instr_hold_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X39Y9          FDCE (Prop_fdce_C_Q)         0.456     2.122 r  u_if_stage/instr_hold_reg[3]/Q
+                         net (fo=3, routed)           1.188     3.310    u_if_stage/instr_hold[3]
+    SLICE_X39Y9          LUT4 (Prop_lut4_I0_O)        0.152     3.462 r  u_if_stage/mem_reg_write_i_5/O
+                         net (fo=8, routed)           0.782     4.243    u_if_stage/instr[3]
+    SLICE_X39Y9          LUT6 (Prop_lut6_I0_O)        0.326     4.569 f  u_if_stage/lt_carry_i_23/O
+                         net (fo=10, routed)          1.048     5.618    u_if_stage/lt_carry_i_23_n_0
+    SLICE_X38Y11         LUT3 (Prop_lut3_I0_O)        0.146     5.764 f  u_if_stage/lt_carry__0_i_17/O
+                         net (fo=17, routed)          0.864     6.628    u_if_stage/lt_carry__0_i_17_n_0
+    SLICE_X40Y11         LUT5 (Prop_lut5_I4_O)        0.356     6.984 r  u_if_stage/lt_carry__0_i_18/O
+                         net (fo=16, routed)          0.693     7.678    u_if_stage/lt_carry__0_i_18_n_0
+    SLICE_X36Y14         LUT5 (Prop_lut5_I2_O)        0.332     8.010 r  u_if_stage/lt_carry__0_i_12/O
+                         net (fo=9, routed)           1.042     9.051    u_if_stage/lt_carry__0_i_12_n_0
+    SLICE_X44Y14         LUT4 (Prop_lut4_I1_O)        0.124     9.175 r  u_if_stage/ltu_carry__0_i_6/O
+                         net (fo=1, routed)           0.000     9.175    u_id_ex/u_alu/ltu_carry__1_1[2]
+    SLICE_X44Y14         CARRY4 (Prop_carry4_S[2]_CO[3])
+                                                      0.398     9.573 r  u_id_ex/u_alu/ltu_carry__0/CO[3]
+                         net (fo=1, routed)           0.000     9.573    u_id_ex/u_alu/ltu_carry__0_n_0
+    SLICE_X44Y15         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.687 r  u_id_ex/u_alu/ltu_carry__1/CO[3]
+                         net (fo=1, routed)           0.000     9.687    u_id_ex/u_alu/ltu_carry__1_n_0
+    SLICE_X44Y16         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.801 r  u_id_ex/u_alu/ltu_carry__2/CO[3]
+                         net (fo=1, routed)           1.188    10.989    u_if_stage/mem_addr[0]_i_3_0[0]
+    SLICE_X44Y10         LUT5 (Prop_lut5_I2_O)        0.150    11.139 r  u_if_stage/mem_addr[0]_i_5/O
+                         net (fo=1, routed)           0.441    11.580    u_if_stage/mem_addr[0]_i_5_n_0
+    SLICE_X44Y10         LUT6 (Prop_lut6_I0_O)        0.326    11.906 r  u_if_stage/mem_addr[0]_i_3/O
+                         net (fo=2, routed)           0.632    12.538    u_if_stage/mem_addr[0]_i_3_n_0
+    SLICE_X45Y10         LUT6 (Prop_lut6_I1_O)        0.124    12.662 r  u_if_stage/mem_addr[0]_i_1/O
+                         net (fo=1, routed)           0.000    12.662    u_mem_wb/D[0]
+    SLICE_X45Y10         FDRE                                         r  u_mem_wb/mem_addr_reg[0]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock sys_clk rise edge)   11.520    11.520 r  <hidden>
+                                                      0.000    11.520 r  clk
+                         net (fo=596, unset)          1.492    13.012    u_mem_wb/clk
+    SLICE_X45Y10         FDRE                                         r  u_mem_wb/mem_addr_reg[0]/C
+                         clock pessimism              0.115    13.127    <hidden>
+                         clock uncertainty           -0.035    13.092    <hidden>
+    SLICE_X45Y10         FDRE (Setup_fdre_C_D)        0.031    13.123    u_mem_wb/mem_addr_reg[0]
+  -------------------------------------------------------------------
+                         required time                         13.123    <hidden>
+                         arrival time                         -12.662    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.461    <hidden>
+
+Slack (MET) :             0.463ns  (required time - arrival time)
+  Source:                 u_if_stage/instr_hold_reg[3]/C
+                            (rising edge-triggered cell FDCE clocked by sys_clk  {rise@0.000ns fall@5.760ns period=11.520ns})
+  Destination:            u_mem_wb/mem_result_reg[0]/D
+                            (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.760ns period=11.520ns})
+  Path Group:             sys_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            11.520ns  (sys_clk rise@11.520ns - sys_clk rise@0.000ns)
+  Data Path Delay:        10.992ns  (logic 3.242ns (29.494%)  route 7.750ns (70.506%))
+  Logic Levels:           13  (CARRY4=3 LUT2=1 LUT3=1 LUT4=2 LUT5=3 LUT6=3)
+  Clock Path Skew:        -0.059ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.492ns = ( 13.012 - 11.520 ) 
+    Source Clock Delay      (SCD):    1.666ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock sys_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=596, unset)          1.666     1.666    u_if_stage/clk
+    SLICE_X39Y9          FDCE                                         r  u_if_stage/instr_hold_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X39Y9          FDCE (Prop_fdce_C_Q)         0.456     2.122 r  u_if_stage/instr_hold_reg[3]/Q
+                         net (fo=3, routed)           1.188     3.310    u_if_stage/instr_hold[3]
+    SLICE_X39Y9          LUT4 (Prop_lut4_I0_O)        0.152     3.462 r  u_if_stage/mem_reg_write_i_5/O
+                         net (fo=8, routed)           0.782     4.243    u_if_stage/instr[3]
+    SLICE_X39Y9          LUT6 (Prop_lut6_I0_O)        0.326     4.569 f  u_if_stage/lt_carry_i_23/O
+                         net (fo=10, routed)          1.048     5.618    u_if_stage/lt_carry_i_23_n_0
+    SLICE_X38Y11         LUT3 (Prop_lut3_I0_O)        0.146     5.764 f  u_if_stage/lt_carry__0_i_17/O
+                         net (fo=17, routed)          0.864     6.628    u_if_stage/lt_carry__0_i_17_n_0
+    SLICE_X40Y11         LUT5 (Prop_lut5_I4_O)        0.356     6.984 r  u_if_stage/lt_carry__0_i_18/O
+                         net (fo=16, routed)          0.693     7.678    u_if_stage/lt_carry__0_i_18_n_0
+    SLICE_X36Y14         LUT5 (Prop_lut5_I2_O)        0.332     8.010 r  u_if_stage/lt_carry__0_i_12/O
+                         net (fo=9, routed)           1.042     9.051    u_if_stage/lt_carry__0_i_12_n_0
+    SLICE_X44Y14         LUT4 (Prop_lut4_I1_O)        0.124     9.175 r  u_if_stage/ltu_carry__0_i_6/O
+                         net (fo=1, routed)           0.000     9.175    u_id_ex/u_alu/ltu_carry__1_1[2]
+    SLICE_X44Y14         CARRY4 (Prop_carry4_S[2]_CO[3])
+                                                      0.398     9.573 r  u_id_ex/u_alu/ltu_carry__0/CO[3]
+                         net (fo=1, routed)           0.000     9.573    u_id_ex/u_alu/ltu_carry__0_n_0
+    SLICE_X44Y15         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.687 r  u_id_ex/u_alu/ltu_carry__1/CO[3]
+                         net (fo=1, routed)           0.000     9.687    u_id_ex/u_alu/ltu_carry__1_n_0
+    SLICE_X44Y16         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.801 r  u_id_ex/u_alu/ltu_carry__2/CO[3]
+                         net (fo=1, routed)           1.188    10.989    u_if_stage/mem_addr[0]_i_3_0[0]
+    SLICE_X44Y10         LUT5 (Prop_lut5_I2_O)        0.150    11.139 r  u_if_stage/mem_addr[0]_i_5/O
+                         net (fo=1, routed)           0.441    11.580    u_if_stage/mem_addr[0]_i_5_n_0
+    SLICE_X44Y10         LUT6 (Prop_lut6_I0_O)        0.326    11.906 r  u_if_stage/mem_addr[0]_i_3/O
+                         net (fo=2, routed)           0.350    12.256    u_if_stage/mem_addr[0]_i_3_n_0
+    SLICE_X45Y10         LUT2 (Prop_lut2_I0_O)        0.124    12.380 r  u_if_stage/mem_result[0]_i_3/O
+                         net (fo=1, routed)           0.154    12.534    u_if_stage/mem_result[0]_i_3_n_0
+    SLICE_X45Y10         LUT6 (Prop_lut6_I1_O)        0.124    12.658 r  u_if_stage/mem_result[0]_i_1/O
+                         net (fo=1, routed)           0.000    12.658    u_mem_wb/mem_result_reg[31]_1[0]
+    SLICE_X45Y10         FDRE                                         r  u_mem_wb/mem_result_reg[0]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock sys_clk rise edge)   11.520    11.520 r  <hidden>
+                                                      0.000    11.520 r  clk
+                         net (fo=596, unset)          1.492    13.012    u_mem_wb/clk
+    SLICE_X45Y10         FDRE                                         r  u_mem_wb/mem_result_reg[0]/C
+                         clock pessimism              0.115    13.127    <hidden>
+                         clock uncertainty           -0.035    13.092    <hidden>
+    SLICE_X45Y10         FDRE (Setup_fdre_C_D)        0.029    13.121    u_mem_wb/mem_result_reg[0]
+  -------------------------------------------------------------------
+                         required time                         13.121    <hidden>
+                         arrival time                         -12.658    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.463    <hidden>
+
+Slack (MET) :             0.467ns  (required time - arrival time)
+  Source:                 u_if_stage/instr_hold_reg[3]/C
+                            (rising edge-triggered cell FDCE clocked by sys_clk  {rise@0.000ns fall@5.760ns period=11.520ns})
+  Destination:            u_mem_wb/mem_result_reg[21]/D
+                            (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.760ns period=11.520ns})
+  Path Group:             sys_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            11.520ns  (sys_clk rise@11.520ns - sys_clk rise@0.000ns)
+  Data Path Delay:        11.029ns  (logic 3.433ns (31.126%)  route 7.596ns (68.874%))
+  Logic Levels:           12  (CARRY4=2 LUT2=1 LUT3=1 LUT4=1 LUT5=4 LUT6=3)
+  Clock Path Skew:        -0.069ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.482ns = ( 13.002 - 11.520 ) 
+    Source Clock Delay      (SCD):    1.666ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock sys_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=596, unset)          1.666     1.666    u_if_stage/clk
+    SLICE_X39Y9          FDCE                                         r  u_if_stage/instr_hold_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X39Y9          FDCE (Prop_fdce_C_Q)         0.456     2.122 r  u_if_stage/instr_hold_reg[3]/Q
+                         net (fo=3, routed)           1.188     3.310    u_if_stage/instr_hold[3]
+    SLICE_X39Y9          LUT4 (Prop_lut4_I0_O)        0.152     3.462 r  u_if_stage/mem_reg_write_i_5/O
+                         net (fo=8, routed)           0.782     4.243    u_if_stage/instr[3]
+    SLICE_X39Y9          LUT6 (Prop_lut6_I0_O)        0.326     4.569 f  u_if_stage/lt_carry_i_23/O
+                         net (fo=10, routed)          1.048     5.618    u_if_stage/lt_carry_i_23_n_0
+    SLICE_X38Y11         LUT3 (Prop_lut3_I0_O)        0.146     5.764 f  u_if_stage/lt_carry__0_i_17/O
+                         net (fo=17, routed)          0.864     6.628    u_if_stage/lt_carry__0_i_17_n_0
+    SLICE_X40Y11         LUT5 (Prop_lut5_I4_O)        0.356     6.984 r  u_if_stage/lt_carry__0_i_18/O
+                         net (fo=16, routed)          0.844     7.828    u_if_stage/lt_carry__0_i_18_n_0
+    SLICE_X36Y15         LUT5 (Prop_lut5_I2_O)        0.332     8.160 r  u_if_stage/lt_carry__1_i_15/O
+                         net (fo=9, routed)           0.749     8.909    u_if_stage/lt_carry__1_i_15_n_0
+    SLICE_X45Y17         LUT2 (Prop_lut2_I0_O)        0.124     9.033 r  u_if_stage/y0_carry__3_i_8/O
+                         net (fo=1, routed)           0.000     9.033    u_id_ex/u_alu/mem_addr[16]_i_6_0[0]
+    SLICE_X45Y17         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532     9.565 r  u_id_ex/u_alu/y0_carry__3/CO[3]
+                         net (fo=1, routed)           0.000     9.565    u_id_ex/u_alu/y0_carry__3_n_0
+    SLICE_X45Y18         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334     9.899 r  u_id_ex/u_alu/y0_carry__4/O[1]
+                         net (fo=1, routed)           0.600    10.499    u_if_stage/data0[21]
+    SLICE_X49Y20         LUT5 (Prop_lut5_I3_O)        0.303    10.802 r  u_if_stage/mem_addr[21]_i_6/O
+                         net (fo=1, routed)           0.452    11.255    u_if_stage/mem_addr[21]_i_6_n_0
+    SLICE_X50Y21         LUT6 (Prop_lut6_I4_O)        0.124    11.379 r  u_if_stage/mem_addr[21]_i_2/O
+                         net (fo=1, routed)           0.452    11.831    u_if_stage/mem_addr[21]_i_2_n_0
+    SLICE_X50Y21         LUT6 (Prop_lut6_I0_O)        0.124    11.955 r  u_if_stage/mem_addr[21]_i_1/O
+                         net (fo=3, routed)           0.616    12.571    u_if_stage/mem_addr[31]_i_7_0[21]
+    SLICE_X46Y21         LUT5 (Prop_lut5_I4_O)        0.124    12.695 r  u_if_stage/mem_result[21]_i_1/O
+                         net (fo=1, routed)           0.000    12.695    u_mem_wb/mem_result_reg[31]_1[21]
+    SLICE_X46Y21         FDRE                                         r  u_mem_wb/mem_result_reg[21]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock sys_clk rise edge)   11.520    11.520 r  <hidden>
+                                                      0.000    11.520 r  clk
+                         net (fo=596, unset)          1.482    13.002    u_mem_wb/clk
+    SLICE_X46Y21         FDRE                                         r  u_mem_wb/mem_result_reg[21]/C
+                         clock pessimism              0.115    13.117    <hidden>
+                         clock uncertainty           -0.035    13.082    <hidden>
+    SLICE_X46Y21         FDRE (Setup_fdre_C_D)        0.081    13.163    u_mem_wb/mem_result_reg[21]
+  -------------------------------------------------------------------
+                         required time                         13.163    <hidden>
+                         arrival time                         -12.695    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.467    <hidden>
+
+Slack (MET) :             0.473ns  (required time - arrival time)
+  Source:                 u_if_stage/flush_q_reg/C
+                            (rising edge-triggered cell FDPE clocked by sys_clk  {rise@0.000ns fall@5.760ns period=11.520ns})
+  Destination:            u_mem_wb/mem_result_reg[25]/D
+                            (rising edge-triggered cell FDRE clocked by sys_clk  {rise@0.000ns fall@5.760ns period=11.520ns})
+  Path Group:             sys_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            11.520ns  (sys_clk rise@11.520ns - sys_clk rise@0.000ns)
+  Data Path Delay:        10.971ns  (logic 2.347ns (21.393%)  route 8.624ns (78.607%))
+  Logic Levels:           9  (LUT3=1 LUT4=2 LUT5=1 LUT6=4 RAMD32=1)
+  Clock Path Skew:        -0.070ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.481ns = ( 13.001 - 11.520 ) 
+    Source Clock Delay      (SCD):    1.666ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock sys_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=596, unset)          1.666     1.666    u_if_stage/clk
+    SLICE_X38Y9          FDPE                                         r  u_if_stage/flush_q_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X38Y9          FDPE (Prop_fdpe_C_Q)         0.518     2.184 f  u_if_stage/flush_q_reg/Q
+                         net (fo=110, routed)         0.882     3.066    u_if_stage/flush_q
+    SLICE_X37Y10         LUT4 (Prop_lut4_I2_O)        0.124     3.190 r  u_if_stage/regs_reg_r2_0_31_0_5_i_5/O
+                         net (fo=40, routed)          0.956     4.146    u_regfile/regs_reg_r2_0_31_0_5/ADDRB0
+    SLICE_X34Y10         RAMD32 (Prop_ramd32_RADR0_O)
+                                                      0.124     4.270 r  u_regfile/regs_reg_r2_0_31_0_5/RAMB_D1/O
+                         net (fo=4, routed)           1.178     5.448    u_if_stage/rdata20[3]
+    SLICE_X37Y11         LUT6 (Prop_lut6_I0_O)        0.124     5.572 r  u_if_stage/multiplier[3]_i_2/O
+                         net (fo=7, routed)           0.997     6.569    u_if_stage/rs2_fwd[3]
+    SLICE_X41Y11         LUT5 (Prop_lut5_I0_O)        0.154     6.723 r  u_if_stage/pc[23]_i_18/O
+                         net (fo=80, routed)          1.646     8.369    u_if_stage/pc[23]_i_18_n_0
+    SLICE_X53Y18         LUT3 (Prop_lut3_I2_O)        0.355     8.724 r  u_if_stage/mem_addr[22]_i_21/O
+                         net (fo=4, routed)           0.974     9.698    u_if_stage/mem_addr[22]_i_21_n_0
+    SLICE_X52Y20         LUT6 (Prop_lut6_I2_O)        0.326    10.024 r  u_if_stage/pc[26]_i_10/O
+                         net (fo=2, routed)           0.798    10.822    u_if_stage/pc[26]_i_10_n_0
+    SLICE_X50Y20         LUT4 (Prop_lut4_I0_O)        0.150    10.972 r  u_if_stage/pc[25]_i_7/O
+                         net (fo=3, routed)           0.749    11.721    u_if_stage/pc[25]_i_7_n_0
+    SLICE_X48Y21         LUT6 (Prop_lut6_I1_O)        0.348    12.069 r  u_if_stage/mem_result[25]_i_3/O
+                         net (fo=1, routed)           0.444    12.513    u_if_stage/mem_result[25]_i_3_n_0
+    SLICE_X48Y21         LUT6 (Prop_lut6_I2_O)        0.124    12.637 r  u_if_stage/mem_result[25]_i_1/O
+                         net (fo=1, routed)           0.000    12.637    u_mem_wb/mem_result_reg[31]_1[25]
+    SLICE_X48Y21         FDRE                                         r  u_mem_wb/mem_result_reg[25]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock sys_clk rise edge)   11.520    11.520 r  <hidden>
+                                                      0.000    11.520 r  clk
+                         net (fo=596, unset)          1.481    13.001    u_mem_wb/clk
+    SLICE_X48Y21         FDRE                                         r  u_mem_wb/mem_result_reg[25]/C
+                         clock pessimism              0.115    13.116    <hidden>
+                         clock uncertainty           -0.035    13.081    <hidden>
+    SLICE_X48Y21         FDRE (Setup_fdre_C_D)        0.029    13.110    u_mem_wb/mem_result_reg[25]
+  -------------------------------------------------------------------
+                         required time                         13.110    <hidden>
+                         arrival time                         -12.637    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.473    <hidden>
+
+Slack (MET) :             0.473ns  (required time - arrival time)
+  Source:                 u_if_stage/flush_q_reg/C
+                            (rising edge-triggered cell FDPE clocked by sys_clk  {rise@0.000ns fall@5.760ns period=11.520ns})
+  Destination:            u_pc/pc_reg[25]/D
+                            (rising edge-triggered cell FDCE clocked by sys_clk  {rise@0.000ns fall@5.760ns period=11.520ns})
+  Path Group:             sys_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            11.520ns  (sys_clk rise@11.520ns - sys_clk rise@0.000ns)
+  Data Path Delay:        10.973ns  (logic 2.347ns (21.388%)  route 8.626ns (78.612%))
+  Logic Levels:           9  (LUT3=1 LUT4=2 LUT5=2 LUT6=3 RAMD32=1)
+  Clock Path Skew:        -0.069ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.482ns = ( 13.002 - 11.520 ) 
+    Source Clock Delay      (SCD):    1.666ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock sys_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=596, unset)          1.666     1.666    u_if_stage/clk
+    SLICE_X38Y9          FDPE                                         r  u_if_stage/flush_q_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X38Y9          FDPE (Prop_fdpe_C_Q)         0.518     2.184 f  u_if_stage/flush_q_reg/Q
+                         net (fo=110, routed)         0.882     3.066    u_if_stage/flush_q
+    SLICE_X37Y10         LUT4 (Prop_lut4_I2_O)        0.124     3.190 r  u_if_stage/regs_reg_r2_0_31_0_5_i_5/O
+                         net (fo=40, routed)          0.956     4.146    u_regfile/regs_reg_r2_0_31_0_5/ADDRB0
+    SLICE_X34Y10         RAMD32 (Prop_ramd32_RADR0_O)
+                                                      0.124     4.270 r  u_regfile/regs_reg_r2_0_31_0_5/RAMB_D1/O
+                         net (fo=4, routed)           1.178     5.448    u_if_stage/rdata20[3]
+    SLICE_X37Y11         LUT6 (Prop_lut6_I0_O)        0.124     5.572 r  u_if_stage/multiplier[3]_i_2/O
+                         net (fo=7, routed)           0.997     6.569    u_if_stage/rs2_fwd[3]
+    SLICE_X41Y11         LUT5 (Prop_lut5_I0_O)        0.154     6.723 r  u_if_stage/pc[23]_i_18/O
+                         net (fo=80, routed)          1.646     8.369    u_if_stage/pc[23]_i_18_n_0
+    SLICE_X53Y18         LUT3 (Prop_lut3_I2_O)        0.355     8.724 r  u_if_stage/mem_addr[22]_i_21/O
+                         net (fo=4, routed)           0.974     9.698    u_if_stage/mem_addr[22]_i_21_n_0
+    SLICE_X52Y20         LUT6 (Prop_lut6_I2_O)        0.326    10.024 r  u_if_stage/pc[26]_i_10/O
+                         net (fo=2, routed)           0.798    10.822    u_if_stage/pc[26]_i_10_n_0
+    SLICE_X50Y20         LUT4 (Prop_lut4_I0_O)        0.150    10.972 r  u_if_stage/pc[25]_i_7/O
+                         net (fo=3, routed)           0.481    11.453    u_if_stage/pc[25]_i_7_n_0
+    SLICE_X48Y21         LUT5 (Prop_lut5_I3_O)        0.348    11.801 r  u_if_stage/pc[25]_i_3/O
+                         net (fo=1, routed)           0.715    12.515    u_if_stage/pc[25]_i_3_n_0
+    SLICE_X45Y21         LUT6 (Prop_lut6_I3_O)        0.124    12.639 r  u_if_stage/pc[25]_i_1/O
+                         net (fo=1, routed)           0.000    12.639    u_pc/D[25]
+    SLICE_X45Y21         FDCE                                         r  u_pc/pc_reg[25]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock sys_clk rise edge)   11.520    11.520 r  <hidden>
+                                                      0.000    11.520 r  clk
+                         net (fo=596, unset)          1.482    13.002    u_pc/clk
+    SLICE_X45Y21         FDCE                                         r  u_pc/pc_reg[25]/C
+                         clock pessimism              0.115    13.117    <hidden>
+                         clock uncertainty           -0.035    13.082    <hidden>
+    SLICE_X45Y21         FDCE (Setup_fdce_C_D)        0.031    13.113    u_pc/pc_reg[25]
+  -------------------------------------------------------------------
+                         required time                         13.113    <hidden>
+                         arrival time                         -12.639    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.473    <hidden>
+
+
+
+
