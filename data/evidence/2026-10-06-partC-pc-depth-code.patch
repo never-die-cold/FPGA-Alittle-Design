@@ -1,0 +1,356 @@
+diff --git a/sim/riscv/tb_core_bht_flow.v b/sim/riscv/tb_core_bht_flow.v
+index 09d972a..5216563 100644
+--- a/sim/riscv/tb_core_bht_flow.v
++++ b/sim/riscv/tb_core_bht_flow.v
+@@ -7,6 +7,7 @@ module tb_core_bht_flow;
+     reg [31:0] imem [0:8191], dmem [0:8191];
+     integer i, cycles=0, resolves=0, lookups=0, hits=0, misses=0;
+     integer mispredicts=0, writes=0, x10_writes=0, starts=0, errors=0;
++    reg invalid_to_mem, flushed;
+     always #5 clk=~clk;
+     always @(posedge clk) imem_rdata <= imem[imem_addr[14:2]];
+     assign dmem_rdata=dmem[dmem_addr[14:2]];
+@@ -14,6 +15,18 @@ module tb_core_bht_flow;
+         .clk(clk),.rst_n(rst_n),.imem_addr(imem_addr),.imem_rdata(imem_rdata),
+         .dmem_addr(dmem_addr),.dmem_wdata(dmem_wdata),.dmem_be(dmem_be),
+         .dmem_we(dmem_we),.dmem_rdata(dmem_rdata));
++    always @(posedge clk) if (rst_n) begin
++        invalid_to_mem=!dut.instr_valid;
++        flushed=dut.flush;
++        if (!dut.instr_valid && (dut.muldiv_start || dut.redirect ||
++            dut.branch_resolve || dut.mem_in_valid || dut.bp_lookup_event))
++            $fatal(1,"FAIL: invalid IF payload produced an EX side effect");
++        #1;
++        if (invalid_to_mem && (dut.mem_valid || dut.rf_we || dmem_we))
++            $fatal(1,"FAIL: invalid payload reached architectural commit");
++        if (flushed && dut.instr_valid !== 1'b0)
++            $fatal(1,"FAIL: redirect did not invalidate the young slot");
++    end
+     always @(posedge clk) if (rst_n) begin
+         cycles=cycles+1;
+         if (dut.branch_resolve) begin
+diff --git a/sim/riscv/tb_id_ex_stage.v b/sim/riscv/tb_id_ex_stage.v
+index 1916131..6b9ba56 100644
+--- a/sim/riscv/tb_id_ex_stage.v
++++ b/sim/riscv/tb_id_ex_stage.v
+@@ -5,10 +5,13 @@ module tb_id_ex_stage;
+     wire [4:0] rs1_addr, rs2_addr, rd_addr;
+     wire uses_rs1, uses_rs2, muldiv_valid; wire [2:0] muldiv_op;
+     wire branch_taken, jump_taken; wire [31:0] redirect_target;
++    wire [31:0] branch_target, branch_target_next;
+     wire [31:0] ex_result, ex_addr, ex_store_data;
+     wire ex_reg_write, ex_mem_read, ex_mem_write, ex_sign_ext;
+     wire [1:0] ex_wb_sel, ex_mask_sel;
+-    integer checks;
++    integer checks, offset, pc_case;
++    reg [12:0] b_offset;
++    reg [31:0] expected_target;
+     id_ex_stage dut (
+         .in_valid(in_valid), .in_pc(in_pc), .in_instr(in_instr),
+         .rs1_value(rs1_value), .rs2_value(rs2_value),
+@@ -18,6 +21,7 @@ module tb_id_ex_stage;
+         .muldiv_valid(muldiv_valid), .muldiv_op(muldiv_op),
+         .branch_taken(branch_taken), .jump_taken(jump_taken),
+         .redirect_target(redirect_target), .ex_result(ex_result),
++        .branch_target(branch_target), .branch_target_next(branch_target_next),
+         .ex_addr(ex_addr), .ex_store_data(ex_store_data),
+         .ex_reg_write(ex_reg_write), .ex_mem_read(ex_mem_read),
+         .ex_mem_write(ex_mem_write), .ex_wb_sel(ex_wb_sel),
+@@ -59,6 +63,23 @@ module tb_id_ex_stage;
+               ex_result==32'h80000024 && rd_addr==1);
+         in_instr=32'h022081b3; rs1_value=7; rs2_value=3; #1;
+         check(muldiv_valid && muldiv_op==0 && ex_wb_sel==3 && ex_result==21);
++        // Every encodable B offset, including sign extension, bit1 and wraparound.
++        for (pc_case=0; pc_case<3; pc_case=pc_case+1) begin
++            case (pc_case)
++                0: in_pc=32'h80000000;
++                1: in_pc=32'hfffffffc;
++                2: in_pc=32'h00000002;
++            endcase
++            for (offset=-4096; offset<=4094; offset=offset+2) begin
++                b_offset=offset[12:0];
++                in_instr={b_offset[12],b_offset[10:5],5'd2,5'd1,
++                          3'b000,b_offset[4:1],b_offset[11],7'b1100011};
++                expected_target=in_pc+offset; #1;
++                check(branch_target === expected_target &&
++                      branch_target_next === (expected_target+32'd4) &&
++                      redirect_target === expected_target);
++            end
++        end
+         $display("PASS: ID+EX decode, execute and redirect (%0d cases)", checks);
+         $finish;
+     end
+diff --git a/sim/scripts/run_iverilog.sh b/sim/scripts/run_iverilog.sh
+index 650d546..e7a9938 100644
+--- a/sim/scripts/run_iverilog.sh
++++ b/sim/scripts/run_iverilog.sh
+@@ -14,6 +14,8 @@
+ #   bash sim/scripts/run_iverilog.sh forwarding # 转发选择器单元自检
+ #   bash sim/scripts/run_iverilog.sh hazard    # 冒险与重定向控制自检
+ #   bash sim/scripts/run_iverilog.sh branch_predict # BHT 三档单元自检
++#   bash sim/scripts/run_iverilog.sh pc_control # PC/flush 与优化前真值表等价
++#   bash sim/scripts/run_iverilog.sh if_stage # IF valid-only flush 与停顿保持
+ #   bash sim/scripts/run_iverilog.sh mem_wb    # MEM+WB 边界寄存器自检
+ #   bash sim/scripts/run_iverilog.sh id_ex     # ID+EX 组合级自检
+ #   bash sim/scripts/run_iverilog.sh v1_mem    # v1 整核访存宽度与扩展自检
+@@ -55,6 +57,8 @@ case "$MODE" in
+     forwarding) TBS=(riscv/tb_forwarding.v) ;;
+     hazard) TBS=(riscv/tb_hazard.v) ;;
+     branch_predict) TBS=(riscv/tb_branch_predict.v) ;;
++    pc_control) TBS=(riscv/tb_core_pc_control.v) ;;
++    if_stage) TBS=(riscv/tb_if_stage.v) ;;
+     bht_flow|bht_flow_2) TBS=(riscv/tb_core_bht_flow.v); IVERILOG_ARGS=(-Ptb_core_bht_flow.BHT_MODE=2) ;;
+     bht_flow_1) TBS=(riscv/tb_core_bht_flow.v); IVERILOG_ARGS=(-Ptb_core_bht_flow.BHT_MODE=1) ;;
+     bht_flow_off) TBS=(riscv/tb_core_bht_flow.v); IVERILOG_ARGS=(-Ptb_core_bht_flow.BHT_MODE=0) ;;
+@@ -78,7 +82,7 @@ case "$MODE" in
+     bench) TBS=(riscv/tb_core_coremark.v) ;;
+     bench_fwd) TBS=(riscv/tb_core_coremark.v); IVERILOG_ARGS=(-Ptb_core_coremark.ENABLE_FORWARDING=1) ;;
+     bench_nofwd) TBS=(riscv/tb_core_coremark.v); IVERILOG_ARGS=(-Ptb_core_coremark.ENABLE_FORWARDING=0) ;;
+-    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_pynq_z2_clock_config.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_v1_mem.v riscv/tb_core_fwd.v riscv/tb_decode.v riscv/tb_forwarding.v riscv/tb_hazard.v riscv/tb_branch_predict.v riscv/tb_core_bht_flow.v riscv/tb_mem_wb_stage.v riscv/tb_id_ex_stage.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_soc_top.v riscv/tb_soc_check.v) ;;
++    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_pynq_z2_clock_config.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_v1_mem.v riscv/tb_core_fwd.v riscv/tb_decode.v riscv/tb_forwarding.v riscv/tb_hazard.v riscv/tb_branch_predict.v riscv/tb_core_pc_control.v riscv/tb_if_stage.v riscv/tb_core_bht_flow.v riscv/tb_mem_wb_stage.v riscv/tb_id_ex_stage.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_soc_top.v riscv/tb_soc_check.v) ;;
+     *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|v1_fwd|v1_nofwd|v1_hazard_fwd|v1_hazard_nofwd|v1_muldiv_fwd|v1_muldiv_nofwd|decode|forwarding|hazard|branch_predict|mem_wb|id_ex|v1_flow|v1_mem|v1_muldiv_flow|muldiv|rv32im|imem|dmem|clock_cfg|coremark|coremark_fwd|coremark_nofwd|soc|soc_check|bench|bench_fwd|bench_nofwd|all]"; exit 1 ;;
+ esac
+ 
+diff --git a/src/riscv/core_top.v b/src/riscv/core_top.v
+index b37e046..a73b9d3 100644
+--- a/src/riscv/core_top.v
++++ b/src/riscv/core_top.v
+@@ -23,6 +23,10 @@ module core_top #(
+     wire        data_stall, front_stall, ex_accept, redirect, mem_in_valid;
+     wire        branch_resolve, branch_mispredict, jump_redirect, predicted_redirect;
+     wire [31:0] pc_target, fetch_addr, recovery_target;
++    wire branch_fetch_taken, branch_recover_taken, branch_recover_fall;
++    wire recover_valid;
++    wire [31:0] recover_pc, fallthrough_pc;
++    wire [31:0] branch_target, branch_target_next;
+     wire [31:0] instr;
+     wire        instr_valid;
+ 
+@@ -32,16 +36,29 @@ module core_top #(
+     wire bp_hit_event = bp_lookup_event && !branch_mispredict;
+     wire bp_miss_event = bp_lookup_event && branch_mispredict;
+     assign jump_redirect = ex_accept && jump_taken;
+-    assign predicted_redirect = branch_resolve && bp_predict_taken && !branch_mispredict;
+-    assign redirect = jump_redirect || branch_mispredict;
++    // Decode the mutually exclusive address choices directly, independently of flush.
++    assign branch_fetch_taken = branch_resolve && branch_taken;
++    assign branch_recover_taken = branch_resolve && branch_taken && !bp_predict_taken;
++    assign branch_recover_fall = branch_resolve && !branch_taken && bp_predict_taken;
++    assign predicted_redirect = branch_resolve && branch_taken && bp_predict_taken;
++    assign recover_valid = jump_redirect || branch_recover_taken || branch_recover_fall;
++    assign redirect = recover_valid;
+     assign flush = redirect;
+-    assign recovery_target = jump_redirect ? redirect_target :
+-                             (branch_taken ? redirect_target : (pc_id + 32'd4));
+-    assign fetch_addr = redirect ? recovery_target :
+-                        (predicted_redirect ? redirect_target : pc);
++    assign fallthrough_pc = pc_id + 32'd4;
++    assign recover_pc = ({32{jump_redirect}} & redirect_target) |
++                        ({32{branch_recover_taken}} & branch_target) |
++                        ({32{branch_recover_fall}} & fallthrough_pc);
++    assign recovery_target = recover_pc;
++    assign fetch_addr = ({32{jump_redirect}} & redirect_target) |
++                        ({32{branch_fetch_taken}} & branch_target) |
++                        ({32{branch_recover_fall}} & fallthrough_pc) |
++                        ({32{!(jump_redirect || branch_fetch_taken || branch_recover_fall)}} & pc);
+     assign imem_addr = fetch_addr;
+-    assign pc_sel = (redirect || predicted_redirect) ? 2'b01 : 2'b00;
+-    assign pc_target = redirect ? recovery_target : (redirect_target + 32'd4);
++    assign pc_sel = (jump_redirect || branch_fetch_taken || branch_recover_fall) ? 2'b01 : 2'b00;
++    assign pc_target = ({32{jump_redirect}} & redirect_target) |
++                       ({32{branch_recover_taken}} & branch_target) |
++                       ({32{branch_recover_fall}} & fallthrough_pc) |
++                       ({32{predicted_redirect}} & branch_target_next);
+ 
+     pc u_pc (
+         .clk      (clk),
+@@ -153,6 +170,7 @@ module core_top #(
+         .muldiv_valid(muldiv_valid), .muldiv_op(muldiv_op),
+         .branch_valid(branch_valid), .branch_taken(branch_taken), .jump_taken(jump_taken),
+         .redirect_target(redirect_target),
++        .branch_target(branch_target), .branch_target_next(branch_target_next),
+         .ex_result(ex_result), .ex_addr(ex_addr), .ex_store_data(ex_store_data),
+         .ex_reg_write(ex_reg_write), .ex_mem_read(ex_mem_read),
+         .ex_mem_write(ex_mem_write), .ex_wb_sel(ex_wb_sel),
+diff --git a/src/riscv/id_ex_stage.v b/src/riscv/id_ex_stage.v
+index dde8787..02ccd87 100644
+--- a/src/riscv/id_ex_stage.v
++++ b/src/riscv/id_ex_stage.v
+@@ -7,6 +7,7 @@ module id_ex_stage (
+     output wire [2:0] muldiv_op,
+     output wire branch_valid, branch_taken, jump_taken,
+     output wire [31:0] redirect_target,
++    output wire [31:0] branch_target, branch_target_next,
+     output wire [31:0] ex_result, ex_addr, ex_store_data,
+     output wire ex_reg_write, ex_mem_read, ex_mem_write,
+     output wire [1:0] ex_wb_sel, ex_mask_sel,
+@@ -48,6 +49,13 @@ module id_ex_stage (
+     assign branch_valid = (branch_type != 0);
+     assign branch_taken = branch_valid && cond_taken;
+     assign jump_taken = (jump_type != 0);
++    // Raw B-immediate bypasses the general immediate/JALR muxes on the PC path.
++    wire [31:0] branch_imm = {{19{instr[31]}}, instr[31], instr[7],
++                             instr[30:25], instr[11:8], 1'b0};
++    wire [31:0] branch_next_imm = branch_imm + 32'd4;
++    assign branch_target = in_pc + branch_imm;
++    // Independent PC adder: do not add 4 after branch_target/redirect_target.
++    assign branch_target_next = in_pc + branch_next_imm;
+     assign redirect_target = (jump_type == 2'd2) ?
+                              (alu_y & 32'hffff_fffe) : (in_pc + imm);
+     assign ex_result = (wb_sel == 2'd2) ? (in_pc + 4) :
+diff --git a/src/riscv/if_stage.v b/src/riscv/if_stage.v
+index 52a0be0..3af4923 100644
+--- a/src/riscv/if_stage.v
++++ b/src/riscv/if_stage.v
+@@ -1,4 +1,4 @@
+-// if_stage.v —— IF 级流水寄存器：锁存指令与 pc_id；flush 时下一拍注入 NOP
++// if_stage.v —— IF 边界：保持指令与 pc_id；flush 只使下一拍槽位无效
+ // 复位后首拍 flush_q=1 注入气泡，保证首条指令只执行一次
+ // 语义见 src/riscv/design_v0.md §2、§5.2
+ module if_stage (
+@@ -21,7 +21,9 @@ module if_stage (
+     reg        valid_hold;
+     reg        stall_q;
+ 
+-    assign instr       = stall_q ? instr_hold : (flush_q ? NOP : imem_rdata);
++    // Invalid payload is a don't-care; valid gates every architectural side effect.
++    // Keep flush_q out of the 32-bit decode/target data path.
++    assign instr       = stall_q ? instr_hold : imem_rdata;
+     assign instr_valid = stall_q ? valid_hold : ~flush_q;
+     assign pc_id       = pc_id_r;
+ 
+@@ -35,7 +37,7 @@ module if_stage (
+         end else begin
+             stall_q <= stall;
+             if (stall && !stall_q) begin
+-                instr_hold <= flush_q ? NOP : imem_rdata;
++                instr_hold <= imem_rdata;
+                 valid_hold <= ~flush_q;
+             end
+             if (!stall) begin
+diff --git a/sim/riscv/tb_core_pc_control.v b/sim/riscv/tb_core_pc_control.v
+new file mode 100644
+index 0000000..306763a
+--- /dev/null
++++ b/sim/riscv/tb_core_pc_control.v
+@@ -0,0 +1,64 @@
++`timescale 1ns/1ps
++// Compare observable PC/flush choices with the pre-optimization equations.
++module tb_core_pc_control;
++    reg clk=0, rst_n=0;
++    reg valid, wait_data, wait_m, branch, taken, jump, prediction;
++    reg [31:0] current_pc, instruction_pc, target, target_next;
++    wire [31:0] imem_addr;
++    integer kind, bits, n, checks=0;
++    reg accept, resolve, miss, jump_event, correct_taken, redirect_ref;
++    reg [31:0] recover_ref, fetch_ref, pc_ref;
++    reg select_ref;
++    core_top dut (.clk(clk), .rst_n(rst_n), .imem_addr(imem_addr),
++        .imem_rdata(32'h00000013), .dmem_addr(), .dmem_wdata(),
++        .dmem_be(), .dmem_we(), .dmem_rdata(32'd0));
++    always #5 clk=~clk;
++    initial begin
++        force dut.instr_valid=valid;
++        force dut.data_stall=wait_data;
++        force dut.muldiv_wait=wait_m;
++        force dut.branch_valid=branch;
++        force dut.branch_taken=taken;
++        force dut.jump_taken=jump;
++        force dut.bp_predict_taken=prediction;
++        force dut.pc=current_pc;
++        force dut.pc_id=instruction_pc;
++        force dut.redirect_target=target;
++        force dut.branch_target=target;
++        force dut.branch_target_next=target_next;
++        for (n=0; n<8; n=n+1) begin
++            // Include carry, wraparound and bit1 cases without assuming aligned PC.
++            case (n)
++                0: begin current_pc=32'h80000024; instruction_pc=32'h80000020; target=32'h80000010; end
++                1: begin current_pc=32'hffffffff; instruction_pc=32'hfffffffc; target=32'hfffffffe; end
++                default: begin current_pc=$random; instruction_pc=$random; target=$random; end
++            endcase
++            target_next=target+32'd4;
++            for (kind=0; kind<3; kind=kind+1) begin
++                branch=(kind==1); jump=(kind==2);
++                for (bits=0; bits<32; bits=bits+1) begin
++                    valid=bits[0]; wait_data=bits[1]; wait_m=bits[2];
++                    taken=branch && bits[3]; prediction=bits[4]; #1;
++                    accept=valid && !(wait_data || wait_m);
++                    resolve=accept && branch;
++                    miss=resolve && (prediction != taken);
++                    jump_event=accept && jump;
++                    correct_taken=resolve && prediction && !miss;
++                    redirect_ref=jump_event || miss;
++                    recover_ref=jump_event ? target : (taken ? target : instruction_pc+32'd4);
++                    fetch_ref=redirect_ref ? recover_ref : (correct_taken ? target : current_pc);
++                    select_ref=redirect_ref || correct_taken;
++                    pc_ref=redirect_ref ? recover_ref : target+32'd4;
++                    if (imem_addr !== fetch_ref || dut.flush !== redirect_ref ||
++                        dut.pc_sel !== (select_ref ? 2'b01 : 2'b00) ||
++                        (select_ref && dut.pc_target !== pc_ref) ||
++                        dut.front_stall !== (wait_data || wait_m))
++                        $fatal(1,"FAIL: PC control n/kind/bits=%0d/%0d/%0d",n,kind,bits);
++                    checks=checks+1;
++                end
++            end
++        end
++        $display("PASS: PC control matches pre-optimization truth table (%0d cases)",checks);
++        $finish;
++    end
++endmodule
+diff --git a/sim/riscv/tb_if_stage.v b/sim/riscv/tb_if_stage.v
+new file mode 100644
+index 0000000..c982b59
+--- /dev/null
++++ b/sim/riscv/tb_if_stage.v
+@@ -0,0 +1,50 @@
++`timescale 1ns/1ps
++module tb_if_stage;
++    reg clk=0, rst_n=0, stall=0, flush=0;
++    reg [31:0] pc=32'h80000000, imem_rdata=32'h024185b3;
++    wire [31:0] instr, pc_id;
++    wire instr_valid;
++    integer checks=0;
++    if_stage dut (.clk(clk), .rst_n(rst_n), .pc(pc),
++        .imem_rdata(imem_rdata), .stall(stall), .flush(flush),
++        .instr(instr), .instr_valid(instr_valid), .pc_id(pc_id));
++    always #5 clk=~clk;
++    task check;
++        input ok;
++        begin
++            checks=checks+1;
++            if (ok !== 1'b1) $fatal(1,"FAIL: IF boundary case %0d",checks);
++        end
++    endtask
++    task tick;
++        begin @(posedge clk); #1; end
++    endtask
++    initial begin
++        tick; check(!instr_valid); // Raw M payload is permitted in a reset bubble.
++        @(negedge clk); rst_n=1;
++        tick; check(instr_valid && instr==32'h024185b3 && pc_id==pc);
++        // Start holding the original M, then change incoming BRAM payload.
++        @(negedge clk); stall=1; tick;
++        @(negedge clk); imem_rdata=32'h00a02223; pc=32'h80000004;
++        tick; check(instr_valid && instr==32'h024185b3 && pc_id==32'h80000000);
++        repeat (3) begin
++            @(negedge clk); imem_rdata=imem_rdata+32'd4; tick;
++            check(instr_valid && instr==32'h024185b3 && pc_id==32'h80000000);
++        end
++        // Removing stall must not release held instruction before the sampling edge.
++        @(negedge clk); stall=0; imem_rdata=32'h0000006f; #1;
++        check(instr==32'h024185b3); tick;
++        check(instr_valid && instr==32'h0000006f && pc_id==pc);
++        // Flush carries raw store/M/JAL payload with valid=0, not a NOP mux.
++        @(negedge clk); flush=1; imem_rdata=32'h00a02223; tick;
++        check(!instr_valid && instr==32'h00a02223);
++        @(negedge clk); stall=1; tick;
++        @(negedge clk); imem_rdata=32'h024185b3; tick;
++        check(!instr_valid && instr==32'h00a02223);
++        @(negedge clk); stall=0; flush=0; tick;
++        check(instr_valid && instr==32'h024185b3);
++        @(negedge clk); rst_n=0; #1; check(!instr_valid);
++        $display("PASS: IF valid-only flush, hold/release and reset (%0d cases)",checks);
++        $finish;
++    end
++endmodule

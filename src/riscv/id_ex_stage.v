@@ -7,6 +7,7 @@ module id_ex_stage (
     output wire [2:0] muldiv_op,
     output wire branch_valid, branch_taken, jump_taken,
     output wire [31:0] redirect_target,
+    output wire [31:0] branch_target, branch_target_next,
     output wire [31:0] ex_result, ex_addr, ex_store_data,
     output wire ex_reg_write, ex_mem_read, ex_mem_write,
     output wire [1:0] ex_wb_sel, ex_mask_sel,
@@ -48,6 +49,13 @@ module id_ex_stage (
     assign branch_valid = (branch_type != 0);
     assign branch_taken = branch_valid && cond_taken;
     assign jump_taken = (jump_type != 0);
+    // Raw B-immediate bypasses the general immediate/JALR muxes on the PC path.
+    wire [31:0] branch_imm = {{19{instr[31]}}, instr[31], instr[7],
+                             instr[30:25], instr[11:8], 1'b0};
+    wire [31:0] branch_next_imm = branch_imm + 32'd4;
+    assign branch_target = in_pc + branch_imm;
+    // Independent PC adder: do not add 4 after branch_target/redirect_target.
+    assign branch_target_next = in_pc + branch_next_imm;
     assign redirect_target = (jump_type == 2'd2) ?
                              (alu_y & 32'hffff_fffe) : (in_pc + imm);
     assign ex_result = (wb_sel == 2'd2) ? (in_pc + 4) :

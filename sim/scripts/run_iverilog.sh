@@ -14,6 +14,8 @@
 #   bash sim/scripts/run_iverilog.sh forwarding # 转发选择器单元自检
 #   bash sim/scripts/run_iverilog.sh hazard    # 冒险与重定向控制自检
 #   bash sim/scripts/run_iverilog.sh branch_predict # BHT 三档单元自检
+#   bash sim/scripts/run_iverilog.sh pc_control # PC/flush 与优化前真值表等价
+#   bash sim/scripts/run_iverilog.sh if_stage # IF valid-only flush 与停顿保持
 #   bash sim/scripts/run_iverilog.sh mem_wb    # MEM+WB 边界寄存器自检
 #   bash sim/scripts/run_iverilog.sh id_ex     # ID+EX 组合级自检
 #   bash sim/scripts/run_iverilog.sh v1_mem    # v1 整核访存宽度与扩展自检
@@ -55,6 +57,8 @@ case "$MODE" in
     forwarding) TBS=(riscv/tb_forwarding.v) ;;
     hazard) TBS=(riscv/tb_hazard.v) ;;
     branch_predict) TBS=(riscv/tb_branch_predict.v) ;;
+    pc_control) TBS=(riscv/tb_core_pc_control.v) ;;
+    if_stage) TBS=(riscv/tb_if_stage.v) ;;
     bht_flow|bht_flow_2) TBS=(riscv/tb_core_bht_flow.v); IVERILOG_ARGS=(-Ptb_core_bht_flow.BHT_MODE=2) ;;
     bht_flow_1) TBS=(riscv/tb_core_bht_flow.v); IVERILOG_ARGS=(-Ptb_core_bht_flow.BHT_MODE=1) ;;
     bht_flow_off) TBS=(riscv/tb_core_bht_flow.v); IVERILOG_ARGS=(-Ptb_core_bht_flow.BHT_MODE=0) ;;
@@ -78,7 +82,7 @@ case "$MODE" in
     bench) TBS=(riscv/tb_core_coremark.v) ;;
     bench_fwd) TBS=(riscv/tb_core_coremark.v); IVERILOG_ARGS=(-Ptb_core_coremark.ENABLE_FORWARDING=1) ;;
     bench_nofwd) TBS=(riscv/tb_core_coremark.v); IVERILOG_ARGS=(-Ptb_core_coremark.ENABLE_FORWARDING=0) ;;
-    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_pynq_z2_clock_config.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_v1_mem.v riscv/tb_core_fwd.v riscv/tb_decode.v riscv/tb_forwarding.v riscv/tb_hazard.v riscv/tb_branch_predict.v riscv/tb_core_bht_flow.v riscv/tb_mem_wb_stage.v riscv/tb_id_ex_stage.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_soc_top.v riscv/tb_soc_check.v) ;;
+    all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_pynq_z2_clock_config.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_v1_mem.v riscv/tb_core_fwd.v riscv/tb_decode.v riscv/tb_forwarding.v riscv/tb_hazard.v riscv/tb_branch_predict.v riscv/tb_core_pc_control.v riscv/tb_if_stage.v riscv/tb_core_bht_flow.v riscv/tb_mem_wb_stage.v riscv/tb_id_ex_stage.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_soc_top.v riscv/tb_soc_check.v) ;;
     *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|v1_fwd|v1_nofwd|v1_hazard_fwd|v1_hazard_nofwd|v1_muldiv_fwd|v1_muldiv_nofwd|decode|forwarding|hazard|branch_predict|mem_wb|id_ex|v1_flow|v1_mem|v1_muldiv_flow|muldiv|rv32im|imem|dmem|clock_cfg|coremark|coremark_fwd|coremark_nofwd|soc|soc_check|bench|bench_fwd|bench_nofwd|all]"; exit 1 ;;
 esac
 

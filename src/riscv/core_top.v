@@ -23,6 +23,10 @@ module core_top #(
     wire        data_stall, front_stall, ex_accept, redirect, mem_in_valid;
     wire        branch_resolve, branch_mispredict, jump_redirect, predicted_redirect;
     wire [31:0] pc_target, fetch_addr, recovery_target;
+    wire branch_fetch_taken, branch_recover_taken, branch_recover_fall;
+    wire recover_valid;
+    wire [31:0] recover_pc, fallthrough_pc;
+    wire [31:0] branch_target, branch_target_next;
     wire [31:0] instr;
     wire        instr_valid;
 
@@ -32,16 +36,29 @@ module core_top #(
     wire bp_hit_event = bp_lookup_event && !branch_mispredict;
     wire bp_miss_event = bp_lookup_event && branch_mispredict;
     assign jump_redirect = ex_accept && jump_taken;
-    assign predicted_redirect = branch_resolve && bp_predict_taken && !branch_mispredict;
-    assign redirect = jump_redirect || branch_mispredict;
+    // Decode the mutually exclusive address choices directly, independently of flush.
+    assign branch_fetch_taken = branch_resolve && branch_taken;
+    assign branch_recover_taken = branch_resolve && branch_taken && !bp_predict_taken;
+    assign branch_recover_fall = branch_resolve && !branch_taken && bp_predict_taken;
+    assign predicted_redirect = branch_resolve && branch_taken && bp_predict_taken;
+    assign recover_valid = jump_redirect || branch_recover_taken || branch_recover_fall;
+    assign redirect = recover_valid;
     assign flush = redirect;
-    assign recovery_target = jump_redirect ? redirect_target :
-                             (branch_taken ? redirect_target : (pc_id + 32'd4));
-    assign fetch_addr = redirect ? recovery_target :
-                        (predicted_redirect ? redirect_target : pc);
+    assign fallthrough_pc = pc_id + 32'd4;
+    assign recover_pc = ({32{jump_redirect}} & redirect_target) |
+                        ({32{branch_recover_taken}} & branch_target) |
+                        ({32{branch_recover_fall}} & fallthrough_pc);
+    assign recovery_target = recover_pc;
+    assign fetch_addr = ({32{jump_redirect}} & redirect_target) |
+                        ({32{branch_fetch_taken}} & branch_target) |
+                        ({32{branch_recover_fall}} & fallthrough_pc) |
+                        ({32{!(jump_redirect || branch_fetch_taken || branch_recover_fall)}} & pc);
     assign imem_addr = fetch_addr;
-    assign pc_sel = (redirect || predicted_redirect) ? 2'b01 : 2'b00;
-    assign pc_target = redirect ? recovery_target : (redirect_target + 32'd4);
+    assign pc_sel = (jump_redirect || branch_fetch_taken || branch_recover_fall) ? 2'b01 : 2'b00;
+    assign pc_target = ({32{jump_redirect}} & redirect_target) |
+                       ({32{branch_recover_taken}} & branch_target) |
+                       ({32{branch_recover_fall}} & fallthrough_pc) |
+                       ({32{predicted_redirect}} & branch_target_next);
 
     pc u_pc (
         .clk      (clk),
@@ -153,6 +170,7 @@ module core_top #(
         .muldiv_valid(muldiv_valid), .muldiv_op(muldiv_op),
         .branch_valid(branch_valid), .branch_taken(branch_taken), .jump_taken(jump_taken),
         .redirect_target(redirect_target),
+        .branch_target(branch_target), .branch_target_next(branch_target_next),
         .ex_result(ex_result), .ex_addr(ex_addr), .ex_store_data(ex_store_data),
         .ex_reg_write(ex_reg_write), .ex_mem_read(ex_mem_read),
         .ex_mem_write(ex_mem_write), .ex_wb_sel(ex_wb_sel),

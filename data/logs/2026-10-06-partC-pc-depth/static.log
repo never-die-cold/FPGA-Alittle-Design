@@ -1,0 +1,9 @@
+$ iverilog -g2001 -Wall -tnull -s core_top src/riscv/muldiv.v src/riscv/id_ex_stage.v src/riscv/branch_predict.v src/riscv/imem.v src/riscv/if_stage.v src/riscv/forwarding.v src/riscv/mem_wb_stage.v src/riscv/decode.v src/riscv/hazard.v src/riscv/soc_top.v src/riscv/regfile.v src/riscv/pc.v src/riscv/alu.v src/riscv/pynq_z2_top.v src/riscv/dmem.v src/riscv/core_top.v
+(no output)
+exit_code=0 expected=0
+$ grep -rn (\.\*) src/
+(no output)
+exit_code=1 expected=1
+$ git diff --check
+(no output)
+exit_code=0 expected=0

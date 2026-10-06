@@ -118,7 +118,7 @@ DMEM / load 扩展 / regfile 写回 / store 提交
 |:---|:---:|:---:|:---|
 | `if_valid` | 1 | 0 | 当前指令能否进入 ID+EX |
 | `if_pc` | 32 | `0x8000_0000` | 分支目标、JAL/JALR 链接值和调试 |
-| `if_instr` | 32 | NOP | decode 输入；正常路径来自 IMEM 输出 |
+| `if_instr` | 32 | 无效时不约束 | decode 输入；正常路径来自 IMEM 输出 |
 | `if_hold` | 1 | 0 | load-use 或 muldiv 等待时保持当前槽 |
 | `if_flush` | 1 | 0 | redirect 后把错误顺序指令标为无效 |
 
@@ -541,6 +541,8 @@ MEM+WB 是唯一架构副作用级：
 | `branch_taken` | out | 1 | branch 条件原始裁决，尚未经过 `ex_accept` |
 | `jump_taken` | out | 1 | JAL/JALR 原始裁决，尚未经过 `ex_accept` |
 | `redirect_target` | out | 32 | branch/JAL 目标或清 bit0 后的 JALR 目标 |
+| `branch_target` | out | 32 | 原始 B 型立即数与 in_pc 相加；仅条件分支使用 |
+| `branch_target_next` | out | 32 | in_pc+(B 型立即数+4)，独立于通用目标选择，见 §16.4 |
 
 `branch_taken/jump_taken` 即使组合为 1，也不能直接改 PC；`core_top` 必须按 §9
 用 `in_valid && ex_accept` 门控 redirect。
@@ -856,6 +858,35 @@ tb 在与 CPI 完全相同的窗口（`rst_n` 释放至首次终止 tohost 写�
 v0 仍由 `partA-v0` tag 单独作为外部锚点，不混入同 RTL 参数矩阵。`gain_fwd`、BHT 净贡献
 和相对 `v1_nofwd` 的 `gain_total` 分列，25% 仅为组合尽力目标，不得改写 Part B 8.14% 历史。
 
+### 16.4 PC/flush 降深度约定（2026-10-06）
+
+本轮严格保持 IF / ID+EX / MEM+WB 三级。不得新增正常路径流水寄存器；
+`recover_valid/recover_pc`、分支目标及其后继均为 ID+EX 组合候选，命名不代表寄存。
+条件分支 B 型立即数直接从指令拼接，目标与目标后继并行计算，避免经过通用
+`redirect_target` 的 JALR 选择后再加 4。所有加法保持完整 32 位回绕语义。
+
+| 已被 ex_accept 接受的情况 | 本拍 IMEM 地址 | 拍末 PC | flush |
+|:---|:---|:---|:---:|
+| 普通指令 / 分支预测不跳且实际不跳 | pc | pc+4 | 0 |
+| 分支预测跳且实际跳 | T | T+4 | 0 |
+| 分支预测不跳且实际跳 | T | T | 1 |
+| 分支预测跳且实际不跳 | pc_id+4 | pc_id+4 | 1 |
+| JAL/JALR | 跳转目标 | 跳转目标 | 1 |
+| front_stall | 沿用保持时的取址 | 保持 | 0 |
+
+T 为条件分支目标。原有恢复、预测及顺序选择以互斥条件形成；不得让 PC 地址
+选择再次依赖已经合并过的 mispredict/flush。非法的 branch+jump 同时有效不属译码输出。
+误预测拍 IMEM 采样恢复地址，同时拍末 PC 保存恢复地址、IF valid 清零；
+下一拍无效槽再次取恢复地址，再下一拍正确指令有效，保持一个气泡。
+
+flush 只清 IF 有效位，不再把数据总线改写成 NOP。无效槽的指令内容不约束；
+`instr_valid` 必须门控提交、redirect、muldiv 启动、BHT 更新及统计事件。
+stall 时仍保持原指令和 valid，正常 IMEM 输出仍直通；复位清 valid 后不产生副作用。
+
+验收：四档 cycles/retired/CRC 与 BHT 三事件数保持原锚点；本轮最低时序目标为
+BHT2 核 OOC 在 11.520 ns 实跑 WNS>=0，10 ns 为继续提升目标。SoC 单独复验。
+优化前 11.520 ns 的 WNS=-0.334 ns 为用户转述的验证线实测；优化后 WNS 未验证。
+
 ## 99. 契约编写状态
 
 - [x] 三级拍序、流水寄存器字段及裁剪规则；
@@ -870,9 +901,11 @@ v0 仍由 `partA-v0` tag 单独作为外部锚点，不混入同 RTL 参数矩�
 - [x] Part C §16 与 D10/D17 已确认，允许按古法编程进入 BHT RTL。
 - [x] 可切换 BHT、误预测恢复、统计事件线与四档 Icarus 入口已实现并全量回归通过；
 - [ ] Part C arch-test 四档、XSim、Vivado WNS/资源与实机仍由验证/上板线执行。
+- [ ] PC/flush 降深度版本的 BHT2 核 OOC 11.520 ns WNS>=0，交验证线复验。
 
 ## 100. 变更记录
 
 | 日期 | 变更 |
 |:---|:---|
 | 2026-10-06 | 冻结 Part C §16/D17；实现 64 项三档 BHT、误预测恢复、tb 事件统计及同 CoreMark 四档入口；Icarus 四档 CRC/retired 一致，外部时序与资源待验证。 |
+| 2026-10-06 | PC/flush 降深度：保持三级，展开互斥地址选择，增加组合 B 目标/后继端口，flush 只清 valid；新增 PC 等价和 IF 边界 tb。用户授权一次写完、题目集中末尾，未 commit。优化后 Vivado 待复验。 |
