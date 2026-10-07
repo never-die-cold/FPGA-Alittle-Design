@@ -1,4 +1,4 @@
-// if_stage.v —— IF 级流水寄存器：锁存指令与 pc_id；flush 时下一拍注入 NOP
+// if_stage.v —— IF 边界：保持指令与 pc_id；flush 只使下一拍槽位无效
 // 复位后首拍 flush_q=1 注入气泡，保证首条指令只执行一次
 // 语义见 src/riscv/design_v0.md §2、§5.2
 module if_stage (
@@ -21,7 +21,9 @@ module if_stage (
     reg        valid_hold;
     reg        stall_q;
 
-    assign instr       = stall_q ? instr_hold : (flush_q ? NOP : imem_rdata);
+    // Invalid payload is a don't-care; valid gates every architectural side effect.
+    // Keep flush_q out of the 32-bit decode/target data path.
+    assign instr       = stall_q ? instr_hold : imem_rdata;
     assign instr_valid = stall_q ? valid_hold : ~flush_q;
     assign pc_id       = pc_id_r;
 
@@ -35,7 +37,7 @@ module if_stage (
         end else begin
             stall_q <= stall;
             if (stall && !stall_q) begin
-                instr_hold <= flush_q ? NOP : imem_rdata;
+                instr_hold <= imem_rdata;
                 valid_hold <= ~flush_q;
             end
             if (!stall) begin

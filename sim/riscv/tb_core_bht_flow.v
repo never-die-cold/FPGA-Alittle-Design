@@ -7,6 +7,7 @@ module tb_core_bht_flow;
     reg [31:0] imem [0:8191], dmem [0:8191];
     integer i, cycles=0, resolves=0, lookups=0, hits=0, misses=0;
     integer mispredicts=0, writes=0, x10_writes=0, starts=0, errors=0;
+    reg invalid_to_mem, flushed;
     always #5 clk=~clk;
     always @(posedge clk) imem_rdata <= imem[imem_addr[14:2]];
     assign dmem_rdata=dmem[dmem_addr[14:2]];
@@ -14,6 +15,18 @@ module tb_core_bht_flow;
         .clk(clk),.rst_n(rst_n),.imem_addr(imem_addr),.imem_rdata(imem_rdata),
         .dmem_addr(dmem_addr),.dmem_wdata(dmem_wdata),.dmem_be(dmem_be),
         .dmem_we(dmem_we),.dmem_rdata(dmem_rdata));
+    always @(posedge clk) if (rst_n) begin
+        invalid_to_mem=!dut.instr_valid;
+        flushed=dut.flush;
+        if (!dut.instr_valid && (dut.muldiv_start || dut.redirect ||
+            dut.branch_resolve || dut.mem_in_valid || dut.bp_lookup_event))
+            $fatal(1,"FAIL: invalid IF payload produced an EX side effect");
+        #1;
+        if (invalid_to_mem && (dut.mem_valid || dut.rf_we || dmem_we))
+            $fatal(1,"FAIL: invalid payload reached architectural commit");
+        if (flushed && dut.instr_valid !== 1'b0)
+            $fatal(1,"FAIL: redirect did not invalidate the young slot");
+    end
     always @(posedge clk) if (rst_n) begin
         cycles=cycles+1;
         if (dut.branch_resolve) begin
