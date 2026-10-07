@@ -22,8 +22,6 @@ module core_top #(
     wire        branch_valid, branch_taken, jump_taken, flush;
     wire        data_stall, front_stall, ex_accept, redirect, mem_in_valid;
     wire        branch_resolve, branch_mispredict, jump_redirect, predicted_redirect;
-    wire        bp_predict_taken;
-    wire [31:0] redirect_target;
     wire [31:0] pc_target, fetch_addr, recovery_target;
     wire branch_fetch_taken, branch_recover_taken, branch_recover_fall;
     wire recover_valid;
