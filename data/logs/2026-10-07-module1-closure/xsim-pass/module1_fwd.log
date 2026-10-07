@@ -1,0 +1,31 @@
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Wed Oct  7 17:44:17 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/module1_fwd/xsim_script.tcl
+# xsim {module1_fwd} -testplusarg hex=../../../src/riscv_fw/coremark.hex -testplusarg exp_exit=0 -testplusarg timer_addr=80008000 -testplusarg max_cycles=50000000 -testplusarg exp_tohost=34713 -testplusarg exp_iter=32 -testplusarg exp_seedcrc=e9f5 -testplusarg exp_crclist=e714 -testplusarg exp_crcmatrix=1fd7 -testplusarg exp_crcstate=8e3a -testplusarg exp_crcfinal=8799 -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+... 进度 cycles=2000000 pc=0x8000179c tohost=0
+... 进度 cycles=4000000 pc=0x80001790 tohost=0
+... 进度 cycles=6000000 pc=0x80001788 tohost=0
+... 进度 cycles=8000000 pc=0x80001028 tohost=0
+... 进度 cycles=10000000 pc=0x800016d0 tohost=0
+... 进度 cycles=12000000 pc=0x80001778 tohost=0
+... 进度 cycles=14000000 pc=0x80001790 tohost=0
+... 进度 cycles=16000000 pc=0x8000102c tohost=0
+== coremark mode=1 hex=../../../src/riscv_fw/coremark.hex exit=0 tohost=34713 cycles=17114141 retired=10106386 bubbles=7007755
+CLASS: mode=1 mul=5113141 div=33 load_use=650771 raw_nofwd=0 control=1243809 other=1 classified=7007755
+BHT: mode=0 lookup=0 hit=0 miss=0
+== obs iter=32 seedcrc=0xe9f5 crclist=0xe714 crcmatrix=0x1fd7 crcstate=0x8e3a crcfinal=0x8799 t0=18966 t1=17112625 errors=1
+PASS: coremark mode=1 cycles=17114141 retired=10106386 bubbles=7007755 cpi=1.693
+$finish called at time : 171141485 ns : File "E:/Projects/FPGA-Alittle-Design/sim/riscv/tb_core_coremark.v" Line 237
+run: Time (s): cpu = 00:00:00 ; elapsed = 00:01:22 . Memory (MB): peak = 238.883 ; gain = 0.000
+exit
+INFO: xsimkernel Simulation Memory Usage: 22412 KB (Peak: 22412 KB), Simulation CPU Usage: 80343 ms
+INFO: [Common 17-206] Exiting xsim at Wed Oct  7 17:45:41 2026...

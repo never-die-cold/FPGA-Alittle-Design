@@ -25,9 +25,9 @@
 2. 转发覆盖完整，并产出可复现的 CPI 对比；
 3. 提高主频。
 
-125 MHz 是非阻塞加分项，不得因追频拖慢 M1 收口。若收尾时间盒结束时
-仍未在 125 MHz 下取得 WNS≥0，则保留实际最高通过频率，并启用
-“两级 + 完整转发”L3 预案。
+125 MHz 是非阻塞加分项，不得因追频拖慢 M1 收口。当前最低频率门禁以 §16.4
+的 11.520ns 为准；仅在该最低门禁到时间盒结束仍未通过时启用“两级 + 完整转发”
+L3 预案。保留最高已通过约束点；125MHz 未通过本身不触发降级。
 
 ### 1.3 本阶段不做
 
@@ -710,7 +710,7 @@ v0 在 tag `partA-v0` 上复现，v1 两档在同一 commit 上复现。
 主指标固定为同一三级核的 v1+转发相对 v1无转发，v0 两级只作参考锚点：
 
 ```text
-cycles  = rst_n 释放后到首次终止 tohost 写入之间的核时钟拍数
+cycles  = rst_n 释放后到首次 tohost_exit 写入之间的核时钟拍数
 retired = 同一窗口内 wb_valid=1 的指令数；气泡不计，M 指令只计一次
 CPI     = cycles / retired
 gain    = (CPI_nofwd - CPI_fwd) / CPI_nofwd * 100%
@@ -758,7 +758,7 @@ Radix-4 当前双档 CPI 为 `1.885683 → 1.693399`，固定新乘法器的转�
 - 每个报告点必须满足 WNS≥0、无未约束内部端点、无 Error/Critical Warning DRC；
 - Part B 基本验收：v1 功能通过，实际最高通过频率相对 v0 提升或持平；
 - 125 MHz 是非阻塞加分目标，未经 WNS≥0 不得直接把板载 125 MHz 接入核；
-- 到收尾时间盒仍未通过 125 MHz：保留实测最高通过频率，停止追频并启动 L3；
+- 到收尾时间盒仍未通过 §16.4 最低门禁：停止追频并启动 L3；125MHz 本身非阻塞；
 - L3 固定为“两级 + 完整转发”，不得因追频拖慢 M1 功能与 CPI 收口。
 
 报告保存于 `build/reports/`，至少包含 utilization、timing summary、worst paths、
@@ -768,8 +768,15 @@ clock utilization、check_timing、DRC 和 Vivado 版本。bitstream 只能在�
 
 生成 bitstream 或 `PROGRAM PASSED` 均不能单独记为“已上板通过”。只有实际下载
 PYNQ-Z2，并观察到约定 LED/tohost 现象，才可追加 board 日志；报告须记录 bitstream
-对应 commit、核时钟、Vivado 版本、连接方式和观察结果。当前已验证 40 MHz 属 v0；
+对应 commit、核时钟、Vivado 版本、连接方式和观察结果。2026-09-28 的 40MHz 证据属 v0；
 v1 未重新下载和观察前必须标为“待上板”，不得借用 v0 证据。
+
+2026-10-07 收口补证：声明补丁已入库 `96414be`；优化后 BHT2 核 @11.520ns
+WNS=+0.538、hold=+0.167、严重 DRC=0。默认转发/BHT1 的 10ns 固定布线检查点
+改约束至 11.520ns 后 STA 分别为 +0.933/+1.101ns；这是固定布线重分析，未重新综合。
+主档 SoC 40MHz WNS=+3.618/WHS=+0.035，never-die-cold 已记录下载及 LED
+`1101 -> 按钮0000 -> 松开0001`。同脚本 v0 的 83.8MHz 为外推；86.8MHz 是本轮约束门禁。
+完整版本、四档 XSim/arch-test 与原始证据见 [收口报告](../../report/module1-closure.md)。
 
 ## 15. 已确认决策 D1–D17
 
@@ -885,7 +892,7 @@ stall 时仍保持原指令和 valid，正常 IMEM 输出仍直通；复位清 v
 
 验收：四档 cycles/retired/CRC 与 BHT 三事件数保持原锚点；本轮最低时序目标为
 BHT2 核 OOC 在 11.520 ns 实跑 WNS>=0，10 ns 为继续提升目标。SoC 单独复验。
-优化前 11.520 ns 的 WNS=-0.334 ns 为用户转述的验证线实测；优化后 WNS 未验证。
+优化前 WNS=-0.334ns 的失败保留；优化后 @11.520ns WNS=+0.538ns 已实测通过，见 §14.4 与收口报告。
 
 ## 99. 契约编写状态
 
@@ -900,8 +907,8 @@ BHT2 核 OOC 在 11.520 ns 实跑 WNS>=0，10 ns 为继续提升目标。SoC 单
 - [x] v0/plan 交叉引用及决策记录定稿。
 - [x] Part C §16 与 D10/D17 已确认，允许按古法编程进入 BHT RTL。
 - [x] 可切换 BHT、误预测恢复、统计事件线与四档 Icarus 入口已实现并全量回归通过；
-- [ ] Part C arch-test 四档、XSim、Vivado WNS/资源与实机仍由验证/上板线执行。
-- [ ] PC/flush 降深度版本的 BHT2 核 OOC 11.520 ns WNS>=0，交验证线复验。
+- [x] Part C arch-test 扩展子集四档、优化后 XSim 四档、OOC/资源及 40MHz 主档真实上板证据已补齐。
+- [x] PC/flush 降深度 BHT2 核 @11.520ns WNS=+0.538；100/125MHz 非阻塞目标仍未通过。
 
 ## 100. 变更记录
 
