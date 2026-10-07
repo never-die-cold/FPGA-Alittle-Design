@@ -20,7 +20,7 @@
 
 | 核 | LUT | Fmax | CPI | DMIPS/MHz | 来源与口径 |
 |:---|---:|---:|---:|---:|:---|
-| 本项目 v0（两级） | 1606 | 83.8 MHz（post-route，WNS −1.935@10ns；2026-09-28 重综合口径，2026-10-03 同脚本复现逐位一致） | ≈1（设计推导，待 CoreMark 实测） | 未测 | `data/metrics.csv`、[对比实测](../data/logs/2026-10-03-picorv32-compare/README.md) |
+| 本项目 v0（两级） | 1606 | 83.8 MHz（Slack外推，WNS −1.935@10ns；10/03复现同值） | CoreMark 2.105（短仿真；非设计推导≈1） | 未测 | `data/metrics.csv`、[对比实测](../data/logs/2026-10-03-picorv32-compare/README.md) |
 | PicoRV32 (regular) **本仓实测** | 905 | **194.6 MHz**（post-route WNS −0.139@5ns，收敛 ≈192–195） | 4–5（引用作者自述，未重跑） | 未测 | [2026-10-03 对比实测](../data/logs/2026-10-03-picorv32-compare/README.md)，OOC 同法 |
 | PicoRV32 (large，含 M) **本仓实测** | 2006 | **134.3 MHz**（post-route WNS −0.445@7ns） | — | — | 同上 |
 | PicoRV32 (regular) | ~904 | ~196–200 MHz（Artix-7 -1 级 post-route，作者精调约束） | 4–5（作者自述） | 0.309 | 官方 README + JIPS 论文 |
@@ -46,6 +46,8 @@
 4. **PicoRV32 Fmax 远超本核**：预期内（其为作者精调的 size/fmax 优化设计）；对策是聚焦 CoreMark/LUT 与协处理器耦合论证，不押主频。
 
 ## 5. 产出物
+
+2026-10-07 自研核v0外部锚点及v1四档CoreMark/MHz、每MHz面积归一值、原始日志与方法限制见 [模块一收口报告](../report/module1-closure.md)；不能把外推值标成实际通过频率，也不拿PicoRV32公开CPI作同负载加速比。
 
 - [ ] `data/metrics.csv` 增行：CoreMark/MHz（四档）+ CoreMark/LUT
 - [ ] `data/logs/`：iverilog 跑分原始日志 + PicoRV32 OOC timing/utilization 报告（PicoRV32 部分 ✅ 2026-10-03：`data/logs/2026-10-03-picorv32-compare/`）

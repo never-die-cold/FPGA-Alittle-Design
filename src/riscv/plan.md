@@ -1,6 +1,7 @@
 # RISC-V 核专项计划：Part A/B/C 与验收
 
-> 更新日期：2026-09-30。本文件只管理 RISC-V 核及其最小 SoC 的技术任务。
+> 更新日期：2026-10-07。本文件只管理 RISC-V 核及其最小 SoC 的技术任务。
+> 最新收口事实、四档表与复现入口见 [模块一收口报告](../../report/module1-closure.md)；理解门槛已补测通过，PR #60已合并、#20/#21与M1已关闭；未验证备考移交#61。
 > 全项目产品、分工和收口日期见根目录 [项目主计划](../../plan.md)；本模块对应 M1，核任务见 [核交付看板](plan_calendar.md)。
 > v0 接口以 [design_v0.md](design_v0.md) 为准，Part B/C 以 [design_v1.md](design_v1.md) 为准。
 
@@ -50,7 +51,7 @@ RTL 可独立自测后交付配置和已知问题，验证线复验并反馈缺�
 - [x] 基线 CPI、CoreMark/LUT 与 SoC 资源补录 `data/metrics.csv`
 - [x] `dev/rtl` Part A 分支 PR 合并（PR #32，2026-09-23；原计划 9/27 周合并）
 - [x] gate #19 复核签字（9/27；2026-10-03 随 issue #19 关闭补记，证据见 issue 评论）
-- [x] benchmark v0.1 / CPI harness / v0 metrics 入档；[ ] CoreMark 四档对比待 Part B/C 完成后补齐
+- [x] benchmark v0.1 / CPI harness / v0 metrics 入档；[x] CoreMark 四档及 v0 外部锚点见收口报告
 
 ### 3.3 引用兼容说明
 
@@ -101,7 +102,7 @@ RTL 可独立自测后交付配置和已知问题，验证线复验并反馈缺�
 
 同日 Radix-4 乘法回归后，双档 CPI 为 `1.885683 → 1.693399`，固定新乘法器的转发
 收益为 10.20%；固定转发的新旧乘法器周期降幅为 21.95%；相对原始无转发基线的
-组合周期降幅为 28.30%。功能仿真与 arch-test 已通过，XSim、Vivado WNS/资源和实机仍待验证。
+组合周期降幅为 28.30%。后续 XSim、Vivado 与真实板上证据已补齐，版本与测试条件见收口报告；不得将组合收益归因给转发。
 
 #### 依赖与风险
 
@@ -123,10 +124,10 @@ RTL 可独立自测后交付配置和已知问题，验证线复验并反馈缺�
 
 #### 交付物
 
-- [x] 完整 v1 核（三级 + 转发 + 可切换 BHT；RTL/Icarus 已通过，XSim/Vivado/上板待验证）
-- [ ] benchmark 源码与编译脚本（`src/riscv_fw/`）
-- [ ] 对比数据报告（四档数据表格 + 测试条件 + 原始日志），归档 `report/`
-- [ ] 验证脚本/清单沉淀，标 `#skill候选`（如"CPI 测量流程"）
+- [x] 完整 v1 核：三级 + 转发 + 可切换 BHT，优化后 XSim 四档、OOC 与 40MHz 主档真实上板有证据
+- [x] benchmark 源码、Makefile 与反汇编：`src/riscv_fw/bench_v0_1.*`，四档接入 `run_iverilog.sh all`
+- [x] 对比数据报告：`report/module1-closure.md`，含 v0 锚点与同 RTL 四档、原始日志和明确限制
+- [x] 复现清单：`docs/module1-reproduction.md`，标 `#skill候选`；不等于已创建正式技能包
 
 #### 验收标准
 
@@ -134,6 +135,12 @@ RTL 可独立自测后交付配置和已知问题，验证线复验并反馈缺�
 
 - 25% 保留为“转发 + 快速乘除 + 分支预测”等组合优化相对 **v1 无转发**的尽力目标；2026-10-05 已确认仅转发实测为 8.14%，不得把组合收益归因给转发（原始规划与失败记录见 [llm_log](../../report/llm_log/2026-10-05-partB-v1-cpi.md)）
 - 实际最高通过频率点 WNS ≥ 0；125 MHz 为非阻塞加分项
+- 本轮 PC/flush 优化最低目标：保持三级，BHT2 核 OOC 在 11.520 ns（约 86.8 MHz）
+  实跑 WNS≥0；10 ns（100 MHz）为继续提升目标，SoC 另测，不混用。
+  用户转述验证线的优化前 BHT2 实点 WNS=-0.334 ns，17 级关键路径
+  `instr_hold_reg[5] -> pc_reg[27]`，Data Path 11.860 ns；该失败保留。
+  优化后 BHT2 在 11.520ns 实跑 WNS=+0.538、hold=+0.167、严重 DRC=0；100MHz 仍失败。
+  v0 同脚本复现外推值为 83.8MHz；86.8MHz 是本轮最低约束门禁，不能混称 v0 实测通过频率。
 - 2-bit BHT 在含循环的 benchmark 上命中率可统计且显著优于无预测
 - 全套测试回归通过，数据与 git commit 对得上
 
@@ -147,8 +154,8 @@ RTL 可独立自测后交付配置和已知问题，验证线复验并反馈缺�
 
 > 由验证线负责，在 M4 材料收口前完成；不另设逐日窗口。详细口径见 [核心对比说明](../../docs/core_comparison.md)。
 
-- [ ] PicoRV32（YosysHQ 官方仓库）regular + large 两配置，同器件 xc7z020clg400-1、同 Vivado 2026.1 OOC post-route（复用 `build/build.tcl` 流程）
-- [ ] Fmax 用约束递减收敛法（10ns → 5ns → 收敛，2–3 轮），与本核同法
+- [x] PicoRV32 regular + large 同器件/工具 OOC 报告已于 10/03 入档，见 `data/logs/2026-10-03-picorv32-compare/`
+- [x] 约束递减多点已记录；Fmax 数值仍为 Slack 外推，最高通过约束点另列，不冒充频率认证
 - [ ] 性能数据引用官方公开口径（0.309 DMIPS/MHz、CPI 4–5），不重跑其基准；脚注注明来源与口径差异
 - [ ] 产出：`docs/core_comparison.md` §2 表更新为实测行 + `data/logs/` 原始报告
 

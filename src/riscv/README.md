@@ -2,14 +2,14 @@
 
 自研三级流水 RISC-V 核（RV32IM）：流水线重构 + 数据转发（旁路）+ 轻量分支预测。
 
-> 📋 剩余计划（三级+转发 / 预测+验证）与技术栈学习路线见 [plan.md](plan.md)；已完成部分（阶段 0 / 第一阶段 / Part A）原文与证据归档见 [done/m1-first-phase-completed.md](done/m1-first-phase-completed.md)。
+> 📋 收口证据与四档数据见 [模块一报告](../../report/module1-closure.md)，技术验收与学习路线见 [plan.md](plan.md)；Part A 历史证据见 [done/m1-first-phase-completed.md](done/m1-first-phase-completed.md)。
 > 🔧 v0 接口冻结（模块划分 / 信号表 / 控制真值表）：[design_v0.md](design_v0.md)。
 
-## v1 规划内容（待实现）
+## v1 已实现内容
 
 - `core_top.v`：核顶层，例化各级流水与互连（v1 改造）
-- `id_ex_stage.v`：译码 + 执行级（译码、ALU、乘除单元、转发裁决）
-- `mem_wb_stage.v`：访存 + 写回级
+- `id_ex_stage.v`：组合译码 + 执行级（decode/ALU、分支目标与条件）；不增加流水寄存器
+- `mem_wb_stage.v`：执行到提交的边界寄存器；访存与写回组合逻辑在 core_top
 - `forwarding.v`：数据转发（旁路）单元
 - `hazard.v`：冒险检测与流水线暂停（Stall）控制
 - `branch_predict.v`：1-bit/2-bit 分支历史表
@@ -21,10 +21,8 @@
 ## SoC 外壳与集成（原 `src/soc/` 并入本目录）
 
 - `soc_top.v`：PL 侧 SoC 顶层（核 + 指令 BRAM + 数据 RAM + 最小外设）
-- `bus_interconnect.v`：内部总线互连（指令/数据存储、外设地址映射）
-- `imem.v` / `dmem.v`：指令/数据存储（BlockRAM）
-- `ps_interface.v`：PS↔PL AXI-Lite 寄存器映射 + 中断（M3）
-- `addr_map.md`：地址映射表（定稿后 `src/riscv_fw/` 与 `src/pynq_host/` 均以此为准）
+- `imem.v` / `dmem.v`：32KB 同步读指令 BRAM / 32KB 异步读分布式数据 RAM
+- **未实现**：`bus_interconnect.v`、`ps_interface.v`、统一 `addr_map.md`；当前译码在 soc_top，PS/协处理器集成属于后续模块
 
 ## 命名与编码约定
 
@@ -35,6 +33,6 @@
 ## 版本基线
 
 - `v0`：两级流水基线（已收口，锚点 tag `partA-v0` = `962a4f5`，接口见 `design_v0.md`）
-- `v1`：三级流水 + 转发 + 分支预测（契约已冻结，见 `design_v1.md`；转发/冒险/三级重构 RTL 待实现）
+- `v1`：三级流水 + 转发 + Radix-4 乘法 + 可切换 BHT（实现与验收证据见 `design_v1.md` §14/§16）
 
-> 状态：v0 与 Part A 收口完成；v1 契约定稿，积木模块有专项复验记录，完整三级核尚未验收。技术任务与验收见 [核计划](plan.md)，M1 收口时间见根目录 [项目主计划](../../plan.md)，不设逐日交付表。
+默认配置为转发开、BHT 关；Part C 主验收配置为转发开、BHT2。保持相同存储器端口，核 OOC 与 40MHz SoC/上板频率分开记录。提交仍须用户通过理解门槛。

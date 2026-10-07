@@ -14,3 +14,8 @@
 #   *.patch 为 unified diff 证据（空白上下文行会被 git diff --check 误报）
 src/riscv_fw/coremark/vendor/** -whitespace
 *.patch -whitespace
+
+# Module-one Vivado archives retain the tool's original table padding.
+data/logs/2026-10-07-partC-postopt/** -whitespace
+data/logs/2026-10-07-partC-postopt/*.md whitespace
+build/reports/soc_40mhz_bht2/** -whitespace

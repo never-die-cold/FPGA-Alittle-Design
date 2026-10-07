@@ -25,9 +25,9 @@
 2. 转发覆盖完整，并产出可复现的 CPI 对比；
 3. 提高主频。
 
-125 MHz 是非阻塞加分项，不得因追频拖慢 M1 收口。若收尾时间盒结束时
-仍未在 125 MHz 下取得 WNS≥0，则保留实际最高通过频率，并启用
-“两级 + 完整转发”L3 预案。
+125 MHz 是非阻塞加分项，不得因追频拖慢 M1 收口。当前最低频率门禁以 §16.4
+的 11.520ns 为准；仅在该最低门禁到时间盒结束仍未通过时启用“两级 + 完整转发”
+L3 预案。保留最高已通过约束点；125MHz 未通过本身不触发降级。
 
 ### 1.3 本阶段不做
 
@@ -118,7 +118,7 @@ DMEM / load 扩展 / regfile 写回 / store 提交
 |:---|:---:|:---:|:---|
 | `if_valid` | 1 | 0 | 当前指令能否进入 ID+EX |
 | `if_pc` | 32 | `0x8000_0000` | 分支目标、JAL/JALR 链接值和调试 |
-| `if_instr` | 32 | NOP | decode 输入；正常路径来自 IMEM 输出 |
+| `if_instr` | 32 | 无效时不约束 | decode 输入；正常路径来自 IMEM 输出 |
 | `if_hold` | 1 | 0 | load-use 或 muldiv 等待时保持当前槽 |
 | `if_flush` | 1 | 0 | redirect 后把错误顺序指令标为无效 |
 
@@ -541,6 +541,8 @@ MEM+WB 是唯一架构副作用级：
 | `branch_taken` | out | 1 | branch 条件原始裁决，尚未经过 `ex_accept` |
 | `jump_taken` | out | 1 | JAL/JALR 原始裁决，尚未经过 `ex_accept` |
 | `redirect_target` | out | 32 | branch/JAL 目标或清 bit0 后的 JALR 目标 |
+| `branch_target` | out | 32 | 原始 B 型立即数与 in_pc 相加；仅条件分支使用 |
+| `branch_target_next` | out | 32 | in_pc+(B 型立即数+4)，独立于通用目标选择，见 §16.4 |
 
 `branch_taken/jump_taken` 即使组合为 1，也不能直接改 PC；`core_top` 必须按 §9
 用 `in_valid && ex_accept` 门控 redirect。
@@ -708,7 +710,7 @@ v0 在 tag `partA-v0` 上复现，v1 两档在同一 commit 上复现。
 主指标固定为同一三级核的 v1+转发相对 v1无转发，v0 两级只作参考锚点：
 
 ```text
-cycles  = rst_n 释放后到首次终止 tohost 写入之间的核时钟拍数
+cycles  = rst_n 释放后到首次 tohost_exit 写入之间的核时钟拍数
 retired = 同一窗口内 wb_valid=1 的指令数；气泡不计，M 指令只计一次
 CPI     = cycles / retired
 gain    = (CPI_nofwd - CPI_fwd) / CPI_nofwd * 100%
@@ -756,7 +758,7 @@ Radix-4 当前双档 CPI 为 `1.885683 → 1.693399`，固定新乘法器的转�
 - 每个报告点必须满足 WNS≥0、无未约束内部端点、无 Error/Critical Warning DRC；
 - Part B 基本验收：v1 功能通过，实际最高通过频率相对 v0 提升或持平；
 - 125 MHz 是非阻塞加分目标，未经 WNS≥0 不得直接把板载 125 MHz 接入核；
-- 到收尾时间盒仍未通过 125 MHz：保留实测最高通过频率，停止追频并启动 L3；
+- 到收尾时间盒仍未通过 §16.4 最低门禁：停止追频并启动 L3；125MHz 本身非阻塞；
 - L3 固定为“两级 + 完整转发”，不得因追频拖慢 M1 功能与 CPI 收口。
 
 报告保存于 `build/reports/`，至少包含 utilization、timing summary、worst paths、
@@ -766,8 +768,15 @@ clock utilization、check_timing、DRC 和 Vivado 版本。bitstream 只能在�
 
 生成 bitstream 或 `PROGRAM PASSED` 均不能单独记为“已上板通过”。只有实际下载
 PYNQ-Z2，并观察到约定 LED/tohost 现象，才可追加 board 日志；报告须记录 bitstream
-对应 commit、核时钟、Vivado 版本、连接方式和观察结果。当前已验证 40 MHz 属 v0；
+对应 commit、核时钟、Vivado 版本、连接方式和观察结果。2026-09-28 的 40MHz 证据属 v0；
 v1 未重新下载和观察前必须标为“待上板”，不得借用 v0 证据。
+
+2026-10-07 收口补证：声明补丁已入库 `96414be`；优化后 BHT2 核 @11.520ns
+WNS=+0.538、hold=+0.167、严重 DRC=0。默认转发/BHT1 的 10ns 固定布线检查点
+改约束至 11.520ns 后 STA 分别为 +0.933/+1.101ns；这是固定布线重分析，未重新综合。
+主档 SoC 40MHz WNS=+3.618/WHS=+0.035，never-die-cold 已记录下载及 LED
+`1101 -> 按钮0000 -> 松开0001`。同脚本 v0 的 83.8MHz 为外推；86.8MHz 是本轮约束门禁。
+完整版本、四档 XSim/arch-test 与原始证据见 [收口报告](../../report/module1-closure.md)。
 
 ## 15. 已确认决策 D1–D17
 
@@ -856,6 +865,35 @@ tb 在与 CPI 完全相同的窗口（`rst_n` 释放至首次终止 tohost 写�
 v0 仍由 `partA-v0` tag 单独作为外部锚点，不混入同 RTL 参数矩阵。`gain_fwd`、BHT 净贡献
 和相对 `v1_nofwd` 的 `gain_total` 分列，25% 仅为组合尽力目标，不得改写 Part B 8.14% 历史。
 
+### 16.4 PC/flush 降深度约定（2026-10-06）
+
+本轮严格保持 IF / ID+EX / MEM+WB 三级。不得新增正常路径流水寄存器；
+`recover_valid/recover_pc`、分支目标及其后继均为 ID+EX 组合候选，命名不代表寄存。
+条件分支 B 型立即数直接从指令拼接，目标与目标后继并行计算，避免经过通用
+`redirect_target` 的 JALR 选择后再加 4。所有加法保持完整 32 位回绕语义。
+
+| 已被 ex_accept 接受的情况 | 本拍 IMEM 地址 | 拍末 PC | flush |
+|:---|:---|:---|:---:|
+| 普通指令 / 分支预测不跳且实际不跳 | pc | pc+4 | 0 |
+| 分支预测跳且实际跳 | T | T+4 | 0 |
+| 分支预测不跳且实际跳 | T | T | 1 |
+| 分支预测跳且实际不跳 | pc_id+4 | pc_id+4 | 1 |
+| JAL/JALR | 跳转目标 | 跳转目标 | 1 |
+| front_stall | 沿用保持时的取址 | 保持 | 0 |
+
+T 为条件分支目标。原有恢复、预测及顺序选择以互斥条件形成；不得让 PC 地址
+选择再次依赖已经合并过的 mispredict/flush。非法的 branch+jump 同时有效不属译码输出。
+误预测拍 IMEM 采样恢复地址，同时拍末 PC 保存恢复地址、IF valid 清零；
+下一拍无效槽再次取恢复地址，再下一拍正确指令有效，保持一个气泡。
+
+flush 只清 IF 有效位，不再把数据总线改写成 NOP。无效槽的指令内容不约束；
+`instr_valid` 必须门控提交、redirect、muldiv 启动、BHT 更新及统计事件。
+stall 时仍保持原指令和 valid，正常 IMEM 输出仍直通；复位清 valid 后不产生副作用。
+
+验收：四档 cycles/retired/CRC 与 BHT 三事件数保持原锚点；本轮最低时序目标为
+BHT2 核 OOC 在 11.520 ns 实跑 WNS>=0，10 ns 为继续提升目标。SoC 单独复验。
+优化前 WNS=-0.334ns 的失败保留；优化后 @11.520ns WNS=+0.538ns 已实测通过，见 §14.4 与收口报告。
+
 ## 99. 契约编写状态
 
 - [x] 三级拍序、流水寄存器字段及裁剪规则；
@@ -869,10 +907,12 @@ v0 仍由 `partA-v0` tag 单独作为外部锚点，不混入同 RTL 参数矩�
 - [x] v0/plan 交叉引用及决策记录定稿。
 - [x] Part C §16 与 D10/D17 已确认，允许按古法编程进入 BHT RTL。
 - [x] 可切换 BHT、误预测恢复、统计事件线与四档 Icarus 入口已实现并全量回归通过；
-- [ ] Part C arch-test 四档、XSim、Vivado WNS/资源与实机仍由验证/上板线执行。
+- [x] Part C arch-test 扩展子集四档、优化后 XSim 四档、OOC/资源及 40MHz 主档真实上板证据已补齐。
+- [x] PC/flush 降深度 BHT2 核 @11.520ns WNS=+0.538；100/125MHz 非阻塞目标仍未通过。
 
 ## 100. 变更记录
 
 | 日期 | 变更 |
 |:---|:---|
 | 2026-10-06 | 冻结 Part C §16/D17；实现 64 项三档 BHT、误预测恢复、tb 事件统计及同 CoreMark 四档入口；Icarus 四档 CRC/retired 一致，外部时序与资源待验证。 |
+| 2026-10-06 | PC/flush 降深度：保持三级，展开互斥地址选择，增加组合 B 目标/后继端口，flush 只清 valid；新增 PC 等价和 IF 边界 tb。用户授权一次写完、题目集中末尾，未 commit。优化后 Vivado 待复验。 |

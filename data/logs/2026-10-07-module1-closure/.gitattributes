@@ -1,0 +1,4 @@
+# Preserve raw tool output and signature bytes, including native line endings.
+* -text -whitespace
+README.md text whitespace
+.gitattributes text whitespace

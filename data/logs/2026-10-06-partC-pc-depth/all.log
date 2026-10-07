@@ -1,0 +1,1236 @@
+== tb_imem ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_imem.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_imem.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_imem.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_imem.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_imem.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_imem.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_imem.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_imem.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_imem.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_imem.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_imem.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_imem.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_imem.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_imem.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_imem.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_imem.v:1: ...: The inherited timescale is here.
+WARNING: ../src/riscv/imem.v:19: $readmemh(../src/riscv_fw/hello.hex): Not enough words in the file for the requested range [0:8191].
+PASS: imem preload, synchronous read and addr[14:2] indexing
+== tb_dmem ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_dmem.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_dmem.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_dmem.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_dmem.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_dmem.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_dmem.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_dmem.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_dmem.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_dmem.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_dmem.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_dmem.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_dmem.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_dmem.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_dmem.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_dmem.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_dmem.v:1: ...: The inherited timescale is here.
+PASS: dmem async read, byte writes and addr[14:2] indexing
+== tb_pynq_z2_clock_config ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_pynq_z2_clock_config.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_pynq_z2_clock_config.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_pynq_z2_clock_config.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_pynq_z2_clock_config.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_pynq_z2_clock_config.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_pynq_z2_clock_config.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_pynq_z2_clock_config.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_pynq_z2_clock_config.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_pynq_z2_clock_config.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_pynq_z2_clock_config.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_pynq_z2_clock_config.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_pynq_z2_clock_config.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_pynq_z2_clock_config.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_pynq_z2_clock_config.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_pynq_z2_clock_config.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_pynq_z2_clock_config.v:1: ...: The inherited timescale is here.
+WARNING: ../src/riscv/imem.v:19: $readmemh(../src/riscv_fw/hello_v0.hex): Not enough words in the file for the requested range [0:8191].
+WARNING: ../src/riscv/dmem.v:21: $readmemh(../src/riscv_fw/hello_v0.hex): Not enough words in the file for the requested range [0:8191].
+WARNING: ../src/riscv/imem.v:19: $readmemh(../src/riscv_fw/hello_v0.hex): Not enough words in the file for the requested range [0:8191].
+WARNING: ../src/riscv/dmem.v:21: $readmemh(../src/riscv_fw/hello_v0.hex): Not enough words in the file for the requested range [0:8191].
+PASS: board clocks and forwarding/BHT parameters reach core_top
+== tb_core_smoke ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_smoke.v:1: ...: The inherited timescale is here.
+WARNING: riscv/tb_core_smoke.v:38: $readmemh(../src/riscv_fw/hello_v0.hex): Not enough words in the file for the requested range [0:8191].
+VCD info: dumpfile tb_core_smoke.vcd opened for output.
+PASS: tohost = 13 (0x0000000d), tohost_exit = 0
+== tb_core_test ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_test.v:1: ...: The inherited timescale is here.
+WARNING: riscv/tb_core_test.v:36: $readmemh(../src/riscv_fw/hello_test.hex): Not enough words in the file for the requested range [0:8191].
+VCD info: dumpfile tb_core_test.vcd opened for output.
+PASS: all RV32I tests passed (tohost_exit = 0)
+== tb_core_v1_mem ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_v1_mem.v:1: ...: The inherited timescale is here.
+PASS: v1 byte/half/word memory path, writes=11
+== tb_core_fwd ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_fwd.v:1: ...: The inherited timescale is here.
+WARNING: riscv/tb_core_fwd.v:48: $readmemh(riscv/fwd/fwd_test.hex): Not enough words in the file for the requested range [0:8191].
+VCD info: dumpfile tb_core_fwd.vcd opened for output.
+== fwd phase A (R-type RAW) : cycles=28 bubbles=0 (expect 0)
+== fwd phase B (lw->op)     : cycles=26 bubbles=4 (expect 4)
+== fwd phase C (taken)      : cycles=26 bubbles=5 (expect 5)
+== fwd phase D (not-taken)  : cycles=12 bubbles=0 (expect 0)
+PASS: fwd_test 结果全对；气泡 A/B/C/D = 0/4/5/0，总周期 128，总气泡 13
+== tb_decode ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_decode.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_decode.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_decode.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_decode.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_decode.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_decode.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_decode.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_decode.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_decode.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_decode.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_decode.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_decode.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_decode.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_decode.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_decode.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_decode.v:1: ...: The inherited timescale is here.
+PASS: decode source-use flags (11 cases)
+== tb_forwarding ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_forwarding.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_forwarding.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_forwarding.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_forwarding.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_forwarding.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_forwarding.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_forwarding.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_forwarding.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_forwarding.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_forwarding.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_forwarding.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_forwarding.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_forwarding.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_forwarding.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_forwarding.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_forwarding.v:1: ...: The inherited timescale is here.
+PASS: forwarding unit checks (25 cases)
+== tb_hazard ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_hazard.v:1: ...: The inherited timescale is here.
+PASS: hazard unit checks (16020 cases)
+== tb_branch_predict ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_branch_predict.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_branch_predict.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_branch_predict.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_branch_predict.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_branch_predict.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_branch_predict.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_branch_predict.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_branch_predict.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_branch_predict.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_branch_predict.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_branch_predict.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_branch_predict.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_branch_predict.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_branch_predict.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_branch_predict.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_branch_predict.v:1: ...: The inherited timescale is here.
+PASS: tb_branch_predict (21 checks)
+== tb_core_pc_control ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_pc_control.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_core_pc_control.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_pc_control.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_pc_control.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_core_pc_control.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_core_pc_control.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_core_pc_control.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_core_pc_control.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_pc_control.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_core_pc_control.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_core_pc_control.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_pc_control.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_pc_control.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_core_pc_control.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_pc_control.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_pc_control.v:1: ...: The inherited timescale is here.
+PASS: PC control matches pre-optimization truth table (768 cases)
+== tb_if_stage ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_if_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_if_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_if_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_if_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_if_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_if_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_if_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_if_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_if_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_if_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_if_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_if_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_if_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_if_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_if_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_if_stage.v:1: ...: The inherited timescale is here.
+PASS: IF valid-only flush, hold/release and reset (12 cases)
+== tb_core_bht_flow ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+PASS: BHT mode 2, wrong-path store/RF/muldiv suppressed
+== tb_mem_wb_stage ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_mem_wb_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_mem_wb_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_mem_wb_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_mem_wb_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_mem_wb_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_mem_wb_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_mem_wb_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_mem_wb_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_mem_wb_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_mem_wb_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_mem_wb_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_mem_wb_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_mem_wb_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_mem_wb_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_mem_wb_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_mem_wb_stage.v:1: ...: The inherited timescale is here.
+PASS: MEM+WB capture, bubble overwrite and reset (3 captures)
+== tb_id_ex_stage ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_id_ex_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_id_ex_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_id_ex_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_id_ex_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_id_ex_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_id_ex_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_id_ex_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_id_ex_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_id_ex_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_id_ex_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_id_ex_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_id_ex_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_id_ex_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_id_ex_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_id_ex_stage.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_id_ex_stage.v:1: ...: The inherited timescale is here.
+PASS: ID+EX decode, execute and redirect (12304 cases)
+== tb_muldiv ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_muldiv.v:1: ...: The inherited timescale is here.
+VCD info: dumpfile tb_muldiv.vcd opened for output.
+PASS: radix-4 multiply, division, boundaries and handshake
+== tb_core_muldiv ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_core_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_core_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_core_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_core_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_core_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_core_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_core_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_core_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_muldiv.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_muldiv.v:1: ...: The inherited timescale is here.
+WARNING: riscv/tb_core_muldiv.v:38: $readmemh(../src/riscv_fw/hello.hex): Not enough words in the file for the requested range [0:8191].
+VCD info: dumpfile tb_core_muldiv.vcd opened for output.
+PASS: RV32IM core tohost=142879 exit=0
+== tb_soc_top ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_soc_top.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_soc_top.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_soc_top.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_soc_top.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_soc_top.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_soc_top.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_soc_top.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_soc_top.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_soc_top.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_soc_top.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_soc_top.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_soc_top.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_soc_top.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_soc_top.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_soc_top.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_soc_top.v:1: ...: The inherited timescale is here.
+WARNING: ../src/riscv/imem.v:19: $readmemh(../src/riscv_fw/hello_v0.hex): Not enough words in the file for the requested range [0:8191].
+WARNING: ../src/riscv/dmem.v:21: $readmemh(../src/riscv_fw/hello_v0.hex): Not enough words in the file for the requested range [0:8191].
+VCD info: dumpfile tb_soc_top.vcd opened for output.
+PASS: SoC first-run=13/1101, timer reset/increment/write-ignore, second-run=65/0001
+== tb_soc_check ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_soc_check.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_soc_check.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_soc_check.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_soc_check.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_soc_check.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_soc_check.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_soc_check.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_soc_check.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_soc_check.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_soc_check.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_soc_check.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_soc_check.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_soc_check.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_soc_check.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_soc_check.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_soc_check.v:1: ...: The inherited timescale is here.
+WARNING: ../src/riscv/imem.v:19: $readmemh(../src/riscv_fw/soc_check.hex): Not enough words in the file for the requested range [0:8191].
+WARNING: ../src/riscv/dmem.v:21: $readmemh(../src/riscv_fw/soc_check.hex): Not enough words in the file for the requested range [0:8191].
+VCD info: dumpfile tb_soc_check.vcd opened for output.
+PASS: soc_check preload/timer/read-write path tohost=534f4301 cycles=3000
+== tb_core_coremark ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+WARNING: riscv/tb_core_coremark.v:160: $readmemh(../src/riscv_fw/coremark.hex): Not enough words in the file for the requested range [0:8191].
+WARNING: riscv/tb_core_coremark.v:163: $readmemh(../src/riscv_fw/coremark.hex): Not enough words in the file for the requested range [0:8191].
+... 进度 cycles=2000000 pc=0x80001788 tohost=0
+... 进度 cycles=4000000 pc=0x800016c8 tohost=0
+... 进度 cycles=6000000 pc=0x80000f78 tohost=0
+... 进度 cycles=8000000 pc=0x80001788 tohost=0
+... 进度 cycles=10000000 pc=0x80002174 tohost=0
+... 进度 cycles=12000000 pc=0x800016cc tohost=0
+... 进度 cycles=14000000 pc=0x8000248c tohost=0
+... 进度 cycles=16000000 pc=0x80002514 tohost=0
+... 进度 cycles=18000000 pc=0x80001664 tohost=0
+== coremark mode=0 hex=../src/riscv_fw/coremark.hex exit=0 tohost=34713 cycles=19057438 retired=10106386 bubbles=8951052
+CLASS: mode=0 mul=5113141 div=33 load_use=650771 raw_nofwd=1943297 control=1243809 other=1 classified=8951052
+BHT: mode=0 lookup=0 hit=0 miss=0
+== obs iter=32 seedcrc=0xe9f5 crclist=0xe714 crcmatrix=0x1fd7 crcstate=0x8e3a crcfinal=0x8799 t0=22350 t1=19055568 errors=1
+PASS: coremark mode=0 cycles=19057438 retired=10106386 bubbles=8951052 cpi=1.886
+== tb_core_coremark ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+WARNING: riscv/tb_core_coremark.v:160: $readmemh(../src/riscv_fw/coremark.hex): Not enough words in the file for the requested range [0:8191].
+WARNING: riscv/tb_core_coremark.v:163: $readmemh(../src/riscv_fw/coremark.hex): Not enough words in the file for the requested range [0:8191].
+... 进度 cycles=2000000 pc=0x8000179c tohost=0
+... 进度 cycles=4000000 pc=0x80001790 tohost=0
+... 进度 cycles=6000000 pc=0x80001788 tohost=0
+... 进度 cycles=8000000 pc=0x80001028 tohost=0
+... 进度 cycles=10000000 pc=0x800016d0 tohost=0
+... 进度 cycles=12000000 pc=0x80001778 tohost=0
+... 进度 cycles=14000000 pc=0x80001790 tohost=0
+... 进度 cycles=16000000 pc=0x8000102c tohost=0
+== coremark mode=1 hex=../src/riscv_fw/coremark.hex exit=0 tohost=34713 cycles=17114141 retired=10106386 bubbles=7007755
+CLASS: mode=1 mul=5113141 div=33 load_use=650771 raw_nofwd=0 control=1243809 other=1 classified=7007755
+BHT: mode=0 lookup=0 hit=0 miss=0
+== obs iter=32 seedcrc=0xe9f5 crclist=0xe714 crcmatrix=0x1fd7 crcstate=0x8e3a crcfinal=0x8799 t0=18966 t1=17112625 errors=1
+PASS: coremark mode=1 cycles=17114141 retired=10106386 bubbles=7007755 cpi=1.693
+== tb_core_coremark ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+WARNING: riscv/tb_core_coremark.v:160: $readmemh(../src/riscv_fw/coremark.hex): Not enough words in the file for the requested range [0:8191].
+WARNING: riscv/tb_core_coremark.v:163: $readmemh(../src/riscv_fw/coremark.hex): Not enough words in the file for the requested range [0:8191].
+... 进度 cycles=2000000 pc=0x80001024 tohost=0
+... 进度 cycles=4000000 pc=0x80001eac tohost=0
+... 进度 cycles=6000000 pc=0x80001788 tohost=0
+... 进度 cycles=8000000 pc=0x80001940 tohost=0
+... 进度 cycles=10000000 pc=0x80002458 tohost=0
+... 进度 cycles=12000000 pc=0x80001e90 tohost=0
+... 进度 cycles=14000000 pc=0x80001778 tohost=0
+... 进度 cycles=16000000 pc=0x80001b90 tohost=0
+== coremark mode=1 hex=../src/riscv_fw/coremark.hex exit=0 tohost=34713 cycles=16335562 retired=10106386 bubbles=6229176
+CLASS: mode=1 mul=5113141 div=33 load_use=650771 raw_nofwd=0 control=465230 other=1 classified=6229176
+BHT: mode=1 lookup=1854101 hit=1587055 miss=267046
+== obs iter=32 seedcrc=0xe9f5 crclist=0xe714 crcmatrix=0x1fd7 crcstate=0x8e3a crcfinal=0x8799 t0=18038 t1=16334077 errors=1
+PASS: coremark mode=1 cycles=16335562 retired=10106386 bubbles=6229176 cpi=1.616
+== tb_core_coremark ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_coremark.v:1: ...: The inherited timescale is here.
+WARNING: riscv/tb_core_coremark.v:160: $readmemh(../src/riscv_fw/coremark.hex): Not enough words in the file for the requested range [0:8191].
+WARNING: riscv/tb_core_coremark.v:163: $readmemh(../src/riscv_fw/coremark.hex): Not enough words in the file for the requested range [0:8191].
+... 进度 cycles=2000000 pc=0x80000f78 tohost=0
+... 进度 cycles=4000000 pc=0x80002538 tohost=0
+... 进度 cycles=6000000 pc=0x80001f98 tohost=0
+... 进度 cycles=8000000 pc=0x8000179c tohost=0
+... 进度 cycles=10000000 pc=0x80001a5c tohost=0
+... 进度 cycles=12000000 pc=0x80001878 tohost=0
+... 进度 cycles=14000000 pc=0x80002178 tohost=0
+... 进度 cycles=16000000 pc=0x80001ed0 tohost=0
+== coremark mode=1 hex=../src/riscv_fw/coremark.hex exit=0 tohost=34713 cycles=16232079 retired=10106386 bubbles=6125693
+CLASS: mode=1 mul=5113141 div=33 load_use=650771 raw_nofwd=0 control=361747 other=1 classified=6125693
+BHT: mode=2 lookup=1854101 hit=1690538 miss=163563
+== obs iter=32 seedcrc=0xe9f5 crclist=0xe714 crcmatrix=0x1fd7 crcstate=0x8e3a crcfinal=0x8799 t0=17897 t1=16230603 errors=1
+PASS: coremark mode=1 cycles=16232079 retired=10106386 bubbles=6125693 cpi=1.606
+== tb_core_v1_hazard ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+PASS: v1 hazard mode=1 cycles=13
+== tb_core_v1_hazard ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_v1_hazard.v:1: ...: The inherited timescale is here.
+PASS: v1 hazard mode=0 cycles=15
+== tb_core_v1_muldiv_flow ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+PASS: v1 muldiv mode=1 start=1 busy=16 done=1 x2/x3/x4=1/1/1 stalls=0/0/0
+== tb_core_v1_muldiv_flow ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_v1_muldiv_flow.v:1: ...: The inherited timescale is here.
+PASS: v1 muldiv mode=0 start=1 busy=16 done=1 x2/x3/x4=1/1/1 stalls=2/1/1
+== tb_core_bht_flow ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+PASS: BHT mode 0, wrong-path store/RF/muldiv suppressed
+== tb_core_bht_flow ==
+../src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+../src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+riscv/tb_core_bht_flow.v:1: ...: The inherited timescale is here.
+PASS: BHT mode 1, wrong-path store/RF/muldiv suppressed
+PASS: injected
+CASE: pass result=0 wanted=accept
+# if true { error failed }
+PASS: injected
+CASE: tcl_echo result=0 wanted=accept
+FAIL: injected
+ERROR: simulation gate rejected build/vision/gate/fail_zero.log
+CASE: fail_zero result=1 wanted=reject
+PASS: injected
+FAIL: injected
+ERROR: simulation gate rejected build/vision/gate/mixed.log
+CASE: mixed result=1 wanted=reject
+FATAL: injected
+ERROR: simulation gate rejected build/vision/gate/fatal.log
+CASE: fatal result=1 wanted=reject
+INFO: no verdict
+ERROR: simulation gate rejected build/vision/gate/no_pass.log
+CASE: no_pass result=1 wanted=reject
+PASS: injected
+ERROR: simulation gate rejected build/vision/gate/process_failed.log
+CASE: process_failed result=1 wanted=reject
+ERROR: missing testbench build/vision/gate/not-a-testbench.v
+CASE: missing_tb result=1 wanted=reject
+PASS: vision gate 8 cases (PASS/FAIL/fatal/exit/missing tb)
+== tb_rgb2gray ==
+vision/tb_rgb2gray.v:12: warning: Instantiating module rgb2gray with dangling input port 2 (in_vs) floating.
+vision/tb_rgb2gray.v:12: warning: Instantiating module rgb2gray with dangling input port 3 (in_hs) floating.
+PASS: rgb2gray 128 px, 0 errors
+== tb_line_buffer ==
+PASS: line_buffer sync-read, read-before-write, addressing
+== tb_gaussian3x3 ==
+PASS: gaussian3x3 128 px, 0 errors
+== tb_scaler ==
+../src/vision/scaler.v:105: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+../src/vision/scaler.v:106: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+../src/vision/scaler.v:118: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+../src/vision/scaler.v:119: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+PASS: scaler 16x8->32x16, 512 px, 0 errors
+== tb_scaler_ds ==
+../src/vision/scaler.v:105: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:106: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:118: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:119: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+PASS: scaler_ds 32x16->8x4 downscale, 32 px, 0 errors (slot reuse exercised)
+== tb_sobel ==
+PASS: sobel 128 px, 0 errors
+== tb_chain ==
+PASS: chain rgb2gray->gaussian, gray 128 px + gauss 128 px, 0 errors
+== tb_fullchain ==
+../src/vision/scaler.v:105: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+../src/vision/scaler.v:106: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+../src/vision/scaler.v:118: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+../src/vision/scaler.v:119: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+PASS: fullchain gray 128 + gauss 128 + scaler 512 px, 0 errors
+== tb_osd ==
+PASS: osd 2 frames 256 px, 0 errors (param latch at vs verified)
+== tb_axi_regs ==
+PASS: axi_regs rw/strb/reserved/oob/flat, 0 errors
+== tb_in_align ==
+PASS: in_align 3 frames, 384 px passthrough, 24 hs/4 vs, spacing OK (vs/hs collision deferred)
+== tb_cop_buf ==
+PASS: cop_buf 3 frames ping-pong, 96 px replay = golden, ready-gate + concurrent write verified
+== tb_top ==
+../src/vision/scaler.v:105: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+../src/vision/scaler.v:106: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+../src/vision/scaler.v:118: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+../src/vision/scaler.v:119: warning: @* is sensitive to all 16 words in array 'slot_rd'.
+PASS: vision_top v0.3 6 frames dual-path, display 768 px + cop 512 px, 0 errors (frame-latch verified)
+PASS: A5 latency gray=1 gauss=25 gauss+sobel=50 cycles (window lag + pipelined arithmetic), scaler throughput-based
+== tb_cop_buf_stress ==
+PASS: cop_buf distinct frames, simultaneous start/commit, congestion, drain and reset
+== tb_axi_split ==
+PASS: AXI AW-before-W/W-before-AW, response backpressure, captured payload
+== tb_config_bridge ==
+PASS: config CDC async clocks, atomic bundle, busy reject, frame apply, ack, reset
+== tb_top_async ==
+../src/vision/scaler.v:105: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:106: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:118: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:119: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+PASS: top async config staging, busy SLVERR, atomic frame apply, status epoch
+== tb_top_color ==
+../src/vision/scaler.v:105: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:106: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:118: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:119: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+PASS: RGB display 256 pixels exact, all analysis enables, stalled consumer, frame IDs
+== tb_video_pipeline ==
+../src/vision/scaler.v:105: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:106: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:118: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:119: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+PASS: raw HDMI parallel sync/color passthrough + normalized analysis, 2 snapshots with frame/config IDs
+== tb_video_real ==
+../src/vision/scaler.v:105: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:106: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:118: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:119: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+PASS: 720p timing 2 consecutive frames, 1843200 RGB px + 100352 snapshot px, 448 rows, IDs exact, no drops
+== tb_vision_axi ==
+../src/vision/scaler.v:105: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:106: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:118: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:119: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+PASS: AXI HDMI wrapper RBG/RGB/raw sync + lock-loss reset
+== tb_axi_lock_reset ==
+../src/vision/scaler.v:105: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:106: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:118: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:119: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+INFO baseline write/read ok
+INFO in-flight write completed across lock drop
+INFO bready=0 pending write survived lock drop
+PASS: AXI slave survives video lock drop with in-flight transactions
+== tb_patterns ==
+../src/vision/scaler.v:105: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:106: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:118: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:119: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+PASS: 3 synthetic nonconstant RGB scenes -> gaussian/scaler/cop_buf, 96 pixels + IDs exact
+PASS: PS configuration staging/commit/ack/busy/timeout/epoch wrap mock protocol
+PASS: localization empty/multiple/non-grid/noise/limit/border + per-target crop/resize/frame metadata
+Traceback (most recent call last):
+  File "/home/jianglibo/FPGA-Alittle-Design/sim/vision/test_vision_protocol.py", line 66, in <module>
+    main()
+  File "/home/jianglibo/FPGA-Alittle-Design/sim/vision/test_vision_protocol.py", line 37, in main
+    server = make_server(port=0)
+  File "/home/jianglibo/FPGA-Alittle-Design/src/pynq_host/vision_mock_service.py", line 71, in make_server
+    return ThreadingHTTPServer((host, port), Handler)
+  File "/usr/lib/python3.10/socketserver.py", line 448, in __init__
+    self.socket = socket.socket(self.address_family,
+  File "/usr/lib/python3.10/socket.py", line 232, in __init__
+    _socket.socket.__init__(self, family, type, proto, fileno)
+PermissionError: [Errno 1] Operation not permitted
+ERROR: simulation gate rejected sim/build/vision/python/vision_protocol.log

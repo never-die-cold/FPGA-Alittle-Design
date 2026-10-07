@@ -7,6 +7,7 @@
 //       逐字比对参考签名，写 .signature.output；PASS/FAIL 自检（FAIL 非零退出）
 module tb_arch_test;
     parameter [0:0] ENABLE_FORWARDING = 1'b1;
+    parameter [1:0] BHT_MODE = 2'd0;
 
     localparam integer CLK_PERIOD   = 10;
     localparam integer RESET_CYCLES = 8;
@@ -53,7 +54,7 @@ module tb_arch_test;
 
     always #(CLK_PERIOD / 2) clk = ~clk;
 
-    core_top #(.ENABLE_FORWARDING(ENABLE_FORWARDING)) dut (
+    core_top #(.ENABLE_FORWARDING(ENABLE_FORWARDING), .BHT_MODE(BHT_MODE)) dut (
         .clk        (clk),
         .rst_n      (rst_n),
         .imem_addr  (imem_addr),

@@ -1,0 +1,9 @@
+$ iverilog -g2001 -Wall -tnull -s core_top src/riscv/alu.v src/riscv/branch_predict.v src/riscv/core_top.v src/riscv/decode.v src/riscv/dmem.v src/riscv/forwarding.v src/riscv/hazard.v src/riscv/id_ex_stage.v src/riscv/if_stage.v src/riscv/imem.v src/riscv/mem_wb_stage.v src/riscv/muldiv.v src/riscv/pc.v src/riscv/pynq_z2_top.v src/riscv/regfile.v src/riscv/soc_top.v
+exit_code=0
+$ grep -rn '(\.\*)' src/
+exit_code=1
+$ git diff --check
+exit_code=0
+$ python3 data/logs/2026-10-06-partC-pc-depth/check_results.py all-final.log
+PASS: source hashes, four anchors, CRC/retired, cycle classes and BHT counts
+exit_code=0

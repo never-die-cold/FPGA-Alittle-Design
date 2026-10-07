@@ -1,0 +1,52 @@
+{
+  "source_sha256": "f58b95ca6e6be5b05ab6b67fa56008c2edb059e67c54516ee22e1d15ae2f5710",
+  "four_mode_matches_anchors": true,
+  "first_all_exit": 1,
+  "first_all_failure": "sandbox socket permission in vision Python",
+  "results": [
+    {
+      "mode": "v1_nofwd",
+      "cycles": 19057438,
+      "retired": 10106386,
+      "bubbles": 8951052,
+      "crc": "8799",
+      "lookup": 0,
+      "hit": 0,
+      "miss": 0
+    },
+    {
+      "mode": "v1_fwd",
+      "cycles": 17114141,
+      "retired": 10106386,
+      "bubbles": 7007755,
+      "crc": "8799",
+      "lookup": 0,
+      "hit": 0,
+      "miss": 0
+    },
+    {
+      "mode": "v1_fwd_bht1",
+      "cycles": 16335562,
+      "retired": 10106386,
+      "bubbles": 6229176,
+      "crc": "8799",
+      "lookup": 1854101,
+      "hit": 1587055,
+      "miss": 267046
+    },
+    {
+      "mode": "v1_fwd_bht2",
+      "cycles": 16232079,
+      "retired": 10106386,
+      "bubbles": 6125693,
+      "crc": "8799",
+      "lookup": 1854101,
+      "hit": 1690538,
+      "miss": 163563
+    }
+  ],
+  "full_all_exit": 0,
+  "full_all_log": "all-final.log",
+  "second_all_status": "interrupted; no exit code",
+  "final_source_check": "PASS; manifest matches actual sources"
+}

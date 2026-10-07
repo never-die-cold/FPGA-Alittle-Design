@@ -5,10 +5,13 @@ module tb_id_ex_stage;
     wire [4:0] rs1_addr, rs2_addr, rd_addr;
     wire uses_rs1, uses_rs2, muldiv_valid; wire [2:0] muldiv_op;
     wire branch_taken, jump_taken; wire [31:0] redirect_target;
+    wire [31:0] branch_target, branch_target_next;
     wire [31:0] ex_result, ex_addr, ex_store_data;
     wire ex_reg_write, ex_mem_read, ex_mem_write, ex_sign_ext;
     wire [1:0] ex_wb_sel, ex_mask_sel;
-    integer checks;
+    integer checks, offset, pc_case;
+    reg [12:0] b_offset;
+    reg [31:0] expected_target;
     id_ex_stage dut (
         .in_valid(in_valid), .in_pc(in_pc), .in_instr(in_instr),
         .rs1_value(rs1_value), .rs2_value(rs2_value),
@@ -18,6 +21,7 @@ module tb_id_ex_stage;
         .muldiv_valid(muldiv_valid), .muldiv_op(muldiv_op),
         .branch_taken(branch_taken), .jump_taken(jump_taken),
         .redirect_target(redirect_target), .ex_result(ex_result),
+        .branch_target(branch_target), .branch_target_next(branch_target_next),
         .ex_addr(ex_addr), .ex_store_data(ex_store_data),
         .ex_reg_write(ex_reg_write), .ex_mem_read(ex_mem_read),
         .ex_mem_write(ex_mem_write), .ex_wb_sel(ex_wb_sel),
@@ -59,6 +63,23 @@ module tb_id_ex_stage;
               ex_result==32'h80000024 && rd_addr==1);
         in_instr=32'h022081b3; rs1_value=7; rs2_value=3; #1;
         check(muldiv_valid && muldiv_op==0 && ex_wb_sel==3 && ex_result==21);
+        // Every encodable B offset, including sign extension, bit1 and wraparound.
+        for (pc_case=0; pc_case<3; pc_case=pc_case+1) begin
+            case (pc_case)
+                0: in_pc=32'h80000000;
+                1: in_pc=32'hfffffffc;
+                2: in_pc=32'h00000002;
+            endcase
+            for (offset=-4096; offset<=4094; offset=offset+2) begin
+                b_offset=offset[12:0];
+                in_instr={b_offset[12],b_offset[10:5],5'd2,5'd1,
+                          3'b000,b_offset[4:1],b_offset[11],7'b1100011};
+                expected_target=in_pc+offset; #1;
+                check(branch_target === expected_target &&
+                      branch_target_next === (expected_target+32'd4) &&
+                      redirect_target === expected_target);
+            end
+        end
         $display("PASS: ID+EX decode, execute and redirect (%0d cases)", checks);
         $finish;
     end
