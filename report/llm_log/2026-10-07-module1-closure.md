@@ -115,3 +115,9 @@ PASS行的mode=1是转发开关；BHT行的mode=2才是BHT档位。若BHT2误跑
 暂存后git diff --cached --check首次检查到新归档的Vivado报告/XSim日志原生尾随空格；此前未暂存diff不包含这些新文件，不能代替完整暂存检查。证据目录新增.gitattributes，原始输出和签名设置-text/-whitespace，保留字节及行尾，不修剪原始证据；README和属性文件继续检查空白。修复复现文档末尾空行后重新检查暂存差异。
 本轮工作提交到dev/bench；独立PR基于main，仅带核声明修正96414be、板级报告归档dcb3ef7和本轮收口提交，避免审查范围混入Pi/视觉WIP。原dev/bench已有四个提交完整保留。
 收口工作提交1cf5f2c；独立checkout证据汇总再次PASS。完整PR差异还包含上述依赖提交的历史Vivado输出，根.gitattributes为data/logs/2026-10-07-partC-postopt与build/reports/soc_40mhz_bht2增加定向-whitespace例外，Markdown仍检查空白；不修改历史原始报告。首次PR差异检查失败输出留pr-diff-check-before-attributes.log。
+
+## 9. 发布状态与自动审核
+dev/bench本轮技术提交1cf5f2c、归档属性补记169cf01；独立分支codex/module1-closure当前对应ad6db82、c9ce3f0，包含必要依赖fe31bf4与0454364。独立工作树汇总与完整PR差异检查通过，测试输入与原验证内容一致。
+尝试git push --atomic -u origin dev/bench codex/module1-closure时，自动批准审核拒绝。理由原文：This pushes repository contents, including potentially sensitive source and evidence, to an external GitHub destination and updates two remote branches; the user authorized the local closure work but did not explicitly authorize this exact payload and destination.
+未执行被拒绝的推送，未使用连接器或其他命令绕过；未创建远程PR、未发评论、未更新/关闭#20/#21或M1。目标origin=https://github.com/never-die-cold/FPGA-Alittle-Design.git；推送源为dev/bench及codex/module1-closure，载荷是模块一代码、验证入口、原始日志和报告。
+PR描述已按模板准备docs/module1-pr.md；远程检查点更新草稿仍在docs/module1-issue-closeout.md。发布需用户明确授权；main合并及非作者复核仍是后续审查步骤，不能用理解门槛替代。
