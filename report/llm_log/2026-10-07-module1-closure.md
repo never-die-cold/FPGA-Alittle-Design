@@ -2,6 +2,8 @@
 > 标签：#riscv #verify #docs #skill候选
 > 平台：Codex；本轮未提交。运行HEAD=dcb3ef7，RTL与96414be无差异，v0=partA-v0^{commit}=962a4f5。
 
+最新状态：模块一技术PR #60已合并，#20/#21与M1已关闭；备考#61未完成。此前各阶段状态按时间保留，最新执行事实见§10。
+
 ## 1. 任务与授权
 用户：“先完成模块一的全部收口工作吧”。
 开工完成 workflow、主/核计划、v0/v1契约、gufa-programming 与 understand-gate 阅读；branch/log/status 已核对。
@@ -121,3 +123,13 @@ dev/bench本轮技术提交1cf5f2c、归档属性补记169cf01；独立分支cod
 尝试git push --atomic -u origin dev/bench codex/module1-closure时，自动批准审核拒绝。理由原文：This pushes repository contents, including potentially sensitive source and evidence, to an external GitHub destination and updates two remote branches; the user authorized the local closure work but did not explicitly authorize this exact payload and destination.
 未执行被拒绝的推送，未使用连接器或其他命令绕过；未创建远程PR、未发评论、未更新/关闭#20/#21或M1。目标origin=https://github.com/never-die-cold/FPGA-Alittle-Design.git；推送源为dev/bench及codex/module1-closure，载荷是模块一代码、验证入口、原始日志和报告。
 PR描述已按模板准备docs/module1-pr.md；远程检查点更新草稿仍在docs/module1-issue-closeout.md。发布需用户明确授权；main合并及非作者复核仍是后续审查步骤，不能用理解门槛替代。
+
+## 10. 正式发布、合并与收口
+用户明确回答：“允许推送、创建PR并更新清单”，随后指令：“该关的issue关掉，开PR，合并，同步各分支”。原推送拒绝的授权缺口已补齐，未绕过原拒绝。
+dev/bench@29e6864与codex/module1-closure@2f758df推送成功，草稿PR #59创建并附到本会话，#20/#21技术清单先更新但未提前关闭。
+GitHub连接器及GraphQL转待审接口连续内部错误；REST查询确认#59仍draft。保存pr59-before-merge.json后关闭草稿保留记录，REST以相同head创建正式PR #60并附到会话；不是删除审计或强写main。
+protect-main要求1审批，并为当前用户270969795配置User/always管理员例外。用户在本会话通过理解门槛并明确要求合并；按该授权和既定例外，通过REST精确head合并#60。没有伪造非作者署名。
+实际merge commit=f3668f73ad2e6e779f5a2afe066e532770f94a02，结果见pr60-merge.json。完整代码证据与输入不变，独立checkout汇总再次PASS；仅回填文档和原始执行元数据，无需重复长仿真。
+未验证备考移交独立issue #61并保持open；#20/#21以completed关闭。M1汇总计数曾仍显示2，但实际issue状态closed、按milestone=1过滤open列表为空；以真实列表核验后关闭M1，见m1-closed.json。
+分支同步范围：main、dev/bench、dev/rtl、dev/verify、dev/vision、dev/model、CNN、codex/module1-closure。dev/bench合并main保留原Pi/视觉及所有收口提交；其余分支按祖先关系快进，禁止强推。RTL工作树未跟踪的d3-repro/id_ex_ooc日志保留，detached的其他聊天工作树不改动。
+最终状态文档及API原始结果经后续纯文档PR发布；同步验收入口为git merge-base --is-ancestor origin/main origin/<branch>与git status --short，最终Git引用本身保留同步结果。
