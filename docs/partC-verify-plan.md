@@ -1,5 +1,7 @@
 # Part C 验收清单（verify/bench 线执行计划）
 
+> 2026-10-07 执行结果见 [收口报告](../report/module1-closure.md) 和 [复现清单](module1-reproduction.md)。以下复选框为交付前计划快照；当前状态以上述原始证据为准。
+
 > 是什么：Part C（v1 + 可切换 BHT）交付后的验证、四档数据采集与 M1 收口验收执行清单。
 > 给谁看：never-die-cold（verify+bench 线，执行人）、jianglibo（RTL 线，交付对照）、watercopper（bench/四档指标）、上板负责人（第 7 节简报）。
 > 什么时候读：Part C RTL 交付前对照第 2–4 节备货，交付日按第 8 节逐项执行，10/4 对照第 3 节门禁验收（与 Part B 一并收口，[issue #21](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)）。

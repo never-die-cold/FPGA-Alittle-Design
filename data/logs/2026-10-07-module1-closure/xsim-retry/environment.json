@@ -1,0 +1,76 @@
+{
+  "hex": "ED229725AD95D0038AF83B745704504C53B6176F6E927D9A147A34A39C762B11",
+  "reference": "140F950C7D8016CC38040EA3858F8F7455C1CF0D1D0C5257AF741740CFEE9552",
+  "sources": [
+    {
+      "Path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\alu.v",
+      "Hash": "95B963F6DE03DEAC8EFB965B44BA3662B09B5AE54D6052D660D42BCBA888DB9F"
+    },
+    {
+      "Path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\branch_predict.v",
+      "Hash": "27D40AD9C80F011C0E846818D4668AD0DCBB2DD1AD51D50AADF013F237B1D408"
+    },
+    {
+      "Path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\core_top.v",
+      "Hash": "E33859F33988ED765F075D12AAB5986A503CD232CB6B1EDED8B29C2C18C2B8E6"
+    },
+    {
+      "Path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\decode.v",
+      "Hash": "C502E5CCB977D754D0BD3EB5225B9B273597B9558907582B1F81ED8D7DE445BB"
+    },
+    {
+      "Path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\dmem.v",
+      "Hash": "9C8CF5FFA5609661783AF170F05A17FB2C9C2BA35A2811F3C4C44E562BFA91A2"
+    },
+    {
+      "Path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\forwarding.v",
+      "Hash": "0542D9899909B3D51F48E4482DFDB18488C298B314EE65D3AB3331CDC78E8A04"
+    },
+    {
+      "Path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\hazard.v",
+      "Hash": "305A84A0A00C0BE6DEC7F3A624596B7D648B21FDEB4C3FA78B4C75DA123D4761"
+    },
+    {
+      "Path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\id_ex_stage.v",
+      "Hash": "BCE3386C041C4137F365575F46540E9046575D4442B5118E43FE918C1B7748D7"
+    },
+    {
+      "Path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\if_stage.v",
+      "Hash": "1CF0591BD01937AA98977B708FFF06BF636E4DC1B1F3B1215FCCC06127FA2C68"
+    },
+    {
+      "Path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\imem.v",
+      "Hash": "12FDD837FF7A9C4832638AE55AE3129A672EDDC1DFA294A949337FDD350FBB16"
+    },
+    {
+      "Path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\mem_wb_stage.v",
+      "Hash": "215720A970951C1F081B3158ABDDF592A3556F552C87C987AAFA251BBF9A408B"
+    },
+    {
+      "Path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\muldiv.v",
+      "Hash": "0E0842E4F529E1604DB1A17E083C23B2F4CE13E6BBB1ED07CC3F745473E95530"
+    },
+    {
+      "Path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\pc.v",
+      "Hash": "B513D34A0AD21E2B58084E4B827BD53CCE7A875C728C8DCF9292D3E05767CD50"
+    },
+    {
+      "Path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\pynq_z2_top.v",
+      "Hash": "02DBF4FD2BE92833FCE83295D7F1529518B3161EC758DC025A100FAD1D6B0421"
+    },
+    {
+      "Path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\regfile.v",
+      "Hash": "5A03842E3D86BDF3D86F63F9249197D236C64F9670B49466F879BD7B25EE5EC9"
+    },
+    {
+      "Path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\soc_top.v",
+      "Hash": "453C8D14186F7203FC03C6187D7C5A14917A21A1DBA158692C24B5CCDEE2AE17"
+    },
+    {
+      "Path": "E:\\Projects\\FPGA-Alittle-Design\\sim\\riscv\\tb_core_coremark.v",
+      "Hash": "65CF52214C9B4A831F3CB572690A804EA0B7844AEA3FF6FCBCD07E119E60624B"
+    }
+  ],
+  "repo_commit": "dcb3ef7bab58887ff605ea575f72b85933635930",
+  "vivado_bin": "D:/Vivado_downloads/2026.1/Vivado/bin"
+}

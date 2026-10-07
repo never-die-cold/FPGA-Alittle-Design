@@ -1,0 +1,6 @@
+Vivado Simulator v2026.1
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: D:/Vivado_downloads/2026.1/Vivado/bin/unwrapped/win64.o/xelab.exe work.tb_core_coremark -generic_top ENABLE_FORWARDING 0 -generic_top BHT_MODE 0 -s module1_nofwd 
+Multi-threading is on. Using 18 slave threads.
+ERROR: [XSIM 43-3225] Cannot find design unit work.0 in library work located at xsim.dir/work.

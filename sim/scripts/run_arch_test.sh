@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# run_arch_test.sh —— riscv-arch-test 单测：编译 → v1 双档仿真 → 签名比对
-# 用法：bash sim/scripts/run_arch_test.sh [测试名] [扩展 I] [fwd|nofwd]
+# run_arch_test.sh —— riscv-arch-test 单测：编译 → v1 四档仿真 → 签名比对
+# 用法：bash sim/scripts/run_arch_test.sh [测试名] [扩展 I|M] [fwd|nofwd|bht1|bht2]
 # 前置：sim/scripts/fetch_arch_test.sh 已下载套件；MSYS2 UCRT64 工具链 + iverilog
 # 产物：sim/build/arch_test/（hex/elf/签名输出，gitignore）
 set -euo pipefail
@@ -16,7 +16,7 @@ case "$mode" in
     nofwd) enable_forwarding=0; bht_mode=0 ;;
     bht1)  enable_forwarding=1; bht_mode=1 ;;
     bht2)  enable_forwarding=1; bht_mode=2 ;;
-    *) echo "ERROR: 转发模式必须是 fwd 或 nofwd，实际为 $mode" >&2; exit 1 ;;
+    *) echo "ERROR: 模式必须是 fwd/nofwd/bht1/bht2，实际为 $mode" >&2; exit 1 ;;
 esac
 xl=32
 work="$sim/build/arch_test"

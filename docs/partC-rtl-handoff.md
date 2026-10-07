@@ -1,5 +1,7 @@
 # Part C RTL 交接单
 
+> 2026-10-07 补证：优化后 XSim 四档、arch-test RV32M扩展、OOC与40MHz上板事实见 [收口报告](../report/module1-closure.md)。下文待验证项是10/06交付时快照。
+
 日期：2026-10-06。状态：三级核、转发、Radix-4 与可切换 BHT 已完成 Icarus 功能回归；
 arch-test 四档、XSim、Vivado WNS/资源和上板仍待验证。
 

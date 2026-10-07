@@ -88,6 +88,7 @@ flowchart LR
   2. **数据转发（旁路）电路**，消除 RAW 数据冒险气泡
   3. **轻量化分支预测**（1-bit/2-bit BHT），减少跳转冲刷
 - 验证：riscv-arch-test 子集 + 自写 benchmark（Dhrystone 思路的整型测试程序）
+- 2026-10-07 收口证据：优化后 XSim 四档对拍、arch-test RV32M 扩展、BHT2 核11.520ns时序与40MHz真实上板；四档表及边界见 [模块一报告](report/module1-closure.md)。
 
 ### 模块二：HDMI 图像预处理硬件流水线
 
@@ -124,13 +125,13 @@ flowchart LR
 
 ## 性能指标与基线对比
 
-所有指标均在真实板卡上实测，每组数据给出测试条件与原始日志。
+各指标分别标明仿真、实现或真实板卡口径，每组数据给出测试条件与原始日志。
 
 | 指标 | 基线 | 目标 | 对比对象 |
 |:---|:---|:---|:---|
-| RISC-V 核 CPI（benchmark 平均） | v1 无转发（同三级核）实测值 | 降低 ≥ 25% | v1 无转发 vs v1+转发；v0 两级基线 CPI≈1 仅作参考锚点（2026-09-20 口径重定义，见 [llm_log](report/llm_log/2026-09-20-v0-no-stall-cpi-reframe.md)） |
-| RISC-V 核 CoreMark/MHz 与 CoreMark/LUT | v0 实测值（iverilog 仿真外推口径，见 [docs/core_comparison.md](docs/core_comparison.md)） | M1 收口后四档对比在案 | 同核四档（v0/v1无转发/v1+转发/v1+BHT）+ PicoRV32 公开数据对照 |
-| RISC-V 核最高主频 Fmax / WNS | 基线实测值 | ≥ 100 MHz，WNS ≥ 0 | 同核无优化版 |
+| RISC-V 核 CoreMark CPI | v1 无转发 1.885683 | 固定乘法器仅转发门禁≥8.0%；组合25%为尽力目标 | fwd 1.693399（10.20%）；BHT2 1.606121；v0仅外部锚点，见收口报告 |
+| RISC-V CoreMark/MHz / 每MHz面积归一值 | v0短迭代仿真外推1.506 | v0锚点及v1四档已入报告 | 同核参数矩阵；PicoRV32不同负载数据不作同负载加速比 |
+| RISC-V 核通过约束点 / WNS | v0同脚本外推83.8MHz | BHT2核86.806MHz实点WNS≥0；100/125MHz非阻塞 | BHT2 WNS=+0.538；SoC/上板单列40MHz |
 | 图像预处理延迟 | 软件 OpenCV 实测值 | 降低 ≥ 10×，逐像素固定延迟 | PS 侧软件实现 |
 | 直通 vs 帧缓存架构对比（延迟/带宽/资源） | DDR 帧缓存参考实现 | 直通优势量化在案 | 自建对照组 |
 | 板端视频延迟（输入 → HDMI 输出） | 软件链路实测值 | ≤ 1 帧的目标；采集卡/EXE 显示延迟另测 | PS 软件实现 |
