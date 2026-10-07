@@ -87,7 +87,7 @@ PicoRV32 regular/large OOC 已于 10/03 入档，数值仍需标注 Slack 外推
 
 ## 7. 交付与复现
 [一键复现清单与 #skill候选](../docs/module1-reproduction.md) 包含全量、arch、XSim、OOC 和汇总入口；[data/metrics.csv](../data/metrics.csv) 保留旧指标并追加本轮结果。
-本轮用户已授权一次写完、理解题集中末尾；[完整理解问答](llm_log/2026-10-07-module1-closure.md) 已归档，补测通过。#20/#21 于提交前读取仍 open，旧 25%/100MHz 硬条款与仓库已确认修订不同；[远程收尾记录](../docs/module1-issue-closeout.md) 在证据发布后更新，不能提前宣称远程检查点已关闭。
+本轮用户已授权一次写完、理解题集中末尾；[完整理解问答](llm_log/2026-10-07-module1-closure.md) 已归档，补测通过。代码与证据已本地提交；自动批准审核拒绝向origin推送两个分支，发布待明确授权。[独立PR发布稿](../docs/module1-pr.md) 已准备。#20/#21 仍open，旧25%/100MHz硬条款与仓库已确认修订不同；[远程收尾记录](../docs/module1-issue-closeout.md) 在证据发布与复核后更新。
 
 本轮最终汇总：
 `PASS: 44 arch signatures; eight workload runs; four XSim matches; five OOC audits; two fixed-route gates`。
