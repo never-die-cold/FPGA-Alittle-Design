@@ -1,0 +1,1237 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Wed Oct  7 16:55:04 2026
+| Host         : never-die-cold running 64-bit major release  (build 9200)
+| Command      : report_timing -delay_type max -max_paths 10 -sort_by group -file E:/Projects/FPGA-Alittle-Design/build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt
+| Design       : pynq_z2_top
+| Device       : 7z020-clg400
+| Speed File   : -1  PRODUCTION 1.12 2019-11-22
+| Design State : Physopt postRoute
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             3.618ns  (required time - arrival time)
+  Source:                 reset_pipe_reg[1]/C
+                            (rising edge-triggered cell FDPE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            u_soc/u_core/u_mem_wb/mem_addr_reg[2]_rep__26/CE
+                            (rising edge-triggered cell FDRE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             core_clk_40
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk_40 rise@25.000ns - core_clk_40 rise@0.000ns)
+  Data Path Delay:        20.576ns  (logic 0.718ns (3.489%)  route 19.858ns (96.511%))
+  Logic Levels:           1  (LUT1=1)
+  Clock Path Skew:        -0.519ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.644ns = ( 23.356 - 25.000 ) 
+    Source Clock Delay      (SCD):    -0.658ns
+    Clock Pessimism Removal (CPR):    0.466ns
+  Clock Uncertainty:      0.082ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.147ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk_40 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    H16                                               0.000     0.000 r  clk
+                         net (fo=0)                   0.000     0.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.451     1.451 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.285     2.736    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.759    -5.023 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.206    -2.817    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101    -2.716 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        2.058    -0.658    core_clk
+    SLICE_X113Y101       FDPE                                         r  reset_pipe_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y101       FDPE (Prop_fdpe_C_Q)         0.419    -0.239 f  reset_pipe_reg[1]/Q
+                         net (fo=568, routed)        11.111    10.872    u_soc/u_core/u_mem_wb/out[0]
+    SLICE_X47Y29         LUT1 (Prop_lut1_I0_O)        0.299    11.171 r  u_soc/u_core/u_mem_wb/mem_mask_sel[1]_i_1/O
+                         net (fo=291, routed)         8.747    19.918    u_soc/u_core/u_mem_wb/mem_mask_sel[1]_i_1_n_0
+    SLICE_X31Y96         FDRE                                         r  u_soc/u_core/u_mem_wb/mem_addr_reg[2]_rep__26/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk_40 rise edge)
+                                                     25.000    25.000 r  <hidden>
+    H16                                               0.000    25.000 r  clk
+                         net (fo=0)                   0.000    25.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.380    26.380 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.162    27.542    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.814    19.728 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.012    21.740    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.831 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        1.525    23.356    u_soc/u_core/u_mem_wb/core_clk
+    SLICE_X31Y96         FDRE                                         r  u_soc/u_core/u_mem_wb/mem_addr_reg[2]_rep__26/C
+                         clock pessimism              0.466    23.822    <hidden>
+                         clock uncertainty           -0.082    23.741    <hidden>
+    SLICE_X31Y96         FDRE (Setup_fdre_C_CE)      -0.205    23.536    u_soc/u_core/u_mem_wb/mem_addr_reg[2]_rep__26
+  -------------------------------------------------------------------
+                         required time                         23.536    <hidden>
+                         arrival time                         -19.918    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  3.618    <hidden>
+
+Slack (MET) :             3.866ns  (required time - arrival time)
+  Source:                 reset_pipe_reg[1]/C
+                            (rising edge-triggered cell FDPE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            u_soc/u_core/u_mem_wb/mem_addr_reg[5]_rep/CE
+                            (rising edge-triggered cell FDRE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             core_clk_40
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk_40 rise@25.000ns - core_clk_40 rise@0.000ns)
+  Data Path Delay:        20.283ns  (logic 0.718ns (3.540%)  route 19.565ns (96.460%))
+  Logic Levels:           1  (LUT1=1)
+  Clock Path Skew:        -0.564ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+    Source Clock Delay      (SCD):    -0.658ns
+    Clock Pessimism Removal (CPR):    0.466ns
+  Clock Uncertainty:      0.082ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.147ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk_40 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    H16                                               0.000     0.000 r  clk
+                         net (fo=0)                   0.000     0.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.451     1.451 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.285     2.736    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.759    -5.023 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.206    -2.817    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101    -2.716 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        2.058    -0.658    core_clk
+    SLICE_X113Y101       FDPE                                         r  reset_pipe_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y101       FDPE (Prop_fdpe_C_Q)         0.419    -0.239 f  reset_pipe_reg[1]/Q
+                         net (fo=568, routed)        11.111    10.872    u_soc/u_core/u_mem_wb/out[0]
+    SLICE_X47Y29         LUT1 (Prop_lut1_I0_O)        0.299    11.171 r  u_soc/u_core/u_mem_wb/mem_mask_sel[1]_i_1/O
+                         net (fo=291, routed)         8.454    19.625    u_soc/u_core/u_mem_wb/mem_mask_sel[1]_i_1_n_0
+    SLICE_X35Y95         FDRE                                         r  u_soc/u_core/u_mem_wb/mem_addr_reg[5]_rep/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk_40 rise edge)
+                                                     25.000    25.000 r  <hidden>
+    H16                                               0.000    25.000 r  clk
+                         net (fo=0)                   0.000    25.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.380    26.380 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.162    27.542    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.814    19.728 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.012    21.740    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.831 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        1.480    23.311    u_soc/u_core/u_mem_wb/core_clk
+    SLICE_X35Y95         FDRE                                         r  u_soc/u_core/u_mem_wb/mem_addr_reg[5]_rep/C
+                         clock pessimism              0.466    23.777    <hidden>
+                         clock uncertainty           -0.082    23.696    <hidden>
+    SLICE_X35Y95         FDRE (Setup_fdre_C_CE)      -0.205    23.491    u_soc/u_core/u_mem_wb/mem_addr_reg[5]_rep
+  -------------------------------------------------------------------
+                         required time                         23.491    <hidden>
+                         arrival time                         -19.625    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  3.866    <hidden>
+
+Slack (MET) :             3.866ns  (required time - arrival time)
+  Source:                 reset_pipe_reg[1]/C
+                            (rising edge-triggered cell FDPE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            u_soc/u_core/u_mem_wb/mem_addr_reg[5]_rep__0/CE
+                            (rising edge-triggered cell FDRE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             core_clk_40
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk_40 rise@25.000ns - core_clk_40 rise@0.000ns)
+  Data Path Delay:        20.283ns  (logic 0.718ns (3.540%)  route 19.565ns (96.460%))
+  Logic Levels:           1  (LUT1=1)
+  Clock Path Skew:        -0.564ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+    Source Clock Delay      (SCD):    -0.658ns
+    Clock Pessimism Removal (CPR):    0.466ns
+  Clock Uncertainty:      0.082ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.147ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk_40 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    H16                                               0.000     0.000 r  clk
+                         net (fo=0)                   0.000     0.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.451     1.451 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.285     2.736    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.759    -5.023 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.206    -2.817    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101    -2.716 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        2.058    -0.658    core_clk
+    SLICE_X113Y101       FDPE                                         r  reset_pipe_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y101       FDPE (Prop_fdpe_C_Q)         0.419    -0.239 f  reset_pipe_reg[1]/Q
+                         net (fo=568, routed)        11.111    10.872    u_soc/u_core/u_mem_wb/out[0]
+    SLICE_X47Y29         LUT1 (Prop_lut1_I0_O)        0.299    11.171 r  u_soc/u_core/u_mem_wb/mem_mask_sel[1]_i_1/O
+                         net (fo=291, routed)         8.454    19.625    u_soc/u_core/u_mem_wb/mem_mask_sel[1]_i_1_n_0
+    SLICE_X35Y95         FDRE                                         r  u_soc/u_core/u_mem_wb/mem_addr_reg[5]_rep__0/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk_40 rise edge)
+                                                     25.000    25.000 r  <hidden>
+    H16                                               0.000    25.000 r  clk
+                         net (fo=0)                   0.000    25.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.380    26.380 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.162    27.542    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.814    19.728 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.012    21.740    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.831 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        1.480    23.311    u_soc/u_core/u_mem_wb/core_clk
+    SLICE_X35Y95         FDRE                                         r  u_soc/u_core/u_mem_wb/mem_addr_reg[5]_rep__0/C
+                         clock pessimism              0.466    23.777    <hidden>
+                         clock uncertainty           -0.082    23.696    <hidden>
+    SLICE_X35Y95         FDRE (Setup_fdre_C_CE)      -0.205    23.491    u_soc/u_core/u_mem_wb/mem_addr_reg[5]_rep__0
+  -------------------------------------------------------------------
+                         required time                         23.491    <hidden>
+                         arrival time                         -19.625    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  3.866    <hidden>
+
+Slack (MET) :             3.866ns  (required time - arrival time)
+  Source:                 reset_pipe_reg[1]/C
+                            (rising edge-triggered cell FDPE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            u_soc/u_core/u_mem_wb/mem_addr_reg[8]_rep/CE
+                            (rising edge-triggered cell FDRE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             core_clk_40
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk_40 rise@25.000ns - core_clk_40 rise@0.000ns)
+  Data Path Delay:        20.283ns  (logic 0.718ns (3.540%)  route 19.565ns (96.460%))
+  Logic Levels:           1  (LUT1=1)
+  Clock Path Skew:        -0.564ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+    Source Clock Delay      (SCD):    -0.658ns
+    Clock Pessimism Removal (CPR):    0.466ns
+  Clock Uncertainty:      0.082ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.147ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk_40 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    H16                                               0.000     0.000 r  clk
+                         net (fo=0)                   0.000     0.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.451     1.451 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.285     2.736    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.759    -5.023 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.206    -2.817    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101    -2.716 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        2.058    -0.658    core_clk
+    SLICE_X113Y101       FDPE                                         r  reset_pipe_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y101       FDPE (Prop_fdpe_C_Q)         0.419    -0.239 f  reset_pipe_reg[1]/Q
+                         net (fo=568, routed)        11.111    10.872    u_soc/u_core/u_mem_wb/out[0]
+    SLICE_X47Y29         LUT1 (Prop_lut1_I0_O)        0.299    11.171 r  u_soc/u_core/u_mem_wb/mem_mask_sel[1]_i_1/O
+                         net (fo=291, routed)         8.454    19.625    u_soc/u_core/u_mem_wb/mem_mask_sel[1]_i_1_n_0
+    SLICE_X35Y95         FDRE                                         r  u_soc/u_core/u_mem_wb/mem_addr_reg[8]_rep/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk_40 rise edge)
+                                                     25.000    25.000 r  <hidden>
+    H16                                               0.000    25.000 r  clk
+                         net (fo=0)                   0.000    25.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.380    26.380 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.162    27.542    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.814    19.728 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.012    21.740    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.831 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        1.480    23.311    u_soc/u_core/u_mem_wb/core_clk
+    SLICE_X35Y95         FDRE                                         r  u_soc/u_core/u_mem_wb/mem_addr_reg[8]_rep/C
+                         clock pessimism              0.466    23.777    <hidden>
+                         clock uncertainty           -0.082    23.696    <hidden>
+    SLICE_X35Y95         FDRE (Setup_fdre_C_CE)      -0.205    23.491    u_soc/u_core/u_mem_wb/mem_addr_reg[8]_rep
+  -------------------------------------------------------------------
+                         required time                         23.491    <hidden>
+                         arrival time                         -19.625    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  3.866    <hidden>
+
+Slack (MET) :             3.866ns  (required time - arrival time)
+  Source:                 reset_pipe_reg[1]/C
+                            (rising edge-triggered cell FDPE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            u_soc/u_core/u_mem_wb/mem_addr_reg[8]_rep__0/CE
+                            (rising edge-triggered cell FDRE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             core_clk_40
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk_40 rise@25.000ns - core_clk_40 rise@0.000ns)
+  Data Path Delay:        20.283ns  (logic 0.718ns (3.540%)  route 19.565ns (96.460%))
+  Logic Levels:           1  (LUT1=1)
+  Clock Path Skew:        -0.564ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+    Source Clock Delay      (SCD):    -0.658ns
+    Clock Pessimism Removal (CPR):    0.466ns
+  Clock Uncertainty:      0.082ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.147ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk_40 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    H16                                               0.000     0.000 r  clk
+                         net (fo=0)                   0.000     0.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.451     1.451 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.285     2.736    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.759    -5.023 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.206    -2.817    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101    -2.716 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        2.058    -0.658    core_clk
+    SLICE_X113Y101       FDPE                                         r  reset_pipe_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y101       FDPE (Prop_fdpe_C_Q)         0.419    -0.239 f  reset_pipe_reg[1]/Q
+                         net (fo=568, routed)        11.111    10.872    u_soc/u_core/u_mem_wb/out[0]
+    SLICE_X47Y29         LUT1 (Prop_lut1_I0_O)        0.299    11.171 r  u_soc/u_core/u_mem_wb/mem_mask_sel[1]_i_1/O
+                         net (fo=291, routed)         8.454    19.625    u_soc/u_core/u_mem_wb/mem_mask_sel[1]_i_1_n_0
+    SLICE_X35Y95         FDRE                                         r  u_soc/u_core/u_mem_wb/mem_addr_reg[8]_rep__0/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk_40 rise edge)
+                                                     25.000    25.000 r  <hidden>
+    H16                                               0.000    25.000 r  clk
+                         net (fo=0)                   0.000    25.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.380    26.380 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.162    27.542    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.814    19.728 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.012    21.740    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.831 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        1.480    23.311    u_soc/u_core/u_mem_wb/core_clk
+    SLICE_X35Y95         FDRE                                         r  u_soc/u_core/u_mem_wb/mem_addr_reg[8]_rep__0/C
+                         clock pessimism              0.466    23.777    <hidden>
+                         clock uncertainty           -0.082    23.696    <hidden>
+    SLICE_X35Y95         FDRE (Setup_fdre_C_CE)      -0.205    23.491    u_soc/u_core/u_mem_wb/mem_addr_reg[8]_rep__0
+  -------------------------------------------------------------------
+                         required time                         23.491    <hidden>
+                         arrival time                         -19.625    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  3.866    <hidden>
+
+Slack (MET) :             3.866ns  (required time - arrival time)
+  Source:                 reset_pipe_reg[1]/C
+                            (rising edge-triggered cell FDPE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep/CE
+                            (rising edge-triggered cell FDRE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             core_clk_40
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk_40 rise@25.000ns - core_clk_40 rise@0.000ns)
+  Data Path Delay:        20.283ns  (logic 0.718ns (3.540%)  route 19.565ns (96.460%))
+  Logic Levels:           1  (LUT1=1)
+  Clock Path Skew:        -0.564ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+    Source Clock Delay      (SCD):    -0.658ns
+    Clock Pessimism Removal (CPR):    0.466ns
+  Clock Uncertainty:      0.082ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.147ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk_40 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    H16                                               0.000     0.000 r  clk
+                         net (fo=0)                   0.000     0.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.451     1.451 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.285     2.736    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.759    -5.023 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.206    -2.817    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101    -2.716 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        2.058    -0.658    core_clk
+    SLICE_X113Y101       FDPE                                         r  reset_pipe_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y101       FDPE (Prop_fdpe_C_Q)         0.419    -0.239 f  reset_pipe_reg[1]/Q
+                         net (fo=568, routed)        11.111    10.872    u_soc/u_core/u_mem_wb/out[0]
+    SLICE_X47Y29         LUT1 (Prop_lut1_I0_O)        0.299    11.171 r  u_soc/u_core/u_mem_wb/mem_mask_sel[1]_i_1/O
+                         net (fo=291, routed)         8.454    19.625    u_soc/u_core/u_mem_wb/mem_mask_sel[1]_i_1_n_0
+    SLICE_X35Y95         FDRE                                         r  u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk_40 rise edge)
+                                                     25.000    25.000 r  <hidden>
+    H16                                               0.000    25.000 r  clk
+                         net (fo=0)                   0.000    25.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.380    26.380 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.162    27.542    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.814    19.728 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.012    21.740    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.831 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        1.480    23.311    u_soc/u_core/u_mem_wb/core_clk
+    SLICE_X35Y95         FDRE                                         r  u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep/C
+                         clock pessimism              0.466    23.777    <hidden>
+                         clock uncertainty           -0.082    23.696    <hidden>
+    SLICE_X35Y95         FDRE (Setup_fdre_C_CE)      -0.205    23.491    u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep
+  -------------------------------------------------------------------
+                         required time                         23.491    <hidden>
+                         arrival time                         -19.625    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  3.866    <hidden>
+
+Slack (MET) :             3.866ns  (required time - arrival time)
+  Source:                 reset_pipe_reg[1]/C
+                            (rising edge-triggered cell FDPE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__0/CE
+                            (rising edge-triggered cell FDRE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             core_clk_40
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk_40 rise@25.000ns - core_clk_40 rise@0.000ns)
+  Data Path Delay:        20.283ns  (logic 0.718ns (3.540%)  route 19.565ns (96.460%))
+  Logic Levels:           1  (LUT1=1)
+  Clock Path Skew:        -0.564ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+    Source Clock Delay      (SCD):    -0.658ns
+    Clock Pessimism Removal (CPR):    0.466ns
+  Clock Uncertainty:      0.082ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.147ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk_40 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    H16                                               0.000     0.000 r  clk
+                         net (fo=0)                   0.000     0.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.451     1.451 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.285     2.736    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.759    -5.023 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.206    -2.817    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101    -2.716 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        2.058    -0.658    core_clk
+    SLICE_X113Y101       FDPE                                         r  reset_pipe_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y101       FDPE (Prop_fdpe_C_Q)         0.419    -0.239 f  reset_pipe_reg[1]/Q
+                         net (fo=568, routed)        11.111    10.872    u_soc/u_core/u_mem_wb/out[0]
+    SLICE_X47Y29         LUT1 (Prop_lut1_I0_O)        0.299    11.171 r  u_soc/u_core/u_mem_wb/mem_mask_sel[1]_i_1/O
+                         net (fo=291, routed)         8.454    19.625    u_soc/u_core/u_mem_wb/mem_mask_sel[1]_i_1_n_0
+    SLICE_X35Y95         FDRE                                         r  u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__0/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk_40 rise edge)
+                                                     25.000    25.000 r  <hidden>
+    H16                                               0.000    25.000 r  clk
+                         net (fo=0)                   0.000    25.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.380    26.380 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.162    27.542    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.814    19.728 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.012    21.740    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.831 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        1.480    23.311    u_soc/u_core/u_mem_wb/core_clk
+    SLICE_X35Y95         FDRE                                         r  u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__0/C
+                         clock pessimism              0.466    23.777    <hidden>
+                         clock uncertainty           -0.082    23.696    <hidden>
+    SLICE_X35Y95         FDRE (Setup_fdre_C_CE)      -0.205    23.491    u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__0
+  -------------------------------------------------------------------
+                         required time                         23.491    <hidden>
+                         arrival time                         -19.625    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  3.866    <hidden>
+
+Slack (MET) :             3.866ns  (required time - arrival time)
+  Source:                 reset_pipe_reg[1]/C
+                            (rising edge-triggered cell FDPE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__1/CE
+                            (rising edge-triggered cell FDRE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             core_clk_40
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk_40 rise@25.000ns - core_clk_40 rise@0.000ns)
+  Data Path Delay:        20.283ns  (logic 0.718ns (3.540%)  route 19.565ns (96.460%))
+  Logic Levels:           1  (LUT1=1)
+  Clock Path Skew:        -0.564ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+    Source Clock Delay      (SCD):    -0.658ns
+    Clock Pessimism Removal (CPR):    0.466ns
+  Clock Uncertainty:      0.082ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.147ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk_40 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    H16                                               0.000     0.000 r  clk
+                         net (fo=0)                   0.000     0.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.451     1.451 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.285     2.736    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.759    -5.023 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.206    -2.817    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101    -2.716 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        2.058    -0.658    core_clk
+    SLICE_X113Y101       FDPE                                         r  reset_pipe_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y101       FDPE (Prop_fdpe_C_Q)         0.419    -0.239 f  reset_pipe_reg[1]/Q
+                         net (fo=568, routed)        11.111    10.872    u_soc/u_core/u_mem_wb/out[0]
+    SLICE_X47Y29         LUT1 (Prop_lut1_I0_O)        0.299    11.171 r  u_soc/u_core/u_mem_wb/mem_mask_sel[1]_i_1/O
+                         net (fo=291, routed)         8.454    19.625    u_soc/u_core/u_mem_wb/mem_mask_sel[1]_i_1_n_0
+    SLICE_X35Y95         FDRE                                         r  u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__1/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk_40 rise edge)
+                                                     25.000    25.000 r  <hidden>
+    H16                                               0.000    25.000 r  clk
+                         net (fo=0)                   0.000    25.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.380    26.380 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.162    27.542    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.814    19.728 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.012    21.740    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.831 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        1.480    23.311    u_soc/u_core/u_mem_wb/core_clk
+    SLICE_X35Y95         FDRE                                         r  u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__1/C
+                         clock pessimism              0.466    23.777    <hidden>
+                         clock uncertainty           -0.082    23.696    <hidden>
+    SLICE_X35Y95         FDRE (Setup_fdre_C_CE)      -0.205    23.491    u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__1
+  -------------------------------------------------------------------
+                         required time                         23.491    <hidden>
+                         arrival time                         -19.625    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  3.866    <hidden>
+
+Slack (MET) :             3.901ns  (required time - arrival time)
+  Source:                 reset_pipe_reg[1]/C
+                            (rising edge-triggered cell FDPE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            u_soc/u_core/u_mem_wb/mem_addr_reg[6]_rep__0/CE
+                            (rising edge-triggered cell FDRE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             core_clk_40
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk_40 rise@25.000ns - core_clk_40 rise@0.000ns)
+  Data Path Delay:        20.293ns  (logic 0.718ns (3.538%)  route 19.575ns (96.462%))
+  Logic Levels:           1  (LUT1=1)
+  Clock Path Skew:        -0.519ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.644ns = ( 23.356 - 25.000 ) 
+    Source Clock Delay      (SCD):    -0.658ns
+    Clock Pessimism Removal (CPR):    0.466ns
+  Clock Uncertainty:      0.082ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.147ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk_40 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    H16                                               0.000     0.000 r  clk
+                         net (fo=0)                   0.000     0.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.451     1.451 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.285     2.736    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.759    -5.023 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.206    -2.817    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101    -2.716 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        2.058    -0.658    core_clk
+    SLICE_X113Y101       FDPE                                         r  reset_pipe_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y101       FDPE (Prop_fdpe_C_Q)         0.419    -0.239 f  reset_pipe_reg[1]/Q
+                         net (fo=568, routed)        11.111    10.872    u_soc/u_core/u_mem_wb/out[0]
+    SLICE_X47Y29         LUT1 (Prop_lut1_I0_O)        0.299    11.171 r  u_soc/u_core/u_mem_wb/mem_mask_sel[1]_i_1/O
+                         net (fo=291, routed)         8.464    19.635    u_soc/u_core/u_mem_wb/mem_mask_sel[1]_i_1_n_0
+    SLICE_X29Y94         FDRE                                         r  u_soc/u_core/u_mem_wb/mem_addr_reg[6]_rep__0/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk_40 rise edge)
+                                                     25.000    25.000 r  <hidden>
+    H16                                               0.000    25.000 r  clk
+                         net (fo=0)                   0.000    25.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.380    26.380 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.162    27.542    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.814    19.728 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.012    21.740    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.831 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        1.525    23.356    u_soc/u_core/u_mem_wb/core_clk
+    SLICE_X29Y94         FDRE                                         r  u_soc/u_core/u_mem_wb/mem_addr_reg[6]_rep__0/C
+                         clock pessimism              0.466    23.822    <hidden>
+                         clock uncertainty           -0.082    23.741    <hidden>
+    SLICE_X29Y94         FDRE (Setup_fdre_C_CE)      -0.205    23.536    u_soc/u_core/u_mem_wb/mem_addr_reg[6]_rep__0
+  -------------------------------------------------------------------
+                         required time                         23.536    <hidden>
+                         arrival time                         -19.635    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  3.901    <hidden>
+
+Slack (MET) :             3.965ns  (required time - arrival time)
+  Source:                 reset_pipe_reg[1]/C
+                            (rising edge-triggered cell FDPE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            u_soc/u_core/u_mem_wb/mem_addr_reg[7]_rep__0/CE
+                            (rising edge-triggered cell FDRE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             core_clk_40
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk_40 rise@25.000ns - core_clk_40 rise@0.000ns)
+  Data Path Delay:        20.183ns  (logic 0.718ns (3.558%)  route 19.465ns (96.442%))
+  Logic Levels:           1  (LUT1=1)
+  Clock Path Skew:        -0.565ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.690ns = ( 23.310 - 25.000 ) 
+    Source Clock Delay      (SCD):    -0.658ns
+    Clock Pessimism Removal (CPR):    0.466ns
+  Clock Uncertainty:      0.082ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.147ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk_40 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    H16                                               0.000     0.000 r  clk
+                         net (fo=0)                   0.000     0.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.451     1.451 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.285     2.736    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.759    -5.023 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.206    -2.817    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101    -2.716 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        2.058    -0.658    core_clk
+    SLICE_X113Y101       FDPE                                         r  reset_pipe_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y101       FDPE (Prop_fdpe_C_Q)         0.419    -0.239 f  reset_pipe_reg[1]/Q
+                         net (fo=568, routed)        11.111    10.872    u_soc/u_core/u_mem_wb/out[0]
+    SLICE_X47Y29         LUT1 (Prop_lut1_I0_O)        0.299    11.171 r  u_soc/u_core/u_mem_wb/mem_mask_sel[1]_i_1/O
+                         net (fo=291, routed)         8.353    19.524    u_soc/u_core/u_mem_wb/mem_mask_sel[1]_i_1_n_0
+    SLICE_X37Y95         FDRE                                         r  u_soc/u_core/u_mem_wb/mem_addr_reg[7]_rep__0/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk_40 rise edge)
+                                                     25.000    25.000 r  <hidden>
+    H16                                               0.000    25.000 r  clk
+                         net (fo=0)                   0.000    25.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.380    26.380 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.162    27.542    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.814    19.728 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.012    21.740    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.831 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        1.479    23.310    u_soc/u_core/u_mem_wb/core_clk
+    SLICE_X37Y95         FDRE                                         r  u_soc/u_core/u_mem_wb/mem_addr_reg[7]_rep__0/C
+                         clock pessimism              0.466    23.776    <hidden>
+                         clock uncertainty           -0.082    23.695    <hidden>
+    SLICE_X37Y95         FDRE (Setup_fdre_C_CE)      -0.205    23.490    u_soc/u_core/u_mem_wb/mem_addr_reg[7]_rep__0
+  -------------------------------------------------------------------
+                         required time                         23.490    <hidden>
+                         arrival time                         -19.524    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  3.965    <hidden>
+
+Slack (MET) :             10.879ns  (required time - arrival time)
+  Source:                 reset_pipe_reg[1]/C
+                            (rising edge-triggered cell FDPE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[0][1]/CLR
+                            (recovery check against rising-edge clock core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             **async_default**
+  Path Type:              Recovery (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk_40 rise@25.000ns - core_clk_40 rise@0.000ns)
+  Data Path Delay:        12.876ns  (logic 0.419ns (3.254%)  route 12.457ns (96.746%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.583ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.693ns = ( 23.307 - 25.000 ) 
+    Source Clock Delay      (SCD):    -0.658ns
+    Clock Pessimism Removal (CPR):    0.452ns
+  Clock Uncertainty:      0.082ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.147ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk_40 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    H16                                               0.000     0.000 r  clk
+                         net (fo=0)                   0.000     0.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.451     1.451 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.285     2.736    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.759    -5.023 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.206    -2.817    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101    -2.716 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        2.058    -0.658    core_clk
+    SLICE_X113Y101       FDPE                                         r  reset_pipe_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y101       FDPE (Prop_fdpe_C_Q)         0.419    -0.239 f  reset_pipe_reg[1]/Q
+                         net (fo=568, routed)        12.457    12.218    u_soc/u_core/u_branch_predict/out[0]
+    SLICE_X51Y33         FDCE                                         f  u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[0][1]/CLR
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk_40 rise edge)
+                                                     25.000    25.000 r  <hidden>
+    H16                                               0.000    25.000 r  clk
+                         net (fo=0)                   0.000    25.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.380    26.380 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.162    27.542    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.814    19.728 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.012    21.740    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.831 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        1.475    23.307    u_soc/u_core/u_branch_predict/core_clk
+    SLICE_X51Y33         FDCE                                         r  u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[0][1]/C
+                         clock pessimism              0.452    23.759    <hidden>
+                         clock uncertainty           -0.082    23.677    <hidden>
+    SLICE_X51Y33         FDCE (Recov_fdce_C_CLR)     -0.580    23.097    u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[0][1]
+  -------------------------------------------------------------------
+                         required time                         23.097    <hidden>
+                         arrival time                         -12.218    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 10.879    <hidden>
+
+Slack (MET) :             10.879ns  (required time - arrival time)
+  Source:                 reset_pipe_reg[1]/C
+                            (rising edge-triggered cell FDPE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[8][1]/CLR
+                            (recovery check against rising-edge clock core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             **async_default**
+  Path Type:              Recovery (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk_40 rise@25.000ns - core_clk_40 rise@0.000ns)
+  Data Path Delay:        12.876ns  (logic 0.419ns (3.254%)  route 12.457ns (96.746%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.583ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.693ns = ( 23.307 - 25.000 ) 
+    Source Clock Delay      (SCD):    -0.658ns
+    Clock Pessimism Removal (CPR):    0.452ns
+  Clock Uncertainty:      0.082ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.147ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk_40 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    H16                                               0.000     0.000 r  clk
+                         net (fo=0)                   0.000     0.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.451     1.451 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.285     2.736    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.759    -5.023 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.206    -2.817    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101    -2.716 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        2.058    -0.658    core_clk
+    SLICE_X113Y101       FDPE                                         r  reset_pipe_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y101       FDPE (Prop_fdpe_C_Q)         0.419    -0.239 f  reset_pipe_reg[1]/Q
+                         net (fo=568, routed)        12.457    12.218    u_soc/u_core/u_branch_predict/out[0]
+    SLICE_X51Y33         FDCE                                         f  u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[8][1]/CLR
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk_40 rise edge)
+                                                     25.000    25.000 r  <hidden>
+    H16                                               0.000    25.000 r  clk
+                         net (fo=0)                   0.000    25.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.380    26.380 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.162    27.542    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.814    19.728 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.012    21.740    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.831 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        1.475    23.307    u_soc/u_core/u_branch_predict/core_clk
+    SLICE_X51Y33         FDCE                                         r  u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[8][1]/C
+                         clock pessimism              0.452    23.759    <hidden>
+                         clock uncertainty           -0.082    23.677    <hidden>
+    SLICE_X51Y33         FDCE (Recov_fdce_C_CLR)     -0.580    23.097    u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[8][1]
+  -------------------------------------------------------------------
+                         required time                         23.097    <hidden>
+                         arrival time                         -12.218    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 10.879    <hidden>
+
+Slack (MET) :             11.007ns  (required time - arrival time)
+  Source:                 reset_pipe_reg[1]/C
+                            (rising edge-triggered cell FDPE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[10][1]/CLR
+                            (recovery check against rising-edge clock core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             **async_default**
+  Path Type:              Recovery (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk_40 rise@25.000ns - core_clk_40 rise@0.000ns)
+  Data Path Delay:        12.749ns  (logic 0.419ns (3.287%)  route 12.330ns (96.713%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.583ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.693ns = ( 23.307 - 25.000 ) 
+    Source Clock Delay      (SCD):    -0.658ns
+    Clock Pessimism Removal (CPR):    0.452ns
+  Clock Uncertainty:      0.082ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.147ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk_40 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    H16                                               0.000     0.000 r  clk
+                         net (fo=0)                   0.000     0.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.451     1.451 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.285     2.736    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.759    -5.023 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.206    -2.817    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101    -2.716 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        2.058    -0.658    core_clk
+    SLICE_X113Y101       FDPE                                         r  reset_pipe_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y101       FDPE (Prop_fdpe_C_Q)         0.419    -0.239 f  reset_pipe_reg[1]/Q
+                         net (fo=568, routed)        12.330    12.091    u_soc/u_core/u_branch_predict/out[0]
+    SLICE_X52Y33         FDCE                                         f  u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[10][1]/CLR
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk_40 rise edge)
+                                                     25.000    25.000 r  <hidden>
+    H16                                               0.000    25.000 r  clk
+                         net (fo=0)                   0.000    25.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.380    26.380 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.162    27.542    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.814    19.728 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.012    21.740    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.831 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        1.475    23.307    u_soc/u_core/u_branch_predict/core_clk
+    SLICE_X52Y33         FDCE                                         r  u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[10][1]/C
+                         clock pessimism              0.452    23.759    <hidden>
+                         clock uncertainty           -0.082    23.677    <hidden>
+    SLICE_X52Y33         FDCE (Recov_fdce_C_CLR)     -0.580    23.097    u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[10][1]
+  -------------------------------------------------------------------
+                         required time                         23.097    <hidden>
+                         arrival time                         -12.091    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 11.007    <hidden>
+
+Slack (MET) :             11.007ns  (required time - arrival time)
+  Source:                 reset_pipe_reg[1]/C
+                            (rising edge-triggered cell FDPE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[13][1]/CLR
+                            (recovery check against rising-edge clock core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             **async_default**
+  Path Type:              Recovery (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk_40 rise@25.000ns - core_clk_40 rise@0.000ns)
+  Data Path Delay:        12.749ns  (logic 0.419ns (3.287%)  route 12.330ns (96.713%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.583ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.693ns = ( 23.307 - 25.000 ) 
+    Source Clock Delay      (SCD):    -0.658ns
+    Clock Pessimism Removal (CPR):    0.452ns
+  Clock Uncertainty:      0.082ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.147ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk_40 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    H16                                               0.000     0.000 r  clk
+                         net (fo=0)                   0.000     0.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.451     1.451 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.285     2.736    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.759    -5.023 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.206    -2.817    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101    -2.716 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        2.058    -0.658    core_clk
+    SLICE_X113Y101       FDPE                                         r  reset_pipe_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y101       FDPE (Prop_fdpe_C_Q)         0.419    -0.239 f  reset_pipe_reg[1]/Q
+                         net (fo=568, routed)        12.330    12.091    u_soc/u_core/u_branch_predict/out[0]
+    SLICE_X52Y33         FDCE                                         f  u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[13][1]/CLR
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk_40 rise edge)
+                                                     25.000    25.000 r  <hidden>
+    H16                                               0.000    25.000 r  clk
+                         net (fo=0)                   0.000    25.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.380    26.380 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.162    27.542    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.814    19.728 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.012    21.740    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.831 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        1.475    23.307    u_soc/u_core/u_branch_predict/core_clk
+    SLICE_X52Y33         FDCE                                         r  u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[13][1]/C
+                         clock pessimism              0.452    23.759    <hidden>
+                         clock uncertainty           -0.082    23.677    <hidden>
+    SLICE_X52Y33         FDCE (Recov_fdce_C_CLR)     -0.580    23.097    u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[13][1]
+  -------------------------------------------------------------------
+                         required time                         23.097    <hidden>
+                         arrival time                         -12.091    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 11.007    <hidden>
+
+Slack (MET) :             11.144ns  (required time - arrival time)
+  Source:                 reset_pipe_reg[1]/C
+                            (rising edge-triggered cell FDPE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[15][1]/CLR
+                            (recovery check against rising-edge clock core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             **async_default**
+  Path Type:              Recovery (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk_40 rise@25.000ns - core_clk_40 rise@0.000ns)
+  Data Path Delay:        12.610ns  (logic 0.419ns (3.323%)  route 12.191ns (96.677%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.584ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.694ns = ( 23.306 - 25.000 ) 
+    Source Clock Delay      (SCD):    -0.658ns
+    Clock Pessimism Removal (CPR):    0.452ns
+  Clock Uncertainty:      0.082ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.147ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk_40 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    H16                                               0.000     0.000 r  clk
+                         net (fo=0)                   0.000     0.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.451     1.451 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.285     2.736    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.759    -5.023 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.206    -2.817    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101    -2.716 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        2.058    -0.658    core_clk
+    SLICE_X113Y101       FDPE                                         r  reset_pipe_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y101       FDPE (Prop_fdpe_C_Q)         0.419    -0.239 f  reset_pipe_reg[1]/Q
+                         net (fo=568, routed)        12.191    11.952    u_soc/u_core/u_branch_predict/out[0]
+    SLICE_X52Y32         FDCE                                         f  u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[15][1]/CLR
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk_40 rise edge)
+                                                     25.000    25.000 r  <hidden>
+    H16                                               0.000    25.000 r  clk
+                         net (fo=0)                   0.000    25.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.380    26.380 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.162    27.542    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.814    19.728 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.012    21.740    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.831 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        1.474    23.306    u_soc/u_core/u_branch_predict/core_clk
+    SLICE_X52Y32         FDCE                                         r  u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[15][1]/C
+                         clock pessimism              0.452    23.758    <hidden>
+                         clock uncertainty           -0.082    23.676    <hidden>
+    SLICE_X52Y32         FDCE (Recov_fdce_C_CLR)     -0.580    23.096    u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[15][1]
+  -------------------------------------------------------------------
+                         required time                         23.096    <hidden>
+                         arrival time                         -11.952    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 11.144    <hidden>
+
+Slack (MET) :             11.144ns  (required time - arrival time)
+  Source:                 reset_pipe_reg[1]/C
+                            (rising edge-triggered cell FDPE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[6][1]/CLR
+                            (recovery check against rising-edge clock core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             **async_default**
+  Path Type:              Recovery (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk_40 rise@25.000ns - core_clk_40 rise@0.000ns)
+  Data Path Delay:        12.610ns  (logic 0.419ns (3.323%)  route 12.191ns (96.677%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.584ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.694ns = ( 23.306 - 25.000 ) 
+    Source Clock Delay      (SCD):    -0.658ns
+    Clock Pessimism Removal (CPR):    0.452ns
+  Clock Uncertainty:      0.082ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.147ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk_40 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    H16                                               0.000     0.000 r  clk
+                         net (fo=0)                   0.000     0.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.451     1.451 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.285     2.736    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.759    -5.023 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.206    -2.817    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101    -2.716 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        2.058    -0.658    core_clk
+    SLICE_X113Y101       FDPE                                         r  reset_pipe_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y101       FDPE (Prop_fdpe_C_Q)         0.419    -0.239 f  reset_pipe_reg[1]/Q
+                         net (fo=568, routed)        12.191    11.952    u_soc/u_core/u_branch_predict/out[0]
+    SLICE_X52Y32         FDCE                                         f  u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[6][1]/CLR
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk_40 rise edge)
+                                                     25.000    25.000 r  <hidden>
+    H16                                               0.000    25.000 r  clk
+                         net (fo=0)                   0.000    25.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.380    26.380 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.162    27.542    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.814    19.728 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.012    21.740    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.831 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        1.474    23.306    u_soc/u_core/u_branch_predict/core_clk
+    SLICE_X52Y32         FDCE                                         r  u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[6][1]/C
+                         clock pessimism              0.452    23.758    <hidden>
+                         clock uncertainty           -0.082    23.676    <hidden>
+    SLICE_X52Y32         FDCE (Recov_fdce_C_CLR)     -0.580    23.096    u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[6][1]
+  -------------------------------------------------------------------
+                         required time                         23.096    <hidden>
+                         arrival time                         -11.952    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 11.144    <hidden>
+
+Slack (MET) :             11.149ns  (required time - arrival time)
+  Source:                 reset_pipe_reg[1]/C
+                            (rising edge-triggered cell FDPE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[5][1]/CLR
+                            (recovery check against rising-edge clock core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             **async_default**
+  Path Type:              Recovery (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk_40 rise@25.000ns - core_clk_40 rise@0.000ns)
+  Data Path Delay:        12.606ns  (logic 0.419ns (3.324%)  route 12.187ns (96.676%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.584ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.694ns = ( 23.306 - 25.000 ) 
+    Source Clock Delay      (SCD):    -0.658ns
+    Clock Pessimism Removal (CPR):    0.452ns
+  Clock Uncertainty:      0.082ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.147ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk_40 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    H16                                               0.000     0.000 r  clk
+                         net (fo=0)                   0.000     0.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.451     1.451 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.285     2.736    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.759    -5.023 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.206    -2.817    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101    -2.716 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        2.058    -0.658    core_clk
+    SLICE_X113Y101       FDPE                                         r  reset_pipe_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y101       FDPE (Prop_fdpe_C_Q)         0.419    -0.239 f  reset_pipe_reg[1]/Q
+                         net (fo=568, routed)        12.187    11.948    u_soc/u_core/u_branch_predict/out[0]
+    SLICE_X53Y32         FDCE                                         f  u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[5][1]/CLR
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk_40 rise edge)
+                                                     25.000    25.000 r  <hidden>
+    H16                                               0.000    25.000 r  clk
+                         net (fo=0)                   0.000    25.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.380    26.380 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.162    27.542    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.814    19.728 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.012    21.740    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.831 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        1.474    23.306    u_soc/u_core/u_branch_predict/core_clk
+    SLICE_X53Y32         FDCE                                         r  u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[5][1]/C
+                         clock pessimism              0.452    23.758    <hidden>
+                         clock uncertainty           -0.082    23.676    <hidden>
+    SLICE_X53Y32         FDCE (Recov_fdce_C_CLR)     -0.580    23.096    u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[5][1]
+  -------------------------------------------------------------------
+                         required time                         23.096    <hidden>
+                         arrival time                         -11.948    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 11.149    <hidden>
+
+Slack (MET) :             11.149ns  (required time - arrival time)
+  Source:                 reset_pipe_reg[1]/C
+                            (rising edge-triggered cell FDPE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[9][1]/CLR
+                            (recovery check against rising-edge clock core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             **async_default**
+  Path Type:              Recovery (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk_40 rise@25.000ns - core_clk_40 rise@0.000ns)
+  Data Path Delay:        12.606ns  (logic 0.419ns (3.324%)  route 12.187ns (96.676%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.584ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.694ns = ( 23.306 - 25.000 ) 
+    Source Clock Delay      (SCD):    -0.658ns
+    Clock Pessimism Removal (CPR):    0.452ns
+  Clock Uncertainty:      0.082ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.147ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk_40 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    H16                                               0.000     0.000 r  clk
+                         net (fo=0)                   0.000     0.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.451     1.451 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.285     2.736    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.759    -5.023 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.206    -2.817    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101    -2.716 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        2.058    -0.658    core_clk
+    SLICE_X113Y101       FDPE                                         r  reset_pipe_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y101       FDPE (Prop_fdpe_C_Q)         0.419    -0.239 f  reset_pipe_reg[1]/Q
+                         net (fo=568, routed)        12.187    11.948    u_soc/u_core/u_branch_predict/out[0]
+    SLICE_X53Y32         FDCE                                         f  u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[9][1]/CLR
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk_40 rise edge)
+                                                     25.000    25.000 r  <hidden>
+    H16                                               0.000    25.000 r  clk
+                         net (fo=0)                   0.000    25.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.380    26.380 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.162    27.542    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.814    19.728 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.012    21.740    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.831 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        1.474    23.306    u_soc/u_core/u_branch_predict/core_clk
+    SLICE_X53Y32         FDCE                                         r  u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[9][1]/C
+                         clock pessimism              0.452    23.758    <hidden>
+                         clock uncertainty           -0.082    23.676    <hidden>
+    SLICE_X53Y32         FDCE (Recov_fdce_C_CLR)     -0.580    23.096    u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[9][1]
+  -------------------------------------------------------------------
+                         required time                         23.096    <hidden>
+                         arrival time                         -11.948    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 11.149    <hidden>
+
+Slack (MET) :             11.308ns  (required time - arrival time)
+  Source:                 reset_pipe_reg[1]/C
+                            (rising edge-triggered cell FDPE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[14][1]/CLR
+                            (recovery check against rising-edge clock core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             **async_default**
+  Path Type:              Recovery (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk_40 rise@25.000ns - core_clk_40 rise@0.000ns)
+  Data Path Delay:        12.445ns  (logic 0.419ns (3.367%)  route 12.026ns (96.633%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.586ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.696ns = ( 23.304 - 25.000 ) 
+    Source Clock Delay      (SCD):    -0.658ns
+    Clock Pessimism Removal (CPR):    0.452ns
+  Clock Uncertainty:      0.082ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.147ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk_40 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    H16                                               0.000     0.000 r  clk
+                         net (fo=0)                   0.000     0.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.451     1.451 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.285     2.736    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.759    -5.023 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.206    -2.817    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101    -2.716 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        2.058    -0.658    core_clk
+    SLICE_X113Y101       FDPE                                         r  reset_pipe_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y101       FDPE (Prop_fdpe_C_Q)         0.419    -0.239 f  reset_pipe_reg[1]/Q
+                         net (fo=568, routed)        12.026    11.787    u_soc/u_core/u_branch_predict/out[0]
+    SLICE_X52Y31         FDCE                                         f  u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[14][1]/CLR
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk_40 rise edge)
+                                                     25.000    25.000 r  <hidden>
+    H16                                               0.000    25.000 r  clk
+                         net (fo=0)                   0.000    25.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.380    26.380 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.162    27.542    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.814    19.728 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.012    21.740    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.831 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        1.472    23.304    u_soc/u_core/u_branch_predict/core_clk
+    SLICE_X52Y31         FDCE                                         r  u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[14][1]/C
+                         clock pessimism              0.452    23.756    <hidden>
+                         clock uncertainty           -0.082    23.674    <hidden>
+    SLICE_X52Y31         FDCE (Recov_fdce_C_CLR)     -0.580    23.094    u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[14][1]
+  -------------------------------------------------------------------
+                         required time                         23.094    <hidden>
+                         arrival time                         -11.787    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 11.308    <hidden>
+
+Slack (MET) :             11.308ns  (required time - arrival time)
+  Source:                 reset_pipe_reg[1]/C
+                            (rising edge-triggered cell FDPE clocked by core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[3][1]/CLR
+                            (recovery check against rising-edge clock core_clk_40  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             **async_default**
+  Path Type:              Recovery (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk_40 rise@25.000ns - core_clk_40 rise@0.000ns)
+  Data Path Delay:        12.445ns  (logic 0.419ns (3.367%)  route 12.026ns (96.633%))
+  Logic Levels:           0  
+  Clock Path Skew:        -0.586ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.696ns = ( 23.304 - 25.000 ) 
+    Source Clock Delay      (SCD):    -0.658ns
+    Clock Pessimism Removal (CPR):    0.452ns
+  Clock Uncertainty:      0.082ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.147ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk_40 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    H16                                               0.000     0.000 r  clk
+                         net (fo=0)                   0.000     0.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.451     1.451 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.285     2.736    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.759    -5.023 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.206    -2.817    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101    -2.716 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        2.058    -0.658    core_clk
+    SLICE_X113Y101       FDPE                                         r  reset_pipe_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X113Y101       FDPE (Prop_fdpe_C_Q)         0.419    -0.239 f  reset_pipe_reg[1]/Q
+                         net (fo=568, routed)        12.026    11.787    u_soc/u_core/u_branch_predict/out[0]
+    SLICE_X52Y31         FDCE                                         f  u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[3][1]/CLR
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk_40 rise edge)
+                                                     25.000    25.000 r  <hidden>
+    H16                                               0.000    25.000 r  clk
+                         net (fo=0)                   0.000    25.000    clk
+    H16                  IBUF (Prop_ibuf_I_O)         1.380    26.380 r  clk_IBUF_inst/O
+                         net (fo=1, routed)           1.162    27.542    clk_IBUF
+    MMCME2_ADV_X1Y2      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -7.814    19.728 r  u_mmcm/CLKOUT0
+                         net (fo=1, routed)           2.012    21.740    core_clk_raw
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091    21.831 r  u_core_clk_bufg/O
+                         net (fo=5051, routed)        1.472    23.304    u_soc/u_core/u_branch_predict/core_clk
+    SLICE_X52Y31         FDCE                                         r  u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[3][1]/C
+                         clock pessimism              0.452    23.756    <hidden>
+                         clock uncertainty           -0.082    23.674    <hidden>
+    SLICE_X52Y31         FDCE (Recov_fdce_C_CLR)     -0.580    23.094    u_soc/u_core/u_branch_predict/gen_bht2.bht_reg[3][1]
+  -------------------------------------------------------------------
+                         required time                         23.094    <hidden>
+                         arrival time                         -11.787    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 11.308    <hidden>
+
+
+
+
