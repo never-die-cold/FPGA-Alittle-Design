@@ -1,0 +1,81 @@
+{
+  "config": {
+    "dataset": "..\\datasets\\synthetic-yolo\\seed-52",
+    "output": "..\\datasets\\training-runs\\controlled-hog",
+    "engine": "hog",
+    "epochs": 40,
+    "seed": 2026,
+    "augment": false,
+    "schedule": "cosine"
+  },
+  "split_sha256": {
+    "train": "867ff2e8442d3b1fb9365a799c48c4c0ebf1d7b2019dcef24d89554a957dc6c0",
+    "val": "228671ac46877225ff353a16fb8b7fdb9ea4e449ec018a87a8f1d159db946199"
+  },
+  "classes": [
+    "bolt",
+    "nut",
+    "washer"
+  ],
+  "preprocess": "scene-gray-opposite-padding-v1",
+  "training_splits": [
+    "train"
+  ],
+  "selection_split": "val",
+  "test_read": false,
+  "history": [
+    {
+      "C": 1.0,
+      "gamma": 0.0003,
+      "val_accuracy": 0.6544
+    },
+    {
+      "C": 1.0,
+      "gamma": 0.0006,
+      "val_accuracy": 0.78
+    },
+    {
+      "C": 1.0,
+      "gamma": 0.0012,
+      "val_accuracy": 0.82
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.0003,
+      "val_accuracy": 0.852
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.0006,
+      "val_accuracy": 0.912
+    },
+    {
+      "C": 10.0,
+      "gamma": 0.0012,
+      "val_accuracy": 0.9152
+    },
+    {
+      "C": 100.0,
+      "gamma": 0.0003,
+      "val_accuracy": 0.9312
+    },
+    {
+      "C": 100.0,
+      "gamma": 0.0006,
+      "val_accuracy": 0.9384
+    },
+    {
+      "C": 100.0,
+      "gamma": 0.0012,
+      "val_accuracy": 0.9328
+    }
+  ],
+  "best_config": {
+    "C": 100.0,
+    "gamma": 0.0006
+  },
+  "train_objects": 1250,
+  "val_objects": 1250,
+  "best_val_accuracy": 0.9384,
+  "elapsed_seconds": 14.497792899999922
+}

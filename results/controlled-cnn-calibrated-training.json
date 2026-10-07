@@ -1,0 +1,12 @@
+{
+  "weights": "..\\datasets\\training-runs\\seed-52-scene-cnn-bn64.pt",
+  "dataset": "..\\datasets\\synthetic-yolo\\seed-52",
+  "baseline_val_accuracy": 0.9152,
+  "recalibrated_val_accuracy": 0.9096,
+  "selected_recalibrated": false,
+  "fold_max_logit_error": 5.602836608886719e-06,
+  "fold_argmax_disagreements": 0,
+  "val_objects": 1250,
+  "int8_verified": false,
+  "board_verified": false
+}
