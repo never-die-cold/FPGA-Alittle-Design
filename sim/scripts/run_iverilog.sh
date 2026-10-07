@@ -32,7 +32,7 @@
 #   bash sim/scripts/run_iverilog.sh soc      # hello_v0 SoC + tohost LED 自检
 #   bash sim/scripts/run_iverilog.sh soc_check # SoC 预载 + 计时器端到端自检
 #   bash sim/scripts/run_iverilog.sh bench    # benchmark v0.1 + CPI 统计
-#   bash sim/scripts/run_iverilog.sh bench_fwd|bench_nofwd # benchmark CPI 双档
+#   bash sim/scripts/run_iverilog.sh bench_fwd|bench_nofwd|bench_bht1|bench_bht2 # benchmark 四档
 #   bash sim/scripts/run_iverilog.sh vision [单项|all] # 视觉专项；all 含核与视觉
 #   bash sim/scripts/run_iverilog.sh vision_gate # 视觉回归失败门禁自检
 # 前置：PATH 中含 MSYS2 ucrt64 的 iverilog / vvp（13.0+）
@@ -82,6 +82,8 @@ case "$MODE" in
     bench) TBS=(riscv/tb_core_coremark.v) ;;
     bench_fwd) TBS=(riscv/tb_core_coremark.v); IVERILOG_ARGS=(-Ptb_core_coremark.ENABLE_FORWARDING=1) ;;
     bench_nofwd) TBS=(riscv/tb_core_coremark.v); IVERILOG_ARGS=(-Ptb_core_coremark.ENABLE_FORWARDING=0) ;;
+    bench_bht1) TBS=(riscv/tb_core_coremark.v); IVERILOG_ARGS=(-Ptb_core_coremark.ENABLE_FORWARDING=1 -Ptb_core_coremark.BHT_MODE=1) ;;
+    bench_bht2) TBS=(riscv/tb_core_coremark.v); IVERILOG_ARGS=(-Ptb_core_coremark.ENABLE_FORWARDING=1 -Ptb_core_coremark.BHT_MODE=2) ;;
     all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_pynq_z2_clock_config.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_v1_mem.v riscv/tb_core_fwd.v riscv/tb_decode.v riscv/tb_forwarding.v riscv/tb_hazard.v riscv/tb_branch_predict.v riscv/tb_core_pc_control.v riscv/tb_if_stage.v riscv/tb_core_bht_flow.v riscv/tb_mem_wb_stage.v riscv/tb_id_ex_stage.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_soc_top.v riscv/tb_soc_check.v) ;;
     *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|v1_fwd|v1_nofwd|v1_hazard_fwd|v1_hazard_nofwd|v1_muldiv_fwd|v1_muldiv_nofwd|decode|forwarding|hazard|branch_predict|mem_wb|id_ex|v1_flow|v1_mem|v1_muldiv_flow|muldiv|rv32im|imem|dmem|clock_cfg|coremark|coremark_fwd|coremark_nofwd|soc|soc_check|bench|bench_fwd|bench_nofwd|all]"; exit 1 ;;
 esac
@@ -134,6 +136,9 @@ for tb in "${TBS[@]}"; do
     fi
 done
 if [ "$MODE" = "all" ]; then
+    for bench_mode in bench_nofwd bench_fwd bench_bht1 bench_bht2; do
+        bash scripts/run_iverilog.sh "$bench_mode" || exit 1
+    done
     bash scripts/run_iverilog.sh v1_nofwd || exit 1
     bash scripts/run_iverilog.sh v1_fwd || exit 1
     bash scripts/run_iverilog.sh v1_fwd_bht1 || exit 1

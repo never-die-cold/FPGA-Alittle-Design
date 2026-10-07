@@ -1,0 +1,170 @@
+{
+  "benchmark": {
+    "nofwd": {
+      "cycles": 2850,
+      "retired": 1205,
+      "bubbles": 1645,
+      "cpi": 2.3651452282157677,
+      "lookup": 0,
+      "hit": 0,
+      "miss": 0,
+      "hit_percent": null,
+      "control": 129,
+      "log": "all-final.log",
+      "gain_vs_nofwd_percent": 0.0,
+      "gain_vs_fwd_percent": -17.622781675608756
+    },
+    "fwd": {
+      "cycles": 2423,
+      "retired": 1205,
+      "bubbles": 1218,
+      "cpi": 2.0107883817427386,
+      "lookup": 0,
+      "hit": 0,
+      "miss": 0,
+      "hit_percent": null,
+      "control": 129,
+      "log": "all-final.log",
+      "gain_vs_nofwd_percent": 14.982456140350875,
+      "gain_vs_fwd_percent": 0.0
+    },
+    "bht1": {
+      "cycles": 2380,
+      "retired": 1205,
+      "bubbles": 1175,
+      "cpi": 1.9751037344398341,
+      "lookup": 161,
+      "hit": 93,
+      "miss": 68,
+      "hit_percent": 57.7639751552795,
+      "control": 86,
+      "log": "all-final.log",
+      "gain_vs_nofwd_percent": 16.491228070175435,
+      "gain_vs_fwd_percent": 1.7746595130004095
+    },
+    "bht2": {
+      "cycles": 2351,
+      "retired": 1205,
+      "bubbles": 1146,
+      "cpi": 1.9510373443983402,
+      "lookup": 161,
+      "hit": 122,
+      "miss": 39,
+      "hit_percent": 75.77639751552795,
+      "control": 57,
+      "log": "all-final.log",
+      "gain_vs_nofwd_percent": 17.50877192982456,
+      "gain_vs_fwd_percent": 2.9715229054890657
+    }
+  },
+  "coremark": {
+    "nofwd": {
+      "cycles": 19057438,
+      "retired": 10106386,
+      "bubbles": 8951052,
+      "cpi": 1.8856827752274652,
+      "lookup": 0,
+      "hit": 0,
+      "miss": 0,
+      "hit_percent": null,
+      "control": 1243809,
+      "log": "all-final.log",
+      "ticks": 19033218,
+      "coremark_per_mhz": 1.681271133446798,
+      "errors_raw": 1,
+      "gain_vs_nofwd_percent": 0.0,
+      "gain_vs_fwd_percent": -11.354919887594717
+    },
+    "fwd": {
+      "cycles": 17114141,
+      "retired": 10106386,
+      "bubbles": 7007755,
+      "cpi": 1.6933987084997546,
+      "lookup": 0,
+      "hit": 0,
+      "miss": 0,
+      "hit_percent": null,
+      "control": 1243809,
+      "log": "all-final.log",
+      "ticks": 17093659,
+      "coremark_per_mhz": 1.872039216413525,
+      "errors_raw": 1,
+      "gain_vs_nofwd_percent": 10.197052720307942,
+      "gain_vs_fwd_percent": 0.0
+    },
+    "bht1": {
+      "cycles": 16335562,
+      "retired": 10106386,
+      "bubbles": 6229176,
+      "cpi": 1.6163603883722628,
+      "lookup": 1854101,
+      "hit": 1587055,
+      "miss": 267046,
+      "hit_percent": 85.5970090086786,
+      "control": 465230,
+      "log": "all-final.log",
+      "ticks": 16316039,
+      "coremark_per_mhz": 1.96126032795092,
+      "errors_raw": 1,
+      "gain_vs_nofwd_percent": 14.282486449647635,
+      "gain_vs_fwd_percent": 4.549331456366989
+    },
+    "bht2": {
+      "cycles": 16232079,
+      "retired": 10106386,
+      "bubbles": 6125693,
+      "cpi": 1.606121020906979,
+      "lookup": 1854101,
+      "hit": 1690538,
+      "miss": 163563,
+      "hit_percent": 91.17831229258816,
+      "control": 361747,
+      "log": "all-final.log",
+      "ticks": 16212706,
+      "coremark_per_mhz": 1.9737605801277096,
+      "errors_raw": 1,
+      "gain_vs_nofwd_percent": 14.825492282855645,
+      "gain_vs_fwd_percent": 5.153995166920733
+    }
+  },
+  "arch_tests": 44,
+  "ooc": {
+    "v1_nofwd_10ns_postopt": {
+      "setup_ns": 0.051,
+      "hold_ns": 0.081,
+      "critical_drc": 0
+    },
+    "v1_fwd_10ns_postopt": {
+      "setup_ns": -0.587,
+      "hold_ns": 0.103,
+      "critical_drc": 0
+    },
+    "v1_bht1_10ns_postopt": {
+      "setup_ns": -0.419,
+      "hold_ns": 0.088,
+      "critical_drc": 0
+    },
+    "v1_bht2_10ns_postopt": {
+      "setup_ns": -0.586,
+      "hold_ns": 0.169,
+      "critical_drc": 0
+    },
+    "v1_bht2_11p52_postopt": {
+      "setup_ns": 0.538,
+      "hold_ns": 0.167,
+      "critical_drc": 0
+    }
+  },
+  "fixed_route": {
+    "v1_fwd_11p52_fixedroute_postopt": {
+      "setup_ns": 0.933,
+      "hold_ns": 0.103,
+      "period_ns": 11.52
+    },
+    "v1_bht1_11p52_fixedroute_postopt": {
+      "setup_ns": 1.101,
+      "hold_ns": 0.088,
+      "period_ns": 11.52
+    }
+  }
+}

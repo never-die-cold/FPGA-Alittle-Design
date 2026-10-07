@@ -1,0 +1,2 @@
+# Share the bare-metal target; the suite supplies -march=rv32im for M tests.
+include $(TARGETDIR)/$(RISCV_TARGET)/device/rv32i_m/Makefile.include

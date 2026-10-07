@@ -1,0 +1,29 @@
+== [1/4] 编译 beq-01（套件 6f7f47b）==
+make: Entering directory '/e/Projects/FPGA-Alittle-Design/sim/arch_test/suite'
+
+============================ VARIABLE INFO ==================================
+ROOTDIR: /e/Projects/FPGA-Alittle-Design/sim/arch_test/suite [origin: file]
+WORK: /e/Projects/FPGA-Alittle-Design/sim/build/arch_test [origin: command line]
+TARGETDIR: /e/Projects/FPGA-Alittle-Design/sim/arch_test/target [origin: command line]
+RISCV_TARGET: pynq_z2_v0 [origin: command line]
+XLEN: 32 [origin: command line]
+RISCV_DEVICE: I [origin: command line]
+=============================================================================
+
+make -j1 \
+	RISCV_TARGET=pynq_z2_v0 \
+	RISCV_DEVICE=I \
+	compile -C /e/Projects/FPGA-Alittle-Design/sim/arch_test/suite/riscv-test-suite/rv32i_m/I
+make[1]: Entering directory '/e/Projects/FPGA-Alittle-Design/sim/arch_test/suite/riscv-test-suite/rv32i_m/I'
+Compile /e/Projects/FPGA-Alittle-Design/sim/build/arch_test/rv32i_m/I/beq-01.elf
+C:/msys64/ucrt64/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/bin/ld.exe: E:/Projects/FPGA-Alittle-Design/sim/build/arch_test/rv32i_m/I/beq-01.elf section `.text' will not fit in region `ram'
+C:/msys64/ucrt64/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/bin/ld.exe: region `ram' overflowed by 195388 bytes
+C:/msys64/ucrt64/bin/../lib/gcc/riscv32-unknown-elf/14.2.0/../../../../riscv32-unknown-elf/bin/ld.exe: warning: E:/Projects/FPGA-Alittle-Design/sim/build/arch_test/rv32i_m/I/beq-01.elf has a LOAD segment with RWX permissions
+collect2.exe: error: ld returned 1 exit status
+C:\msys64\ucrt64\bin\riscv32-unknown-elf-objdump.exe: 'E:/Projects/FPGA-Alittle-Design/sim/build/arch_test/rv32i_m/I/beq-01.elf': No such file
+readelf: Error: 'E:/Projects/FPGA-Alittle-Design/sim/build/arch_test/rv32i_m/I/beq-01.elf': No such file
+C:\msys64\ucrt64\bin\riscv32-unknown-elf-objcopy.exe: 'E:/Projects/FPGA-Alittle-Design/sim/build/arch_test/rv32i_m/I/beq-01.elf': No such file
+make[1]: *** [Makefile:5: /e/Projects/FPGA-Alittle-Design/sim/build/arch_test/rv32i_m/I/beq-01.elf] Error 1
+make[1]: Leaving directory '/e/Projects/FPGA-Alittle-Design/sim/arch_test/suite/riscv-test-suite/rv32i_m/I'
+make: *** [Makefile:78: compile] Error 2
+make: Leaving directory '/e/Projects/FPGA-Alittle-Design/sim/arch_test/suite'
