@@ -1,0 +1,23 @@
+{
+  "source": 1,
+  "opened": true,
+  "received": 24,
+  "black_frames": 0,
+  "min_luma_std": 74.81382124138938,
+  "settings": [
+    true,
+    true,
+    true,
+    true
+  ],
+  "actual": {
+    "width": 1280.0,
+    "height": 720.0,
+    "fps": 30.00003000003
+  },
+  "elapsed_s": 1.0,
+  "mean": 121.51343858506945,
+  "std": 74.83035469001135,
+  "channel_difference": 35.07773546006945,
+  "laplacian_variance": 368.48622035330203
+}

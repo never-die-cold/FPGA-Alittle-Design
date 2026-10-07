@@ -1,0 +1,6 @@
+{ sudo bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 /home/xilinx/vision_diag/display_view.py --view color'; }; uart_rc=$?; printf '\nUART-CMD-EXIT=%s\n' "$uart_rc"
+[?2004lPASS: display=COLOR applied_config_id=1
+{"staged_view": "COLOR", "staged_R0": 0, "busy": false, "applied_config_id": 1}
+
+UART-CMD-EXIT=0
+[?2004hxilinx@pynq:~$ 

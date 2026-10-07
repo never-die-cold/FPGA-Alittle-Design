@@ -1,0 +1,8 @@
+{ date; pgrep -af "m2_onboard|display_view|watch_video" || true; ls -l /home/xilinx/vision_diag/vision.bit /home/xilinx/vision_diag/vision.hwh; cat /sys/class/fpga_manager/fpga0/state 2>/dev/null || true; }; uart_rc=$?; printf '\nUART-CMD-EXIT=%s\n' "$uart_rc"
+[?2004lMon Sep 21 12:26:59 PM UTC 2026
+-rw-rw-r-- 1 xilinx xilinx 4045769 Sep 21 12:06 /home/xilinx/vision_diag/vision.bit
+-rw-rw-r-- 1 xilinx xilinx  314080 Sep 21 12:06 /home/xilinx/vision_diag/vision.hwh
+operating
+
+UART-CMD-EXIT=0
+[?2004hxilinx@pynq:~$ 

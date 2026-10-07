@@ -14,13 +14,14 @@ BRD_USER=${2:-xilinx}
 DEST=${3:-vision}
 ROOT=$(cd "$(dirname "$0")/../.." && pwd)
 
-BIT="$ROOT/sim/build/hdmi-project/vision.bit"
-HWH="$ROOT/sim/build/hdmi-project/vision_hdmi.gen/sources_1/bd/vision/hw_handoff/vision.hwh"
+BUILD="${VISION_HDMI_OUT:-$ROOT/sim/build/hdmi-project}"
+BIT="$BUILD/vision.bit"
+HWH="$BUILD/vision_hdmi.gen/sources_1/bd/vision/hw_handoff/vision.hwh"
 HOST_DIR="$ROOT/src/pynq_host"
 
 for f in "$BIT" "$HWH" \
          "$HOST_DIR/vision_regs.py" "$HOST_DIR/vision_protocol.py" \
-         "$HOST_DIR/vision_demo.py" "$HOST_DIR/onboard_smoke.py"; do
+         "$HOST_DIR/vision_demo.py" "$HOST_DIR/onboard_smoke.py" "$HOST_DIR/display_view.py"; do
   [ -f "$f" ] || { echo "缺少交付物: $f（先跑 sim/scripts/run_vivado_hdmi.sh）" >&2; exit 1; }
 done
 
@@ -31,7 +32,7 @@ ssh "${SSH_OPTS[@]}" "$BRD_USER@$IP" "cat /etc/version; mkdir -p ~/$DEST"
 echo "== 推送 bit/hwh/脚本 → ~/$DEST =="
 scp "${SSH_OPTS[@]}" "$BIT" "$HWH" "$BRD_USER@$IP:~/$DEST/"
 scp "${SSH_OPTS[@]}" "$HOST_DIR"/vision_regs.py "$HOST_DIR"/vision_protocol.py \
-    "$HOST_DIR"/vision_demo.py "$HOST_DIR"/onboard_smoke.py "$BRD_USER@$IP:~/$DEST/"
+    "$HOST_DIR"/vision_demo.py "$HOST_DIR"/onboard_smoke.py "$HOST_DIR"/display_view.py "$BRD_USER@$IP:~/$DEST/"
 
 echo "== 板端清点 =="
 ssh "${SSH_OPTS[@]}" "$BRD_USER@$IP" "ls -la ~/$DEST"

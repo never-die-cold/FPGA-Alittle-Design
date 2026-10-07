@@ -1,0 +1,13 @@
+== tb_raster_delay ==
+PASS: circular raster RAM delay, wrap, validity and reset
+vision/tb_raster_delay.v:24: $finish called at 840000 (1ps)
+== tb_diagnostic_rows ==
+PASS: completed row storage, non-power-of-two width, overwrite/frame/reset rejection
+vision/tb_diagnostic_rows.v:32: $finish called at 436000 (1ps)
+== tb_diagnostic_video ==
+../src/vision/scaler.v:105: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:106: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:118: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+../src/vision/scaler.v:119: warning: @* is sensitive to all 8 words in array 'slot_rd'.
+PASS: diagnostic REAL=0 COLOR/GRAY/GAUSS/EDGE, 1024 pixels, full sync, frame-atomic switches and reset recovery
+vision/tb_diagnostic_video.v:128: $finish called at 100410000 (1ps)

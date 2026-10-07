@@ -1,0 +1,2 @@
+PASS: USB source=1 1280x720 received=1800
+{"source": 1, "opened": true, "received": 1800, "black_frames": 0, "min_luma_std": 79.78792764462224, "settings": [true, true, true, true], "actual": {"width": 1280.0, "height": 720.0, "fps": 30.00003000003}, "elapsed_s": 74.875, "mean": 108.48870768229166, "std": 96.30694106461458, "channel_difference": 49.49303927951389, "laplacian_variance": 126.9909060853452}

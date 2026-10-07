@@ -30,6 +30,7 @@ external_intf rx/TMDS hdmi_in
 external_intf rx/DDC hdmi_in_ddc
 external_intf tx/TMDS hdmi_out
 set pipe [create_bd_cell -type module -reference vision_axi pipe]
+set_property -dict [list CONFIG.ENABLE_DIAGNOSTIC 1 CONFIG.H_TOTAL 1650] $pipe
 set conv [ip converter xilinx.com:ip:axi_protocol_converter:2.1]
 set_property -dict [list CONFIG.SI_PROTOCOL AXI3 CONFIG.MI_PROTOCOL AXI4LITE] $conv
 connect_bd_intf_net [get_bd_intf_pins ps7/M_AXI_GP0] [get_bd_intf_pins converter/S_AXI]

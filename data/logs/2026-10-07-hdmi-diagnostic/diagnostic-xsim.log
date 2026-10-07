@@ -1,0 +1,75 @@
+== tb_raster_delay ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Wed Oct  7 02:22:56 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_raster_delay_xsim/xsim_script.tcl
+# xsim {tb_raster_delay_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: circular raster RAM delay, wrap, validity and reset
+$finish called at time : 840 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_raster_delay.v" Line 24
+exit
+INFO: [Common 17-206] Exiting xsim at Wed Oct  7 02:22:58 2026...
+== tb_diagnostic_rows ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Wed Oct  7 02:23:01 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_diagnostic_rows_xsim/xsim_script.tcl
+# xsim {tb_diagnostic_rows_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: completed row storage, non-power-of-two width, overwrite/frame/reset rejection
+$finish called at time : 436 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_diagnostic_rows.v" Line 32
+exit
+INFO: [Common 17-206] Exiting xsim at Wed Oct  7 02:23:03 2026...
+== tb_diagnostic_video ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Wed Oct  7 02:23:08 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_diagnostic_video_xsim/xsim_script.tcl
+# xsim {tb_diagnostic_video_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: diagnostic REAL=0 COLOR/GRAY/GAUSS/EDGE, 1024 pixels, full sync, frame-atomic switches and reset recovery
+$finish called at time : 100410 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_diagnostic_video.v" Line 128
+exit
+INFO: [Common 17-206] Exiting xsim at Wed Oct  7 02:23:10 2026...
+== tb_diagnostic_720 ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Wed Oct  7 02:23:15 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_diagnostic_720_xsim/xsim_script.tcl
+# xsim {tb_diagnostic_720_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: diagnostic REAL=1 COLOR/GRAY/GAUSS/EDGE, 7372800 pixels, full sync, frame-atomic switches and reset recovery
+$finish called at time : 133468055084 ps : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_diagnostic_720.v" Line 5
+run: Time (s): cpu = 00:00:00 ; elapsed = 00:00:22 . Memory (MB): peak = 229.582 ; gain = 0.000
+exit
+INFO: xsimkernel Simulation Memory Usage: 22276 KB (Peak: 22276 KB), Simulation CPU Usage: 21749 ms
+INFO: [Common 17-206] Exiting xsim at Wed Oct  7 02:23:39 2026...
+== XSim 全部完成（diagnostic）==

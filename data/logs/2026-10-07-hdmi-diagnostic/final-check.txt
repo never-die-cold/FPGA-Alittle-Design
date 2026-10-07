@@ -1,0 +1,5 @@
+run_iverilog.sh all exit=0
+all-complete.log PASS lines=70
+git diff --check exit=0
+git diff --check output: empty
+Three comprehension answers recorded and core understanding passed. User authorized commit; push not requested.

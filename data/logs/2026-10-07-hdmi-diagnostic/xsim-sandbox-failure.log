@@ -1,0 +1,23 @@
+== tb_raster_delay ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Wed Oct  7 02:18:36 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_raster_delay_xsim/xsim_script.tcl
+# xsim {tb_raster_delay_xsim} -autoloadwcfg -runall
+
+
+Could not obtain the necessary license for Simulator.
+
+
+
+ERROR: [Simtcl 6-50] Simulation engine failed to start: The Simulation shut down unexpectedly during initialization.
+Please see the Tcl Console or the Messages for details.
+exit
+INFO: [Common 17-206] Exiting xsim at Wed Oct  7 02:18:39 2026...
+ERROR: simulation gate rejected build/vision/xsim/tb_raster_delay.log

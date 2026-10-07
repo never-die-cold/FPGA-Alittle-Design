@@ -1,0 +1,10 @@
+
+[?2004l[?2004hxilinx@pynq:~$ ip -br addr; command -v rz; command -v python3; ls /home/xilinx/.ssh/authorized_keys; uptime
+[?2004llo               UNKNOWN        127.0.0.1/8 ::1/128 
+dummy0           DOWN           
+eth0             DOWN           169.254.87.99/16 192.168.2.99/24 
+sit0@NONE        DOWN           
+/usr/local/share/pynq-venv/bin/python3
+/home/xilinx/.ssh/authorized_keys
+ 11:54:06 up 37 min,  1 user,  load average: 0.01, 0.02, 0.05
+[?2004hxilinx@pynq:~$ 

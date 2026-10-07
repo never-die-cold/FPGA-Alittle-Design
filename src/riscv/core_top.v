@@ -22,6 +22,8 @@ module core_top #(
     wire        branch_valid, branch_taken, jump_taken, flush;
     wire        data_stall, front_stall, ex_accept, redirect, mem_in_valid;
     wire        branch_resolve, branch_mispredict, jump_redirect, predicted_redirect;
+    wire        bp_predict_taken;
+    wire [31:0] redirect_target;
     wire [31:0] pc_target, fetch_addr, recovery_target;
     wire [31:0] instr;
     wire        instr_valid;
@@ -69,7 +71,7 @@ module core_top #(
     wire [4:0] rs1_addr, rs2_addr, rd_addr;
     wire [2:0] muldiv_op;
     wire muldiv_valid, uses_rs1, uses_rs2;
-    wire [31:0] redirect_target, ex_result, ex_addr, ex_store_data;
+    wire [31:0] ex_result, ex_addr, ex_store_data;
     wire ex_reg_write, ex_mem_read, ex_mem_write, ex_sign_ext;
     wire [1:0] ex_wb_sel, ex_mask_sel;
 
@@ -158,7 +160,6 @@ module core_top #(
         .ex_mem_write(ex_mem_write), .ex_wb_sel(ex_wb_sel),
         .ex_mask_sel(ex_mask_sel), .ex_sign_ext(ex_sign_ext)
     );
-    wire bp_predict_taken;
     branch_predict #(.BHT_MODE(BHT_MODE)) u_branch_predict (
         .clk(clk), .rst_n(rst_n), .lookup_valid(instr_valid && branch_valid),
         .lookup_pc(pc_id), .predict_taken(bp_predict_taken), .lookup_state(),

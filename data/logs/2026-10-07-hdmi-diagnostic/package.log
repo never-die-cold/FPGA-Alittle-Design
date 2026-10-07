@@ -1,0 +1,16 @@
+extract vision.bit
+extract vision.hwh
+PASS: board package files, source hashes and UART ZIP assembled
+total 4544
+drwxr-xr-x 1 CodexSandboxOffline None       0 Oct  7 02:33 .
+drwxr-xr-x 1 CodexSandboxOffline None       0 Oct  7 02:33 ..
+-rw-r--r-- 1 CodexSandboxOffline None    3272 Oct  7 02:33 RUNBOOK.md
+-rw-r--r-- 1 CodexSandboxOffline None  239135 Oct  7 02:33 board_pkg.zip
+-rwxr-xr-x 1 CodexSandboxOffline None    1365 Oct  7 02:33 display_view.py
+-rwxr-xr-x 1 CodexSandboxOffline None    3103 Oct  7 02:33 m2_onboard.py
+-rw-r--r-- 1 CodexSandboxOffline None    2531 Oct  7 02:33 manifest.json
+-rw-r--r-- 1 CodexSandboxOffline None 4045769 Oct  7 02:33 vision.bit
+-rw-r--r-- 1 CodexSandboxOffline None  314080 Oct  7 02:33 vision.hwh
+-rwxr-xr-x 1 CodexSandboxOffline None    2245 Oct  7 02:33 vision_demo.py
+-rwxr-xr-x 1 CodexSandboxOffline None    6565 Oct  7 02:33 vision_regs.py
+board_pkg ready: sim/build/board_pkg_diagnostic

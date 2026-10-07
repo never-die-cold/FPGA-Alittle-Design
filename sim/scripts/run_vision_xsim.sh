@@ -24,7 +24,10 @@ case "$MODE" in
     pipeline) TBS=(tb_video_pipeline) ;;
     real) TBS=(tb_video_real) ;;
     hdmi_wrapper) TBS=(tb_vision_axi) ;;
+    axi_lock) TBS=(tb_axi_lock_reset) ;;
     patterns) TBS=(tb_patterns) ;;
+    diagnostic) TBS=(tb_raster_delay tb_diagnostic_rows tb_diagnostic_reset tb_diagnostic_video tb_diagnostic_720) ;;
+    diagnostic_reset) TBS=(tb_diagnostic_reset) ;;
     align)    TBS=(tb_in_align) ;;
     copbuf)   TBS=(tb_cop_buf) ;;
     copbuf_stress) TBS=(tb_cop_buf_stress) ;;
@@ -34,8 +37,9 @@ case "$MODE" in
 esac
 if [ "$MODE" = all ]; then TBS+=(tb_cop_buf_stress tb_axi_split tb_config_bridge tb_top_async tb_top_color); fi
 if [ "$MODE" = all ]; then TBS+=(tb_video_pipeline tb_video_real); fi
-if [ "$MODE" = all ]; then TBS+=(tb_vision_axi); fi
+if [ "$MODE" = all ]; then TBS+=(tb_vision_axi tb_axi_lock_reset); fi
 if [ "$MODE" = all ]; then TBS+=(tb_patterns); fi
+if [ "$MODE" = all ]; then TBS+=(tb_raster_delay tb_diagnostic_rows tb_diagnostic_reset tb_diagnostic_video tb_diagnostic_720); fi
 cd "$(dirname "$0")/.." || exit 1
 source scripts/vision_gate.sh
 mkdir -p build/vision/xsim
@@ -43,8 +47,11 @@ for t in "${TBS[@]}"; do
     vision_require_tb "vision/$t.v" || exit 1
 done
 
-"${VIV}/xvlog.bat" ../src/vision/*.v vision/tb_*.v > build/vision/xsim/compile.log 2>&1 \
+"${VIV}/xvlog.bat" ../src/vision/*.v > build/vision/xsim/compile.log 2>&1 \
     || { cat build/vision/xsim/compile.log; echo "ERROR: xvlog 编译失败"; exit 1; }
+# Existing testbenches use SystemVerilog (e.g. ++). Keep RTL in Verilog mode.
+"${VIV}/xvlog.bat" --sv vision/tb_*.v >> build/vision/xsim/compile.log 2>&1 \
+    || { cat build/vision/xsim/compile.log; echo "ERROR: testbench 编译失败"; exit 1; }
 
 for t in "${TBS[@]}"; do
     echo "== $t =="

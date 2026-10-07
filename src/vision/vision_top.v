@@ -3,7 +3,7 @@
 // display_* 原图 RGB 直通；out_* 为灰度诊断流，不能直接驱动物理 HDMI。
 // 分析：rgb2gray → [gaussian] → [sobel] → [osd]；scaler 在 sobel 后分叉。
 // 快照：scaler → cop_buf → cop_*；ready 仅授权整帧启动。
-// R0 位定义 v0.2：bit0 gauss_en / bit1 scaler_en（快照使能）/ bit2 osd_en / bit3 sobel_en。
+// R0: bit0 gauss / bit1 snapshot / bit2 OSD / bit3 Sobel / bit4 diagnostic display.
 // R0..10 整组暂存，R11 提交，config_bridge 在帧首应用并确认 R12 配置编号。
 // 请求/确认两级同步；在途配置总线保持不变。两时钟分别同步释放复位。
 module vision_top #(
@@ -56,7 +56,8 @@ module vision_top #(
     output reg [23:0] display_rgb,
     output reg [31:0] display_frame_id,
     output wire [31:0] active_config_id,
-    output wire [31:0] cop_frame_id,cop_config_id,snapshot_drop_count
+    output wire [31:0] cop_frame_id,cop_config_id,snapshot_drop_count,
+    output wire diagnostic_display_en
 );
     wire [16*32-1:0] regs_flat;
     wire pixel_reset,axi_reset;
@@ -79,6 +80,7 @@ module vision_top #(
         .regs_flat(regs_flat),.cfg_commit(cfg_commit),.cfg_busy(cfg_busy),.cfg_applied(cfg_applied)
     );
     assign active_config_id=cfg_id;
+    assign diagnostic_display_en=active_cfg[4];
     // 彩色原图独立显示，分析开关/缩放/消费反压均不影响该路径。
     always @(posedge clk or negedge pixel_reset) begin
         if(!pixel_reset) begin

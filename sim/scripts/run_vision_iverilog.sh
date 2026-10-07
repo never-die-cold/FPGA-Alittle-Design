@@ -32,6 +32,8 @@ case "$MODE" in
     hdmi_wrapper) TBS=(vision/tb_vision_axi.v) ;;
     axi_lock) TBS=(vision/tb_axi_lock_reset.v) ;;
     patterns) TBS=(vision/tb_patterns.v) ;;
+    diagnostic) TBS=(vision/tb_raster_delay.v vision/tb_diagnostic_rows.v vision/tb_diagnostic_reset.v vision/tb_diagnostic_video.v) ;;
+    diagnostic_720) TBS=(vision/tb_diagnostic_720.v) ;;
     align)    TBS=(vision/tb_in_align.v) ;;
     copbuf)   TBS=(vision/tb_cop_buf.v) ;;
     copbuf_stress) TBS=(vision/tb_cop_buf_stress.v) ;;
@@ -44,6 +46,7 @@ if [ "$MODE" = all ]; then TBS+=(vision/tb_video_pipeline.v vision/tb_video_real
 if [ "$MODE" = all ]; then TBS+=(vision/tb_vision_axi.v); fi
 if [ "$MODE" = all ]; then TBS+=(vision/tb_axi_lock_reset.v); fi
 if [ "$MODE" = all ]; then TBS+=(vision/tb_patterns.v); fi
+if [ "$MODE" = all ]; then TBS+=(vision/tb_raster_delay.v vision/tb_diagnostic_rows.v vision/tb_diagnostic_reset.v vision/tb_diagnostic_video.v vision/tb_diagnostic_720.v); fi
 
 cd "$(dirname "$0")/.." || exit 1  # -> sim/
 source scripts/vision_gate.sh
@@ -67,6 +70,8 @@ for tb in "${TBS[@]}"; do
     vision_require_tb "$tb" || exit 1
     name=$(basename "$tb" .v)
     echo "== $name =="
-    iverilog -g2012 -Wall -s "$name" -o "build/vision/$name.vvp" "$tb" "${RTL_FILES[@]}" || exit 1
+    EXTRA=()
+    if [ "$name" = tb_diagnostic_720 ]; then EXTRA=(vision/tb_diagnostic_video.v); fi
+    iverilog -g2012 -Wall -s "$name" -o "build/vision/$name.vvp" "$tb" "${EXTRA[@]}" "${RTL_FILES[@]}" || exit 1
     vision_run_checked "build/vision/$name.log" vvp "build/vision/$name.vvp" || exit 1
 done

@@ -56,6 +56,7 @@ case "$MODE" in
     hazard) TBS=(riscv/tb_hazard.v) ;;
     branch_predict) TBS=(riscv/tb_branch_predict.v) ;;
     bht_flow|bht_flow_2) TBS=(riscv/tb_core_bht_flow.v); IVERILOG_ARGS=(-Ptb_core_bht_flow.BHT_MODE=2) ;;
+    bht_flow_off) TBS=(riscv/tb_core_bht_flow.v); IVERILOG_ARGS=(-Ptb_core_bht_flow.BHT_MODE=0) ;;
     bht_flow_1) TBS=(riscv/tb_core_bht_flow.v); IVERILOG_ARGS=(-Ptb_core_bht_flow.BHT_MODE=1) ;;
     bht_flow_off) TBS=(riscv/tb_core_bht_flow.v); IVERILOG_ARGS=(-Ptb_core_bht_flow.BHT_MODE=0) ;;
     mem_wb) TBS=(riscv/tb_mem_wb_stage.v) ;;

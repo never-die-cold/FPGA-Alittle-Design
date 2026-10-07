@@ -1,6 +1,7 @@
 # Offline full PYNQ-Z2 HDMI build. Never opens a hardware target.
 if {[catch {
     set out sim/build/hdmi-project
+    if {[info exists ::env(VISION_HDMI_OUT)]} {set out $::env(VISION_HDMI_OUT)}
     create_project -force vision_hdmi $out -part xc7z020clg400-1
     set_property target_language Verilog [current_project]
     set_property ip_repo_paths [file normalize sim/build/hdmi-library-full] [current_project]
@@ -30,6 +31,7 @@ if {[catch {
     if {[get_property PROGRESS [get_runs impl_1]] ne "100%"} { error "HDMI implementation failed" }
     open_run impl_1
     set rep data/logs/2026-10-02-vision-offboard/hdmi
+    if {[info exists ::env(VISION_HDMI_EVDIR)]} {set rep $::env(VISION_HDMI_EVDIR)}
     file mkdir $rep
     report_utilization -file $rep/utilization.rpt
     report_cdc -details -file $rep/cdc.rpt

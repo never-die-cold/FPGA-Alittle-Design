@@ -1,0 +1,11 @@
+{ sha256sum /home/xilinx/vision_m2/vision.bit && sudo bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 /home/xilinx/vision_diag/m2_onboard.py load'; }; uart_rc=$?; printf '\nUART-CMD-EXIT=%s\n' "$uart_rc"
+[?2004l4f0c491a6383d8a11f87cd2de260027f519dbd466942d0b1b6e36198e39d5be5  /home/xilinx/vision_m2/vision.bit
+[sudo] password for xilinx: 
+ip_dict:
+  pipe @ 0x40000000 range 0x10000
+  ps7 @ 0x00000000 range 0x0
+axi_regs 段: pipe @ 0x40000000
+PASS: load
+
+UART-CMD-EXIT=0
+[?2004hxilinx@pynq:~$ 

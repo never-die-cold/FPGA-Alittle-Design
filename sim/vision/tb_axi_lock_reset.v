@@ -21,7 +21,7 @@ module tb_axi_lock_reset;
     wire awready,wready,bvalid,arready,rvalid;
     wire [31:0] rdata; wire [1:0] bresp,rresp;
     reg [31:0] rd;
-    vision_axi dut(.pclk(pclk),.s_axi_aclk(aclk),.s_axi_aresetn(rst_n),.video_locked(locked),
+    vision_axi #(.ENABLE_DIAGNOSTIC(1)) dut(.pclk(pclk),.s_axi_aclk(aclk),.s_axi_aresetn(rst_n),.video_locked(locked),
         .raw_vs(vs),.raw_hs(hs),.raw_de(de),.raw_rbg(rbg),
         .video_vs(ovs),.video_hs(ohs),.video_de(ode),.video_rbg(orgb),
         .s_axi_awaddr(awaddr),.s_axi_araddr(araddr),.s_axi_awprot(3'b0),.s_axi_arprot(3'b0),

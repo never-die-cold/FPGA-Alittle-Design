@@ -1,0 +1,22 @@
+== tb_axi_lock_reset ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Wed Oct  7 02:29:50 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_axi_lock_reset_xsim/xsim_script.tcl
+# xsim {tb_axi_lock_reset_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+INFO baseline write/read ok
+INFO in-flight write completed across lock drop
+INFO bready=0 pending write survived lock drop
+PASS: AXI slave survives video lock drop with in-flight transactions
+$finish called at time : 490 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_axi_lock_reset.v" Line 144
+exit
+INFO: [Common 17-206] Exiting xsim at Wed Oct  7 02:29:53 2026...
+== XSim 全部完成（axi_lock）==

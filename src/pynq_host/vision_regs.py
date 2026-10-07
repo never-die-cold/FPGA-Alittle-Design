@@ -2,7 +2,7 @@
 """vision_regs —— 模块二 axi_regs 寄存器映射的 PS 侧绑定（M2 演示原型）
 
 映射唯一来源：src/vision/design_v0.md §3.3（v1.0 草案，10/5 冻结）——
-  R0      [0]gauss_en [1]scaler_en(快照) [2]osd_en [3]sobel_en [31:4]保留
+  R0      [0]gauss_en [1]scaler_en(快照) [2]osd_en [3]sobel_en [4]diagnostic_display_en
   R1-R4   box_x0/y0/x1/y1（[15:0]，全分辨率显示图坐标系）
   R5      box_color（[7:0]）
   R6-R9   roi_x0/y0/x1/y1
@@ -28,6 +28,7 @@ BIT_GAUSS = 0
 BIT_SCALER = 1     # 快照分支使能（cop_*），不影响显示路径
 BIT_OSD = 2
 BIT_SOBEL = 3
+BIT_DISPLAY = 4
 
 # 拓扑预设（bit3:0）
 PRESETS = {
@@ -75,6 +76,28 @@ class VisionRegs:
 
     def get_enable(self) -> int:
         return self._read(0) & 0xF
+
+    def set_display_view(self, view: str) -> int:
+        """Stage a display view; commit separately. Preserve snapshot/OSD bits.
+
+        COLOR clears only bit4, retaining the current analysis topology.
+        Processed views select the existing FPGA analysis branch.
+        """
+        modes = {"GRAY": 0x10, "GAUSS": 0x11, "EDGE": 0x19}
+        view = view.upper()
+        if view not in (*modes, "COLOR"):
+            raise ValueError("view must be COLOR, GRAY, GAUSS or EDGE")
+        r0 = self._read(0)
+        r0 = r0 & ~0x10 if view == "COLOR" else (r0 & ~0x19) | modes[view]
+        self._write(0, r0)
+        return r0
+
+    def get_display_view(self) -> str:
+        """Report staged R0, not an independent readback of active pixel config."""
+        r0 = self._read(0)
+        if not r0 & 0x10:
+            return "COLOR"
+        return {0: "GRAY", 1: "GAUSS", 8: "GRAY_SOBEL", 9: "EDGE"}[r0 & 9]
 
     # ---- 检测框 / ROI（A4 动效：换帧生效） ----
     def set_box(self, x0: int, y0: int, x1: int, y1: int, color: int):
