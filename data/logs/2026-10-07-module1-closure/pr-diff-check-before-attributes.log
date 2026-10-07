@@ -1,0 +1,1684 @@
+build/reports/soc_40mhz_bht2/soc_check_timing.rpt:43: new blank line at EOF.
+build/reports/soc_40mhz_bht2/soc_clock_utilization_impl.rpt:216: trailing whitespace.
++# Location of BUFG Primitives 
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:39: trailing whitespace.
++Report rule limit reached  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:44: trailing whitespace.
++RAMB36 async control check  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:49: trailing whitespace.
++RAMB36 async control check  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:54: trailing whitespace.
++RAMB36 async control check  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:59: trailing whitespace.
++RAMB36 async control check  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:64: trailing whitespace.
++RAMB36 async control check  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:69: trailing whitespace.
++RAMB36 async control check  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:74: trailing whitespace.
++RAMB36 async control check  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:79: trailing whitespace.
++RAMB36 async control check  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:84: trailing whitespace.
++RAMB36 async control check  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:89: trailing whitespace.
++RAMB36 async control check  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:94: trailing whitespace.
++RAMB36 async control check  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:99: trailing whitespace.
++RAMB36 async control check  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:104: trailing whitespace.
++RAMB36 async control check  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:109: trailing whitespace.
++RAMB36 async control check  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:114: trailing whitespace.
++RAMB36 async control check  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:119: trailing whitespace.
++RAMB36 async control check  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:124: trailing whitespace.
++RAMB36 async control check  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:129: trailing whitespace.
++RAMB36 async control check  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:134: trailing whitespace.
++RAMB36 async control check  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:139: trailing whitespace.
++RAMB36 async control check  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:144: trailing whitespace.
++PS7 block required  
+build/reports/soc_40mhz_bht2/soc_drc_impl.rpt:147: new blank line at EOF.
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:32: trailing whitespace.
++  Corner  Analyze    Analyze    
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:33: trailing whitespace.
++  Name    Max Paths  Min Paths  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:34: trailing whitespace.
++  ------  ---------  ---------  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:35: trailing whitespace.
++  Slow    Yes        Yes        
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:36: trailing whitespace.
++  Fast    Yes        Yes        
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:146: trailing whitespace.
++    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:147: trailing whitespace.
++    -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:148: trailing whitespace.
++      3.618        0.000                      0                43808        0.035        0.000                      0                43808        2.000        0.000                       0                  5057  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:161: trailing whitespace.
++sys_clk_125         {0.000 4.000}        8.000           125.000         
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:162: trailing whitespace.
++  clk_feedback_raw  {0.000 4.000}        8.000           125.000         
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:163: trailing whitespace.
++  core_clk_40       {0.000 12.500}       25.000          40.000          
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:171: trailing whitespace.
++Clock                   WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:172: trailing whitespace.
++-----                   -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:173: trailing whitespace.
++sys_clk_125                                                                                                                                                           2.000        0.000                       0                     1  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:174: trailing whitespace.
++  clk_feedback_raw                                                                                                                                                    5.845        0.000                       0                     3  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:175: trailing whitespace.
++  core_clk_40             3.618        0.000                      0                43242        0.035        0.000                      0                43242       11.250        0.000                       0                  5053  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:183: trailing whitespace.
++From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:184: trailing whitespace.
++----------    --------          -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:192: trailing whitespace.
++Path Group         From Clock         To Clock               WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:193: trailing whitespace.
++----------         ----------         --------               -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:194: trailing whitespace.
++**async_default**  core_clk_40        core_clk_40             10.879        0.000                      0                  566        1.882        0.000                      0                  566  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:202: trailing whitespace.
++Path Group    From Clock    To Clock    
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:203: trailing whitespace.
++----------    ----------    --------    
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:204: trailing whitespace.
++(none)        core_clk_40                 
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:205: trailing whitespace.
++(none)                      core_clk_40   
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:213: trailing whitespace.
++Path Group    From Clock    To Clock    
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:214: trailing whitespace.
++----------    ----------    --------    
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:215: trailing whitespace.
++(none)                      core_clk_40   
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:295: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.644ns = ( 23.356 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:361: trailing whitespace.
++  Logic Levels:           0  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:448: trailing whitespace.
++  Logic Levels:           0  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:450: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.693ns = ( 23.307 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:514: trailing whitespace.
++  Logic Levels:           0  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:567: trailing whitespace.
++  To Clock:  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:662: trailing whitespace.
++From Clock:  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:766: trailing whitespace.
++From Clock:  
+build/reports/soc_40mhz_bht2/soc_timing_impl.rpt:853: new blank line at EOF.
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:26: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.644ns = ( 23.356 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:88: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:150: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:212: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:274: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:336: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:398: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:460: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:522: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.644ns = ( 23.356 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:584: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.690ns = ( 23.310 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:644: trailing whitespace.
++  Logic Levels:           0  
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:646: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.693ns = ( 23.307 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:704: trailing whitespace.
++  Logic Levels:           0  
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:706: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.693ns = ( 23.307 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:764: trailing whitespace.
++  Logic Levels:           0  
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:766: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.693ns = ( 23.307 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:824: trailing whitespace.
++  Logic Levels:           0  
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:826: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.693ns = ( 23.307 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:884: trailing whitespace.
++  Logic Levels:           0  
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:886: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.694ns = ( 23.306 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:944: trailing whitespace.
++  Logic Levels:           0  
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:946: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.694ns = ( 23.306 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:1004: trailing whitespace.
++  Logic Levels:           0  
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:1006: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.694ns = ( 23.306 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:1064: trailing whitespace.
++  Logic Levels:           0  
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:1066: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.694ns = ( 23.306 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:1124: trailing whitespace.
++  Logic Levels:           0  
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:1126: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.696ns = ( 23.304 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:1184: trailing whitespace.
++  Logic Levels:           0  
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:1186: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.696ns = ( 23.304 - 25.000 ) 
+build/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:1234: new blank line at EOF.
+build/reports/soc_40mhz_bht2/soc_utilization_impl.rpt:225: new blank line at EOF.
+build/reports/soc_40mhz_bht2/soc_utilization_synth.rpt:196: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:69: trailing whitespace.
++	Parameter CORE_CLK_DIVIDE bound to: 25 - type: integer 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:70: trailing whitespace.
++	Parameter ENABLE_FORWARDING bound to: 1 - type: integer 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:71: trailing whitespace.
++	Parameter BHT_MODE bound to: 2'b10 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:73: trailing whitespace.
++	Parameter BANDWIDTH bound to: OPTIMIZED - type: string 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:74: trailing whitespace.
++	Parameter CLKFBOUT_MULT_F bound to: 8.000000e+00 - type: double 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:75: trailing whitespace.
++	Parameter CLKIN1_PERIOD bound to: 8.000000e+00 - type: double 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:76: trailing whitespace.
++	Parameter CLKOUT0_DIVIDE_F bound to: 2.500000e+01 - type: double 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:77: trailing whitespace.
++	Parameter DIVCLK_DIVIDE bound to: 1 - type: integer 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:78: trailing whitespace.
++	Parameter STARTUP_WAIT bound to: FALSE - type: string 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:95: trailing whitespace.
++	Parameter IMEM_INIT_FILE bound to: src/riscv_fw/hello_v0.hex - type: string 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:96: trailing whitespace.
++	Parameter DMEM_INIT_FILE bound to: src/riscv_fw/hello_v0.hex - type: string 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:97: trailing whitespace.
++	Parameter ENABLE_FORWARDING bound to: 1 - type: integer 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:98: trailing whitespace.
++	Parameter BHT_MODE bound to: 2'b10 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:100: trailing whitespace.
++	Parameter ENABLE_FORWARDING bound to: 1 - type: integer 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:101: trailing whitespace.
++	Parameter BHT_MODE bound to: 2'b10 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:123: trailing whitespace.
++	Parameter BHT_MODE bound to: 2'b10 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:129: trailing whitespace.
++	Parameter INIT_FILE bound to: src/riscv_fw/hello_v0.hex - type: string 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:133: trailing whitespace.
++	Parameter INIT_FILE bound to: src/riscv_fw/hello_v0.hex - type: string 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:275: trailing whitespace.
++  MMCME2_BASE => MMCME2_ADV: 1 instance 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:298: trailing whitespace.
++Start RTL Component Statistics 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:300: trailing whitespace.
++Detailed RTL Component Info : 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:301: trailing whitespace.
+++---Adders : 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:302: trailing whitespace.
++	   2 Input   64 Bit       Adders := 3     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:303: trailing whitespace.
++	   3 Input   33 Bit       Adders := 1     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:304: trailing whitespace.
++	   2 Input   32 Bit       Adders := 10    
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:305: trailing whitespace.
++	   3 Input   32 Bit       Adders := 2     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:306: trailing whitespace.
++	   2 Input    5 Bit       Adders := 1     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:307: trailing whitespace.
++	   2 Input    2 Bit       Adders := 1     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:308: trailing whitespace.
+++---XORs : 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:309: trailing whitespace.
++	   2 Input     32 Bit         XORs := 1     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:310: trailing whitespace.
++	   2 Input      1 Bit         XORs := 2     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:311: trailing whitespace.
+++---Registers : 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:312: trailing whitespace.
++	               64 Bit    Registers := 2     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:313: trailing whitespace.
++	               33 Bit    Registers := 1     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:314: trailing whitespace.
++	               32 Bit    Registers := 13    
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:315: trailing whitespace.
++	                5 Bit    Registers := 2     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:316: trailing whitespace.
++	                4 Bit    Registers := 1     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:317: trailing whitespace.
++	                3 Bit    Registers := 1     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:318: trailing whitespace.
++	                2 Bit    Registers := 67    
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:319: trailing whitespace.
++	                1 Bit    Registers := 14    
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:320: trailing whitespace.
+++---RAMs : 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:321: trailing whitespace.
++	             256K Bit	(8192 X 32 bit)          RAMs := 1     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:322: trailing whitespace.
++	             1024 Bit	(32 X 32 bit)          RAMs := 1     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:323: trailing whitespace.
+++---ROMs : 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:324: trailing whitespace.
++	                    ROMs := 1     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:325: trailing whitespace.
+++---Muxes : 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:326: trailing whitespace.
++	   2 Input   64 Bit        Muxes := 5     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:327: trailing whitespace.
++	   2 Input   34 Bit        Muxes := 10    
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:328: trailing whitespace.
++	   2 Input   33 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:329: trailing whitespace.
++	   2 Input   32 Bit        Muxes := 41    
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:330: trailing whitespace.
++	   4 Input   32 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:331: trailing whitespace.
++	   3 Input   32 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:332: trailing whitespace.
++	   2 Input   16 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:333: trailing whitespace.
++	   4 Input    8 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:334: trailing whitespace.
++	   2 Input    8 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:335: trailing whitespace.
++	   2 Input    5 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:336: trailing whitespace.
++	   8 Input    4 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:337: trailing whitespace.
++	   2 Input    4 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:338: trailing whitespace.
++	   4 Input    4 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:339: trailing whitespace.
++	   2 Input    3 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:340: trailing whitespace.
++	   7 Input    3 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:341: trailing whitespace.
++	   5 Input    2 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:342: trailing whitespace.
++	   2 Input    2 Bit        Muxes := 3     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:343: trailing whitespace.
++	   2 Input    1 Bit        Muxes := 137   
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:344: trailing whitespace.
++	   5 Input    1 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:346: trailing whitespace.
++Finished RTL Component Statistics 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:379: trailing whitespace.
++|Module Name              | RTL Object           | Inference      | Size (Depth x Width) | Primitives        | 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:381: trailing whitespace.
++|\u_soc/u_core /u_regfile | regs_reg             | Implied        | 32 x 32              | RAM32M x 12       | 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:382: trailing whitespace.
++|pynq_z2_top              | u_soc/u_dmem/mem_reg | User Attribute | 8 K x 32             | RAM256X1S x 1024  | 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:407: trailing whitespace.
++|Module Name              | RTL Object           | Inference      | Size (Depth x Width) | Primitives        | 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:409: trailing whitespace.
++|\u_soc/u_core /u_regfile | regs_reg             | Implied        | 32 x 32              | RAM32M x 12       | 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:410: trailing whitespace.
++|pynq_z2_top              | u_soc/u_dmem/mem_reg | User Attribute | 8 K x 32             | RAM256X1S x 1024  | 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:482: trailing whitespace.
++Report BlackBoxes: 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:488: trailing whitespace.
++Report Cell Usage: 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:532: trailing whitespace.
++  MMCME2_BASE => MMCME2_ADV: 1 instance 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:626: trailing whitespace.
++INFO: [Opt 31-1021] In phase Retarget, 1 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:940: trailing whitespace.
++INFO: [Place 30-612] Post-Placement Estimated Congestion 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:983: trailing whitespace.
++INFO: [Vivado_Tcl 4-2279] Estimated Timing Summary | WNS= 6.787 | TNS= 0.000 | 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:1177: trailing whitespace.
++INFO: [Vivado_Tcl 4-241] Physical synthesis in post route mode 
+data/logs/2026-10-07-partC-postopt/build_soc_40mhz_bht2.log:1183: trailing whitespace.
++INFO: [Vivado_Tcl 4-2279] Estimated Timing Summary | WNS= 3.618 | TNS= 0.000 | 
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:72: trailing whitespace.
++	Parameter ENABLE_FORWARDING bound to: 1 - type: integer 
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:73: trailing whitespace.
++	Parameter BHT_MODE bound to: 2'b01 
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:95: trailing whitespace.
++	Parameter BHT_MODE bound to: 2'b01 
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:213: trailing whitespace.
++Start RTL Component Statistics 
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:215: trailing whitespace.
++Detailed RTL Component Info : 
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:216: trailing whitespace.
+++---Adders : 
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:217: trailing whitespace.
++	   2 Input   64 Bit       Adders := 3     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:218: trailing whitespace.
++	   3 Input   33 Bit       Adders := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:219: trailing whitespace.
++	   2 Input   32 Bit       Adders := 10    
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:220: trailing whitespace.
++	   3 Input   32 Bit       Adders := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:221: trailing whitespace.
++	   2 Input    5 Bit       Adders := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:222: trailing whitespace.
+++---XORs : 
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:223: trailing whitespace.
++	   2 Input     32 Bit         XORs := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:224: trailing whitespace.
++	   2 Input      1 Bit         XORs := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:225: trailing whitespace.
+++---Registers : 
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:226: trailing whitespace.
++	               64 Bit    Registers := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:227: trailing whitespace.
++	               33 Bit    Registers := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:228: trailing whitespace.
++	               32 Bit    Registers := 12    
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:229: trailing whitespace.
++	                5 Bit    Registers := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:230: trailing whitespace.
++	                3 Bit    Registers := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:231: trailing whitespace.
++	                2 Bit    Registers := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:232: trailing whitespace.
++	                1 Bit    Registers := 78    
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:233: trailing whitespace.
+++---RAMs : 
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:234: trailing whitespace.
++	             1024 Bit	(32 X 32 bit)          RAMs := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:235: trailing whitespace.
+++---Muxes : 
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:236: trailing whitespace.
++	   2 Input   64 Bit        Muxes := 5     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:237: trailing whitespace.
++	   2 Input   34 Bit        Muxes := 10    
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:238: trailing whitespace.
++	   2 Input   33 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:239: trailing whitespace.
++	   2 Input   32 Bit        Muxes := 28    
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:240: trailing whitespace.
++	   4 Input   32 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:241: trailing whitespace.
++	   3 Input   32 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:242: trailing whitespace.
++	   2 Input   16 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:243: trailing whitespace.
++	   4 Input    8 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:244: trailing whitespace.
++	   2 Input    5 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:245: trailing whitespace.
++	   8 Input    4 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:246: trailing whitespace.
++	   2 Input    4 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:247: trailing whitespace.
++	   4 Input    4 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:248: trailing whitespace.
++	   2 Input    3 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:249: trailing whitespace.
++	   7 Input    3 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:250: trailing whitespace.
++	   5 Input    2 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:251: trailing whitespace.
++	   2 Input    2 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:252: trailing whitespace.
++	   2 Input    1 Bit        Muxes := 73    
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:253: trailing whitespace.
++	   5 Input    1 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:255: trailing whitespace.
++Finished RTL Component Statistics 
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:326: trailing whitespace.
++|Module Name | RTL Object | Inference | Size (Depth x Width) | Primitives   | 
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:328: trailing whitespace.
++|u_regfile   | regs_reg   | Implied   | 32 x 32              | RAM32M x 12  | 
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:353: trailing whitespace.
++|Module Name | RTL Object | Inference | Size (Depth x Width) | Primitives   | 
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:355: trailing whitespace.
++|u_regfile   | regs_reg   | Implied   | 32 x 32              | RAM32M x 12  | 
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:419: trailing whitespace.
++Report BlackBoxes: 
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:425: trailing whitespace.
++Report Cell Usage: 
+data/logs/2026-10-07-partC-postopt/fmax_bht1_10ns_postopt.log:855: trailing whitespace.
++INFO: [Place 30-612] Post-Placement Estimated Congestion 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:72: trailing whitespace.
++	Parameter ENABLE_FORWARDING bound to: 1 - type: integer 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:73: trailing whitespace.
++	Parameter BHT_MODE bound to: 2'b10 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:95: trailing whitespace.
++	Parameter BHT_MODE bound to: 2'b10 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:213: trailing whitespace.
++Start RTL Component Statistics 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:215: trailing whitespace.
++Detailed RTL Component Info : 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:216: trailing whitespace.
+++---Adders : 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:217: trailing whitespace.
++	   2 Input   64 Bit       Adders := 3     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:218: trailing whitespace.
++	   3 Input   33 Bit       Adders := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:219: trailing whitespace.
++	   2 Input   32 Bit       Adders := 10    
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:220: trailing whitespace.
++	   3 Input   32 Bit       Adders := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:221: trailing whitespace.
++	   2 Input    5 Bit       Adders := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:222: trailing whitespace.
++	   2 Input    2 Bit       Adders := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:223: trailing whitespace.
+++---XORs : 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:224: trailing whitespace.
++	   2 Input     32 Bit         XORs := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:225: trailing whitespace.
++	   2 Input      1 Bit         XORs := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:226: trailing whitespace.
+++---Registers : 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:227: trailing whitespace.
++	               64 Bit    Registers := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:228: trailing whitespace.
++	               33 Bit    Registers := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:229: trailing whitespace.
++	               32 Bit    Registers := 12    
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:230: trailing whitespace.
++	                5 Bit    Registers := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:231: trailing whitespace.
++	                3 Bit    Registers := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:232: trailing whitespace.
++	                2 Bit    Registers := 66    
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:233: trailing whitespace.
++	                1 Bit    Registers := 14    
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:234: trailing whitespace.
+++---RAMs : 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:235: trailing whitespace.
++	             1024 Bit	(32 X 32 bit)          RAMs := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:236: trailing whitespace.
+++---Muxes : 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:237: trailing whitespace.
++	   2 Input   64 Bit        Muxes := 5     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:238: trailing whitespace.
++	   2 Input   34 Bit        Muxes := 10    
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:239: trailing whitespace.
++	   2 Input   33 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:240: trailing whitespace.
++	   2 Input   32 Bit        Muxes := 28    
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:241: trailing whitespace.
++	   4 Input   32 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:242: trailing whitespace.
++	   3 Input   32 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:243: trailing whitespace.
++	   2 Input   16 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:244: trailing whitespace.
++	   4 Input    8 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:245: trailing whitespace.
++	   2 Input    5 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:246: trailing whitespace.
++	   8 Input    4 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:247: trailing whitespace.
++	   2 Input    4 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:248: trailing whitespace.
++	   4 Input    4 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:249: trailing whitespace.
++	   2 Input    3 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:250: trailing whitespace.
++	   7 Input    3 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:251: trailing whitespace.
++	   5 Input    2 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:252: trailing whitespace.
++	   2 Input    2 Bit        Muxes := 3     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:253: trailing whitespace.
++	   2 Input    1 Bit        Muxes := 137   
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:254: trailing whitespace.
++	   5 Input    1 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:256: trailing whitespace.
++Finished RTL Component Statistics 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:327: trailing whitespace.
++|Module Name | RTL Object | Inference | Size (Depth x Width) | Primitives   | 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:329: trailing whitespace.
++|u_regfile   | regs_reg   | Implied   | 32 x 32              | RAM32M x 12  | 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:354: trailing whitespace.
++|Module Name | RTL Object | Inference | Size (Depth x Width) | Primitives   | 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:356: trailing whitespace.
++|u_regfile   | regs_reg   | Implied   | 32 x 32              | RAM32M x 12  | 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:420: trailing whitespace.
++Report BlackBoxes: 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:426: trailing whitespace.
++Report Cell Usage: 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_10ns_postopt.log:856: trailing whitespace.
++INFO: [Place 30-612] Post-Placement Estimated Congestion 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:72: trailing whitespace.
++	Parameter ENABLE_FORWARDING bound to: 1 - type: integer 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:73: trailing whitespace.
++	Parameter BHT_MODE bound to: 2'b10 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:95: trailing whitespace.
++	Parameter BHT_MODE bound to: 2'b10 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:213: trailing whitespace.
++Start RTL Component Statistics 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:215: trailing whitespace.
++Detailed RTL Component Info : 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:216: trailing whitespace.
+++---Adders : 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:217: trailing whitespace.
++	   2 Input   64 Bit       Adders := 3     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:218: trailing whitespace.
++	   3 Input   33 Bit       Adders := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:219: trailing whitespace.
++	   2 Input   32 Bit       Adders := 10    
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:220: trailing whitespace.
++	   3 Input   32 Bit       Adders := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:221: trailing whitespace.
++	   2 Input    5 Bit       Adders := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:222: trailing whitespace.
++	   2 Input    2 Bit       Adders := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:223: trailing whitespace.
+++---XORs : 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:224: trailing whitespace.
++	   2 Input     32 Bit         XORs := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:225: trailing whitespace.
++	   2 Input      1 Bit         XORs := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:226: trailing whitespace.
+++---Registers : 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:227: trailing whitespace.
++	               64 Bit    Registers := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:228: trailing whitespace.
++	               33 Bit    Registers := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:229: trailing whitespace.
++	               32 Bit    Registers := 12    
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:230: trailing whitespace.
++	                5 Bit    Registers := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:231: trailing whitespace.
++	                3 Bit    Registers := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:232: trailing whitespace.
++	                2 Bit    Registers := 66    
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:233: trailing whitespace.
++	                1 Bit    Registers := 14    
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:234: trailing whitespace.
+++---RAMs : 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:235: trailing whitespace.
++	             1024 Bit	(32 X 32 bit)          RAMs := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:236: trailing whitespace.
+++---Muxes : 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:237: trailing whitespace.
++	   2 Input   64 Bit        Muxes := 5     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:238: trailing whitespace.
++	   2 Input   34 Bit        Muxes := 10    
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:239: trailing whitespace.
++	   2 Input   33 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:240: trailing whitespace.
++	   2 Input   32 Bit        Muxes := 28    
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:241: trailing whitespace.
++	   4 Input   32 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:242: trailing whitespace.
++	   3 Input   32 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:243: trailing whitespace.
++	   2 Input   16 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:244: trailing whitespace.
++	   4 Input    8 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:245: trailing whitespace.
++	   2 Input    5 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:246: trailing whitespace.
++	   8 Input    4 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:247: trailing whitespace.
++	   2 Input    4 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:248: trailing whitespace.
++	   4 Input    4 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:249: trailing whitespace.
++	   2 Input    3 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:250: trailing whitespace.
++	   7 Input    3 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:251: trailing whitespace.
++	   5 Input    2 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:252: trailing whitespace.
++	   2 Input    2 Bit        Muxes := 3     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:253: trailing whitespace.
++	   2 Input    1 Bit        Muxes := 137   
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:254: trailing whitespace.
++	   5 Input    1 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:256: trailing whitespace.
++Finished RTL Component Statistics 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:327: trailing whitespace.
++|Module Name | RTL Object | Inference | Size (Depth x Width) | Primitives   | 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:329: trailing whitespace.
++|u_regfile   | regs_reg   | Implied   | 32 x 32              | RAM32M x 12  | 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:354: trailing whitespace.
++|Module Name | RTL Object | Inference | Size (Depth x Width) | Primitives   | 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:356: trailing whitespace.
++|u_regfile   | regs_reg   | Implied   | 32 x 32              | RAM32M x 12  | 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:420: trailing whitespace.
++Report BlackBoxes: 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:426: trailing whitespace.
++Report Cell Usage: 
+data/logs/2026-10-07-partC-postopt/fmax_bht2_11p52_postopt.log:851: trailing whitespace.
++INFO: [Place 30-612] Post-Placement Estimated Congestion 
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:72: trailing whitespace.
++	Parameter ENABLE_FORWARDING bound to: 1 - type: integer 
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:73: trailing whitespace.
++	Parameter BHT_MODE bound to: 2'b00 
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:95: trailing whitespace.
++	Parameter BHT_MODE bound to: 2'b00 
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:230: trailing whitespace.
++Start RTL Component Statistics 
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:232: trailing whitespace.
++Detailed RTL Component Info : 
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:233: trailing whitespace.
+++---Adders : 
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:234: trailing whitespace.
++	   2 Input   64 Bit       Adders := 3     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:235: trailing whitespace.
++	   3 Input   33 Bit       Adders := 1     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:236: trailing whitespace.
++	   2 Input   32 Bit       Adders := 10    
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:237: trailing whitespace.
++	   3 Input   32 Bit       Adders := 2     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:238: trailing whitespace.
++	   2 Input    5 Bit       Adders := 1     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:239: trailing whitespace.
+++---XORs : 
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:240: trailing whitespace.
++	   2 Input     32 Bit         XORs := 1     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:241: trailing whitespace.
++	   2 Input      1 Bit         XORs := 2     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:242: trailing whitespace.
+++---Registers : 
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:243: trailing whitespace.
++	               64 Bit    Registers := 2     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:244: trailing whitespace.
++	               33 Bit    Registers := 1     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:245: trailing whitespace.
++	               32 Bit    Registers := 12    
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:246: trailing whitespace.
++	                5 Bit    Registers := 2     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:247: trailing whitespace.
++	                3 Bit    Registers := 1     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:248: trailing whitespace.
++	                2 Bit    Registers := 2     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:249: trailing whitespace.
++	                1 Bit    Registers := 14    
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:250: trailing whitespace.
+++---RAMs : 
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:251: trailing whitespace.
++	             1024 Bit	(32 X 32 bit)          RAMs := 1     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:252: trailing whitespace.
+++---Muxes : 
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:253: trailing whitespace.
++	   2 Input   64 Bit        Muxes := 5     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:254: trailing whitespace.
++	   2 Input   34 Bit        Muxes := 10    
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:255: trailing whitespace.
++	   2 Input   33 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:256: trailing whitespace.
++	   2 Input   32 Bit        Muxes := 28    
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:257: trailing whitespace.
++	   4 Input   32 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:258: trailing whitespace.
++	   3 Input   32 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:259: trailing whitespace.
++	   2 Input   16 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:260: trailing whitespace.
++	   4 Input    8 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:261: trailing whitespace.
++	   2 Input    5 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:262: trailing whitespace.
++	   8 Input    4 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:263: trailing whitespace.
++	   2 Input    4 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:264: trailing whitespace.
++	   4 Input    4 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:265: trailing whitespace.
++	   2 Input    3 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:266: trailing whitespace.
++	   7 Input    3 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:267: trailing whitespace.
++	   5 Input    2 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:268: trailing whitespace.
++	   2 Input    2 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:269: trailing whitespace.
++	   2 Input    1 Bit        Muxes := 9     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:270: trailing whitespace.
++	   5 Input    1 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:272: trailing whitespace.
++Finished RTL Component Statistics 
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:296: trailing whitespace.
++|Module Name | RTL Object         | Inference | Size (Depth x Width) | Primitives   | 
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:298: trailing whitespace.
++|core_top    | u_regfile/regs_reg | Implied   | 32 x 32              | RAM32M x 12  | 
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:323: trailing whitespace.
++|Module Name | RTL Object         | Inference | Size (Depth x Width) | Primitives   | 
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:325: trailing whitespace.
++|core_top    | u_regfile/regs_reg | Implied   | 32 x 32              | RAM32M x 12  | 
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:389: trailing whitespace.
++Report BlackBoxes: 
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:395: trailing whitespace.
++Report Cell Usage: 
+data/logs/2026-10-07-partC-postopt/fmax_fwd_10ns_postopt.log:822: trailing whitespace.
++INFO: [Place 30-612] Post-Placement Estimated Congestion 
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:72: trailing whitespace.
++	Parameter ENABLE_FORWARDING bound to: 0 - type: integer 
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:73: trailing whitespace.
++	Parameter BHT_MODE bound to: 2'b00 
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:95: trailing whitespace.
++	Parameter BHT_MODE bound to: 2'b00 
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:230: trailing whitespace.
++Start RTL Component Statistics 
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:232: trailing whitespace.
++Detailed RTL Component Info : 
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:233: trailing whitespace.
+++---Adders : 
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:234: trailing whitespace.
++	   2 Input   64 Bit       Adders := 3     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:235: trailing whitespace.
++	   3 Input   33 Bit       Adders := 1     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:236: trailing whitespace.
++	   2 Input   32 Bit       Adders := 10    
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:237: trailing whitespace.
++	   3 Input   32 Bit       Adders := 2     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:238: trailing whitespace.
++	   2 Input    5 Bit       Adders := 1     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:239: trailing whitespace.
+++---XORs : 
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:240: trailing whitespace.
++	   2 Input     32 Bit         XORs := 1     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:241: trailing whitespace.
++	   2 Input      1 Bit         XORs := 2     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:242: trailing whitespace.
+++---Registers : 
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:243: trailing whitespace.
++	               64 Bit    Registers := 2     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:244: trailing whitespace.
++	               33 Bit    Registers := 1     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:245: trailing whitespace.
++	               32 Bit    Registers := 12    
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:246: trailing whitespace.
++	                5 Bit    Registers := 2     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:247: trailing whitespace.
++	                3 Bit    Registers := 1     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:248: trailing whitespace.
++	                2 Bit    Registers := 2     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:249: trailing whitespace.
++	                1 Bit    Registers := 14    
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:250: trailing whitespace.
+++---RAMs : 
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:251: trailing whitespace.
++	             1024 Bit	(32 X 32 bit)          RAMs := 1     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:252: trailing whitespace.
+++---Muxes : 
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:253: trailing whitespace.
++	   2 Input   64 Bit        Muxes := 5     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:254: trailing whitespace.
++	   2 Input   34 Bit        Muxes := 10    
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:255: trailing whitespace.
++	   2 Input   33 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:256: trailing whitespace.
++	   2 Input   32 Bit        Muxes := 28    
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:257: trailing whitespace.
++	   4 Input   32 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:258: trailing whitespace.
++	   3 Input   32 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:259: trailing whitespace.
++	   2 Input   16 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:260: trailing whitespace.
++	   4 Input    8 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:261: trailing whitespace.
++	   2 Input    5 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:262: trailing whitespace.
++	   8 Input    4 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:263: trailing whitespace.
++	   2 Input    4 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:264: trailing whitespace.
++	   4 Input    4 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:265: trailing whitespace.
++	   2 Input    3 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:266: trailing whitespace.
++	   7 Input    3 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:267: trailing whitespace.
++	   5 Input    2 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:268: trailing whitespace.
++	   2 Input    2 Bit        Muxes := 2     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:269: trailing whitespace.
++	   2 Input    1 Bit        Muxes := 9     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:270: trailing whitespace.
++	   5 Input    1 Bit        Muxes := 1     
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:272: trailing whitespace.
++Finished RTL Component Statistics 
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:296: trailing whitespace.
++|Module Name | RTL Object         | Inference | Size (Depth x Width) | Primitives   | 
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:298: trailing whitespace.
++|core_top    | u_regfile/regs_reg | Implied   | 32 x 32              | RAM32M x 12  | 
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:323: trailing whitespace.
++|Module Name | RTL Object         | Inference | Size (Depth x Width) | Primitives   | 
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:325: trailing whitespace.
++|core_top    | u_regfile/regs_reg | Implied   | 32 x 32              | RAM32M x 12  | 
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:389: trailing whitespace.
++Report BlackBoxes: 
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:395: trailing whitespace.
++Report Cell Usage: 
+data/logs/2026-10-07-partC-postopt/fmax_nofwd_10ns_postopt.log:817: trailing whitespace.
++INFO: [Place 30-612] Post-Placement Estimated Congestion 
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:1: trailing whitespace.
++INFO: [Common 17-3922] A valid Vivado Design Suite BASIC license has been detected. Your current license is active and will expire on 14-sep-2027.
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:2: trailing whitespace.
++
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:3: trailing whitespace.
++****** Vivado v2026.1 (64-bit)
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:4: trailing whitespace.
++  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:5: trailing whitespace.
++  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:6: trailing whitespace.
++  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:7: trailing whitespace.
++  **** Start of session at: Wed Oct  7 16:57:22 2026
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:8: trailing whitespace.
++    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:9: trailing whitespace.
++    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:10: trailing whitespace.
++
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:11: trailing whitespace.
++source board/scripts/program_soc.tcl
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:12: trailing whitespace.
++# set script_dir [file normalize [file dirname [info script]]]
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:13: trailing whitespace.
++# set root [file normalize [file join $script_dir .. ..]]
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:14: trailing whitespace.
++# if {[llength $argv] > 1} {error "Usage: program_soc.tcl ?bitstream?"}
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:15: trailing whitespace.
++# if {[llength $argv] == 1} {
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:16: trailing whitespace.
++#     set bitstream [file normalize [lindex $argv 0]]
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:17: trailing whitespace.
++# } else {
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:18: trailing whitespace.
++#     set bitstream [file join $root build run soc pynq_z2_soc.bit]
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:19: trailing whitespace.
++# }
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:20: trailing whitespace.
++# if {![file isfile $bitstream] || [file size $bitstream] == 0} {
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:21: trailing whitespace.
++#     error "Bitstream missing or empty: $bitstream"
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:22: trailing whitespace.
++# }
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:23: trailing whitespace.
++# if {[catch {
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:24: trailing whitespace.
++#     open_hw_manager
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:25: trailing whitespace.
++#     connect_hw_server
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:26: trailing whitespace.
++#     open_hw_target
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:27: trailing whitespace.
++# 
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:28: trailing whitespace.
++#     set matches {}
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:29: trailing whitespace.
++#     foreach device [get_hw_devices] {
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:30: trailing whitespace.
++#         set part [get_property -quiet PART $device]
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:31: trailing whitespace.
++#         puts "FOUND: $device PART=$part"
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:32: trailing whitespace.
++#         if {[string match -nocase "xc7z020*" $part]} {
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:33: trailing whitespace.
++#             lappend matches $device
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:34: trailing whitespace.
++#         }
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:35: trailing whitespace.
++#     }
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:36: trailing whitespace.
++#     if {[llength $matches] != 1} {
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:37: trailing whitespace.
++#         error "Expected exactly one XC7Z020, found [llength $matches]"
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:38: trailing whitespace.
++#     }
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:39: trailing whitespace.
++# 
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:40: trailing whitespace.
++#     set device [lindex $matches 0]
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:41: trailing whitespace.
++#     current_hw_device $device
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:42: trailing whitespace.
++#     refresh_hw_device -update_hw_probes false $device
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:43: trailing whitespace.
++#     set_property PROGRAM.FILE $bitstream $device
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:44: trailing whitespace.
++#     puts "PROGRAMMING: $device"
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:45: trailing whitespace.
++#     program_hw_devices $device
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:46: trailing whitespace.
++#     puts "PROGRAM PASSED: $device <- $bitstream"
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:47: trailing whitespace.
++# } message options]} {
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:48: trailing whitespace.
++#     puts stderr "PROGRAM FAILED: $message"
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:49: trailing whitespace.
++#     if {[dict exists $options -errorinfo]} {
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:50: trailing whitespace.
++#         puts stderr [dict get $options -errorinfo]
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:51: trailing whitespace.
++#     }
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:52: trailing whitespace.
++#     catch {close_hw_manager}
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:53: trailing whitespace.
++#     exit 1
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:54: trailing whitespace.
++# }
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:55: trailing whitespace.
++open_hw_manager: Time (s): cpu = 00:00:12 ; elapsed = 00:00:10 . Memory (MB): peak = 615.105 ; gain = 271.867
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:56: trailing whitespace.
++INFO: [Labtools 27-2285] Connecting to hw_server url TCP:localhost:3121
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:57: trailing whitespace.
++INFO: [Labtools 27-2222] Launching hw_server...
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:58: trailing whitespace.
++INFO: [Labtools 27-2221] Launch Output:
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:59: trailing whitespace.
++
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:60: trailing whitespace.
++****** Xilinx hw_server v2026.1
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:61: trailing whitespace.
++  **** Build date : May 29 2026 at 14:55:19
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:62: trailing whitespace.
++    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:63: trailing whitespace.
++
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:64: trailing whitespace.
++
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:65: trailing whitespace.
++INFO: [Labtools 27-3415] Connecting to cs_server url TCP:localhost:0
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:66: trailing whitespace.
++INFO: [Labtools 27-3417] Launching cs_server...
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:67: trailing whitespace.
++INFO: [Labtools 27-2221] Launch Output:
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:68: trailing whitespace.
++
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:69: trailing whitespace.
++****** Xilinx cs_server v2026.1
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:70: trailing whitespace.
++  **** Build Info : #60 | 2026-06-15 19:15 UTC | a9691a9
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:71: trailing whitespace.
++    ** Copyright 2017-2022 Xilinx, Inc. All Rights Reserved.
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:72: trailing whitespace.
++    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:73: trailing whitespace.
++
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:74: trailing whitespace.
++
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:75: trailing whitespace.
++
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:76: trailing whitespace.
++connect_hw_server: Time (s): cpu = 00:00:00 ; elapsed = 00:00:11 . Memory (MB): peak = 621.312 ; gain = 6.207
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:77: trailing whitespace.
++INFO: [Labtoolstcl 44-466] Opening hw_target localhost:3121/xilinx_tcf/Xilinx/1234-tulA
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:78: trailing whitespace.
++FOUND: arm_dap_0 PART=arm_dap
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:79: trailing whitespace.
++FOUND: xc7z020_1 PART=xc7z020
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:80: trailing whitespace.
++INFO: [Labtools 27-2302] Device xc7z020 (JTAG device index = 1) is programmed with a design that has 1 ILA core(s).
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:81: trailing whitespace.
++PROGRAMMING: xc7z020_1
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:82: trailing whitespace.
++INFO: [Labtools 27-3164] End of startup status: HIGH
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:83: trailing whitespace.
++PROGRAM PASSED: xc7z020_1 <- E:/Projects/FPGA-Alittle-Design/build/run/soc_40mhz_bht2/pynq_z2_soc_40mhz_bht2.bit
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:84: trailing whitespace.
++# close_hw_manager
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:85: trailing whitespace.
++# exit 0
+data/logs/2026-10-07-partC-postopt/program_soc_40mhz_bht2.log:86: trailing whitespace.
++INFO: [Common 17-206] Exiting Vivado at Wed Oct  7 16:57:55 2026...
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_check_timing.rpt:43: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_clock_utilization_impl.rpt:216: trailing whitespace.
++# Location of BUFG Primitives 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:39: trailing whitespace.
++Report rule limit reached  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:44: trailing whitespace.
++RAMB36 async control check  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:49: trailing whitespace.
++RAMB36 async control check  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:54: trailing whitespace.
++RAMB36 async control check  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:59: trailing whitespace.
++RAMB36 async control check  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:64: trailing whitespace.
++RAMB36 async control check  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:69: trailing whitespace.
++RAMB36 async control check  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:74: trailing whitespace.
++RAMB36 async control check  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:79: trailing whitespace.
++RAMB36 async control check  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:84: trailing whitespace.
++RAMB36 async control check  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:89: trailing whitespace.
++RAMB36 async control check  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:94: trailing whitespace.
++RAMB36 async control check  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:99: trailing whitespace.
++RAMB36 async control check  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:104: trailing whitespace.
++RAMB36 async control check  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:109: trailing whitespace.
++RAMB36 async control check  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:114: trailing whitespace.
++RAMB36 async control check  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:119: trailing whitespace.
++RAMB36 async control check  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:124: trailing whitespace.
++RAMB36 async control check  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:129: trailing whitespace.
++RAMB36 async control check  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:134: trailing whitespace.
++RAMB36 async control check  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:139: trailing whitespace.
++RAMB36 async control check  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:144: trailing whitespace.
++PS7 block required  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_drc_impl.rpt:147: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:32: trailing whitespace.
++  Corner  Analyze    Analyze    
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:33: trailing whitespace.
++  Name    Max Paths  Min Paths  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:34: trailing whitespace.
++  ------  ---------  ---------  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:35: trailing whitespace.
++  Slow    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:36: trailing whitespace.
++  Fast    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:146: trailing whitespace.
++    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:147: trailing whitespace.
++    -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:148: trailing whitespace.
++      3.618        0.000                      0                43808        0.035        0.000                      0                43808        2.000        0.000                       0                  5057  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:161: trailing whitespace.
++sys_clk_125         {0.000 4.000}        8.000           125.000         
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:162: trailing whitespace.
++  clk_feedback_raw  {0.000 4.000}        8.000           125.000         
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:163: trailing whitespace.
++  core_clk_40       {0.000 12.500}       25.000          40.000          
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:171: trailing whitespace.
++Clock                   WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:172: trailing whitespace.
++-----                   -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:173: trailing whitespace.
++sys_clk_125                                                                                                                                                           2.000        0.000                       0                     1  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:174: trailing whitespace.
++  clk_feedback_raw                                                                                                                                                    5.845        0.000                       0                     3  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:175: trailing whitespace.
++  core_clk_40             3.618        0.000                      0                43242        0.035        0.000                      0                43242       11.250        0.000                       0                  5053  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:183: trailing whitespace.
++From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:184: trailing whitespace.
++----------    --------          -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:192: trailing whitespace.
++Path Group         From Clock         To Clock               WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:193: trailing whitespace.
++----------         ----------         --------               -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:194: trailing whitespace.
++**async_default**  core_clk_40        core_clk_40             10.879        0.000                      0                  566        1.882        0.000                      0                  566  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:202: trailing whitespace.
++Path Group    From Clock    To Clock    
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:203: trailing whitespace.
++----------    ----------    --------    
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:204: trailing whitespace.
++(none)        core_clk_40                 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:205: trailing whitespace.
++(none)                      core_clk_40   
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:213: trailing whitespace.
++Path Group    From Clock    To Clock    
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:214: trailing whitespace.
++----------    ----------    --------    
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:215: trailing whitespace.
++(none)                      core_clk_40   
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:295: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.644ns = ( 23.356 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:361: trailing whitespace.
++  Logic Levels:           0  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:448: trailing whitespace.
++  Logic Levels:           0  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:450: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.693ns = ( 23.307 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:514: trailing whitespace.
++  Logic Levels:           0  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:567: trailing whitespace.
++  To Clock:  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:662: trailing whitespace.
++From Clock:  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:766: trailing whitespace.
++From Clock:  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_impl.rpt:853: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:26: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.644ns = ( 23.356 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:88: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:150: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:212: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:274: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:336: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:398: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:460: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.689ns = ( 23.311 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:522: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.644ns = ( 23.356 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:584: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.690ns = ( 23.310 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:644: trailing whitespace.
++  Logic Levels:           0  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:646: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.693ns = ( 23.307 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:704: trailing whitespace.
++  Logic Levels:           0  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:706: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.693ns = ( 23.307 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:764: trailing whitespace.
++  Logic Levels:           0  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:766: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.693ns = ( 23.307 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:824: trailing whitespace.
++  Logic Levels:           0  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:826: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.693ns = ( 23.307 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:884: trailing whitespace.
++  Logic Levels:           0  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:886: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.694ns = ( 23.306 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:944: trailing whitespace.
++  Logic Levels:           0  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:946: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.694ns = ( 23.306 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:1004: trailing whitespace.
++  Logic Levels:           0  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:1006: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.694ns = ( 23.306 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:1064: trailing whitespace.
++  Logic Levels:           0  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:1066: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.694ns = ( 23.306 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:1124: trailing whitespace.
++  Logic Levels:           0  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:1126: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.696ns = ( 23.304 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:1184: trailing whitespace.
++  Logic Levels:           0  
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:1186: trailing whitespace.
++    Destination Clock Delay (DCD):    -1.696ns = ( 23.304 - 25.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_timing_worst_paths.rpt:1234: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_utilization_impl.rpt:225: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/soc_40mhz_bht2/soc_utilization_synth.rpt:196: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/design_analysis_impl.rpt:87: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_impl.rpt:32: trailing whitespace.
++  Corner  Analyze    Analyze    
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_impl.rpt:33: trailing whitespace.
++  Name    Max Paths  Min Paths  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_impl.rpt:34: trailing whitespace.
++  ------  ---------  ---------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_impl.rpt:35: trailing whitespace.
++  Slow    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_impl.rpt:36: trailing whitespace.
++  Fast    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_impl.rpt:139: trailing whitespace.
++    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_impl.rpt:140: trailing whitespace.
++    -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_impl.rpt:141: trailing whitespace.
++     -0.419      -12.201                     61                 1538        3.750        0.000                       0                   661  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_impl.rpt:154: trailing whitespace.
++sys_clk  {0.000 5.000}      10.000          100.000         
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_impl.rpt:162: trailing whitespace.
++Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_impl.rpt:163: trailing whitespace.
++-----             -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_impl.rpt:164: trailing whitespace.
++sys_clk            -0.419      -12.201                     61                 1538        3.750        0.000                       0                   661  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_impl.rpt:172: trailing whitespace.
++From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_impl.rpt:173: trailing whitespace.
++----------    --------          -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_impl.rpt:181: trailing whitespace.
++Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_impl.rpt:182: trailing whitespace.
++----------    ----------    --------          -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_impl.rpt:214: trailing whitespace.
++    Destination Clock Delay (DCD):    1.567ns = ( 11.567 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_impl.rpt:302: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_synth.rpt:32: trailing whitespace.
++  Corner  Analyze    Analyze    
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_synth.rpt:33: trailing whitespace.
++  Name    Max Paths  Min Paths  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_synth.rpt:34: trailing whitespace.
++  ------  ---------  ---------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_synth.rpt:35: trailing whitespace.
++  Slow    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_synth.rpt:36: trailing whitespace.
++  Fast    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_synth.rpt:139: trailing whitespace.
++    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_synth.rpt:140: trailing whitespace.
++    -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_synth.rpt:141: trailing whitespace.
++     -2.066     -147.827                    132                 1538        3.750        0.000                       0                   661  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_synth.rpt:154: trailing whitespace.
++sys_clk  {0.000 5.000}      10.000          100.000         
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_synth.rpt:162: trailing whitespace.
++Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_synth.rpt:163: trailing whitespace.
++-----             -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_synth.rpt:164: trailing whitespace.
++sys_clk            -2.066     -147.827                    132                 1538        3.750        0.000                       0                   661  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_synth.rpt:172: trailing whitespace.
++From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_synth.rpt:173: trailing whitespace.
++----------    --------          -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_synth.rpt:181: trailing whitespace.
++Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_synth.rpt:182: trailing whitespace.
++----------    ----------    --------          -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_synth.rpt:214: trailing whitespace.
++    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_synth.rpt:286: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_worst_paths.rpt:26: trailing whitespace.
++    Destination Clock Delay (DCD):    1.567ns = ( 11.567 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_worst_paths.rpt:110: trailing whitespace.
++    Destination Clock Delay (DCD):    1.571ns = ( 11.571 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_worst_paths.rpt:179: trailing whitespace.
++    Destination Clock Delay (DCD):    1.489ns = ( 11.489 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_worst_paths.rpt:248: trailing whitespace.
++    Destination Clock Delay (DCD):    1.486ns = ( 11.486 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_worst_paths.rpt:317: trailing whitespace.
++    Destination Clock Delay (DCD):    1.487ns = ( 11.487 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_worst_paths.rpt:386: trailing whitespace.
++    Destination Clock Delay (DCD):    1.496ns = ( 11.496 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_worst_paths.rpt:455: trailing whitespace.
++    Destination Clock Delay (DCD):    1.495ns = ( 11.495 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_worst_paths.rpt:524: trailing whitespace.
++    Destination Clock Delay (DCD):    1.571ns = ( 11.571 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_worst_paths.rpt:593: trailing whitespace.
++    Destination Clock Delay (DCD):    1.485ns = ( 11.485 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_worst_paths.rpt:662: trailing whitespace.
++    Destination Clock Delay (DCD):    1.495ns = ( 11.495 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/timing_worst_paths.rpt:719: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/utilization_impl.rpt:216: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_bht1_10ns_postopt/utilization_synth.rpt:187: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/design_analysis_impl.rpt:87: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_impl.rpt:32: trailing whitespace.
++  Corner  Analyze    Analyze    
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_impl.rpt:33: trailing whitespace.
++  Name    Max Paths  Min Paths  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_impl.rpt:34: trailing whitespace.
++  ------  ---------  ---------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_impl.rpt:35: trailing whitespace.
++  Slow    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_impl.rpt:36: trailing whitespace.
++  Fast    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_impl.rpt:139: trailing whitespace.
++    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_impl.rpt:140: trailing whitespace.
++    -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_impl.rpt:141: trailing whitespace.
++     -0.586      -27.187                    113                 1602        3.750        0.000                       0                   725  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_impl.rpt:154: trailing whitespace.
++sys_clk  {0.000 5.000}      10.000          100.000         
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_impl.rpt:162: trailing whitespace.
++Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_impl.rpt:163: trailing whitespace.
++-----             -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_impl.rpt:164: trailing whitespace.
++sys_clk            -0.586      -27.187                    113                 1602        3.750        0.000                       0                   725  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_impl.rpt:172: trailing whitespace.
++From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_impl.rpt:173: trailing whitespace.
++----------    --------          -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_impl.rpt:181: trailing whitespace.
++Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_impl.rpt:182: trailing whitespace.
++----------    ----------    --------          -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_impl.rpt:214: trailing whitespace.
++    Destination Clock Delay (DCD):    1.548ns = ( 11.548 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_impl.rpt:299: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_synth.rpt:32: trailing whitespace.
++  Corner  Analyze    Analyze    
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_synth.rpt:33: trailing whitespace.
++  Name    Max Paths  Min Paths  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_synth.rpt:34: trailing whitespace.
++  ------  ---------  ---------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_synth.rpt:35: trailing whitespace.
++  Slow    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_synth.rpt:36: trailing whitespace.
++  Fast    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_synth.rpt:139: trailing whitespace.
++    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_synth.rpt:140: trailing whitespace.
++    -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_synth.rpt:141: trailing whitespace.
++     -1.857     -155.751                    262                 1602        3.750        0.000                       0                   725  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_synth.rpt:154: trailing whitespace.
++sys_clk  {0.000 5.000}      10.000          100.000         
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_synth.rpt:162: trailing whitespace.
++Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_synth.rpt:163: trailing whitespace.
++-----             -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_synth.rpt:164: trailing whitespace.
++sys_clk            -1.857     -155.751                    262                 1602        3.750        0.000                       0                   725  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_synth.rpt:172: trailing whitespace.
++From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_synth.rpt:173: trailing whitespace.
++----------    --------          -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_synth.rpt:181: trailing whitespace.
++Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_synth.rpt:182: trailing whitespace.
++----------    ----------    --------          -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_synth.rpt:214: trailing whitespace.
++    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_synth.rpt:286: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_worst_paths.rpt:26: trailing whitespace.
++    Destination Clock Delay (DCD):    1.548ns = ( 11.548 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_worst_paths.rpt:107: trailing whitespace.
++    Destination Clock Delay (DCD):    1.547ns = ( 11.547 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_worst_paths.rpt:175: trailing whitespace.
++    Destination Clock Delay (DCD):    1.551ns = ( 11.551 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_worst_paths.rpt:256: trailing whitespace.
++    Destination Clock Delay (DCD):    1.551ns = ( 11.551 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_worst_paths.rpt:337: trailing whitespace.
++    Destination Clock Delay (DCD):    1.550ns = ( 11.550 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_worst_paths.rpt:418: trailing whitespace.
++    Destination Clock Delay (DCD):    1.550ns = ( 11.550 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_worst_paths.rpt:499: trailing whitespace.
++    Destination Clock Delay (DCD):    1.548ns = ( 11.548 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_worst_paths.rpt:580: trailing whitespace.
++    Destination Clock Delay (DCD):    1.546ns = ( 11.546 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_worst_paths.rpt:661: trailing whitespace.
++    Destination Clock Delay (DCD):    1.549ns = ( 11.549 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_worst_paths.rpt:742: trailing whitespace.
++    Destination Clock Delay (DCD):    1.545ns = ( 11.545 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/timing_worst_paths.rpt:798: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/utilization_impl.rpt:216: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_10ns_postopt/utilization_synth.rpt:187: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/design_analysis_impl.rpt:87: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_impl.rpt:32: trailing whitespace.
++  Corner  Analyze    Analyze    
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_impl.rpt:33: trailing whitespace.
++  Name    Max Paths  Min Paths  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_impl.rpt:34: trailing whitespace.
++  ------  ---------  ---------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_impl.rpt:35: trailing whitespace.
++  Slow    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_impl.rpt:36: trailing whitespace.
++  Fast    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_impl.rpt:139: trailing whitespace.
++    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_impl.rpt:140: trailing whitespace.
++    -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_impl.rpt:141: trailing whitespace.
++      0.538        0.000                      0                 1602        4.510        0.000                       0                   725  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_impl.rpt:154: trailing whitespace.
++sys_clk  {0.000 5.760}      11.520          86.806          
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_impl.rpt:162: trailing whitespace.
++Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_impl.rpt:163: trailing whitespace.
++-----             -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_impl.rpt:164: trailing whitespace.
++sys_clk             0.538        0.000                      0                 1602        4.510        0.000                       0                   725  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_impl.rpt:172: trailing whitespace.
++From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_impl.rpt:173: trailing whitespace.
++----------    --------          -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_impl.rpt:181: trailing whitespace.
++Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_impl.rpt:182: trailing whitespace.
++----------    ----------    --------          -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_impl.rpt:214: trailing whitespace.
++    Destination Clock Delay (DCD):    1.551ns = ( 13.071 - 11.520 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_impl.rpt:291: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_synth.rpt:32: trailing whitespace.
++  Corner  Analyze    Analyze    
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_synth.rpt:33: trailing whitespace.
++  Name    Max Paths  Min Paths  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_synth.rpt:34: trailing whitespace.
++  ------  ---------  ---------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_synth.rpt:35: trailing whitespace.
++  Slow    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_synth.rpt:36: trailing whitespace.
++  Fast    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_synth.rpt:139: trailing whitespace.
++    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_synth.rpt:140: trailing whitespace.
++    -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_synth.rpt:141: trailing whitespace.
++     -0.337       -3.061                     27                 1602        4.510        0.000                       0                   725  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_synth.rpt:154: trailing whitespace.
++sys_clk  {0.000 5.760}      11.520          86.806          
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_synth.rpt:162: trailing whitespace.
++Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_synth.rpt:163: trailing whitespace.
++-----             -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_synth.rpt:164: trailing whitespace.
++sys_clk            -0.337       -3.061                     27                 1602        4.510        0.000                       0                   725  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_synth.rpt:172: trailing whitespace.
++From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_synth.rpt:173: trailing whitespace.
++----------    --------          -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_synth.rpt:181: trailing whitespace.
++Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_synth.rpt:182: trailing whitespace.
++----------    ----------    --------          -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_synth.rpt:214: trailing whitespace.
++    Destination Clock Delay (DCD):    0.924ns = ( 12.444 - 11.520 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_synth.rpt:286: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_worst_paths.rpt:26: trailing whitespace.
++    Destination Clock Delay (DCD):    1.551ns = ( 13.071 - 11.520 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_worst_paths.rpt:99: trailing whitespace.
++    Destination Clock Delay (DCD):    1.554ns = ( 13.074 - 11.520 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_worst_paths.rpt:172: trailing whitespace.
++    Destination Clock Delay (DCD):    1.555ns = ( 13.075 - 11.520 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_worst_paths.rpt:240: trailing whitespace.
++    Destination Clock Delay (DCD):    1.555ns = ( 13.075 - 11.520 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_worst_paths.rpt:313: trailing whitespace.
++    Destination Clock Delay (DCD):    1.554ns = ( 13.074 - 11.520 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_worst_paths.rpt:381: trailing whitespace.
++    Destination Clock Delay (DCD):    1.544ns = ( 13.064 - 11.520 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_worst_paths.rpt:449: trailing whitespace.
++    Destination Clock Delay (DCD):    1.554ns = ( 13.074 - 11.520 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_worst_paths.rpt:522: trailing whitespace.
++    Destination Clock Delay (DCD):    1.557ns = ( 13.077 - 11.520 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_worst_paths.rpt:593: trailing whitespace.
++    Destination Clock Delay (DCD):    1.552ns = ( 13.072 - 11.520 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_worst_paths.rpt:666: trailing whitespace.
++    Destination Clock Delay (DCD):    1.554ns = ( 13.074 - 11.520 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/timing_worst_paths.rpt:727: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/utilization_impl.rpt:216: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_bht2_11p52_postopt/utilization_synth.rpt:187: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/design_analysis_impl.rpt:87: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_impl.rpt:32: trailing whitespace.
++  Corner  Analyze    Analyze    
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_impl.rpt:33: trailing whitespace.
++  Name    Max Paths  Min Paths  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_impl.rpt:34: trailing whitespace.
++  ------  ---------  ---------  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_impl.rpt:35: trailing whitespace.
++  Slow    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_impl.rpt:36: trailing whitespace.
++  Fast    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_impl.rpt:139: trailing whitespace.
++    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_impl.rpt:140: trailing whitespace.
++    -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_impl.rpt:141: trailing whitespace.
++     -0.587      -16.340                     63                 1470        3.750        0.000                       0                   597  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_impl.rpt:154: trailing whitespace.
++sys_clk  {0.000 5.000}      10.000          100.000         
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_impl.rpt:162: trailing whitespace.
++Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_impl.rpt:163: trailing whitespace.
++-----             -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_impl.rpt:164: trailing whitespace.
++sys_clk            -0.587      -16.340                     63                 1470        3.750        0.000                       0                   597  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_impl.rpt:172: trailing whitespace.
++From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_impl.rpt:173: trailing whitespace.
++----------    --------          -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_impl.rpt:181: trailing whitespace.
++Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_impl.rpt:182: trailing whitespace.
++----------    ----------    --------          -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_impl.rpt:214: trailing whitespace.
++    Destination Clock Delay (DCD):    1.567ns = ( 11.567 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_impl.rpt:286: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_synth.rpt:32: trailing whitespace.
++  Corner  Analyze    Analyze    
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_synth.rpt:33: trailing whitespace.
++  Name    Max Paths  Min Paths  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_synth.rpt:34: trailing whitespace.
++  ------  ---------  ---------  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_synth.rpt:35: trailing whitespace.
++  Slow    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_synth.rpt:36: trailing whitespace.
++  Fast    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_synth.rpt:139: trailing whitespace.
++    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_synth.rpt:140: trailing whitespace.
++    -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_synth.rpt:141: trailing whitespace.
++     -0.452       -4.903                     35                 1470        3.750        0.000                       0                   597  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_synth.rpt:154: trailing whitespace.
++sys_clk  {0.000 5.000}      10.000          100.000         
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_synth.rpt:162: trailing whitespace.
++Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_synth.rpt:163: trailing whitespace.
++-----             -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_synth.rpt:164: trailing whitespace.
++sys_clk            -0.452       -4.903                     35                 1470        3.750        0.000                       0                   597  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_synth.rpt:172: trailing whitespace.
++From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_synth.rpt:173: trailing whitespace.
++----------    --------          -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_synth.rpt:181: trailing whitespace.
++Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_synth.rpt:182: trailing whitespace.
++----------    ----------    --------          -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_synth.rpt:214: trailing whitespace.
++    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_synth.rpt:294: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_worst_paths.rpt:26: trailing whitespace.
++    Destination Clock Delay (DCD):    1.567ns = ( 11.567 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_worst_paths.rpt:94: trailing whitespace.
++    Destination Clock Delay (DCD):    1.495ns = ( 11.495 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_worst_paths.rpt:162: trailing whitespace.
++    Destination Clock Delay (DCD):    1.490ns = ( 11.490 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_worst_paths.rpt:230: trailing whitespace.
++    Destination Clock Delay (DCD):    1.493ns = ( 11.493 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_worst_paths.rpt:298: trailing whitespace.
++    Destination Clock Delay (DCD):    1.493ns = ( 11.493 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_worst_paths.rpt:366: trailing whitespace.
++    Destination Clock Delay (DCD):    1.484ns = ( 11.484 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_worst_paths.rpt:434: trailing whitespace.
++    Destination Clock Delay (DCD):    1.490ns = ( 11.490 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_worst_paths.rpt:502: trailing whitespace.
++    Destination Clock Delay (DCD):    1.492ns = ( 11.492 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_worst_paths.rpt:570: trailing whitespace.
++    Destination Clock Delay (DCD):    1.484ns = ( 11.484 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_worst_paths.rpt:638: trailing whitespace.
++    Destination Clock Delay (DCD):    1.484ns = ( 11.484 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/timing_worst_paths.rpt:694: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/utilization_impl.rpt:214: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_fwd_10ns_postopt/utilization_synth.rpt:185: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/design_analysis_impl.rpt:87: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_impl.rpt:32: trailing whitespace.
++  Corner  Analyze    Analyze    
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_impl.rpt:33: trailing whitespace.
++  Name    Max Paths  Min Paths  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_impl.rpt:34: trailing whitespace.
++  ------  ---------  ---------  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_impl.rpt:35: trailing whitespace.
++  Slow    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_impl.rpt:36: trailing whitespace.
++  Fast    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_impl.rpt:139: trailing whitespace.
++    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_impl.rpt:140: trailing whitespace.
++    -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_impl.rpt:141: trailing whitespace.
++      0.051        0.000                      0                 1502        3.750        0.000                       0                   597  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_impl.rpt:154: trailing whitespace.
++sys_clk  {0.000 5.000}      10.000          100.000         
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_impl.rpt:162: trailing whitespace.
++Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_impl.rpt:163: trailing whitespace.
++-----             -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_impl.rpt:164: trailing whitespace.
++sys_clk             0.051        0.000                      0                 1502        3.750        0.000                       0                   597  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_impl.rpt:172: trailing whitespace.
++From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_impl.rpt:173: trailing whitespace.
++----------    --------          -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_impl.rpt:181: trailing whitespace.
++Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_impl.rpt:182: trailing whitespace.
++----------    ----------    --------          -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_impl.rpt:214: trailing whitespace.
++    Destination Clock Delay (DCD):    1.486ns = ( 11.486 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_impl.rpt:293: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_synth.rpt:32: trailing whitespace.
++  Corner  Analyze    Analyze    
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_synth.rpt:33: trailing whitespace.
++  Name    Max Paths  Min Paths  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_synth.rpt:34: trailing whitespace.
++  ------  ---------  ---------  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_synth.rpt:35: trailing whitespace.
++  Slow    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_synth.rpt:36: trailing whitespace.
++  Fast    Yes        Yes        
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_synth.rpt:139: trailing whitespace.
++    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_synth.rpt:140: trailing whitespace.
++    -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_synth.rpt:141: trailing whitespace.
++      0.114        0.000                      0                 1502        3.750        0.000                       0                   597  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_synth.rpt:154: trailing whitespace.
++sys_clk  {0.000 5.000}      10.000          100.000         
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_synth.rpt:162: trailing whitespace.
++Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_synth.rpt:163: trailing whitespace.
++-----             -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_synth.rpt:164: trailing whitespace.
++sys_clk             0.114        0.000                      0                 1502        3.750        0.000                       0                   597  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_synth.rpt:172: trailing whitespace.
++From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_synth.rpt:173: trailing whitespace.
++----------    --------          -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_synth.rpt:181: trailing whitespace.
++Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_synth.rpt:182: trailing whitespace.
++----------    ----------    --------          -------      -------  ---------------------  -------------------  
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_synth.rpt:214: trailing whitespace.
++    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_synth.rpt:282: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_worst_paths.rpt:26: trailing whitespace.
++    Destination Clock Delay (DCD):    1.486ns = ( 11.486 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_worst_paths.rpt:101: trailing whitespace.
++    Destination Clock Delay (DCD):    1.484ns = ( 11.484 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_worst_paths.rpt:185: trailing whitespace.
++    Destination Clock Delay (DCD):    1.488ns = ( 11.488 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_worst_paths.rpt:246: trailing whitespace.
++    Destination Clock Delay (DCD):    1.484ns = ( 11.484 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_worst_paths.rpt:308: trailing whitespace.
++    Destination Clock Delay (DCD):    1.564ns = ( 11.564 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_worst_paths.rpt:379: trailing whitespace.
++    Destination Clock Delay (DCD):    1.488ns = ( 11.488 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_worst_paths.rpt:450: trailing whitespace.
++    Destination Clock Delay (DCD):    1.485ns = ( 11.485 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_worst_paths.rpt:525: trailing whitespace.
++    Destination Clock Delay (DCD):    1.565ns = ( 11.565 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_worst_paths.rpt:596: trailing whitespace.
++    Destination Clock Delay (DCD):    1.490ns = ( 11.490 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_worst_paths.rpt:667: trailing whitespace.
++    Destination Clock Delay (DCD):    1.484ns = ( 11.484 - 10.000 ) 
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/timing_worst_paths.rpt:739: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/utilization_impl.rpt:214: new blank line at EOF.
+data/logs/2026-10-07-partC-postopt/reports/v1_nofwd_10ns_postopt/utilization_synth.rpt:185: new blank line at EOF.

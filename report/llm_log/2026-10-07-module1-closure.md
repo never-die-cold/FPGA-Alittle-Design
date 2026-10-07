@@ -114,3 +114,4 @@ PASS行的mode=1是转发开关；BHT行的mode=2才是BHT档位。若BHT2误跑
 ## 8. 入库检查补记
 暂存后git diff --cached --check首次检查到新归档的Vivado报告/XSim日志原生尾随空格；此前未暂存diff不包含这些新文件，不能代替完整暂存检查。证据目录新增.gitattributes，原始输出和签名设置-text/-whitespace，保留字节及行尾，不修剪原始证据；README和属性文件继续检查空白。修复复现文档末尾空行后重新检查暂存差异。
 本轮工作提交到dev/bench；独立PR基于main，仅带核声明修正96414be、板级报告归档dcb3ef7和本轮收口提交，避免审查范围混入Pi/视觉WIP。原dev/bench已有四个提交完整保留。
+收口工作提交1cf5f2c；独立checkout证据汇总再次PASS。完整PR差异还包含上述依赖提交的历史Vivado输出，根.gitattributes为data/logs/2026-10-07-partC-postopt与build/reports/soc_40mhz_bht2增加定向-whitespace例外，Markdown仍检查空白；不修改历史原始报告。首次PR差异检查失败输出留pr-diff-check-before-attributes.log。
