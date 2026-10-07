@@ -1,15 +1,15 @@
-# 模块一收口 PR 发布稿
-状态：已完成本地提交；推送与创建PR待明确发布授权。目标仓库：https://github.com/never-die-cold/FPGA-Alittle-Design。
+# 模块一收口 PR 发布记录
+状态：[PR #60](https://github.com/never-die-cold/FPGA-Alittle-Design/pull/60)已合并至main；目标仓库：https://github.com/never-die-cold/FPGA-Alittle-Design。
 标题：`chore(riscv): 完成模块一四档验证、时序与证据收口`。
-base=`main`，head=`codex/module1-closure`，创建为draft；原工作分支=`dev/bench`。
+base=`main`，head=`codex/module1-closure`；原工作分支=`dev/bench`。草稿#59转换接口故障，关闭保留记录后以相同head创建非草稿#60，合并提交f3668f7。
 独立分支基于`c2bb910`，引入核声明修正、40MHz板级报告归档与本轮收口。核RTL/tb/hex与本轮被测输入一致；Pi/视觉WIP仍在原工作分支。
 
-以下正文按仓库PR模板发布。发布后将证据链接固定到独立收口提交`ad6db8292c468171b009819a32376087fa83f79e`。
+以下正文按仓库PR模板发布，技术证据链接固定到独立收口提交`ad6db8292c468171b009819a32376087fa83f79e`；本文件随后回填执行状态。
 
 ## 1. 变动概述
 模块一的优化后结果已有零散日志，但缺少统一的四档arch、benchmark、XSim入口及完整时序交叉核对。本PR补齐这些入口，归档11条I/M子集×4档签名、八组工作负载、四档XSim及OOC审计，统一报告、指标与核契约。
 包含前置核声明顺序修正及40MHz SoC归档；源RTL功能和容量不变。arch链接容量由16KB对齐已有32KB核/tb契约。
-对应核计划Part B/C；Refs #20、#21。技术证据与理解门槛完成，远程检查点在证据发布、复核后同步；备考条目仍缺证据，不能随技术验收勾选。
+对应核计划Part B/C；#20/#21与M1技术里程碑已关闭。技术证据与理解门槛完成；备考条目仍缺证据，移交#61保持待办。
 
 ## 2. 涉及目录
 `src/riscv/`、`sim/scripts/`、`sim/arch_test/target/`、`data/logs/`、`data/metrics.csv`、`report/`、`docs/`、根README/plan/.gitattributes，以及前置提交的`build/reports/soc_40mhz_bht2/`与引脚报告。
@@ -33,4 +33,4 @@ CoreMark短仿真非官方长测；arch为声明子集。PS/CNN接口、工业�
 - [x] 完整讲解、题目、用户原文答案与判定已存`report/llm_log/2026-10-07-module1-closure.md`。
 
 ## 5. 复核人
-待非作者抽查、署名及合并审查。本稿不代填复核人，不表示PR已合并或里程碑已关闭。
+用户在本会话通过理解补测并明确要求合并；按protect-main已配置的用户管理员例外执行。非作者署名未代填，不能把用户授权记录改写成第三人审查。实际合并与关闭记录已回填。

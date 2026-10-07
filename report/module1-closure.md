@@ -1,5 +1,5 @@
 # 模块一收口报告：三级 RV32IM、转发与分支预测
-日期：2026-10-07。状态：模块一技术收口复验完成，全量退出码0；理解门槛补测通过。正式入库与远程检查点状态见§7。
+日期：2026-10-07。状态：模块一技术收口完成，全量退出码0，理解门槛补测通过；PR #60已合并，#20/#21与M1已关闭。正式记录见§7。
 任务范围是核及最小 SoC；CNN、视觉定位、工业调度固件与 PS 接口属于后续模块。
 
 ## 1. 版本、条件和证据
@@ -87,7 +87,9 @@ PicoRV32 regular/large OOC 已于 10/03 入档，数值仍需标注 Slack 外推
 
 ## 7. 交付与复现
 [一键复现清单与 #skill候选](../docs/module1-reproduction.md) 包含全量、arch、XSim、OOC 和汇总入口；[data/metrics.csv](../data/metrics.csv) 保留旧指标并追加本轮结果。
-本轮用户已授权一次写完、理解题集中末尾；[完整理解问答](llm_log/2026-10-07-module1-closure.md) 已归档，补测通过。代码与证据已本地提交；自动批准审核拒绝向origin推送两个分支，发布待明确授权。[独立PR发布稿](../docs/module1-pr.md) 已准备。#20/#21 仍open，旧25%/100MHz硬条款与仓库已确认修订不同；[远程收尾记录](../docs/module1-issue-closeout.md) 在证据发布与复核后更新。
+本轮用户已授权一次写完、理解题集中末尾；[完整理解问答](llm_log/2026-10-07-module1-closure.md) 已归档，补测通过。用户随后明确授权推送、创建PR、更新清单，再明确要求关闭issue、合并及同步各分支。
+代码和证据经[PR #60](https://github.com/never-die-cold/FPGA-Alittle-Design/pull/60)合并至main，merge commit=f3668f73ad2e6e779f5a2afe066e532770f94a02。原草稿#59因GitHub GraphQL转换故障由相同head的正式#60接续并保留记录；本次依用户授权使用protect-main已配置的用户管理员例外，未代填非作者审查署名。
+[#20](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20)、[#21](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)和M1技术里程碑已关闭。未验证备考移交[#61](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/61)继续待办；100/125MHz和25%未达事实保留。[远程收尾记录](../docs/module1-issue-closeout.md)与[PR记录](../docs/module1-pr.md)同步正式状态。
 
 本轮最终汇总：
 `PASS: 44 arch signatures; eight workload runs; four XSim matches; five OOC audits; two fixed-route gates`。
