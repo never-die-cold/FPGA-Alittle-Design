@@ -1,0 +1,26 @@
+ls -l /etc/profile.d /opt/xilinx/xrt /dev/dri
+[?2004lls: cannot access '/opt/xilinx/xrt': No such file or directory
+/dev/dri:
+total 0
+drwxr-xr-x 2 root root         80 Sep 21 09:17 by-path
+crw-rw---- 1 root video  226,   0 Sep 21 09:17 card0
+crw-rw---- 1 root render 226, 128 Sep 21 09:17 renderD128
+
+/etc/profile.d:
+total 40
+-rw-r--r-- 1 root root   96 Oct 15  2021 01-locale-fix.sh
+-rw-r--r-- 1 root root  726 Nov 15  2021 bash_completion.sh
+-rwxr-xr-x 1 root root  193 Jul 10  2025 boardname.sh
+-rw------- 1 root root  677 May  3  2025 debuginfod.csh
+-rw------- 1 root root  692 May  3  2025 debuginfod.sh
+-rw-r--r-- 1 root root 1107 Mar 23  2022 gawk.csh
+-rw-r--r-- 1 root root  757 Mar 23  2022 gawk.sh
+-rw-r--r-- 1 root root   47 May  3  2025 pynq_venv.sh
+-rw-r--r-- 1 root root   27 May  3  2025 sigrok.sh
+-rwxr-xr-x 1 root root   23 Jul 10  2025 xrt_setup.sh
+[?2004hxilinx@pynq:~$ printenv XILINX_XRT LD_LIBRARY_PATH XILINX_VITIS
+[?2004l/usr
+[?2004hxilinx@pynq:~$ cat /etc/profile.d/xrt_setup.sh /etc/profile.d/pynq_venv.sh
+[?2004lexport XILINX_XRT=/usr
+source /usr/local/share/pynq-venv/bin/activate
+[?2004hxilinx@pynq:~$ 

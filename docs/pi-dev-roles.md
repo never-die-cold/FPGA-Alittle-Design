@@ -9,7 +9,7 @@
 2. **Pi 不产生数据集像素**：数据集帧一律经 PYNQ `hdmi_in.readframe()` 采集（数据集像素=部署像素），Pi 侧存图禁止。
 3. **供电与上电顺序**：Pi 用专用 5V/3A USB-C 电源；**禁止从 PYNQ USB host 口取电**；上电顺序 PYNQ 先（PL EDID 就绪）→ Pi 后（hardware.md §3.7）。
 4. **mock/回放结果标注「非板上识别」**：仅供界面联调与链路验收动作，不替代真实识别验收（plan.md §3.4）。
-5. **系统配置只落在项目专用 microSD**（另配，Raspberry Pi OS Lite 32-bit，SSH 开启）；HDMI 输出锁 720p60（`config.txt` 设 `hdmi_group=1`/`hdmi_mode=4`）。
+5. **系统配置只落在项目专用 microSD**（另配，Raspberry Pi OS Lite 32-bit，SSH 开启）；HDMI 输出锁 720p60。KMS 系统在 `/boot/firmware/cmdline.txt` 原单行追加 `video=HDMI-A-1:1280x720@60D`，并用 `sudo kmsprint` 复验实际时序；旧 `hdmi_group/hdmi_mode` 不能替代 KMS 配置。
 
 ## §2 角色清单
 
@@ -62,12 +62,17 @@ ffplay -loop 0 -vf "setpts=N/FRAME_RATE/TB" replay.mp4   # 或 vlc 循环
 
 ## §6 R4 CM3 演示源（到货后）
 
-1. 项目卡上 `raspi-config` 使能相机 + `config.txt` 锁 `hdmi_group=1`/`hdmi_mode=4`
+1. 项目卡启用 `camera_auto_detect=1`，用 `rpicam-hello --list-cameras` 确认 IMX708，KMS HDMI 固定及实际模式检查按 §1 第 5 条。
 2. 按 hardware.md §4 验线（base overlay 直通先行）
 3. 采集规程 §2 机位定标（40–80cm）后进入数据采集
+
+2026-10-06 实机为 Trixie 13：相机 → Pi → 采集卡 → 电脑直连已通，
+普通账号预览及重启后自动预览通过，见 [服务复现入口](pi-camera-preview-runbook.md)。
+这一步不等于相机经 PYNQ 或数据采集验收，后续仍执行第 2–3 项。
 
 ## 变更记录
 
 | 日期 | 变更 |
 |:---|:---|
 | 2026-10-03 | 首版：R1–R4 角色定案（方案经批准），红线五条；mock 服务加 `--host`；回放素材生成器入库 |
+| 2026-10-06 | KMS 输出配置更正为 cmdline video=；增加直连相机与重启自动预览证据入口，PYNQ 路径仍待验收 |

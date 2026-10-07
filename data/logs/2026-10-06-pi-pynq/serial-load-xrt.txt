@@ -1,0 +1,7 @@
+sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 /home/xilinx/vision_m2/m2_onboard.py load'
+[?2004lip_dict:
+  pipe @ 0x40000000 range 0x10000
+  ps7 @ 0x00000000 range 0x0
+axi_regs ???: pipe @ 0x40000000
+PASS: load
+[?2004hxilinx@pynq:~$ 

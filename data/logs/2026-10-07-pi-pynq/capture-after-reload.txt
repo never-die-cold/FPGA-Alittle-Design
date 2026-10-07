@@ -1,0 +1,6 @@
+[ WARN:0@0.492] global cap.cpp:480 cv::VideoCapture::open VIDEOIO(DSHOW): backend is generally available but can't be used to capture by index
+Traceback (most recent call last):
+  File "preview.py", line 87, in <module>
+  File "preview.py", line 71, in main
+RuntimeError: UVC frame unavailable
+[PYI-38652:ERROR] Failed to execute script 'preview' due to unhandled exception!

@@ -1,0 +1,9 @@
+
+[?2004l[?2004hxilinx@pynq:~$ sudo -n /usr/local/share/pynq-venv/bin/python3 /home/xilinx/vision_m2/m2_onboard.py env
+[?2004lpython=3.10.4
+pynq=3.1
+vision.bit: OK (4045769 B)
+vision.hwh: OK (313989 B)
+vision_regs.py: OK (5626 B)
+PASS: env
+[?2004hxilinx@pynq:~$ 

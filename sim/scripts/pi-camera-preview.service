@@ -1,0 +1,18 @@
+[Unit]
+Description=Camera Module 3 HDMI preview
+After=systemd-udev-trigger.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=exec
+User=edgesight
+SupplementaryGroups=video
+ExecStart=/usr/bin/rpicam-hello --timeout 0 --fullscreen --viewfinder-width 1280 --viewfinder-height 720
+Restart=on-failure
+RestartSec=5s
+KillSignal=SIGINT
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,98 @@
+edgesight@edgesight-pi:~ $ sudo kmsprint -m
+sudo: unable to resolve host edgesight-pi: Temporary failure in name resolution
+Connector 0 (35) HDMI-A-1 (connected)
+   0 1920x1080@60.00  148.500 1920/88/44/148/+   1080/4/5/36/+      60 (60.00) P|D
+   1 4096x2160@30.00  297.000 4096/88/88/128/+   2160/8/10/72/+     30 (30.00) D     256:135
+   2 4096x2160@29.97  296.703 4096/88/88/128/+   2160/8/10/72/+     30 (29.97) D     256:135
+   3 4096x2160@24.00  297.000 4096/1020/88/296/+ 2160/8/10/72/+     24 (24.00) D     256:135
+   4 4096x2160@23.98  296.703 4096/1020/88/296/+ 2160/8/10/72/+     24 (23.98) D     256:135
+   5 3840x2160@30.00  297.000 3840/176/88/296/+  2160/8/10/72/+     30 (30.00) D     16:9
+   6 3840x2160@29.97  296.703 3840/176/88/296/+  2160/8/10/72/+     30 (29.97) D     16:9
+   7 3840x2160@25.00  297.000 3840/1056/88/296/+ 2160/8/10/72/+     25 (25.00) D     16:9
+   8 3840x2160@24.00  297.000 3840/1276/88/296/+ 2160/8/10/72/+     24 (24.00) D     16:9
+   9 3840x2160@23.98  296.703 3840/1276/88/296/+ 2160/8/10/72/+     24 (23.98) D     16:9
+  10 2560x1440@60.00  241.700 2560/48/32/80/-    1440/2/5/34/-      60 (60.00) D
+  11 2560x1440@49.96  256.250 2560/176/272/448/- 1440/3/5/36/-      50 (49.96) D
+  12 1920x1080@60.00  148.500 1920/88/44/148/+   1080/4/5/36/+      60 (60.00) D     16:9
+  13 1920x1080@59.94  148.352 1920/88/44/148/+   1080/4/5/36/+      60 (59.94) D     16:9
+  14 1920x1080i@60.00  74.250 1920/88/44/148/+   1080/4/10/31/+     60 (60.00) D     16:9
+  15 1920x1080i@59.94  74.176 1920/88/44/148/+   1080/4/10/31/+     60 (59.94) D     16:9
+  16 1920x1080@50.00  148.500 1920/528/44/148/+  1080/4/5/36/+      50 (50.00) D     16:9
+  17 1920x1080i@50.00  74.250 1920/528/44/148/+  1080/4/10/31/+     50 (50.00) D     16:9
+  18 1920x1080@30.00   74.250 1920/88/44/148/+   1080/4/5/36/+      30 (30.00) D     16:9
+  19 1920x1080@29.97   74.176 1920/88/44/148/+   1080/4/5/36/+      30 (29.97) D     16:9
+  20 1920x1080@25.00   74.250 1920/528/44/148/+  1080/4/5/36/+      25 (25.00) D     16:9
+  21 1920x1080@24.00   74.250 1920/638/44/148/+  1080/4/5/36/+      24 (24.00) D     16:9
+  22 1920x1080@23.98   74.176 1920/638/44/148/+  1080/4/5/36/+      24 (23.98) D     16:9
+  23 1280x720@60.00    74.250 1280/110/40/220/+  720/5/5/20/+       60 (60.00) D
+  24 1280x720@60.00    74.250 1280/110/40/220/+  720/5/5/20/+       60 (60.00) D     16:9
+  25 1280x720@59.94    74.176 1280/110/40/220/+  720/5/5/20/+       60 (59.94) D     16:9
+  26 1280x720@50.00    74.250 1280/440/40/220/+  720/5/5/20/+       50 (50.00) D     16:9
+  27 1280x720@30.00    74.250 1280/1760/40/220/+ 720/5/5/20/+       30 (30.00) D     16:9
+  28 1280x720@29.97    74.176 1280/1760/40/220/+ 720/5/5/20/+       30 (29.97) D     16:9
+  29 1280x720@25.00    74.250 1280/2420/40/220/+ 720/5/5/20/+       25 (25.00) D     16:9
+  30 1280x720@24.00    59.400 1280/1760/40/220/+ 720/5/5/20/+       24 (24.00) D     16:9
+  31 1280x720@23.98    59.341 1280/1760/40/220/+ 720/5/5/20/+       24 (23.98) D     16:9
+  32 1024x768@60.00    65.000 1024/24/136/160/-  768/3/6/29/-       60 (60.00) D
+  33 800x600@60.32     40.000 800/40/128/88/+    600/1/4/23/+       60 (60.32) D
+  34 640x480@60.00     25.200 640/16/96/48/-     480/10/2/33/-      60 (60.00) D     4:3
+  35 640x480@59.94     25.175 640/16/96/48/-     480/10/2/33/-      60 (59.94) D
+edgesight@edgesight-pi:~ $ cat /boot/firmware/cmdline.txt
+console=serial0,115200 console=tty1 root=PARTUUID=22b1b901-02 rootfstype=ext4 fsck.repair=yes rootwait
+edgesight@edgesight-pi:~ $ cat /boot/firmware/config.txt
+# For more options and information see
+# http://rptl.io/configtxt
+# Some settings may impact device functionality. See link above for details
+
+# Uncomment some or all of these to enable the optional hardware interfaces
+#dtparam=i2c_arm=on
+#dtparam=i2s=on
+#dtparam=spi=on
+
+# Enable audio (loads snd_bcm2835)
+dtparam=audio=on
+
+# Additional overlays and parameters are documented
+# /boot/firmware/overlays/README
+
+# Automatically load overlays for detected cameras
+camera_auto_detect=1
+
+# Automatically load overlays for detected DSI displays
+display_auto_detect=1
+
+# Automatically load initramfs files, if found
+auto_initramfs=1
+
+# Enable DRM VC4 V3D driver
+dtoverlay=vc4-kms-v3d
+max_framebuffers=2
+
+# Don't have the firmware create an initial video= setting in cmdline.txt.
+# Use the kernel's default instead.
+disable_fw_kms_setup=1
+
+# Disable compensation for displays with overscan
+disable_overscan=1
+
+# Run as fast as firmware / board allows
+arm_boost=1
+
+[cm4]
+# Enable host mode on the 2711 built-in XHCI USB controller.
+# This line should be removed if the legacy DWC2 controller is required
+# (e.g. for USB device mode) or if USB support is not required.
+otg_mode=1
+
+[cm5]
+dtoverlay=dwc2,dr_mode=host
+
+[pi5]
+dtoverlay=nospi10
+
+[all]
+# EdgeSight: lock HDMI to 1280x720@60 (CEA group 1, mode 4) for PYNQ-Z2 HDMI IN.
+# Per docs/pi-dev-roles.md red line 5 / board/hardware.md 3.7. Kernel KMS ignores
+# firmware video options; the PYNQ PL EDID stays authoritative (hardware.md 3.7-3).
+hdmi_group=1
+hdmi_mode=4

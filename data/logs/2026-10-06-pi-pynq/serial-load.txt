@@ -1,0 +1,16 @@
+sudo -n /usr/local/share/pynq-venv/bin/python3 /home/xilinx/vision_m2/m2_onboard.py load
+[?2004l/usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/pl_server/device.py:56: UserWarning: No devices found, is the XRT environment sourced?
+  warnings.warn(
+Traceback (most recent call last):
+  File "/home/xilinx/vision_m2/m2_onboard.py", line 86, in <module>
+    cmds[sys.argv[1]]()
+  File "/home/xilinx/vision_m2/m2_onboard.py", line 42, in cmd_load
+    ol = Overlay(os.path.join(here, "vision.bit"))
+  File "/usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/overlay.py", line 318, in __init__
+    super().__init__(bitfile_name, dtbo, partial=False, device=device)
+  File "/usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/bitstream.py", line 88, in __init__
+    device = Device.active_device
+  File "/usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/pl_server/device.py", line 71, in active_device
+    raise RuntimeError("No Devices Found")
+RuntimeError: No Devices Found
+[?2004hxilinx@pynq:~$ 
