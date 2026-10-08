@@ -16,6 +16,9 @@
 | D5 | 会话生命周期 | ✅ 2026-10-06 watercopper 确认沿用预填推荐 |
 | D6 | 报文 schema v1.1 | ✅ 2026-10-06 watercopper 确认沿用预填推荐；代码另起步骤 |
 | D7 | 板端真实服务负责人 | ✅ 2026-10-06 NC（组长）本人确认接任；plan.md §3.4 已同步 |
+| D8 | 批次记录：触发 | ✅ 2026-10-08 随离板实现落地：仅手动触发轮次是记录候选（0.3s 防抖） |
+| D9 | 批次记录：去重 | ✅ 2026-10-08 落地：键 = (session_id, check_id)，一次确认的检查只记一条 |
+| D10 | 批次记录：存储与标识 | ✅ 2026-10-08 落地：records.jsonl + screenshots/；MOCK 记录带 `mock_` 前缀 |
 
 ## 1. 问题背景（为什么需要本单）
 
@@ -71,6 +74,18 @@
 - EXE 前端 = watercopper（已定）。板端 PS 上的真实 HTTP 服务（消费 cop_* 快照、响应触发、MMIO 配置）主责 = **never-die-cold（2026-10-06 NC 本人确认接任）**。理由——EXE 开发机无网口，实机网口联调依赖队长环境；队长已有上板操作经验（2026-10-03 vision onboard 由其执行）。plan.md §3.4/§5.3 已同步。
 - 过渡方案：服务未就绪期间，EXE 联调用 mock 服务（PC 或 Pi 宿主，pi-dev-roles R2），结果恒标 MOCK。
 
+## D8–D10 批次记录（M3 起步，2026-10-08 随离板实现落地）
+
+- **D8 记录触发**：只有**手动触发**（`c` 键/检查按钮，0.3s 防抖）的轮次是批次记录候选；
+  自动间隔轮次（演示模式）永不落记录——结构性满足 M3"重复帧不增加批次计数"，
+  视频帧/自动轮询再多也不产生记录。
+- **D9 去重**：记录键 = (session_id, check_id)；同键重复写入被拒，"一次确认的检查只记一条"。
+  结果未到/过期/断联不记录（异常事件与异常截图列 M3 项，独立于批次）。
+- **D10 存储与标识**：`records.jsonl`（一行一条：schema_version / mode / session_id / check_id /
+  config_id / frame_id / recorded_at / result_age_s / target_count / targets / verdict 预留 /
+  screenshot）+ `screenshots/` 逐条 PNG（记录时的含框画面）。**MOCK 记录截图带 `mock_` 前缀
+  且 mode=MOCK——不得用作板上识别证据**（plan.md §3.4）。导出 = 记录目录本身；CSV 导出列 M3 增强。
+
 ## 与验收的映射
 
 - M2（10/12）：本单评审冻结 + EXE 轮次级叠加原型（mock 结果联调，明确标注来源）。
@@ -85,3 +100,4 @@
 | 2026-10-06 | 契约收口：D2–D6 watercopper 确认沿用推荐；D7 NC 本人确认接任，plan.md §3.4/§5.3 同步 | watercopper（EXE 前端） |
 | 2026-10-06 | D3 增实现注记：EXE 触发间隔须小于年龄窗口（0.5s < 1.0s，启动校验）；取值经 WC 质询修正 | watercopper（EXE 前端） |
 | 2026-10-08 | D6 bbox 端点语义对齐：闭区间 → 半开区间 `[x0,x1)×[y0,y1)`（对齐[定位外包需求](outsource/localization-requirements.md) L2，宽=x1-x0）；协议校验、测试与 EXE 画框同步 | watercopper（EXE 前端） |
+| 2026-10-08 | 新增 D8–D10 批次记录（手动触发才记录 / 键去重 / JSONL+截图，MOCK 带 `mock_` 标识）；离板实现与测试随 EXE 落地 | watercopper（EXE 前端） |

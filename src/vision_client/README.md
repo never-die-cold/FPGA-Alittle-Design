@@ -25,8 +25,16 @@ python src/pynq_host/vision_mock_service.py
 sim/build/vision-client/dist/vision_preview/vision_preview.exe --mock --endpoint http://127.0.0.1:8765
 ```
 
-采集卡接入后的验收入口为 `vision_preview.exe --source 0`，按 q 或 Esc 退出，按 c 立即触发一轮检查。
+采集卡接入后的验收入口为 `vision_preview.exe --source 0`，按 q 或 Esc 退出。按 `c` 手动触发
+一轮检查（0.3s 防抖）；配 `--records-dir` 时该轮**有效**结果落批次记录（D8–D10）。
 设备索引需现场确认。当前没有验证实际 UVC 格式、驱动与目标电脑兼容性。
+
+批次记录（M3 起步，契约见决策单 D8–D10）：`--records-dir <目录>` 开启。只有手动触发的
+有效轮次记录——自动间隔轮次永不记录，结构性满足"重复帧不增加批次计数"；记录键
+`(session_id, check_id)` 去重；产物为 `records.jsonl`（一行一条：mode/session/check/config/
+frame/时间/结果年龄/目标数/boxes/verdict 预留/截图名）+ `screenshots/` 逐条 PNG。
+**MOCK 记录截图带 `mock_` 前缀、mode=MOCK，不得用作板上识别证据**（plan.md §3.4）。
+目录本身即导出件；CSV 导出列 M3 增强。离线测试：`py sim/vision/test_vision_records.py`。
 
 轮次叠加模式（契约见 [docs/vision-sync-protocol-decisions.md](../../docs/vision-sync-protocol-decisions.md)）：
 `--source 0 --endpoint http://<host>:8765` —— 采集卡视频 + 结果服务轮次叠加。启动握手失败立即

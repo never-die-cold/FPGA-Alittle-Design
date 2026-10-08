@@ -8,7 +8,9 @@ preview.py 只负责取帧与渲染；状态机抽离为纯 stdlib 模块（不�
 - 连续失败达 FAIL_LIMIT 重握手，重握手自身失败不许外泄异常（服务重启窗口期）；
 - 服务重启 = 新会话：poll 检测到 session 变化立即重握手，本轮不采纳报文（D5）；
 - overlay 撤框条件 = 无报文 / 连续失败达限 / 超龄 / 会话不符 / 配置号不符 /
-  LIVE 模式未联接（MOCK 模式豁免 hardware_connected=false）。
+  LIVE 模式未联接（MOCK 模式豁免 hardware_connected=false）；
+- trigger()：手动触发（c 键/检查按钮）立即发起下一轮并标记为批次记录候选（D8），
+  0.3s 防抖防按键自动重复灌爆批次表。
 """
 import json
 import urllib.error
@@ -42,6 +44,9 @@ class RemoteRounds:
         self.fails = 0
         self.last_trigger = 0.0
         self.packet = None
+        self.manual_pending = False
+        self.last_round_manual = False
+        self.last_manual = None
 
     def handshake(self):
         status = http_json(self.endpoint + "/v1/status")
@@ -53,7 +58,18 @@ class RemoteRounds:
         self.fails = 0
         self.packet = None
         self.last_trigger = 0.0
+        self.manual_pending = False
+        self.last_round_manual = False
         return status
+
+    def trigger(self, now, min_gap=0.3):
+        """手动触发下一轮；min_gap 内重复触发忽略（防按键自动重复）。该轮为批次记录候选（D8）。"""
+        if self.last_manual is not None and now - self.last_manual < min_gap:
+            return False
+        self.last_manual = now
+        self.manual_pending = True
+        self.last_trigger = 0.0
+        return True
 
     def rehandshake(self):
         try:
@@ -65,6 +81,9 @@ class RemoteRounds:
         if now - self.last_trigger < interval:
             return
         self.last_trigger = now
+        manual = self.manual_pending
+        self.manual_pending = False
+        self.last_round_manual = manual
         try:
             # 传空 JSON 对象：http_json 以"有无 body"区分 GET/POST，/v1/check 仅接受 POST。
             packet = validate_packet(http_json(self.endpoint + "/v1/check", {}))

@@ -2,6 +2,7 @@
 
 画面来源：UVC 采集卡（--source）或本机合成场景（--mock）。网络结果按轮次语义叠加：
 状态机（D2 触发 / D3 有效性撤框 / D5 重连）在 rounds.py，离板测试 sim/vision/test_vision_rounds.py；
+批次记录（D8–D10）在 records.py（--records-dir 开启，仅手动触发的有效轮次）；
 本文件只负责取帧、画框与横幅。MOCK 结果恒标 MOCK ONLY，不代表板上识别（plan.md §3.4）。
 无 --endpoint 时纯视频显示 VIDEO ONLY | UNASSOCIATED，不叠任何框。
 """
@@ -15,6 +16,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "pynq_host"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from vision_protocol import mock_packet
 from rounds import RemoteRounds
+from records import BatchRecords
 import cv2
 import numpy as np
 
@@ -62,6 +64,8 @@ def main():
     parser.add_argument("--max-age", type=float, default=1.0, help="D3 result age window (s)")
     parser.add_argument("--interval", type=float, default=0.5,
                         help="auto check trigger period (s); must be < --max-age")
+    parser.add_argument("--records-dir", type=Path,
+                        help="batch record dir (D8-D10): manual-triggered current rounds only")
     args = parser.parse_args()
     if args.selftest:
         p = mock_packet("selftest", 1, 0, 1)
@@ -81,6 +85,7 @@ def main():
             sys.exit(f"result service unreachable at startup: {error}")
         print(f"session {status['session_id']} mode {status['mode']} "
               f"hardware_connected {status['hardware_connected']}", flush=True)
+    recorder = BatchRecords(args.records_dir) if args.records_dir else None
     scene = None
     capture = None if args.mock else cv2.VideoCapture(args.source, cv2.CAP_DSHOW)
     try:
@@ -97,6 +102,7 @@ def main():
                     scene = mock_frame(mock_packet("scene", 0, 0, 0))
                 frame = scene
             targets = None
+            will_record = False
             if remote is None:
                 if capture is None:
                     p = mock_packet("local-preview", i, 0, i)
@@ -109,8 +115,14 @@ def main():
                 remote.poll(now, args.interval)
                 current, status_text = remote.overlay(now)
                 targets = remote.packet["targets"] if current else None
+                will_record = (recorder is not None and current
+                               and remote.last_round_manual and recorder.accept(remote.packet))
+                if will_record:
+                    status_text += f" | REC {recorder.count + 1}"
                 label = "MOCK ONLY | " + status_text
             shown = render(frame, targets, label)
+            if will_record:
+                recorder.write(remote.packet, shown)
             if args.save and not cv2.imwrite(str(args.save), shown):
                 raise RuntimeError("preview image save failed")
             if not args.headless:
@@ -119,7 +131,7 @@ def main():
                 if key in (27, ord("q")):
                     break
                 if key == ord("c") and remote is not None:
-                    remote.last_trigger = 0.0
+                    remote.trigger(now)
     finally:
         if capture is not None:
             capture.release()
