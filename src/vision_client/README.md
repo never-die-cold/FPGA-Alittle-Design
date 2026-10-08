@@ -36,6 +36,11 @@ frame/时间/结果年龄/目标数/boxes/verdict 预留/截图名）+ `screensh
 **MOCK 记录截图带 `mock_` 前缀、mode=MOCK，不得用作板上识别证据**（plan.md §3.4）。
 目录本身即导出件；CSV 导出列 M3 增强。离线测试：`py sim/vision/test_vision_records.py`。
 
+异常事件日志（D11）：状态迁移（断联/超期/配置变化/恢复 ok）与会话变化、重握手失败写入
+同目录 `anomalies.jsonl`（一行一事件，含 prev/check_id/fails）+ `screenshots/anomaly_*.png`。
+`--trigger-frame N` 为联调自检入口：在第 N 帧模拟一次手动触发（等效按 `c`），
+供打包测试覆盖"手动触发→落批次记录"全路径。
+
 轮次叠加模式（契约见 [docs/vision-sync-protocol-decisions.md](../../docs/vision-sync-protocol-decisions.md)）：
 `--source 0 --endpoint http://<host>:8765` —— 采集卡视频 + 结果服务轮次叠加。启动握手失败立即
 退出；每 `--interval`（默认 0.5s，启动校验必须小于 `--max-age`，否则每轮结果在下轮触发前过期、

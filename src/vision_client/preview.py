@@ -16,7 +16,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "pynq_host"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from vision_protocol import mock_packet
 from rounds import RemoteRounds
-from records import BatchRecords
+from records import AnomalyLog, BatchRecords
 import cv2
 import numpy as np
 
@@ -66,6 +66,8 @@ def main():
                         help="auto check trigger period (s); must be < --max-age")
     parser.add_argument("--records-dir", type=Path,
                         help="batch record dir (D8-D10): manual-triggered current rounds only")
+    parser.add_argument("--trigger-frame", type=int, default=0,
+                        help="self-check hook: simulate one manual trigger (c) at frame N")
     args = parser.parse_args()
     if args.selftest:
         p = mock_packet("selftest", 1, 0, 1)
@@ -86,6 +88,7 @@ def main():
         print(f"session {status['session_id']} mode {status['mode']} "
               f"hardware_connected {status['hardware_connected']}", flush=True)
     recorder = BatchRecords(args.records_dir) if args.records_dir else None
+    anomalies = AnomalyLog(args.records_dir) if args.records_dir else None
     scene = None
     capture = None if args.mock else cv2.VideoCapture(args.source, cv2.CAP_DSHOW)
     try:
@@ -112,6 +115,8 @@ def main():
                 else:
                     label = "VIDEO ONLY | UNASSOCIATED | no board recognition"
             else:
+                if args.trigger_frame and i == args.trigger_frame:
+                    remote.trigger(now)  # 联调自检：模拟按 c（覆盖 D8 记录路径）
                 remote.poll(now, args.interval)
                 current, status_text = remote.overlay(now)
                 targets = remote.packet["targets"] if current else None
@@ -123,6 +128,9 @@ def main():
             shown = render(frame, targets, label)
             if will_record:
                 recorder.write(remote.packet, shown)
+            if anomalies is not None and remote is not None:
+                for event in remote.drain_events():
+                    anomalies.log(remote.mode, event, shown)
             if args.save and not cv2.imwrite(str(args.save), shown):
                 raise RuntimeError("preview image save failed")
             if not args.headless:

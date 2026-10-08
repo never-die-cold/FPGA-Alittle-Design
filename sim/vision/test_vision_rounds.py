@@ -66,7 +66,10 @@ def main():
         # D5：断联 → 连续失败达限撤框，且重握手失败不外泄异常
         server.shutdown()
         server.server_close()
-        for step in (3.0, 3.6, 4.2):
+        assert remote.trigger(now + 2.9) is True  # 断联中的手动触发
+        remote.poll(now + 3.0, 0.5)  # 该手动轮失败（fails=1）
+        assert not remote.last_round_manual  # 残留旧报文不得冒充手动轮结果（D8 采纳点语义）
+        for step in (3.6, 4.2):
             remote.poll(now + step, 0.5)
         assert remote.fails >= 3
         assert remote.overlay(time.time()) == (False, WAITING)
@@ -77,10 +80,14 @@ def main():
         remote.poll(now + 5.4, 0.5)
         current, label = remote.overlay(time.time())
         assert current and label.startswith("ROUND ") and "2 targets" in label
+        # D11：异常事件队列覆盖 状态迁移/会话变化/重握手失败
+        kinds = {event["kind"] for event in remote.drain_events()}
+        assert {"overlay_stale", "overlay_config", "overlay_outage", "overlay_ok",
+                "session_changed", "rehandshake_failed"} <= kinds
     finally:
         server.shutdown()
         server.server_close()
-    print("PASS: round overlay trigger/throttle/manual/stale/config-change/outage/session-recovery")
+    print("PASS: round overlay trigger/throttle/manual/stale/config-change/outage/session-recovery/events")
 
 
 if __name__ == "__main__":

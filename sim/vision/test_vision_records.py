@@ -11,7 +11,7 @@ from pathlib import Path
 root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(root / "src/pynq_host"))
 sys.path.insert(0, str(root / "src/vision_client"))
-from records import BatchRecords
+from records import AnomalyLog, BatchRecords
 from vision_protocol import mock_packet
 
 
@@ -40,7 +40,20 @@ def main():
     assert row["verdict"] is None
     assert row["screenshot"] == "screenshots/mock_sess-abc_000005.png"
     assert written[0] == out / "screenshots/mock_sess-abc_000005.png"
-    print("PASS: batch records key-dedup/mock-prefix/fields/append (D8-D10)")
+    # D11：异常事件日志（AnomalyLog）独立成文件，截图按序编号，LIVE 不带 mock_ 前缀
+    anomaly_shots = []
+    anom = AnomalyLog(out, save_image=lambda path, frame: anomaly_shots.append(path) or True)
+    first = anom.log("MOCK", {"kind": "overlay_outage", "prev": "ok", "check_id": 4, "fails": 3}, None)
+    anom.log("LIVE", {"kind": "overlay_ok", "prev": "outage", "check_id": 4, "fails": 0}, None)
+    assert first.name == "mock_anomaly_0001.png" and anom.count == 2
+    assert not anomaly_shots[1].name.startswith("mock_")
+    a_lines = (out / "anomalies.jsonl").read_text(encoding="utf-8").strip().splitlines()
+    assert len(a_lines) == 2
+    arow = json.loads(a_lines[0])
+    assert arow["kind"] == "overlay_outage" and arow["prev"] == "ok"
+    assert arow["check_id"] == 4 and arow["fails"] == 3 and arow["mode"] == "MOCK"
+    assert arow["screenshot"] == "screenshots/mock_anomaly_0001.png"
+    print("PASS: batch records key-dedup/mock-prefix/fields + anomaly events (D8-D11)")
 
 
 if __name__ == "__main__":

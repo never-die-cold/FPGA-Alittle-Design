@@ -10,13 +10,15 @@ preview.py 只负责取帧与渲染；状态机抽离为纯 stdlib 模块（不�
 - overlay 撤框条件 = 无报文 / 连续失败达限 / 超龄 / 会话不符 / 配置号不符 /
   LIVE 模式未联接（MOCK 模式豁免 hardware_connected=false）；
 - trigger()：手动触发（c 键/检查按钮）立即发起下一轮并标记为批次记录候选（D8），
-  0.3s 防抖防按键自动重复灌爆批次表。
+  0.3s 防抖防按键自动重复灌爆批次表；
+- 事件（D11）：overlay 状态迁移 / 会话变化 / 重握手失败记入 events 队列，
+  由上层 drain_events() 取走写 anomalies.jsonl（异常事件日志）。
 """
 import json
 import urllib.error
 import urllib.request
 
-from vision_protocol import is_current, validate_packet
+from vision_protocol import validate_packet
 
 REQUEST_TIMEOUT = 2.0
 FAIL_LIMIT = 3
@@ -47,6 +49,8 @@ class RemoteRounds:
         self.manual_pending = False
         self.last_round_manual = False
         self.last_manual = None
+        self.events = []
+        self.last_state = "no_result"
 
     def handshake(self):
         status = http_json(self.endpoint + "/v1/status")
@@ -60,6 +64,7 @@ class RemoteRounds:
         self.last_trigger = 0.0
         self.manual_pending = False
         self.last_round_manual = False
+        self.last_state = "no_result"
         return status
 
     def trigger(self, now, min_gap=0.3):
@@ -75,6 +80,8 @@ class RemoteRounds:
         try:
             self.handshake()
         except (urllib.error.URLError, OSError, KeyError, ValueError) as error:
+            self.events.append({"kind": "rehandshake_failed", "prev": None,
+                                "check_id": None, "fails": self.fails})
             print(f"WARN: re-handshake failed: {error}", flush=True)
 
     def poll(self, now, interval):
@@ -83,7 +90,6 @@ class RemoteRounds:
         self.last_trigger = now
         manual = self.manual_pending
         self.manual_pending = False
-        self.last_round_manual = manual
         try:
             # 传空 JSON 对象：http_json 以"有无 body"区分 GET/POST，/v1/check 仅接受 POST。
             packet = validate_packet(http_json(self.endpoint + "/v1/check", {}))
@@ -94,18 +100,46 @@ class RemoteRounds:
                 self.rehandshake()
             return
         if self.session is not None and packet["session_id"] != self.session:
+            self.events.append({"kind": "session_changed", "prev": None,
+                                "check_id": packet["check_id"], "fails": self.fails})
             print("WARN: service session changed; re-handshaking", flush=True)
             self.rehandshake()
             return
         self.packet = packet
+        # 采纳点才更新来源标记：失败的手动轮不得让残留旧报文冒充手动结果（D8）。
+        self.last_round_manual = manual
         self.fails = 0
 
+    def _state(self, now):
+        """当前叠加状态（D3 判定分解；供 overlay 与异常事件复用）。"""
+        if self.packet is None or self.session is None:
+            return "no_result"
+        if self.fails >= FAIL_LIMIT:
+            return "outage"
+        if self.packet["session_id"] != self.session:
+            return "session"
+        if self.packet["config_id"] != self.expected_config:
+            return "config"
+        if not 0 <= now - self.packet["created_at"] <= self.max_age:
+            return "stale"
+        if not (self.mode == "MOCK" or self.hardware_connected):
+            return "offline"
+        return "ok"
+
     def overlay(self, now):
-        """返回 (是否叠加, 横幅文本)；撤框条件见 D3。"""
-        if (self.packet is not None and self.session is not None and self.fails < FAIL_LIMIT
-                and (self.mode == "MOCK" or self.hardware_connected)
-                and is_current(self.packet, self.session, self.expected_config, self.max_age)):
+        """返回 (是否叠加, 横幅文本)；状态迁移记入 events（D11 异常事件）。"""
+        state = self._state(now)
+        if state != self.last_state:
+            self.events.append({"kind": f"overlay_{state}", "prev": self.last_state,
+                                "check_id": self.packet["check_id"] if self.packet else None,
+                                "fails": self.fails})
+            self.last_state = state
+        if state == "ok":
             age = now - self.packet["created_at"]
             return True, (f"ROUND {self.packet['check_id']} | {age:.1f}s ago | "
                           f"{len(self.packet['targets'])} targets")
         return False, WAITING
+
+    def drain_events(self):
+        events, self.events = self.events, []
+        return events

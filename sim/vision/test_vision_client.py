@@ -1,4 +1,5 @@
 """Exercise the packaged Windows EXE against the local M2 HTTP service."""
+import json
 import shutil
 import subprocess
 import sys
@@ -26,6 +27,21 @@ try:
     assert image.read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
     # D8：自动间隔轮次永不落批次记录（"--frames 3" 无手动触发 → 无 records.jsonl）
     assert not (record_dir / "records.jsonl").exists(), "auto rounds must not create batch records"
+    # 手动触发路径（--trigger-frame 模拟按 c）：恰好一条批次记录 + 异常事件日志存在
+    manual_dir = root / "sim/build/vision-client/records-manual-check"
+    shutil.rmtree(manual_dir, ignore_errors=True)
+    manual = subprocess.run([str(exe), "--mock", "--headless", "--frames", "6",
+        "--endpoint", f"http://127.0.0.1:{server.server_port}", "--save", str(image),
+        "--records-dir", str(manual_dir), "--trigger-frame", "2"],
+        capture_output=True, text=True, timeout=20)
+    if manual.returncode != 0:
+        raise AssertionError(manual.stdout + manual.stderr)
+    rows = (manual_dir / "records.jsonl").read_text(encoding="utf-8").strip().splitlines()
+    assert len(rows) == 1, "manual trigger must record exactly one batch"
+    row = json.loads(rows[0])
+    assert row["mode"] == "MOCK" and row["screenshot"].startswith("screenshots/mock_")
+    assert (manual_dir / row["screenshot"]).exists()
+    assert (manual_dir / "anomalies.jsonl").exists(), "state events must be journalled"
     # 内容断言：叠加生效时画面必须有绿色目标框像素。2026-10-08 曾出现 /v1/check 误发 GET
     # （404）导致端点模式叠框全部失效、"跑通即通过"的旧断言未能发现，故补此检查。
     frame = cv2.imread(str(image))

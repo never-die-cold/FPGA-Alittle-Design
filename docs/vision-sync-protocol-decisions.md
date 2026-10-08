@@ -19,6 +19,7 @@
 | D8 | 批次记录：触发 | ✅ 2026-10-08 随离板实现落地：仅手动触发轮次是记录候选（0.3s 防抖） |
 | D9 | 批次记录：去重 | ✅ 2026-10-08 落地：键 = (session_id, check_id)，一次确认的检查只记一条 |
 | D10 | 批次记录：存储与标识 | ✅ 2026-10-08 落地：records.jsonl + screenshots/；MOCK 记录带 `mock_` 前缀 |
+| D11 | 异常事件日志 | ✅ 2026-10-08 落地：状态迁移/会话变化/重握手失败 → anomalies.jsonl + 异常截图 |
 
 ## 1. 问题背景（为什么需要本单）
 
@@ -85,6 +86,11 @@
   config_id / frame_id / recorded_at / result_age_s / target_count / targets / verdict 预留 /
   screenshot）+ `screenshots/` 逐条 PNG（记录时的含框画面）。**MOCK 记录截图带 `mock_` 前缀
   且 mode=MOCK——不得用作板上识别证据**（plan.md §3.4）。导出 = 记录目录本身；CSV 导出列 M3 增强。
+- **D8 补充（记录资格时间点，2026-10-08 经理解题推演修正）**：手动标记在**报文被采纳**时
+  才生效——断联中的手动触发失败后，残留旧报文不得冒充手动轮结果被记入批次档案。
+- **D11 异常事件日志**：overlay 状态迁移（no_result/outage/stale/config/offline/ok，含恢复）、
+  会话变化、重握手失败 → 同目录 `anomalies.jsonl`（kind/prev/check_id/fails）+ 异常截图
+  `screenshots/anomaly_*.png`（MOCK 带前缀）。与批次记录同一导出件。
 
 ## 与验收的映射
 
@@ -101,3 +107,4 @@
 | 2026-10-06 | D3 增实现注记：EXE 触发间隔须小于年龄窗口（0.5s < 1.0s，启动校验）；取值经 WC 质询修正 | watercopper（EXE 前端） |
 | 2026-10-08 | D6 bbox 端点语义对齐：闭区间 → 半开区间 `[x0,x1)×[y0,y1)`（对齐[定位外包需求](outsource/localization-requirements.md) L2，宽=x1-x0）；协议校验、测试与 EXE 画框同步 | watercopper（EXE 前端） |
 | 2026-10-08 | 新增 D8–D10 批次记录（手动触发才记录 / 键去重 / JSONL+截图，MOCK 带 `mock_` 标识）；离板实现与测试随 EXE 落地 | watercopper（EXE 前端） |
+| 2026-10-08 | D8 补记录资格时间点（采纳点语义，修"断联中手动轮残包冒充记录"）；新增 D11 异常事件日志（anomalies.jsonl + 异常截图） | watercopper（EXE 前端） |

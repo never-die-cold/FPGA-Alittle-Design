@@ -64,3 +64,42 @@ class BatchRecords:
         self.keys.add(key)
         self.count += 1
         return shot
+
+
+class AnomalyLog:
+    """异常事件追加日志（D11）：anomalies.jsonl 一行一事件 + screenshots/anomaly_*.png。
+
+    事件种类来自 rounds.RemoteRounds.drain_events()：overlay_*（状态迁移，含恢复的
+    overlay_ok）/ session_changed / rehandshake_failed。与批次记录共用目录，导出即整体。
+    """
+
+    def __init__(self, directory, save_image=None):
+        if save_image is None:
+            import cv2
+            save_image = lambda path, frame: bool(cv2.imwrite(str(path), frame))
+        self.dir = Path(directory)
+        self.shots = self.dir / "screenshots"
+        self.shots.mkdir(parents=True, exist_ok=True)
+        self.save_image = save_image
+        self.count = 0
+
+    def log(self, mode, event, frame):
+        prefix = "mock_" if mode == "MOCK" else ""
+        name = f"{prefix}anomaly_{self.count + 1:04d}.png"
+        shot = self.shots / name
+        if not self.save_image(shot, frame):
+            raise RuntimeError(f"anomaly screenshot write failed: {shot}")
+        row = {
+            "schema_version": SCHEMA_VERSION,
+            "mode": mode,
+            "recorded_at": datetime.now().isoformat(timespec="seconds"),
+            "kind": event.get("kind"),
+            "prev": event.get("prev"),
+            "check_id": event.get("check_id"),
+            "fails": event.get("fails"),
+            "screenshot": f"screenshots/{name}",
+        }
+        with (self.dir / "anomalies.jsonl").open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(row, ensure_ascii=False) + "\n")
+        self.count += 1
+        return shot
