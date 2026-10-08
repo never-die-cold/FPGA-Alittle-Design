@@ -123,8 +123,10 @@ def main():
                 targets = remote.packet["targets"] if current else None
                 will_record = (recorder is not None and current
                                and remote.last_round_manual and recorder.accept(remote.packet))
-                if will_record:
-                    status_text += f" | REC {recorder.count + 1}"
+                if recorder is not None:
+                    # 常驻计数（含本帧待落盘的 +1）：原"仅落盘帧追加 REC n"只存在 1 帧（33ms），
+                    # 人工实测看不到反馈（2026-10-08），改为会话累计数常显。
+                    status_text += f" | REC {recorder.count + (1 if will_record else 0)}"
                 label = "MOCK ONLY | " + status_text
             shown = render(frame, targets, label)
             if will_record:

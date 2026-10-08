@@ -1,0 +1,78 @@
+113 INFO: PyInstaller: 6.16.0, contrib hooks: 2026.8
+113 INFO: Python: 3.13.5
+145 INFO: Platform: Windows-11-10.0.26200-SP0
+145 INFO: Python environment: C:\Users\涛\AppData\Local\Programs\Python\Python313
+146 INFO: wrote sim/build/vision-client\vision_preview.spec
+149 INFO: Module search paths (PYTHONPATH):
+['D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt',
+ 'D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\sim\\build\\vision-client-deps',
+ 'D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt',
+ 'C:\\Users\\涛\\AppData\\Local\\Programs\\Python\\Python313\\python313.zip',
+ 'C:\\Users\\涛\\AppData\\Local\\Programs\\Python\\Python313\\DLLs',
+ 'C:\\Users\\涛\\AppData\\Local\\Programs\\Python\\Python313\\Lib',
+ 'C:\\Users\\涛\\AppData\\Local\\Programs\\Python\\Python313',
+ 'C:\\Users\\涛\\AppData\\Roaming\\Python\\Python313\\site-packages',
+ 'C:\\Users\\涛\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages',
+ 'D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\src\\vision_client',
+ 'D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\src\\pynq_host']
+415 INFO: checking Analysis
+421 INFO: Building because D:\Desktop\contests\2026fpga\FPGA-Alittle-Design\sim\build\exe-wt\src\vision_client\preview.py changed
+421 INFO: Looking for Python shared library...
+421 INFO: Using Python shared library: C:\Users\涛\AppData\Local\Programs\Python\Python313\python313.dll
+421 INFO: Running Analysis Analysis-00.toc
+421 INFO: Target bytecode optimization level: 0
+421 INFO: Initializing module dependency graph...
+421 INFO: Initializing module graph hook caches...
+428 INFO: Analyzing modules for base_library.zip ...
+1040 INFO: Processing standard module hook 'hook-heapq.py' from 'D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+1273 INFO: Processing standard module hook 'hook-encodings.py' from 'D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+2383 INFO: Processing standard module hook 'hook-pickle.py' from 'D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+3193 INFO: Caching module dependency graph...
+3214 INFO: Analyzing D:\Desktop\contests\2026fpga\FPGA-Alittle-Design\sim\build\exe-wt\src\vision_client\preview.py
+3406 INFO: Processing standard module hook 'hook-cv2.py' from 'D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\sim\\build\\vision-client-deps\\_pyinstaller_hooks_contrib\\stdhooks'
+3735 INFO: Processing standard module hook 'hook-numpy.py' from 'D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+3946 INFO: Processing standard module hook 'hook-platform.py' from 'D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+3960 INFO: Processing standard module hook 'hook-_ctypes.py' from 'D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+4095 INFO: Processing standard module hook 'hook-sysconfig.py' from 'D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+4538 INFO: Processing standard module hook 'hook-difflib.py' from 'D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+4700 INFO: Processing standard module hook 'hook-multiprocessing.util.py' from 'D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+4754 INFO: Processing standard module hook 'hook-xml.py' from 'D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+5556 INFO: Processing pre-safe-import-module hook 'hook-typing_extensions.py' from 'D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\sim\\build\\vision-client-deps\\PyInstaller\\hooks\\pre_safe_import_module'
+5556 INFO: SetuptoolsInfo: initializing cached setuptools info...
+6433 INFO: Processing module hooks (post-graph stage)...
+6491 INFO: Performing binary vs. data reclassification (7 entries)
+6494 INFO: Looking for ctypes DLLs
+6511 INFO: Analyzing run-time hooks ...
+6512 INFO: Including run-time hook 'pyi_rth_inspect.py' from 'D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\sim\\build\\vision-client-deps\\PyInstaller\\hooks\\rthooks'
+6515 INFO: Including run-time hook 'pyi_rth_pkgutil.py' from 'D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\sim\\build\\vision-client-deps\\PyInstaller\\hooks\\rthooks'
+6516 INFO: Including run-time hook 'pyi_rth_multiprocessing.py' from 'D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\sim\\build\\vision-client-deps\\PyInstaller\\hooks\\rthooks'
+6523 INFO: Creating base_library.zip...
+6545 INFO: Looking for dynamic libraries
+6816 INFO: Extra DLL search directories (AddDllDirectory): ['D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\sim\\build\\vision-client-deps\\numpy.libs', 'D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\sim\\build\\vision-client-deps\\cv2\\../../x64/vc17/bin']
+6816 INFO: Extra DLL search directories (PATH): ['D:\\Desktop\\contests\\2026fpga\\FPGA-Alittle-Design\\sim\\build\\exe-wt\\sim\\build\\vision-client-deps\\cv2\\../../x64/vc17/bin']
+7124 INFO: Warnings written to D:\Desktop\contests\2026fpga\FPGA-Alittle-Design\sim\build\exe-wt\sim\build\vision-client\build\vision_preview\warn-vision_preview.txt
+7145 INFO: Graph cross-reference written to D:\Desktop\contests\2026fpga\FPGA-Alittle-Design\sim\build\exe-wt\sim\build\vision-client\build\vision_preview\xref-vision_preview.html
+7158 INFO: checking PYZ
+7165 INFO: checking PKG
+7165 INFO: Building because D:\Desktop\contests\2026fpga\FPGA-Alittle-Design\sim\build\exe-wt\src\vision_client\preview.py changed
+7165 INFO: Building PKG (CArchive) vision_preview.pkg
+7181 INFO: Building PKG (CArchive) vision_preview.pkg completed successfully.
+7182 INFO: Bootloader D:\Desktop\contests\2026fpga\FPGA-Alittle-Design\sim\build\exe-wt\sim\build\vision-client-deps\PyInstaller\bootloader\Windows-64bit-intel\run.exe
+7182 INFO: checking EXE
+7182 INFO: Rebuilding EXE-00.toc because pkg is more recent
+7182 INFO: Building EXE from EXE-00.toc
+7183 INFO: Copying bootloader EXE to D:\Desktop\contests\2026fpga\FPGA-Alittle-Design\sim\build\exe-wt\sim\build\vision-client\build\vision_preview\vision_preview.exe
+7192 INFO: Copying icon to EXE
+7198 INFO: Copying 0 resources to EXE
+7198 INFO: Embedding manifest in EXE
+7204 INFO: Appending PKG archive to EXE
+7209 INFO: Fixing EXE headers
+7251 INFO: Building EXE from EXE-00.toc completed successfully.
+7253 INFO: checking COLLECT
+7254 INFO: Removing dir D:\Desktop\contests\2026fpga\FPGA-Alittle-Design\sim\build\exe-wt\sim\build\vision-client\dist\vision_preview
+7342 INFO: Building COLLECT COLLECT-00.toc
+7514 INFO: Building COLLECT COLLECT-00.toc completed successfully.
+7516 INFO: Build complete! The results are available in: D:\Desktop\contests\2026fpga\FPGA-Alittle-Design\sim\build\exe-wt\sim\build\vision-client\dist
+PASS: preview mock renderer packaged runtime
+PASS: packaged EXE HTTP mock preview + unreachable route rejects, no UVC/board access
+PASS: Windows M2 preview EXE build + packaged renderer test
