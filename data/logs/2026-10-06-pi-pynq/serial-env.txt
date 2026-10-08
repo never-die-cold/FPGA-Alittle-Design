@@ -1,0 +1,9 @@
+hostname
+[?2004lpynq
+[?2004hxilinx@pynq:~$ sha256sum ~/vision_m2/vision.bit ~/vision_m2/m2_onboard.py ~/vision_m2/vision_regs.py
+[?2004l4f0c491a6383d8a11f87cd2de260027f519dbd466942d0b1b6e36198e39d5be5  /home/xilinx/vision_m2/vision.bit
+679befc31ee11f0ab5ff4d7bf9d19ed83389750b12febdd3b90fdc27373664cd  /home/xilinx/vision_m2/m2_onboard.py
+1b30a62d27c9cedbc0e5cb94321984e343d903b4a84165fe5e0c4e13a7030479  /home/xilinx/vision_m2/vision_regs.py
+[?2004hxilinx@pynq:~$ sudo -n /usr/local/share/pynq-venv/bin/python3 /home/xilinx/vision_m2/m2_onboard.py env
+[?2004lsudo: a password is required
+[?2004hxilinx@pynq:~$ 

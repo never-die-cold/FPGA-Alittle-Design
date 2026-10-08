@@ -1,0 +1,10 @@
+uptime
+[?2004l 11:18:33 up 2 min,  1 user,  load average: 3.50, 1.39, 0.51
+[?2004hxilinx@pynq:~$ sudo bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 /home/xilinx/vision_m2/m2_onboard.py load'
+[?2004l[sudo] password for xilinx: 
+ip_dict:
+  pipe @ 0x40000000 range 0x10000
+  ps7 @ 0x00000000 range 0x0
+axi_regs 段: pipe @ 0x40000000
+PASS: load
+[?2004hxilinx@pynq:~$ 

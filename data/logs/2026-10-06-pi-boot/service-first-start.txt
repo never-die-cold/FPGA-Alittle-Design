@@ -1,0 +1,24 @@
+User-provided Pi terminal output; recorded 2026-10-06 Asia/Shanghai.
+Pi wall-clock timestamp is preserved as reported, without assuming clock accuracy.
+
+edgesight@edgesight-pi:~ $ mkdir -p ~/FPGA-Alittle-Design/sim/scripts
+edgesight@edgesight-pi:~ $ systemd-analyze verify ~/FPGA-Alittle-Design/sim/scripts/pi-camera-preview.service
+echo "verify_exit=$?"
+verify_exit=0
+edgesight@edgesight-pi:~ $ sudo install -m 0644 -b ~/FPGA-Alittle-Design/sim/scripts/pi-camera-preview.service /etc/systemd/system/pi-camera-preview.service
+sudo systemctl daemon-reload
+sudo systemctl start pi-camera-preview.service
+systemctl status pi-camera-preview.service --no-pager -l
+sudo: unable to resolve host edgesight-pi: Temporary failure in name resolution
+sudo: unable to resolve host edgesight-pi: Temporary failure in name resolution
+sudo: unable to resolve host edgesight-pi: Temporary failure in name resolution
+● pi-camera-preview.service - Camera Module 3 HDMI preview
+     Loaded: loaded (/etc/systemd/system/pi-camera-preview.service; disabled; preset: enabled)
+     Active: active (running) since Mon 2026-10-05 04:08:15 CST; 33ms ago
+ Invocation: 86aedcb5be914512a7a527b3e597af38
+   Main PID: 1152 (rpicam-hello)
+      Tasks: 1 (limit: 3967)
+        CPU: 38ms
+     CGroup: /system.slice/pi-camera-preview.service
+             └─1152 /usr/bin/rpicam-hello --timeout 0 --fullscreen --viewfinder-width 1280 --viewfinder-height 720
+edgesight@edgesight-pi:~ $

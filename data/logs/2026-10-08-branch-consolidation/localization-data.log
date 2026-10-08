@@ -1,0 +1,5 @@
+PASS: deterministic RGB scene, labels, bounds, and non-overlap
+PASS: source-image split is shared by all extracted crops
+PASS: seeded backgrounds contrast with bright and dark crops
+PASS: PNG and normalized YOLO label agree
+PASS: OpenCV contrast localization and one-to-one box scoring

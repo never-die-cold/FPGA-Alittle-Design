@@ -19,3 +19,11 @@ src/riscv_fw/coremark/vendor/** -whitespace
 data/logs/2026-10-07-partC-postopt/** -whitespace
 data/logs/2026-10-07-partC-postopt/*.md whitespace
 build/reports/soc_40mhz_bht2/** -whitespace
+
+# Archived Pi terminal output retains original CR/control characters.
+data/logs/2026-10-06-pi-boot/*.txt -whitespace
+data/logs/2026-10-06-pi-boot/*.log -whitespace
+data/logs/2026-10-06-pi-pynq/*.txt -whitespace
+data/logs/2026-10-06-pi-pynq/*.log -whitespace
+data/logs/2026-10-07-pi-pynq/*.txt -whitespace
+data/logs/2026-10-07-pi-pynq/*.log -whitespace

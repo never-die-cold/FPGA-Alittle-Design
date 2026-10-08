@@ -1,0 +1,25 @@
+User-provided Pi terminal output; recorded 2026-10-06 Asia/Shanghai.
+Pi wall-clock timestamps are preserved as reported.
+
+edgesight@edgesight-pi:~ $ systemctl show pi-camera-preview.service -p User -p ActiveState -p SubState -p NRestarts -p ExecMainStatus
+NRestarts=0
+ExecMainStatus=0
+User=edgesight
+ActiveState=active
+SubState=running
+edgesight@edgesight-pi:~ $ sudo journalctl -u pi-camera-preview.service -b -n 30 --no-pager
+sudo: unable to resolve host edgesight-pi: Temporary failure in name resolution
+Oct 05 04:08:15 edgesight-pi systemd[1]: Starting pi-camera-preview.service - Camera Module 3 HDMI preview...
+Oct 05 04:08:15 edgesight-pi systemd[1]: Started pi-camera-preview.service - Camera Module 3 HDMI preview.
+Oct 05 04:08:15 edgesight-pi rpicam-hello[1152]: [0:34:58.055048285] [1152]  INFO Camera camera_manager.cpp:340 libcamera v0.7.2+rpt20260817
+Oct 05 04:08:15 edgesight-pi rpicam-hello[1152]: [0:34:58.157057563] [1156]  INFO RPI pipeline_base.cpp:1133 Using configuration file '/usr/share/libcamera/pipeline/rpi/vc4/rpi_apps.yaml'
+Oct 05 04:08:15 edgesight-pi rpicam-hello[1152]: [0:34:58.184422322] [1156]  INFO IPAProxy ipa_proxy.cpp:184 Using tuning file /usr/share/libcamera/ipa/rpi/vc4/imx708.json
+Oct 05 04:08:16 edgesight-pi rpicam-hello[1152]: [0:34:58.190377489] [1156]  INFO Camera camera_manager.cpp:223 Adding camera '/base/soc/i2c0mux/i2c@1/imx708@1a' for pipeline handler rpi/vc4
+Oct 05 04:08:16 edgesight-pi rpicam-hello[1152]: [0:34:58.190440100] [1156]  INFO RPI vc4.cpp:445 Registered camera /base/soc/i2c0mux/i2c@1/imx708@1a to Unicam device /dev/media2 and ISP device /dev/media0
+Oct 05 04:08:16 edgesight-pi rpicam-hello[1152]: Made drm preview window
+Oct 05 04:08:16 edgesight-pi rpicam-hello[1152]: Mode selection for 1280:720:12:P
+Oct 05 04:08:16 edgesight-pi rpicam-hello[1152]:     SRGGB10_CSI2P,1536x864/0 - Score: 1100
+Oct 05 04:08:16 edgesight-pi rpicam-hello[1152]:     SRGGB10_CSI2P,2304x1296/0 - Score: 1400
+Oct 05 04:08:16 edgesight-pi rpicam-hello[1152]:     SRGGB10_CSI2P,4608x2592/0 - Score: 2300
+Oct 05 04:08:16 edgesight-pi rpicam-hello[1152]: [0:34:58.244162174] [1152]  INFO Camera camera.cpp:1216 configuring streams: (0) 1280x720-YUV420/sYCC (1) 1536x864-SBGGR10_CSI2P/RAW
+Oct 05 04:08:16 edgesight-pi rpicam-hello[1152]: [0:34:58.244557267] [1156]  INFO RPI vc4.cpp:620 Sensor: /base/soc/i2c0mux/i2c@1/imx708@1a - Selected sensor format: 1536x864-SBGGR10_1X10/RAW - Selected unicam format: 1536x864-pBAA/RAW

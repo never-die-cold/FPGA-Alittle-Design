@@ -1,0 +1,9 @@
+opened= True
+set 6 1196444237 True
+set 3 1280 True
+set 4 720 True
+set 5 30 True
+actual= 1280.0 720.0 30.00003000003
+received= 24
+first {"shape": [720, 1280, 3], "min": 0, "max": 255, "mean": 128.05469328703703} saved= True
+last {"shape": [720, 1280, 3], "min": 0, "max": 255, "mean": 128.06887659143518} saved= True

@@ -1,0 +1,38 @@
+User-provided Pi terminal output; recorded 2026-10-06 Asia/Shanghai.
+Pi wall-clock timestamps are preserved as reported.
+
+edgesight@edgesight-pi:~ $ systemctl show pi-camera-preview.service -p UnitFileState -p User -p ActiveState -p SubState -p NRestarts -p ExecMainStatus
+NRestarts=0
+ExecMainStatus=0
+User=edgesight
+ActiveState=active
+SubState=running
+UnitFileState=enabled
+edgesight@edgesight-pi:~ $ sudo kmsprint
+sudo: unable to resolve host edgesight-pi: Temporary failure in name resolution
+Connector 0 (35) HDMI-A-1 (connected)
+  Encoder 0 (34) TMDS
+    Crtc 3 (102) 1280x720@60.00 74.250 1280/110/40/220/+ 720/5/5/20/+ 60 (60.00) U|D
+      Plane 3 (91) fb-id: 722 (crtcs: 3) 0,0 1280x720 -> 0,0 1280x720 (XR24 AR24 AB24 XB24 RX24 RA24 BX24 BA24 RG16 BG16 AR15 XR15 RG24 BG24 YU16 YV16 YU24 YV24 YU12 YV12 NV12 NV21 NV16 NV61 P030 XR30 AR30 AB30 XB30 RGB8 BGR8 XR12 AR12 XB12 AB12 BX12 BA12 RX12 RA12)
+        FB 722 1280x720 RG16
+      Plane 6 (127) fb-id: 726 (crtcs: 1 2 3 4 5) 0,0 1280x720 -> 0,0 1280x720 (XR24 AR24 AB24 XB24 RX24 RA24 BX24 BA24 RG16 BG16 AR15 XR15 RG24 BG24 YU16 YV16 YU24 YV24 YU12 YV12 NV12 NV21 NV16 NV61 P030 XR30 AR30 AB30 XB30 RGB8 BGR8 XR12 AR12 XB12 AB12 BX12 BA12 RX12 RA12)
+        FB 726 1280x720 YU12
+Connector 1 (44) HDMI-A-2 (disconnected)
+  Encoder 1 (43) TMDS
+edgesight@edgesight-pi:~ $ sudo journalctl -u pi-camera-preview.service -b -n 30 --no-pager
+sudo: unable to resolve host edgesight-pi: Temporary failure in name resolution
+Oct 05 04:21:05 edgesight-pi systemd[1]: Starting pi-camera-preview.service - Camera Module 3 HDMI preview...
+Oct 05 04:21:05 edgesight-pi systemd[1]: Started pi-camera-preview.service - Camera Module 3 HDMI preview.
+Oct 05 04:21:07 edgesight-pi rpicam-hello[642]: [0:00:11.611115807] [642]  INFO Camera camera_manager.cpp:340 libcamera v0.7.2+rpt20260817
+Oct 05 04:21:07 edgesight-pi rpicam-hello[642]: [0:00:11.761485733] [736]  INFO RPI pipeline_base.cpp:1133 Using configuration file '/usr/share/libcamera/pipeline/rpi/vc4/rpi_apps.yaml'
+Oct 05 04:21:07 edgesight-pi rpicam-hello[642]: [0:00:12.026801121] [736]  INFO IPAProxy ipa_proxy.cpp:184 Using tuning file /usr/share/libcamera/ipa/rpi/vc4/imx708.json
+Oct 05 04:21:07 edgesight-pi rpicam-hello[642]: [0:00:12.034710955] [736]  INFO Camera camera_manager.cpp:223 Adding camera '/base/soc/i2c0mux/i2c@1/imx708@1a' for pipeline handler rpi/vc4
+Oct 05 04:21:07 edgesight-pi rpicam-hello[642]: [0:00:12.034826084] [736]  INFO RPI vc4.cpp:445 Registered camera /base/soc/i2c0mux/i2c@1/imx708@1a to Unicam device /dev/media2 and ISP device /dev/media0
+Oct 05 04:21:07 edgesight-pi rpicam-hello[642]: Made drm preview window
+Oct 05 04:21:07 edgesight-pi rpicam-hello[642]: Mode selection for 1280:720:12:P
+Oct 05 04:21:07 edgesight-pi rpicam-hello[642]:     SRGGB10_CSI2P,1536x864/0 - Score: 1100
+Oct 05 04:21:07 edgesight-pi rpicam-hello[642]:     SRGGB10_CSI2P,2304x1296/0 - Score: 1400
+Oct 05 04:21:07 edgesight-pi rpicam-hello[642]:     SRGGB10_CSI2P,4608x2592/0 - Score: 2300
+Oct 05 04:21:07 edgesight-pi rpicam-hello[642]: [0:00:12.096510584] [642]  INFO Camera camera.cpp:1216 configuring streams: (0) 1280x720-YUV420/sYCC (1) 1536x864-SBGGR10_CSI2P/RAW
+Oct 05 04:21:07 edgesight-pi rpicam-hello[642]: [0:00:12.096962658] [736]  INFO RPI vc4.cpp:620 Sensor: /base/soc/i2c0mux/i2c@1/imx708@1a - Selected sensor format: 1536x864-SBGGR10_1X10/RAW - Selected unicam format: 1536x864-pBAA/RAW
+edgesight@edgesight-pi:~ $
