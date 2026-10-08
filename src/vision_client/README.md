@@ -35,6 +35,10 @@ sim/build/vision-client/dist/vision_preview/vision_preview.exe --mock --endpoint
 默认 1.0s）有效才叠框，过期/断联撤框显示 WAITING；连续 3 次 HTTP 失败自动重新握手（D5）。
 横幅常显 `MOCK ONLY | ROUND n | age | targets`。
 
+状态机（`rounds.py`，纯 stdlib）与取帧渲染解耦：preview.py 只负责取帧与画框。
+离线测试 `py sim/vision/test_vision_rounds.py` 覆盖触发节流、超龄/配置变化/断联撤框、
+服务重启（新会话）自动恢复，已接入 `sim/scripts/run_vision_python.sh` 全量。
+
 ## 模拟接口 v1
 
 - GET `/v1/status`：mode=MOCK、session_id、hardware_connected=false。

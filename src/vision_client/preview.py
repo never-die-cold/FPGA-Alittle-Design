@@ -1,35 +1,24 @@
 """Windows preview prototype. Round-level overlay per docs/vision-sync-protocol-decisions.md.
 
 画面来源：UVC 采集卡（--source）或本机合成场景（--mock）。网络结果按轮次语义叠加：
-- D2：POST /v1/check 触发一轮检查；D3：session+config+年龄三判据，过期/断联撤框；
-- D5：连续失败 >= FAIL_LIMIT 视为会话失效，自动重新握手。
-MOCK 结果恒标 MOCK ONLY，不代表板上识别（plan.md §3.4）。无 --endpoint 时
-纯视频显示 VIDEO ONLY | UNASSOCIATED，不叠任何框。
+状态机（D2 触发 / D3 有效性撤框 / D5 重连）在 rounds.py，离板测试 sim/vision/test_vision_rounds.py；
+本文件只负责取帧、画框与横幅。MOCK 结果恒标 MOCK ONLY，不代表板上识别（plan.md §3.4）。
+无 --endpoint 时纯视频显示 VIDEO ONLY | UNASSOCIATED，不叠任何框。
 """
 import argparse
-import json
 import sys
 import time
 import urllib.error
-import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "pynq_host"))
-from vision_protocol import mock_packet, validate_packet, is_current
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from vision_protocol import mock_packet
+from rounds import RemoteRounds
 import cv2
 import numpy as np
 
-REQUEST_TIMEOUT = 2.0
-FAIL_LIMIT = 3
 BANNER_H = 55
-
-
-def http_json(url, body=None):
-    data = None if body is None else json.dumps(body).encode()
-    headers = {"Content-Type": "application/json"} if body is not None else {}
-    request = urllib.request.Request(url, data, headers)
-    with urllib.request.urlopen(request, timeout=REQUEST_TIMEOUT) as response:
-        return json.loads(response.read(65537))
 
 
 def mock_frame(packet):
@@ -59,50 +48,6 @@ def render(frame, targets, label):
         draw_targets(frame, targets)
     draw_banner(frame, label)
     return frame
-
-
-class RemoteRounds:
-    """D2/D3/D5 会话状态机：握手 → 周期触发 → 有效性判定 → 连续失败重握手。"""
-
-    def __init__(self, endpoint, max_age):
-        self.endpoint = endpoint.rstrip("/")
-        self.max_age = max_age
-        self.session = None
-        self.expected_config = None
-        self.fails = 0
-        self.last_trigger = 0.0
-        self.packet = None
-
-    def handshake(self):
-        status = http_json(self.endpoint + "/v1/status")
-        applied = http_json(self.endpoint + "/v1/config", {"control": 0})["applied_config_id"]
-        self.session = status["session_id"]
-        self.expected_config = applied
-        self.fails = 0
-        self.packet = None
-        self.last_trigger = 0.0
-        return status
-
-    def poll(self, now, interval):
-        if now - self.last_trigger < interval:
-            return
-        self.last_trigger = now
-        try:
-            self.packet = validate_packet(http_json(self.endpoint + "/v1/check"))
-            self.fails = 0
-        except (urllib.error.URLError, OSError, ValueError) as error:
-            self.fails += 1
-            print(f"WARN: check failed ({self.fails}/{FAIL_LIMIT}): {error}", flush=True)
-            if self.fails >= FAIL_LIMIT:
-                self.handshake()
-
-    def overlay(self, now):
-        if self.packet is not None and self.session is not None \
-                and is_current(self.packet, self.session, self.expected_config, self.max_age):
-            age = now - self.packet["created_at"]
-            return True, (f"ROUND {self.packet['check_id']} | {age:.1f}s ago | "
-                          f"{len(self.packet['targets'])} targets")
-        return False, "WAITING FOR RESULT"
 
 
 def main():
