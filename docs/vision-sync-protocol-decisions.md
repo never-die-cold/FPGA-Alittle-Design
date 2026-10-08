@@ -61,7 +61,7 @@
 
 ## D6 报文 schema v1.1（待评审；改动另起代码步骤）
 
-- 保留 mock v1 全部字段与校验规则：version、mode、session_id、frame_id、config_id、width、height、created_at、status、targets（16 目标上限、闭区间 bbox、越界拒绝、重复 target_id 拒绝）。
+- 保留 mock v1 全部字段与校验规则：version、mode、session_id、frame_id、config_id、width、height、created_at、status、targets（16 目标上限、**半开区间 bbox `[x0,x1)×[y0,y1)`**——宽=x1-x0、右下端点可恰为 w/h，与[定位外包需求](outsource/localization-requirements.md) L2 一致；退化/反向/越界拒绝、重复 target_id 拒绝）。
 - 新增：check_id（uint32，轮次标识，见 D2）；trigger_ref（可选回显字段）。
 - 预留：status 枚举 M3 起从 LOCATION_ONLY 扩展 CHECK_PASS / CHECK_FAIL / RECHECK（工单判定，枚举值届时冻结）；真实服务 mode=LIVE 且 hardware_connected=true——EXE 对 MOCK 结果恒加"MOCK ONLY"横幅（plan.md §3.4：样例结果可联调界面，不得记为板上识别）。
 - 不动：单报文 ≤64KB；未知字段拒绝（严格校验不放宽）。
@@ -84,3 +84,4 @@
 | 2026-10-06 | 理解门槛问答通过后：D7 更新为提议定 NC（队长），待 NC 评审确认 |
 | 2026-10-06 | 契约收口：D2–D6 watercopper 确认沿用推荐；D7 NC 本人确认接任，plan.md §3.4/§5.3 同步 | watercopper（EXE 前端） |
 | 2026-10-06 | D3 增实现注记：EXE 触发间隔须小于年龄窗口（0.5s < 1.0s，启动校验）；取值经 WC 质询修正 | watercopper（EXE 前端） |
+| 2026-10-08 | D6 bbox 端点语义对齐：闭区间 → 半开区间 `[x0,x1)×[y0,y1)`（对齐[定位外包需求](outsource/localization-requirements.md) L2，宽=x1-x0）；协议校验、测试与 EXE 画框同步 | watercopper（EXE 前端） |

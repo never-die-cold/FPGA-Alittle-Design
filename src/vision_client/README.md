@@ -39,7 +39,8 @@ sim/build/vision-client/dist/vision_preview/vision_preview.exe --mock --endpoint
 
 - GET `/v1/status`：mode=MOCK、session_id、hardware_connected=false。
 - GET `/v1/latest`：版本、session_id、frame_id、config_id、原图宽高、UTC Unix 时间戳、
-  status=LOCATION_ONLY、目标序号和原图闭区间 bbox `[x0,y0,x1,y1]`；最多16目标。
+  status=LOCATION_ONLY、目标序号和原图 bbox `[x0,y0,x1,y1]`——半开区间语义 `[x0,x1)×[y0,y1)`，
+  宽=x1-x0、右下端点可恰为 w/h（对齐定位外包需求 L2）；最多16目标。
 - POST `/v1/config`：JSON `{"control":3}`，只允许低四位；返回模拟 applied_config_id。
 - POST `/v1/check`（v1.1 新增）：触发一轮检查；body 可选 `{"trigger_ref":"..."}`（未知字段 400，
   空 body 合法），返回带自增 check_id 的定位报文并回显 trigger_ref（D2）。`/v1/latest` 保留为

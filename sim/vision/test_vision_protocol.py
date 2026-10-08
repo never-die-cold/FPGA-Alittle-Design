@@ -56,6 +56,18 @@ def main():
         raise AssertionError("out-of-frame box accepted")
     except ValueError:
         pass
+    # 半开区间端点语义（对齐定位外包需求 L2）：右下端点可恰为 w/h；退化、反向、越界拒绝
+    edge = copy.deepcopy(packet)
+    edge["targets"] = [{"target_id": 0, "bbox": [1279, 719, 1280, 720]}]
+    validate_packet(edge)
+    for box in ([200, 170, 200, 289], [300, 170, 200, 289], [0, 0, 1280, 721]):
+        invalid = copy.deepcopy(packet)
+        invalid["targets"][0]["bbox"] = box
+        try:
+            validate_packet(invalid)
+            raise AssertionError("degenerate/reversed/out-of-frame box accepted")
+        except ValueError:
+            pass
     server = make_server(port=0)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()

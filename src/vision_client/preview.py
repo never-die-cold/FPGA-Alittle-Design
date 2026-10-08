@@ -36,14 +36,15 @@ def mock_frame(packet):
     frame = np.full((packet["height"], packet["width"], 3), (220, 230, 240), np.uint8)
     for target in packet["targets"]:
         x0, y0, x1, y1 = target["bbox"]
-        cv2.rectangle(frame, (x0, y0), (x1, y1), (40, 50, 60), -1)
+        cv2.rectangle(frame, (x0, y0), (x1 - 1, y1 - 1), (40, 50, 60), -1)
     return frame
 
 
 def draw_targets(frame, targets):
+    # bbox 为半开区间 [x0,x1)×[y0,y1)；OpenCV 画笔含端点像素，故右下取 x1-1/y1-1 覆盖同一像素集。
     for target in targets:
         x0, y0, x1, y1 = target["bbox"]
-        cv2.rectangle(frame, (x0, y0), (x1, y1), (40, 160, 30), 2)
+        cv2.rectangle(frame, (x0, y0), (x1 - 1, y1 - 1), (40, 160, 30), 2)
         cv2.putText(frame, f"target {target['target_id']}", (x0, y0 - 8), 0, .6, (20, 80, 20), 2)
 
 

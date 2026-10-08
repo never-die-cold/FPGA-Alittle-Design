@@ -5,6 +5,8 @@ schema v1.1（docs/vision-sync-protocol-decisions.md D2/D3/D6）：
 - trigger_ref 可选回显字段：EXE 触发时携带，服务端原样返回（D2）。
 - 有效性判据（D3）= session_id + config_id + created_at 年龄；frame_id 仅透传展示，
   不参与匹配——EXE 无法把结果帧号对应到采集卡画面（决策单 §1）。
+- bbox 为半开区间 [x0,x1)×[y0,y1)，宽=x1-x0；端点语义对齐定位外包需求 L2
+  （docs/outsource/localization-requirements.md）。
 """
 import math
 import time
@@ -51,8 +53,8 @@ def validate_packet(packet):
         if not isinstance(box, list) or len(box) != 4 or any(type(x) is not int for x in box):
             raise ValueError("invalid box")
         x0, y0, x1, y1 = box
-        if not (0 <= x0 <= x1 < w and 0 <= y0 <= y1 < h):
-            raise ValueError("box outside frame")
+        if not (0 <= x0 < x1 <= w and 0 <= y0 < y1 <= h):
+            raise ValueError("invalid box bounds")
         if "class" in target or "verdict" in target:
             raise ValueError("classification is outside this mock contract")
     return packet
