@@ -74,15 +74,17 @@
 
 ## §2 成员分工与协作规矩
 
-> 2026-09-14 起采用"三线并行 + 每周 PR 合并"工作流；操作要点：dev/rtl、dev/verify、dev/bench 三条分支各自推进，周日由组长审 PR 后合并，任何人（含组长）不直接 push `main`。
+> 2026-10-08 起按功能保留五个分支：`dev/riscv`、`dev/vision`、`dev/model`、`dev/exe`、`main`。开发分支经 PR 合入主干；任何人（含组长）不直接 push `main`。历史三线分支名仅在旧记录中保留。
 
 ### 2.1 成员职责
 
 | 成员 | 模块一职责 | 后续职责 | 工作分支 |
 |:---|:---|:---|:---|
-| `jianglibo` | 全部 RTL、自测及缺陷修复 | 模块三 RTL 与算子级自测 | `dev/rtl` |
-| `never-die-cold` | 专项 tb、波形检查、全量回归、综合与问题定位 | 模块二 RTL；抽查模块三端到端结果 | `dev/verify` |
-| `watercopper` | arch-test、benchmark、四档指标、日志与验收材料 | 模块二黄金参考、测试数据、板务、EXE 前端及文档 | `dev/bench` |
+| `jianglibo` | 全部 RTL、自测及缺陷修复 | 模块三 RTL 与算子级自测 | `dev/riscv` |
+| `never-die-cold` | 专项 tb、波形检查、全量回归、综合与问题定位 | 模块二 RTL；抽查模块三端到端结果 | `dev/vision`、`dev/model` |
+| `watercopper` | arch-test、benchmark、四档指标、日志与验收材料 | 模块二黄金参考、测试数据、板务、EXE 前端及文档 | `dev/exe`（板务/基准跨模块协调） |
+
+分支用途：`dev/riscv` 管核与协处理器 RTL；`dev/vision` 管视觉链路；`dev/model` 管训练、模型与黄金参考；`dev/exe` 管前端与联调；`main` 管经 PR 审查的集成版本。模型负责人仍按具体工作包协调，本次不改变成员职责。
 
 目录分工：
 
@@ -98,7 +100,7 @@
 2. 保留每周 PR 审查与合并；具体会议安排由团队协调，不写入逐日排期
 3. **任何人（含组长）不直接 push `main`**，一切改动经 PR 合并
 4. 组长审 PR 时按 [workflow.md](docs/workflow.md) §2 走理解门槛（逐段讲解 + 3 道测试题）；AI 代码未通过不 merge
-5. 合并后全员 `git pull origin main` 同步，下一周从最新 main 续做
+5. 合并后先 `git fetch --prune origin`，在自己的开发分支将 `origin/main` 合入（可快进时用 `git merge --ff-only origin/main`）；禁止以 reset/强推覆盖独有提交
 6. 任何一步卡住超 30 分钟：群里报，不硬扛
 
 ### 2.3 工作交接
