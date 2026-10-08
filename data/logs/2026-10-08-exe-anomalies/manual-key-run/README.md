@@ -30,3 +30,13 @@
 ## 运行环境
 
 session `6e5f2f16-255c-474e-ade2-495602fbe81c`（mock 服务）；EXE stdout 见 `exe-stdout.log`。
+
+## 复验运行 2（2026-10-08 23:04，REC 常驻计数修复后）
+
+- 操作同上（新会话 `b564747f`，修复版 EXE @18ebd4f，`--records-dir sim\build\records-manual-check2`），
+  按 `c` 三次、`q` 退出。
+- 结果：records.jsonl **3 行**（check 16/18/22，23:04:21–23，`result_age_s=0.0` 本地时基、
+  `created_at` 原始戳在案）；anomalies.jsonl **仅 1 条**初始 `overlay_ok`——**flap 实机确认消失**
+  （修复前同长度运行约 20–40 条）。留档 `records-run2.jsonl`、`anomalies-run2.jsonl`。
+- 结论：按键记录路径（含常驻 REC 计数反馈）人工复验通过；flap 修复实机确认。
+
