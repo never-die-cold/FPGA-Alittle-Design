@@ -36,6 +36,8 @@ def main():
         # D2：到点触发一轮；新鲜结果叠加（MOCK 模式不受 hardware_connected=false 影响）
         remote.poll(now, 0.5)
         assert remote.packet["check_id"] == 1 and not remote.last_round_manual
+        # 回归（2026-10-08 实机 flap）：用"请求前取的钟"评估刚采纳的报文不得误判超龄
+        assert remote.overlay(now)[0]
         current, label = remote.overlay(time.time())
         assert current and label.startswith("ROUND 1 |") and "2 targets" in label
         # 节流：间隔内不重复触发；过间隔后触发（last_trigger 记"尝试"时刻）
@@ -50,8 +52,8 @@ def main():
         assert remote.packet["check_id"] == 3 and remote.last_round_manual
         remote.poll(now + 1.2, 0.5)
         assert remote.packet["check_id"] == 4 and not remote.last_round_manual
-        # D3：结果超龄撤框
-        remote.packet["created_at"] = time.time() - 1.5
+        # D3：结果超龄撤框（新鲜度按 EXE 接收时刻计量）
+        remote.received_at = time.time() - 1.5
         assert remote.overlay(time.time()) == (False, WAITING)
         # D3：服务端配置变化 → 新结果配置号不符撤框；重握手后恢复
         urllib.request.urlopen(urllib.request.Request(

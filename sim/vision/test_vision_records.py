@@ -31,15 +31,17 @@ def main():
     live = {**packet, "mode": "LIVE", "check_id": 7}  # LIVE 记录文件名不带 mock_ 前缀（D10）
     shot_live = rec.write(live, None)
     assert not shot_live.name.startswith("mock_") and shot.name.startswith("mock_")
+    rec.write(mock_packet("sess-abcd-1234", 9, 2, 8), None, age_s=0.25)  # EXE 接收时基年龄优先
     lines = (out / "records.jsonl").read_text(encoding="utf-8").strip().splitlines()
-    assert len(lines) == 3
+    assert len(lines) == 4
     row = json.loads(lines[0])
     assert row["mode"] == "MOCK" and row["check_id"] == 5 and row["frame_id"] == 7
     assert row["config_id"] == 2 and row["schema_version"] == 1
     assert row["target_count"] == 2 and row["targets"][0]["bbox"] == [180, 170, 339, 289]
-    assert row["verdict"] is None
+    assert row["verdict"] is None and row["created_at"] == packet["created_at"]
     assert row["screenshot"] == "screenshots/mock_sess-abc_000005.png"
     assert written[0] == out / "screenshots/mock_sess-abc_000005.png"
+    assert json.loads(lines[3])["result_age_s"] == 0.25
     # D11：异常事件日志（AnomalyLog）独立成文件，截图按序编号，LIVE 不带 mock_ 前缀
     anomaly_shots = []
     anom = AnomalyLog(out, save_image=lambda path, frame: anomaly_shots.append(path) or True)

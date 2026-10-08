@@ -52,6 +52,9 @@
   - 实现注记（2026-10-06，经 WC 质询修正）：EXE 触发间隔必须**小于**年龄窗口（默认 interval
     0.5s < max_age 1.0s），EXE 启动时校验——否则每轮结果在下轮触发前过期，画面周期性空窗；
     若改用大间隔则须同步放大窗口，会把"过期仍显示"的红线拉长，两害取其前。
+  - 实现注记（2026-10-08 实机 flap 修复）：新鲜度改按 **EXE 接收时刻**（received_at）计量
+    （overlay 与批次记录），不与服务端 created_at 跨机比较（板卡/EXE 时钟不同源）；同迭代
+    "先取钟再请求"的负年龄不判超龄。created_at 保留在报文与记录中供诊断。
 - **影响**：EXE 画面必须常显当前状态（轮次号 + 结果年龄），杜绝"静默旧框"。
 
 ## D4 传输形态与服务地址
@@ -83,9 +86,10 @@
 - **D9 去重**：记录键 = (session_id, check_id)；同键重复写入被拒，"一次确认的检查只记一条"。
   结果未到/过期/断联不记录（异常事件与异常截图列 M3 项，独立于批次）。
 - **D10 存储与标识**：`records.jsonl`（一行一条：schema_version / mode / session_id / check_id /
-  config_id / frame_id / recorded_at / result_age_s / target_count / targets / verdict 预留 /
-  screenshot）+ `screenshots/` 逐条 PNG（记录时的含框画面）。**MOCK 记录截图带 `mock_` 前缀
-  且 mode=MOCK——不得用作板上识别证据**（plan.md §3.4）。导出 = 记录目录本身；CSV 导出列 M3 增强。
+  config_id / frame_id / recorded_at / result_age_s（EXE 接收时基）/ created_at（原始服务端
+  时间戳）/ target_count / targets / verdict 预留 / screenshot）+ `screenshots/` 逐条 PNG
+  （记录时的含框画面）。**MOCK 记录截图带 `mock_` 前缀且 mode=MOCK——不得用作板上识别证据**
+  （plan.md §3.4）。导出 = 记录目录本身；CSV 导出列 M3 增强。
 - **D8 补充（记录资格时间点，2026-10-08 经理解题推演修正）**：手动标记在**报文被采纳**时
   才生效——断联中的手动触发失败后，残留旧报文不得冒充手动轮结果被记入批次档案。
 - **D11 异常事件日志**：overlay 状态迁移（no_result/outage/stale/config/offline/ok，含恢复）、
@@ -108,3 +112,4 @@
 | 2026-10-08 | D6 bbox 端点语义对齐：闭区间 → 半开区间 `[x0,x1)×[y0,y1)`（对齐[定位外包需求](outsource/localization-requirements.md) L2，宽=x1-x0）；协议校验、测试与 EXE 画框同步 | watercopper（EXE 前端） |
 | 2026-10-08 | 新增 D8–D10 批次记录（手动触发才记录 / 键去重 / JSONL+截图，MOCK 带 `mock_` 标识）；离板实现与测试随 EXE 落地 | watercopper（EXE 前端） |
 | 2026-10-08 | D8 补记录资格时间点（采纳点语义，修"断联中手动轮残包冒充记录"）；新增 D11 异常事件日志（anomalies.jsonl + 异常截图） | watercopper（EXE 前端） |
+| 2026-10-08 | 实机 flap 修复（WC 人工按键测试暴露）：新鲜度改按 EXE 接收时刻计量（D3 注记）；记录增 created_at 原始时间戳（D10） | watercopper（EXE 前端） |

@@ -118,7 +118,8 @@ def main():
                 if args.trigger_frame and i == args.trigger_frame:
                     remote.trigger(now)  # 联调自检：模拟按 c（覆盖 D8 记录路径）
                 remote.poll(now, args.interval)
-                current, status_text = remote.overlay(now)
+                fresh = time.time()  # 接收后再取钟：overlay/记录年龄不与"请求前"混用（防负年龄 flap）
+                current, status_text = remote.overlay(fresh)
                 targets = remote.packet["targets"] if current else None
                 will_record = (recorder is not None and current
                                and remote.last_round_manual and recorder.accept(remote.packet))
@@ -127,7 +128,7 @@ def main():
                 label = "MOCK ONLY | " + status_text
             shown = render(frame, targets, label)
             if will_record:
-                recorder.write(remote.packet, shown)
+                recorder.write(remote.packet, shown, fresh - remote.received_at)
             if anomalies is not None and remote is not None:
                 for event in remote.drain_events():
                     anomalies.log(remote.mode, event, shown)

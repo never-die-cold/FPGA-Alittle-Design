@@ -45,7 +45,8 @@ frame/时间/结果年龄/目标数/boxes/verdict 预留/截图名）+ `screensh
 `--source 0 --endpoint http://<host>:8765` —— 采集卡视频 + 结果服务轮次叠加。启动握手失败立即
 退出；每 `--interval`（默认 0.5s，启动校验必须小于 `--max-age`，否则每轮结果在下轮触发前过期、
 画面周期性空窗）触发一轮 `POST /v1/check`；结果按 D3 判据（会话 + 配置号 + 年龄窗 `--max-age`
-默认 1.0s）有效才叠框，过期/断联撤框显示 WAITING；连续 3 次 HTTP 失败自动重新握手（D5）。
+默认 1.0s，**年龄按 EXE 接收时刻计量、与服务端时钟无关**）有效才叠框，过期/断联撤框显示
+WAITING；连续 3 次 HTTP 失败自动重新握手（D5）。
 横幅常显 `MOCK ONLY | ROUND n | age | targets`。
 
 状态机（`rounds.py`，纯 stdlib）与取帧渲染解耦：preview.py 只负责取帧与画框。

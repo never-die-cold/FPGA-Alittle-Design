@@ -30,11 +30,11 @@ powershell -ExecutionPolicy Bypass -File sim/scripts/build_vision_client.ps1 -Py
   → PASS: Windows M2 preview EXE build + packaged renderer test
 ```
 
-## 人工待办（1 分钟）
+## 人工按键验证（已完成，2026-10-08 22:57–22:59）
 
-真实按键路径：`vision_mock_service.py` + `vision_preview.exe --source 0 --endpoint ... --records-dir <目录>`，
-按一次 `c`（≈0.5s 后）确认横幅出现 `| REC 1`、目录出现 records.jsonl 一行 + 截图；
-再按一次确认 `REC 2`。headless 无法注入按键，故此步保留人工。
+见 [manual-key-run/README.md](manual-key-run/README.md)：按 `c` 两次落 **2 条批次记录**（成功）；
+同轮运行暴露"负年龄 flap"缺陷并经修复复核（before 576 条 → after 1 条，before/after 日志留档）。
+
 
 ## 边界声明
 

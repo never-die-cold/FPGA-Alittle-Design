@@ -6,6 +6,7 @@
 - D9 记录键 = (session_id, check_id)，同键重复写入被拒（一次确认的检查只记一条）。
 - D10 存储 = records.jsonl（一行一条）+ screenshots/ 逐条截图；MOCK 模式截图带
   `mock_` 前缀且记录含 mode 字段——不得用作板上识别证据（plan.md §3.4）。
+  result_age_s 按 EXE 接收时基传入（age_s），created_at 保留原始服务端时间戳供诊断。
 
 截图写入通过注入的 save_image(path, frame) 回调完成；缺省惰性导入 cv2（EXE 内可用），
 离线测试传桩函数以保持纯 stdlib。
@@ -35,8 +36,11 @@ class BatchRecords:
     def accept(self, packet):
         return (packet["session_id"], packet["check_id"]) not in self.keys
 
-    def write(self, packet, frame):
-        """落一条记录（jsonl 行 + 截图）；重复键返回 None，不抛异常。"""
+    def write(self, packet, frame, age_s=None):
+        """落一条记录（jsonl 行 + 截图）；重复键返回 None，不抛异常。
+
+        age_s 为 EXE 接收时基的结果年龄（调用方传入）；缺省回退 created_at 差值。
+        """
         key = (packet["session_id"], packet["check_id"])
         if key in self.keys:
             return None
@@ -53,7 +57,8 @@ class BatchRecords:
             "config_id": packet["config_id"],
             "frame_id": packet["frame_id"],
             "recorded_at": datetime.now().isoformat(timespec="seconds"),
-            "result_age_s": round(time.time() - packet["created_at"], 3),
+            "result_age_s": round(age_s if age_s is not None else time.time() - packet["created_at"], 3),
+            "created_at": packet["created_at"],
             "target_count": len(packet["targets"]),
             "targets": packet["targets"],
             "verdict": packet.get("verdict"),  # M3 工单判定预留
