@@ -53,7 +53,8 @@ WAITING；连续 3 次 HTTP 失败自动重新握手（D5）。界面为 **HUD v
 `DETECTED OBJECTS` 列表（缩略图 / T 序号 / XYWH 坐标）+ `RUN INSPECTION` 按钮
 （**鼠标可点击**，与 `c` 键等效触发）。**UVC-only 模式隐藏面板与按钮**；REC 常驻计数
 （`--records-dir`，手动触发成功记录一条即 +1 并保持）。文本由 Pillow 真实字体（Inter，OFL）
-渲染，随 EXE 打包。
+渲染，随 EXE 打包；启动时声明 DPI 感知并按屏幕工作区等比缩放（200% 缩放屏实测 1.8×），
+高分屏下不被系统拉伸切割。
 
 状态机（`rounds.py`，纯 stdlib）与取帧渲染解耦：preview.py 只负责取帧与画框。
 离线测试 `py sim/vision/test_vision_rounds.py` 覆盖触发节流、超龄/配置变化/断联撤框、

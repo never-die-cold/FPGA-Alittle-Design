@@ -57,6 +57,31 @@ def clock_text():
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
+def _set_dpi_awareness():
+    """声明 DPI 感知：高分屏（如 2880x1800@200%）下按物理像素 1:1 输出，不被系统拉伸/切割。"""
+    try:
+        import ctypes
+        try:
+            ctypes.windll.shcore.SetProcessDpiAwareness(2)  # PerMonitorV2（Win8.1+）
+        except (AttributeError, OSError):
+            ctypes.windll.user32.SetProcessDPIAware()
+    except (ImportError, AttributeError, OSError):
+        pass  # 非 Windows 或不可用：保持默认
+
+
+def _work_area():
+    """主屏工作区（物理像素，已 DPI 感知）。失败时回退 1600x900。"""
+    try:
+        import ctypes
+        from ctypes import wintypes
+        rect = wintypes.RECT()
+        if ctypes.windll.user32.SystemParametersInfoW(0x0030, 0, ctypes.byref(rect), 0):
+            return rect.right - rect.left, rect.bottom - rect.top
+    except (ImportError, AttributeError, OSError):
+        pass
+    return 1600, 900
+
+
 class FpsMeter:
     def __init__(self, span=30):
         self.times = deque(maxlen=span)
@@ -131,6 +156,7 @@ def main():
     parser.add_argument("--trigger-frame", type=int, default=0,
                         help="self-check hook: simulate one manual trigger (c) at frame N")
     args = parser.parse_args()
+    _set_dpi_awareness()
     if args.selftest:
         p = mock_packet("selftest", 1, 0, 1)
         canvas = Hud(TextEngine()).render(mock_frame(p), demo_state(p, 30))
@@ -156,12 +182,23 @@ def main():
     hud = Hud(TextEngine())
     fps = FpsMeter()
     click_pending = [False]
+    disp = (1600, 900)
+    scale = 1.0
+    if not args.headless:
+        aw, ah = _work_area()
+        scale = min(aw / 1600.0, ah / 900.0, 2.0)  # 等比适配工作区，上限 2x 防过度放大
+        disp = (int(1600 * scale) & ~1, int(900 * scale) & ~1)
+        print(f"display {disp[0]}x{disp[1]} (scale {scale:.2f}, work area {aw}x{ah})", flush=True)
 
-    def on_mouse(event, x, y, flags, param):
-        if event == cv2.EVENT_LBUTTONDOWN:
-            bx, by, bw, bh = BUTTON
-            if bx <= x <= bx + bw and by <= y <= by + bh:
-                click_pending[0] = True
+        def on_mouse(event, x, y, flags, param):
+            if event == cv2.EVENT_LBUTTONDOWN:
+                bx, by, bw, bh = BUTTON
+                mx, my = x / scale, y / scale  # 窗口像素 → 画布坐标
+                if bx <= mx <= bx + bw and by <= my <= by + bh:
+                    click_pending[0] = True
+    else:
+        def on_mouse(event, x, y, flags, param):
+            pass
 
     scene = None
     capture = None if args.mock else cv2.VideoCapture(args.source, cv2.CAP_DSHOW)
@@ -210,7 +247,8 @@ def main():
             if args.save and not cv2.imwrite(str(args.save), canvas):
                 raise RuntimeError("preview image save failed")
             if not args.headless:
-                cv2.imshow(WINDOW, canvas)
+                cv2.imshow(WINDOW, canvas if scale == 1.0
+                           else cv2.resize(canvas, disp, interpolation=cv2.INTER_LINEAR))
                 key = cv2.waitKey(1) & 255
                 if key in (27, ord("q")):
                     break
