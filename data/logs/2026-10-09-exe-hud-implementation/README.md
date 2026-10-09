@@ -24,6 +24,17 @@
   HTTP 联调（内容断言 / 自动轮不记录 / 手动轮恰好一条记录 + 异常日志 / 坏端点拒绝）
 - **全量 Python 回归 7/7 PASS**（本目录 test_*.log）
 
+## 实机人工目检（2026-10-09，用户操作打包 EXE 窗口）
+
+命令：`vision_preview.exe --mock --endpoint http://127.0.0.1:8765 --records-dir <dir>`，
+用户按 `c` **4 次**、`q` 退出：
+
+- `records.jsonl` **4 行**（check 27/40/84/87，留档于 `manual-hud-run/`）——按键记录路径在新
+  HUD 下正常；`rec4_frame.png` 为第 4 次按键时截帧：面板显示 **REC 4** / ROUND 87 /
+  TARGETS 2 / AGE 0.0s + 满格新鲜度条
+- `anomalies.jsonl` **仅 1 条**初始 `overlay_ok`——flap 未复发（全程无 stale 翻转）
+- stdout 无 WARN（仅 libpng iCCP 提示，无害）
+
 ## 边界声明
 
 MOCK 数据；真实 UVC 画面上 HUD 的观感（对比度/遮挡）待采集卡在位实测；中文类别名（M3）
