@@ -46,12 +46,14 @@ frame/时间/结果年龄/目标数/boxes/verdict 预留/截图名）+ `screensh
 退出；每 `--interval`（默认 0.5s，启动校验必须小于 `--max-age`，否则每轮结果在下轮触发前过期、
 画面周期性空窗）触发一轮 `POST /v1/check`；结果按 D3 判据（会话 + 配置号 + 年龄窗 `--max-age`
 默认 1.0s，**年龄按 EXE 接收时刻计量、与服务端时钟无关**）有效才叠框，过期/断联撤框显示
-WAITING；连续 3 次 HTTP 失败自动重新握手（D5）。界面为 **HUD v3.1**（设计规范
-[data/logs/2026-10-08-exe-ui-design/](../../data/logs/2026-10-08-exe-ui-design/README.md)）：
-左上状态框（模式徽标 MOCK ONLY / LIVE / VIDEO ONLY + 状态行）、右上三格指标面板
-（ROUND / TARGETS / REC；**UVC-only 模式隐藏面板**）、面板下沿内嵌**新鲜度条 + `FRESHNESS`
-标签**（青条随结果年龄收缩、过期转红）、目标为实线绿方框 + T 序号片；REC 常驻计数
-（`--records-dir`，手动触发成功记录一条即 +1 并保持）。
+WAITING；连续 3 次 HTTP 失败自动重新握手（D5）。界面为 **HUD v4「EdgeSight 应用外壳」**
+（定稿与说明 [data/logs/2026-10-09-exe-hud-v4/](../../data/logs/2026-10-09-exe-hud-v4/README.md)）：
+1600×900 画布 = 顶栏（运行状态徽标 / 状态 / 分辨率·FPS·session / 时钟）+ 视频圆角视口
+（比例 0.9875）+ 右上三格指标面板（ROUND / TARGETS / REC + `FRESHNESS` 内嵌条）+ 右列
+`DETECTED OBJECTS` 列表（缩略图 / T 序号 / XYWH 坐标）+ `RUN INSPECTION` 按钮
+（**鼠标可点击**，与 `c` 键等效触发）。**UVC-only 模式隐藏面板与按钮**；REC 常驻计数
+（`--records-dir`，手动触发成功记录一条即 +1 并保持）。文本由 Pillow 真实字体（Inter，OFL）
+渲染，随 EXE 打包。
 
 状态机（`rounds.py`，纯 stdlib）与取帧渲染解耦：preview.py 只负责取帧与画框。
 离线测试 `py sim/vision/test_vision_rounds.py` 覆盖触发节流、超龄/配置变化/断联撤框、

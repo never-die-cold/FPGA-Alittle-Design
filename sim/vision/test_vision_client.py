@@ -45,10 +45,12 @@ try:
     assert (manual_dir / "anomalies.jsonl").exists(), "state events must be journalled"
     # 内容断言：叠加生效时画面必须有绿色目标框像素。2026-10-08 曾出现 /v1/check 误发 GET
     # （404）导致端点模式叠框全部失效、"跑通即通过"的旧断言未能发现，故补此检查。
-    # v3 绿为 (130,230,0)，判据改用 int16 差值（防 uint8 运算溢出误判背景）。
+    # v4 起画布为 1600x900 应用外壳：绿色计数只看视频视口区域（24,88,1288,799），
+    # 防右侧 RUN 按钮渐变（青→绿）混入计数；判据用 int16 差值（防 uint8 溢出）。
     frame = cv2.imread(str(image))
     assert frame is not None, "saved frame unreadable"
-    f = frame.astype(np.int16)
+    view = frame[88:799, 24:1288]
+    f = view.astype(np.int16)
     green = int(((f[:, :, 1] > 150) & (f[:, :, 1] - f[:, :, 0] > 60)
                  & (f[:, :, 1] - f[:, :, 2] > 60)).sum())
     assert green > 500, f"round overlay targets missing from packaged preview frame (green={green})"

@@ -1,22 +1,20 @@
-"""Windows preview prototype. Round-level overlay per docs/vision-sync-protocol-decisions.md.
+"""Windows preview prototype（EdgeSight 应用外壳，HUD v4）。
 
 画面来源：UVC 采集卡（--source）或本机合成场景（--mock）。
-- 状态机（D2 触发 / D3 有效性撤框 / D5 重连）在 rounds.py（离板测试 test_vision_rounds.py）；
-- 批次记录与异常事件在 records.py；本文件负责取帧与 HUD 绘制。
+- 状态机（D2 触发 / D3 有效性撤框 / D5 重连）在 rounds.py；批次记录与异常事件在 records.py；
+- 应用外壳（顶栏/视频视口/指标面板/检测对象列表/RUN 按钮）在 hud.py：静态基座与固定形状
+  元素预渲染缓存，每帧仅粘贴 + 动态文本（~6-10ms/帧）；
+- 文本由 hud_text.TextEngine（Pillow 真实字体，Inter）渲染。
 
-HUD 设计 v3.1（data/logs/2026-10-08-exe-ui-design/README.md）：
-- 左上状态框：模式徽标（MOCK ONLY / LIVE / VIDEO ONLY）+ 状态行；
-- 右上三格指标面板：ROUND / TARGETS / REC（UVC-only 模式隐藏面板）；
-- 面板下沿内嵌新鲜度条 + 左端 `FRESHNESS` 小标签（青条随结果年龄收缩、过期转红）；
-- AGE 数字格与浮动条已删（2026-10-09 用户评审：数字逐帧跳动是噪声；条移入面板并加标注）；
-- 目标：实线绿方框 + T 序号片。
-MOCK 结果恒标 MOCK ONLY，不代表板上识别（plan.md §3.4）。无 --endpoint 时纯视频显示
-VIDEO ONLY | UNASSOCIATED，不叠任何框。
+HUD 设计 v4 定稿与说明：data/logs/2026-10-09-exe-hud-v4/。
+MOCK 结果恒标 MOCK ONLY，不代表板上识别（plan.md §3.4）。
 """
 import argparse
 import sys
 import time
 import urllib.error
+from collections import deque
+from datetime import datetime
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "pynq_host"))
@@ -24,59 +22,17 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from vision_protocol import mock_packet
 from rounds import RemoteRounds
 from records import AnomalyLog, BatchRecords
+from hud_text import TextEngine
+from hud import (AMBER, AMBER_DEEP, BUTTON, CYAN, DIM, GREEN, MAIN, RED, Hud)
 import cv2
 import numpy as np
 
-FONT = cv2.FONT_HERSHEY_DUPLEX
-PANEL = (34, 26, 20)        # 深蓝黑衬底 #141A22
-CYAN = (255, 210, 0)        # 主色 / 新鲜度条 #00D2FF
-GREEN = (130, 230, 0)       # 目标框 / 有效 #00E682
-AMBER = (32, 176, 255)      # 徽标琥珀 #FFB020
-AMBER_DEEP = (0, 150, 240)  # 等待文字深琥珀 #F09600
-RED = (79, 77, 255)         # 过期/故障 #FF4D4F
-TEXT = (246, 248, 250)
-DIM = (150, 156, 160)
-SEP = (88, 80, 74)
-BORDER = (150, 140, 130)
-
-
-def tsize(text, scale, th=1):
-    (w, h), _ = cv2.getTextSize(text, FONT, scale, th)
-    return w, h
-
-
-def put(img, text, org, scale, color, th=1, align="left"):
-    w, _ = tsize(text, scale, th)
-    x, y = org
-    if align == "right":
-        x -= w
-    elif align == "center":
-        x -= w // 2
-    cv2.putText(img, text, (x, y), FONT, scale, color, th, cv2.LINE_AA)
-
-
-def panel(img, rect, alpha=0.55):
-    """半透明衬底：仅混合面板 ROI（不全屏），性能可控。"""
-    x0, y0, x1, y1 = rect
-    roi = img[y0:y1, x0:x1]
-    base = np.empty_like(roi)
-    base[:] = PANEL
-    cv2.addWeighted(base, alpha, roi, 1.0 - alpha, 0, roi)
-
-
-def framed(img, rect):
-    panel(img, rect)
-    cv2.rectangle(img, (rect[0], rect[1]), (rect[2], rect[3]), BORDER, 1)
-
-
-def chip(img, x, y, text, fg, bg, scale=0.55, th=2, pad=8):
-    w, h = tsize(text, scale, th)
-    cv2.rectangle(img, (x, y), (x + w + 2 * pad, y + h + 12), bg, -1)
-    put(img, text, (x + pad, y + h + 6), scale, fg, th)
+WINDOW = "EdgeSight Vision Preview"
+VIEW_RECT = (24, 88, 1264, 711)  # 视频视口（与 hud.VIEW 同步；selftest 区域断言用）
 
 
 def mock_frame(packet):
-    """合成场景（--mock 演示）：冷灰工作台 + 细网格 + 椭圆"零件"（暗色，便于定位风格）。"""
+    """合成场景（--mock 演示）：冷灰工作台 + 细网格 + 椭圆"零件"。"""
     frame = np.full((packet["height"], packet["width"], 3), (196, 200, 204), np.uint8)
     for x in range(0, packet["width"], 80):
         cv2.line(frame, (x, 0), (x, packet["height"]), (188, 192, 196), 1)
@@ -90,54 +46,6 @@ def mock_frame(packet):
     return frame
 
 
-def draw_targets(frame, targets):
-    """v3：实线绿色方框 + T 序号片（颜色 + 形状 + 文字三重编码）。"""
-    for target in targets:
-        x0, y0, x1, y1 = target["bbox"]
-        cv2.rectangle(frame, (x0, y0), (x1 - 1, y1 - 1), GREEN, 2, cv2.LINE_AA)
-        chip(frame, x0, max(y0 - 34, 0), f"T{target['target_id']}", (10, 20, 10), GREEN)
-
-
-def draw_hud(frame, hud):
-    """HUD 层（设计 v3）。hud 由调用方按模式组装：
-    badge=(文本, 底色) / status=(文本, 颜色, 线宽) / metrics=[(标签, 数值, 颜色)] 或 None /
-    fresh=(剩余比例 0..1, 颜色) 或 None。
-    """
-    framed(frame, (24, 20, 384, 122))
-    chip(frame, 40, 36, hud["badge"][0], (16, 14, 12), hud["badge"][1], scale=0.8, th=2, pad=12)
-    text, color, th = hud["status"]
-    put(frame, text, (42, 103), 0.45 if th == 1 else 0.5, color, th)
-    if hud["metrics"] is None:
-        return
-    x1, y0 = frame.shape[1] - 24, 20
-    x0, y1 = x1 - 520, 116
-    framed(frame, (x0, y0, x1, y1))
-    cell_w = (x1 - x0) // 3
-    for i, (label, value, color) in enumerate(hud["metrics"]):
-        cx = x0 + cell_w * i + cell_w // 2
-        put(frame, label, (cx, y0 + 26), 0.42, DIM, 1, "center")
-        put(frame, value, (cx, y0 + 74), 1.2, color, 2, "center")
-        if i:
-            cv2.line(frame, (x0 + cell_w * i, y0 + 14), (x0 + cell_w * i, y1 - 14), SEP, 1)
-    if hud["fresh"] is not None:
-        # 新鲜度条（v3.1 选项 A）：内嵌面板下沿空白区，左端小标签与格子标题同款字
-        frac, color = hud["fresh"]
-        put(frame, "FRESHNESS", (x0 + 16, 111), 0.42, DIM, 1)
-        label_w, _ = tsize("FRESHNESS", 0.42, 1)
-        bx0, bx1 = x0 + 16 + label_w + 14, x1 - 16
-        cv2.rectangle(frame, (bx0, 105), (bx1, 111), (70, 62, 56), -1)
-        if frac > 0:
-            cv2.rectangle(frame, (bx0, 105), (bx0 + int((bx1 - bx0) * frac), 111), color, -1)
-
-
-def render(frame, targets, hud):
-    frame = frame.copy()
-    if targets is not None:
-        draw_targets(frame, targets)
-    draw_hud(frame, hud)
-    return frame
-
-
 def green_pixels(image):
     """绿色目标框像素计数（int16 防 uint8 溢出；供 selftest 与打包断言复用）。"""
     f = image.astype(np.int16)
@@ -145,12 +53,65 @@ def green_pixels(image):
                 & (f[:, :, 1] - f[:, :, 2] > 60)).sum())
 
 
-def metrics_cells(packet, rec_count, value_color):
-    """三格指标（v3.1：AGE 已删——与新鲜度条信息重复、数字逐帧跳动抢注意力）。"""
-    return [("ROUND", str(packet["check_id"]) if packet else "--", value_color),
-            ("TARGETS", str(len(packet["targets"])) if packet else "--", value_color),
-            ("REC", str(rec_count) if rec_count is not None else "--",
-             TEXT if rec_count is not None else DIM)]
+def clock_text():
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+class FpsMeter:
+    def __init__(self, span=30):
+        self.times = deque(maxlen=span)
+
+    def tick(self, now):
+        self.times.append(now)
+
+    def value(self):
+        if len(self.times) < 2:
+            return 0
+        span = self.times[-1] - self.times[0]
+        return round((len(self.times) - 1) / span) if span > 0 else 0
+
+
+def demo_state(packet, fps):
+    targets = [tuple(t["bbox"]) for t in packet["targets"]]
+    return {"badge": ("MOCK ONLY", AMBER),
+            "status": ("LOCAL DEMO", MAIN, "SemiBold"),
+            "detail": f"{packet['width']} x {packet['height']} | {fps} FPS",
+            "clock": clock_text(),
+            "cells": [("ROUND", str(packet["check_id"]), MAIN),
+                      ("TARGETS", str(len(targets)), MAIN),
+                      ("REC", "--", DIM)],
+            "fresh": None, "boxes": targets, "list": targets, "button": False}
+
+
+def uvc_state(shape, fps):
+    return {"badge": ("VIDEO ONLY", DIM),
+            "status": ("UNASSOCIATED | no board recognition", DIM, "Regular"),
+            "detail": f"{shape[1]} x {shape[0]} | {fps} FPS",
+            "clock": clock_text(), "cells": None, "fresh": None,
+            "boxes": None, "list": None, "button": False}
+
+
+def endpoint_state(remote, rec_count, current, age, fps, shape):
+    rec_val = str(rec_count) if rec_count is not None else "--"
+    rec_color = MAIN if rec_count is not None else DIM
+    state = {"badge": ("LIVE", GREEN) if remote.mode == "LIVE" else ("MOCK ONLY", AMBER),
+             "clock": clock_text(),
+             "detail": f"{shape[1]} x {shape[0]} | {fps} FPS | session {remote.session[:8]}",
+             "button": True}
+    if current:
+        targets = [tuple(t["bbox"]) for t in remote.packet["targets"]]
+        state.update(status=("STREAMING", MAIN, "SemiBold"),
+                     cells=[("ROUND", str(remote.packet["check_id"]), MAIN),
+                            ("TARGETS", str(len(targets)), MAIN),
+                            ("REC", rec_val, rec_color)],
+                     fresh=(max(0.0, 1.0 - age / remote.max_age), CYAN),
+                     boxes=targets, list=targets)
+    else:
+        state.update(status=("WAITING FOR RESULT", AMBER_DEEP, "SemiBold"),
+                     cells=[("ROUND", "--", AMBER_DEEP), ("TARGETS", "--", AMBER_DEEP),
+                            ("REC", rec_val, rec_color)],
+                     fresh=(1.0, RED), boxes=None, list=[])
+    return state
 
 
 def main():
@@ -172,13 +133,10 @@ def main():
     args = parser.parse_args()
     if args.selftest:
         p = mock_packet("selftest", 1, 0, 1)
-        hud = {"badge": ("MOCK ONLY", AMBER),
-               "status": ("STREAMING | 1280x720 | session selftest", DIM, 1),
-               "metrics": metrics_cells(p, 0, TEXT),
-               "fresh": (1.0, CYAN)}
-        shown = render(mock_frame(p), p["targets"], hud)
-        assert shown.shape == (720, 1280, 3)
-        assert green_pixels(shown) > 500, "target boxes missing in selftest render"
+        canvas = Hud(TextEngine()).render(mock_frame(p), demo_state(p, 30))
+        assert canvas.shape == (900, 1600, 3)
+        vx, vy, vw, vh = VIEW_RECT
+        assert green_pixels(canvas[vy:vy + vh, vx:vx + vw]) > 500, "target boxes missing in viewport"
         print("PASS: preview mock renderer packaged runtime")
         return
     if args.interval >= args.max_age:
@@ -195,13 +153,27 @@ def main():
               f"hardware_connected {status['hardware_connected']}", flush=True)
     recorder = BatchRecords(args.records_dir) if args.records_dir else None
     anomalies = AnomalyLog(args.records_dir) if args.records_dir else None
+    hud = Hud(TextEngine())
+    fps = FpsMeter()
+    click_pending = [False]
+
+    def on_mouse(event, x, y, flags, param):
+        if event == cv2.EVENT_LBUTTONDOWN:
+            bx, by, bw, bh = BUTTON
+            if bx <= x <= bx + bw and by <= y <= by + bh:
+                click_pending[0] = True
+
     scene = None
     capture = None if args.mock else cv2.VideoCapture(args.source, cv2.CAP_DSHOW)
+    if not args.headless:
+        cv2.namedWindow(WINDOW, cv2.WINDOW_AUTOSIZE)
+        cv2.setMouseCallback(WINDOW, on_mouse)
     try:
         i = 0
         while not args.frames or i < args.frames:
             i += 1
             now = time.time()
+            fps.tick(now)
             if capture is not None:
                 ok, frame = capture.read()
                 if not ok:
@@ -210,61 +182,44 @@ def main():
                 if scene is None:
                     scene = mock_frame(mock_packet("scene", 0, 0, 0))
                 frame = scene
-            w, h = frame.shape[1], frame.shape[0]
-            targets = None
             will_record = False
             fresh = now
             if remote is None:
                 if capture is None:
-                    p = mock_packet("local-preview", i, 0, i)
-                    targets = p["targets"]
-                    status_line = (f"LOCAL DEMO | synthetic | {w}x{h}", DIM, 1)
-                    cells = metrics_cells(p, None, TEXT)
-                    fresh_bar = None
+                    state = demo_state(mock_packet("local-preview", i, 0, i), fps.value())
                 else:
-                    status_line = ("UNASSOCIATED | no board recognition", DIM, 1)
-                    cells = None  # UVC-only：隐藏指标面板（无结果源，不空转仪表）
-                    fresh_bar = None
-                hud = {"badge": ("MOCK ONLY", AMBER) if capture is None else ("VIDEO ONLY", DIM),
-                       "status": status_line, "metrics": cells, "fresh": fresh_bar}
+                    state = uvc_state(frame.shape, fps.value())
             else:
                 if args.trigger_frame and i == args.trigger_frame:
-                    remote.trigger(now)  # 联调自检：模拟按 c（覆盖 D8 记录路径）
+                    remote.trigger(now)  # 联调自检：模拟按 c / 点按钮（覆盖 D8 记录路径）
                 remote.poll(now, args.interval)
                 fresh = time.time()  # 接收后再取钟：overlay/记录年龄不与"请求前"混用（防负年龄 flap）
                 current, _ = remote.overlay(fresh)
-                targets = remote.packet["targets"] if current else None
+                age = fresh - remote.received_at if remote.received_at is not None else None
                 will_record = (recorder is not None and current
                                and remote.last_round_manual and recorder.accept(remote.packet))
-                rec_count = recorder.count + (1 if will_record else 0) if recorder is not None else None
-                badge = ("LIVE", GREEN) if remote.mode == "LIVE" else ("MOCK ONLY", AMBER)
-                age = fresh - remote.received_at if remote.received_at is not None else None
-                if current:
-                    frac = max(0.0, 1.0 - age / args.max_age)
-                    hud = {"badge": badge,
-                           "status": (f"STREAMING | {w}x{h} | session {remote.session[:8]}", DIM, 1),
-                           "metrics": metrics_cells(remote.packet, rec_count, TEXT),
-                           "fresh": (frac, CYAN)}
-                else:
-                    hud = {"badge": badge,
-                           "status": ("WAITING FOR RESULT", AMBER_DEEP, 2),
-                           "metrics": metrics_cells(None, rec_count, AMBER_DEEP),
-                           "fresh": (1.0, RED)}
-            shown = render(frame, targets, hud)
+                rec_count = (recorder.count + (1 if will_record else 0)
+                             if recorder is not None else None)
+                state = endpoint_state(remote, rec_count, current, age, fps.value(), frame.shape)
+            canvas = hud.render(frame, state)
             if will_record:
-                recorder.write(remote.packet, shown, fresh - remote.received_at)
+                recorder.write(remote.packet, canvas, fresh - remote.received_at)
             if anomalies is not None and remote is not None:
                 for event in remote.drain_events():
-                    anomalies.log(remote.mode, event, shown)
-            if args.save and not cv2.imwrite(str(args.save), shown):
+                    anomalies.log(remote.mode, event, canvas)
+            if args.save and not cv2.imwrite(str(args.save), canvas):
                 raise RuntimeError("preview image save failed")
             if not args.headless:
-                cv2.imshow("M2 vision preview", shown)
+                cv2.imshow(WINDOW, canvas)
                 key = cv2.waitKey(33) & 255
                 if key in (27, ord("q")):
                     break
                 if key == ord("c") and remote is not None:
                     remote.trigger(now)
+                if click_pending[0]:
+                    click_pending[0] = False
+                    if remote is not None:
+                        remote.trigger(now)
     finally:
         if capture is not None:
             capture.release()

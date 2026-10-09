@@ -65,8 +65,19 @@ class TextEngine:
         return hit, hit.shape[1], hit.shape[0]
 
     def size(self, text, size, weight="Regular"):
-        img, w, h = self.render(text, size, (255, 255, 255), weight)
-        return w, h
+        left, top, right, bottom = self._font(size, weight).getbbox(text)
+        return max(right - left, 1), max(bottom - top, 1)
+
+    def draw_cy(self, frame, text, x, cy, size, color, weight="Regular", align="left"):
+        """以文本**实际墨迹像素**的垂直中心对准 cy 贴图。
+
+        注意不能按包围盒中心：如 "7" 的盒≈墨迹，而 "--" 的盒高 13px 里墨迹只占 5px 左右，
+        按盒居中会让短横线明显偏上（2026-10-09 实测修正）。
+        """
+        arr, _, h = self.render(text, size, color, weight)
+        rows = np.where(arr[:, :, 3].any(axis=1))[0]
+        ink_cy = (float(rows.min()) + float(rows.max())) / 2.0 if len(rows) else h / 2.0
+        return self.draw(frame, text, x, int(round(cy - ink_cy)), size, color, weight, align)
 
     def draw(self, frame, text, x, y, size, color, weight="Regular", align="left"):
         """把文本以 alpha 混合贴到 BGR 帧；align 按文本宽做 left/center/right，y 为顶边。"""

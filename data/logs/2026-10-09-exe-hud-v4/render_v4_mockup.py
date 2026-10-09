@@ -81,19 +81,29 @@ t = np.linspace(0, 1, H)[:, None, None]
 bg = (np.array(BG_TOP) * (1 - t) + np.array(BG_BOT) * t).astype(np.uint8)
 frame = np.ascontiguousarray(np.repeat(bg, W, axis=1)[:, :, [2, 1, 0]])
 
-# —— 顶栏 ——
+# —— 顶栏（左：运行状态信息，主要位置；右：系统状态/时钟；所有元素垂直居中于 y=32） ——
+BAR_CY = 32
 cv2.line(frame, (0, 64), (W, 64), bgr(BORDER), 1)
-cv2.fillPoly(frame, [np.array([[30, 50], [46, 18], [56, 18], [40, 50]], np.int32)], bgr(CYAN))
-cv2.fillPoly(frame, [np.array([[50, 50], [66, 18], [76, 18], [60, 50]], np.int32)], (140, 110, 70))
-engine.draw(frame, "WORKPIECE RECOGNITION", 94, 8, 32, MAIN, "SemiBold")
-tracked(engine, frame, "AI VISION / INSPECTION / AUTOMATION", 96, 44, 15, DIM)
-cv2.circle(frame, (1120, 32), 5, bgr(GREEN), -1, cv2.LINE_AA)
-engine.draw(frame, "SYSTEM ONLINE", 1134, 23, 16, (205, 212, 222))
+
+
+def draw_cy(frame, text, x, size, color, weight="Regular", cy=BAR_CY):
+    w, h = engine.size(text, size, weight)
+    engine.draw(frame, text, x, cy - h // 2, size, color, weight)
+    return w, h
+
+
+tw, th = engine.size("MOCK ONLY", 14, "SemiBold")
+chip_text(engine, frame, "MOCK ONLY", 30, BAR_CY - (th + 10) // 2, 14, DARK_TXT, AMBER, pad=12)
+px = 30 + tw + 24 + 18
+w1, _ = draw_cy(frame, "STREAMING", px, 16, MAIN, "SemiBold")
+draw_cy(frame, "1280 x 720  |  30 FPS  |  session e13c07fe", px + w1 + 16, 13, DIM)
+cv2.circle(frame, (1120, BAR_CY), 5, bgr(GREEN), -1, cv2.LINE_AA)
+draw_cy(frame, "SYSTEM ONLINE", 1134, 16, (205, 212, 222))
 cv2.line(frame, (1300, 16), (1300, 48), bgr(BORDER), 1)
-cv2.circle(frame, (1330, 32), 9, (188, 196, 208), 2, cv2.LINE_AA)
-cv2.line(frame, (1330, 32), (1330, 25), (188, 196, 208), 2, cv2.LINE_AA)
-cv2.line(frame, (1330, 32), (1336, 34), (188, 196, 208), 2, cv2.LINE_AA)
-engine.draw(frame, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 1348, 23, 16, (205, 212, 222))
+cv2.circle(frame, (1330, BAR_CY), 9, (188, 196, 208), 2, cv2.LINE_AA)
+cv2.line(frame, (1330, BAR_CY), (1330, BAR_CY - 7), (188, 196, 208), 2, cv2.LINE_AA)
+cv2.line(frame, (1330, BAR_CY), (1336, BAR_CY + 2), (188, 196, 208), 2, cv2.LINE_AA)
+draw_cy(frame, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 1348, 16, (205, 212, 222))
 
 # —— 视频视口（圆角 + 细边框 + 角标） ——
 VX, VY, VW, VH = 24, 88, 1264, 711
@@ -132,7 +142,7 @@ for i, (label, value) in enumerate(cells):
     cv2.circle(frame, (start + 9, MY0 + 30), 9, (150, 160, 176), 2, cv2.LINE_AA)
     cv2.circle(frame, (start + 9, MY0 + 30), 3, (150, 160, 176), -1, cv2.LINE_AA)
     engine.draw(frame, label, start + 26, MY0 + 21, 14, DIM)
-    engine.draw(frame, value, cx, MY0 + 42, 36, MAIN, "SemiBold", "center")
+    engine.draw_cy(frame, value, cx, MY0 + 55, 36, MAIN, "SemiBold", "center")  # 按墨迹居中：-- 占位符与数字同带
     if i:
         cv2.line(frame, (MX0 + cw * i, MY0 + 16), (MX0 + cw * i, MY1 - 16), bgr(BORDER), 1)
 engine.draw(frame, "FRESHNESS", MX0 + 18, MY0 + 92, 13, DIM)
@@ -172,17 +182,16 @@ paste(frame, bimg, BX0, BY0)
 icx, icy = BX0 + 32, (BY0 + BY1) // 2
 cv2.circle(frame, (icx, icy), 8, DARK_TXT, 2, cv2.LINE_AA)
 cv2.circle(frame, (icx, icy), 2, DARK_TXT, -1, cv2.LINE_AA)
-engine.draw(frame, "RUN INSPECTION", (BX0 + BX1) // 2 + 12, icy - 10, 15, DARK_TXT, "Bold", "center")
+engine.draw_cy(frame, "RUN INSPECTION", (BX0 + 40 + BX1 - 33) // 2 + 2, icy, 15, DARK_TXT, "Bold", "center")
 cv2.line(frame, (BX1 - 30, icy - 6), (BX1 - 23, icy), DARK_TXT, 3, cv2.LINE_AA)
 cv2.line(frame, (BX1 - 23, icy), (BX1 - 30, icy + 6), DARK_TXT, 3, cv2.LINE_AA)
 
-# —— 左下状态块 ——
-SX0, SY0, SY1 = 24, 823, 878
-paste(frame, rounded_rgba((640, SY1 - SY0), 12, fill=PANEL, outline=BORDER), SX0, SY0)
-pw, _ = chip_text(engine, frame, "MOCK ONLY", SX0 + 16, SY0 + 14, 14, DARK_TXT, AMBER, pad=12)
-tx = SX0 + 16 + pw + 18
-engine.draw(frame, "STREAMING", tx, SY0 + 9, 16, MAIN, "SemiBold")
-engine.draw(frame, "1280 x 720  |  30 FPS  |  session e13c07fe", tx, SY0 + 31, 13, DIM)
+# —— 左下品牌块（logo + EdgeSight，次要位置） ——
+SPX, SPY = 24, 823
+paste(frame, rounded_rgba((252, 53), 12, fill=PANEL, outline=BORDER), SPX, SPY)
+cv2.fillPoly(frame, [np.array([[SPX + 18, SPY + 40], [SPX + 30, SPY + 13], [SPX + 38, SPY + 13], [SPX + 26, SPY + 40]], np.int32)], bgr(CYAN))
+cv2.fillPoly(frame, [np.array([[SPX + 33, SPY + 40], [SPX + 45, SPY + 13], [SPX + 53, SPY + 13], [SPX + 41, SPY + 40]], np.int32)], (140, 110, 70))
+engine.draw(frame, "EdgeSight", SPX + 70, SPY + 14, 25, MAIN, "SemiBold")
 
 cv2.imwrite(str(OUT / "v4_mockup.png"), frame)
 print("PASS: v4 mockup ->", OUT / "v4_mockup.png")

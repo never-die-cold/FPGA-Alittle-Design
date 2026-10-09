@@ -1,37 +1,46 @@
-# 2026-10-09 HUD v4（Step 1：Pillow 文本引擎 + 布局定稿图，待评审）
+# 2026-10-09 HUD v4（Pillow 文本引擎 + 布局定稿 + 接入产品）
 
 用户方向（2026-10-09）：在 v3.1 基础上走"**性价比子集**"升级——Pillow 真字体（同时解锁
 M3 中文能力）+ 圆角面板 + 顶栏 + 检测对象列表 + 检查按钮；**不换技术栈**；
 目标是参考设计图约 70% 观感（辉光/真阴影/侧边导航不做）。
 
-## 本步交付
+## Step 1 交付（字体引擎与布局定稿）
 
 - `src/vision_client/hud_text.py`：**TextEngine**——Pillow 文本 → RGBA 贴图缓存 +
-  alpha 混合贴图（每帧性能与 Hershey 相当）；变量字体按名取字重（InterVariable，
-  Regular/SemiBold/Bold）；`asset_path()` 统一源码/打包（PyInstaller `_MEIPASS`）寻径
+  alpha 混合贴图；变量字体按名取字重（InterVariable，Regular/SemiBold/Bold）；
+  `asset_path()` 统一源码/打包（PyInstaller `_MEIPASS`）寻径；`draw_cy()` 按**墨迹中心**
+  垂直对齐（符号/短横线专用）
 - `src/vision_client/assets/fonts/`：`InterVariable.ttf`（OFL 开源协议）+ `OFL.txt`（873 KB）
-- `requirements.txt` / `build_vision_client.ps1`：新增 `pillow==12.3.0` 依赖与自检断言
-- `render_v4_mockup.py` + `v4_mockup.png`：**1600×900 布局定稿图**（本步评审对象）
+- `render_v4_mockup.py` + `v4_mockup.png`：1600×900 布局定稿图（三轮评审修订版）
 
-## 布局（定稿图对应，坐标为 1600×900 画布）
+## Step 2：接入产品（2026-10-09 完成）
 
-顶栏 64px：logo/标题/字距副标题/SYSTEM ONLINE/时钟｜视频视口 (24,88,1288,799)：
-圆角 14 + 细边框 + 四角标（源 1280×720 映射比例 0.9875）｜右上指标面板
-(712,108,1272,222)：三格 + 图标位 + FRESHNESS 内嵌条｜右列
-(1312,88,1576,799)：DETECTED OBJECTS n/n 徽标 + 卡片（缩略图/T序号/XYWH）+
-RUN INSPECTION 渐变按钮｜左下状态块 (24,823)。
+- **新模块 `src/vision_client/hud.py`**（Hud 渲染器）：静态基座（背景渐变/顶栏底线/品牌块/
+  SYSTEM ONLINE/时钟图标）启动预渲染一次，每帧仅 `base.copy()`；面板/卡片/RUN 按钮/徽标
+  药丸等固定形状元素预渲染 RGBA 贴图缓存；动态文本走 `hud_text` 引擎贴图缓存；缩略图按
+  轮次缓存（bbox 键）。
+- **`preview.py` 状态字典化改造**：主循环 = 源帧 → 状态字典（endpoint / LOCAL DEMO /
+  UVC-only 三种组装）→ `hud.render` → 1600×900 画布；`RUN INSPECTION` **鼠标可点击**
+  （`cv2.setMouseCallback`，与 `c` 键双通道触发）；FPS 实测与时钟进顶栏。
+- **字体随包**：`--add-data`（绝对路径——`--specpath` 下相对路径以 spec 目录为基准，
+  已踩坑）；selftest 构建完整 Hud 对象 = 等效验证打包字体的运行期寻径。
+- 修复记录：药丸贴片合成错误（底色被文字缓冲替换，徽标文字消失）——详见 llm_log。
 
-## 性能方案（Step 2 实施要点）
+### 验证
 
-静态外壳（顶栏/面板/细边框/静态文字）**启动渲染一次存底图**（2× 超采样保证圆角/描边
-平滑）；每帧 = 底图拷贝（~1ms）+ 视频缩放进视口（~2-3ms）+ 动态元素（框/数字/条，
-~2ms）+ 文本缓存贴图（~1ms）≈ **6-8ms/帧**，30fps 预算占用约 20-25%。
+- **四态实渲染**（本目录）：`02_endpoint_ok.png` / `03_local_demo.png`（真实运行保存）/
+  `04_waiting_state.png` / `05_uvc_only.png`（render_hud_states.py 以产品 Hud 渲染）
+- **打包三关 PASS**（build_exe_v4.log）：selftest（含视口区绿色断言）+ 打包 HTTP 联调
+  （绿色内容断言只看视频视口 24,88,1288,799，防 RUN 按钮渐变混入计数）+ 记录 E2E
+- **回归 7/7 PASS**（test_*.log）
+- **字体入包核对**：`dist/vision_preview/_internal/assets/fonts/{InterVariable.ttf, OFL.txt}`
 
-## 状态
+### 性能
 
-Step 1 完成（引擎可运行、定稿图目检通过）；**待用户评审布局** → Step 2 接入
-`preview.py`（含字体随包打包 `--add-data`、打包/回归验证、实机窗口复验）。
+每帧 ≈ 底图拷贝 1-2ms + 视频缩放 2-3ms + 圆角遮罩贴合 2-3ms + 动态绘制 ~2ms ≈ **8-10ms**，
+30fps 预算（33ms）占用约 30%。静态预渲染 + 贴图缓存保证外挂全套外壳后帧率不受影响。
 
 ## 边界
 
-mock 场景与 mock 数据；本步未接产品代码，帧率/端到端指标不受影响（无行为变更）。
+mock 场景与 mock 数据；UVC 真实画面上的观感待采集卡实测；帧率读数在 headless 保存模式下
+无意义（真实窗口 ~30fps）。

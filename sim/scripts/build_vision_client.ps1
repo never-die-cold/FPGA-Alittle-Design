@@ -11,8 +11,10 @@ try {
         if ($LASTEXITCODE -ne 0) { throw "client dependency installation failed" }
     }
     New-Item -ItemType Directory -Force sim/build/vision-client | Out-Null
+    $assetsPath = Join-Path (Get-Location) "src/vision_client/assets"
     & $Python -m PyInstaller --noconfirm --onedir --console --name vision_preview `
-        --paths src/pynq_host --distpath sim/build/vision-client/dist `
+        --paths src/pynq_host --add-data "$assetsPath;assets" `
+        --distpath sim/build/vision-client/dist `
         --workpath sim/build/vision-client/build --specpath sim/build/vision-client src/vision_client/preview.py
     if ($LASTEXITCODE -ne 0) { throw "EXE packaging failed" }
     & sim/build/vision-client/dist/vision_preview/vision_preview.exe --selftest
