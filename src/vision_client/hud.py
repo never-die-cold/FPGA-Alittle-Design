@@ -52,11 +52,32 @@ def rounded_rgba(size, radius, fill=None, outline=None, width=1):
 
 
 def _paste(canvas, rgba, x, y):
+    """uint16 整数混合（>>8 代替 //255 再提速；±1 灰阶误差不可见）。"""
     h, w = rgba.shape[:2]
     roi = canvas[y:y + h, x:x + w]
-    a = rgba[:, :, 3:4].astype(np.float32) / 255.0
-    roi[:] = (rgba[:, :, :3][:, :, ::-1].astype(np.float32) * a
-              + roi.astype(np.float32) * (1.0 - a)).astype(np.uint8)
+    a = rgba[:, :, 3].astype(np.uint16)[..., None]
+    src = rgba[:, :, :3][:, :, ::-1].astype(np.uint16)
+    roi[:] = ((src * a + roi.astype(np.uint16) * (255 - a)) >> 8).astype(np.uint8)
+
+
+def _corner_tiles(keep, r=17):
+    h, w = keep.shape
+    return ((0, r, 0, r), (0, r, w - r, w), (h - r, h, 0, r), (h - r, h, w - r, w))
+
+
+def _blit(canvas, img, keep, x, y, outside_bgr=None, outside_patches=None):
+    """不透明图形快速粘贴：矩形区直拷（memcpy），圆角外像素一次布尔赋值恢复底层。
+
+    outside_patches 为整块预取背景（图形圆角外是静态底图时用）；否则 outside_bgr 单色。
+    """
+    h, w = img.shape[:2]
+    roi = canvas[y:y + h, x:x + w]
+    roi[:] = img
+    out = ~keep
+    if outside_patches is not None:
+        roi[out] = outside_patches[out]
+    else:
+        roi[out] = outside_bgr
 
 
 def _mask(size, radius):
@@ -75,13 +96,21 @@ class Hud:
         self.view_frame = self._build_view_frame()
         self.mpanel = rounded_rgba((MPANEL[2] - MPANEL[0], MPANEL[3] - MPANEL[1]), 12,
                                    fill=PANEL3, outline=BORDER)
-        self.lpanel = rounded_rgba((LPANEL[2] - LPANEL[0], LPANEL[3] - LPANEL[1]), 14,
-                                   fill=PANEL, outline=BORDER)
-        self.card = rounded_rgba((LPANEL[2] - LPANEL[0] - 32, 134), 10, fill=PANEL2, outline=BORDER)
+        lw, lh = LPANEL[2] - LPANEL[0], LPANEL[3] - LPANEL[1]
+        self.lpanel_img, self.lpanel_keep = self._shape((lw, lh), 14, fill=PANEL, outline=BORDER)
+        self._lpanel_bg = self.base[LPANEL[1]:LPANEL[3], LPANEL[0]:LPANEL[2]].copy()
+        self.card_img, self.card_keep = self._shape((lw - 32, 134), 10, fill=PANEL2, outline=BORDER)
+        self.panel_bgr = bgr(PANEL)
         self._bar_x0 = int(MPANEL[0] + 18 + engine.advance("FRESHNESS", 13) + 14)
         self._bar_x1 = MPANEL[2] - 18
         self.track = rounded_rgba((self._bar_x1 - self._bar_x0, 7), 3, fill=(30, 38, 52))
-        self.button = self._build_button()
+        # 视频圆角只在四角有非 1 掩码：中间直拷、四角小块混合（避免全视口浮点运算）
+        vw, vh = VIEW[2], VIEW[3]
+        r = 17
+        self._corners = [(y0, y1, x0, x1, self.mask[y0:y1, x0:x1])
+                         for y0, y1, x0, x1 in ((0, r, 0, r), (0, r, vw - r, vw),
+                                                (vh - r, vh, 0, r), (vh - r, vh, vw - r, vw))]
+        self.button_img, self.button_keep = self._build_button()
         self._chip_cache = {}
         self._thumb_key = None
         self._thumbs = []
@@ -115,7 +144,19 @@ class Hud:
                                (12, h - 12, 1, -1), (w - 12, h - 12, -1, -1)):
             cv2.line(arr, (bx, by), (bx + dx * 26, by), (222, 212, 205, 255), 2, cv2.LINE_AA)
             cv2.line(arr, (bx, by), (bx, by + dy * 26), (222, 212, 205, 255), 2, cv2.LINE_AA)
-        return arr
+        # 只保留四条边缘带（边框环 + 四角标所在区域），中部全透明不必逐帧粘贴
+        edge = 40
+        return [(arr[0:edge, :], 0, 0),
+                (arr[h - edge:h, :], 0, h - edge),
+                (arr[edge:h - edge, 0:edge], 0, edge),
+                (arr[edge:h - edge, w - edge:w], w - edge, edge)]
+
+    @staticmethod
+    def _shape(size, radius, fill=None, outline=None):
+        """不透明圆角图形 → (BGR 矩形图, 不透明布尔掩码)。"""
+        rgba = rounded_rgba(size, radius, fill=fill, outline=outline)
+        img = np.ascontiguousarray(rgba[:, :, :3][:, :, ::-1])
+        return img, rgba[:, :, 3] > 127
 
     def _build_button(self):
         bw, bh = BUTTON[2], BUTTON[3]
@@ -129,8 +170,7 @@ class Hud:
                             DARK_TXT, "Bold", "center")
         cv2.line(img, (bw - 30, icy - 6), (bw - 23, icy), bgr(DARK_TXT), 3, cv2.LINE_AA)
         cv2.line(img, (bw - 23, icy), (bw - 30, icy + 6), bgr(DARK_TXT), 3, cv2.LINE_AA)
-        m = _mask((bw, bh), bh // 2)
-        return np.dstack([img[:, :, 2::-1], (m[..., 0] * 255).astype(np.uint8)])
+        return img, _mask((bw, bh), bh // 2)[..., 0] > 0.5
 
     # ---------- 缓存贴图 ----------
     def _chip(self, canvas, text, x, y, bg_rgb, size=17, fg=DARK_TXT, pad=12):
@@ -157,10 +197,16 @@ class Hud:
     def render(self, video, state):
         canvas = self.base.copy()
         vx, vy, vw, vh = VIEW
-        small = cv2.resize(video, (vw, vh), interpolation=cv2.INTER_AREA)
+        small = cv2.resize(video, (vw, vh), interpolation=cv2.INTER_LINEAR)
         roi = canvas[vy:vy + vh, vx:vx + vw]
-        roi[:] = (small * self.mask + roi * (1.0 - self.mask)).astype(np.uint8)
-        _paste(canvas, self.view_frame, vx, vy)
+        bg_corners = [(canvas[vy + y0:vy + y1, vx + x0:vx + x1].copy(), y0, y1, x0, x1, mt)
+                      for y0, y1, x0, x1, mt in self._corners]
+        roi[:] = small  # 直拷（~99% 区域掩码=1）
+        for back, y0, y1, x0, x1, mt in bg_corners:  # 仅四角小块做掩码混合
+            sub = roi[y0:y1, x0:x1]
+            sub[:] = (small[y0:y1, x0:x1] * mt + back * (1.0 - mt)).astype(np.uint8)
+        for tile, tx, ty in self.view_frame:
+            _paste(canvas, tile, vx + tx, vy + ty)
 
         if state.get("boxes"):
             for i, (x0, y0, x1, y1) in enumerate(state["boxes"]):
@@ -177,7 +223,8 @@ class Hud:
         if state.get("list") is not None:
             self._list_panel(canvas, video, state["list"])
         if state.get("button"):
-            _paste(canvas, self.button, BUTTON[0], BUTTON[1])
+            _blit(canvas, self.button_img, self.button_keep, BUTTON[0], BUTTON[1],
+                  outside_bgr=self.panel_bgr)
         return canvas
 
     def _topbar(self, canvas, state):
@@ -232,7 +279,8 @@ class Hud:
 
     def _list_panel(self, canvas, video, targets):
         rx0, ry0, rx1, ry1 = LPANEL
-        _paste(canvas, self.lpanel, rx0, ry0)
+        _blit(canvas, self.lpanel_img, self.lpanel_keep, rx0, ry0,
+              outside_patches=self._lpanel_bg)
         self.engine.draw(canvas, "DETECTED OBJECTS", rx0 + 22, ry0 + 18, 17, MAIN, "SemiBold")
         code = str(len(targets)) if targets else "--"
         bw = self.engine.size(code, 14, "SemiBold")[0] + 24
@@ -241,7 +289,7 @@ class Hud:
         shown = self._thumbs_for(video, targets, (tuple(map(tuple, targets[:4])), len(targets)))
         for i, (x0, y0, x1, y1) in enumerate(targets[:4]):
             cy0 = ry0 + 62 + i * 148
-            _paste(canvas, self.card, rx0 + 16, cy0)
+            _blit(canvas, self.card_img, self.card_keep, rx0 + 16, cy0, outside_bgr=self.panel_bgr)
             _paste(canvas, shown[i], rx0 + 30, cy0 + 14)
             tx = rx0 + 30 + 88 + 20
             self._chip(canvas, f"T{i}", tx, cy0 + 12, GREEN, size=15)

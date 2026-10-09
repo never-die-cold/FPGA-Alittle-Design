@@ -211,7 +211,7 @@ def main():
                 raise RuntimeError("preview image save failed")
             if not args.headless:
                 cv2.imshow(WINDOW, canvas)
-                key = cv2.waitKey(33) & 255
+                key = cv2.waitKey(1) & 255
                 if key in (27, ord("q")):
                     break
                 if key == ord("c") and remote is not None:
@@ -220,6 +220,9 @@ def main():
                     click_pending[0] = False
                     if remote is not None:
                         remote.trigger(now)
+                delay = 1.0 / 30.0 - (time.time() - now)  # 30fps 节流（渲染耗时计入）
+                if delay > 0:
+                    time.sleep(delay)
     finally:
         if capture is not None:
             capture.release()
