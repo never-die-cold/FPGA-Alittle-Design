@@ -158,11 +158,16 @@ def main():
     args = parser.parse_args()
     _set_dpi_awareness()
     if args.selftest:
+        engine = TextEngine()
         p = mock_packet("selftest", 1, 0, 1)
-        canvas = Hud(TextEngine()).render(mock_frame(p), demo_state(p, 30))
+        canvas = Hud(engine).render(mock_frame(p), demo_state(p, 30))
         assert canvas.shape == (900, 1600, 3)
         vx, vy, vw, vh = VIEW_RECT
         assert green_pixels(canvas[vy:vy + vh, vx:vx + vw]) > 500, "target boxes missing in viewport"
+        assert engine.cjk_path, "CJK font missing in package"
+        probe = np.zeros((44, 260, 3), np.uint8)
+        w, h = engine.draw(probe, "螺栓 螺母 垫圈", 6, 8, 24, (230, 237, 246), "SemiBold")
+        assert w > 60 and h > 12 and probe.sum() > 0, "CJK text render failed"
         print("PASS: preview mock renderer packaged runtime")
         return
     if args.interval >= args.max_age:

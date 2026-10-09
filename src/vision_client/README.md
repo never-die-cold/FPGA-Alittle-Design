@@ -34,7 +34,9 @@ sim/build/vision-client/dist/vision_preview/vision_preview.exe --mock --endpoint
 `(session_id, check_id)` 去重；产物为 `records.jsonl`（一行一条：mode/session/check/config/
 frame/时间/结果年龄/目标数/boxes/verdict 预留/截图名）+ `screenshots/` 逐条 PNG。
 **MOCK 记录截图带 `mock_` 前缀、mode=MOCK，不得用作板上识别证据**（plan.md §3.4）。
-目录本身即导出件；CSV 导出列 M3 增强。离线测试：`py sim/vision/test_vision_records.py`。
+目录包含 `records.csv` 时即为完整导出件；**CSV 导出**：`py src/vision_client/export_records.py <记录目录>`
+（UTF-8-BOM，Excel 直接打开不乱码；targets 列保留 JSON）。离线测试：
+`py sim/vision/test_vision_records.py`、`py sim/vision/test_vision_export.py`。
 
 异常事件日志（D11）：状态迁移（断联/超期/配置变化/恢复 ok）与会话变化、重握手失败写入
 同目录 `anomalies.jsonl`（一行一事件，含 prev/check_id/fails）+ `screenshots/anomaly_*.png`。
@@ -53,7 +55,8 @@ WAITING；连续 3 次 HTTP 失败自动重新握手（D5）。界面为 **HUD v
 `DETECTED OBJECTS` 列表（缩略图 / T 序号 / XYWH 坐标）+ `RUN INSPECTION` 按钮
 （**鼠标可点击**，与 `c` 键等效触发）。**UVC-only 模式隐藏面板与按钮**；REC 常驻计数
 （`--records-dir`，手动触发成功记录一条即 +1 并保持）。文本由 Pillow 真实字体（Inter，OFL）
-渲染，随 EXE 打包；启动时声明 DPI 感知并按屏幕工作区等比缩放（200% 缩放屏实测 1.8×），
+渲染，随 EXE 打包（含中文：Noto Sans SC 子集，GB2312 全集，OFL——类别名/判定文案可直接用）；
+启动时声明 DPI 感知并按屏幕工作区等比缩放（200% 缩放屏实测 1.8×），
 高分屏下不被系统拉伸切割。
 
 状态机（`rounds.py`，纯 stdlib）与取帧渲染解耦：preview.py 只负责取帧与画框。
