@@ -1,0 +1,1254 @@
+diff --git a/README.md b/README.md
+index 443287f..e9202b5 100644
+--- a/README.md
++++ b/README.md
+@@ -4,7 +4,9 @@
+ 
+ **目标形态**：在 AMD PYNQ-Z2（Zynq-7020）上，用**自研 RISC-V 核、HDMI 视觉流水线与 INT8 CNN 协处理器**分析相机拍到的螺栓、螺母、垫圈等紧固件。板卡 HDMI 视频经 USB 采集卡进入 Windows **EXE 前端**，识别结果经网口同步到前端；统一展示物体矩形框、类别标签、数量统计、工单缺件/错料提示和异常记录，并与 ARM 软件基线对比。
+ 
+-> **当前进度**：v0 核已收口；视觉模块与顶层骨架有仿真证据，训练导出演练已完成。物体定位、正式紧固件模型、CNN 协处理器、工业检查闭环和 EXE 尚未实现，完整 HDMI 链路未完成实机验证。已确定自由分散且互不遮挡的摆放、传统视觉定位 + CNN 分类路线，EXE 由 `watercopper` 负责；见根目录 [项目主计划](plan.md)。
++> **当前进度（2026-10-09）**：模块一核＋最小 SoC 已完成收口，见[核收口报告](report/module1-closure.md)。
++> 模块二 HDMI 视觉预处理 RTL＋已验证视频链路已完成（RTL／链路级），见[视频记录](data/logs/2026-10-03-vision-onboard/README.md)和[真实相机链路](data/logs/2026-10-07-pi-pynq/README.md)。
++> **全项目 M2 验收未完成**；CNN、网络硬件输出和工业闭环不得宣称完成。EXE 预览／mock 原型已有证据，正式板端识别服务与定位部署仍待完成，见[项目主计划](plan.md)。
+ 
+ > 👋 新队友请先阅读 [docs/README.md](docs/README.md)（人读入口：5 分钟搞清目录与"找东西"规则），再读 [docs/onboarding.md](docs/onboarding.md)（Git / Markdown / Agent 上手指南）
+ 
+@@ -42,7 +44,7 @@
+ 
+ **为什么自研核，而不用 PicoRV32 / E203 现成软核？（用数据回答，不用情怀）**
+ 
+-1. **面积效率（DMIPS/LUT）**：同器件（xc7z020）公开数据显示，PicoRV32 regular 约 904 LUT 但 CPI 4–5（0.309 DMIPS/MHz），蜂鸟 E203 约 4153 LUT；我们的核以 ≈850 LUT（v0，不含存储器）实现 CPI≈1 的流水线结构，目标是同器件实测 CoreMark/LUT 优于两者（对比实测计划见 [docs/core_comparison.md](docs/core_comparison.md)，数据入 [data/metrics.csv](data/metrics.csv)）
++1. **可审计的优化与面积数据**：当前同 RTL 四档 CoreMark CPI 为 1.885683／1.693399／1.616360／1.606121；BHT2 核 11.520 ns 实点 LUT=2443、FF=637（不含 SoC 存储器）。同负载参数收益与频率／资源口径见[核收口报告](report/module1-closure.md)；PicoRV32 仅有 OOC 和公开性能参考，不能据此宣称同负载面积能效领先。
+ 2. **协处理器原生耦合**：现成核加 custom 指令需侵入他人微架构；自研核可在 EX 级原生集成 `conv.start/conv.wait`（协处理器 busy 直接进流水线 stall），这是外挂 AXI 方案做不到的集成深度
+ 3. **裁剪的量化收益**：面向"推理控制负载"裁掉 CSR/trap（fence/ecall/ebreak 按 NOP），省掉用不到的特权级逻辑；代价与适用边界在报告中主动披露（不适用于需要中断/异常的通用场景）
+ 
+@@ -67,11 +69,11 @@ flowchart LR
+     UI -->|工单与参数| PS
+ ```
+ 
+-> **视频与分析分流（目标架构）**：显示路径保留相机画面、经 HDMI 输出到采集卡；分析路径按模型需要灰度化、缩放，保存小图快照用于推理。EXE 将识别坐标映射到显示画面，叠加矩形框与中文标签。逐帧 DDR 回写仍作为架构对照组；定位与缓存方案待契约评审，不能把“全链零 DDR”提前记为实测结论。
++> **视频与分析分流（已实现的 RTL）**：显示路径保留彩色原图、分析路径独立预处理并保存片上快照，见[视觉契约](src/vision/design_v0.md)与[视频证据](data/logs/2026-10-03-vision-onboard/README.md)。真实识别坐标／类别叠加仍是目标；逐帧 DDR 回写仅为架构对照，不把“全链零 DDR”记为工业闭环实测。
+ 
+ **演示闭环**：放入紧固件 → EXE 展示实际识别框与类别 → 按工单核对类别和数量 → 缺件/错料提示 → 保存本次检查结果与异常截图。连续视频帧不重复累加批次；视频与网口结果须同步，断联或过期结果显示待确认。
+ 
+-**首版边界**：紧固件自由分散摆放、互不遮挡；传统视觉分割/连通区域产生物体框，逐目标裁剪后由 CNN 分类。最大目标数、分割参数、模型输入尺寸与同步协议待契约冻结；任意堆叠和遮挡识别不在首版范围。
++**首版边界**：自由分散、互不遮挡；定位／裁剪 Python 黄金参考已有，板端部署与 CNN 分类未完成。模型和部署参数仍待冻结；同步协议已定轮次级／最多 16 目标，见[决策单](docs/vision-sync-protocol-decisions.md)。任意堆叠和遮挡识别不在首版范围。
+ 
+ ---
+ 
+@@ -94,10 +96,12 @@ flowchart LR
+ 
+ - HDMI IN → 解码 → 逐像素流水线：RGB→灰度 → 3×3 高斯滤波 → 双线性缩放（至网络输入尺寸）→ 可选 Sobel 边缘
+ - 行缓存（Line Buffer）调度，全流水无逐帧 DDR 回写依赖，**像素级延迟固定可测**
+-- **参数化直通链路**：滤波系数、缩放尺寸、ROI 经 AXI-Lite 由 PS/RISC-V 动态配置，现场实时调参
++- **参数化链路**：当前 PS 经 AXI-Lite 配置视觉寄存器，配置原子生效；RISC-V 应用调度接入尚未实现
+ - **架构对比点**：行缓存直通 vs 传统"DDR 帧缓存回写"方案，延迟/带宽/资源三列实测对比（借鉴往届国一作品 Ultra-Vision 的"算法直出"架构，见 [docs/proposal_upgrade.md](docs/proposal_upgrade.md)）
+ - 对照组：PS 侧 OpenCV / 裸机 C 软件实现同算法
+ 
++模块二 RTL／链路级证据见[视频记录](data/logs/2026-10-03-vision-onboard/README.md)和[真实相机恢复记录](data/logs/2026-10-07-pi-pynq/README.md)。板端现用位流与本地修复版指纹尚未闭环；长时间、冷启动与该位流断连恢复不据此宣称全过。
++
+ ### 模块三：轻量 CNN 推理协处理器
+ 
+ - 形态：RISC-V **自定义指令扩展**（如 `conv.start` / `conv.wait`）+ AXI 协处理器，片内 INT8 MAC 阵列；推理输入为预处理缩放后的**片上快照小图**（KB 级 BRAM），权重经 DMA 预载
+@@ -119,7 +123,7 @@ flowchart LR
+ | 板端服务/基准 | PS（PYNQ） | 寄存器配置、结果通信、ARM 软件基线、黄金参考与指标采集；Jupyter 调试 |
+ | 工业操作界面 | PC（Windows EXE） | 采集卡视频、框与标签叠加、工单配置、统计、异常截图与记录导出 |
+ 
+-**通信接口（目标）**：PS↔PL 使用寄存器映射与结果缓冲，EXE↔PS 经网口交换配置和结果；视频独立走 HDMI + USB 采集卡。结果需要物体位置、类别及检查/帧关联信息，具体协议待冻结。现有单框 OSD 保留为调试能力，不承担 EXE 的完整工业界面。
++**通信边界**：PS↔视觉 PL 寄存器／快照接口已冻结，EXE↔服务轮次协议见[决策单](docs/vision-sync-protocol-decisions.md)；真实识别服务未实现，mock 不代表硬件识别。视频独立走 HDMI＋采集卡，单框 OSD 仅作诊断。
+ 
+ ---
+ 
+@@ -154,14 +158,14 @@ edgesight/
+ ├── plan.md              # 全项目目标、收口时间、分工、验收与交付看板
+ ├── LICENSE              # MIT 协议
+ ├── src/                 # 设计源码（RTL / 固件 / PS 侧软件）
+-│   ├── riscv/           # RISC-V 核 RTL（v0 已收口；v1 契约冻结、RTL 进行中；含 SoC 外壳）
+-│   ├── vision/          # HDMI 预处理流水线 RTL（离板收口：22 tb 同判据 + 物理 HDMI bit/XSA 已产出）
++│   ├── riscv/           # v1 三级＋转发＋BHT 核与最小 SoC；收口证据见上方报告
++│   ├── vision/          # HDMI 预处理 RTL；23 tb、已验证视频链路，证据见上方链接
+ │   ├── coprocessor/     # CNN 推理协处理器 RTL（M1 验收后主力转入）
+ │   ├── riscv_fw/        # RISC-V 裸机固件（冒烟 / 逐指令自检 / 后续 benchmark）
+-│   └── pynq_host/       # PS 侧服务与调试：寄存器配置协议、mock 服务（真实板端接入待上板）
++│   └── pynq_host/       # PS 配置／快照工具、mock 服务；正式识别服务未实现
+ ├── sim/                 # testbench、仿真脚本（scripts/ 一键 iverilog；tools/ 含 RV32I 编解码自测）
+ ├── build/               # Vivado 可复现构建 tcl + 综合/实现报告
+-├── board/               # 上板工程、运行脚本、实测输出（占位）
++├── board/               # 上板步骤、运行脚本与已有实机记录
+ ├── data/                # 测试数据与参考结果（metrics.csv 指标汇总 + logs/ + scripts/ + evidence/）
+ ├── skill/                 # 技能包（含 understand-gate 入库理解门槛 skill，OpenCode 自动加载位说明见其文件头）
+ ├── report/                # 设计报告 + 大模型协作记录（llm_log/）
+@@ -179,7 +183,7 @@ edgesight/
+ |:---|:---|:---|
+ | `src/` | `src/`（设计源码） | RTL 三个子目录（`riscv/` 含 SoC 外壳）+ `riscv_fw/` 固件 + `pynq_host/` PS 侧软件 |
+ | `sim/` | `sim/` | testbench、仿真脚本与结果 |
+-| `build/` | `build/` | 可复现构建脚本 + 综合与实现报告（M2 起填充） |
++| `build/` | `build/` | 可复现构建脚本＋已有核／SoC／视觉综合实现报告 |
+ | `board/` | `board/` | 上板工程、运行脚本与实测输出 |
+ | `data/` | `data/` | 测试数据、黄金参考与 `metrics.csv` 指标汇总（含 `logs/`、`scripts/`、`evidence/`） |
+ | `skill/` | `skill/` | 技能包（大模型协作沉淀，加分项） |
+@@ -187,7 +191,7 @@ edgesight/
+ | `docs/` | —（指南未列） | 非强制扩展：过程文档集中地（onboarding / 清单 / 赛题调研） |
+ | `.github/` `.gitignore` | — | 仓库基础设施，不参与作品结构对照 |
+ 
+-> `data/metrics.csv` 骨架已按指南要求建立（表头 + `logs/` + `scripts/` + `evidence/`），M3 实测时填充数值与证据；演示级指标增行说明见 `data/README.md`。
++> [data/metrics.csv](data/metrics.csv) 已有核／视觉指标与原始日志链接；工业闭环指标仍待 M3 实测。指标口径见 [data/README.md](data/README.md)。
+ 
+ ---
+ 
+@@ -204,7 +208,7 @@ edgesight/
+ 
+ 只固定收口时间，阶段内按依赖推进并预留复验余量。全局分工、验收与交付看板见根目录 [项目主计划](plan.md)；RISC-V 技术任务与验收见 [核专项计划](src/riscv/plan.md)。
+ 
+-M1 检查点为 [#19 Part A](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/19)、[#20 Part B](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20) 和 [#21 Part C / M1 收口](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)；#20、#21 在 10/4 联合验收。
++M1 检查点历史为 #19／#20／#21；正式合并和关闭记录见[模块一报告 §7](report/module1-closure.md)。10/4 是原截止日，不是实际收口记录日期。
+ 
+ ---
+ 
+@@ -218,7 +222,7 @@ M1 检查点为 [#19 Part A](https://github.com/never-die-cold/FPGA-Alittle-Desi
+ 
+ > 分工不分家：每周例会互讲进度，确保三人都能讲清任一模块——答辩质询不分工。
+ 
+-EXE 由 `watercopper` 负责；板端通信服务归属与代码目录在接口交接时确认。负责人确定不代表已有上位机实现。
++EXE 由 `watercopper` 负责，已有[预览／mock 原型证据](data/logs/2026-10-06-vision-sync-schema/README.md)；板端真实服务主责已定 NC，正式服务与工业界面未完成。
+ 
+ ---
+ 
+@@ -231,7 +235,7 @@ EXE 由 `watercopper` 负责；板端通信服务归属与代码目录在接口
+ | **L3 保底版** | 单点打透 | RISC-V 核三级流水 + 转发优化（分支预测可弃）+ 一路预处理（灰度+缩放），保证"流水线优化"这一核心创新点完整可测 |
+ | **L3.5 增强版**（stretch） | 跨帧跟踪与流程辅助 | 基础版本验收后，按余量增加轻量跟踪或取料顺序确认；不替代目标版的框/标签与数量检查 |
+ 
+-**核心原则**：架构绝不降级，优化思想绝不取消；降级只砍广度，不砍深度。每个模块独立分支开发，随时可回退。
++**版本原则**：上表为全项目产品裁剪；核专项另有契约中“两级＋完整转发”时序保底，二者不能混为一条架构禁令。当前三级核已通过最低实点门禁，见[收口报告](report/module1-closure.md)。
+ 
+ ---
+ 
+@@ -245,7 +249,7 @@ EXE 由 `watercopper` 负责；板端通信服务归属与代码目录在接口
+ 
+ 记录规范与模板见 [`report/llm_log/`](report/llm_log/README.md)，日常操作三条规矩：
+ 
+-1. **平时干活**：正常用 Kimi Work / OpenCode 工作，零额外负担。唯二规矩——AI 生成的 RTL 一律走 git commit（commit message 注明 prompt 要点）；agent 会话不删除
++1. **平时干活**：保留 agent 会话与验证证据；AI RTL 必须先过理解门槛并取得提交授权，再 commit（message 注明 prompt 要点），不能产出即提交
+ 2. **入库门槛（先读懂，再 commit）**：看不懂的代码不许入库。按 `skill/understand-gate/SKILL.md` 执行——commit 前 agent 先给逐段讲解 + 3 道理解测试题，答对才提交，讲解与测试全量落盘 `report/llm_log/`；其他 agent 平台手动走 [docs/workflow.md](docs/workflow.md) §2 检查单
+ 3. **每个工作日收尾**：在当前会话里让 agent 自己写日志：
+ 
+diff --git a/board/README.md b/board/README.md
+index f50e6d6..d23bdb9 100644
+--- a/board/README.md
++++ b/board/README.md
+@@ -2,6 +2,10 @@
+ 
+ PYNQ-Z2 上板运行工程、启动脚本与实测输出记录。
+ 
++模块一核＋最小 SoC 已完成收口，见[核收口报告](../report/module1-closure.md)。
++模块二 HDMI RTL＋已验证视频链路已完成（RTL／链路级），见[10/03 视频记录](../data/logs/2026-10-03-vision-onboard/README.md)
++和[10/07 真实相机恢复](../data/logs/2026-10-07-pi-pynq/README.md)；全项目 M2／CNN／工业闭环未完成。
++
+ ## 板卡信息
+ 
+ - 板卡：PYNQ-Z2（XC7Z020-1CLG400C）× 1，**全队共用**
+@@ -14,7 +18,8 @@ PYNQ-Z2 上板运行工程、启动脚本与实测输出记录。
+ 
+ - `setup.md`：从零复现指南（SD 卡烧录 → 部署 → 运行演示）——✅ 2026-09-20 建立
+ - `hardware.md`：演示硬件与 HDMI 接线（最终链路、配件清单、720p/HDCP 限制、验线步骤）——✅ 2026-09-20 建立
+-- `run.sh` / 启动脚本：演示与测试的一键入口——🚧 待建
++- `scripts/program_soc.tcl`／`program_soc.bat`：已有 JTAG 下载入口；默认路径修正本轮另批审核，暂显式传入对应位流路径
++- 视觉加载／smoke／demo：见[板端操作说明](../src/pynq_host/ONBOARD.md)；自动开机加载未实现
+ - `logs/`：每次上板实测的原始输出日志（按日期归档）——✅ 目录与记录模板已建（`logs/README.md`）
+ - `media/`：演示照片与视频索引——🚧 待建
+ 
+@@ -23,4 +28,4 @@ PYNQ-Z2 上板运行工程、启动脚本与实测输出记录。
+ - 每次实测记录：日期、硬件连接、bitstream 版本（commit hash）、结果
+ - 实测数据是评分硬依据，日志不删不改，只追加
+ 
+-> 状态：🚧 板卡已就位、SD 卡烧录完毕并开通校园网 SSH（2026-09-20）；setup 指南、演示硬件接线（hardware.md）与 logs 模板已建立；上板工程、运行脚本与实测记录待填充
++> 当前已有上述实机证据；板端现用 vision.bit 与本地修复版指纹未闭环，现用位流长时间／冷启动／断连恢复待验证。下载成功不能单独代替功能观察。
+diff --git a/board/hardware.md b/board/hardware.md
+index 8bcac2e..5740cab 100644
+--- a/board/hardware.md
++++ b/board/hardware.md
+@@ -43,7 +43,7 @@ PYNQ-Z2 PROG-UART ──Micro-USB──▶ 笔记本（串口日志 + 下载/调
+ 1. **分辨率锁定 720p**：PYNQ 官方文档明确 Z1/Z2 的 DVI 前端"因差分引脚速率限制，官方只支持到 720p"（视频流水线 142 MHz vs 1080p60 像素时钟 148.5 MHz）。源设备统一设 **1280×720@60**（含 HDMI 摄像头输出分辨率，采购时确认）。
+ 2. **PL 直接收发 TMDS**：PYNQ-Z2 没有 ADV7611；采用 `dvi2rgb`/`rgb2dvi`，DDC/EDID 在 PL，HDCP 不支持。依据 [官方视频说明](https://pynq.readthedocs.io/en/v3.0.0/pynq_overlays/pynqz2/pynqz2_base_overlay.html)。`adv7611_init.py` 仅为外接接收器示例，不用于本板。
+ 3. **摄像头走 HDMI**：本演示采用 HDMI 输出相机。板上另有 USB 2.0 host（不应与 PROG-UART 混淆），但 USB 摄像头不是本 PL 直通链路的视频源。
+-4. **采集卡不参与指标**：USB 采集链路自带 50–200 ms 延迟，只影响观感；端到端延迟指标用 OSD 帧计数器/时间戳或 GPIO 打点实测，`data/metrics.csv` 测量条件注明"经采集卡观测，不计入延迟"。
++4. **延迟分口径记录**：经采集卡观测的端到端延迟包含采集缓冲，不能写成 PL 延迟；[10/03 记录](../data/logs/2026-10-03-vision-onboard/README.md)的 125 ms 是观测上界。PL 延迟另按像素拍序或独立打点测量，指标注明方法。
+ 5. **供电**：USB 供电仅够启动与点灯；跑 HDMI 流水线建议 12V 适配器（Power 跳线切 REG，USB 供电切 USB）。
+ 6. **串口看日志**：Linux 启动日志与 `ip addr` 一律走 PROG-UART 串口（115200-8N1）；HDMI OUT 由 PL 驱动，不显示系统日志。
+ 7. **演示源供电与上电顺序（2026-10-03 定）**：正式源 = 树莓派 4B + Camera Module 3。① 树莓派用独立 5V/3A USB-C 电源，不从 PYNQ USB host 口取电——该口 5V 来自板载共享轨：整板 USB 供电时上游约 500mA，仅够启动（第 5 条）；12V 供电时 5V 轨还要喂 Zynq/PHY/TMDS，抽 3A 给 Pi 会导致 Pi 欠压复位并恶化 HDMI 信号完整性。② 上电顺序：PYNQ 先上电并加载 PL（PL 内 EDID 就绪）→ 树莓派后上电读取 EDID 协商 1280×720@60；顺序反了可能协商到非 720p 模式。③ Pi 侧双保险：config.txt 锁 `hdmi_group=1`/`hdmi_mode=4`（换 Pi OS 版本失效则以 PL EDID 为准，验线时确认）。
+@@ -72,6 +72,6 @@ hdmi_in.tie(hdmi_out)   # 直通：采集窗口应立即看到笔记本画面
+ ## 5. 状态
+ 
+ - 接线方案：📌 已定（2026-09-20 笔记本源 + 采集卡显示；2026-09-21 修订为真实 HDMI 相机源；**2026-10-03 定案：树莓派 4B + Camera Module 3**，micro-HDMI(HDMI0)→HDMI IN；笔记本 HDMI 输出降级为开发调试源）
+-- 采购：✅ 已购（2026-10-03）：HDMI 线 ×2 / USB 采集卡 / 12V 电源适配器 / Camera Module 3（标准 75° AF 日光版，含 15pin CSI 排线）/ micro-HDMI→HDMI-A 短线 / 树莓派 4B USB-C 5V/3A 电源；到货待收，验线照 §4 执行；负责人：never-die-cold
+-- 验线：⬜ 未开始（线到后执行 §4）
++- 采购与实际接线：Camera Module 3／Pi／PYNQ／采集卡已用于[10/07 真实相机恢复](../data/logs/2026-10-07-pi-pynq/README.md)；不再标“到货待收”。负责人：never-die-cold
++- 视频链路已完成已验证部分（RTL／链路级），见[10/03 视频](../data/logs/2026-10-03-vision-onboard/README.md)、[10/07 相机](../data/logs/2026-10-07-pi-pynq/README.md)；现用位流版本追溯、冷启动／长时间／断连复验仍待补。
+ - 开发期角色：Pi 兼任回放源 / arm_localize 交叉基准 / EXE mock 服务宿主（R1–R3，runbook 见 [docs/pi-dev-roles.md](../docs/pi-dev-roles.md)）；Pi 不进产品分析路径、不产生数据集像素。系统用项目专用 microSD（另配，Raspberry Pi OS Lite 32-bit），输出锁 720p60
+diff --git a/build/README.md b/build/README.md
+index ed8694e..c0e873d 100644
+--- a/build/README.md
++++ b/build/README.md
+@@ -2,10 +2,15 @@
+ 
+ Vivado 构建脚本与综合/实现报告，保证工程可由他人从零复现。
+ 
++> 模块一核＋最小 SoC 已完成收口，见[收口报告](../report/module1-closure.md)。
++> 本轮无本地 Vivado/XSim；下面命令按现有脚本核对，未在本机执行，不产生新 WNS 结论。
++
+ ## 内容
+ 
+ - `build.tcl`：一键构建脚本（无工程模式：读 RTL/XDC → 综合 → opt/place/route → 报告归档）
+-- `constraints/core_top.xdc`：v0 核时序约束（100 MHz 目标 + OOC 时钟源标注）
++- `constraints/core_top.xdc`：核 OOC 100 MHz 参考约束；v0 重现须在 tag 对应源码，不能用当前 v1 冒充
++- `build_fmax.tcl`：核 OOC 周期／配置入口；`-core_profile nofwd|fwd|bht1|bht2` 显式传参
++- `build_soc.tcl`：板级 40／125 MHz 与四配置构建；默认 40 MHz、fwd、BHT 关
+ - `reports/`：综合与实现报告归档（资源占用、Fmax/WNS、最差路径）——指标证据，入库
+ - `run/`：临时产物（checkpoint / 日志，不入库）
+ 
+@@ -15,29 +20,43 @@ Vivado 构建脚本与综合/实现报告，保证工程可由他人从零复现
+ vivado -mode batch -source build/build.tcl
+ ```
+ 
+-Part B SoC 双频档从仓库根目录运行；两档使用同一 RTL/XDC，只改变顶层分频参数：
++SoC 从仓库根目录运行，频率和配置显式传入；使用同一 RTL/XDC。Windows Vivado 路径按本机安装位置替换：
+ 
+ ```bat
+-D:\vivado\2026.1\Vivado\bin\vivado.bat -mode batch -source build/build_soc.tcl -tclargs 40
+-D:\vivado\2026.1\Vivado\bin\vivado.bat -mode batch -source build/build_soc.tcl -tclargs 125
++D:\vivado\2026.1\Vivado\bin\vivado.bat -mode batch -source build/build_soc.tcl -tclargs 40 fwd
++D:\vivado\2026.1\Vivado\bin\vivado.bat -mode batch -source build/build_soc.tcl -tclargs 40 bht2
++D:\vivado\2026.1\Vivado\bin\vivado.bat -mode batch -source build/build_soc.tcl -tclargs 125 bht2
++D:\vivado\2026.1\Vivado\bin\vivado.bat -mode batch -source build/build_fmax.tcl -tclargs core_top v1_bht2_11p52ns 11.520 -core_profile bht2 src/riscv
+ ```
+ 
+-报告分别写入 `build/reports/soc_40mhz/` 与 `soc_125mhz/`，位流分别写入
+-`build/run/soc_40mhz/` 与 `soc_125mhz/`。脚本在时钟对象、未约束路径、WNS 或 DRC
++fwd 报告／位流目录为 `soc_40mhz/` 或 `soc_125mhz/`；其他配置加 `_nofwd/_bht1/_bht2` 后缀。
++例如主档位流为 `build/run/soc_40mhz_bht2/pynq_z2_soc_40mhz_bht2.bit`，默认 fwd 为
++`build/run/soc_40mhz/pynq_z2_soc_40mhz.bit`。脚本在时钟对象、未约束路径、WNS 或 DRC
+ 门禁失败时停止，不生成该档位流。125 MHz 未过只能记录实际结果，不能写成已达标。
+ 
+-> v0 核暂无板级顶层，采用 **out_of_context（OOC）** 模式做核级基线：
+-> 直接做含 I/O 的实现会因顶层端口（166）超过 CLG400 可用引脚（125）而报 Place 30-58；
+-> bitstream 流程待 SoC 顶层就位后（M3）再挂接。
++> 核 OOC 不含外部存储器，不能代替 SoC 全路径验收；核顶层不直接按板级 I/O 布局。
++> 板级 `pynq_z2_top` 和 SoC bitstream 流程已存在；上板还需对应配置实机观测。
+ 
+ ## v0 核基线（2026-09-14，post-route，OOC）
+ 
++**历史数据保留**：下表是 9/14 快照，不能与当前 `build/reports/` 内容混用。
++现存重综合报告为 WNS −1.935 ns、LUT=1606、FF=401，详见下表。
++
+ | 指标 | 实测 | 证据 |
+ |:---|:---|:---|
+-| WNS / Fmax（约束 10 ns / 100 MHz） | **-1.530 ns / 86.8 MHz**（未达标，Part B 优化对象） | `reports/timing_impl.rpt` |
+-| 失败端点 / 全端点 | 101 / 661 | 同上 |
+-| 最差路径 | `u_if_stage/flush_q_reg` 反馈路径：数据路径 11.405 ns（逻辑 3.450 / 布线 7.955），逻辑 17 级 | `reports/timing_worst_paths.rpt` |
+-| 资源 | LUT 846 / FF 65 / BRAM 0 / DSP 0（XC7Z020 占用 < 2%） | `reports/utilization_impl.rpt` |
++| WNS / Fmax（约束 10 ns / 100 MHz） | **-1.530 ns / 86.8 MHz**（历史外推、未达标） | [9/14 验收记录](../report/llm_log/2026-09-14-vivado-2026-1-acceptance.md) |
++| 失败端点 / 全端点 | 101 / 661 | 同一历史记录 |
++| 最差路径 | `u_if_stage/flush_q_reg` 反馈路径：11.405 ns（逻辑 3.450／布线 7.955），17 级 | 同一历史记录 |
++| 资源 | LUT 846 / FF 65 / BRAM 0 / DSP 0 | 同一历史记录 |
++
++### 当前归档报告与后续通过点（不替换历史失败）
++
++| 对象／方法 | 结果 | 原始证据 |
++|:---|:---|:---|
++| v0 @10 ns OOC | WNS −1.935；101/1394 失败端点；LUT 1606／FF 401；83.8 MHz 仅外推 | [timing](reports/timing_impl.rpt)、[资源](reports/utilization_impl.rpt) |
++| v0 最差路径 | 11.876 ns、13 级；logic 19.628%／route 80.372% | [worst paths](reports/timing_worst_paths.rpt) |
++| BHT2 核独立实现 @11.520 ns | 86.806 MHz 实点通过，WNS +0.538；不等于绝对 Fmax | [核收口报告 §5](../report/module1-closure.md) |
++| BHT2 SoC／板级 @40 MHz | WNS +3.618；有实际下载和 LED 观测；125 MHz 历史 FAIL 保留 | [实机证据](../data/logs/2026-10-07-partC-postopt/README.md) |
+ 
+ ## 约定
+ 
+@@ -45,4 +64,4 @@ D:\vivado\2026.1\Vivado\bin\vivado.bat -mode batch -source build/build_soc.tcl -
+ - 每次里程碑打 tag，并归档当次构建报告
+ - 报告数据与 `data/metrics.csv`、`report/` 设计报告保持一致
+ 
+-> 状态：🚧 v0 核综合基线已归档；SoC 顶层与 bitstream 流程待 M3
++> 当前构建与实机结论见[模块一收口报告](../report/module1-closure.md)；核 OOC、SoC 和板级频率分别记录。
+diff --git a/data/README.md b/data/README.md
+index 9f67ef8..3149534 100644
+--- a/data/README.md
++++ b/data/README.md
+@@ -8,9 +8,9 @@
+ - `logs/`：原始日志（延迟分位数、任务闭环成功率等）
+ - `scripts/`：可重跑的测试脚本（须可在提交环境中重跑）
+ - `evidence/`：波形、示波器或逻辑分析仪截图
+-- `images/`：预处理流水线测试图样（规划）
+-- `models/`：CNN 权重（INT8 量化导出）与网络结构描述（规划）
+-- `golden/`：软件黄金参考输出（供仿真与上板比对，规划）
++- 测试图样：随 `golden/` 和相应 `evidence/` 归档；独立 `data/images/` 未建立
++- 模型资料：见根目录 `models/` 及训练证据；独立 `data/models/` 未建立，演练不代表正式模型或网络硬件输出
++- `golden/`：已有核／视觉／定位软件黄金参考与生成入口
+ 
+ ## 约定
+ 
+@@ -21,4 +21,5 @@
+ - 大文件（模型权重、视频）用下载脚本替代直接入库；报告中所有数据必须能追溯到本目录原始文件
+ - 演示级指标（直通对比/端到端帧延迟/动效帧率）随演示脚本一次采集，不单开测试轮次
+ 
+-> 状态：🚧 骨架已就位，M3 实测时填充数值与证据
++> 模块一核＋最小 SoC 已完成收口，见[核报告](../report/module1-closure.md)；模块二 RTL＋已验证视频链路已完成（RTL／链路级），见[视频](logs/2026-10-03-vision-onboard/README.md)、[相机](logs/2026-10-07-pi-pynq/README.md)。全项目 M2 未完成。
++> metrics 已有数值与证据；旧 25% FAIL／8.14%／失败 WNS 继续保留。本轮文档整理不改历史指标；仿真复跑日志另存 `logs/2026-10-09-module1-2-closeout/`，不新增硬件测量行。
+diff --git a/docs/README.md b/docs/README.md
+index ccb330d..534c5db 100644
+--- a/docs/README.md
++++ b/docs/README.md
+@@ -7,14 +7,20 @@
+ ## 项目三句话
+ 
+ 1. 是什么：在 PYNQ-Z2 上用自研 RISC-V + HDMI 视觉流水线 + CNN 协处理器识别桌面紧固件，视频经采集卡进入 Windows EXE，统一显示识别框、类别、计数与工单异常（2026 嵌赛 FPGA 赛道 · AMD 自主选题）。
+-2. 现在到哪：Part A 已收口（tag `partA-v0`）；v1 契约冻结，积木模块已有独立复验，完整核尚未验收；视觉模块离板已收口（2026-10-02：22 tb 同判据 PASS、原子配置 CDC、物理 HDMI bit/XSA 已产出，实机验收待上板），定位部署/正式模型/工业闭环/EXE 正式版未实现。自由分散且互不遮挡、传统定位 + CNN 分类已确定；EXE 由 watercopper 负责。
++2. 现在到哪：按下表区分模块收口与全项目验收。自由分散且互不遮挡、传统定位 + CNN 分类路线已确定；EXE 由 watercopper 负责。
+ 3. 计划和验收：根目录 `plan.md` 管全项目收口、分工和交付看板；`src/riscv/plan.md` 只管核专项，`src/riscv/plan_calendar.md` 只管核任务与卡点。接口按模块与核版本看对应设计契约。
+ 
++| 层次 | 状态与证据 |
++|:---|:---|
++| 模块一 | 核＋最小 SoC 已完成收口。[核收口报告](../report/module1-closure.md) |
++| 模块二 | HDMI 视觉预处理 RTL＋已验证视频链路已完成（RTL／链路级）。[RTL 与视频记录](../data/logs/2026-10-03-vision-onboard/README.md)、[真实相机链路记录](../data/logs/2026-10-07-pi-pynq/README.md) |
++| 全项目 M2 | 全项目 M2 验收未完成；CNN、网络硬件输出和工业闭环不得宣称完成。验收范围见[主计划](../plan.md) §1.4；前两层收口不替代全项目验收。 |
++
+ ## 目录地图（每个目录一句话）
+ 
+ | 目录 | 是什么 |
+ |:---|:---|
+-| `src/` | 设计源码。`riscv/` 是核心（RTL + plan + design_v0）；`riscv_fw/` 裸机固件；`vision/` 离板已收口；`coprocessor/` M3 占位；`pynq_host/` PS 配置协议与 mock；`vision_client/` Windows EXE 原型 |
++| `src/` | 设计源码。`riscv/` 是核与最小 SoC（RTL + plan + design_v0/design_v1）；`riscv_fw/` 裸机固件；`vision/` 图像预处理与视频链路；`coprocessor/` 未实现；`pynq_host/` PS 配置协议与 mock；`vision_client/` Windows EXE 原型 |
+ | `sim/` | 验证。`riscv/` 放 tb；`scripts/run_iverilog.sh` 一键回归；`arch_test/` 第三方套件（脚本拉取，不入库） |
+ | `build/` | Vivado 可复现构建（build.tcl + constraints + 综合报告） |
+ | `board/` | 上板。`smoke_test/` 工程、`setup.md` 复现指南、`logs/` 上板实测记录（只追加） |
+@@ -37,7 +43,9 @@
+ | Part B 验证与验收执行清单 | `docs/partB-verify-plan.md` |
+ | 模块三训练与量化前期 | `docs/module3-model-training.md` |
+ | 视频/结果同步协议决策单 | `docs/vision-sync-protocol-decisions.md` |
+-| 接口定义（唯一权威） | `src/riscv/design_v0.md` |
++| RISC-V v0 接口（基线唯一权威） | [src/riscv/design_v0.md](../src/riscv/design_v0.md) |
++| RISC-V v1 接口（Part B/C 唯一权威） | [src/riscv/design_v1.md](../src/riscv/design_v1.md) |
++| HDMI 视觉预处理接口 | [src/vision/design_v0.md](../src/vision/design_v0.md) |
+ | 指标数值 | `data/metrics.csv` |
+ | 证据（golden、源码溯源） | `data/evidence/`、`data/golden/` |
+ | 学习资料 | `docs/resources.md` |
+@@ -54,7 +62,7 @@
+ 
+ 1. 开工：读 `docs/workflow.md` 开工三件事，先贴"已实现/未实现"清单再动手。
+ 2. 入库：看不懂的代码不许 commit——先通过理解门槛（`docs/workflow.md` §2）。
+-3. 收尾：AI 产出立即 commit（注明 prompt 要点）；设计决策写 `report/llm_log/`；跑过的命令必须能从仓库内脚本复现。
++3. 收尾：通过理解门槛且获提交授权后才可 commit（注明 prompt 要点）；设计决策写 `report/llm_log/`；跑过的命令必须能从仓库内脚本复现。
+ 
+ ## 写作规范（防 AI 味，全员遵守）
+ 
+@@ -78,3 +86,19 @@
+ | `docs/coremark_plan.md` | `docs/coremark.md` 附录 A |
+ 
+ 历史快照声明：`report/llm_log/` 与 `src/riscv/done/` 按"历史不改写"铁律保留原样，其中的旧链接是历史快照，以本表为准。
++
++## 本轮只登记的事项（2026-10-09）
++
++- Q01：D6 覆盖结果报文；未知字段拒绝的实现缺口另批裁决，见[核查注记](vision-sync-protocol-decisions.md)。
++- Q02：`run_iverilog.sh` 缺失 tb 时 continue 的风险只登记，本轮不改 fail-fast 语义。
++- Q03：本地有 `partA-v0`；未取得 `archive/pi-hdmi-diagnostics-2026-10-08`，不查远端、不建替代 tag。
++- Q04：[中文探索报告](方案探索报告.md)与[英文名 audit](localization-exploration-audit.md)正文一致；保留两份，权威正文待用户裁决。
++- Q05：旧配图标“历史快照：BHT 尚未绘制”，见[总览](project-overview.md)；重绘另批。
++- Q06：三处历史／第三方本地链接缺失见[索引](../data/logs/2026-10-09-module1-2-closeout/inventory-links.txt)；原文保留，外部 HTTP 链接未重查。
++- 全量读过的文件与初始指纹见[机器索引](../data/logs/2026-10-09-module1-2-closeout/file-index.txt)，不手写重复清单。
++
++## 变更记录
++
++| 日期 | 变更 |
++|:---|:---|
++| 2026-10-09 | B01：区分三层收口状态并链接证据；补齐对应版本接口导航；纠正提交纪律。 |
+diff --git a/docs/core_comparison.md b/docs/core_comparison.md
+index b3871ef..bbc409f 100644
+--- a/docs/core_comparison.md
++++ b/docs/core_comparison.md
+@@ -1,6 +1,7 @@
+ # 核性能对比计划：自研核 vs PicoRV32 vs E203
+ 
+-> 状态：🚧 执行中（2026-09-21 决策）；PicoRV32 Fmax/资源实测已提前完成（2026-10-03，验证线），CoreMark 四档待 M1 后
++> 状态（2026-10-09）：自研核四档 CoreMark 与模块一收口见[收口报告](../report/module1-closure.md)；PicoRV32 已有 OOC 原始报告，频率数字为 Slack 外推，未重跑其 CoreMark。
++> §1 排期与 §4 风险预案保留为 9/21 历史；其中 v0 CPI≈1／DMEM 同步改造不是当前设计结论或新任务。
+ > 决策记录：[`report/llm_log/2026-09-21-narrative-architecture-fix.md`](../report/llm_log/2026-09-21-narrative-architecture-fix.md)
+ > 本文回答答辩必问题："PicoRV32/E203 现成且更成熟，你们自研的差异化优势是什么？"——用数据回答，不用情怀。
+ 
+@@ -21,8 +22,8 @@
+ | 核 | LUT | Fmax | CPI | DMIPS/MHz | 来源与口径 |
+ |:---|---:|---:|---:|---:|:---|
+ | 本项目 v0（两级） | 1606 | 83.8 MHz（Slack外推，WNS −1.935@10ns；10/03复现同值） | CoreMark 2.105（短仿真；非设计推导≈1） | 未测 | `data/metrics.csv`、[对比实测](../data/logs/2026-10-03-picorv32-compare/README.md) |
+-| PicoRV32 (regular) **本仓实测** | 905 | **194.6 MHz**（post-route WNS −0.139@5ns，收敛 ≈192–195） | 4–5（引用作者自述，未重跑） | 未测 | [2026-10-03 对比实测](../data/logs/2026-10-03-picorv32-compare/README.md)，OOC 同法 |
+-| PicoRV32 (large，含 M) **本仓实测** | 2006 | **134.3 MHz**（post-route WNS −0.445@7ns） | — | — | 同上 |
++| PicoRV32 (regular) **本仓 OOC** | 905 | **194.6 MHz（Slack 外推）**；WNS −0.139@5ns，该约束实点失败 | 4–5（引用作者自述，未重跑） | 未测 | [2026-10-03 对比实测](../data/logs/2026-10-03-picorv32-compare/README.md)，OOC 同法 |
++| PicoRV32 (large，含 M) **本仓 OOC** | 2006 | **134.3 MHz（Slack 外推）**；WNS −0.445@7ns，该约束实点失败 | — | — | 同上 |
+ | PicoRV32 (regular) | ~904 | ~196–200 MHz（Artix-7 -1 级 post-route，作者精调约束） | 4–5（作者自述） | 0.309 | 官方 README + JIPS 论文 |
+ | PicoRV32 (large，含 M) | ~2019 | 同上量级 | — | — | 官方 README |
+ | 蜂鸟 E203 | 4153 | 41.7 MHz（**综合口径，非实现**） | ≈1 | 1.61（社区移植 50MHz 实测） | JIPS 论文 / 社区移植 |
+@@ -33,8 +34,8 @@
+ 
+ ## 3. 对比指标定义
+ 
+-- **CoreMark/MHz**：性能密度（同频性能）。本核四档（v0 / v1 无转发 / v1+转发 / v1+BHT）同基准实测。
+-- **CoreMark/LUT**：面积能效。答辩第一硬牌（E203 面积是本核 ~5 倍，PicoRV32 CPI 是本核 4–5 倍）。
++- **CoreMark/MHz**：当前四档为 v1_nofwd / v1_fwd / v1_fwd_bht1 / v1_fwd_bht2；v0 是外部历史锚点。短仿真外推不是官方长时间认证分数。
++- **CoreMark/LUT**：面积能效。只在负载、计时和资源口径一致时比较；不能用 PicoRV32 公开 CPI 与自研 CoreMark CPI 直接推出加速倍数。
+ - **Fmax（约束递减收敛法）**：PicoRV32 对比时不能只跑 10ns 约束（大正 slack 会低估其 Fmax），做 10ns→5ns→收敛 2–3 轮，两边同法。
+ - 口径纪律：同器件（xc7z020clg400-1）、同工具（Vivado 2026.1）、同为 post-route（E203 引用数据除外，须标注"综合口径"）。
+ 
+@@ -49,7 +50,7 @@
+ 
+ 2026-10-07 自研核v0外部锚点及v1四档CoreMark/MHz、每MHz面积归一值、原始日志与方法限制见 [模块一收口报告](../report/module1-closure.md)；不能把外推值标成实际通过频率，也不拿PicoRV32公开CPI作同负载加速比。
+ 
+-- [ ] `data/metrics.csv` 增行：CoreMark/MHz（四档）+ CoreMark/LUT
+-- [ ] `data/logs/`：iverilog 跑分原始日志 + PicoRV32 OOC timing/utilization 报告（PicoRV32 部分 ✅ 2026-10-03：`data/logs/2026-10-03-picorv32-compare/`）
++- [x] 自研核四档 CoreMark/MHz 与每 MHz 面积归一值已入[收口报告](../report/module1-closure.md)和[指标表](../data/metrics.csv)；不是实板 CoreMark/LUT。
++- [x] 自研核跑分与 PicoRV32 OOC 日志已在[模块一证据](../data/logs/2026-10-07-module1-closure/README.md)及[PicoRV32 证据](../data/logs/2026-10-03-picorv32-compare/README.md)归档。
+ - [x] 本文档 §2 表更新为实测数字 + PicoRV32 实测行（2026-10-03，Fmax/资源列；CPI/DMIPS 引用公开口径）
+-- [ ] README「为什么自研核」段落数据刷新（当前为计划口径占位）
++- [x] [README「为什么自研核」](../README.md)已刷新为当前四档 CPI、BHT2 核实点资源与比较限制；未宣称 PicoRV32 同负载优势。
+diff --git a/docs/partB-verify-plan.md b/docs/partB-verify-plan.md
+index e92c850..1cb7959 100644
+--- a/docs/partB-verify-plan.md
++++ b/docs/partB-verify-plan.md
+@@ -1,5 +1,11 @@
+ # Part B 验收清单（verify/bench 线执行计划）
+ 
++> **当前入口（2026-10-09）**：下文排期、角色分支和早期复选框为历史执行记录；
++> 模块一核＋最小 SoC 已完成收口，见[收口报告](../report/module1-closure.md)
++> 与[合并验收](../data/logs/2026-10-07-module1-closure/README.md)。
++> 当前重现入口见[复现清单](module1-reproduction.md)，分工见[分支规则](branch-layout.md)。
++> 本轮本机 Icarus 为 11.0，原验收为 13.0；本机无 Vivado/XSim，不能产生新时序结论。
++
+ > 是什么：Part B（v1 三级流水+转发）交付后的验证、数据采集与验收执行清单。
+ > 给谁看：never-die-cold（verify+bench 线，执行人）、jianglibo（RTL 线，交付对照）、上板负责人（第 7 节简报）。
+ > 什么时候读：10/2 RTL 交付前对照第 3–4 节备货，10/3 按第 8 节逐项执行，10/4 验收对照第 3 节门禁。
+@@ -29,7 +35,7 @@
+ |:---|:---|:---|
+ | v1+转发 | `bash sim/scripts/run_iverilog.sh v1_fwd` 全 PASS | verify |
+ | v1 无转发 | `bash sim/scripts/run_iverilog.sh v1_nofwd` 全 PASS | verify |
+-| 全量回归 | `bash sim/scripts/run_iverilog.sh all` 含两档 + 现有 11 tb | verify |
++| 全量回归 | `bash sim/scripts/run_iverilog.sh all`；当前完整列表以脚本为准，不限早期 11 tb | verify |
+ | arch-test | 与 v0 相同用例清单，两档签名一致（`run_arch_test.sh <name> <ext>`） | verify |
+ | RV32IM | 八种 M、除零、溢出；整核 `tohost=142879` | verify |
+ | 冒险专项 | R-type 零气泡；load-use 恰 1 气泡；taken 控制转移 1 气泡 | verify |
+@@ -55,9 +61,9 @@
+ ## 5. CPI 口径与 bench 适配（契约 §14.2，D14）
+ 
+ - 主指标：同一 v1 三级核开/关转发对比；v0 仅作参考锚点（v0 CPI≈2.105，不是降幅基线）。
+-- 计数窗口（两档必须完全一致）：`cycles` = rst_n 释放后到首次终止 tohost 写；`retired` = 同窗口 `wb_valid=1` 拍数；M 指令只计一次；等待拍计入 cycles，不得剔除。
+-- `data/scripts/cpi_harness.py` 无需修改：解析的 PASS 行格式不变。**需要适配的是 `tb_core_coremark.v` 的计数信号**：当前绑定 v0 内部信号 `dut.instr_valid && !dut.stall`（见 tb 第 76–78 行），v1 下改为 hierarchical 引用 `dut.wb_valid`（WB 提交记录，契约 §6.4）。适配方案（同 tb 兼容 v0/v1，或 v1 独立 tb）由 RTL 线在 10/2 交付时说明，verify 线只验收"同一 tb 文件、同一计数代码跑两档"。
+-- `bubble_count` 在 v1 下语义变为"无效槽拍数"，仅作波形辅助，不进 PASS 判据。
++- 计数窗口（各档完全一致）：rst_n 释放至首次 `tohost_exit` 写；`retired` 按 `dut.mem_valid` 计数，M 只退休一次；等待拍全部计入 cycles。
++- 适配已在 `sim/riscv/tb_core_coremark.v` 落实；契约 §6.4 的逻辑 `wb_valid` 在当前核映射为 `mem_valid`，不是另一个提交寄存器。不得再按 v0 的 `instr_valid && !stall` 统计 v1。
++- 气泡按同窗口无效提交槽计数，并检查 `cycles=retired+bubbles`、分类之和等于 bubbles；四档使用同一 tb/hex/计数代码。证据见[收口报告 §2–3](../report/module1-closure.md)。
+ - 产出归档：原始日志 `data/logs/<date-slug>/`；波形/覆盖 `data/evidence/`；汇总 `data/metrics.csv`（表格链接原始日志，禁止只留手抄数值）。
+ 
+ ## 6. XSim 对拍口径（沿用 Part A 惯例）
+@@ -71,7 +77,7 @@
+ - 前置：bitstream 只能在 Vivado 门禁（WNS≥0、无 Error/Critical DRC）通过后生成（§14.3）。
+ - 需要移交物：v1 门禁后 bitstream、对应 commit 号、核时钟频率（125 MHz 未达标则用实测最高通过频率）、Vivado 版本、下载步骤（沿用 `board/setup.md`）。
+ - 判据口径（§14.4）：只有实际下载 PYNQ-Z2 并观察到约定 LED/tohost 现象才能记"已上板"；`PROGRAM PASSED` 不算。v1 上板证据追加到 `board/logs/<date-slug>/`，与 v0 的 40 MHz 证据分开，**不得借用 v0 证据表述 v1 已上板**。
+-- 在此之前所有文档/报告中 v1 一律标"待上板"。
++- 未取得对应配置的实机证据前标“待上板”；当前 BHT2/40 MHz 已有[下载与人工 LED 观察](../data/logs/2026-10-07-partC-postopt/README.md)，不推广到其他频率/配置。
+ 
+ ## 8. 10/3 执行清单（verify + bench 当日照单执行）
+ 
+@@ -91,3 +97,4 @@
+ |:---|:---|:---|
+ | 2026-09-29 | 首版：按冻结契约 fe80857 制定执行清单；R1 独立复验同日启动（`data/logs/2026-09-29-r1-verify/`） | never-die-cold（verify 线） |
+ | 2026-10-05 | 增加 40/125 MHz 同 RTL 双档构建入口；具体命令、门禁和上板判据见 `docs/partB-rtl-handoff.md` | Codex（RTL 线） |
++| 2026-10-09 | B04：补当前收口入口，校正退休绑定、tohost_exit 窗口和气泡对账；保留历史排期及失败门禁 | Codex |
+diff --git a/docs/partC-pc-depth-resume.md b/docs/partC-pc-depth-resume.md
+index 3ae0ab1..82e8317 100644
+--- a/docs/partC-pc-depth-resume.md
++++ b/docs/partC-pc-depth-resume.md
+@@ -1,5 +1,13 @@
+ # Part C PC/flush 优化：额度刷新后的续工入口
+ 
++> **历史续工快照（2026-10-09 整理）**：下文记录优化刚落盘时的状态与失败历史，
++> 当时“下一未完成项”和后台进程检查不再是当前执行指令，不要依据旧 PID 重启任务。
++> 后续优化复验见[PC 降深度复验](../data/logs/2026-10-07-partC-postopt/README.md)。
++> 模块一核＋最小 SoC 已完成收口，见[模块一收口报告](../report/module1-closure.md)
++> 与[合并验收记录](../data/logs/2026-10-07-module1-closure/README.md)。
++> BHT2 核 OOC 的 11.520 ns 实点通过、40 MHz SoC 与实机证据应引用上述记录；
++> 100/125 MHz 不因此视为通过，原 `WNS=-0.334 ns` 失败记录保留。
++
+ 更新时间：2026-10-07；工作区 `/home/jianglibo/FPGA-Alittle-Design`。
+ 分支 `dev/rtl`，起点 HEAD `3c6b794`；修改尚未 commit/push，禁止新建分支。
+ 用户授权一次写完、理解题放末尾；2026-10-07 理解门槛已 3/3 通过。
+diff --git a/docs/partC-verify-plan.md b/docs/partC-verify-plan.md
+index 7a330a6..61df5f5 100644
+--- a/docs/partC-verify-plan.md
++++ b/docs/partC-verify-plan.md
+@@ -1,6 +1,8 @@
+ # Part C 验收清单（verify/bench 线执行计划）
+ 
+ > 2026-10-07 执行结果见 [收口报告](../report/module1-closure.md) 和 [复现清单](module1-reproduction.md)。以下复选框为交付前计划快照；当前状态以上述原始证据为准。
++> 当前四档名称为 v1_nofwd／v1_fwd／v1_fwd_bht1／v1_fwd_bht2；v0 是外部 tag 锚点。
++> 本轮无本地 Vivado/XSim；不重复宣称执行历史硬件验证。
+ 
+ > 是什么：Part C（v1 + 可切换 BHT）交付后的验证、四档数据采集与 M1 收口验收执行清单。
+ > 给谁看：never-die-cold（verify+bench 线，执行人）、jianglibo（RTL 线，交付对照）、watercopper（bench/四档指标）、上板负责人（第 7 节简报）。
+@@ -39,7 +41,7 @@
+ | CPI 阶梯留档 | `gain_fwd`（Part B D16 回归门槛 ≥8.0%）与 BHT 净贡献（fwd+BHT 相对 fwd）分列入 metrics.csv | bench |
+ | BHT 命中率 | 2-bit 在含循环 benchmark 上命中率可统计（计数 vs 波形双源核对）且显著优于关闭档（静态不跳）；1-bit/2-bit 对比留档 | bench |
+ | Vivado | 同器件同版本；实测最高通过频率点 WNS≥0；125 MHz 为非阻塞加分（D15）；四档资源（LUT/FF/BRAM）入表 | verify |
+-| 基线锚点 | v0 = tag `partA-v0`（=`962a4f5`）；v1 三档同一 commit，BHT 开/关仅参数不同 | verify |
++| 基线锚点 | v0 = tag `partA-v0`（=`962a4f5`）；v1 四档同一 RTL/commit，仅参数不同 | verify |
+ | 降级预案核对 | 若 L3 触发（关闭 BHT + 默认冲刷）四档退化三档；CoreMark 卡住退自写 benchmark——报告必须注明降级范围，不得标完整目标版通过（§4.3 风险预案） | verify |
+ 
+ ## 4. tb 备货清单（jianglibo 交付应含，never-die-cold 验收时逐项核对断言点）
+@@ -61,9 +63,9 @@
+   - `gain_fwd = (CPI_nofwd − CPI_fwd) / CPI_nofwd`——Part B D16 回归门槛 ≥8.0%；
+   - `gain_total = (CPI_nofwd − CPI_fwd+BHT) / CPI_nofwd`——Part C §4.3 组合尽力目标 25%；
+   - `BHT 净贡献 = CPI_fwd − CPI_fwd+BHT`——负值即回归，必须定位后重测。
+-- 计数窗口（**四档完全一致**）：`cycles` = rst_n 释放后到首次终止 tohost 写；`retired` = 同窗口 `wb_valid=1` 拍数；M 指令只计一次；muldiv 等待拍与误预测冲刷拍计入 cycles，不得剔除。同 hex、同初始内存、同终止条件、同最大周期、同计数代码。
+-- 命中率口径：`命中率 = 预测正确次数 / 预测查表次数`（分子分母精确定义随契约冻结）；统计来源（片上 or tb）写入数据表；四档报告另列冲刷次数列作交叉印证。
+-- harness 现状：`data/scripts/cpi_harness.py` 解析格式不变则零修改；`tb_core_coremark.v` 计数信号在 v1 下 = `dut.wb_valid`（Part B 交付时适配，Part C 沿用）；BHT 统计通道适配方案由 RTL 线交付时说明。verify 只验收"**同一 tb 文件、同一计数代码跑四档**"。
++- 计数窗口（**四档完全一致**）：rst_n 释放至首次 `tohost_exit` 写；retired 按 `dut.mem_valid` 计，M 只计一次；等待与误预测气泡全部计入 cycles。同 hex、初始化、终止条件和计数代码。
++- 命中率按 §16.2 已冻结：tb 在真实 `branch_resolve` 事件统计 lookup／hit／miss，共用 CPI 窗口；每拍互斥且 hit+miss=lookup。关闭档事件全 0，命中率不适用；静态方向命中率如推导须另标来源。
++- 当前 tb 已绑定 `dut.mem_valid`（契约逻辑 wb_valid），harness 不另造计数口。执行与原始数据见[收口报告 §2–4](../report/module1-closure.md)，同一 tb 文件跑四档。
+ - 产出归档：原始日志 `data/logs/<date-slug>/`；波形/覆盖 `data/evidence/`；四档各行入 `data/metrics.csv`（链接原始日志，禁止手抄数值）；四档对比报告入 `report/`（§4.3 交付物，含测试条件与日志索引）。
+ 
+ ## 6. XSim 对拍口径（沿用 Part A/B 惯例）
+@@ -97,3 +99,4 @@
+ | 日期 | 变更 | 作者 |
+ |:---|:---|:---|
+ | 2026-10-03 | 首版：Part C RTL 交付前备货清单；如实标注契约现状（design_v1.md 尚无 Part C 专章，第 4 节断言点为计划稿待回填） | never-die-cold（verify 线） |
++| 2026-10-09 | 补实际四档、mem_valid／tohost_exit 和 tb 事件统计口径；历史复选框与失败数据不回填 | Codex |
+diff --git a/docs/project-overview.md b/docs/project-overview.md
+index f9aa1fa..4dccdf9 100644
+--- a/docs/project-overview.md
++++ b/docs/project-overview.md
+@@ -5,13 +5,13 @@
+ > 每句只写一个信息点；句子要短；用主动语态；用一般现在时；一个术语只指一个事物；
+ > 不用比喻和口语。模块名、信号名、寄存器名按代码原名写（STE 允许技术名）。
+ > **配图**：7 幅图由 [img/make_project_diagrams.py](img/make_project_diagrams.py) 生成。
+-> 重生成命令：`python docs/img/make_project_diagrams.py`。RTL 改动后须同步更新脚本。
+-> **状态口径**：2026-10-03。更细的契约见 [design_v0.md](../src/riscv/design_v0.md)、
++> **历史快照：BHT 尚未绘制。**7 幅图保留 2026-10-03 版本；重绘另列批次，本轮不运行生成脚本。
++> **状态口径**：2026-10-09；当前实现以正文、冻结契约和收口证据为准。更细的契约见 [design_v0.md](../src/riscv/design_v0.md)、
+ > [design_v1.md](../src/riscv/design_v1.md)、[vision design_v0.md](../src/vision/design_v0.md)。
+ 
+ ---
+ 
+-## 1. 系统是什么
++## 1. 系统是什么（目标架构，未全链实现）
+ 
+ 本项目做一台桌面紧固件检查仪。相机拍摄螺栓、螺母和垫圈。零件自由摆放，互不遮挡。
+ 视频进入 PYNQ-Z2 板卡。板卡完成三件事：图像预处理、物体定位、CNN 分类。
+@@ -22,45 +22,39 @@
+ ![图 1 系统总览](img/fig1_system.png)
+ 
+ 数据走两条物理路径。视频路径：板卡 HDMI OUT → USB 采集卡 → EXE。
+-结果路径：板卡 PS → 网口 → EXE。两条路径的帧必须一一对应。
+-过期结果不得显示为当前检查通过。这条同步协议还没有冻结。
++结果路径：板卡 PS → 网口 → EXE。[轮次级同步契约](vision-sync-protocol-decisions.md)已冻结；mock v1.1 有[落码证据](../data/logs/2026-10-06-vision-sync-schema/README.md)。
++真实识别结果与画面关联尚未实现；过期结果不得显示为当前检查通过，不能把轮次级契约称为逐帧精确对齐。
+ 
+ ## 2. 三个模块与当前状态
+ 
+ | 模块 | 内容 | 负责人 | 状态 |
+ |:---|:---|:---|:---|
+-| 模块一 | 自研 RISC-V 核（v0 两级 → v1 三级） | jianglibo | v0 已收口；v1 集成未验收 |
+-| 模块二 | HDMI 图像预处理流水线 | never-die-cold | 离板 22 tb 收口；上板已通 |
++| 模块一 | RISC-V 核＋最小 SoC | jianglibo | 已完成收口。[核收口报告](../report/module1-closure.md) |
++| 模块二 | HDMI 视觉预处理 RTL＋已验证视频链路 | never-die-cold | 已完成（RTL／链路级）。[视频记录](../data/logs/2026-10-03-vision-onboard/README.md)、[真实相机记录](../data/logs/2026-10-07-pi-pynq/README.md) |
+ | 模块三 | INT8 CNN 推理协处理器 | jianglibo | 未实现 |
+-| EXE 前端 | 视频叠加、工单统计、记录导出 | watercopper | 未实现 |
++| EXE 前端 | 视频预览、mock 原型；正式工业界面 | watercopper | [原型已验证](../data/logs/2026-10-06-vision-sync-schema/README.md)；正式版未实现 |
+ 
+ 里程碑：M1（10/4）核验收；M2（10/12）预处理 + 首个网络 + EXE 原型；
+ M3（10/20）工业闭环；M4（10/26）材料收口；11/4 提交。
+ 
+-现状三类清单：
++全项目 M2 验收未完成；首个网络硬件输出仍缺实现与黄金参考对齐证据，CNN 与工业闭环不得宣称完成。验收范围以[主计划 §1.4](../plan.md)为准。
+ 
+ - ✅ **已实现并验证**
+-  - v0 两级核：38 用例 tb + SoC 冒烟 + arch-test 子集 PASS；
+-    OOC 实测 Fmax 83.8 MHz（LUT 1606 / FF 401 / BRAM 0 / DSP 0）。
+-  - 视觉链路离板全家福：22 个仓库内 tb，Icarus 与 XSim 同判据全 PASS；
+-    彩色直通分流、原子配置 CDC、cop_buf 争用修复、720p 真实时序。
+-  - 时序：video_pipeline 并行边界 OOC post-route WNS +0.330 @ 74.25 MHz；
+-    scaler real 档 ≈ 94.9 MHz。
+-  - 上板（2026-10-03）：全链验证 PASS；video_locked 挂死 bug 已修复；拔插复测 PASS。
+-  - PicoRV32 对比：与 v0 核同法对跑，Fmax 实测已入档（M4 前置提前完成）。
+-- 🟡 **已实现但未完成验收**
+-  - v1 三级流水的积木模块（if_stage / id_ex_stage / mem_wb_stage / forwarding / hazard）
+-    已入库，各有专项 tb；完整三级核的集成与验收未收口。
+-  - 端到端帧延迟未实测（需要 OSD 打点）。
++  - v0 保留 `partA-v0` 锚点；v1 三级、转发、Radix-4、BHT 三档及四档入口已收口。[核收口报告](../report/module1-closure.md)
++  - v1：44 组 arch-test 子集签名、四档 XSim 对拍；BHT2 核 OOC 11.520 ns 实点 WNS +0.538，40 MHz 主档真实下载并观察 LED，均见核收口报告。
++  - 视觉：当前回归入口含 23 个 RTL tb；[10/03 实机记录](../data/logs/2026-10-03-vision-onboard/README.md)含配置、彩色直通及修复后拔插复验，物理实现 WNS +0.956。
++  - 相机：CM3 经 PYNQ 到采集卡取得真实画面，720p 连续 24 帧；[10/07 记录](../data/logs/2026-10-07-pi-pynq/README.md)保留原黑屏、恢复过程与用户确认。
++  - v0/PicoRV32 OOC 对比已入档；83.8 MHz 等是 Slack 外推，不是该频率实点通过，见[对比记录](../data/logs/2026-10-03-picorv32-compare/README.md)。
++- 🟡 **已实现但仍有验证／追溯缺口**
++  - 当前相机所用板端位流与本地修复版的对应关系、该配置的长时间／冷启动／断连恢复待验证；不覆盖 10/03 已通过的特定配置记录。
++  - 采集卡观测延迟上界 125 ms 已记录，不能当作 PL 本体延迟；PL／识别端到端延迟仍缺同口径实测。
+ - ⬜ **未实现 / 未接入**
+-  - 分支预测 BHT（`branch_predict.v`，Part C）；v1 两档运行命令未接入回归入口。
+-  - CNN 协处理器 `cop_top`；物体定位（PS/PL 分配待冻结）；逐目标裁剪。
+-  - 正式紧固件模型；工业检查固件；EXE 正式版；网口结果同步协议。
++  - CNN 协处理器、正式紧固件模型、实际定位部署与逐目标推理、工业检查固件、真实结果服务及视频关联、EXE 正式版、PYNQ 开机自动加载。
+ 
+ ## 3. RTL 代码组成
+ 
+-RTL 有两棵树，加一处预留。核树在 `src/riscv/`，共 979 行。
+-视觉树在 `src/vision/`，共 1355 行。预留是 `src/coprocessor/`，现在只有 README。
++RTL 有两棵树，加一处预留。核树在 `src/riscv/`，视觉树在 `src/vision/`。
++`src/coprocessor/` 现在只有 README；旧图中的行数和实现标记只对应历史快照。
+ 
+ ![图 2 RTL 组成树](img/fig2_rtl_tree.png)
+ 
+@@ -68,8 +62,8 @@ RTL 有两棵树，加一处预留。核树在 `src/riscv/`，共 979 行。
+ 
+ - `pynq_z2_top`：板级顶层。它把 125 MHz 板钟降到 40 MHz。它同步释放复位。
+ - `soc_top`：SoC 外壳。它例化核、指令 BRAM、数据 RAM、计时器和 LED。
+-- `core_top`：v0 两级核。它是当前主线。
+-- v1 模块组：`if_stage`、`id_ex_stage`、`mem_wb_stage`、`forwarding`、`hazard`。
++- `core_top`：当前 v1 三级核；v0 两级基线留存在 `partA-v0`。
++- v1 模块组：`if_stage`、`id_ex_stage`、`mem_wb_stage`、`forwarding`、`hazard`、`branch_predict`。
+   它们服务 Part B/C。共享单元是 `pc`、`decode`、`regfile`、`alu`、`muldiv`、`imem`、`dmem`。
+ 
+ 视觉树分三组：
+@@ -99,14 +93,15 @@ v0 只有两级。第一级是 IF。第二级把译码、执行、访存、写
+ 8. load 数据做符号扩展或零扩展。写回选择器四选一：`alu_y`、load 数据、`pc_id+4`、乘除结果。
+ 9. `muldiv` 是多拍单元。核在它算完之前保持 stall。结果经写回选择器进寄存器堆。
+ 
+-v0 没有转发，也没有停顿。RAW 相关靠固件调度避开。load 后紧跟使用时，固件要插 nop。
++v0 不设独立转发和 load-use interlock，异步 DMEM 支持同拍 load 写回；普通相关指令下一拍读取已更新的寄存器堆。
++M 指令仍按 [v0 握手契约](../src/riscv/design_v0.md)停顿，不能把“无数据停顿”解释为所有指令都不停顿。
+ 
+ SoC 侧有两个 MMIO 地址。读 `0x8000_8000` 得到周期计数器。写 `0x8000_3FF0` 驱动 LED。
+ 写计时器地址被忽略，不落 DMEM。
+ 
+ ### 4.2 v1 三级流水（图 4）
+ 
+-v1 把两级拆成三级：IF、ID+EX、MEM+WB。流水充满后每拍提交一条。
++v1 把两级拆成三级：IF、ID+EX、MEM+WB。无停顿的稳态路径每拍提交一条。
+ 
+ ![图 4 v1 三级流水与转发](img/fig4_core_v1.png)
+ 
+@@ -115,19 +110,17 @@ v1 把两级拆成三级：IF、ID+EX、MEM+WB。流水充满后每拍提交一
+ - IF/ID 边界由 `if_stage` 拥有。它携带 `if_valid`、`if_pc`、`if_instr`。
+ - ID+EX/MEM+WB 边界由 `mem_wb_stage` 拥有。store 副作用只在这一级提交。
+ 
+-三条转发路径共用一组选择器。优先级固定为 EX > MEM > WB：
++通用 `forwarding` 的来源优先级为 EX > MEM > WB，来源类别不代表额外流水级。
++当前核只启用来自 MEM+WB 的非 load `mem_result`，接到 EX 候选；MEM/WB 候选无效。
++ALU、PC+4 和 M 结果均可旁路；load 先提交，消费者停 1 拍后重读寄存器堆。
+ 
+-- **EX→EX**：相邻两条指令的 RAW。ALU 结果直接旁路给下一条指令。
+-- **MEM→EX**：隔一条指令的 RAW。结果从 MEM+WB 槽旁路回来。
+-- **WB→EX**：更早的写回值。寄存器堆此时还没写入，靠旁路拿新值。
+-
+-`hazard` 只做两个动作：
++冒险与控制处理包括以下动作：
+ 
+ - load-use：前一条是 load 且本条用它的目的寄存器。固定停 1 拍。没有 DMEM→ALU 组合旁路。
+-- taken 分支或跳转：冲刷 1 个年轻槽。IF 下一拍注入 NOP。not-taken 不产生气泡。
++- 控制裁决以 `ex_accept` 门控；BHT 关闭时 taken 分支冲刷 1 槽，开启时预测正确零冲刷、误预测冲刷 1 槽；JAL/JALR 仍冲刷 1 槽。
+ 
+-转发有顶层参数 `enable_forwarding`。关掉它就是"v1 无转发"对照档：RAW 一律停顿。
+-所有副作用都以流水槽 `valid=1` 为前提。NOP 只为波形可读，不产生副作用。
++顶层参数 `ENABLE_FORWARDING` 切转发，`BHT_MODE=0/1/2` 切关闭／1-bit／2-bit；同 RTL 四档由脚本传参。
++所有副作用由槽位 `valid` 门控；当前 IF flush 只清有效位，不要求把指令 payload 改成 NOP。
+ 
+ ## 5. 模块二：视觉流水线的数据流
+ 
+@@ -182,7 +175,7 @@ PS 的配置时钟和像素时钟异步。直接写寄存器会撕裂配置。
+ 
+ ### 5.5 快照如何交给 CNN（图 7）
+ 
+-`cop_buf` 是模块二和模块三的交接件。它用两片 BRAM 做乒乓帧缓冲。
++`cop_buf` 是模块二和模块三的交接件。它用两个存储银行做乒乓帧缓冲；银行数不等于 BRAM 块数。
+ 
+ ![图 7 cop_buf 乒乓帧缓冲](img/fig7_copbuf.png)
+ 
+@@ -219,8 +212,8 @@ PS 的配置时钟和像素时钟异步。直接写寄存器会撕裂配置。
+ 
+ ## 7. 验证体系
+ 
+-一键回归是唯一验证入口：`bash sim/scripts/run_iverilog.sh all`。
+-它覆盖核 tb、门禁自检、22 个视觉 tb 和 Python 检查。任何一项 FAIL 都算整体 FAIL。
++全量功能回归入口：`bash sim/scripts/run_iverilog.sh all`；arch-test、XSim 与 Vivado 另有专项入口。
++它覆盖核 tb、四档 CoreMark/benchmark、门禁自检、23 个视觉 tb 和 Python 检查。门禁故意注入的 FAIL 由自检判据处理，真正测试失败使整体失败。
+ 
+ - 每个视觉单元都有黄金参考。Python 生成输入和期望，tb 逐像素比对。数据在 `data/golden/vision/`。
+ - iverilog 全 PASS 后，XSim 用同一判据复跑（`bash sim/scripts/run_vision_xsim.sh all`）。
+@@ -229,16 +222,13 @@ PS 的配置时钟和像素时钟异步。直接写寄存器会撕裂配置。
+ 
+ ## 8. 未实现清单（明确标注）
+ 
+-- `branch_predict.v`：未实现。Part C 范围。
+-- v1 完整三级核：未集成验收。v1 两档运行命令未接入 `run_iverilog.sh`。
+ - `cop_top`（CNN 协处理器）：未实现。算子契约未冻结。
+-- 物体定位：未实现。PS/PL 分配待冻结。
+-- 逐目标裁剪：未实现。依赖定位输出。
++- 实际定位部署与逐目标推理：未实现；ARM／Python 定位和裁剪参考已有验证，不等于实时板端部署。
+ - 正式紧固件数据集与模型：未完成。采集规程已入库。
+ - 工业检查固件与工单规则：未实现。
+ - EXE 正式版：未实现。前端原型联调在 M2。
+-- 网口结果同步协议：未冻结。
+-- 端到端帧延迟：未实测。
++- 真实板端结果服务与画面关联：未实现；已冻结的轮次级协议及 mock 原型不能替代真实识别。
++- PL 本体及识别闭环延迟、当前相机配置的长期运行／冷启动／断连恢复：待验证；已有采集卡观测上界不能替代。
+ 
+ ## 9. 文档关系与复现入口
+ 
+@@ -254,8 +244,8 @@ PS 的配置时钟和像素时钟异步。直接写寄存器会撕裂配置。
+ 复现命令：
+ 
+ ```bash
+-python docs/img/make_project_diagrams.py      # 重生成本文 7 幅图
+-bash sim/scripts/run_iverilog.sh all          # 全量回归（核 + 视觉 22 tb）
++python docs/img/make_project_diagrams.py      # 旧图生成器；重绘须另批授权，本轮不执行
++bash sim/scripts/run_iverilog.sh all          # 全量回归（核四档 + 视觉 23 tb）
+ bash sim/scripts/run_vision_xsim.sh all       # XSim 同判据复跑
+ ```
+ 
+@@ -264,3 +254,9 @@ bash sim/scripts/run_vision_xsim.sh all       # XSim 同判据复跑
+ 1. v0 为什么不需要转发单元也能跑对？v1 打开转发后，哪一类相关仍然必须停顿？为什么？
+ 2. 配置写入 R0 后为什么画面不立刻变？软件要怎么确认这组配置已经生效？
+ 3. `cop_ready` 拉高期间，快照写侧正在写 Bank0。此刻 Bank1 刚好写完一帧。回放引擎会怎么选？
++
++## 变更记录
++
++| 日期 | 变更 |
++|:---|:---|
++| 2026-10-09 | B02：同步三层状态与证据、当前核/转发/BHT 说明及 23 tb 入口；配图保留历史快照，未重绘。 |
+diff --git a/docs/three-day-plan.md b/docs/three-day-plan.md
+index 94dcd45..7911b2d 100644
+--- a/docs/three-day-plan.md
++++ b/docs/three-day-plan.md
+@@ -1,5 +1,14 @@
+ # Part B 未来三日可执行计划
+ 
++> **历史快照（2026-10-09 整理）**：下文保留 10/04 的执行计划和当时状态，
++> 不再作为当前续工清单；旧 `dev/rtl` 分叉提醒不代表当前 `main` 工作区状态。
++> 模块一核＋最小 SoC 已完成收口，见[模块一收口报告](../report/module1-closure.md)
++> 与[合并验收记录](../data/logs/2026-10-07-module1-closure/README.md)。
++> 当前 BHT 四档、XSim、时序实点和实机证据均以该报告为准；历史失败记录继续保留。
++> PicoRV32 已有[OOC 对比证据](../data/logs/2026-10-03-picorv32-compare/README.md)，
++> 未重跑其 CoreMark。当前退休计数绑定 `dut.mem_valid`，下文 `wb_valid` 为早期逻辑命名。
++> 当前分支分工见[分支规则](branch-layout.md)，不要直接执行下文历史推送操作。
++
+ > ⚠️ 推送前待办：本地 `dev/rtl` 与 `origin/dev/rtl` 已分叉；恢复推送前必须先执行 `git pull --rebase origin dev/rtl`，禁止强推。
+ > 编制日期：2026-10-04；工作分支：`dev/rtl`。
+ > 依据：`design_v1.md` 冻结契约、`src/riscv/plan.md §4.2/§4.3`、`docs/partB-verify-plan.md`。
+diff --git a/docs/vision-offboard-next.md b/docs/vision-offboard-next.md
+index 46d140b..80c708f 100644
+--- a/docs/vision-offboard-next.md
++++ b/docs/vision-offboard-next.md
+@@ -1,5 +1,11 @@
+ # 模块二离板推进清单（2026-10-01）
+ 
++> **历史计划／执行快照（2026-10-09 整理）**：正文保留 10/01–10/02 当时状态和分支操作，
++> 不作为当前待办；不能把末尾“真实相机未实现”直接用作现在的结论。
++> 模块二 HDMI RTL＋已验证视频链路已完成（RTL／链路级），见[10/03 视频](../data/logs/2026-10-03-vision-onboard/README.md)
++> 与[10/07 相机恢复](../data/logs/2026-10-07-pi-pynq/README.md)。全项目 M2 未完成。
++> 板端现用位流追溯、长期复验与应用部署仍待补，见[当前主计划](../plan.md)。
++
+ 用户授权：模块二除实际板上操作外的工作均可推进，包括原 watercopper 的离板任务。
+ 本清单已核对根 plan.md、核计划、v0 核契约和两分支视觉实现；代码步骤待用户确认。
+ 
+diff --git a/docs/vision-sync-protocol-decisions.md b/docs/vision-sync-protocol-decisions.md
+index d333ae2..4c8a5c0 100644
+--- a/docs/vision-sync-protocol-decisions.md
++++ b/docs/vision-sync-protocol-decisions.md
+@@ -59,13 +59,19 @@
+ 
+ - **推荐**：沿用 mock v1——session_id 由服务端生成（uuid）；板端复位、Overlay 重载或换视频源 → 新会话；EXE 不得跨会话复用结果（校验强制），检测到 session 变化即清空本地状态，并重新确认配置生效后才恢复叠加。
+ 
+-## D6 报文 schema v1.1（待评审；改动另起代码步骤）
++## D6 报文 schema v1.1（2026-10-06 已确认；实现缺口另批裁决）
+ 
+ - 保留 mock v1 全部字段与校验规则：version、mode、session_id、frame_id、config_id、width、height、created_at、status、targets（16 目标上限、闭区间 bbox、越界拒绝、重复 target_id 拒绝）。
+ - 新增：check_id（uint32，轮次标识，见 D2）；trigger_ref（可选回显字段）。
+ - 预留：status 枚举 M3 起从 LOCATION_ONLY 扩展 CHECK_PASS / CHECK_FAIL / RECHECK（工单判定，枚举值届时冻结）；真实服务 mode=LIVE 且 hardware_connected=true——EXE 对 MOCK 结果恒加"MOCK ONLY"横幅（plan.md §3.4：样例结果可联调界面，不得记为板上识别）。
+ - 不动：单报文 ≤64KB；未知字段拒绝（严格校验不放宽）。
+ 
++核查注记（2026-10-09，Q01）：上述 schema 与“未知字段拒绝”覆盖**结果报文**，
++不能解释为只针对 POST 请求。v1.1 落码证据见[原验证记录](../data/logs/2026-10-06-vision-sync-schema/README.md)。
++当前 `src/pynq_host/vision_protocol.py:validate_packet` 未实施完整结果字段白名单；
++`vision_mock_service.py` 对请求字段的拒绝不能替代结果报文校验，现有 tb 未覆盖该负例。
++本轮只登记，不改协议、Python 或 tb；最小修复和负例测试须用户另批裁决。
++
+ ## D7 板端真实服务负责人（已定）
+ 
+ - EXE 前端 = watercopper（已定）。板端 PS 上的真实 HTTP 服务（消费 cop_* 快照、响应触发、MMIO 配置）主责 = **never-die-cold（2026-10-06 NC 本人确认接任）**。理由——EXE 开发机无网口，实机网口联调依赖队长环境；队长已有上板操作经验（2026-10-03 vision onboard 由其执行）。plan.md §3.4/§5.3 已同步。
+@@ -84,3 +90,4 @@
+ | 2026-10-06 | 理解门槛问答通过后：D7 更新为提议定 NC（队长），待 NC 评审确认 |
+ | 2026-10-06 | 契约收口：D2–D6 watercopper 确认沿用推荐；D7 NC 本人确认接任，plan.md §3.4/§5.3 同步 | watercopper（EXE 前端） |
+ | 2026-10-06 | D3 增实现注记：EXE 触发间隔须小于年龄窗口（0.5s < 1.0s，启动校验）；取值经 WC 质询修正 | watercopper（EXE 前端） |
++| 2026-10-09 | B08：D6 标题同步已确认状态；登记 Q01 结果报文未知字段拒绝缺口，不放宽冻结条款、不修改代码 | Codex |
+diff --git a/docs/workflow.md b/docs/workflow.md
+index 6ee7d55..df80d85 100644
+--- a/docs/workflow.md
++++ b/docs/workflow.md
+@@ -46,7 +46,7 @@
+ 
+ - [ ] 涉及 RTL：全量回归 PASS（`bash sim/scripts/run_iverilog.sh all`），tb 落在仓库内（`sim/riscv/`），不得用工作区外临时文件
+ - [ ] 新 tb 已接入 `sim/scripts/run_iverilog.sh`（单独模式 + `all` 全量）
+-- [ ] 涉及接口的改动已同步 `src/riscv/design_v0.md`
++- [ ] 涉及接口的改动已同步对应模块、对应版本的冻结契约（RISC-V：`src/riscv/design_v0.md` / `src/riscv/design_v1.md`；视觉：`src/vision/design_v0.md`）
+ - [ ] commit message 说明做了什么；AI 产出注明 prompt 要点
+ - [ ] 关键决策 / 理解门槛记录写进 `report/llm_log/`
+ - [ ] 未经用户确认理解，不得 commit
+@@ -65,3 +65,4 @@
+ | 日期 | 变更 |
+ |:---|:---|
+ | 2026-09-24 | `kickoff_checklist.md` + `code_review_checklist.md` + `prep_checklist.md` 三合一为本文件；目录边界与红线保留在 `AGENTS.md`，不重复 |
++| 2026-10-09 | B01：接口同步检查细化为对应模块、对应版本的冻结契约，保留必须同步的收尾要求。 |
+diff --git a/plan.md b/plan.md
+index 5ff53f5..833b601 100644
+--- a/plan.md
++++ b/plan.md
+@@ -1,6 +1,10 @@
+ # 项目主计划：收口节点、交付物与验收
+ 
+-更新日期：2026-10-07。目标形态为**桌面紧固件识别与工业检查系统**；只固定收口时间，阶段内按依赖和实际进度安排。
++更新日期：2026-10-09。目标形态为**桌面紧固件识别与工业检查系统**；只固定收口时间，阶段内按依赖和实际进度安排。
++
++**三层状态**：模块一核＋最小 SoC 已完成收口，见[核收口报告](report/module1-closure.md)。
++模块二 HDMI 视觉预处理 RTL＋已验证视频链路已完成（RTL／链路级），见[视频记录](data/logs/2026-10-03-vision-onboard/README.md)和[真实相机链路](data/logs/2026-10-07-pi-pynq/README.md)。
++全项目 M2 验收未完成；首个网络硬件输出仍缺，CNN 与工业闭环不得宣称完成，M2／M3 条件保持 §1.4 原定义。
+ 
+ 本文管理全项目的产品目标、收口时间、分工与交付看板；模块技术任务放在各模块目录。RISC-V 专项见 [核计划](src/riscv/plan.md)，接口以对应版本设计契约为准。
+ 
+@@ -42,11 +46,11 @@
+ - 分工：板卡完成预处理、定位与分类；RISC-V 调度检查、汇总数量、按工单判定；PS 提供结果与配置通信；EXE 负责叠加、交互、统计展示和记录。
+ - 首版功能：按类别计数、工单要求与实际结果比较（缺件/多余件/错料）、一次检查一条批次记录、异常截图和记录导出、设备连接与推理状态诊断。
+ - 显示路径保留相机画面，分析路径按模型需要灰度化/缩放；物体坐标须映射回显示画面。视频/分析分流已在 RTL 落地（彩色原图恒延迟直通 display_*，分析路径独立），板上显示保留彩色原图；灰度 out_* 口的框 OSD 只作诊断，不代表物体定位。
+-- 视频与网口结果必须建立帧/检查对应关系；过期结果、断联或无法确认的画面不得显示为当前检查通过。具体同步协议待契约冻结。
++- 视频与结果按[已冻结轮次协议](docs/vision-sync-protocol-decisions.md)关联；过期、断联或无法确认的画面不得显示为当前检查通过。逐帧精确关联未实现。
+ 
+ **已确定负责人**：Windows EXE 由 `watercopper` 负责。
+ 
+-**待冻结的工程参数**：最大目标数、背景/光照条件与最小间距、定位分割参数、输入尺寸、网络与硬件算子边界、定位在板卡 PS/PL 的实现分配、通信/同步协议、EXE 技术栈与代码目录、板端服务负责人。任意接触、堆叠和遮挡识别不在首版范围。
++**已冻结部分**：轮次协议最多 16 目标、Python/OpenCV 前端目录 `src/vision_client/`、板端服务主责 NC，见[同步协议](docs/vision-sync-protocol-decisions.md)。**待冻结**：真实场景条件、模型／硬件算子及定位部署分配等；任意接触、堆叠和遮挡不在首版范围。
+ 
+ 分类模型负责类别，自动框还需要定位算法。裂纹、尺寸超差等质量缺陷检测，以及跨帧跟踪，属于额外能力；当前首版只承诺上述工单与数量检查目标。
+ 
+@@ -91,7 +95,7 @@
+ - `jianglibo`：`src/riscv/`、`src/coprocessor/`；模块三自测与验证线协调。
+ - `never-die-cold`：`src/vision/`、`sim/` 中除 arch-test 外的验证内容。
+ - `watercopper`：`src/riscv_fw/`、`sim/arch_test/`、`data/`。
+-- EXE 开发由 `watercopper` 负责，前端目录在开始实现时确认；板端接口协同 RTL/验证线对齐。
++- EXE 开发由 `watercopper` 负责，前端在 `src/vision_client/`；板端接口协同 RTL/验证线对齐。
+ - 日志和证据可由执行人归档到 `data/logs/`、`data/evidence/`；共享文件改动先协调。
+ 
+ ### 2.2 六条分支规矩
+@@ -116,24 +120,24 @@
+ 
+ ### 3.1 当前状态
+ 
+-- 已实现并验证：v0 基线核；v1 三级核、转发、Radix-4 乘法、双档 arch-test/CRC 语义一致性与 CoreMark CPI 对比；视觉模块离板全家福（22 个仓库内 tb，Icarus/XSim 同判据；原子配置 CDC、彩色直通分流、720p 真实时序、OOC post-route WNS=+0.330）、训练导出演练。原仅转发门禁实测 8.14% 并保留 FAIL；Radix-4 后同工作点转发收益 10.20%，两项相对原始无转发基线的组合周期降幅 28.30%。
+-- 已实现但待实机验收：视觉物理 HDMI 工程 bit/XSA 已离板产出（布线、DRC、时序通过），上板下载、相机锁定、采集卡闭环未验证。
+-- 未实现 / 未接入：物体定位部署（PS/PL 分配待冻结，Python 契约已定）、逐目标裁剪、正式紧固件模型、CNN 协处理器、工业检查固件/服务与 EXE 正式版。
++- 已实现并验证：核与最小 SoC 收口见[核报告](report/module1-closure.md)；视觉 23 个 RTL tb、彩色分流、物理 HDMI 与采集链路见[视频记录](data/logs/2026-10-03-vision-onboard/README.md)、[真实相机恢复](data/logs/2026-10-07-pi-pynq/README.md)；EXE mock 原型见[原型证据](data/logs/2026-10-06-vision-sync-schema/README.md)。
++- 已实现但验证缺口未闭环：板端现用 vision.bit 与本地修复版指纹不同；现用位流的长时间、冷启动、断连恢复待复验，不能借用另一位流结果。原 8.14%／25% FAIL、组合 28.30% 均保留在历史记录。
++- 未实现／未接入：定位与裁剪已有 Python 黄金参考，**板端实时部署**未完成；正式紧固件模型、CNN、网络硬件输出、工业固件／正式服务与正式 EXE 仍待完成。
+ 
+ ### 3.2 交付看板
+ 
+ | 工作包 | 当前事实 | 下一交付物 | 主责 / 依赖 |
+ |:---|:---|:---|:---|
+ | RISC-V 核 | 模块一收口完成：PR #60已合并，#20/#21及M1已关闭；全量退出0、四档XSim/arch扩展、BHT2核86.806MHz时序与40MHz真实上板有证据；仅转发收益10.20% | 移交模块三；备考#61独立待办；见 [收口报告](report/module1-closure.md) | JL；NC/WC 复验 |
+-| 视频链路 | 离板收口（2026-10-02）：22 tb 同判据 PASS；原子配置 CDC、彩色直通/分析分流、cop_buf 争用修复、720p 真实时序、物理 HDMI bit/XSA 已产出（布线/DRC/时序通过） | 上板验收（下载/锁定/采集卡/延迟实测）；定位部署与逐目标裁剪待契约 | NC 离板已毕；WC 板务/黄金参考 |
+-| 定位与紧固件模型 | 自由分散/互不遮挡、传统定位 + CNN 已确定；实现未完成 | 相机数据、分割/连通区域定位、逐目标裁剪、INT8 模型与精度报告 | 训练 NC、数据 WC；定位 PS/PL 归属待协调 |
++| 视频链路 | RTL／已验证链路完成，见[10/03 视频](data/logs/2026-10-03-vision-onboard/README.md)、[10/07 相机](data/logs/2026-10-07-pi-pynq/README.md)；现有 23 RTL tb | 板端与本地位流指纹闭环；现用配置长时间／冷启动／断连复验 | NC/WC 板务与黄金参考 |
++| 定位与紧固件模型 | 定位／裁剪 Python 黄金参考已有，见[板端软件说明](src/pynq_host/README.md)；正式模型与实时部署未完成 | 相机数据、部署分配、INT8 模型及精度报告 | 训练 NC、数据 WC；部署归属待协调 |
+ | CNN 协处理器 | 尚未实现 | 算子契约、MAC/缓存、自测、首个网络结果 | JL；依赖模型/算子对齐，M1 后主力转入 |
+-| 板端调度与服务 | 应用固件与结果通信未实现 | RISC-V 检查调度/工单规则、PS 配置与结果接口 | 负责人待协调；依赖核与结果契约 |
+-| Windows EXE | WC 负责；前端未实现 | 采集卡预览、网口结果、框/标签叠加、工单与统计、异常记录 | WC；依赖结果/视频同步约定 |
++| 板端调度与服务 | 配置／快照与 mock 工具已有；正式识别服务、工业调度未实现 | RISC-V 工单规则、PS 真实结果接口 | NC 真实服务；核调度另行协调 |
++| Windows EXE | WC 的预览／mock 原型已实现，见[证据](data/logs/2026-10-06-vision-sync-schema/README.md) | 真实结果联调、工单／批次／导出及发布复验 | WC；依赖 NC 真实服务 |
+ | 发布与证据 | 核/视觉已有部分证据；工业闭环证据未完成 | 实机验收、指标、EXE 发布包、操作说明与演示视频 | 全员；WC 主笔材料 |
+ 
+ 缩写：JL = `jianglibo`；NC = `never-die-cold`；WC = `watercopper`。
+-模块级复验来自 `data/logs/2026-09-30-r2r5-verify/`，不等于三级核已集成；当前分支与交付 commit 应随工作包更新。
++早期积木复验不能单独证明整核集成；当前整核收口证据见[模块一报告](report/module1-closure.md)，分支与实际被测指纹分别记录。
+ 
+ ### 3.2.1 RISC-V Part B/C 性能验收修订
+ 
+@@ -157,7 +161,7 @@
+ |:---|:---|
+ | 阴影/反光使定位分裂或合并 | 实测背景、光照与最小间距；统计漏框/多框，加入形态与面积过滤验证；支持条件外提示复检 |
+ | 定位 PS/PL 分配未冻结 | 在应用接口交接前协调；EXE 已由 WC 负责；板端服务已定 NC（2026-10-06 本人确认，见 [同步协议决策单](docs/vision-sync-protocol-decisions.md) D7） |
+-| 720p 缩放时序 | ✅ 已解决（2026-09-30 切拍 + 2026-10-01/02 复验）：scaler 单元 real 档 ≈94.9 MHz；video_pipeline 全链并行边界 post-route WNS=+0.330 @74.25 MHz。物理 TMDS 引脚时序与实机出图仍属上板验收 |
++| 720p 缩放时序 | 历史 OOC +0.330 与后续物理实现 +0.956 分开记录，见[视频证据](data/logs/2026-10-03-vision-onboard/README.md)；现用板端位流与本地修复版指纹仍须闭环 |
+ | 视频与结果有不同延迟 | 明确帧/检查关联和过期处理；采集卡显示延迟与板端推理耗时分开测量 |
+ | 多帧重复统计 | 当前画面数量与批次累计分开；一次确认的检查只计一次 |
+ | 模型或协处理器未就绪 | 可用明确标注的样例结果联调界面；不能用它替代真实识别验收 |
+@@ -225,3 +229,4 @@
+ | 2026-10-05 | 记录 v1 双档 CoreMark 实测 8.14% 与原 25% 门禁 FAIL；将仅转发硬门禁拆为功能正确性和 ≥8.0% 性能回归门禁，25% 保留为组合优化尽力目标 |
+ | 2026-10-05 | Radix-4 乘法通过回归与双档 CoreMark：当前转发收益 10.20%、乘法器独立收益 21.95%、相对原始无转发组合收益 28.30%；XSim/Vivado/上板仍待验证 |
+ | 2026-10-06 | 视频/结果同步协议 D1–D7 落定（轮次级起步，[决策单](docs/vision-sync-protocol-decisions.md)）；板端服务主责定 never-die-cold（NC 本人确认） |
++| 2026-10-09 | B09：三层状态、真实视频／EXE 原型与后续部署边界同步；保留历史失败，不改变 M2/M3 验收；D6 未知字段缺口另批裁决。 |
+diff --git a/sim/README.md b/sim/README.md
+index 8dd94f5..4062e75 100644
+--- a/sim/README.md
++++ b/sim/README.md
+@@ -2,6 +2,26 @@
+ 
+ 各模块 testbench、仿真脚本与波形结果。**所有 RTL 模块必须先过仿真再上板。**
+ 
++> 当前（2026-10-09）：模块一核＋最小 SoC 已完成收口，见[模块一报告](../report/module1-closure.md)。
++> 模块二 HDMI RTL＋已验证视频链路已完成（RTL／链路级），见[视频证据](../data/logs/2026-10-03-vision-onboard/README.md)
++> 与[真实相机链路](../data/logs/2026-10-07-pi-pynq/README.md)；全项目 M2 未完成。
++> 原验收使用 Icarus 13.0；本轮本机为 11.0。XSim/Vivado 结论仅引用历史证据，本机不能复跑。
++
++## 当前一键入口（同 RTL／tb／hex，只切参数）
++
++```bash
++bash sim/scripts/run_iverilog.sh all
++bash sim/scripts/run_iverilog.sh v1_nofwd
++bash sim/scripts/run_iverilog.sh v1_fwd
++bash sim/scripts/run_iverilog.sh v1_fwd_bht1
++bash sim/scripts/run_iverilog.sh v1_fwd_bht2
++bash sim/scripts/run_arch_test_matrix.sh
++```
++
++四档默认负载为 CoreMark；benchmark、单元和边界专项由 `all` 纳入，完整入口见脚本。
++arch 矩阵独立编译 11 项声明子集×4 档，不纳入源码 tb 的 `all`，也不代表上游全套认证。
++v1 判据以[design_v1.md](../src/riscv/design_v1.md)为准；下方 v0 观察表和早期记录仅供历史对照。
++
+ ## 规划结构
+ 
+ ```
+@@ -9,7 +29,7 @@ sim/
+ ├── riscv/           # RISC-V 核各级、整核与 SoC 外壳 testbench
+ ├── coprocessor/     # 协处理器 testbench
+ ├── vision/          # 预处理流水线 testbench（含测试图样生成）
+-├── scripts/         # xsim 批处理脚本（可复跑）
++├── scripts/         # Icarus/XSim/arch-test/OOC 批处理入口
+ └── tools/           # 辅助工具（RV32I 编解码自测等）
+ ```
+ 
+@@ -24,12 +44,16 @@ sim/
+   - `tb_core_smoke.v`：加载 `src/riscv_fw/hello_v0.hex`，检查 `tohost==13 && tohost_exit==0`（程序级冒烟）
+   - `tb_core_test.v`：加载 `src/riscv_fw/hello_test.hex`，检查 `tohost_exit==0`（RV32I 逐指令自检 38 用例；失败值为用例编号）
+   - `tb_core_fwd.v`：加载 `riscv/fwd/fwd_test.hex`（转发专项，Part B 测试先行）——数据冒险零气泡 + taken 分支 1 拍契约，气泡/结果双自检
+-- tb 接口以 [`src/riscv/design_v0.md`](../src/riscv/design_v0.md) 为唯一权威
++- v0 历史接口以 [`design_v0.md`](../src/riscv/design_v0.md) 为准；当前 v1 使用 [`design_v1.md`](../src/riscv/design_v1.md)
+ 
+ > 当前状态：v0 核（RV32I）两个 tb 均 PASS（2026-09-11 iverilog；2026-09-14 XSim 复核对拍一致），见 `report/llm_log/2026-09-14-vivado-2026-1-acceptance.md`
+ 
+ ## v0 八模块验证观察点（仿真时看什么、怎么判对错）
+ 
++**历史表适用边界**：下面 NOP 数据要求、load 当拍写回和气泡数是 v0 判据。
++当前 v1 flush 只清 valid（不要求 instr=NOP）；load 在 MEM+WB 写回、load-use 停 1 拍；
++BHT 正确预测零冲刷、误预测或 JAL/JALR 冲刷 1 槽。当前 SoC 实机证据见[模块一报告 §6](../report/module1-closure.md)。
++
+ > 这是给写 testbench 的人用的「看对错清单」：每个模块在仿真里**要看什么、什么算对、什么算错**。
+ > 判据以 [`src/riscv/design_v0.md`](../src/riscv/design_v0.md) 为唯一权威；已有整核级及 imem/dmem/muldiv 模块级 tb。
+ > `soc_top` 已接入 32KB IMEM/DMEM 双预载、计时计数器和 LED；`tb_soc_top` 与 `tb_soc_check` 分别覆盖复位重跑/分层检查和真实固件端到端路径。
+@@ -43,7 +67,7 @@ sim/
+ | `alu` | §5.5 / §6.1 | 每种运算抽边界值查：负数的算术右移（SRA）、有符号与无符号比较（SLT vs SLTU）、移位只认 b 的低 5 位。`zero/lt/ltu` 三个标志由 a、b 直接比较得出，和结果同拍。**判错**：没定义的运算编码会被当 ADD 处理，而不是报错 | 整核 tb 间接覆盖 |
+ | `muldiv` | §5.6 | 8 种 RV32M 运算及除零、`INT_MIN/-1` 边界；检查 `start/busy/done` 握手、忙时停顿、完成拍单次写回 | `tb_muldiv` 模块级 + `tb_core_muldiv` 整核级 PASS |
+ | `core_top` | §5.7 / §2 | 第 k 拍给出的指令地址，第 k+1 拍才拿到对应指令（指令存储器延迟恰好 1 拍）；分支目标是「本指令的 PC + 立即数」；`jal/jalr` 无条件跳转、每次都**恰好 1 拍气泡**；`jalr` 目标地址末位清 0；`lw` 当拍就能写回、字节使能只在写的时候有效。**判错**：跳转没清气泡、`jalr` 末位没清、`lw` 多等一拍 | `tb_core_smoke` / `tb_core_test` / `tb_core_muldiv` / `tb_core_coremark` |
+-| `soc_top` | §5.8 | hex 双预载、同步 IMEM、异步读/字节写 DMEM、计时器读写屏蔽、软复位重跑与 LED | `tb_soc_top` + `tb_soc_check` PASS；新修订上板复验归 M3 |
++| `soc_top` | §5.8 | hex 双预载、同步 IMEM、异步读/字节写 DMEM、计时器读写屏蔽、软复位重跑与 LED | `tb_soc_top` + `tb_soc_check`；现行 BHT2/40 MHz 上板证据见上方报告 |
+ 
+ > `muldiv` 的接口缺口（`op` 只有 2 位、装不下 RV32IM 的 8 种运算等）详见 [`report/llm_log/2026-09-15-muldiv-interface-gap.md`](../report/llm_log/2026-09-15-muldiv-interface-gap.md)。
+ 
+@@ -66,7 +90,7 @@ sim/
+ 
+ - 契约（判据/观测/接口唯一入口）：[`docs/coremark.md`](../docs/coremark.md)（§1–§7 契约主体 + 附录 A 计划；SoC 计时器与预载已于 2026-09-28 收口）
+ - 通用 tb：`riscv/tb_core_coremark.v`——8192×32 存储模型 + plusargs；`+hex` 默认 `../src/riscv_fw/coremark.hex`，支持 `+timer_addr` 计数器仿真
+-- 当前状态：`coremark.hex` 已入库，v0 32 迭代 PASS（CoreMark/MHz=1.506）；tb 有观测块判据与双口预载；脚本 `coremark` 模式已接入并纳入 `all`。证据见 `data/logs/2026-09-23-coremark/` 与 `data/logs/2026-09-23-coremark-script-regression/`。
++- 历史 v0：32 迭代 CoreMark/MHz=1.506，见 `data/logs/2026-09-23-coremark/`；当前 tb 按 `mem_valid` 退休，窗口止于首次 `tohost_exit`，四档 CRC/retired 与周期证据见[模块一报告 §2](../report/module1-closure.md)。
+ - 单档复跑：`bash sim/scripts/run_iverilog.sh coremark`（固定 2K/32 迭代、50M 看门狗与 golden 判据；约 2,100 万周期）
+ - 全档回归：`bash sim/scripts/run_iverilog.sh all`（同样含 CoreMark 长测）
+ - 记录：tb 落地 `report/llm_log/2026-09-23-coremark-tb.md`；契约起草 `report/llm_log/2026-09-23-coremark-tb-contract.md`
+@@ -83,4 +107,4 @@ sim/
+ - 关键波形截图归档到 `report/`，供设计报告引用
+ - 黄金参考数据放 `data/`，仿真比对脚本引用相对路径
+ 
+-> 状态：🚧 进行中（v0 核 RV32I 已过冒烟与逐指令自检；转发专项 v0 对照基线已建立，2026-09-20）
++> 上述 9 月单项数据是历史基线；当前核与最小 SoC 收口见[模块一报告](../report/module1-closure.md)，CNN／工业应用仍未完成。
+diff --git a/src/pynq_host/README.md b/src/pynq_host/README.md
+index f72d37a..6286d46 100644
+--- a/src/pynq_host/README.md
++++ b/src/pynq_host/README.md
+@@ -2,14 +2,19 @@
+ 
+ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采集；Jupyter 保留为板端调试与复现入口。最终工业操作界面为 Windows EXE，由 `watercopper` 负责：采集卡视频和网口识别结果统一展示，见根目录 [项目主计划](../../plan.md) §1.3。
+ 
+-## 规划内容
++## 当前实现与规划边界（2026-10-09）
++
++已有 `vision_regs.py`／`vision_demo.py`／`m2_onboard.py`／`onboard_smoke.py` 配置及板端诊断；
++`data/golden/vision/localize/reference.py`／`arm_localize.py` 与打包工具提供定位／裁剪黄金参考，不等于实时部署。
++`vision_protocol.py`／`vision_mock_service.py` 为明确标注 MOCK 的接口；D6 未知字段缺口见[核查注记](../../docs/vision-sync-protocol-decisions.md)。
++下列 notebook／通用工具仍是规划，不能由 mock 或训练演练推断已实现。
+ 
+ - `demo.ipynb`：板端调试与复现 notebook
+ - `benchmark.ipynb`：基线对比与指标采集（CPI、延迟、帧率、加速比）
+ - `golden_ref.py`：软件黄金参考实现（OpenCV / 纯 Python 推理）
+ - `metrics.py`：数据自动采集与报告生成（→ `data/`）
+-- 板端服务：向 EXE 提供位置、类别、工单判定、帧/检查关联与设备状态，接收配置；协议与实现主责待冻结。
+-- EXE：采集卡预览、框与类别叠加、工单配置、统计、异常截图和记录导出；技术栈和代码目录待确定。
++- 板端正式识别服务未实现；轮次协议与 NC 主责已冻结，见[协议决策单](../../docs/vision-sync-protocol-decisions.md)。
++- EXE 在 `src/vision_client/`，已有[Python/OpenCV 预览／mock 原型](../../data/logs/2026-10-06-vision-sync-schema/README.md)；正式工单、统计、导出及真实服务联调待完成。
+ 
+ ## 板卡访问
+ 
+@@ -28,5 +33,5 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采
+ > [../../data/logs/2026-10-03-vision-onboard/README.md](../../data/logs/2026-10-03-vision-onboard/README.md)。
+ > 板端分步自检 `m2_onboard.py`（env/load/smoke/demo）、断连监视 `onboard_smoke.py watch`
+ > （STREAM/STALL/BUSY 事件 + WATCH-SUMMARY，含 watch-mock 离板自测）、
+-> 接线与环境备忘见 [ONBOARD.md](ONBOARD.md)。源断连/重连实测待补。
++> 接线见 [ONBOARD.md](ONBOARD.md)。10/03 修复配置断连复测与[10/07 相机恢复](../../data/logs/2026-10-07-pi-pynq/README.md)有证据；现用位流追溯与长时间／冷启动／断连复验仍待补，不混用不同位流结论。
+ > `board/adv7611_init.py` 仅为外接接收器示例（PYNQ-Z2 无 ADV7611，不用于本板）。
+diff --git a/src/riscv/README.md b/src/riscv/README.md
+index 4d1e72e..2ae39fb 100644
+--- a/src/riscv/README.md
++++ b/src/riscv/README.md
+@@ -4,6 +4,7 @@
+ 
+ > 📋 收口证据与四档数据见 [模块一报告](../../report/module1-closure.md)，技术验收与学习路线见 [plan.md](plan.md)；Part A 历史证据见 [done/m1-first-phase-completed.md](done/m1-first-phase-completed.md)。
+ > 🔧 v0 接口冻结（模块划分 / 信号表 / 控制真值表）：[design_v0.md](design_v0.md)。
++> 🔧 当前 v1 / Part B/C 接口权威：[design_v1.md](design_v1.md)；v0 仅为历史基线。
+ 
+ ## v1 已实现内容
+ 
+@@ -14,7 +15,7 @@
+ - `hazard.v`：冒险检测与流水线暂停（Stall）控制
+ - `branch_predict.v`：1-bit/2-bit 分支历史表
+ - `decode.v`：译码（R1 已加 `uses_rs1/uses_rs2` 源使用标志）
+-- `regfile.v` / `alu.v` / `pc.v` / `muldiv.v`：v0 已有，v1 沿用
++- `regfile.v` / `alu.v` / `pc.v`：沿用基础模块接口；`muldiv.v` 保持握手，乘法已改为 Radix-4（16 轮），除法仍为 32 轮
+ 
+ > v1 模块接口与拍序以 `design_v1.md` 冻结契约为准。
+ 
+@@ -32,7 +33,7 @@
+ 
+ ## 版本基线
+ 
+-- `v0`：两级流水基线（已收口，锚点 tag `partA-v0` = `962a4f5`，接口见 `design_v0.md`）
++- `v0`：两级基线已收口（[历史记录](done/m1-first-phase-completed.md)）；锚点 tag `partA-v0` = `962a4f5`，接口见 `design_v0.md`
+ - `v1`：三级流水 + 转发 + Radix-4 乘法 + 可切换 BHT（实现与验收证据见 `design_v1.md` §14/§16）
+ 
+ 默认配置为转发开、BHT 关；Part C 主验收配置为转发开、BHT2。保持相同存储器端口，核 OOC 与 40MHz SoC/上板频率分开记录。提交仍须用户通过理解门槛。
+diff --git a/src/riscv/design_v1.md b/src/riscv/design_v1.md
+index 7f48c83..b9134c7 100644
+--- a/src/riscv/design_v1.md
++++ b/src/riscv/design_v1.md
+@@ -158,6 +158,9 @@ DMEM / load 扩展 / regfile 写回 / store 提交
+ 
+ MEM+WB 另产生 `{wb_valid, wb_we, wb_rd, wb_data}` 一拍提交记录，供 WB→EX 逻辑来源和 CPI/retire 统计使用。它是旁路与观测记录，不构成第四级； 写回仍发生在 MEM+WB，记录本身不得再次触发 regfile 或 DMEM 写入。
+ 
++这里的记录为逻辑命名；当前 `core_top` 分别绑定为 `{mem_valid, rf_we, mem_rd, wb_data}`。
++退休计数使用 `mem_valid`（包括无寄存器写回的有效指令），不能用 `rf_we` 替代。
++
+ ## 7. 边界动作与复位
+ 
+ | 情况 | PC / IF/ID | ID+EX/MEM+WB |
+@@ -188,6 +191,12 @@ MEM+WB 另产生 `{wb_valid, wb_we, wb_rd, wb_data}` 一拍提交记录，供 WB
+ 若同一指令同时形成多个 ready 视图，各视图的数据必须一致。WB 记录仍是本拍组合
+ 提交信息，不保存历史指令，也不构成第四级。
+ 
++当前集成只启用 EX 候选：`ex_valid=mem_valid && !mem_mem_read`、`ex_we=mem_reg_write`、
++`ex_ready=1`、`ex_rd=mem_rd`、`ex_data=mem_result`；MEM/WB 候选固定无效。
++该候选来自唯一 MEM+WB 物理槽的非 load 寄存结果；ALU、PC+4、M 结果共用它。
++load 不以异步 `dmem_rdata/load_data/wb_data` 旁路回执行级；消费者停 1 拍后读已写回 RF。
++通用 `forwarding.v` 的三来源端口与优先级仍保留，由独立单元 tb 验证。
++
+ ### 8.2 单个源操作数的匹配条件
+ 
+ 对每个源操作数独立输入 `src_used`、`src_addr[4:0]` 和 `rf_data[31:0]`。
+@@ -306,6 +315,10 @@ store data、branch 比较、JALR 基址和 muldiv 操作数都属于 `uses_rs*`
+ 
+ branch、JAL、JALR 均在 ID+EX 裁决。控制转移只有在当前槽有效且能够被接受时成立：
+ 
++以下 redirect 公式和 taken 拍序表适用于 Part B／`BHT_MODE=0`。
++开启 BHT 后由 §16.2/§16.4 的误预测恢复与正确预测取址替代；仍须经过 `ex_accept`。
++正确预测不产生 flush；误预测（包括预测跳而实际不跳）和 JAL/JALR 冲刷 1 个年轻槽。
++
+ ```text
+ ex_accept = c_valid && !data_stall && !muldiv_wait
+ redirect  = ex_accept && (branch_taken || jump_taken)
+@@ -538,6 +551,7 @@ MEM+WB 是唯一架构副作用级：
+ | `uses_rs1/uses_rs2` | out | 1 | 指令是否真正读取对应源 |
+ | `muldiv_valid` | out | 1 | 当前指令是合法 RV32M |
+ | `muldiv_op` | out | 3 | M 指令 `funct3` |
++| `branch_valid` | out | 1 | 译码得到合法条件分支；不含 JAL/JALR，更新及统计另由 ex_accept 门控 |
+ | `branch_taken` | out | 1 | branch 条件原始裁决，尚未经过 `ex_accept` |
+ | `jump_taken` | out | 1 | JAL/JALR 原始裁决，尚未经过 `ex_accept` |
+ | `redirect_target` | out | 32 | branch/JAL 目标或清 bit0 后的 JALR 目标 |
+@@ -638,11 +652,12 @@ store data 必须直接等于 `rs2_value`，不能从 ALU B 端或实时 regfile
+ 
+ ### 13.3 v1 `core_top.v` 对外接口
+ 
+-模块声明增加一个顶层参数，端口列表保持 v0 完全不变：
++当前模块声明含两个顶层参数，端口列表保持 v0 完全不变：
+ 
+ ```verilog
+ module core_top #(
+-    parameter ENABLE_FORWARDING = 1'b1
++    parameter ENABLE_FORWARDING = 1'b1,
++    parameter [1:0] BHT_MODE = 2'd0
+ ) (
+     input wire clk, input wire rst_n,
+     output wire [31:0] imem_addr, input wire [31:0] imem_rdata,
+@@ -652,7 +667,8 @@ module core_top #(
+ );
+ ```
+ 
+-因此现有 `soc_top` 无参数覆盖时自动使用转发档，不需要改变 SoC 外部接口。
++`soc_top` 无参数覆盖时使用转发开／BHT 关。显式覆盖须经 `pynq_z2_top → soc_top → core_top`
++逐级传参（§16.3）；SoC 对外端口不变，声明顶层参数不会自动覆盖子模块。
+ 无转发 tb 用 elaboration 参数覆盖为 0，禁止复制或编辑 `core_top.v`。
+ 
+ ### 13.4 `core_top` 实例与状态归属
+@@ -711,7 +727,7 @@ v0 在 tag `partA-v0` 上复现，v1 两档在同一 commit 上复现。
+ 
+ ```text
+ cycles  = rst_n 释放后到首次 tohost_exit 写入之间的核时钟拍数
+-retired = 同一窗口内 wb_valid=1 的指令数；气泡不计，M 指令只计一次
++retired = 同一窗口内 mem_valid=1 的指令数（§6.4 的逻辑 wb_valid）；气泡不计，M 只计一次
+ CPI     = cycles / retired
+ gain    = (CPI_nofwd - CPI_fwd) / CPI_nofwd * 100%
+ ```
+@@ -916,3 +932,5 @@ BHT2 核 OOC 在 11.520 ns 实跑 WNS>=0，10 ns 为继续提升目标。SoC 单
+ |:---|:---|
+ | 2026-10-06 | 冻结 Part C §16/D17；实现 64 项三档 BHT、误预测恢复、tb 事件统计及同 CoreMark 四档入口；Icarus 四档 CRC/retired 一致，外部时序与资源待验证。 |
+ | 2026-10-06 | PC/flush 降深度：保持三级，展开互斥地址选择，增加组合 B 目标/后继端口，flush 只清 valid；新增 PC 等价和 IF 边界 tb。用户授权一次写完、题目集中末尾，未 commit。优化后 Vivado 待复验。 |
++| 2026-10-07 | 后续收口补证已完成：四档功能/XSim、扩展 arch 子集、OOC 实点与 40 MHz BHT2 上板；见[收口报告](../../report/module1-closure.md)。上两行“待复验”保留为当时状态。 |
++| 2026-10-09 | B05/B06 文档整理：补实际非 load 转发绑定、逻辑提交记录映射、branch_valid 和 BHT_MODE；明确 §9 静态公式范围。无接口或 RTL 行为变更。 |
+diff --git a/src/riscv/plan.md b/src/riscv/plan.md
+index b98701e..605abf3 100644
+--- a/src/riscv/plan.md
++++ b/src/riscv/plan.md
+@@ -1,13 +1,13 @@
+ # RISC-V 核专项计划：Part A/B/C 与验收
+ 
+-> 更新日期：2026-10-07。本文件只管理 RISC-V 核及其最小 SoC 的技术任务。
++> 更新日期：2026-10-09。本文件只管理 RISC-V 核及其最小 SoC 的技术任务。
+ > 最新收口事实、四档表与复现入口见 [模块一收口报告](../../report/module1-closure.md)；理解门槛已补测通过，PR #60已合并、#20/#21与M1已关闭；未验证备考移交#61。
+ > 全项目产品、分工和收口日期见根目录 [项目主计划](../../plan.md)；本模块对应 M1，核任务见 [核交付看板](plan_calendar.md)。
+ > v0 接口以 [design_v0.md](design_v0.md) 为准，Part B/C 以 [design_v1.md](design_v1.md) 为准。
+ 
+ ## §1 模块目标与范围
+ 
+-- Part A：两级 RV32IM 基线核、最小 SoC、仿真与上板基线，已收口。
++- Part A：两级 RV32IM 基线核、最小 SoC、仿真与上板基线已收口，见[历史记录](done/m1-first-phase-completed.md)。
+ - Part B：三级流水、转发与冒险控制，完成核集成和功能一致性验证。
+ - Part C：可切换分支预测、冲刷与四档对比，形成可复现功能/性能证据。
+ - M1 收口日期只在 [主计划 §1.2](../../plan.md#12-收口时间总览) 定义；提前交付不能降低验收要求。
+@@ -111,20 +111,20 @@ RTL 可独立自测后交付配置和已知问题，验证线复验并反馈缺
+ 
+ ### 4.3 Part C：分支预测与对比验证
+ 
+-**目标**：完成分支预测，用同一组测试比较四种配置：v0、v1 无转发、v1 加转发、v1 加转发与预测。
++**目标**：同 RTL 四档 `v1_nofwd / v1_fwd / v1_fwd_bht1 / v1_fwd_bht2`；v0 用 tag 独立留作外部历史锚点。
+ 
+ #### 范围
+ 
+ - `branch_predict.v`：1-bit / 2-bit 饱和计数器 BHT，做成**可配置切换**（1-bit/2-bit/关闭三档，便于对比实验）
+-- 预测错误冲刷（flush）逻辑：PC 恢复、流水寄存器清零
+-- 命中率统计计数器（片上统计或仿真统计，数据要有来源）
++- 预测错误冲刷（flush）：PC 恢复、年轻槽 valid 清零；无效 payload 不要求清零，不增加流水级
++- 命中率由 tb 层次化引用事件统计（design_v1 §16.2），不增加片上宽计数器
+ - 自写 benchmark：Dhrystone 思路的整型测试（循环/数组/函数调用/位运算/乘法混编），C 源码 + 反汇编归档
+-- riscv-arch-test 扩展子集（RV32M 等）跑全
+-- 最终数据与报告：v0 / v1 无转发 / v1+转发 / v1+转发+预测 四档的 CPI、Fmax、资源（LUT/FF/BRAM）、命中率（2026-09-20 口径重定义，见 [llm_log](../../report/llm_log/2026-09-20-v0-no-stall-cpi-reframe.md)）
++- riscv-arch-test 声明子集全过：I:add/addi/and＋全部 8 条 M，共 11×4；不等于上游全套或 ISA 合规认证
++- 最终报告含上述 v1 四档 CPI、约束实点／外推区分、资源、命中率；v0 独立参照（[收口证据](../../report/module1-closure.md)）
+ 
+ #### 交付物
+ 
+-- [x] 完整 v1 核：三级 + 转发 + 可切换 BHT，优化后 XSim 四档、OOC 与 40MHz 主档真实上板有证据
++- [x] 完整 v1 核：三级＋转发＋可切换 BHT，四档 XSim、OOC 与 40MHz 主档上板见[收口报告](../../report/module1-closure.md)
+ - [x] benchmark 源码、Makefile 与反汇编：`src/riscv_fw/bench_v0_1.*`，四档接入 `run_iverilog.sh all`
+ - [x] 对比数据报告：`report/module1-closure.md`，含 v0 锚点与同 RTL 四档、原始日志和明确限制
+ - [x] 复现清单：`docs/module1-reproduction.md`，标 `#skill候选`；不等于已创建正式技能包
+@@ -142,6 +142,7 @@ RTL 可独立自测后交付配置和已知问题，验证线复验并反馈缺
+   优化后 BHT2 在 11.520ns 实跑 WNS=+0.538、hold=+0.167、严重 DRC=0；100MHz 仍失败。
+   v0 同脚本复现外推值为 83.8MHz；86.8MHz 是本轮最低约束门禁，不能混称 v0 实测通过频率。
+ - 2-bit BHT 在含循环的 benchmark 上命中率可统计且显著优于无预测
++  - 统计口径：关闭档 lookup=0，不能直接算命中率；与关闭档比较 CPI／控制气泡，静态方向命中率只能明确标为推导值，见[收口报告 §3](../../report/module1-closure.md)。
+ - 全套测试回归通过，数据与 git commit 对得上
+ 
+ #### 依赖与风险
+@@ -244,3 +245,5 @@ RTL 可独立自测后交付配置和已知问题，验证线复验并反馈缺
+ | 2026-09-30 | 全项目内容迁移至根目录 plan.md；本文件保留 RISC-V 技术范围、历史索引、核验收与学习资料 |
+ | 2026-10-05 | 记录 v1 双档 CoreMark 实测 8.14% 与原 25% 门禁 FAIL；仅转发改用功能硬门禁和 ≥8.0% 性能回归门禁，25% 保留为组合优化尽力目标 |
+ | 2026-10-05 | Radix-4 乘法通过 Icarus/arch-test/CoreMark；记录转发 10.20%、乘法器 21.95%、组合 28.30%，并保留 XSim/Vivado/上板待办 |
++| 2026-10-07 | 后续验收已补齐并合入：见[模块一收口报告](../../report/module1-closure.md)；旧待办和失败点保留为历史状态。 |
++| 2026-10-09 | B06：统一当前 v1 四档、valid 冲刷、tb 统计与 arch 声明子集边界；未改变验收指标、RTL 或历史数据。 |
+diff --git a/src/vision/README.md b/src/vision/README.md
+index 29391f3..1bac9a5 100644
+--- a/src/vision/README.md
++++ b/src/vision/README.md
+@@ -4,6 +4,9 @@
+ 当前接口见 [design_v0.md](design_v0.md)，离板证据见
+ [本轮记录](../../data/logs/2026-10-02-vision-offboard/README.md)。
+ 
++模块二 HDMI 视觉预处理 RTL＋已验证视频链路已完成（RTL／链路级），见[10/03 视频](../../data/logs/2026-10-03-vision-onboard/README.md)
++和[10/07 真实相机恢复](../../data/logs/2026-10-07-pi-pynq/README.md)；全项目 M2 尚缺网络硬件输出，CNN／工业闭环未完成。
++
+ ```text
+ HDMI IN → dvi2rgb → 彩色原图直通 → rgb2dvi → HDMI OUT → USB 采集卡 → Windows EXE
+                    └→ 归一化 → 灰度 → 高斯/边缘 → 缩放 → 双帧缓冲 → cop_* / 调试 ILA
+@@ -16,7 +19,7 @@ Digilent 并行视频字节顺序是 R,B,G，`vision_axi.v` 双向转换为内
+ 
+ ## 已实现与验证
+ 
+-- 22 个仓库内 RTL tb：Icarus 和 XSim 同判据通过；含真实 720p 两帧，
++- 原 22 个 RTL tb 有 Icarus／XSim 同判据记录；增加 `tb_axi_lock_reset` 后当前为 23 个，定向与实机修复见下方视频证据。含真实 720p 两帧，
+   1,843,200 显示像素、100,352 快照像素、448 行及帧/配置号精确核对。
+ - AXI AW/W 独立握手、响应反压；整组配置请求/确认；不同频率时钟测试。
+ - 显示 RGB/原始同步波形恒延迟直通；分析使用内部单拍行尾/帧首标记。
+@@ -33,7 +36,7 @@ Digilent 并行视频字节顺序是 R,B,G，`vision_axi.v` 双向转换为内
+ 
+ ```bash
+ bash sim/scripts/run_iverilog.sh all          # 核、CoreMark、门禁、视觉、stdlib Python
+-bash sim/scripts/run_iverilog.sh vision all   # 22 个视觉 tb
++bash sim/scripts/run_iverilog.sh vision all   # 当前 23 个视觉 tb
+ bash sim/scripts/run_iverilog.sh vision_python
+ bash sim/scripts/run_vision_xsim.sh all
+ bash sim/scripts/run_vivado_vision_impl.sh    # 并行边界 OOC 布线
+@@ -59,12 +62,15 @@ EXE 构建和接口原型操作见 [客户端说明](../vision_client/README.md)
+ 断连实测暴露并修复一个真 bug：`video_locked` 曾连带复位 AXI 从机，源断开瞬间
+ PS 总线挂死（串口/网口同死）。修复为双复位拓扑（axi_rst_n 只随 s_axi_aresetn，
+ 见 design_v0 §vision_axi 条目），tb_axi_lock_reset 定向覆盖，全量回归 48 PASS，
+-重建 bit 布线后 WNS +0.956。**修复后拔插复测已过**：NO_VIDEO 干净检测 → pending
+-提交恢复后首帧应用 → 全程串口/网口在线零挂死。真实 HDMI 摄像头源、EDID 换源、
+-DDR 对照仍待实测。
++重建 bit 布线后 WNS +0.956。**该次修复配置的拔插复测已过**（[记录](../../data/logs/2026-10-03-vision-onboard/README.md)）：NO_VIDEO 干净检测 → pending
++提交恢复后首帧应用 → 全程串口/网口在线零挂死。后续真实相机画面已有[10/07 证据](../../data/logs/2026-10-07-pi-pynq/README.md)；
++不能写成相机从未验证。EDID 换源、DDR 对照与现用位流长期复验仍待补。
++
++版本边界：10/06 板端既有位流与本地修复版 SHA256 不同；10/07 重载的是既有板端位流。
++画面恢复不证明它包含本地 lock-reset 修复，板端／源码／位流指纹须验证线闭环。
+ 
+ 灰度 `out_*` 的 OSD 是诊断能力；HDMI 主显示保留彩色原图。EXE 模拟框不是物体检测；
+-UVC 原型显示 `UNASSOCIATED`，在硬件帧关联未完成前不叠加网络框。
++单独 UVC 预览标为 `UNASSOCIATED`；当前[轮次协议](../../docs/vision-sync-protocol-decisions.md)允许原型按年龄窗叠加明确标注 MOCK 的结果，不代表逐帧精确关联或真实分类。
+ 
+ 未实现 / 未接入：正式 CNN/协处理器、实际定位部署、工单检查服务、真实识别结果与
+ 采集卡画面关联。它们属于模块三应用交接，整帧快照不代表逐目标硬件裁剪已经完成。
+diff --git a/src/vision/vision_top.v b/src/vision/vision_top.v
+index 4b6f336..12bc766 100644
+--- a/src/vision/vision_top.v
++++ b/src/vision/vision_top.v
+@@ -119,7 +119,7 @@ module vision_top #(
+     wire       m1_de = t_gauss  ? g1_de : g0_de;
+     wire [7:0] m1_y  = t_gauss  ? g1_y  : g0_y;
+ 
+-    // ---- 级 1b：Sobel 边缘（窗口装配/冲刷与 gaussian 同构，3 拍延迟） ----
++    // ---- 级 1b：Sobel 边缘（窗口装配/冲刷同构，输出流水为 4 拍延迟） ----
+     wire       e_vs, e_hs, e_de;
+     wire [7:0] e_y;
+     sobel #(.WIDTH(SW), .HEIGHT(SH)) u_sobel (
+@@ -142,7 +142,7 @@ module vision_top #(
+         .in_vs(m1b_vs), .in_hs(m1b_hs), .in_de(m1b_de), .in_y(m1b_y),
+         .out_vs(s_vs), .out_hs(s_hs), .out_de(s_de), .out_y(s_y)
+     );
+-    // 快照流帧首锁存门控后落乒乓帧缓冲（§7：乒乓行组缓冲占位实现，cop 契约定稿换封装）
++    // 快照流帧首锁存门控后落 cop_buf 双帧缓冲，读银行保护及帧/配置号随快照回放。
+     wire       cw_vs = t_scaler ? s_vs : 1'b0;
+     wire       cw_hs = t_scaler ? s_hs : 1'b0;
+     wire       cw_de = t_scaler ? s_de : 1'b0;

@@ -43,7 +43,7 @@ PYNQ-Z2 PROG-UART ──Micro-USB──▶ 笔记本（串口日志 + 下载/调
 1. **分辨率锁定 720p**：PYNQ 官方文档明确 Z1/Z2 的 DVI 前端"因差分引脚速率限制，官方只支持到 720p"（视频流水线 142 MHz vs 1080p60 像素时钟 148.5 MHz）。源设备统一设 **1280×720@60**（含 HDMI 摄像头输出分辨率，采购时确认）。
 2. **PL 直接收发 TMDS**：PYNQ-Z2 没有 ADV7611；采用 `dvi2rgb`/`rgb2dvi`，DDC/EDID 在 PL，HDCP 不支持。依据 [官方视频说明](https://pynq.readthedocs.io/en/v3.0.0/pynq_overlays/pynqz2/pynqz2_base_overlay.html)。`adv7611_init.py` 仅为外接接收器示例，不用于本板。
 3. **摄像头走 HDMI**：本演示采用 HDMI 输出相机。板上另有 USB 2.0 host（不应与 PROG-UART 混淆），但 USB 摄像头不是本 PL 直通链路的视频源。
-4. **采集卡不参与指标**：USB 采集链路自带 50–200 ms 延迟，只影响观感；端到端延迟指标用 OSD 帧计数器/时间戳或 GPIO 打点实测，`data/metrics.csv` 测量条件注明"经采集卡观测，不计入延迟"。
+4. **延迟分口径记录**：经采集卡观测的端到端延迟包含采集缓冲，不能写成 PL 延迟；[10/03 记录](../data/logs/2026-10-03-vision-onboard/README.md)的 125 ms 是观测上界。PL 延迟另按像素拍序或独立打点测量，指标注明方法。
 5. **供电**：USB 供电仅够启动与点灯；跑 HDMI 流水线建议 12V 适配器（Power 跳线切 REG，USB 供电切 USB）。
 6. **串口看日志**：Linux 启动日志与 `ip addr` 一律走 PROG-UART 串口（115200-8N1）；HDMI OUT 由 PL 驱动，不显示系统日志。
 7. **演示源供电与上电顺序（2026-10-03 定）**：正式源 = 树莓派 4B + Camera Module 3。① 树莓派用独立 5V/3A USB-C 电源，不从 PYNQ USB host 口取电——该口 5V 来自板载共享轨：整板 USB 供电时上游约 500mA，仅够启动（第 5 条）；12V 供电时 5V 轨还要喂 Zynq/PHY/TMDS，抽 3A 给 Pi 会导致 Pi 欠压复位并恶化 HDMI 信号完整性。② 上电顺序：PYNQ 先上电并加载 PL（PL 内 EDID 就绪）→ 树莓派后上电读取 EDID 协商 1280×720@60；顺序反了可能协商到非 720p 模式。③ Pi 侧双保险：config.txt 锁 `hdmi_group=1`/`hdmi_mode=4`（换 Pi OS 版本失效则以 PL EDID 为准，验线时确认）。
@@ -72,6 +72,6 @@ hdmi_in.tie(hdmi_out)   # 直通：采集窗口应立即看到笔记本画面
 ## 5. 状态
 
 - 接线方案：📌 已定（2026-09-20 笔记本源 + 采集卡显示；2026-09-21 修订为真实 HDMI 相机源；**2026-10-03 定案：树莓派 4B + Camera Module 3**，micro-HDMI(HDMI0)→HDMI IN；笔记本 HDMI 输出降级为开发调试源）
-- 采购：✅ 已购（2026-10-03）：HDMI 线 ×2 / USB 采集卡 / 12V 电源适配器 / Camera Module 3（标准 75° AF 日光版，含 15pin CSI 排线）/ micro-HDMI→HDMI-A 短线 / 树莓派 4B USB-C 5V/3A 电源；到货待收，验线照 §4 执行；负责人：never-die-cold
-- 验线：⬜ 未开始（线到后执行 §4）
+- 采购与实际接线：Camera Module 3／Pi／PYNQ／采集卡已用于[10/07 真实相机恢复](../data/logs/2026-10-07-pi-pynq/README.md)；不再标“到货待收”。负责人：never-die-cold
+- 视频链路已完成已验证部分（RTL／链路级），见[10/03 视频](../data/logs/2026-10-03-vision-onboard/README.md)、[10/07 相机](../data/logs/2026-10-07-pi-pynq/README.md)；现用位流版本追溯、冷启动／长时间／断连复验仍待补。
 - 开发期角色：Pi 兼任回放源 / arm_localize 交叉基准 / EXE mock 服务宿主（R1–R3，runbook 见 [docs/pi-dev-roles.md](../docs/pi-dev-roles.md)）；Pi 不进产品分析路径、不产生数据集像素。系统用项目专用 microSD（另配，Raspberry Pi OS Lite 32-bit），输出锁 720p60

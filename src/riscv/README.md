@@ -4,6 +4,7 @@
 
 > 📋 收口证据与四档数据见 [模块一报告](../../report/module1-closure.md)，技术验收与学习路线见 [plan.md](plan.md)；Part A 历史证据见 [done/m1-first-phase-completed.md](done/m1-first-phase-completed.md)。
 > 🔧 v0 接口冻结（模块划分 / 信号表 / 控制真值表）：[design_v0.md](design_v0.md)。
+> 🔧 当前 v1 / Part B/C 接口权威：[design_v1.md](design_v1.md)；v0 仅为历史基线。
 
 ## v1 已实现内容
 
@@ -14,7 +15,7 @@
 - `hazard.v`：冒险检测与流水线暂停（Stall）控制
 - `branch_predict.v`：1-bit/2-bit 分支历史表
 - `decode.v`：译码（R1 已加 `uses_rs1/uses_rs2` 源使用标志）
-- `regfile.v` / `alu.v` / `pc.v` / `muldiv.v`：v0 已有，v1 沿用
+- `regfile.v` / `alu.v` / `pc.v`：沿用基础模块接口；`muldiv.v` 保持握手，乘法已改为 Radix-4（16 轮），除法仍为 32 轮
 
 > v1 模块接口与拍序以 `design_v1.md` 冻结契约为准。
 
@@ -32,7 +33,7 @@
 
 ## 版本基线
 
-- `v0`：两级流水基线（已收口，锚点 tag `partA-v0` = `962a4f5`，接口见 `design_v0.md`）
+- `v0`：两级基线已收口（[历史记录](done/m1-first-phase-completed.md)）；锚点 tag `partA-v0` = `962a4f5`，接口见 `design_v0.md`
 - `v1`：三级流水 + 转发 + Radix-4 乘法 + 可切换 BHT（实现与验收证据见 `design_v1.md` §14/§16）
 
 默认配置为转发开、BHT 关；Part C 主验收配置为转发开、BHT2。保持相同存储器端口，核 OOC 与 40MHz SoC/上板频率分开记录。提交仍须用户通过理解门槛。

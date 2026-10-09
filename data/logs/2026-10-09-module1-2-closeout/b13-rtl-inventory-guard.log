@@ -1,0 +1,5 @@
+PASS: all 16 RISC-V RTL files equal HEAD
+PASS: vision_top HDL unchanged after removing comments
+PASS: metrics and historical performance data unchanged
+PASS: initial 5978-file inventory fingerprint unchanged
+PASS: all 44 prior arch signature evidence files retained; no RTL change requiring rerun

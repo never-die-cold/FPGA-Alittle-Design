@@ -1,0 +1,3 @@
+NOTE: first recheck used a narrower diff path list (excluding sim/README.md); assertion failed. No source hash failed.
+COMMAND: SHA256(git diff -- src/riscv sim), matching the recorded manifest scope
+PASS: all 44 run-source hashes and recorded diff fingerprint unchanged during regression

@@ -1,0 +1,192 @@
+ M README.md
+ M board/README.md
+ M board/hardware.md
+ M board/scripts/program_soc.bat
+ M board/scripts/program_soc.tcl
+ M build/README.md
+ M data/README.md
+ M docs/README.md
+ M docs/core_comparison.md
+ M docs/partB-verify-plan.md
+ M docs/partC-pc-depth-resume.md
+ M docs/partC-verify-plan.md
+ M docs/project-overview.md
+ M docs/three-day-plan.md
+ M docs/vision-offboard-next.md
+ M docs/vision-sync-protocol-decisions.md
+ M docs/workflow.md
+ M plan.md
+ M sim/README.md
+ M sim/scripts/run_iverilog.sh
+ M src/pynq_host/README.md
+ M src/riscv/README.md
+ M src/riscv/design_v1.md
+ M src/riscv/plan.md
+ M src/vision/README.md
+ M src/vision/vision_top.v
+?? data/logs/2026-10-09-collaboration-summary/wip-file-hashes.json
+?? data/logs/2026-10-09-module1-2-closeout/README.md
+?? data/logs/2026-10-09-module1-2-closeout/all-b13.exit.txt
+?? data/logs/2026-10-09-module1-2-closeout/all-b13.log
+?? data/logs/2026-10-09-module1-2-closeout/all-host.exit.txt
+?? data/logs/2026-10-09-module1-2-closeout/all-host.log
+?? data/logs/2026-10-09-module1-2-closeout/all.exit.txt
+?? data/logs/2026-10-09-module1-2-closeout/all.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/add-01.bht1.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/add-01.bht1.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/add-01.bht2.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/add-01.bht2.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/add-01.fwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/add-01.fwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/add-01.nofwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/add-01.nofwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/add-01.signatures.sha256
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/addi-01.bht1.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/addi-01.bht1.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/addi-01.bht2.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/addi-01.bht2.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/addi-01.fwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/addi-01.fwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/addi-01.nofwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/addi-01.nofwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/addi-01.signatures.sha256
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/and-01.bht1.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/and-01.bht1.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/and-01.bht2.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/and-01.bht2.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/and-01.fwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/and-01.fwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/and-01.nofwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/and-01.nofwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/and-01.signatures.sha256
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/div-01.bht1.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/div-01.bht1.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/div-01.bht2.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/div-01.bht2.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/div-01.fwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/div-01.fwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/div-01.nofwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/div-01.nofwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/div-01.signatures.sha256
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/divu-01.bht1.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/divu-01.bht1.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/divu-01.bht2.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/divu-01.bht2.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/divu-01.fwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/divu-01.fwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/divu-01.nofwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/divu-01.nofwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/divu-01.signatures.sha256
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/environment.txt
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mul-01.bht1.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mul-01.bht1.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mul-01.bht2.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mul-01.bht2.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mul-01.fwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mul-01.fwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mul-01.nofwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mul-01.nofwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mul-01.signatures.sha256
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulh-01.bht1.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulh-01.bht1.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulh-01.bht2.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulh-01.bht2.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulh-01.fwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulh-01.fwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulh-01.nofwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulh-01.nofwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulh-01.signatures.sha256
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulhsu-01.bht1.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulhsu-01.bht1.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulhsu-01.bht2.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulhsu-01.bht2.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulhsu-01.fwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulhsu-01.fwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulhsu-01.nofwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulhsu-01.nofwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulhsu-01.signatures.sha256
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulhu-01.bht1.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulhu-01.bht1.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulhu-01.bht2.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulhu-01.bht2.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulhu-01.fwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulhu-01.fwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulhu-01.nofwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulhu-01.nofwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/mulhu-01.signatures.sha256
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/rem-01.bht1.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/rem-01.bht1.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/rem-01.bht2.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/rem-01.bht2.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/rem-01.fwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/rem-01.fwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/rem-01.nofwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/rem-01.nofwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/rem-01.signatures.sha256
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/remu-01.bht1.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/remu-01.bht1.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/remu-01.bht2.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/remu-01.bht2.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/remu-01.fwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/remu-01.fwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/remu-01.nofwd.log
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/remu-01.nofwd.signature.output
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/remu-01.signatures.sha256
+?? data/logs/2026-10-09-module1-2-closeout/arch-matrix/sources.sha256
+?? data/logs/2026-10-09-module1-2-closeout/arch.exit.txt
+?? data/logs/2026-10-09-module1-2-closeout/arch.log
+?? data/logs/2026-10-09-module1-2-closeout/b13-bash-syntax.exit.txt
+?? data/logs/2026-10-09-module1-2-closeout/b13-bash-syntax.log
+?? data/logs/2026-10-09-module1-2-closeout/b13-help.exit.txt
+?? data/logs/2026-10-09-module1-2-closeout/b13-help.log
+?? data/logs/2026-10-09-module1-2-closeout/b13-rtl-inventory-guard.log
+?? data/logs/2026-10-09-module1-2-closeout/b13-run-source-manifest.json
+?? data/logs/2026-10-09-module1-2-closeout/b13-run-source-recheck.log
+?? data/logs/2026-10-09-module1-2-closeout/b13-scope-guard.log
+?? data/logs/2026-10-09-module1-2-closeout/b16-doc-line-counts.json
+?? data/logs/2026-10-09-module1-2-closeout/core-g2001-b13.exit.txt
+?? data/logs/2026-10-09-module1-2-closeout/core-g2001-b13.log
+?? data/logs/2026-10-09-module1-2-closeout/core-g2001-final.exit.txt
+?? data/logs/2026-10-09-module1-2-closeout/core-g2001-final.log
+?? data/logs/2026-10-09-module1-2-closeout/core-g2001.exit.txt
+?? data/logs/2026-10-09-module1-2-closeout/core-g2001.log
+?? data/logs/2026-10-09-module1-2-closeout/diff-check-final.exit.txt
+?? data/logs/2026-10-09-module1-2-closeout/diff-check-final.log
+?? data/logs/2026-10-09-module1-2-closeout/diff-check.exit.txt
+?? data/logs/2026-10-09-module1-2-closeout/diff-check.log
+?? data/logs/2026-10-09-module1-2-closeout/doc-static.log
+?? data/logs/2026-10-09-module1-2-closeout/documentation.diff
+?? data/logs/2026-10-09-module1-2-closeout/documentation.diff.sha256
+?? data/logs/2026-10-09-module1-2-closeout/environment.json
+?? data/logs/2026-10-09-module1-2-closeout/file-index.sha256
+?? data/logs/2026-10-09-module1-2-closeout/file-index.txt
+?? data/logs/2026-10-09-module1-2-closeout/final-scope-check.log
+?? data/logs/2026-10-09-module1-2-closeout/final-status.json
+?? data/logs/2026-10-09-module1-2-closeout/final-tracked.diff
+?? data/logs/2026-10-09-module1-2-closeout/final-tracked.diff.sha256
+?? data/logs/2026-10-09-module1-2-closeout/implicit-ports-b13.exit.txt
+?? data/logs/2026-10-09-module1-2-closeout/implicit-ports-b13.log
+?? data/logs/2026-10-09-module1-2-closeout/implicit-ports-final.exit.txt
+?? data/logs/2026-10-09-module1-2-closeout/implicit-ports-final.log
+?? data/logs/2026-10-09-module1-2-closeout/implicit-ports.exit.txt
+?? data/logs/2026-10-09-module1-2-closeout/implicit-ports.log
+?? data/logs/2026-10-09-module1-2-closeout/inventory-command.txt
+?? data/logs/2026-10-09-module1-2-closeout/inventory-links.txt
+?? data/logs/2026-10-09-module1-2-closeout/links-final.log
+?? data/logs/2026-10-09-module1-2-closeout/links.log
+?? data/logs/2026-10-09-module1-2-closeout/matrix-check-command.txt
+?? data/logs/2026-10-09-module1-2-closeout/matrix-check.log
+?? data/logs/2026-10-09-module1-2-closeout/matrix-summary.json
+?? data/logs/2026-10-09-module1-2-closeout/proposed-script-changes.patch
+?? data/logs/2026-10-09-module1-2-closeout/read-snapshot.tsv
+?? data/logs/2026-10-09-module1-2-closeout/resume.md
+?? data/logs/2026-10-09-module1-2-closeout/rtl-fingerprint.log
+?? data/logs/2026-10-09-module1-2-closeout/scope-guard.log
+?? data/logs/2026-10-09-module1-2-closeout/tag-status.log
+?? data/logs/2026-10-09-module1-2-closeout/vision-python-host.exit.txt
+?? data/logs/2026-10-09-module1-2-closeout/vision-python-host.log
+?? data/logs/2026-10-09-module1-2-closeout/vision-python-precheck.exit.txt
+?? data/logs/2026-10-09-module1-2-closeout/vision-python-precheck.log
+?? data/logs/2026-10-09-module1-2-closeout/wip-status.txt
+?? docs/resume-2026-10-09-module1-2-closeout.md
+?? report/llm_log/2026-10-09-module1-2-closeout.md

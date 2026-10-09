@@ -4,6 +4,9 @@
 当前接口见 [design_v0.md](design_v0.md)，离板证据见
 [本轮记录](../../data/logs/2026-10-02-vision-offboard/README.md)。
 
+模块二 HDMI 视觉预处理 RTL＋已验证视频链路已完成（RTL／链路级），见[10/03 视频](../../data/logs/2026-10-03-vision-onboard/README.md)
+和[10/07 真实相机恢复](../../data/logs/2026-10-07-pi-pynq/README.md)；全项目 M2 尚缺网络硬件输出，CNN／工业闭环未完成。
+
 ```text
 HDMI IN → dvi2rgb → 彩色原图直通 → rgb2dvi → HDMI OUT → USB 采集卡 → Windows EXE
                    └→ 归一化 → 灰度 → 高斯/边缘 → 缩放 → 双帧缓冲 → cop_* / 调试 ILA
@@ -16,7 +19,7 @@ Digilent 并行视频字节顺序是 R,B,G，`vision_axi.v` 双向转换为内�
 
 ## 已实现与验证
 
-- 22 个仓库内 RTL tb：Icarus 和 XSim 同判据通过；含真实 720p 两帧，
+- 原 22 个 RTL tb 有 Icarus／XSim 同判据记录；增加 `tb_axi_lock_reset` 后当前为 23 个，定向与实机修复见下方视频证据。含真实 720p 两帧，
   1,843,200 显示像素、100,352 快照像素、448 行及帧/配置号精确核对。
 - AXI AW/W 独立握手、响应反压；整组配置请求/确认；不同频率时钟测试。
 - 显示 RGB/原始同步波形恒延迟直通；分析使用内部单拍行尾/帧首标记。
@@ -33,7 +36,7 @@ Digilent 并行视频字节顺序是 R,B,G，`vision_axi.v` 双向转换为内�
 
 ```bash
 bash sim/scripts/run_iverilog.sh all          # 核、CoreMark、门禁、视觉、stdlib Python
-bash sim/scripts/run_iverilog.sh vision all   # 22 个视觉 tb
+bash sim/scripts/run_iverilog.sh vision all   # 当前 23 个视觉 tb
 bash sim/scripts/run_iverilog.sh vision_python
 bash sim/scripts/run_vision_xsim.sh all
 bash sim/scripts/run_vivado_vision_impl.sh    # 并行边界 OOC 布线
@@ -59,12 +62,15 @@ EXE 构建和接口原型操作见 [客户端说明](../vision_client/README.md)
 断连实测暴露并修复一个真 bug：`video_locked` 曾连带复位 AXI 从机，源断开瞬间
 PS 总线挂死（串口/网口同死）。修复为双复位拓扑（axi_rst_n 只随 s_axi_aresetn，
 见 design_v0 §vision_axi 条目），tb_axi_lock_reset 定向覆盖，全量回归 48 PASS，
-重建 bit 布线后 WNS +0.956。**修复后拔插复测已过**：NO_VIDEO 干净检测 → pending
-提交恢复后首帧应用 → 全程串口/网口在线零挂死。真实 HDMI 摄像头源、EDID 换源、
-DDR 对照仍待实测。
+重建 bit 布线后 WNS +0.956。**该次修复配置的拔插复测已过**（[记录](../../data/logs/2026-10-03-vision-onboard/README.md)）：NO_VIDEO 干净检测 → pending
+提交恢复后首帧应用 → 全程串口/网口在线零挂死。后续真实相机画面已有[10/07 证据](../../data/logs/2026-10-07-pi-pynq/README.md)；
+不能写成相机从未验证。EDID 换源、DDR 对照与现用位流长期复验仍待补。
+
+版本边界：10/06 板端既有位流与本地修复版 SHA256 不同；10/07 重载的是既有板端位流。
+画面恢复不证明它包含本地 lock-reset 修复，板端／源码／位流指纹须验证线闭环。
 
 灰度 `out_*` 的 OSD 是诊断能力；HDMI 主显示保留彩色原图。EXE 模拟框不是物体检测；
-UVC 原型显示 `UNASSOCIATED`，在硬件帧关联未完成前不叠加网络框。
+单独 UVC 预览标为 `UNASSOCIATED`；当前[轮次协议](../../docs/vision-sync-protocol-decisions.md)允许原型按年龄窗叠加明确标注 MOCK 的结果，不代表逐帧精确关联或真实分类。
 
 未实现 / 未接入：正式 CNN/协处理器、实际定位部署、工单检查服务、真实识别结果与
 采集卡画面关联。它们属于模块三应用交接，整帧快照不代表逐目标硬件裁剪已经完成。

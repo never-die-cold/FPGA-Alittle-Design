@@ -1,6 +1,6 @@
 @echo off
 setlocal
-set "VIVADO=D:\Vivado\2026.1\Vivado\bin\vivado.bat"
+if not defined VIVADO set "VIVADO=D:\Vivado_downloads\2026.1\Vivado\bin\vivado.bat"
 set "SCRIPT=%~dp0program_soc.tcl"
 
 if not exist "%VIVADO%" (

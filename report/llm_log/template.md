@@ -36,3 +36,14 @@
 - 触发条件：
 - 排查步骤：
 - 适用范围（换题目/换板卡是否仍成立）：
+
+---
+
+## 最新分模块协作记录索引（2026-10-09归档）
+
+保留上方通用模板。以下为独立记录，Codex当日与OpenCode历史会话的来源／日期分别注明。
+- [模块一：RISC-V核声明与证据收口](2026-10-09-riscv-closeout-collaboration.md)
+- [SoC／下载工具：默认路径、兼容与完整理解门槛](2026-10-09-soc-download-collaboration.md)
+- [模块二：视觉链路状态与应用验收边界](2026-10-09-vision-closeout-collaboration.md)
+- [Git工具链：Codex／OpenCode两份仓库与RTL归档](2026-10-09-git-workflow-collaboration.md)
+- [上传已有dev/rtl的操作指南](../../docs/upload-rtl-code-and-logs.md)

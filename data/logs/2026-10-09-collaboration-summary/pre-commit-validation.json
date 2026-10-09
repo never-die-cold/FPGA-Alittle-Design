@@ -1,0 +1,31 @@
+{
+  "cached_diff_check": {
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--check"
+    ],
+    "exit": 0,
+    "output": ""
+  },
+  "worktree_diff_check": {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit": 0,
+    "output": ""
+  },
+  "run_inputs": "44 source/tb/script/hex hashes equal the completed all run",
+  "full_all": "existing all-b13.exit.txt=0; not rerun for documentation-only changes",
+  "arch": "existing arch.exit.txt=0, 44/44, inputs unchanged",
+  "core_compile": "0",
+  "bash_syntax": "0",
+  "branch": "dev/rtl",
+  "base_head": "051aefaae9841e16237cc65a004b2c5ee5ec995d",
+  "remote_dev_rtl": "2daecc97bc380347453461cfc0d488ad04e59da1",
+  "authorization": "user requests reviewed code and module collaboration records in one local commit; user will push",
+  "windows": "pending actual BAT/Vivado/JTAG confirmation; no new hardware/timing claim"
+}

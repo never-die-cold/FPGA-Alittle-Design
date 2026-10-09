@@ -1,0 +1,13 @@
+python3 -B - <<'PY'
+from pathlib import Path
+import hashlib
+out=Path('data/logs/2026-10-09-module1-2-closeout')
+header="# 初始全量阅读文件索引（2026-10-09 模块一／二整理）\n# 仓库：/home/jianglibo/FPGA-Alittle-Design；分支 main；HEAD 051aefaae9841e16237cc65a004b2c5ee5ec995d\n# 范围：初始只读盘点实际读取文件；排除仓库根 .git；包括 ignored 构建物及第三方嵌套元数据。\n# 指纹为初始盘点时内容，本轮文档改动与运行产生的文件不回填为历史读取。\n# 共 5978 个文件／符号链接；文本完整读取，二进制完整读取字节并取 SHA256。\n# 重现当前文件指纹命令：python3 -B - <<'PY'\n# from pathlib import Path; import hashlib, os\n# root=Path.cwd()\n# for p in sorted(root.rglob('*')):\n#     if p.parts[len(root.parts)]=='.git': continue\n#     if p.is_symlink(): print(p.relative_to(root), 'SYMLINK', os.readlink(p)); continue\n#     if p.is_file(): print(p.relative_to(root), hashlib.sha256(p.read_bytes()).hexdigest())\n# PY\n# 注：重现当前快照会包含新增文件／文档改动，不能要求它等于初始快照。\n# 本地缺失的第三方/历史 Markdown 链接另见 inventory-links.txt；不修改原文、不推断 HTTP 可达性。\n# 生成命令：bash data/logs/2026-10-09-module1-2-closeout/inventory-command.txt\n# 输入：read-snapshot.tsv，保存初始逐文件读取记录，非当前源码重算。\n# 路径\t一句话作用\t字节数\t初始 SHA256（或符号链接目标）\n"
+rows=(out/'read-snapshot.tsv').read_text()
+assert len(rows.splitlines())==5978
+p=out/'file-index.txt'
+p.write_text(header+rows)
+sha=hashlib.sha256(p.read_bytes()).hexdigest()
+(out/'file-index.sha256').write_text(sha+'  file-index.txt\n')
+print('PASS: 5978 read records; SHA256='+sha)
+PY

@@ -1,6 +1,8 @@
 # Part C 验收清单（verify/bench 线执行计划）
 
 > 2026-10-07 执行结果见 [收口报告](../report/module1-closure.md) 和 [复现清单](module1-reproduction.md)。以下复选框为交付前计划快照；当前状态以上述原始证据为准。
+> 当前四档名称为 v1_nofwd／v1_fwd／v1_fwd_bht1／v1_fwd_bht2；v0 是外部 tag 锚点。
+> 本轮无本地 Vivado/XSim；不重复宣称执行历史硬件验证。
 
 > 是什么：Part C（v1 + 可切换 BHT）交付后的验证、四档数据采集与 M1 收口验收执行清单。
 > 给谁看：never-die-cold（verify+bench 线，执行人）、jianglibo（RTL 线，交付对照）、watercopper（bench/四档指标）、上板负责人（第 7 节简报）。
@@ -39,7 +41,7 @@
 | CPI 阶梯留档 | `gain_fwd`（Part B D16 回归门槛 ≥8.0%）与 BHT 净贡献（fwd+BHT 相对 fwd）分列入 metrics.csv | bench |
 | BHT 命中率 | 2-bit 在含循环 benchmark 上命中率可统计（计数 vs 波形双源核对）且显著优于关闭档（静态不跳）；1-bit/2-bit 对比留档 | bench |
 | Vivado | 同器件同版本；实测最高通过频率点 WNS≥0；125 MHz 为非阻塞加分（D15）；四档资源（LUT/FF/BRAM）入表 | verify |
-| 基线锚点 | v0 = tag `partA-v0`（=`962a4f5`）；v1 三档同一 commit，BHT 开/关仅参数不同 | verify |
+| 基线锚点 | v0 = tag `partA-v0`（=`962a4f5`）；v1 四档同一 RTL/commit，仅参数不同 | verify |
 | 降级预案核对 | 若 L3 触发（关闭 BHT + 默认冲刷）四档退化三档；CoreMark 卡住退自写 benchmark——报告必须注明降级范围，不得标完整目标版通过（§4.3 风险预案） | verify |
 
 ## 4. tb 备货清单（jianglibo 交付应含，never-die-cold 验收时逐项核对断言点）
@@ -61,9 +63,9 @@
   - `gain_fwd = (CPI_nofwd − CPI_fwd) / CPI_nofwd`——Part B D16 回归门槛 ≥8.0%；
   - `gain_total = (CPI_nofwd − CPI_fwd+BHT) / CPI_nofwd`——Part C §4.3 组合尽力目标 25%；
   - `BHT 净贡献 = CPI_fwd − CPI_fwd+BHT`——负值即回归，必须定位后重测。
-- 计数窗口（**四档完全一致**）：`cycles` = rst_n 释放后到首次终止 tohost 写；`retired` = 同窗口 `wb_valid=1` 拍数；M 指令只计一次；muldiv 等待拍与误预测冲刷拍计入 cycles，不得剔除。同 hex、同初始内存、同终止条件、同最大周期、同计数代码。
-- 命中率口径：`命中率 = 预测正确次数 / 预测查表次数`（分子分母精确定义随契约冻结）；统计来源（片上 or tb）写入数据表；四档报告另列冲刷次数列作交叉印证。
-- harness 现状：`data/scripts/cpi_harness.py` 解析格式不变则零修改；`tb_core_coremark.v` 计数信号在 v1 下 = `dut.wb_valid`（Part B 交付时适配，Part C 沿用）；BHT 统计通道适配方案由 RTL 线交付时说明。verify 只验收"**同一 tb 文件、同一计数代码跑四档**"。
+- 计数窗口（**四档完全一致**）：rst_n 释放至首次 `tohost_exit` 写；retired 按 `dut.mem_valid` 计，M 只计一次；等待与误预测气泡全部计入 cycles。同 hex、初始化、终止条件和计数代码。
+- 命中率按 §16.2 已冻结：tb 在真实 `branch_resolve` 事件统计 lookup／hit／miss，共用 CPI 窗口；每拍互斥且 hit+miss=lookup。关闭档事件全 0，命中率不适用；静态方向命中率如推导须另标来源。
+- 当前 tb 已绑定 `dut.mem_valid`（契约逻辑 wb_valid），harness 不另造计数口。执行与原始数据见[收口报告 §2–4](../report/module1-closure.md)，同一 tb 文件跑四档。
 - 产出归档：原始日志 `data/logs/<date-slug>/`；波形/覆盖 `data/evidence/`；四档各行入 `data/metrics.csv`（链接原始日志，禁止手抄数值）；四档对比报告入 `report/`（§4.3 交付物，含测试条件与日志索引）。
 
 ## 6. XSim 对拍口径（沿用 Part A/B 惯例）
@@ -97,3 +99,4 @@
 | 日期 | 变更 | 作者 |
 |:---|:---|:---|
 | 2026-10-03 | 首版：Part C RTL 交付前备货清单；如实标注契约现状（design_v1.md 尚无 Part C 专章，第 4 节断言点为计划稿待回填） | never-die-cold（verify 线） |
+| 2026-10-09 | 补实际四档、mem_valid／tohost_exit 和 tb 事件统计口径；历史复选框与失败数据不回填 | Codex |

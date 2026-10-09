@@ -7,14 +7,20 @@
 ## 项目三句话
 
 1. 是什么：在 PYNQ-Z2 上用自研 RISC-V + HDMI 视觉流水线 + CNN 协处理器识别桌面紧固件，视频经采集卡进入 Windows EXE，统一显示识别框、类别、计数与工单异常（2026 嵌赛 FPGA 赛道 · AMD 自主选题）。
-2. 现在到哪：Part A 已收口（tag `partA-v0`）；v1 契约冻结，积木模块已有独立复验，完整核尚未验收；视觉模块离板已收口（2026-10-02：22 tb 同判据 PASS、原子配置 CDC、物理 HDMI bit/XSA 已产出，实机验收待上板），定位部署/正式模型/工业闭环/EXE 正式版未实现。自由分散且互不遮挡、传统定位 + CNN 分类已确定；EXE 由 watercopper 负责。
+2. 现在到哪：按下表区分模块收口与全项目验收。自由分散且互不遮挡、传统定位 + CNN 分类路线已确定；EXE 由 watercopper 负责。
 3. 计划和验收：根目录 `plan.md` 管全项目收口、分工和交付看板；`src/riscv/plan.md` 只管核专项，`src/riscv/plan_calendar.md` 只管核任务与卡点。接口按模块与核版本看对应设计契约。
+
+| 层次 | 状态与证据 |
+|:---|:---|
+| 模块一 | 核＋最小 SoC 已完成收口。[核收口报告](../report/module1-closure.md) |
+| 模块二 | HDMI 视觉预处理 RTL＋已验证视频链路已完成（RTL／链路级）。[RTL 与视频记录](../data/logs/2026-10-03-vision-onboard/README.md)、[真实相机链路记录](../data/logs/2026-10-07-pi-pynq/README.md) |
+| 全项目 M2 | 全项目 M2 验收未完成；CNN、网络硬件输出和工业闭环不得宣称完成。验收范围见[主计划](../plan.md) §1.4；前两层收口不替代全项目验收。 |
 
 ## 目录地图（每个目录一句话）
 
 | 目录 | 是什么 |
 |:---|:---|
-| `src/` | 设计源码。`riscv/` 是核心（RTL + plan + design_v0）；`riscv_fw/` 裸机固件；`vision/` 离板已收口；`coprocessor/` M3 占位；`pynq_host/` PS 配置协议与 mock；`vision_client/` Windows EXE 原型 |
+| `src/` | 设计源码。`riscv/` 是核与最小 SoC（RTL + plan + design_v0/design_v1）；`riscv_fw/` 裸机固件；`vision/` 图像预处理与视频链路；`coprocessor/` 未实现；`pynq_host/` PS 配置协议与 mock；`vision_client/` Windows EXE 原型 |
 | `sim/` | 验证。`riscv/` 放 tb；`scripts/run_iverilog.sh` 一键回归；`arch_test/` 第三方套件（脚本拉取，不入库） |
 | `build/` | Vivado 可复现构建（build.tcl + constraints + 综合报告） |
 | `board/` | 上板。`smoke_test/` 工程、`setup.md` 复现指南、`logs/` 上板实测记录（只追加） |
@@ -37,7 +43,9 @@
 | Part B 验证与验收执行清单 | `docs/partB-verify-plan.md` |
 | 模块三训练与量化前期 | `docs/module3-model-training.md` |
 | 视频/结果同步协议决策单 | `docs/vision-sync-protocol-decisions.md` |
-| 接口定义（唯一权威） | `src/riscv/design_v0.md` |
+| RISC-V v0 接口（基线唯一权威） | [src/riscv/design_v0.md](../src/riscv/design_v0.md) |
+| RISC-V v1 接口（Part B/C 唯一权威） | [src/riscv/design_v1.md](../src/riscv/design_v1.md) |
+| HDMI 视觉预处理接口 | [src/vision/design_v0.md](../src/vision/design_v0.md) |
 | 指标数值 | `data/metrics.csv` |
 | 证据（golden、源码溯源） | `data/evidence/`、`data/golden/` |
 | 学习资料 | `docs/resources.md` |
@@ -54,7 +62,7 @@
 
 1. 开工：读 `docs/workflow.md` 开工三件事，先贴"已实现/未实现"清单再动手。
 2. 入库：看不懂的代码不许 commit——先通过理解门槛（`docs/workflow.md` §2）。
-3. 收尾：AI 产出立即 commit（注明 prompt 要点）；设计决策写 `report/llm_log/`；跑过的命令必须能从仓库内脚本复现。
+3. 收尾：通过理解门槛且获提交授权后才可 commit（注明 prompt 要点）；设计决策写 `report/llm_log/`；跑过的命令必须能从仓库内脚本复现。
 
 ## 写作规范（防 AI 味，全员遵守）
 
@@ -78,3 +86,19 @@
 | `docs/coremark_plan.md` | `docs/coremark.md` 附录 A |
 
 历史快照声明：`report/llm_log/` 与 `src/riscv/done/` 按"历史不改写"铁律保留原样，其中的旧链接是历史快照，以本表为准。
+
+## 本轮只登记的事项（2026-10-09）
+
+- Q01：D6 覆盖结果报文；未知字段拒绝的实现缺口另批裁决，见[核查注记](vision-sync-protocol-decisions.md)。
+- Q02：`run_iverilog.sh` 缺失 tb 时 continue 的风险只登记，本轮不改 fail-fast 语义。
+- Q03：本地有 `partA-v0`；未取得 `archive/pi-hdmi-diagnostics-2026-10-08`，不查远端、不建替代 tag。
+- Q04：[中文探索报告](方案探索报告.md)与[英文名 audit](localization-exploration-audit.md)正文一致；保留两份，权威正文待用户裁决。
+- Q05：旧配图标“历史快照：BHT 尚未绘制”，见[总览](project-overview.md)；重绘另批。
+- Q06：三处历史／第三方本地链接缺失见[索引](../data/logs/2026-10-09-module1-2-closeout/inventory-links.txt)；原文保留，外部 HTTP 链接未重查。
+- 全量读过的文件与初始指纹见[机器索引](../data/logs/2026-10-09-module1-2-closeout/file-index.txt)，不手写重复清单。
+
+## 变更记录
+
+| 日期 | 变更 |
+|:---|:---|
+| 2026-10-09 | B01：区分三层收口状态并链接证据；补齐对应版本接口导航；纠正提交纪律。 |
