@@ -5,7 +5,7 @@ $dependencyPath = Join-Path (Get-Location) "sim/build/vision-client-deps"
 $oldPythonPath = $env:PYTHONPATH
 try {
     $env:PYTHONPATH = "$dependencyPath;$oldPythonPath"
-    & $Python -c "import cv2, PyInstaller; assert cv2.__version__ == '4.12.0'; assert PyInstaller.__version__ == '6.16.0'"
+    & $Python -c "import cv2, PyInstaller, PIL; assert cv2.__version__ == '4.12.0'; assert PyInstaller.__version__ == '6.16.0'; assert PIL.__version__ == '12.3.0'"
     if ($LASTEXITCODE -ne 0) {
         & $Python -m pip install --target $dependencyPath -r src/vision_client/requirements.txt
         if ($LASTEXITCODE -ne 0) { throw "client dependency installation failed" }
