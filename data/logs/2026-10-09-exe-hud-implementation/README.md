@@ -35,6 +35,18 @@
 - `anomalies.jsonl` **仅 1 条**初始 `overlay_ok`——flap 未复发（全程无 stale 翻转）
 - stdout 无 WARN（仅 libpng iCCP 提示，无害）
 
+## v3.1 评审修正（2026-10-09 实装后当日评审，用户驱动）
+
+- **删 AGE 格**（用户观察：数字逐帧跳动"先声夺人吸引注意力"，是噪声；且与新鲜度条信息
+  重复）——面板四格改三格（ROUND / TARGETS / REC）。数字年龄在 `records.jsonl` 的
+  `result_age_s` 有精确记录，联调去日志查。
+- **新鲜度条移入面板下沿 + 左端 `FRESHNESS` 小标签**（用户选定方案 A）：消除面板下方浮动
+  元素；标签与格子标题同款小字、落在深色衬底上，对比度有保证（渲染实证：标签放条外侧落在
+  浅色桌面上不可读）。三方案对比图随证据留档：`10_option_a.png`（采用）/ `11_option_b.png`
+  （弃选）/ `12_option_c.png`（不标注，弃选）。
+- 本目录 `02_endpoint_ok / 03_local_demo / 04_waiting_state / 05_uvc_only` 四张模式图、
+  `build_exe_hud_v31.log` 与 `test_*.log` 均为 v3.1 复验产物（打包三关 + 回归 7/7 PASS）。
+
 ## 边界声明
 
 MOCK 数据；真实 UVC 画面上 HUD 的观感（对比度/遮挡）待采集卡在位实测；中文类别名（M3）

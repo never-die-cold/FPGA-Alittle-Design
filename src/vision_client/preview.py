@@ -4,9 +4,11 @@
 - 状态机（D2 触发 / D3 有效性撤框 / D5 重连）在 rounds.py（离板测试 test_vision_rounds.py）；
 - 批次记录与异常事件在 records.py；本文件负责取帧与 HUD 绘制。
 
-HUD 设计 v3（data/logs/2026-10-08-exe-ui-design/README.md）：
+HUD 设计 v3.1（data/logs/2026-10-08-exe-ui-design/README.md）：
 - 左上状态框：模式徽标（MOCK ONLY / LIVE / VIDEO ONLY）+ 状态行；
-- 右上四格指标面板：ROUND / TARGETS / REC / AGE + 新鲜度条（UVC-only 模式隐藏面板）；
+- 右上三格指标面板：ROUND / TARGETS / REC（UVC-only 模式隐藏面板）；
+- 面板下沿内嵌新鲜度条 + 左端 `FRESHNESS` 小标签（青条随结果年龄收缩、过期转红）；
+- AGE 数字格与浮动条已删（2026-10-09 用户评审：数字逐帧跳动是噪声；条移入面板并加标注）；
 - 目标：实线绿方框 + T 序号片。
 MOCK 结果恒标 MOCK ONLY，不代表板上识别（plan.md §3.4）。无 --endpoint 时纯视频显示
 VIDEO ONLY | UNASSOCIATED，不叠任何框。
@@ -110,7 +112,7 @@ def draw_hud(frame, hud):
     x1, y0 = frame.shape[1] - 24, 20
     x0, y1 = x1 - 520, 116
     framed(frame, (x0, y0, x1, y1))
-    cell_w = (x1 - x0) // 4
+    cell_w = (x1 - x0) // 3
     for i, (label, value, color) in enumerate(hud["metrics"]):
         cx = x0 + cell_w * i + cell_w // 2
         put(frame, label, (cx, y0 + 26), 0.42, DIM, 1, "center")
@@ -118,11 +120,14 @@ def draw_hud(frame, hud):
         if i:
             cv2.line(frame, (x0 + cell_w * i, y0 + 14), (x0 + cell_w * i, y1 - 14), SEP, 1)
     if hud["fresh"] is not None:
+        # 新鲜度条（v3.1 选项 A）：内嵌面板下沿空白区，左端小标签与格子标题同款字
         frac, color = hud["fresh"]
-        bar_y = y1 + 5
-        cv2.rectangle(frame, (x0, bar_y), (x1, bar_y + 5), (70, 62, 56), -1)
+        put(frame, "FRESHNESS", (x0 + 16, 111), 0.42, DIM, 1)
+        label_w, _ = tsize("FRESHNESS", 0.42, 1)
+        bx0, bx1 = x0 + 16 + label_w + 14, x1 - 16
+        cv2.rectangle(frame, (bx0, 105), (bx1, 111), (70, 62, 56), -1)
         if frac > 0:
-            cv2.rectangle(frame, (x0, bar_y), (x0 + int((x1 - x0) * frac), bar_y + 5), color, -1)
+            cv2.rectangle(frame, (bx0, 105), (bx0 + int((bx1 - bx0) * frac), 111), color, -1)
 
 
 def render(frame, targets, hud):
@@ -140,12 +145,12 @@ def green_pixels(image):
                 & (f[:, :, 1] - f[:, :, 2] > 60)).sum())
 
 
-def metrics_cells(packet, rec_count, age_text, value_color):
+def metrics_cells(packet, rec_count, value_color):
+    """三格指标（v3.1：AGE 已删——与新鲜度条信息重复、数字逐帧跳动抢注意力）。"""
     return [("ROUND", str(packet["check_id"]) if packet else "--", value_color),
             ("TARGETS", str(len(packet["targets"])) if packet else "--", value_color),
             ("REC", str(rec_count) if rec_count is not None else "--",
-             TEXT if rec_count is not None else DIM),
-            ("AGE", age_text, value_color)]
+             TEXT if rec_count is not None else DIM)]
 
 
 def main():
@@ -169,7 +174,7 @@ def main():
         p = mock_packet("selftest", 1, 0, 1)
         hud = {"badge": ("MOCK ONLY", AMBER),
                "status": ("STREAMING | 1280x720 | session selftest", DIM, 1),
-               "metrics": metrics_cells(p, 0, "0.0s", TEXT),
+               "metrics": metrics_cells(p, 0, TEXT),
                "fresh": (1.0, CYAN)}
         shown = render(mock_frame(p), p["targets"], hud)
         assert shown.shape == (720, 1280, 3)
@@ -214,7 +219,7 @@ def main():
                     p = mock_packet("local-preview", i, 0, i)
                     targets = p["targets"]
                     status_line = (f"LOCAL DEMO | synthetic | {w}x{h}", DIM, 1)
-                    cells = metrics_cells(p, None, "0.0s", TEXT)
+                    cells = metrics_cells(p, None, TEXT)
                     fresh_bar = None
                 else:
                     status_line = ("UNASSOCIATED | no board recognition", DIM, 1)
@@ -238,14 +243,12 @@ def main():
                     frac = max(0.0, 1.0 - age / args.max_age)
                     hud = {"badge": badge,
                            "status": (f"STREAMING | {w}x{h} | session {remote.session[:8]}", DIM, 1),
-                           "metrics": metrics_cells(remote.packet, rec_count, f"{age:.1f}s", TEXT),
+                           "metrics": metrics_cells(remote.packet, rec_count, TEXT),
                            "fresh": (frac, CYAN)}
                 else:
                     hud = {"badge": badge,
                            "status": ("WAITING FOR RESULT", AMBER_DEEP, 2),
-                           "metrics": metrics_cells(None, rec_count,
-                                                    f"{age:.1f}s" if age is not None else "--",
-                                                    AMBER_DEEP),
+                           "metrics": metrics_cells(None, rec_count, AMBER_DEEP),
                            "fresh": (1.0, RED)}
             shown = render(frame, targets, hud)
             if will_record:

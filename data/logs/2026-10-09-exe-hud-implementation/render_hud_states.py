@@ -21,7 +21,7 @@ packet = mock_packet("b564747f-0000-0000-0000-000000000000", 7, 2, 7)
 waiting_hud = {
     "badge": ("MOCK ONLY", AMBER),
     "status": ("WAITING FOR RESULT", AMBER_DEEP, 2),
-    "metrics": metrics_cells(None, 2, "1.4s", AMBER_DEEP),
+    "metrics": metrics_cells(None, 2, AMBER_DEEP),
     "fresh": (1.0, RED),
 }
 cv2.imwrite(str(OUT / "04_waiting_state.png"), render(mock_frame(packet), None, waiting_hud))
