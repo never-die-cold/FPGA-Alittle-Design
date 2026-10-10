@@ -40,9 +40,85 @@ def test_result_fields(packet):
     print("PASS: Q01 result fields: 3 valid / 12 invalid packets")
 
 
+def live_packet():
+    """v1.2 LIVE 轮廓样例：class/score 目标、CHECK_FAIL 判定、prototype 标记。"""
+    return {"version": 1, "mode": "LIVE", "session_id": "sess-live-01",
+            "frame_id": 3, "config_id": 1, "check_id": 4,
+            "width": 1280, "height": 720, "created_at": time.time(),
+            "status": "CHECK_FAIL",
+            "decision": {"verdict": "CHECK_FAIL",
+                         "expected": {"bolt": 1, "nut": 1, "washer": 1},
+                         "actual": {"bolt": 1, "nut": 1, "washer": 0},
+                         "delta": {"bolt": 0, "nut": 0, "washer": -1},
+                         "missing": {"bolt": 0, "nut": 0, "washer": 1},
+                         "extra": {"bolt": 0, "nut": 0, "washer": 0},
+                         "reasons": ["low_score"]},
+            "prototype": True,
+            "targets": [{"target_id": 0, "bbox": [10, 20, 100, 120], "class": "bolt", "score": 0.98},
+                        {"target_id": 1, "bbox": [200, 210, 300, 340], "class": "nut", "score": 0.91}]}
+
+
+def _expect_live_invalid(bad, why):
+    try:
+        validate_packet(bad)
+    except ValueError:
+        return
+    raise AssertionError(f"invalid live packet accepted: {why}")
+
+
+def test_live_profile():
+    packet = live_packet()
+    assert validate_packet(packet) is packet
+    assert is_current(packet, "sess-live-01", 1)  # LIVE 报文同样适用 D3 判据
+    # status 枚举：仅 LOCATION_ONLY 与三个判定值
+    for value in ("", "BOGUS", None, "PASS"):
+        _expect_live_invalid({**packet, "status": value}, f"status={value!r}")
+    # 判定类 status 必带 decision；LOCATION_ONLY 不得带
+    _expect_live_invalid({k: v for k, v in packet.items() if k != "decision"}, "missing decision")
+    _expect_live_invalid({**packet, "status": "LOCATION_ONLY"}, "decision with location status")
+    # verdict 可选；出现时须与 status 一致
+    ok = copy.deepcopy(packet)
+    del ok["decision"]["verdict"]
+    validate_packet(ok)
+    bad = copy.deepcopy(packet)
+    bad["decision"]["verdict"] = "CHECK_PASS"
+    _expect_live_invalid(bad, "verdict mismatch")
+    # decision 计数/reasons/未知字段
+    for mutate, why in ((lambda d: d.update({"expected": {"bolt": 1}}), "counts keys"),
+                        (lambda d: d["actual"].update({"washer": -1}), "negative actual"),
+                        (lambda d: d.update({"reasons": [1]}), "non-string reason"),
+                        (lambda d: d.update({"unknown": 1}), "decision extra field")):
+        bad = copy.deepcopy(packet)
+        mutate(bad["decision"])
+        _expect_live_invalid(bad, why)
+    # 目标 class/score：LIVE 放行但取值受限；target 级 verdict 仍拒绝
+    for mutate, why in ((lambda t: t.update({"class": "screw"}), "unknown class"),
+                        (lambda t: t.update({"score": 1.5}), "score > 1"),
+                        (lambda t: t.update({"score": "high"}), "score type"),
+                        (lambda t: t.update({"verdict": "CHECK_PASS"}), "target verdict")):
+        bad = copy.deepcopy(packet)
+        mutate(bad["targets"][0])
+        _expect_live_invalid(bad, why)
+    ok = copy.deepcopy(packet)
+    ok["targets"] = [{"target_id": 0, "bbox": [10, 20, 100, 120], "class": None},
+                     {"target_id": 1, "bbox": [200, 210, 300, 340]}]
+    validate_packet(ok)  # class=None 与缺省均合法（CNN 未接入时）
+    # 最小 LIVE 报文：LOCATION_ONLY、无 decision、无 prototype（定位先行的服务起步形态）
+    minimal = {k: v for k, v in packet.items() if k not in ("decision", "prototype")}
+    minimal["status"] = "LOCATION_ONLY"
+    validate_packet(minimal)
+    # prototype 必须布尔
+    _expect_live_invalid({**packet, "prototype": "yes"}, "prototype type")
+    # MOCK 轮廓保持严格：class/decision/prototype 顶层字段仍拒绝（与 test_result_fields 互补）
+    for value in ("class", "decision", "prototype"):
+        _expect_live_invalid({**mock_packet("s", 1, 0, 1), value: 1}, f"mock {value}")
+    print("PASS: LIVE profile v1.2 status/decision/class/score/prototype rules")
+
+
 def main():
     packet = mock_packet("session-a", 10, 2, 7)
     test_result_fields(packet)
+    test_live_profile()
     # D3 判据：session + config_id + 年龄；frame_id 不参与（仅换帧号仍判当前）
     assert is_current(packet, "session-a", 2)
     assert is_current({**packet, "frame_id": 999}, "session-a", 2)
