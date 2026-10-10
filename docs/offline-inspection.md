@@ -1,6 +1,6 @@
 # 离板检查：共享 ROI、FP32 原型与 FILE_REPLAY
 
-2026-10-10，基线 `dev/exe @ aa23206`；本轮为工作区实现，待用户理解确认后提交。
+2026-10-10，原实现基线 `dev/exe @ aa23206`；已通过理解门槛并由 PR #67 合并，集成提交 `b51d46b`。
 不需要板卡。目标是把交付模型接入一条可复现的软件流程，不代替真实工位验收。
 
 ## 当前状态
@@ -50,6 +50,9 @@ sim/build/vision-client/dist/vision_preview/vision_preview.exe --replay data/evi
 后续已增加五组[逐层参考准备测试](module3-prototype-reference.md)，该入口目前共十一组。
 原六组历史日志保留；浮点参考包不改变文件回放/网络协议或 EXE 打包入口。
 
+后续又增加两组[数据集结构/泄漏审计](fastener-dataset-audit.md)，当前入口共十三组。
+该工具不运行分类器；真实采集数据、标签审查、精度和可信量化仍待完成。
+
 ## 数据与模型规则
 
 `roi_preprocess.py` 对半开区间原图框取 BGR 裁剪、OpenCV 灰度、INTER_AREA 缩放和边缘中位数填充。
@@ -63,7 +66,7 @@ sim/build/vision-client/dist/vision_preview/vision_preview.exe --replay data/evi
 元数据不足的 `cnn-bn64-baseline.pt` 不可直接代替。
 实际网络为 4 个 Conv/BN/ReLU、全局平均池化及 Linear 分类；卷积通道依次为
 1→16→32→32→64，第 1/3 层步长为 2，输出三类概率。
-这是交付 FP32 原型，不是正式 INT8 网络，不能沿用候选硬件网络的 MAC 预算。
+这是交付 FP32 原型，不是正式 INT8 网络；现已完成[实际逐层 MAC 审计](module3-prototype-reference.md)，不能把理想预算当作板端性能。
 
 工单固定含 bolt/nut/washer 三个非负整数，期望总数为 1 到 max_targets。
 delta=实际−工单，missing=max(-delta,0)，extra=max(delta,0)。
