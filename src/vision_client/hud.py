@@ -222,7 +222,7 @@ class Hud:
         if state.get("cells"):
             self._metrics(canvas, state)
         if state.get("list") is not None:
-            self._list_panel(canvas, video, state["list"])
+            self._list_panel(canvas, video, state["list"], state.get("labels"))
         if state.get("button"):
             _blit(canvas, self.button_img, self.button_keep, BUTTON[0], BUTTON[1],
                   outside_bgr=self.panel_bgr)
@@ -235,6 +235,12 @@ class Hud:
         chip_h = th + 10
         self._chip(canvas, text, 30, cy - chip_h // 2, bg_rgb, size=14)
         px = 30 + tw + 24 + 18
+        badge2 = state.get("badge2")
+        if badge2:
+            t2, bg2 = badge2
+            w2, h2 = self.engine.size(t2, 14, "SemiBold")
+            self._chip(canvas, t2, px, cy - (h2 + 10) // 2, bg2, size=14)
+            px += w2 + 24 + 12
         stext, scolor, sweight = state["status"]
         w1, _ = self.engine.draw_cy(canvas, stext, px, cy, 16, scolor, sweight)
         detail = state.get("detail")
@@ -281,7 +287,7 @@ class Hud:
             self._thumb_key = key
         return self._thumbs
 
-    def _list_panel(self, canvas, video, targets):
+    def _list_panel(self, canvas, video, targets, labels=None):
         rx0, ry0, rx1, ry1 = LPANEL
         _blit(canvas, self.lpanel_img, self.lpanel_keep, rx0, ry0,
               outside_patches=self._lpanel_bg)
@@ -297,8 +303,11 @@ class Hud:
             _paste(canvas, shown[i], rx0 + 30, cy0 + 14)
             tx = rx0 + 30 + 88 + 20
             self._chip(canvas, f"T{i}", tx, cy0 + 12, GREEN, size=15)
+            if labels and i < len(labels):
+                self.engine.draw(canvas, f"{labels[i][0]}  {labels[i][1]}",
+                                 tx + 52, cy0 + 16, 15, MAIN)
             self.engine.draw(canvas, f"X: {x0}    Y: {y0}", tx, cy0 + 56, 15, DIM)
             self.engine.draw(canvas, f"W: {x1 - x0}    H: {y1 - y0}", tx, cy0 + 84, 15, DIM)
         if len(targets) > 4:
-            self.engine.draw(canvas, f"+{len(targets) - 4} more", rx0 + 22, ry0 + 62 + 4 * 148 + 6,
-                             14, DIM)
+            # 面板底部（RUN 按钮下方）：原 y 位置(ry0+62+4*148+6≈754)落在按钮(715-775)后面被遮挡
+            self.engine.draw(canvas, f"+{len(targets) - 4} more", rx0 + 22, ry1 - 21, 14, DIM)

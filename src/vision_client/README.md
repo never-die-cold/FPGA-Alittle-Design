@@ -59,6 +59,13 @@ WAITING；连续 3 次 HTTP 失败自动重新握手（D5）。界面为 **HUD v
 启动时声明 DPI 感知并按屏幕工作区等比缩放（200% 缩放屏实测 1.8×），
 高分屏下不被系统拉伸切割。
 
+**LIVE 显示（W06，C04 §3.2）**：`mode=LIVE` 轮次显示判定横幅（CHECK_PASS 绿 / CHECK_FAIL 红 /
+RECHECK 琥珀，附 `-washerx1` 式缺多摘要）、TARGETS 格显示「实际/工单」、对象列表逐行显示
+类别与分数（`class=null` → unclassified）；报文带 `prototype=true` 时顶栏恒显红色
+`PROTOTYPE` 徽标（离线产物代实时结果，不可关闭）。判定横幅文本与差额由 `rounds.live_view`
+纯函数生成（离板可测）。LIVE 联调替身：`python src/pynq_host/vision_mock_service.py --live`
+（v1.2 LIVE 报文、prototype 恒 true、场景循环 PASS/FAIL/RECHECK；合成数据，不代表板上识别）。
+
 状态机（`rounds.py`，纯 stdlib）与取帧渲染解耦：preview.py 只负责取帧与画框。
 离线测试 `py sim/vision/test_vision_rounds.py` 覆盖触发节流、超龄/配置变化/断联撤框、
 服务重启（新会话）自动恢复，已接入 `sim/scripts/run_vision_python.sh` 全量。

@@ -20,7 +20,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "pynq_host"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from vision_protocol import mock_packet
-from rounds import RemoteRounds
+from rounds import RemoteRounds, live_view
 from records import AnomalyLog, BatchRecords
 from hud_text import TextEngine
 from hud import (AMBER, AMBER_DEEP, BUTTON, CYAN, DIM, GREEN, MAIN, RED, Hud)
@@ -116,21 +116,37 @@ def uvc_state(shape, fps):
             "boxes": None, "list": None, "button": False}
 
 
+VERDICT_COLOR = {"CHECK_PASS": GREEN, "CHECK_FAIL": RED, "RECHECK": AMBER_DEEP}
+
+
 def endpoint_state(remote, rec_count, current, age, fps, shape):
     rec_val = str(rec_count) if rec_count is not None else "--"
     rec_color = MAIN if rec_count is not None else DIM
+    packet = remote.packet
     state = {"badge": ("LIVE", GREEN) if remote.mode == "LIVE" else ("MOCK ONLY", AMBER),
              "clock": clock_text(),
              "detail": f"{shape[1]} x {shape[0]} | {fps} FPS | session {remote.session[:8]}",
              "button": True}
+    if packet is not None and packet.get("prototype"):
+        state["badge2"] = ("PROTOTYPE", RED)  # C04 §3.2：离线产物代实时结果，恒显不可关闭
     if current:
-        targets = [tuple(t["bbox"]) for t in remote.packet["targets"]]
-        state.update(status=("STREAMING", MAIN, "SemiBold"),
-                     cells=[("ROUND", str(remote.packet["check_id"]), MAIN),
-                            ("TARGETS", str(len(targets)), MAIN),
-                            ("REC", rec_val, rec_color)],
+        targets = [tuple(t["bbox"]) for t in packet["targets"]]
+        if remote.mode == "LIVE":
+            view = live_view(packet)
+            status = (f"{view['verdict']} {view['delta']}".rstrip(),
+                      VERDICT_COLOR.get(view["verdict"], MAIN))
+            cells = [("ROUND", str(packet["check_id"]), MAIN),
+                     ("TARGETS", view["targets"], MAIN), ("REC", rec_val, rec_color)]
+            labels = view["labels"]
+        else:
+            status, labels = ("STREAMING", MAIN), None
+            cells = [("ROUND", str(packet["check_id"]), MAIN),
+                     ("TARGETS", str(len(targets)), MAIN), ("REC", rec_val, rec_color)]
+        state.update(status=(*status, "SemiBold"), cells=cells,
                      fresh=(max(0.0, 1.0 - age / remote.max_age), CYAN),
                      boxes=targets, list=targets)
+        if labels is not None:
+            state["labels"] = labels
     else:
         state.update(status=("WAITING FOR RESULT", AMBER_DEEP, "SemiBold"),
                      cells=[("ROUND", "--", AMBER_DEEP), ("TARGETS", "--", AMBER_DEEP),
