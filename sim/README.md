@@ -2,6 +2,26 @@
 
 各模块 testbench、仿真脚本与波形结果。**所有 RTL 模块必须先过仿真再上板。**
 
+> 当前（2026-10-09）：模块一核＋最小 SoC 已完成收口，见[模块一报告](../report/module1-closure.md)。
+> 模块二 HDMI RTL＋已验证视频链路已完成（RTL／链路级），见[视频证据](../data/logs/2026-10-03-vision-onboard/README.md)
+> 与[真实相机链路](../data/logs/2026-10-07-pi-pynq/README.md)；全项目 M2 未完成。
+> 原验收使用 Icarus 13.0；本轮本机为 11.0。XSim/Vivado 结论仅引用历史证据，本机不能复跑。
+
+## 当前一键入口（同 RTL／tb／hex，只切参数）
+
+```bash
+bash sim/scripts/run_iverilog.sh all
+bash sim/scripts/run_iverilog.sh v1_nofwd
+bash sim/scripts/run_iverilog.sh v1_fwd
+bash sim/scripts/run_iverilog.sh v1_fwd_bht1
+bash sim/scripts/run_iverilog.sh v1_fwd_bht2
+bash sim/scripts/run_arch_test_matrix.sh
+```
+
+四档默认负载为 CoreMark；benchmark、单元和边界专项由 `all` 纳入，完整入口见脚本。
+arch 矩阵独立编译 11 项声明子集×4 档，不纳入源码 tb 的 `all`，也不代表上游全套认证。
+v1 判据以[design_v1.md](../src/riscv/design_v1.md)为准；下方 v0 观察表和早期记录仅供历史对照。
+
 ## 规划结构
 
 ```
@@ -9,7 +29,7 @@ sim/
 ├── riscv/           # RISC-V 核各级、整核与 SoC 外壳 testbench
 ├── coprocessor/     # 协处理器 testbench
 ├── vision/          # 预处理流水线 testbench（含测试图样生成）
-├── scripts/         # xsim 批处理脚本（可复跑）
+├── scripts/         # Icarus/XSim/arch-test/OOC 批处理入口
 └── tools/           # 辅助工具（RV32I 编解码自测等）
 ```
 
@@ -24,11 +44,15 @@ sim/
   - `tb_core_smoke.v`：加载 `src/riscv_fw/hello_v0.hex`，检查 `tohost==13 && tohost_exit==0`（程序级冒烟）
   - `tb_core_test.v`：加载 `src/riscv_fw/hello_test.hex`，检查 `tohost_exit==0`（RV32I 逐指令自检 38 用例；失败值为用例编号）
   - `tb_core_fwd.v`：加载 `riscv/fwd/fwd_test.hex`（转发专项，Part B 测试先行）——数据冒险零气泡 + taken 分支 1 拍契约，气泡/结果双自检
-- tb 接口以 [`src/riscv/design_v0.md`](../src/riscv/design_v0.md) 为唯一权威
+- v0 历史接口以 [`design_v0.md`](../src/riscv/design_v0.md) 为准；当前 v1 使用 [`design_v1.md`](../src/riscv/design_v1.md)
 
 > 当前状态：v0 核（RV32I）两个 tb 均 PASS（2026-09-11 iverilog；2026-09-14 XSim 复核对拍一致），见 `report/llm_log/2026-09-14-vivado-2026-1-acceptance.md`
 
 ## v0 八模块验证观察点（仿真时看什么、怎么判对错）
+
+**历史表适用边界**：下面 NOP 数据要求、load 当拍写回和气泡数是 v0 判据。
+当前 v1 flush 只清 valid（不要求 instr=NOP）；load 在 MEM+WB 写回、load-use 停 1 拍；
+BHT 正确预测零冲刷、误预测或 JAL/JALR 冲刷 1 槽。当前 SoC 实机证据见[模块一报告 §6](../report/module1-closure.md)。
 
 > 这是给写 testbench 的人用的「看对错清单」：每个模块在仿真里**要看什么、什么算对、什么算错**。
 > 判据以 [`src/riscv/design_v0.md`](../src/riscv/design_v0.md) 为唯一权威；已有整核级及 imem/dmem/muldiv 模块级 tb。
@@ -43,7 +67,7 @@ sim/
 | `alu` | §5.5 / §6.1 | 每种运算抽边界值查：负数的算术右移（SRA）、有符号与无符号比较（SLT vs SLTU）、移位只认 b 的低 5 位。`zero/lt/ltu` 三个标志由 a、b 直接比较得出，和结果同拍。**判错**：没定义的运算编码会被当 ADD 处理，而不是报错 | 整核 tb 间接覆盖 |
 | `muldiv` | §5.6 | 8 种 RV32M 运算及除零、`INT_MIN/-1` 边界；检查 `start/busy/done` 握手、忙时停顿、完成拍单次写回 | `tb_muldiv` 模块级 + `tb_core_muldiv` 整核级 PASS |
 | `core_top` | §5.7 / §2 | 第 k 拍给出的指令地址，第 k+1 拍才拿到对应指令（指令存储器延迟恰好 1 拍）；分支目标是「本指令的 PC + 立即数」；`jal/jalr` 无条件跳转、每次都**恰好 1 拍气泡**；`jalr` 目标地址末位清 0；`lw` 当拍就能写回、字节使能只在写的时候有效。**判错**：跳转没清气泡、`jalr` 末位没清、`lw` 多等一拍 | `tb_core_smoke` / `tb_core_test` / `tb_core_muldiv` / `tb_core_coremark` |
-| `soc_top` | §5.8 | hex 双预载、同步 IMEM、异步读/字节写 DMEM、计时器读写屏蔽、软复位重跑与 LED | `tb_soc_top` + `tb_soc_check` PASS；新修订上板复验归 M3 |
+| `soc_top` | §5.8 | hex 双预载、同步 IMEM、异步读/字节写 DMEM、计时器读写屏蔽、软复位重跑与 LED | `tb_soc_top` + `tb_soc_check`；现行 BHT2/40 MHz 上板证据见上方报告 |
 
 > `muldiv` 的接口缺口（`op` 只有 2 位、装不下 RV32IM 的 8 种运算等）详见 [`report/llm_log/2026-09-15-muldiv-interface-gap.md`](../report/llm_log/2026-09-15-muldiv-interface-gap.md)。
 
@@ -66,7 +90,7 @@ sim/
 
 - 契约（判据/观测/接口唯一入口）：[`docs/coremark.md`](../docs/coremark.md)（§1–§7 契约主体 + 附录 A 计划；SoC 计时器与预载已于 2026-09-28 收口）
 - 通用 tb：`riscv/tb_core_coremark.v`——8192×32 存储模型 + plusargs；`+hex` 默认 `../src/riscv_fw/coremark.hex`，支持 `+timer_addr` 计数器仿真
-- 当前状态：`coremark.hex` 已入库，v0 32 迭代 PASS（CoreMark/MHz=1.506）；tb 有观测块判据与双口预载；脚本 `coremark` 模式已接入并纳入 `all`。证据见 `data/logs/2026-09-23-coremark/` 与 `data/logs/2026-09-23-coremark-script-regression/`。
+- 历史 v0：32 迭代 CoreMark/MHz=1.506，见 `data/logs/2026-09-23-coremark/`；当前 tb 按 `mem_valid` 退休，窗口止于首次 `tohost_exit`，四档 CRC/retired 与周期证据见[模块一报告 §2](../report/module1-closure.md)。
 - 单档复跑：`bash sim/scripts/run_iverilog.sh coremark`（固定 2K/32 迭代、50M 看门狗与 golden 判据；约 2,100 万周期）
 - 全档回归：`bash sim/scripts/run_iverilog.sh all`（同样含 CoreMark 长测）
 - 记录：tb 落地 `report/llm_log/2026-09-23-coremark-tb.md`；契约起草 `report/llm_log/2026-09-23-coremark-tb-contract.md`
@@ -83,4 +107,4 @@ sim/
 - 关键波形截图归档到 `report/`，供设计报告引用
 - 黄金参考数据放 `data/`，仿真比对脚本引用相对路径
 
-> 状态：🚧 进行中（v0 核 RV32I 已过冒烟与逐指令自检；转发专项 v0 对照基线已建立，2026-09-20）
+> 上述 9 月单项数据是历史基线；当前核与最小 SoC 收口见[模块一报告](../report/module1-closure.md)，CNN／工业应用仍未完成。

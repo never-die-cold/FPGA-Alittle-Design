@@ -1,0 +1,3 @@
+COMMAND: check relative Markdown links in changed documents, report, resume and evidence README
+FILES=25 LINKS=295
+PASS: no missing local Markdown link targets

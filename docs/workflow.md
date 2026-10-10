@@ -46,7 +46,7 @@
 
 - [ ] 涉及 RTL：全量回归 PASS（`bash sim/scripts/run_iverilog.sh all`），tb 落在仓库内（`sim/riscv/`），不得用工作区外临时文件
 - [ ] 新 tb 已接入 `sim/scripts/run_iverilog.sh`（单独模式 + `all` 全量）
-- [ ] 涉及接口的改动已同步 `src/riscv/design_v0.md`
+- [ ] 涉及接口的改动已同步对应模块、对应版本的冻结契约（RISC-V：`src/riscv/design_v0.md` / `src/riscv/design_v1.md`；视觉：`src/vision/design_v0.md`）
 - [ ] commit message 说明做了什么；AI 产出注明 prompt 要点
 - [ ] 关键决策 / 理解门槛记录写进 `report/llm_log/`
 - [ ] 未经用户确认理解，不得 commit
@@ -65,3 +65,4 @@
 | 日期 | 变更 |
 |:---|:---|
 | 2026-09-24 | `kickoff_checklist.md` + `code_review_checklist.md` + `prep_checklist.md` 三合一为本文件；目录边界与红线保留在 `AGENTS.md`，不重复 |
+| 2026-10-09 | B01：接口同步检查细化为对应模块、对应版本的冻结契约，保留必须同步的收尾要求。 |

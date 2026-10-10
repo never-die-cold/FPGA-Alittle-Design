@@ -1,5 +1,13 @@
 # Part C PC/flush 优化：额度刷新后的续工入口
 
+> **历史续工快照（2026-10-09 整理）**：下文记录优化刚落盘时的状态与失败历史，
+> 当时“下一未完成项”和后台进程检查不再是当前执行指令，不要依据旧 PID 重启任务。
+> 后续优化复验见[PC 降深度复验](../data/logs/2026-10-07-partC-postopt/README.md)。
+> 模块一核＋最小 SoC 已完成收口，见[模块一收口报告](../report/module1-closure.md)
+> 与[合并验收记录](../data/logs/2026-10-07-module1-closure/README.md)。
+> BHT2 核 OOC 的 11.520 ns 实点通过、40 MHz SoC 与实机证据应引用上述记录；
+> 100/125 MHz 不因此视为通过，原 `WNS=-0.334 ns` 失败记录保留。
+
 更新时间：2026-10-07；工作区 `/home/jianglibo/FPGA-Alittle-Design`。
 分支 `dev/rtl`，起点 HEAD `3c6b794`；修改尚未 commit/push，禁止新建分支。
 用户授权一次写完、理解题放末尾；2026-10-07 理解门槛已 3/3 通过。

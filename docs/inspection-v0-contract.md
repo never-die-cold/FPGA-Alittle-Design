@@ -33,8 +33,8 @@
 | 输入 | 同一 capture_id 的 uint8 BGR 原帧；不使用 EXE 截图或加框图 |
 | 坐标 | 原图左上为原点，x 向右/y 向下；整数 XYXY 半开区间 |
 | 有效框 | 0≤x0<x1≤1280、0≤y0<y1≤720；裁剪 frame[y0:y1,x0:x1] |
-| 旧接口适配 | 现有 MOCK/参考闭区间 [x0,y0,x1,y1] 转换为 [x0,y0,x1+1,y1+1] |
-| 协议 | 新 LIVE 报文显式声明 bbox_format；旧 MOCK 端点语义不静默改写 |
+| 旧接口适配 | 旧闭区间参考框转换为 [x0,y0,x1+1,y1+1]；当前 MOCK 已统一半开区间，无须再加1 |
+| 协议 | 新 LIVE 报文显式声明 bbox_format；当前 MOCK 与 EXE 按已合并协议采用半开区间 |
 | 灰度 | cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)；输出 uint8 |
 | 额外处理 | 首版不做 Gaussian、Sobel、直方图均衡或自动对比度增强 |
 | 裁剪余量 | 首版不额外扩框；越界/触边候选转复检，不用截断后的残件放行 |

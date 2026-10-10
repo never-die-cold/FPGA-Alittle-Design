@@ -4,7 +4,9 @@
 
 **目标形态**：在 AMD PYNQ-Z2（Zynq-7020）上，用**自研 RISC-V 核、HDMI 视觉流水线与 INT8 CNN 协处理器**分析相机拍到的螺栓、螺母、垫圈等紧固件。板卡 HDMI 视频经 USB 采集卡进入 Windows **EXE 前端**，识别结果经网口同步到前端；统一展示物体矩形框、类别标签、数量统计、工单缺件/错料提示和异常记录，并与 ARM 软件基线对比。
 
-> **当前进度**：v0 核已收口；视觉模块与顶层骨架有仿真证据，训练导出演练已完成。物体定位、正式紧固件模型、CNN 协处理器、工业检查闭环和 EXE 尚未实现，完整 HDMI 链路未完成实机验证。已确定自由分散且互不遮挡的摆放、传统视觉定位 + CNN 分类路线，EXE 由 `watercopper` 负责；见根目录 [项目主计划](plan.md)。
+> **当前进度（2026-10-09）**：模块一核＋最小 SoC 已完成收口，见[核收口报告](report/module1-closure.md)。
+> 模块二 HDMI 视觉预处理 RTL＋已验证视频链路已完成（RTL／链路级），见[视频记录](data/logs/2026-10-03-vision-onboard/README.md)和[真实相机链路](data/logs/2026-10-07-pi-pynq/README.md)。
+> **全项目 M2 验收未完成**；CNN、网络硬件输出和工业闭环不得宣称完成。EXE 预览／mock 原型已有证据，正式板端识别服务与定位部署仍待完成，见[项目主计划](plan.md)。
 
 > 👋 新队友请先阅读 [docs/README.md](docs/README.md)（人读入口：5 分钟搞清目录与"找东西"规则），再读 [docs/onboarding.md](docs/onboarding.md)（Git / Markdown / Agent 上手指南）
 
@@ -42,7 +44,7 @@
 
 **为什么自研核，而不用 PicoRV32 / E203 现成软核？（用数据回答，不用情怀）**
 
-1. **面积效率（DMIPS/LUT）**：同器件（xc7z020）公开数据显示，PicoRV32 regular 约 904 LUT 但 CPI 4–5（0.309 DMIPS/MHz），蜂鸟 E203 约 4153 LUT；我们的核以 ≈850 LUT（v0，不含存储器）实现 CPI≈1 的流水线结构，目标是同器件实测 CoreMark/LUT 优于两者（对比实测计划见 [docs/core_comparison.md](docs/core_comparison.md)，数据入 [data/metrics.csv](data/metrics.csv)）
+1. **可审计的优化与面积数据**：当前同 RTL 四档 CoreMark CPI 为 1.885683／1.693399／1.616360／1.606121；BHT2 核 11.520 ns 实点 LUT=2443、FF=637（不含 SoC 存储器）。同负载参数收益与频率／资源口径见[核收口报告](report/module1-closure.md)；PicoRV32 仅有 OOC 和公开性能参考，不能据此宣称同负载面积能效领先。
 2. **协处理器原生耦合**：现成核加 custom 指令需侵入他人微架构；自研核可在 EX 级原生集成 `conv.start/conv.wait`（协处理器 busy 直接进流水线 stall），这是外挂 AXI 方案做不到的集成深度
 3. **裁剪的量化收益**：面向"推理控制负载"裁掉 CSR/trap（fence/ecall/ebreak 按 NOP），省掉用不到的特权级逻辑；代价与适用边界在报告中主动披露（不适用于需要中断/异常的通用场景）
 
@@ -67,11 +69,11 @@ flowchart LR
     UI -->|工单与参数| PS
 ```
 
-> **视频与分析分流（目标架构）**：显示路径保留相机画面、经 HDMI 输出到采集卡；分析路径按模型需要灰度化、缩放，保存小图快照用于推理。EXE 将识别坐标映射到显示画面，叠加矩形框与中文标签。逐帧 DDR 回写仍作为架构对照组；定位与缓存方案待契约评审，不能把“全链零 DDR”提前记为实测结论。
+> **视频与分析分流（已实现的 RTL）**：显示路径保留彩色原图、分析路径独立预处理并保存片上快照，见[视觉契约](src/vision/design_v0.md)与[视频证据](data/logs/2026-10-03-vision-onboard/README.md)。真实识别坐标／类别叠加仍是目标；逐帧 DDR 回写仅为架构对照，不把“全链零 DDR”记为工业闭环实测。
 
 **演示闭环**：放入紧固件 → EXE 展示实际识别框与类别 → 按工单核对类别和数量 → 缺件/错料提示 → 保存本次检查结果与异常截图。连续视频帧不重复累加批次；视频与网口结果须同步，断联或过期结果显示待确认。
 
-**首版边界**：紧固件自由分散摆放、互不遮挡；传统视觉分割/连通区域产生物体框，逐目标裁剪后由 CNN 分类。最大目标数、分割参数、模型输入尺寸与同步协议待契约冻结；任意堆叠和遮挡识别不在首版范围。
+**首版边界**：自由分散、互不遮挡；定位／裁剪 Python 黄金参考已有，板端部署与 CNN 分类未完成。模型和部署参数仍待冻结；同步协议已定轮次级／最多 16 目标，见[决策单](docs/vision-sync-protocol-decisions.md)。任意堆叠和遮挡识别不在首版范围。
 
 ---
 
@@ -94,9 +96,11 @@ flowchart LR
 
 - HDMI IN → 解码 → 逐像素流水线：RGB→灰度 → 3×3 高斯滤波 → 双线性缩放（至网络输入尺寸）→ 可选 Sobel 边缘
 - 行缓存（Line Buffer）调度，全流水无逐帧 DDR 回写依赖，**像素级延迟固定可测**
-- **参数化直通链路**：滤波系数、缩放尺寸、ROI 经 AXI-Lite 由 PS/RISC-V 动态配置，现场实时调参
+- **参数化链路**：当前 PS 经 AXI-Lite 配置视觉寄存器，配置原子生效；RISC-V 应用调度接入尚未实现
 - **架构对比点**：行缓存直通 vs 传统"DDR 帧缓存回写"方案，延迟/带宽/资源三列实测对比（借鉴往届国一作品 Ultra-Vision 的"算法直出"架构，见 [docs/proposal_upgrade.md](docs/proposal_upgrade.md)）
 - 对照组：PS 侧 OpenCV / 裸机 C 软件实现同算法
+
+模块二 RTL／链路级证据见[视频记录](data/logs/2026-10-03-vision-onboard/README.md)和[真实相机恢复记录](data/logs/2026-10-07-pi-pynq/README.md)。板端现用位流与本地修复版指纹尚未闭环；长时间、冷启动与该位流断连恢复不据此宣称全过。
 
 ### 模块三：轻量 CNN 推理协处理器
 
@@ -119,7 +123,7 @@ flowchart LR
 | 板端服务/基准 | PS（PYNQ） | 寄存器配置、结果通信、ARM 软件基线、黄金参考与指标采集；Jupyter 调试 |
 | 工业操作界面 | PC（Windows EXE） | 采集卡视频、框与标签叠加、工单配置、统计、异常截图与记录导出 |
 
-**通信接口（目标）**：PS↔PL 使用寄存器映射与结果缓冲，EXE↔PS 经网口交换配置和结果；视频独立走 HDMI + USB 采集卡。结果需要物体位置、类别及检查/帧关联信息，具体协议待冻结。现有单框 OSD 保留为调试能力，不承担 EXE 的完整工业界面。
+**通信边界**：PS↔视觉 PL 寄存器／快照接口已冻结，EXE↔服务轮次协议见[决策单](docs/vision-sync-protocol-decisions.md)；真实识别服务未实现，mock 不代表硬件识别。视频独立走 HDMI＋采集卡，单框 OSD 仅作诊断。
 
 ---
 
@@ -154,14 +158,14 @@ edgesight/
 ├── plan.md              # 全项目目标、收口时间、分工、验收与交付看板
 ├── LICENSE              # MIT 协议
 ├── src/                 # 设计源码（RTL / 固件 / PS 侧软件）
-│   ├── riscv/           # RISC-V 核 RTL（v0 已收口；v1 契约冻结、RTL 进行中；含 SoC 外壳）
-│   ├── vision/          # HDMI 预处理流水线 RTL（离板收口：22 tb 同判据 + 物理 HDMI bit/XSA 已产出）
+│   ├── riscv/           # v1 三级＋转发＋BHT 核与最小 SoC；收口证据见上方报告
+│   ├── vision/          # HDMI 预处理 RTL；23 tb、已验证视频链路，证据见上方链接
 │   ├── coprocessor/     # CNN 推理协处理器 RTL（M1 验收后主力转入）
 │   ├── riscv_fw/        # RISC-V 裸机固件（冒烟 / 逐指令自检 / 后续 benchmark）
-│   └── pynq_host/       # PS 侧服务与调试：寄存器配置协议、mock 服务（真实板端接入待上板）
+│   └── pynq_host/       # PS 配置／快照工具、mock 服务；正式识别服务未实现
 ├── sim/                 # testbench、仿真脚本（scripts/ 一键 iverilog；tools/ 含 RV32I 编解码自测）
 ├── build/               # Vivado 可复现构建 tcl + 综合/实现报告
-├── board/               # 上板工程、运行脚本、实测输出（占位）
+├── board/               # 上板步骤、运行脚本与已有实机记录
 ├── data/                # 测试数据与参考结果（metrics.csv 指标汇总 + logs/ + scripts/ + evidence/）
 ├── skill/                 # 技能包（含 understand-gate 入库理解门槛 skill，OpenCode 自动加载位说明见其文件头）
 ├── report/                # 设计报告 + 大模型协作记录（llm_log/）
@@ -179,7 +183,7 @@ edgesight/
 |:---|:---|:---|
 | `src/` | `src/`（设计源码） | RTL 三个子目录（`riscv/` 含 SoC 外壳）+ `riscv_fw/` 固件 + `pynq_host/` PS 侧软件 |
 | `sim/` | `sim/` | testbench、仿真脚本与结果 |
-| `build/` | `build/` | 可复现构建脚本 + 综合与实现报告（M2 起填充） |
+| `build/` | `build/` | 可复现构建脚本＋已有核／SoC／视觉综合实现报告 |
 | `board/` | `board/` | 上板工程、运行脚本与实测输出 |
 | `data/` | `data/` | 测试数据、黄金参考与 `metrics.csv` 指标汇总（含 `logs/`、`scripts/`、`evidence/`） |
 | `skill/` | `skill/` | 技能包（大模型协作沉淀，加分项） |
@@ -187,7 +191,7 @@ edgesight/
 | `docs/` | —（指南未列） | 非强制扩展：过程文档集中地（onboarding / 清单 / 赛题调研） |
 | `.github/` `.gitignore` | — | 仓库基础设施，不参与作品结构对照 |
 
-> `data/metrics.csv` 骨架已按指南要求建立（表头 + `logs/` + `scripts/` + `evidence/`），M3 实测时填充数值与证据；演示级指标增行说明见 `data/README.md`。
+> [data/metrics.csv](data/metrics.csv) 已有核／视觉指标与原始日志链接；工业闭环指标仍待 M3 实测。指标口径见 [data/README.md](data/README.md)。
 
 ---
 
@@ -204,7 +208,7 @@ edgesight/
 
 只固定收口时间，阶段内按依赖推进并预留复验余量。全局分工、验收与交付看板见根目录 [项目主计划](plan.md)；RISC-V 技术任务与验收见 [核专项计划](src/riscv/plan.md)。
 
-M1 检查点为 [#19 Part A](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/19)、[#20 Part B](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20) 和 [#21 Part C / M1 收口](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)；#20、#21 在 10/4 联合验收。
+M1 检查点历史为 #19／#20／#21；正式合并和关闭记录见[模块一报告 §7](report/module1-closure.md)。10/4 是原截止日，不是实际收口记录日期。
 
 ---
 
@@ -218,7 +222,7 @@ M1 检查点为 [#19 Part A](https://github.com/never-die-cold/FPGA-Alittle-Desi
 
 > 分工不分家：每周例会互讲进度，确保三人都能讲清任一模块——答辩质询不分工。
 
-EXE 由 `watercopper` 负责；板端通信服务归属与代码目录在接口交接时确认。负责人确定不代表已有上位机实现。
+EXE 由 `watercopper` 负责，已有[预览／mock 原型证据](data/logs/2026-10-06-vision-sync-schema/README.md)；板端真实服务主责已定 NC，正式服务与工业界面未完成。
 
 ---
 
@@ -231,7 +235,7 @@ EXE 由 `watercopper` 负责；板端通信服务归属与代码目录在接口�
 | **L3 保底版** | 单点打透 | RISC-V 核三级流水 + 转发优化（分支预测可弃）+ 一路预处理（灰度+缩放），保证"流水线优化"这一核心创新点完整可测 |
 | **L3.5 增强版**（stretch） | 跨帧跟踪与流程辅助 | 基础版本验收后，按余量增加轻量跟踪或取料顺序确认；不替代目标版的框/标签与数量检查 |
 
-**核心原则**：架构绝不降级，优化思想绝不取消；降级只砍广度，不砍深度。每个模块独立分支开发，随时可回退。
+**版本原则**：上表为全项目产品裁剪；核专项另有契约中“两级＋完整转发”时序保底，二者不能混为一条架构禁令。当前三级核已通过最低实点门禁，见[收口报告](report/module1-closure.md)。
 
 ---
 
@@ -245,7 +249,7 @@ EXE 由 `watercopper` 负责；板端通信服务归属与代码目录在接口�
 
 记录规范与模板见 [`report/llm_log/`](report/llm_log/README.md)，日常操作三条规矩：
 
-1. **平时干活**：正常用 Kimi Work / OpenCode 工作，零额外负担。唯二规矩——AI 生成的 RTL 一律走 git commit（commit message 注明 prompt 要点）；agent 会话不删除
+1. **平时干活**：保留 agent 会话与验证证据；AI RTL 必须先过理解门槛并取得提交授权，再 commit（message 注明 prompt 要点），不能产出即提交
 2. **入库门槛（先读懂，再 commit）**：看不懂的代码不许入库。按 `skill/understand-gate/SKILL.md` 执行——commit 前 agent 先给逐段讲解 + 3 道理解测试题，答对才提交，讲解与测试全量落盘 `report/llm_log/`；其他 agent 平台手动走 [docs/workflow.md](docs/workflow.md) §2 检查单
 3. **每个工作日收尾**：在当前会话里让 agent 自己写日志：
 

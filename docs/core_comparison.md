@@ -1,6 +1,7 @@
 # 核性能对比计划：自研核 vs PicoRV32 vs E203
 
-> 状态：🚧 执行中（2026-09-21 决策）；PicoRV32 Fmax/资源实测已提前完成（2026-10-03，验证线），CoreMark 四档待 M1 后
+> 状态（2026-10-09）：自研核四档 CoreMark 与模块一收口见[收口报告](../report/module1-closure.md)；PicoRV32 已有 OOC 原始报告，频率数字为 Slack 外推，未重跑其 CoreMark。
+> §1 排期与 §4 风险预案保留为 9/21 历史；其中 v0 CPI≈1／DMEM 同步改造不是当前设计结论或新任务。
 > 决策记录：[`report/llm_log/2026-09-21-narrative-architecture-fix.md`](../report/llm_log/2026-09-21-narrative-architecture-fix.md)
 > 本文回答答辩必问题："PicoRV32/E203 现成且更成熟，你们自研的差异化优势是什么？"——用数据回答，不用情怀。
 
@@ -21,8 +22,8 @@
 | 核 | LUT | Fmax | CPI | DMIPS/MHz | 来源与口径 |
 |:---|---:|---:|---:|---:|:---|
 | 本项目 v0（两级） | 1606 | 83.8 MHz（Slack外推，WNS −1.935@10ns；10/03复现同值） | CoreMark 2.105（短仿真；非设计推导≈1） | 未测 | `data/metrics.csv`、[对比实测](../data/logs/2026-10-03-picorv32-compare/README.md) |
-| PicoRV32 (regular) **本仓实测** | 905 | **194.6 MHz**（post-route WNS −0.139@5ns，收敛 ≈192–195） | 4–5（引用作者自述，未重跑） | 未测 | [2026-10-03 对比实测](../data/logs/2026-10-03-picorv32-compare/README.md)，OOC 同法 |
-| PicoRV32 (large，含 M) **本仓实测** | 2006 | **134.3 MHz**（post-route WNS −0.445@7ns） | — | — | 同上 |
+| PicoRV32 (regular) **本仓 OOC** | 905 | **194.6 MHz（Slack 外推）**；WNS −0.139@5ns，该约束实点失败 | 4–5（引用作者自述，未重跑） | 未测 | [2026-10-03 对比实测](../data/logs/2026-10-03-picorv32-compare/README.md)，OOC 同法 |
+| PicoRV32 (large，含 M) **本仓 OOC** | 2006 | **134.3 MHz（Slack 外推）**；WNS −0.445@7ns，该约束实点失败 | — | — | 同上 |
 | PicoRV32 (regular) | ~904 | ~196–200 MHz（Artix-7 -1 级 post-route，作者精调约束） | 4–5（作者自述） | 0.309 | 官方 README + JIPS 论文 |
 | PicoRV32 (large，含 M) | ~2019 | 同上量级 | — | — | 官方 README |
 | 蜂鸟 E203 | 4153 | 41.7 MHz（**综合口径，非实现**） | ≈1 | 1.61（社区移植 50MHz 实测） | JIPS 论文 / 社区移植 |
@@ -33,8 +34,8 @@
 
 ## 3. 对比指标定义
 
-- **CoreMark/MHz**：性能密度（同频性能）。本核四档（v0 / v1 无转发 / v1+转发 / v1+BHT）同基准实测。
-- **CoreMark/LUT**：面积能效。答辩第一硬牌（E203 面积是本核 ~5 倍，PicoRV32 CPI 是本核 4–5 倍）。
+- **CoreMark/MHz**：当前四档为 v1_nofwd / v1_fwd / v1_fwd_bht1 / v1_fwd_bht2；v0 是外部历史锚点。短仿真外推不是官方长时间认证分数。
+- **CoreMark/LUT**：面积能效。只在负载、计时和资源口径一致时比较；不能用 PicoRV32 公开 CPI 与自研 CoreMark CPI 直接推出加速倍数。
 - **Fmax（约束递减收敛法）**：PicoRV32 对比时不能只跑 10ns 约束（大正 slack 会低估其 Fmax），做 10ns→5ns→收敛 2–3 轮，两边同法。
 - 口径纪律：同器件（xc7z020clg400-1）、同工具（Vivado 2026.1）、同为 post-route（E203 引用数据除外，须标注"综合口径"）。
 
@@ -49,7 +50,7 @@
 
 2026-10-07 自研核v0外部锚点及v1四档CoreMark/MHz、每MHz面积归一值、原始日志与方法限制见 [模块一收口报告](../report/module1-closure.md)；不能把外推值标成实际通过频率，也不拿PicoRV32公开CPI作同负载加速比。
 
-- [ ] `data/metrics.csv` 增行：CoreMark/MHz（四档）+ CoreMark/LUT
-- [ ] `data/logs/`：iverilog 跑分原始日志 + PicoRV32 OOC timing/utilization 报告（PicoRV32 部分 ✅ 2026-10-03：`data/logs/2026-10-03-picorv32-compare/`）
+- [x] 自研核四档 CoreMark/MHz 与每 MHz 面积归一值已入[收口报告](../report/module1-closure.md)和[指标表](../data/metrics.csv)；不是实板 CoreMark/LUT。
+- [x] 自研核跑分与 PicoRV32 OOC 日志已在[模块一证据](../data/logs/2026-10-07-module1-closure/README.md)及[PicoRV32 证据](../data/logs/2026-10-03-picorv32-compare/README.md)归档。
 - [x] 本文档 §2 表更新为实测数字 + PicoRV32 实测行（2026-10-03，Fmax/资源列；CPI/DMIPS 引用公开口径）
-- [ ] README「为什么自研核」段落数据刷新（当前为计划口径占位）
+- [x] [README「为什么自研核」](../README.md)已刷新为当前四档 CPI、BHT2 核实点资源与比较限制；未宣称 PicoRV32 同负载优势。

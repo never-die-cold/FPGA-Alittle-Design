@@ -1,5 +1,14 @@
 # Part B 未来三日可执行计划
 
+> **历史快照（2026-10-09 整理）**：下文保留 10/04 的执行计划和当时状态，
+> 不再作为当前续工清单；旧 `dev/rtl` 分叉提醒不代表当前 `main` 工作区状态。
+> 模块一核＋最小 SoC 已完成收口，见[模块一收口报告](../report/module1-closure.md)
+> 与[合并验收记录](../data/logs/2026-10-07-module1-closure/README.md)。
+> 当前 BHT 四档、XSim、时序实点和实机证据均以该报告为准；历史失败记录继续保留。
+> PicoRV32 已有[OOC 对比证据](../data/logs/2026-10-03-picorv32-compare/README.md)，
+> 未重跑其 CoreMark。当前退休计数绑定 `dut.mem_valid`，下文 `wb_valid` 为早期逻辑命名。
+> 当前分支分工见[分支规则](branch-layout.md)，不要直接执行下文历史推送操作。
+
 > ⚠️ 推送前待办：本地 `dev/rtl` 与 `origin/dev/rtl` 已分叉；恢复推送前必须先执行 `git pull --rebase origin dev/rtl`，禁止强推。
 > 编制日期：2026-10-04；工作分支：`dev/rtl`。
 > 依据：`design_v1.md` 冻结契约、`src/riscv/plan.md §4.2/§4.3`、`docs/partB-verify-plan.md`。

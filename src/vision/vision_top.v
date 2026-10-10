@@ -119,7 +119,7 @@ module vision_top #(
     wire       m1_de = t_gauss  ? g1_de : g0_de;
     wire [7:0] m1_y  = t_gauss  ? g1_y  : g0_y;
 
-    // ---- 级 1b：Sobel 边缘（窗口装配/冲刷与 gaussian 同构，3 拍延迟） ----
+    // ---- 级 1b：Sobel 边缘（窗口装配/冲刷同构，输出流水为 4 拍延迟） ----
     wire       e_vs, e_hs, e_de;
     wire [7:0] e_y;
     sobel #(.WIDTH(SW), .HEIGHT(SH)) u_sobel (
@@ -142,7 +142,7 @@ module vision_top #(
         .in_vs(m1b_vs), .in_hs(m1b_hs), .in_de(m1b_de), .in_y(m1b_y),
         .out_vs(s_vs), .out_hs(s_hs), .out_de(s_de), .out_y(s_y)
     );
-    // 快照流帧首锁存门控后落乒乓帧缓冲（§7：乒乓行组缓冲占位实现，cop 契约定稿换封装）
+    // 快照流帧首锁存门控后落 cop_buf 双帧缓冲，读银行保护及帧/配置号随快照回放。
     wire       cw_vs = t_scaler ? s_vs : 1'b0;
     wire       cw_hs = t_scaler ? s_hs : 1'b0;
     wire       cw_de = t_scaler ? s_de : 1'b0;

@@ -66,12 +66,18 @@
 
 - **推荐**：沿用 mock v1——session_id 由服务端生成（uuid）；板端复位、Overlay 重载或换视频源 → 新会话；EXE 不得跨会话复用结果（校验强制），检测到 session 变化即清空本地状态，并重新确认配置生效后才恢复叠加。
 
-## D6 报文 schema v1.1（待评审；改动另起代码步骤）
+## D6 报文 schema v1.1（2026-10-06 已确认；实现缺口另批裁决）
 
 - 保留 mock v1 全部字段与校验规则：version、mode、session_id、frame_id、config_id、width、height、created_at、status、targets（16 目标上限、**半开区间 bbox `[x0,x1)×[y0,y1)`**——宽=x1-x0、右下端点可恰为 w/h，与[定位外包需求](outsource/localization-requirements.md) L2 一致；退化/反向/越界拒绝、重复 target_id 拒绝）。
 - 新增：check_id（uint32，轮次标识，见 D2）；trigger_ref（可选回显字段）。
 - 预留：status 枚举 M3 起从 LOCATION_ONLY 扩展 CHECK_PASS / CHECK_FAIL / RECHECK（工单判定，枚举值届时冻结）；真实服务 mode=LIVE 且 hardware_connected=true——EXE 对 MOCK 结果恒加"MOCK ONLY"横幅（plan.md §3.4：样例结果可联调界面，不得记为板上识别）。
 - 不动：单报文 ≤64KB；未知字段拒绝（严格校验不放宽）。
+
+核查注记（2026-10-09，Q01）：上述 schema 与“未知字段拒绝”覆盖**结果报文**，
+不能解释为只针对 POST 请求。v1.1 落码证据见[原验证记录](../data/logs/2026-10-06-vision-sync-schema/README.md)。
+当前 `src/pynq_host/vision_protocol.py:validate_packet` 未实施完整结果字段白名单；
+`vision_mock_service.py` 对请求字段的拒绝不能替代结果报文校验，现有 tb 未覆盖该负例。
+本轮只登记，不改协议、Python 或 tb；最小修复和负例测试须用户另批裁决。
 
 ## D7 板端真实服务负责人（已定）
 
@@ -113,3 +119,4 @@
 | 2026-10-08 | 新增 D8–D10 批次记录（手动触发才记录 / 键去重 / JSONL+截图，MOCK 带 `mock_` 标识）；离板实现与测试随 EXE 落地 | watercopper（EXE 前端） |
 | 2026-10-08 | D8 补记录资格时间点（采纳点语义，修"断联中手动轮残包冒充记录"）；新增 D11 异常事件日志（anomalies.jsonl + 异常截图） | watercopper（EXE 前端） |
 | 2026-10-08 | 实机 flap 修复（WC 人工按键测试暴露）：新鲜度改按 EXE 接收时刻计量（D3 注记）；记录增 created_at 原始时间戳（D10） | watercopper（EXE 前端） |
+| 2026-10-09 | B08：D6 标题同步已确认状态；登记 Q01 结果报文未知字段拒绝缺口，不放宽冻结条款、不修改代码 | Codex |

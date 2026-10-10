@@ -1,0 +1,3 @@
+PASS: original template preserved; 4 module records follow all six template sections
+PASS: 31 local links resolve; all 44 tested input hashes unchanged
+PASS: prior full all exit=0 and arch exit=0 retained; remote dev/rtl is ancestor of local HEAD

@@ -1,0 +1,15 @@
+PASS: PS configuration staging/commit/ack/busy/timeout/epoch wrap mock protocol
+PASS: localization empty/multiple/non-grid/noise/limit/border + per-target crop/resize/frame metadata
+Traceback (most recent call last):
+  File "/home/jianglibo/FPGA-Alittle-Design/sim/vision/test_vision_protocol.py", line 93, in <module>
+    main()
+  File "/home/jianglibo/FPGA-Alittle-Design/sim/vision/test_vision_protocol.py", line 59, in main
+    server = make_server(port=0)
+  File "/home/jianglibo/FPGA-Alittle-Design/src/pynq_host/vision_mock_service.py", line 105, in make_server
+    return ThreadingHTTPServer((host, port), Handler)
+  File "/usr/lib/python3.10/socketserver.py", line 448, in __init__
+    self.socket = socket.socket(self.address_family,
+  File "/usr/lib/python3.10/socket.py", line 232, in __init__
+    _socket.socket.__init__(self, family, type, proto, fileno)
+PermissionError: [Errno 1] Operation not permitted
+ERROR: simulation gate rejected sim/build/vision/python/vision_protocol.log

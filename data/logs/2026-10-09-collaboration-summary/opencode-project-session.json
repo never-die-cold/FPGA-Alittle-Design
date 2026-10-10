@@ -1,0 +1,51 @@
+{
+  "source": "OpenCode project session; read-only SQLite query",
+  "session_id": "ses_f414e4730ffe4s0gyiHiOp5PYP",
+  "directory": "C:/Users/jianglibo/Documents/FPGA-Alittle-Design",
+  "last_updated_utc": "2026-10-06T12:36:33.449Z",
+  "model_ids": [
+    "deepseek-flash"
+  ],
+  "messages": [
+    {
+      "role": "user",
+      "text": "请问我怎么把更新后的FPGA里面划分的RTL模块拉取到本地"
+    },
+    {
+      "role": "assistant",
+      "text": "你这个仓库已经和 GitHub 关联了（origin 指向 `never-die-cold/FPGA-Alittle-Design`），拉取更新只需：\n\n```powershell\ngit pull origin main\n```\n\n如果有未提交的本地改动会冲突的话，先处理：\n\n```powershell\ngit stash          # 暂存本地改动\ngit pull origin main\ngit stash pop      # 恢复本地改动\n```\n\n你当前只有 `board/smoke_test/` 是未跟踪文件（不影响 pull）。合入后如果只想更新某个 RTL 目录，也可以用 `git checkout origin/main -- src/` 覆盖指定路径。"
+    },
+    {
+      "role": "user",
+      "text": "克隆到vscode里面"
+    },
+    {
+      "role": "assistant",
+      "text": "你的 WSL 里已经有这个仓库了（终端提示符在 `~/FPGA-Alittle-Design`，且 working tree clean）。要把它在 VS Code 里打开，在这个终端里直接运行：\n\n```bash\ncode .\n```\n\nVS Code 会以 **WSL Remote** 方式打开。如果没有 `code` 命令，先在 WSL 里装一次：\n\n```bash\ncode --install-extension ms-vscode-remote.remote-wsl\n```\n\n如果你其实是**重新克隆**一份到 WSL：\n\n```bash\ncd ~\ngit clone https://github.com/never-die-cold/FPGA-Alittle-Design.git\ncode FPGA-Alittle-Design\n```\n\n打开后按 `Ctrl+Shift+`` 打开的就是 WSL 的 bash 终端。你截图里已经是这种环境了。"
+    },
+    {
+      "role": "user",
+      "text": "我现在要拉取我的rtl分支，请问要分别在powershell和vscode里面输入什么命令行"
+    },
+    {
+      "role": "assistant",
+      "text": "分支 `dev/rtl` 确实在远端存在。注意：PowerShell 和 VS Code(WSL) 是**两份独立的本地仓库**，只需要选一边操作。按你那份指南走的是 WSL，所以推荐在 **VS Code 的 WSL bash 终端**里做。\n\n## VS Code（WSL bash 终端，推荐）\n```bash\ncd ~/FPGA-Alittle-Design\ngit fetch origin\ngit switch dev/rtl          # 本地已有时\n# 若提示找不到本地分支，则：\n# git switch -c dev/rtl origin/dev/rtl\ngit pull origin dev/rtl\ngit status\n```\n\n## PowerShell（Windows 那份克隆）\n```powershell\ncd C:\\Users\\jianglibo\\Documents\\FPGA-Alittle-Design\ngit fetch origin\ngit switch dev/rtl\ngit pull origin dev/rtl\ngit status\n```\n\n`git pull` 前先 `git status` 确认工作区干净；若有本地改动先 `git stash`，拉完再 `git stash pop`。两个环境别同时改同一分支，容易搞混。"
+    },
+    {
+      "role": "user",
+      "text": "那我如果要拉取main主支该怎么输入指令"
+    },
+    {
+      "role": "assistant",
+      "text": "和 `dev/rtl` 一样，只换分支名。\n\n## VS Code（WSL bash 终端）\n```bash\ncd ~/FPGA-Alittle-Design\ngit fetch origin\ngit switch main\ngit pull origin main\ngit status\n```\n\n## PowerShell（Windows 克隆）\n```powershell\ncd C:\\Users\\jianglibo\\Documents\\FPGA-Alittle-Design\ngit fetch origin\ngit switch main\ngit pull origin main\ngit status\n```\n\n`git switch main` 前先 `git status` 确保工作区干净；有本地改动先 `git stash`，拉完 `git stash pop`。"
+    },
+    {
+      "role": "user",
+      "text": "那我现在要拉取远程main板块，请你给我要求的所有指令"
+    },
+    {
+      "role": "assistant",
+      "text": "完整指令如下（按顺序执行）。\n\n## VS Code（WSL bash 终端，推荐）\n```bash\ncd ~/FPGA-Alittle-Design        # 进入仓库\ngit status                      # 1. 确认当前状态/工作区是否干净\ngit fetch origin                # 2. 拉取远端最新信息\ngit switch main                 # 3. 切到 main 分支\ngit pull origin main            # 4. 拉取远端 main 并合并\ngit log --oneline -5            # 5. 确认更新已到本地\n```\n\n## PowerShell（Windows 克隆）\n```powershell\ncd C:\\Users\\jianglibo\\Documents\\FPGA-Alittle-Design\ngit status\ngit fetch origin\ngit switch main\ngit pull origin main\ngit log --oneline -5\n```\n\n如果第 1 步 `git status` 显示有**已修改但未提交**的文件，先执行 `git stash`，拉完后再 `git stash pop`。未跟踪文件（如你的 `board/smoke_test/`）不影响拉取。"
+    }
+  ]
+}

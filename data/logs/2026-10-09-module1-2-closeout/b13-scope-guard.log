@@ -1,0 +1,5 @@
+PASS: run_iverilog executable flow unchanged except usage text
+PASS: missing-tb continue unchanged
+PASS: program_soc Tcl changes only default bitstream path (comments excluded)
+PASS: BAT fallback does not overwrite an existing VIVADO variable
+PENDING: Windows BAT/Vivado/JTAG execution not performed locally

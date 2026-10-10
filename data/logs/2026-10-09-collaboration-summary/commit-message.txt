@@ -1,0 +1,9 @@
+chore(rtl): 修复下载默认路径并按模块归档协作与收口证据
+
+同步模块一核、SoC与视觉链路的当前文档状态，保留M2未完成和历史失败数据。
+修复SoC默认位流路径与VIVADO环境回退，保持40MHz/fwd/BHT关闭默认及continue行为。
+按模板分别归档RISC-V、SoC、视觉与Git协作记录，保留完整理解门槛回答与纠错。
+附完整all exit=0、arch 44/44、静态检查和来源指纹；Windows执行仍待验证。
+
+AI prompt: 阅读本项目Codex/OpenCode未上传的协作历史，按模块独立记录并在template.md加索引；
+代码和记录一起提交到已有dev/rtl，不新建分支，给用户团队GitHub上传命令，不自动push。

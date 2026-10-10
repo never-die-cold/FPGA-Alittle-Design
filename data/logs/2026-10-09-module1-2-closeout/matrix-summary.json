@@ -1,0 +1,366 @@
+{
+  "command": "bash sim/scripts/run_iverilog.sh all",
+  "exit": 0,
+  "raw_log": "all-b13.log",
+  "raw_sha256": "58e518f28e7df3d83ca0bd876857ccd38b5a1621ef4a1455c942fb4399c4e79b",
+  "coremark": [
+    {
+      "mode": 0,
+      "hex": "../src/riscv_fw/coremark.hex",
+      "exit": 0,
+      "tohost": 34713,
+      "cycles": 19057438,
+      "retired": 10106386,
+      "bubbles": 8951052,
+      "class": {
+        "mode": 0,
+        "mul": 5113141,
+        "div": 33,
+        "load_use": 650771,
+        "raw_nofwd": 1943297,
+        "control": 1243809,
+        "other": 1,
+        "classified": 8951052
+      },
+      "bht": {
+        "mode": 0,
+        "lookup": 0,
+        "hit": 0,
+        "miss": 0
+      },
+      "obs": {
+        "iter": 32,
+        "seedcrc": "0xe9f5",
+        "crclist": "0xe714",
+        "crcmatrix": "0x1fd7",
+        "crcstate": "0x8e3a",
+        "crcfinal": "0x8799",
+        "t0": 22350,
+        "t1": 19055568,
+        "errors": 1
+      },
+      "pass": {
+        "mode": 0,
+        "cycles": 19057438,
+        "retired": 10106386,
+        "bubbles": 8951052,
+        "cpi": "1.886"
+      },
+      "profile": "v1_nofwd"
+    },
+    {
+      "mode": 1,
+      "hex": "../src/riscv_fw/coremark.hex",
+      "exit": 0,
+      "tohost": 34713,
+      "cycles": 17114141,
+      "retired": 10106386,
+      "bubbles": 7007755,
+      "class": {
+        "mode": 1,
+        "mul": 5113141,
+        "div": 33,
+        "load_use": 650771,
+        "raw_nofwd": 0,
+        "control": 1243809,
+        "other": 1,
+        "classified": 7007755
+      },
+      "bht": {
+        "mode": 0,
+        "lookup": 0,
+        "hit": 0,
+        "miss": 0
+      },
+      "obs": {
+        "iter": 32,
+        "seedcrc": "0xe9f5",
+        "crclist": "0xe714",
+        "crcmatrix": "0x1fd7",
+        "crcstate": "0x8e3a",
+        "crcfinal": "0x8799",
+        "t0": 18966,
+        "t1": 17112625,
+        "errors": 1
+      },
+      "pass": {
+        "mode": 1,
+        "cycles": 17114141,
+        "retired": 10106386,
+        "bubbles": 7007755,
+        "cpi": "1.693"
+      },
+      "profile": "v1_fwd"
+    },
+    {
+      "mode": 1,
+      "hex": "../src/riscv_fw/coremark.hex",
+      "exit": 0,
+      "tohost": 34713,
+      "cycles": 16335562,
+      "retired": 10106386,
+      "bubbles": 6229176,
+      "class": {
+        "mode": 1,
+        "mul": 5113141,
+        "div": 33,
+        "load_use": 650771,
+        "raw_nofwd": 0,
+        "control": 465230,
+        "other": 1,
+        "classified": 6229176
+      },
+      "bht": {
+        "mode": 1,
+        "lookup": 1854101,
+        "hit": 1587055,
+        "miss": 267046
+      },
+      "obs": {
+        "iter": 32,
+        "seedcrc": "0xe9f5",
+        "crclist": "0xe714",
+        "crcmatrix": "0x1fd7",
+        "crcstate": "0x8e3a",
+        "crcfinal": "0x8799",
+        "t0": 18038,
+        "t1": 16334077,
+        "errors": 1
+      },
+      "pass": {
+        "mode": 1,
+        "cycles": 16335562,
+        "retired": 10106386,
+        "bubbles": 6229176,
+        "cpi": "1.616"
+      },
+      "profile": "v1_fwd_bht1"
+    },
+    {
+      "mode": 1,
+      "hex": "../src/riscv_fw/coremark.hex",
+      "exit": 0,
+      "tohost": 34713,
+      "cycles": 16232079,
+      "retired": 10106386,
+      "bubbles": 6125693,
+      "class": {
+        "mode": 1,
+        "mul": 5113141,
+        "div": 33,
+        "load_use": 650771,
+        "raw_nofwd": 0,
+        "control": 361747,
+        "other": 1,
+        "classified": 6125693
+      },
+      "bht": {
+        "mode": 2,
+        "lookup": 1854101,
+        "hit": 1690538,
+        "miss": 163563
+      },
+      "obs": {
+        "iter": 32,
+        "seedcrc": "0xe9f5",
+        "crclist": "0xe714",
+        "crcmatrix": "0x1fd7",
+        "crcstate": "0x8e3a",
+        "crcfinal": "0x8799",
+        "t0": 17897,
+        "t1": 16230603,
+        "errors": 1
+      },
+      "pass": {
+        "mode": 1,
+        "cycles": 16232079,
+        "retired": 10106386,
+        "bubbles": 6125693,
+        "cpi": "1.606"
+      },
+      "profile": "v1_fwd_bht2"
+    }
+  ],
+  "benchmark": [
+    {
+      "mode": 0,
+      "hex": "../src/riscv_fw/bench_v0_1.hex",
+      "exit": 0,
+      "tohost": 327535569,
+      "cycles": 2850,
+      "retired": 1205,
+      "bubbles": 1645,
+      "class": {
+        "mode": 0,
+        "mul": 1088,
+        "div": 0,
+        "load_use": 0,
+        "raw_nofwd": 427,
+        "control": 129,
+        "other": 1,
+        "classified": 1645
+      },
+      "bht": {
+        "mode": 0,
+        "lookup": 0,
+        "hit": 0,
+        "miss": 0
+      },
+      "obs": {},
+      "pass": {
+        "mode": 0,
+        "cycles": 2850,
+        "retired": 1205,
+        "bubbles": 1645,
+        "cpi": "2.365"
+      },
+      "profile": "v1_nofwd"
+    },
+    {
+      "mode": 1,
+      "hex": "../src/riscv_fw/bench_v0_1.hex",
+      "exit": 0,
+      "tohost": 327535569,
+      "cycles": 2423,
+      "retired": 1205,
+      "bubbles": 1218,
+      "class": {
+        "mode": 1,
+        "mul": 1088,
+        "div": 0,
+        "load_use": 0,
+        "raw_nofwd": 0,
+        "control": 129,
+        "other": 1,
+        "classified": 1218
+      },
+      "bht": {
+        "mode": 0,
+        "lookup": 0,
+        "hit": 0,
+        "miss": 0
+      },
+      "obs": {},
+      "pass": {
+        "mode": 1,
+        "cycles": 2423,
+        "retired": 1205,
+        "bubbles": 1218,
+        "cpi": "2.011"
+      },
+      "profile": "v1_fwd"
+    },
+    {
+      "mode": 1,
+      "hex": "../src/riscv_fw/bench_v0_1.hex",
+      "exit": 0,
+      "tohost": 327535569,
+      "cycles": 2380,
+      "retired": 1205,
+      "bubbles": 1175,
+      "class": {
+        "mode": 1,
+        "mul": 1088,
+        "div": 0,
+        "load_use": 0,
+        "raw_nofwd": 0,
+        "control": 86,
+        "other": 1,
+        "classified": 1175
+      },
+      "bht": {
+        "mode": 1,
+        "lookup": 161,
+        "hit": 93,
+        "miss": 68
+      },
+      "obs": {},
+      "pass": {
+        "mode": 1,
+        "cycles": 2380,
+        "retired": 1205,
+        "bubbles": 1175,
+        "cpi": "1.975"
+      },
+      "profile": "v1_fwd_bht1"
+    },
+    {
+      "mode": 1,
+      "hex": "../src/riscv_fw/bench_v0_1.hex",
+      "exit": 0,
+      "tohost": 327535569,
+      "cycles": 2351,
+      "retired": 1205,
+      "bubbles": 1146,
+      "class": {
+        "mode": 1,
+        "mul": 1088,
+        "div": 0,
+        "load_use": 0,
+        "raw_nofwd": 0,
+        "control": 57,
+        "other": 1,
+        "classified": 1146
+      },
+      "bht": {
+        "mode": 2,
+        "lookup": 161,
+        "hit": 122,
+        "miss": 39
+      },
+      "obs": {},
+      "pass": {
+        "mode": 1,
+        "cycles": 2351,
+        "retired": 1205,
+        "bubbles": 1146,
+        "cpi": "1.951"
+      },
+      "profile": "v1_fwd_bht2"
+    }
+  ],
+  "vision_tb_pass": 23,
+  "python_pass": 7,
+  "expected_gate_cases": [
+    [
+      "pass",
+      "0",
+      "accept"
+    ],
+    [
+      "tcl_echo",
+      "0",
+      "accept"
+    ],
+    [
+      "fail_zero",
+      "1",
+      "reject"
+    ],
+    [
+      "mixed",
+      "1",
+      "reject"
+    ],
+    [
+      "fatal",
+      "1",
+      "reject"
+    ],
+    [
+      "no_pass",
+      "1",
+      "reject"
+    ],
+    [
+      "process_failed",
+      "1",
+      "reject"
+    ],
+    [
+      "missing_tb",
+      "1",
+      "reject"
+    ]
+  ]
+}

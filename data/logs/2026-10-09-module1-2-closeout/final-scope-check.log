@@ -1,0 +1,5 @@
+COMMAND: check relative Markdown links in changed documents, report, resume and evidence README
+FILES=25 LINKS=295
+PASS: no missing local Markdown link targets
+PASS: 44 run inputs unchanged; 16 core RTL unchanged; vision HDL unchanged after stripping comments; metrics unchanged
+PASS: approved script patch exactly applied; old interrupted exits retained; full new all exit=0

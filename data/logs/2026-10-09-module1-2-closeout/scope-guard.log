@@ -1,0 +1,4 @@
+PASS: changed tracked files are approved documentation or vision_top comments only
+PASS: vision_top HDL tokens unchanged after comment removal
+PASS: program_soc Tcl/bat and run_iverilog remain unchanged (proposed patch not applied)
+PASS: data/metrics.csv unchanged; historical data not rewritten

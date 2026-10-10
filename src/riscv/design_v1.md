@@ -158,6 +158,9 @@ DMEM / load 扩展 / regfile 写回 / store 提交
 
 MEM+WB 另产生 `{wb_valid, wb_we, wb_rd, wb_data}` 一拍提交记录，供 WB→EX 逻辑来源和 CPI/retire 统计使用。它是旁路与观测记录，不构成第四级； 写回仍发生在 MEM+WB，记录本身不得再次触发 regfile 或 DMEM 写入。
 
+这里的记录为逻辑命名；当前 `core_top` 分别绑定为 `{mem_valid, rf_we, mem_rd, wb_data}`。
+退休计数使用 `mem_valid`（包括无寄存器写回的有效指令），不能用 `rf_we` 替代。
+
 ## 7. 边界动作与复位
 
 | 情况 | PC / IF/ID | ID+EX/MEM+WB |
@@ -187,6 +190,12 @@ MEM+WB 另产生 `{wb_valid, wb_we, wb_rd, wb_data}` 一拍提交记录，供 WB
 合并实现可让多个逻辑记录映射到同一个 MEM+WB 物理槽，但不得因此复制提交动作。
 若同一指令同时形成多个 ready 视图，各视图的数据必须一致。WB 记录仍是本拍组合
 提交信息，不保存历史指令，也不构成第四级。
+
+当前集成只启用 EX 候选：`ex_valid=mem_valid && !mem_mem_read`、`ex_we=mem_reg_write`、
+`ex_ready=1`、`ex_rd=mem_rd`、`ex_data=mem_result`；MEM/WB 候选固定无效。
+该候选来自唯一 MEM+WB 物理槽的非 load 寄存结果；ALU、PC+4、M 结果共用它。
+load 不以异步 `dmem_rdata/load_data/wb_data` 旁路回执行级；消费者停 1 拍后读已写回 RF。
+通用 `forwarding.v` 的三来源端口与优先级仍保留，由独立单元 tb 验证。
 
 ### 8.2 单个源操作数的匹配条件
 
@@ -305,6 +314,10 @@ store data、branch 比较、JALR 基址和 muldiv 操作数都属于 `uses_rs*`
 ### 9.4 控制裁决与 redirect
 
 branch、JAL、JALR 均在 ID+EX 裁决。控制转移只有在当前槽有效且能够被接受时成立：
+
+以下 redirect 公式和 taken 拍序表适用于 Part B／`BHT_MODE=0`。
+开启 BHT 后由 §16.2/§16.4 的误预测恢复与正确预测取址替代；仍须经过 `ex_accept`。
+正确预测不产生 flush；误预测（包括预测跳而实际不跳）和 JAL/JALR 冲刷 1 个年轻槽。
 
 ```text
 ex_accept = c_valid && !data_stall && !muldiv_wait
@@ -538,6 +551,7 @@ MEM+WB 是唯一架构副作用级：
 | `uses_rs1/uses_rs2` | out | 1 | 指令是否真正读取对应源 |
 | `muldiv_valid` | out | 1 | 当前指令是合法 RV32M |
 | `muldiv_op` | out | 3 | M 指令 `funct3` |
+| `branch_valid` | out | 1 | 译码得到合法条件分支；不含 JAL/JALR，更新及统计另由 ex_accept 门控 |
 | `branch_taken` | out | 1 | branch 条件原始裁决，尚未经过 `ex_accept` |
 | `jump_taken` | out | 1 | JAL/JALR 原始裁决，尚未经过 `ex_accept` |
 | `redirect_target` | out | 32 | branch/JAL 目标或清 bit0 后的 JALR 目标 |
@@ -638,11 +652,12 @@ store data 必须直接等于 `rs2_value`，不能从 ALU B 端或实时 regfile
 
 ### 13.3 v1 `core_top.v` 对外接口
 
-模块声明增加一个顶层参数，端口列表保持 v0 完全不变：
+当前模块声明含两个顶层参数，端口列表保持 v0 完全不变：
 
 ```verilog
 module core_top #(
-    parameter ENABLE_FORWARDING = 1'b1
+    parameter ENABLE_FORWARDING = 1'b1,
+    parameter [1:0] BHT_MODE = 2'd0
 ) (
     input wire clk, input wire rst_n,
     output wire [31:0] imem_addr, input wire [31:0] imem_rdata,
@@ -652,7 +667,8 @@ module core_top #(
 );
 ```
 
-因此现有 `soc_top` 无参数覆盖时自动使用转发档，不需要改变 SoC 外部接口。
+`soc_top` 无参数覆盖时使用转发开／BHT 关。显式覆盖须经 `pynq_z2_top → soc_top → core_top`
+逐级传参（§16.3）；SoC 对外端口不变，声明顶层参数不会自动覆盖子模块。
 无转发 tb 用 elaboration 参数覆盖为 0，禁止复制或编辑 `core_top.v`。
 
 ### 13.4 `core_top` 实例与状态归属
@@ -711,7 +727,7 @@ v0 在 tag `partA-v0` 上复现，v1 两档在同一 commit 上复现。
 
 ```text
 cycles  = rst_n 释放后到首次 tohost_exit 写入之间的核时钟拍数
-retired = 同一窗口内 wb_valid=1 的指令数；气泡不计，M 指令只计一次
+retired = 同一窗口内 mem_valid=1 的指令数（§6.4 的逻辑 wb_valid）；气泡不计，M 只计一次
 CPI     = cycles / retired
 gain    = (CPI_nofwd - CPI_fwd) / CPI_nofwd * 100%
 ```
@@ -916,3 +932,5 @@ BHT2 核 OOC 在 11.520 ns 实跑 WNS>=0，10 ns 为继续提升目标。SoC 单
 |:---|:---|
 | 2026-10-06 | 冻结 Part C §16/D17；实现 64 项三档 BHT、误预测恢复、tb 事件统计及同 CoreMark 四档入口；Icarus 四档 CRC/retired 一致，外部时序与资源待验证。 |
 | 2026-10-06 | PC/flush 降深度：保持三级，展开互斥地址选择，增加组合 B 目标/后继端口，flush 只清 valid；新增 PC 等价和 IF 边界 tb。用户授权一次写完、题目集中末尾，未 commit。优化后 Vivado 待复验。 |
+| 2026-10-07 | 后续收口补证已完成：四档功能/XSim、扩展 arch 子集、OOC 实点与 40 MHz BHT2 上板；见[收口报告](../../report/module1-closure.md)。上两行“待复验”保留为当时状态。 |
+| 2026-10-09 | B05/B06 文档整理：补实际非 load 转发绑定、逻辑提交记录映射、branch_valid 和 BHT_MODE；明确 §9 静态公式范围。无接口或 RTL 行为变更。 |

@@ -1,0 +1,31 @@
+== [1/4] 编译 remu-01（套件 6f7f47b）==
+make: Entering directory '/home/jianglibo/FPGA-Alittle-Design/sim/arch_test/suite'
+
+============================ VARIABLE INFO ==================================
+ROOTDIR: /home/jianglibo/FPGA-Alittle-Design/sim/arch_test/suite [origin: file]
+WORK: /home/jianglibo/FPGA-Alittle-Design/sim/build/arch_test [origin: command line]
+TARGETDIR: /home/jianglibo/FPGA-Alittle-Design/sim/arch_test/target [origin: command line]
+RISCV_TARGET: pynq_z2_v0 [origin: command line]
+XLEN: 32 [origin: command line]
+RISCV_DEVICE: M [origin: command line]
+=============================================================================
+
+make -j1 \
+	RISCV_TARGET=pynq_z2_v0 \
+	RISCV_DEVICE=M \
+	compile -C /home/jianglibo/FPGA-Alittle-Design/sim/arch_test/suite/riscv-test-suite/rv32i_m/M
+make[1]: Entering directory '/home/jianglibo/FPGA-Alittle-Design/sim/arch_test/suite/riscv-test-suite/rv32i_m/M'
+make[1]: Nothing to be done for 'compile'.
+make[1]: Leaving directory '/home/jianglibo/FPGA-Alittle-Design/sim/arch_test/suite/riscv-test-suite/rv32i_m/M'
+make: Leaving directory '/home/jianglibo/FPGA-Alittle-Design/sim/arch_test/suite'
+== [2/4] 提取签名符号与参考 ==
+签名区 80003ce0..80004830（724 字），参考 724 行
+== [3/4] 镜像转换（bin -> hex）==
+/home/jianglibo/FPGA-Alittle-Design/sim/build/arch_test/remu-01.bin -> /home/jianglibo/FPGA-Alittle-Design/sim/build/arch_test/remu-01.hex: 18492 bytes, 4623 words (32-bit little-endian)
+== [4/4] 仿真与签名比对（200000 周期）==
+WARNING: /home/jianglibo/FPGA-Alittle-Design/sim/riscv/tb_arch_test.v:94: $readmemh(build/arch_test/remu-01.hex): Not enough words in the file for the requested range [0:8191].
+WARNING: /home/jianglibo/FPGA-Alittle-Design/sim/riscv/tb_arch_test.v:95: $readmemh(build/arch_test/remu-01.hex): Not enough words in the file for the requested range [0:8191].
+WARNING: /home/jianglibo/FPGA-Alittle-Design/sim/riscv/tb_arch_test.v:96: $readmemh(build/arch_test/ref_clean.txt): Not enough words in the file for the requested range [0:8191].
+== arch-test remu-01-nofwd: 预载完成，运行 200000 周期 ==
+PASS: remu-01-nofwd signature 724 words match reference
+签名输出：/home/jianglibo/FPGA-Alittle-Design/sim/build/arch_test/rv32i_m/M/remu-01.nofwd.signature.output

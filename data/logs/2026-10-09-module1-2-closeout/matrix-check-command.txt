@@ -1,0 +1,58 @@
+python3 -B - <<'PY'
+from pathlib import Path
+import hashlib,json,re
+out=Path('data/logs/2026-10-09-module1-2-closeout')
+log=(out/'all-b13.log').read_text()
+assert (out/'all-b13.exit.txt').read_text().strip()=='0'
+start=log.index('PASS: injected'); end=log.index('PASS: vision gate 8 cases',start)
+gate=log[start:end]
+expected={'pass':'accept','tcl_echo':'accept','fail_zero':'reject','mixed':'reject','fatal':'reject','no_pass':'reject','process_failed':'reject','missing_tb':'reject'}
+cases=re.findall(r'^CASE: (\w+) result=(\d+) wanted=(\w+)$',gate,re.M)
+assert len(cases)==8 and {n:w for n,r,w in cases}==expected
+assert all((int(r)==0)==(w=='accept') for n,r,w in cases)
+assert not re.search(r'^(FAIL:|ERROR:|FATAL:)',log[:start]+log[end:],re.M)
+def fields(s):
+    return {k:(int(v) if v.isdigit() else v) for k,v in re.findall(r'(\w+)=([^\s]+)',s)}
+records=[]
+pattern=r'^== coremark (.+)\nCLASS: (.+)\nBHT: (.+)\n(?:(== obs .+)\n)?PASS: coremark (.+)$'
+for match in re.finditer(pattern,log,re.M):
+    base=fields(match[1]); base['class']=fields(match[2]); base['bht']=fields(match[3])
+    base['obs']=fields(match[4] or ''); base['pass']=fields(match[5])
+    key=(base['mode'],base['bht']['mode'])
+    base['profile']={(0,0):'v1_nofwd',(1,0):'v1_fwd',(1,1):'v1_fwd_bht1',(1,2):'v1_fwd_bht2'}[key]
+    c=base['class']; b=base['bht']
+    assert base['exit']==0 and base['cycles']==base['retired']+base['bubbles']
+    assert c['classified']==base['bubbles']==sum(c[k] for k in ['mul','div','load_use','raw_nofwd','control','other'])
+    assert b['hit']+b['miss']==b['lookup']
+    if b['mode']==0: assert b['lookup']==0
+    records.append(base)
+assert len(records)==8
+core=[r for r in records if r['hex'].endswith('/coremark.hex')]
+bench=[r for r in records if r['hex'].endswith('/bench_v0_1.hex')]
+crc=['seedcrc','crclist','crcmatrix','crcstate','crcfinal']
+for group in [core,bench]:
+    assert len(group)==4 and len({r['profile'] for r in group})==4
+    assert len({r['retired'] for r in group})==len({r['tohost'] for r in group})==1
+    for k in ['mul','div','load_use','other']: assert len({r['class'][k] for r in group})==1
+    n,f=group[:2]
+    assert n['profile']=='v1_nofwd' and f['profile']=='v1_fwd'
+    assert n['cycles']-f['cycles']==n['class']['raw_nofwd']-f['class']['raw_nofwd']
+    assert n['class']['control']==f['class']['control']
+    if group is core:
+        for k in crc: assert len({r['obs'][k] for r in group})==1
+        assert all(r['obs']['iter']==32 and r['obs']['errors']==1 for r in group)
+vision=log[log.index('== tb_rgb2gray =='):]
+assert len(re.findall(r'^== tb_\w+ ==$',vision,re.M))==23
+blocks=re.split(r'^== tb_\w+ ==$',vision,flags=re.M)[1:]
+assert len(blocks)==23 and all(re.search(r'^PASS:',b,re.M) for b in blocks)
+python=vision[vision.index('PASS: PS configuration staging/commit'):]
+assert len(re.findall(r'^PASS:',python,re.M))==7
+summary={'command':'bash sim/scripts/run_iverilog.sh all','exit':0,'raw_log':'all-b13.log','raw_sha256':hashlib.sha256(log.encode()).hexdigest(),'coremark':core,'benchmark':bench,'vision_tb_pass':23,'python_pass':7,'expected_gate_cases':cases}
+(out/'matrix-summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\n')
+lines=['NOTE: first postprocessing check incorrectly expected one PASS line per vision tb; tb_top also prints an A5 latency PASS. Corrected to per-tb block checks; raw all exit=0 unchanged.','PASS: single complete all run exit=0; expected vision fault-injection cases checked separately','PASS: 4 benchmark + 4 CoreMark profiles; same retired/tohost/CRC; cycles=retired+bubbles','PASS: classified=bubbles; hit+miss=lookup; common classes equal; RAW difference=cycle difference','PASS: 23 vision testbenches and 7 Python checks','NOTE: raw CoreMark errors=1 retained; 32-iteration short test is not an official score']
+for r in core:
+    lines.append(f"{r['profile']}: cycles={r['cycles']} retired={r['retired']} bubbles={r['bubbles']} CPI={r['cycles']/r['retired']:.6f}")
+text='\n'.join(lines)+'\n'
+(out/'matrix-check.log').write_text(text)
+print(text,end='')
+PY

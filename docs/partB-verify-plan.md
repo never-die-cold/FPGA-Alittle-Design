@@ -1,5 +1,11 @@
 # Part B 验收清单（verify/bench 线执行计划）
 
+> **当前入口（2026-10-09）**：下文排期、角色分支和早期复选框为历史执行记录；
+> 模块一核＋最小 SoC 已完成收口，见[收口报告](../report/module1-closure.md)
+> 与[合并验收](../data/logs/2026-10-07-module1-closure/README.md)。
+> 当前重现入口见[复现清单](module1-reproduction.md)，分工见[分支规则](branch-layout.md)。
+> 本轮本机 Icarus 为 11.0，原验收为 13.0；本机无 Vivado/XSim，不能产生新时序结论。
+
 > 是什么：Part B（v1 三级流水+转发）交付后的验证、数据采集与验收执行清单。
 > 给谁看：never-die-cold（verify+bench 线，执行人）、jianglibo（RTL 线，交付对照）、上板负责人（第 7 节简报）。
 > 什么时候读：10/2 RTL 交付前对照第 3–4 节备货，10/3 按第 8 节逐项执行，10/4 验收对照第 3 节门禁。
@@ -29,7 +35,7 @@
 |:---|:---|:---|
 | v1+转发 | `bash sim/scripts/run_iverilog.sh v1_fwd` 全 PASS | verify |
 | v1 无转发 | `bash sim/scripts/run_iverilog.sh v1_nofwd` 全 PASS | verify |
-| 全量回归 | `bash sim/scripts/run_iverilog.sh all` 含两档 + 现有 11 tb | verify |
+| 全量回归 | `bash sim/scripts/run_iverilog.sh all`；当前完整列表以脚本为准，不限早期 11 tb | verify |
 | arch-test | 与 v0 相同用例清单，两档签名一致（`run_arch_test.sh <name> <ext>`） | verify |
 | RV32IM | 八种 M、除零、溢出；整核 `tohost=142879` | verify |
 | 冒险专项 | R-type 零气泡；load-use 恰 1 气泡；taken 控制转移 1 气泡 | verify |
@@ -55,9 +61,9 @@
 ## 5. CPI 口径与 bench 适配（契约 §14.2，D14）
 
 - 主指标：同一 v1 三级核开/关转发对比；v0 仅作参考锚点（v0 CPI≈2.105，不是降幅基线）。
-- 计数窗口（两档必须完全一致）：`cycles` = rst_n 释放后到首次终止 tohost 写；`retired` = 同窗口 `wb_valid=1` 拍数；M 指令只计一次；等待拍计入 cycles，不得剔除。
-- `data/scripts/cpi_harness.py` 无需修改：解析的 PASS 行格式不变。**需要适配的是 `tb_core_coremark.v` 的计数信号**：当前绑定 v0 内部信号 `dut.instr_valid && !dut.stall`（见 tb 第 76–78 行），v1 下改为 hierarchical 引用 `dut.wb_valid`（WB 提交记录，契约 §6.4）。适配方案（同 tb 兼容 v0/v1，或 v1 独立 tb）由 RTL 线在 10/2 交付时说明，verify 线只验收"同一 tb 文件、同一计数代码跑两档"。
-- `bubble_count` 在 v1 下语义变为"无效槽拍数"，仅作波形辅助，不进 PASS 判据。
+- 计数窗口（各档完全一致）：rst_n 释放至首次 `tohost_exit` 写；`retired` 按 `dut.mem_valid` 计数，M 只退休一次；等待拍全部计入 cycles。
+- 适配已在 `sim/riscv/tb_core_coremark.v` 落实；契约 §6.4 的逻辑 `wb_valid` 在当前核映射为 `mem_valid`，不是另一个提交寄存器。不得再按 v0 的 `instr_valid && !stall` 统计 v1。
+- 气泡按同窗口无效提交槽计数，并检查 `cycles=retired+bubbles`、分类之和等于 bubbles；四档使用同一 tb/hex/计数代码。证据见[收口报告 §2–3](../report/module1-closure.md)。
 - 产出归档：原始日志 `data/logs/<date-slug>/`；波形/覆盖 `data/evidence/`；汇总 `data/metrics.csv`（表格链接原始日志，禁止只留手抄数值）。
 
 ## 6. XSim 对拍口径（沿用 Part A 惯例）
@@ -71,7 +77,7 @@
 - 前置：bitstream 只能在 Vivado 门禁（WNS≥0、无 Error/Critical DRC）通过后生成（§14.3）。
 - 需要移交物：v1 门禁后 bitstream、对应 commit 号、核时钟频率（125 MHz 未达标则用实测最高通过频率）、Vivado 版本、下载步骤（沿用 `board/setup.md`）。
 - 判据口径（§14.4）：只有实际下载 PYNQ-Z2 并观察到约定 LED/tohost 现象才能记"已上板"；`PROGRAM PASSED` 不算。v1 上板证据追加到 `board/logs/<date-slug>/`，与 v0 的 40 MHz 证据分开，**不得借用 v0 证据表述 v1 已上板**。
-- 在此之前所有文档/报告中 v1 一律标"待上板"。
+- 未取得对应配置的实机证据前标“待上板”；当前 BHT2/40 MHz 已有[下载与人工 LED 观察](../data/logs/2026-10-07-partC-postopt/README.md)，不推广到其他频率/配置。
 
 ## 8. 10/3 执行清单（verify + bench 当日照单执行）
 
@@ -91,3 +97,4 @@
 |:---|:---|:---|
 | 2026-09-29 | 首版：按冻结契约 fe80857 制定执行清单；R1 独立复验同日启动（`data/logs/2026-09-29-r1-verify/`） | never-die-cold（verify 线） |
 | 2026-10-05 | 增加 40/125 MHz 同 RTL 双档构建入口；具体命令、门禁和上板判据见 `docs/partB-rtl-handoff.md` | Codex（RTL 线） |
+| 2026-10-09 | B04：补当前收口入口，校正退休绑定、tohost_exit 窗口和气泡对账；保留历史排期及失败门禁 | Codex |

@@ -1,13 +1,13 @@
 # RISC-V 核专项计划：Part A/B/C 与验收
 
-> 更新日期：2026-10-07。本文件只管理 RISC-V 核及其最小 SoC 的技术任务。
+> 更新日期：2026-10-09。本文件只管理 RISC-V 核及其最小 SoC 的技术任务。
 > 最新收口事实、四档表与复现入口见 [模块一收口报告](../../report/module1-closure.md)；理解门槛已补测通过，PR #60已合并、#20/#21与M1已关闭；未验证备考移交#61。
 > 全项目产品、分工和收口日期见根目录 [项目主计划](../../plan.md)；本模块对应 M1，核任务见 [核交付看板](plan_calendar.md)。
 > v0 接口以 [design_v0.md](design_v0.md) 为准，Part B/C 以 [design_v1.md](design_v1.md) 为准。
 
 ## §1 模块目标与范围
 
-- Part A：两级 RV32IM 基线核、最小 SoC、仿真与上板基线，已收口。
+- Part A：两级 RV32IM 基线核、最小 SoC、仿真与上板基线已收口，见[历史记录](done/m1-first-phase-completed.md)。
 - Part B：三级流水、转发与冒险控制，完成核集成和功能一致性验证。
 - Part C：可切换分支预测、冲刷与四档对比，形成可复现功能/性能证据。
 - M1 收口日期只在 [主计划 §1.2](../../plan.md#12-收口时间总览) 定义；提前交付不能降低验收要求。
@@ -111,20 +111,20 @@ RTL 可独立自测后交付配置和已知问题，验证线复验并反馈缺�
 
 ### 4.3 Part C：分支预测与对比验证
 
-**目标**：完成分支预测，用同一组测试比较四种配置：v0、v1 无转发、v1 加转发、v1 加转发与预测。
+**目标**：同 RTL 四档 `v1_nofwd / v1_fwd / v1_fwd_bht1 / v1_fwd_bht2`；v0 用 tag 独立留作外部历史锚点。
 
 #### 范围
 
 - `branch_predict.v`：1-bit / 2-bit 饱和计数器 BHT，做成**可配置切换**（1-bit/2-bit/关闭三档，便于对比实验）
-- 预测错误冲刷（flush）逻辑：PC 恢复、流水寄存器清零
-- 命中率统计计数器（片上统计或仿真统计，数据要有来源）
+- 预测错误冲刷（flush）：PC 恢复、年轻槽 valid 清零；无效 payload 不要求清零，不增加流水级
+- 命中率由 tb 层次化引用事件统计（design_v1 §16.2），不增加片上宽计数器
 - 自写 benchmark：Dhrystone 思路的整型测试（循环/数组/函数调用/位运算/乘法混编），C 源码 + 反汇编归档
-- riscv-arch-test 扩展子集（RV32M 等）跑全
-- 最终数据与报告：v0 / v1 无转发 / v1+转发 / v1+转发+预测 四档的 CPI、Fmax、资源（LUT/FF/BRAM）、命中率（2026-09-20 口径重定义，见 [llm_log](../../report/llm_log/2026-09-20-v0-no-stall-cpi-reframe.md)）
+- riscv-arch-test 声明子集全过：I:add/addi/and＋全部 8 条 M，共 11×4；不等于上游全套或 ISA 合规认证
+- 最终报告含上述 v1 四档 CPI、约束实点／外推区分、资源、命中率；v0 独立参照（[收口证据](../../report/module1-closure.md)）
 
 #### 交付物
 
-- [x] 完整 v1 核：三级 + 转发 + 可切换 BHT，优化后 XSim 四档、OOC 与 40MHz 主档真实上板有证据
+- [x] 完整 v1 核：三级＋转发＋可切换 BHT，四档 XSim、OOC 与 40MHz 主档上板见[收口报告](../../report/module1-closure.md)
 - [x] benchmark 源码、Makefile 与反汇编：`src/riscv_fw/bench_v0_1.*`，四档接入 `run_iverilog.sh all`
 - [x] 对比数据报告：`report/module1-closure.md`，含 v0 锚点与同 RTL 四档、原始日志和明确限制
 - [x] 复现清单：`docs/module1-reproduction.md`，标 `#skill候选`；不等于已创建正式技能包
@@ -142,6 +142,7 @@ RTL 可独立自测后交付配置和已知问题，验证线复验并反馈缺�
   优化后 BHT2 在 11.520ns 实跑 WNS=+0.538、hold=+0.167、严重 DRC=0；100MHz 仍失败。
   v0 同脚本复现外推值为 83.8MHz；86.8MHz 是本轮最低约束门禁，不能混称 v0 实测通过频率。
 - 2-bit BHT 在含循环的 benchmark 上命中率可统计且显著优于无预测
+  - 统计口径：关闭档 lookup=0，不能直接算命中率；与关闭档比较 CPI／控制气泡，静态方向命中率只能明确标为推导值，见[收口报告 §3](../../report/module1-closure.md)。
 - 全套测试回归通过，数据与 git commit 对得上
 
 #### 依赖与风险
@@ -244,3 +245,5 @@ RTL 可独立自测后交付配置和已知问题，验证线复验并反馈缺�
 | 2026-09-30 | 全项目内容迁移至根目录 plan.md；本文件保留 RISC-V 技术范围、历史索引、核验收与学习资料 |
 | 2026-10-05 | 记录 v1 双档 CoreMark 实测 8.14% 与原 25% 门禁 FAIL；仅转发改用功能硬门禁和 ≥8.0% 性能回归门禁，25% 保留为组合优化尽力目标 |
 | 2026-10-05 | Radix-4 乘法通过 Icarus/arch-test/CoreMark；记录转发 10.20%、乘法器 21.95%、组合 28.30%，并保留 XSim/Vivado/上板待办 |
+| 2026-10-07 | 后续验收已补齐并合入：见[模块一收口报告](../../report/module1-closure.md)；旧待办和失败点保留为历史状态。 |
+| 2026-10-09 | B06：统一当前 v1 四档、valid 冲刷、tb 统计与 arch 声明子集边界；未改变验收指标、RTL 或历史数据。 |

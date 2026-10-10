@@ -1,0 +1,10 @@
+NOTE: first postprocessing check incorrectly expected one PASS line per vision tb; tb_top also prints an A5 latency PASS. Corrected to per-tb block checks; raw all exit=0 unchanged.
+PASS: single complete all run exit=0; expected vision fault-injection cases checked separately
+PASS: 4 benchmark + 4 CoreMark profiles; same retired/tohost/CRC; cycles=retired+bubbles
+PASS: classified=bubbles; hit+miss=lookup; common classes equal; RAW difference=cycle difference
+PASS: 23 vision testbenches and 7 Python checks
+NOTE: raw CoreMark errors=1 retained; 32-iteration short test is not an official score
+v1_nofwd: cycles=19057438 retired=10106386 bubbles=8951052 CPI=1.885683
+v1_fwd: cycles=17114141 retired=10106386 bubbles=7007755 CPI=1.693399
+v1_fwd_bht1: cycles=16335562 retired=10106386 bubbles=6229176 CPI=1.616360
+v1_fwd_bht2: cycles=16232079 retired=10106386 bubbles=6125693 CPI=1.606121
