@@ -1,12 +1,15 @@
-"""M2 interface prototype: mock location packets, never classification/check verdicts.
+"""M2/M3 result packet contract (schema v1.2) — docs/vision-sync-protocol-decisions.md D6.
 
-schema v1.1（docs/vision-sync-protocol-decisions.md D2/D3/D6）：
-- 新增必填 check_id：检查轮次标识，服务端生成、uint32 单调回绕（D2）。
-- trigger_ref 可选回显字段：EXE 触发时携带，服务端原样返回（D2）。
-- 有效性判据（D3）= session_id + config_id + created_at 年龄；frame_id 仅透传展示，
-  不参与匹配——EXE 无法把结果帧号对应到采集卡画面（决策单 §1）。
-- bbox 为半开区间 [x0,x1)×[y0,y1)，宽=x1-x0；端点语义对齐定位外包需求 L2
-  （docs/outsource/localization-requirements.md）。
+v1.1：check_id / trigger_ref / bbox 半开区间（D1–D3）。
+v1.2（2026-10-10 WC+NC 确认，LIVE 轮廓冻结）：
+- mode 两类：MOCK（严格——仅定位，不允 class/score/decision）与 LIVE（板端真实/原型服务）；
+- LIVE 目标可带 class（bolt/nut/washer 或 null）与 score（0–1）；
+- LIVE status ∈ LOCATION_ONLY / CHECK_PASS / CHECK_FAIL / RECHECK；判定类 status 必带
+  decision（工单判定：expected/actual/delta/missing/extra/reasons，verdict 可选但出现时
+  须与 status 一致），LOCATION_ONLY 不得带 decision；
+- prototype 可选布尔（仅 LIVE）：板端服务以离线产物代实时结果时必须置 true
+  （EXE 恒加 PROTOTYPE 标识，对齐 MOCK 的诚实约束）；
+- 有效性判据（D3）= session_id + config_id + created_at 年龄；frame_id 仅透传展示。
 """
 import math
 import time
@@ -14,10 +17,17 @@ import time
 VERSION = 1
 MAX_TARGETS = 16
 MAX_TRIGGER_REF_LEN = 64
-PACKET_FIELDS = frozenset(("version", "mode", "session_id", "frame_id", "config_id",
-                          "check_id", "trigger_ref", "width", "height", "created_at",
-                          "status", "targets"))
-TARGET_FIELDS = frozenset(("target_id", "bbox"))
+CLASSES = ("bolt", "nut", "washer")
+VERDICTS = ("CHECK_PASS", "CHECK_FAIL", "RECHECK")
+LOCATION_STATUS = "LOCATION_ONLY"
+MOCK_PACKET_FIELDS = frozenset(("version", "mode", "session_id", "frame_id", "config_id",
+                                "check_id", "trigger_ref", "width", "height", "created_at",
+                                "status", "targets"))
+LIVE_PACKET_FIELDS = MOCK_PACKET_FIELDS | frozenset(("decision", "prototype"))
+MOCK_TARGET_FIELDS = frozenset(("target_id", "bbox"))
+LIVE_TARGET_FIELDS = frozenset(("target_id", "bbox", "class", "score"))
+DECISION_FIELDS = frozenset(("verdict", "expected", "actual", "delta", "missing", "extra",
+                             "reasons"))
 
 
 def uint(value, name):
@@ -27,11 +37,55 @@ def uint(value, name):
     return value
 
 
+def _validate_target(target, target_fields, width, height):
+    if not isinstance(target, dict) or set(target) - target_fields:
+        raise ValueError("invalid target fields")
+    identity = uint(target.get("target_id"), "target_id")
+    box = target.get("bbox")
+    if not isinstance(box, list) or len(box) != 4 or any(type(x) is not int for x in box):
+        raise ValueError("invalid box")
+    x0, y0, x1, y1 = box
+    if not (0 <= x0 < x1 <= width and 0 <= y0 < y1 <= height):
+        raise ValueError("invalid box bounds")
+    return identity
+
+
+def _validate_class_score(target):
+    label = target.get("class")
+    if label is not None and label not in CLASSES:
+        raise ValueError("invalid target class")
+    if "score" in target:
+        score = target["score"]
+        if type(score) not in (int, float) or not math.isfinite(score) or not 0 <= score <= 1:
+            raise ValueError("invalid target score")
+
+
+def _validate_decision(decision, status):
+    if not isinstance(decision, dict) or set(decision) - DECISION_FIELDS:
+        raise ValueError("invalid decision fields")
+    if decision.get("verdict") is not None and decision["verdict"] != status:
+        raise ValueError("decision verdict mismatch")
+    for name in ("expected", "actual", "delta", "missing", "extra"):
+        counts = decision.get(name)
+        if not isinstance(counts, dict) or set(counts) != set(CLASSES):
+            raise ValueError("invalid decision counts")
+        for value in counts.values():
+            if type(value) is not int or (name != "delta" and value < 0):
+                raise ValueError("invalid decision counts")
+    reasons = decision.get("reasons")
+    if not isinstance(reasons, list) or any(not isinstance(item, str) or not item
+                                            for item in reasons):
+        raise ValueError("invalid decision reasons")
+
+
 def validate_packet(packet):
-    if not isinstance(packet, dict) or set(packet) - PACKET_FIELDS:
+    """校验 MOCK/LIVE 报文（严格白名单）；通过返回原报文，失败抛 ValueError。"""
+    if not isinstance(packet, dict) or packet.get("mode") not in ("MOCK", "LIVE"):
         raise ValueError("invalid packet fields")
-    if packet.get("version") != VERSION or packet.get("mode") != "MOCK":
-        raise ValueError("only explicitly marked M2 mock packets are supported")
+    live = packet["mode"] == "LIVE"
+    if set(packet) - (LIVE_PACKET_FIELDS if live else MOCK_PACKET_FIELDS) \
+            or packet.get("version") != VERSION:
+        raise ValueError("invalid packet fields")
     if not isinstance(packet.get("session_id"), str) or not packet["session_id"]:
         raise ValueError("missing session_id")
     for name in ("frame_id", "config_id", "check_id"):
@@ -45,24 +99,35 @@ def validate_packet(packet):
     stamp = packet.get("created_at")
     if type(stamp) not in (int, float) or not math.isfinite(stamp):
         raise ValueError("invalid timestamp")
-    if packet.get("status") != "LOCATION_ONLY" or not isinstance(packet.get("targets"), list):
+    status = packet.get("status")
+    if live:
+        if status not in (LOCATION_STATUS,) + VERDICTS:
+            raise ValueError("invalid status")
+    elif status != LOCATION_STATUS:
         raise ValueError("not a location-only packet")
-    if len(packet["targets"]) > MAX_TARGETS:
+    targets = packet.get("targets")
+    if not isinstance(targets, list):
+        raise ValueError("invalid targets")
+    if len(targets) > MAX_TARGETS:
         raise ValueError("target limit")
     ids = set()
-    for target in packet["targets"]:
-        if not isinstance(target, dict) or set(target) - TARGET_FIELDS:
-            raise ValueError("invalid target fields")
-        identity = uint(target.get("target_id"), "target_id")
+    target_fields = LIVE_TARGET_FIELDS if live else MOCK_TARGET_FIELDS
+    for target in targets:
+        identity = _validate_target(target, target_fields, w, h)
         if identity in ids:
             raise ValueError("duplicate target_id")
         ids.add(identity)
-        box = target.get("bbox")
-        if not isinstance(box, list) or len(box) != 4 or any(type(x) is not int for x in box):
-            raise ValueError("invalid box")
-        x0, y0, x1, y1 = box
-        if not (0 <= x0 < x1 <= w and 0 <= y0 < y1 <= h):
-            raise ValueError("invalid box bounds")
+        if live:
+            _validate_class_score(target)
+    if live:
+        decision = packet.get("decision")
+        if status == LOCATION_STATUS:
+            if decision is not None:
+                raise ValueError("decision requires a verdict status")
+        else:
+            _validate_decision(decision, status)
+        if type(packet.get("prototype", False)) is not bool:
+            raise ValueError("invalid prototype flag")
     return packet
 
 

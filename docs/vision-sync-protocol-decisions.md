@@ -14,7 +14,7 @@
 | D3 | 有效性判据与过期/断联语义 | ✅ 2026-10-06 watercopper 确认沿用预填推荐 |
 | D4 | 传输形态与服务地址 | ✅ 2026-10-06 watercopper 确认沿用预填推荐 |
 | D5 | 会话生命周期 | ✅ 2026-10-06 watercopper 确认沿用预填推荐 |
-| D6 | 报文 schema v1.1 | ✅ 2026-10-06 watercopper 确认沿用预填推荐；代码另起步骤 |
+| D6 | 报文 schema v1.2 | ✅ 2026-10-10 WC+NC 现场确认冻结：LIVE 轮廓（class/score/decision）+ status 四态 + prototype 标识 |
 | D7 | 板端真实服务负责人 | ✅ 2026-10-06 NC（组长）本人确认接任；plan.md §3.4 已同步 |
 | D8 | 批次记录：触发 | ✅ 2026-10-08 随离板实现落地：仅手动触发轮次是记录候选（0.3s 防抖） |
 | D9 | 批次记录：去重 | ✅ 2026-10-08 落地：键 = (session_id, check_id)，一次确认的检查只记一条 |
@@ -66,11 +66,13 @@
 
 - **推荐**：沿用 mock v1——session_id 由服务端生成（uuid）；板端复位、Overlay 重载或换视频源 → 新会话；EXE 不得跨会话复用结果（校验强制），检测到 session 变化即清空本地状态，并重新确认配置生效后才恢复叠加。
 
-## D6 报文 schema v1.1（2026-10-06 已确认；实现缺口另批裁决）
+## D6 报文 schema v1.2（2026-10-10 WC+NC 确认冻结）
 
-- 保留 mock v1 全部字段与校验规则：version、mode、session_id、frame_id、config_id、width、height、created_at、status、targets（16 目标上限、**半开区间 bbox `[x0,x1)×[y0,y1)`**——宽=x1-x0、右下端点可恰为 w/h，与[定位外包需求](outsource/localization-requirements.md) L2 一致；退化/反向/越界拒绝、重复 target_id 拒绝）。
+- 保留 mock v1 全部字段与校验规则：version、mode、session_id、frame_id、config_id、width、height、created_at、status、targets（16 目标上限、**半开区间 bbox `[x0,x1)×[y0,y1)`**——宽=x1-x0、右下端点可恰为 w/h，与[定位外包需求](outsource/localization-requirements.md) L2 一致；退化/反向/越界拒绝、重复 target_id 拒绝、**严格白名单**：未知字段一律拒绝）。
 - 新增：check_id（uint32，轮次标识，见 D2）；trigger_ref（可选回显字段）。
-- 预留：status 枚举 M3 起从 LOCATION_ONLY 扩展 CHECK_PASS / CHECK_FAIL / RECHECK（工单判定，枚举值届时冻结）；真实服务 mode=LIVE 且 hardware_connected=true——EXE 对 MOCK 结果恒加"MOCK ONLY"横幅（plan.md §3.4：样例结果可联调界面，不得记为板上识别）。
+- **v1.2 LIVE 轮廓（2026-10-10 冻结）**：`mode` ∈ {MOCK, LIVE}——MOCK 保持严格（仅定位，class/score/decision/prototype 一律拒绝）；LIVE 允许目标 `class`（bolt/nut/washer 或 null）与 `score`（0–1）。
+- **status 枚举（冻结）**：LOCATION_ONLY / CHECK_PASS / CHECK_FAIL / RECHECK（词表与 `inspection_rules.judge` 一致）；判定类 status **必带**顶层 `decision`（expected/actual/delta/missing/extra/reasons；verdict 可选、出现须与 status 一致），LOCATION_ONLY 不得带 decision。真实服务 mode=LIVE 且 hardware_connected=true——EXE 对 MOCK 结果恒加"MOCK ONLY"横幅（plan.md §3.4）。
+- **prototype 标记**：LIVE 可选布尔——板端服务以离线产物代实时结果时**必须置 true**，EXE 恒加 PROTOTYPE 标识（对齐 MOCK 的诚实约束）。
 - 不动：单报文 ≤64KB；未知字段拒绝（严格校验不放宽）。
 
 核查注记（2026-10-09，Q01）：上述 schema 与“未知字段拒绝”覆盖**结果报文**，
@@ -84,6 +86,7 @@
 仓库内 test_vision_protocol.py 覆盖3个合法/12个非法用例，旧代码先复现FAIL；
 run_vision_python.sh 八组退出0，证据见[data/logs](../data/logs/2026-10-10-q01-result-fields/README.md)。
 代码尚未提交，理解门槛待用户回答；此修复不开放 LIVE、分类或工单判定字段。
+**同日后续：WC+NC 现场确认 v1.2（见上），LIVE/分类/工单判定字段正式开放，Q01 的"不开放"限制随之解除。**
 
 ## D7 板端真实服务负责人（已定）
 
@@ -101,7 +104,7 @@ run_vision_python.sh 八组退出0，证据见[data/logs](../data/logs/2026-10-1
   config_id / frame_id / recorded_at / result_age_s（EXE 接收时基）/ created_at（原始服务端
   时间戳）/ target_count / targets / verdict 预留 / screenshot）+ `screenshots/` 逐条 PNG
   （记录时的含框画面）。**MOCK 记录截图带 `mock_` 前缀且 mode=MOCK——不得用作板上识别证据**
-  （plan.md §3.4）。导出 = 记录目录本身；CSV 导出列 M3 增强。
+  （plan.md §3.4）。导出 = 记录目录本身；CSV 导出已实装（export_records.py，2026-10-09）。
 - **D8 补充（记录资格时间点，2026-10-08 经理解题推演修正）**：手动标记在**报文被采纳**时
   才生效——断联中的手动触发失败后，残留旧报文不得冒充手动轮结果被记入批次档案。
 - **D11 异常事件日志**：overlay 状态迁移（no_result/outage/stale/config/offline/ok，含恢复）、
@@ -126,3 +129,4 @@ run_vision_python.sh 八组退出0，证据见[data/logs](../data/logs/2026-10-1
 | 2026-10-08 | D8 补记录资格时间点（采纳点语义，修"断联中手动轮残包冒充记录"）；新增 D11 异常事件日志（anomalies.jsonl + 异常截图） | watercopper（EXE 前端） |
 | 2026-10-08 | 实机 flap 修复（WC 人工按键测试暴露）：新鲜度改按 EXE 接收时刻计量（D3 注记）；记录增 created_at 原始时间戳（D10） | watercopper（EXE 前端） |
 | 2026-10-09 | B08：D6 标题同步已确认状态；登记 Q01 结果报文未知字段拒绝缺口，不放宽冻结条款、不修改代码 | Codex |
+| 2026-10-10 | D6 冻结 v1.2：mode=MOCK/LIVE、LIVE 目标 class/score、status 四态 + decision、prototype 标识（WC+NC 现场确认）；vision_protocol.py 与测试同步，Q01"不开放"限制解除 | watercopper + never-die-cold |
