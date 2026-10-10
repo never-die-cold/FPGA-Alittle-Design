@@ -2,7 +2,6 @@
 
 import argparse
 import random
-import sys
 from pathlib import Path
 
 import cv2
@@ -13,12 +12,25 @@ from torch import nn
 from torch.utils.data import DataLoader, Dataset
 
 from train_fastener_classifier import CLASSES, FastenerCNN
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src/pynq_host"))
-from roi_preprocess import preprocess as shared_preprocess
 
 
 def preprocess(image, box, input_size, mode='opposite'):
-    return shared_preprocess(image, box, input_size, mode)
+    x0, y0, x1, y1 = box
+    crop = cv2.cvtColor(image[y0:y1, x0:x1], cv2.COLOR_BGR2GRAY)
+    height, width = crop.shape
+    object_size = round(input_size * 0.65625)
+    scale = min(object_size / width, object_size / height)
+    size = (max(1, round(width * scale)), max(1, round(height * scale)))
+    crop = cv2.resize(crop, size, interpolation=cv2.INTER_AREA)
+    level = 50 if float(crop.mean()) > 128 else 205
+    if mode == 'border':
+        level = int(np.median(np.concatenate((crop[0], crop[-1], crop[:,0], crop[:,-1]))))
+    elif mode != 'opposite':
+        raise ValueError(f'unknown preprocessing: {mode}')
+    canvas = np.full((input_size, input_size), level, dtype=np.uint8)
+    y, x = (input_size-size[1])//2, (input_size-size[0])//2
+    canvas[y:y+size[1], x:x+size[0]] = crop
+    return canvas, level
 
 
 class SceneCrops(Dataset):

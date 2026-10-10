@@ -11,7 +11,7 @@
 |---|---|---|
 | 进展与部署方案 | `docs/outsource/fastener-vision-2026-10-07/`，原文保留 | [进展汇报](../工作进展汇报.md)、[受控流水线方案](../修订方案-受控流水线.md)，项目维护版 |
 | 实验与数据审计 | 同上，原文保留 | [探索审计](../localization-exploration-audit.md)、[数据审计](../localization-dataset-audit.md)，已有同内容版本 |
-| 定位、训练和评估代码 | 根目录 `sim/vision/` | 16 个脚本与现有文件逐字节一致，合并去重 |
+| 定位、训练和评估代码 | 根目录 `sim/vision/` | 接收时 16 个脚本逐字节一致，合并去重；共享 ROI 改造后训练原件另存快照，见下文 |
 | FP32 CNN、HOG/SVM 原型 | 根目录 `models/` | [BN 基线](../../models/cnn-bn64-baseline.pt)、[边缘填充模型](../../models/cnn-border-fill-best.pt)、[HOG/SVM](../../models/hog-svm-train-only.yml) |
 | 逐图评估、训练记录、背景反例 | 根目录 `results/`、`results/images/` | [CNN 评估](../../results/cnn-border.json)、[HOG 评估](../../results/hog-train-only.json)、[空背景反例记录](../../results/images/report.json) |
 
@@ -49,3 +49,13 @@ if ($bad.Count -or $rows.Count -ne 48) { throw 'Installed integrity FAIL' }
 ```
 
 拆分核对结果：`Installed integrity PASS: 48/48 files`。描述文档、模型、脚本和结果已分别放置，不再保留混装的整包目录。
+
+## 2026-10-10 离板改造注记
+
+当前 `sim/vision/train_scene_classifier.py` 的预处理已转发至共享模块
+`src/pynq_host/roi_preprocess.py`；原签名和默认 `opposite` 模式保留，文件回放显式采用 `border`。
+交付原字节保存在 `sim/vision/archive/fastener-vision-2026-10-07/train_scene_classifier.py`，
+`installed.csv` 仅调整这一项去向，原始哈希不变，48/48 完整性检查仍通过。
+快照用于审计和像素对拍，不作为独立训练入口；活跃训练入口仍在 `sim/vision/`。
+新共享实现与交付原函数的 24 组像素对拍通过，证据见[离板检查](../offline-inspection.md)。
+这些测试不包含缺失的原始数据集训练、准确率复验或板端部署。
