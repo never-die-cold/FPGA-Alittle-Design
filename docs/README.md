@@ -6,8 +6,8 @@
 
 ## 项目三句话
 
-1. 是什么：在 PYNQ-Z2 上用自研 RISC-V + HDMI 视觉流水线 + CNN 协处理器识别桌面紧固件，视频经采集卡进入 Windows EXE，统一显示识别框、类别、计数与工单异常（2026 嵌赛 FPGA 赛道 · AMD 自主选题）。
-2. 现在到哪：Part A 已收口（tag `partA-v0`）；v1 契约冻结，积木模块已有独立复验，完整核尚未验收；视觉模块离板已收口（2026-10-02：22 tb 同判据 PASS、原子配置 CDC、物理 HDMI bit/XSA 已产出，实机验收待上板），定位部署/正式模型/工业闭环/EXE 正式版未实现。自由分散且互不遮挡、传统定位 + CNN 分类已确定；EXE 由 watercopper 负责。
+1. 是什么：在 PYNQ-Z2 上用自研 RISC-V + HDMI 视觉流水线 + CNN 协处理器识别受控工位的紧固件，视频经采集卡进入 Windows EXE，统一显示识别框、类别、计数与工单异常（2026 嵌赛 FPGA 赛道 · AMD 自主选题）。
+2. 现在到哪：模块一已收口，核证据见 [收口报告](../report/module1-closure.md)；视觉离板已收口，板务状态按 [项目总览](project-overview.md) 与实测记录查阅；OpenCV/HOG/小 CNN 离线原型和外包包已接收，正式板端定位/ROI、INT8 模型和工业闭环未验收。自由分散且互不遮挡、传统定位 + CNN 分类已确定；EXE 由 watercopper 负责。
 3. 计划和验收：根目录 `plan.md` 管全项目收口、分工和交付看板；`src/riscv/plan.md` 只管核专项，`src/riscv/plan_calendar.md` 只管核任务与卡点。接口按模块与核版本看对应设计契约。
 
 ## 目录地图（每个目录一句话）
@@ -36,6 +36,7 @@
 | RISC-V 核专项计划与看板 | `src/riscv/plan.md`、`src/riscv/plan_calendar.md` |
 | Part B 验证与验收执行清单 | `docs/partB-verify-plan.md` |
 | 模块三训练与量化前期 | `docs/module3-model-training.md` |
+| 外包视觉交接包、接收差异与复现缺口 | [交接索引](outsource/fastener-handoff.md) |
 | 视频/结果同步协议决策单 | `docs/vision-sync-protocol-decisions.md` |
 | 接口定义（唯一权威） | `src/riscv/design_v0.md` |
 | 指标数值 | `data/metrics.csv` |
