@@ -83,6 +83,9 @@ data/datasets/fastener-v1/
 - 会话名小写连字符，禁空格；`<bg>` ∈ {dark, gray, wood}；class ∈ {bolt, nut, washer}。
 - 裁剪图存原始分辨率（S×S 缩放发生在训练/推理管线内），64→96 升级无需重采。
 - manifest 列：`frame_id, session, split, light, bg, spacing, obj_id, class, x0, y0, x1, y1, notes`。
+- 2026-10-10 已增加[清单审计入口](fastener-dataset-audit.md)：frame_id 使用 `frame_00001` 一类五位文件主名，
+  bbox 明确为 XYXY 半开区间；可选 `specimen_id` 用于全局实物个体隔离，不能用帧内 obj_id 替代。
+  空场景保留一行条件信息，类别/目标编号/坐标/实物编号全空，仅进 test；完整格式与检查边界见入口说明。
 
 ## 5. 阴影/反光专项用例（M3 验收素材，plan.md §1.4）
 
@@ -103,7 +106,8 @@ data/datasets/fastener-v1/
 - [ ] 集合泄漏检查：任一会话只出现在一个 split；测试会话与训练会话不同日、不同布置
 - [ ] 类别/光照/朝向/数量档覆盖率表已生成，缺口列入下次加采
 - [ ] 抽 10 帧人工复看：AF 对焦清晰、无运动模糊、曝光正常
-- [ ] 会话记录归档 `data/logs/`；审计脚本 ⚠️ 未实现（`data/scripts/audit_dataset.py` 待写，先按本清单人工执行）
+- [ ] 会话记录归档 `data/logs/`；运行 `sim/vision/audit_fastener_dataset.py` 完成结构、精确重复、会话/实物划分和覆盖审计。
+  工具已用测试夹具离板验证；GT 对照、真实标签/清晰度/曝光、相似帧与朝向统计仍须人工核查或后续实现。
 
 ## 7. 与 board/hardware.md §4 验线的衔接顺序
 
@@ -117,4 +121,5 @@ data/datasets/fastener-v1/
 
 | 日期 | 变更 | 作者 |
 |:---|:---|:---|
+| 2026-10-10 | 增加仓库内自动结构/泄漏审计入口、显式空帧和可选实物编号；保持真实采集与参数冻结待办 | 文档同步 |
 | 2026-10-03 | 首版草案：机位/光照/背景/间距定标方法、批次矩阵与命名规范、阴影反光专项用例、审计清单与验线衔接顺序；⚠️ 项待 10/5 拍板与到货实测冻结 | never-die-cold（verify 线） |

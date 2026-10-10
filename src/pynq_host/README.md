@@ -6,19 +6,23 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
 
 已有 `vision_regs.py`／`vision_demo.py`／`m2_onboard.py`／`onboard_smoke.py` 配置及板端诊断；
 `data/golden/vision/localize/reference.py`／`arm_localize.py` 与打包工具提供定位／裁剪黄金参考，不等于实时部署。
-`vision_protocol.py`／`vision_mock_service.py` 为明确标注 MOCK 的接口；D6 字段白名单已在工作区修复并离板回归通过，待理解门槛/提交，见[核查注记](../../docs/vision-sync-protocol-decisions.md)。
+`vision_protocol.py`／`vision_mock_service.py` 为明确标注 MOCK 的接口；D6 字段白名单已修复、离板回归通过并随 PR #67 合并，见[核查注记](../../docs/vision-sync-protocol-decisions.md)。
 下列 notebook／通用工具仍是规划，不能由 mock 或训练演练推断已实现。
 
 本轮新增 `roi_preprocess.py`、`inspection_model.py`、`inspection_rules.py`、
 `inspection_replay.py`、`inspection_artifacts.py`、`inspection_run.py`：共享 ROI、
-交付 FP32 权重加载、工单候选判定、文件回放与完整性检查已离板验证，待理解/提交。
+交付 FP32 权重加载、工单候选判定、文件回放与完整性检查已离板验证并随 PR #67 合并。
 这是本机 FILE_REPLAY，不是板端服务；原始数据集缺失，阈值和正式精度未验收。
 复现、证据与尚未实现项见[离板检查说明](../../docs/offline-inspection.md)。
 
 后续新增 `model_reference.py`、`numpy_reference.py`、`model_audit.py`、
 `reference_tensors.py`、`reference_package.py`：交付原型的 BN 折叠、独立逐层对拍、
-预算审计及可移交的 FP32 软件参考包已离板验证，待理解/提交；
+预算审计及可移交的 FP32 软件参考包已离板验证并随 PR #67 合并；
 见[模块三逐层参考](../../docs/module3-prototype-reference.md)。正式 INT8 与硬件尚未实现。
+
+后续新增 `dataset_manifest.py`、`dataset_audit.py` 和仓库 CLI：720p 采集清单、
+会话/精确重复像素/实物编号泄漏、覆盖统计和来源声明已用测试夹具验证，理解题及补测已通过。
+十三组统一回归通过；这不验收真实标签或模型精度，见[数据集审计](../../docs/fastener-dataset-audit.md)。
 
 - `demo.ipynb`：板端调试与复现 notebook
 - `benchmark.ipynb`：基线对比与指标采集（CPI、延迟、帧率、加速比）

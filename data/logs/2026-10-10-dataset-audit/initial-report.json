@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "mode": "DATASET_STRUCTURE_AUDIT",
+  "status": "STRUCTURE_PASS",
+  "source_kind": "TEST_FIXTURE",
+  "capture_origin_authenticated": false,
+  "label_accuracy_verified": false,
+  "manifest_sha256": "022a4c52d24e9aa78847aeeaae7a0676fda6c770bb07895f140e3f920c3bb0b1",
+  "max_targets": 10,
+  "frame_count": 4,
+  "target_count": 3,
+  "coverage": {
+    "train": {
+      "frames": 1,
+      "targets": 1,
+      "empty_frames": 0,
+      "classes": {
+        "bolt": 1,
+        "nut": 0,
+        "washer": 0
+      },
+      "lights": {
+        "L0": 1
+      },
+      "backgrounds": {
+        "gray": 1
+      },
+      "spacing": {
+        "1D": 1
+      },
+      "frame_target_counts": {
+        "1": 1
+      }
+    },
+    "val": {
+      "frames": 1,
+      "targets": 1,
+      "empty_frames": 0,
+      "classes": {
+        "bolt": 0,
+        "nut": 1,
+        "washer": 0
+      },
+      "lights": {
+        "L1": 1
+      },
+      "backgrounds": {
+        "gray": 1
+      },
+      "spacing": {
+        "1D": 1
+      },
+      "frame_target_counts": {
+        "1": 1
+      }
+    },
+    "test": {
+      "frames": 2,
+      "targets": 1,
+      "empty_frames": 1,
+      "classes": {
+        "bolt": 0,
+        "nut": 0,
+        "washer": 1
+      },
+      "lights": {
+        "L2": 2
+      },
+      "backgrounds": {
+        "gray": 2
+      },
+      "spacing": {
+        "1D": 1,
+        "empty": 1
+      },
+      "frame_target_counts": {
+        "1": 1,
+        "0": 1
+      }
+    }
+  },
+  "missing_classes": {
+    "train": [
+      "nut",
+      "washer"
+    ],
+    "val": [
+      "bolt",
+      "washer"
+    ],
+    "test": [
+      "bolt",
+      "nut"
+    ]
+  },
+  "duplicate_pixel_frames_within_splits": 0,
+  "missing_specimen_ids": 0,
+  "all_specimen_ids_present": true,
+  "near_duplicate_check_implemented": false,
+  "frames": [
+    {
+      "session": "sess-20261010-test",
+      "frame_id": "frame_00001",
+      "split": "test",
+      "light": "L2",
+      "bg": "gray",
+      "spacing": "1D",
+      "image": "raw/sess-20261010-test/frame_00001.png",
+      "targets": [
+        {
+          "obj_id": "obj01",
+          "class": "washer",
+          "bbox": [
+            10,
+            20,
+            11,
+            21
+          ],
+          "specimen_id": "washer-fixture"
+        }
+      ],
+      "empty_scene": false,
+      "source_sha256": "8566974d859a63b6cbca79b61992dd60cb462d14bdfae96933f80828c43adf51",
+      "pixels_sha256": "d141dc81f06bd79cf91185ec7263b1e9b67225424473bc22beb1122eb76f17bc"
+    },
+    {
+      "session": "sess-20261010-test",
+      "frame_id": "frame_00002",
+      "split": "test",
+      "light": "L2",
+      "bg": "gray",
+      "spacing": "empty",
+      "image": "raw/sess-20261010-test/frame_00002.png",
+      "targets": [],
+      "empty_scene": true,
+      "source_sha256": "1e7ccd4539b4d254abe290cf55f9fefadb7104aa30889e72b1edfe6d248eb4c6",
+      "pixels_sha256": "13dfaadc3f49aa4d86283c4638beef88852cd23d2358e3a68839558ad932a4bd"
+    },
+    {
+      "session": "sess-20261010-train",
+      "frame_id": "frame_00001",
+      "split": "train",
+      "light": "L0",
+      "bg": "gray",
+      "spacing": "1D",
+      "image": "raw/sess-20261010-train/frame_00001.png",
+      "targets": [
+        {
+          "obj_id": "obj01",
+          "class": "bolt",
+          "bbox": [
+            10,
+            20,
+            11,
+            21
+          ],
+          "specimen_id": "bolt-fixture"
+        }
+      ],
+      "empty_scene": false,
+      "source_sha256": "f8c665d8ad305854f66ccb0c58fb60c921c7350b89aa9e1f1de7b1215261c88a",
+      "pixels_sha256": "e8aaf855b3da5c02655062692e1c967a911fc239fabcafc4a33254d2c379a98f"
+    },
+    {
+      "session": "sess-20261010-val",
+      "frame_id": "frame_00001",
+      "split": "val",
+      "light": "L1",
+      "bg": "gray",
+      "spacing": "1D",
+      "image": "raw/sess-20261010-val/frame_00001.png",
+      "targets": [
+        {
+          "obj_id": "obj01",
+          "class": "nut",
+          "bbox": [
+            10,
+            20,
+            11,
+            21
+          ],
+          "specimen_id": "nut-fixture"
+        }
+      ],
+      "empty_scene": false,
+      "source_sha256": "19eb4a9effc1b63ac2eee95754edf5efb4cf648bba7afb813ac6904722963601",
+      "pixels_sha256": "404af9f0d738a1c4fdcf64c5206d7d8f7e59ebc0d251374910337f32ef67c041"
+    }
+  ],
+  "code_sha256": {
+    "src/pynq_host/dataset_manifest.py": "8bd39479d71599d524784eb8a60cb4632c964a5f1a7e01dbba02b06b5bbd3054",
+    "src/pynq_host/dataset_audit.py": "04ece8462d452d2253d7d1599acbeef610925523f3272f7d95e47b44e52c73f2",
+    "sim/vision/audit_fastener_dataset.py": "bde0930c4c3f24b7a5ab0d1ddb5f13a892a5c29331e07cc7f16c978dd1b416e0"
+  },
+  "runtime": {
+    "python": "3.12.10",
+    "opencv": "5.0.0",
+    "numpy": "2.5.1"
+  }
+}

@@ -1,0 +1,5 @@
+frame_id,session,split,light,bg,spacing,obj_id,class,x0,y0,x1,y1,notes,specimen_id
+frame_00001,sess-20261010-train,train,L0,gray,1D,obj01,bolt,10,20,11,21,TEST_FIXTURE,bolt-fixture
+frame_00001,sess-20261010-val,val,L1,gray,1D,obj01,nut,10,20,11,21,TEST_FIXTURE,nut-fixture
+frame_00001,sess-20261010-test,test,L2,gray,1D,obj01,washer,10,20,11,21,TEST_FIXTURE,washer-fixture
+frame_00002,sess-20261010-test,test,L2,gray,empty,,,,,,,TEST_FIXTURE,

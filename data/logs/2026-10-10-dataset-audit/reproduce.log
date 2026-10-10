@@ -1,0 +1,2 @@
+PASS: DATASET_STRUCTURE_AUDIT source=TEST_FIXTURE frames=4 targets=3
+GAPS: {"test": ["bolt", "nut"], "train": ["nut", "washer"], "val": ["bolt", "washer"]}
