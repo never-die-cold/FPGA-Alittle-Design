@@ -1,0 +1,32 @@
+236 INFO: PyInstaller: 6.16.0, contrib hooks: 2026.8
+236 INFO: Python: 3.12.10
+290 INFO: Platform: Windows-11-10.0.26200-SP0
+291 INFO: Python environment: C:\Users\ASUS\AppData\Local\Programs\Python\Python312
+292 INFO: wrote sim/build/vision-client\vision_preview.spec
+297 INFO: Module search paths (PYTHONPATH):
+['E:\\Projects\\FPGA-Alittle-Design',
+ 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps',
+ 'E:\\Projects\\FPGA-Alittle-Design',
+ 'C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python312.zip',
+ 'C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\DLLs',
+ 'C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\Lib',
+ 'C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312',
+ 'C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages',
+ 'E:\\Projects\\FPGA-Alittle-Design\\src\\vision_client',
+ 'E:\\Projects\\FPGA-Alittle-Design\\src\\pynq_host']
+795 INFO: Appending 'datas' from .spec
+796 INFO: checking Analysis
+855 INFO: checking PYZ
+892 INFO: checking PKG
+893 INFO: Bootloader E:\Projects\FPGA-Alittle-Design\sim\build\vision-client-deps\PyInstaller\bootloader\Windows-64bit-intel\run.exe
+893 INFO: checking EXE
+894 INFO: checking COLLECT
+895 INFO: Removing dir E:\Projects\FPGA-Alittle-Design\sim\build\vision-client\dist\vision_preview
+983 INFO: Building COLLECT COLLECT-00.toc
+1252 INFO: Building COLLECT COLLECT-00.toc completed successfully.
+1253 INFO: Build complete! The results are available in: E:\Projects\FPGA-Alittle-Design\sim\build\vision-client\dist
+PASS: preview mock renderer packaged runtime
+PASS: packaged EXE HTTP mock preview + unreachable route rejects, no UVC/board access
+PASS: packaged FILE REPLAY rendering and conflicting mode rejection
+PASS: checked FILE REPLAY HUD; normal/unknown counts and altered evidence rejection
+PASS: Windows M2 preview EXE build + packaged renderer test

@@ -142,6 +142,7 @@ def endpoint_state(remote, rec_count, current, age, fps, shape):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--mock", action="store_true")
+    parser.add_argument("--replay", type=Path, help="checked file inspection result.json (offline snapshot)")
     parser.add_argument("--endpoint", help="result service URL, e.g. http://127.0.0.1:8765")
     parser.add_argument("--source", type=int, default=0, help="UVC capture device index")
     parser.add_argument("--frames", type=int, default=0)
@@ -157,6 +158,12 @@ def main():
                         help="self-check hook: simulate one manual trigger (c) at frame N")
     args = parser.parse_args()
     _set_dpi_awareness()
+    if args.replay:
+        if args.mock or args.endpoint or args.records_dir or args.selftest or args.trigger_frame:
+            parser.error("--replay cannot combine with mock, endpoint, records, selftest or trigger")
+        from replay_viewer import show_replay
+        show_replay(args, _work_area)
+        return
     if args.selftest:
         engine = TextEngine()
         p = mock_packet("selftest", 1, 0, 1)

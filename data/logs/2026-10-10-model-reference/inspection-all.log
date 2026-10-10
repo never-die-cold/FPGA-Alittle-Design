@@ -1,0 +1,48 @@
+PASS: ROI 24 training parity cases, BGR channels and 8 invalid inputs
+PASS: FP32 prototype load/repeatable inference and model/input rejection
+PASS: work-order pass/fail/recheck counts and invalid inputs
+PASS: persistent replay reuse and input/artifact conflict rejection
+PASS: replay detection/ROI/rules, real FP32 inference, persistent reuse and error gates
+PASS: checked FILE REPLAY HUD; normal/unknown counts and altered evidence rejection
+PASS: four BN folds and logits parity; max_abs_error=7.62939453e-06; training mode rejected
+sample=0 stage=conv1 original_error=1.1920929e-07 folded_fp64_error=0
+sample=0 stage=conv2 original_error=4.76837158e-07 folded_fp64_error=2.45459951e-07
+sample=0 stage=conv3 original_error=4.17232513e-07 folded_fp64_error=4.10656835e-07
+sample=0 stage=conv4 original_error=2.14576721e-06 folded_fp64_error=1.24622568e-06
+sample=0 stage=gap original_error=1.07288361e-06 folded_fp64_error=6.01715699e-07
+sample=0 stage=logits original_error=9.53674316e-07 folded_fp64_error=2.52653734e-07
+sample=1 stage=conv1 original_error=9.53674316e-07 folded_fp64_error=6.0291449e-07
+sample=1 stage=conv2 original_error=2.38418579e-06 folded_fp64_error=1.5701549e-06
+sample=1 stage=conv3 original_error=1.1920929e-06 folded_fp64_error=1.06984631e-06
+sample=1 stage=conv4 original_error=3.33786011e-06 folded_fp64_error=2.85616647e-06
+sample=1 stage=gap original_error=1.66893005e-06 folded_fp64_error=1.57300438e-06
+sample=1 stage=logits original_error=7.15255737e-07 folded_fp64_error=4.20149465e-06
+sample=2 stage=conv1 original_error=1.90734863e-06 folded_fp64_error=2.44751573e-06
+sample=2 stage=conv2 original_error=3.81469727e-06 folded_fp64_error=2.2017922e-06
+sample=2 stage=conv3 original_error=4.29153442e-06 folded_fp64_error=1.81228395e-06
+sample=2 stage=conv4 original_error=6.31809235e-06 folded_fp64_error=1.84050811e-06
+sample=2 stage=gap original_error=2.59280205e-06 folded_fp64_error=5.99249322e-07
+sample=2 stage=logits original_error=4.529953e-06 folded_fp64_error=8.81881484e-07
+sample=3 stage=conv1 original_error=3.81469727e-06 folded_fp64_error=3.03086889e-06
+sample=3 stage=conv2 original_error=7.62939453e-06 folded_fp64_error=5.17868087e-06
+sample=3 stage=conv3 original_error=8.58306885e-06 folded_fp64_error=4.7755216e-06
+sample=3 stage=conv4 original_error=1.71661377e-05 folded_fp64_error=1.00479748e-05
+sample=3 stage=gap original_error=1.90734863e-06 folded_fp64_error=1.06877028e-06
+sample=3 stage=logits original_error=3.81469727e-06 folded_fp64_error=1.743809e-06
+sample=4 stage=conv1 original_error=1.1920929e-07 folded_fp64_error=4.28408384e-07
+sample=4 stage=conv2 original_error=1.1920929e-06 folded_fp64_error=8.61659021e-07
+sample=4 stage=conv3 original_error=7.15255737e-07 folded_fp64_error=4.37668579e-07
+sample=4 stage=conv4 original_error=2.14576721e-06 folded_fp64_error=1.24622568e-06
+sample=4 stage=gap original_error=1.07288361e-06 folded_fp64_error=5.69360112e-07
+sample=4 stage=logits original_error=1.90734863e-06 folded_fp64_error=6.07811476e-07
+sample=5 stage=conv1 original_error=3.81469727e-06 folded_fp64_error=2.87592411e-06
+sample=5 stage=conv2 original_error=7.62939453e-06 folded_fp64_error=6.69173776e-06
+sample=5 stage=conv3 original_error=2.28881836e-05 folded_fp64_error=1.06168592e-05
+sample=5 stage=conv4 original_error=8.01086426e-05 folded_fp64_error=3.55989858e-05
+sample=5 stage=gap original_error=5.34057617e-05 folded_fp64_error=2.04973569e-05
+sample=5 stage=logits original_error=0.000183105469 folded_fp64_error=9.32466652e-05
+PASS: convolution indexing and six inputs x six stages; max_abs_error=0.000183105469; rtol=2e-05 atol=0.0001
+PASS: model audit 11944128 MAC/ROI, 32592 weights + 147 folded bias, 130956 FP32 bytes
+PASS: FP32/uint8 exact bits, row order, hash/format/path rejection
+PASS: NumPy-only FP32 reference: 3 cases x 7 tensors; max_abs_error=0.00016784668
+PASS: reference package isolated replay, overwrite/tool/audit/numerical gates; max_abs_error=0.00016784668

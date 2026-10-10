@@ -17,8 +17,32 @@ def post_json(base, path, body):
         return json.load(response)
 
 
+def test_result_fields(packet):
+    for valid in (packet, {**packet, "trigger_ref": "ref-1"},
+                  {**packet, "targets": []}):
+        assert validate_packet(valid) is valid
+    cases = [("packet", {**packet, name: value}) for name, value in
+             (("extra", 1), ("class", "bolt"), ("verdict", "CHECK_PASS"))]
+    for name, value in (("extra", 1), ("class", "bolt"), ("verdict", "CHECK_PASS")):
+        bad = copy.deepcopy(packet)
+        bad["targets"][0][name] = value
+        cases.append(("target", bad))
+    cases.extend(("packet", value) for value in (None, [], "invalid"))
+    for value in (None, [], "invalid"):
+        cases.append(("target", {**packet, "targets": [value]}))
+    for scope, bad in cases:
+        try:
+            validate_packet(bad)
+        except ValueError as error:
+            assert str(error) == f"invalid {scope} fields", str(error)
+        else:
+            raise AssertionError(f"invalid {scope} fields accepted")
+    print("PASS: Q01 result fields: 3 valid / 12 invalid packets")
+
+
 def main():
     packet = mock_packet("session-a", 10, 2, 7)
+    test_result_fields(packet)
     # D3 判据：session + config_id + 年龄；frame_id 不参与（仅换帧号仍判当前）
     assert is_current(packet, "session-a", 2)
     assert is_current({**packet, "frame_id": 999}, "session-a", 2)

@@ -1,7 +1,7 @@
 # 检查 V0：取图、ROI 预处理与首次成功检查契约（建议稿）
 
 日期：2026-10-09；审查基线 dev/exe @ 051aefa。
-状态：设计建议，尚未完成实现/实机验收；不自动替换既有核、视频与 MOCK 协议契约。
+状态：设计建议；2026-10-10 共享 ROI 与 FILE_REPLAY 候选实现已完成离板验证，板端取图/实机验收未完成；不自动替换既有核、视频与 MOCK 协议契约。
 “检查 V0/V1”是应用版本，与 RISC-V 核 v0/v1 分开命名。
 
 ## 1. 当前事实与首版取图选择
@@ -49,7 +49,7 @@
 | INT8 衔接 | 归一化后的量化由模型 scale/zero_point 决定，不能直接把 uint8 reinterpret 为 int8 |
 
 - 当前行为依据：sim/vision/train_scene_classifier.py 的 preprocess(...,64,mode='border')。
-- 建议后续抽取到 src/pynq_host/roi_preprocess.py，训练/评估/PS 共用；该新模块尚未实现。
+- 2026-10-10 已抽取 `src/pynq_host/roi_preprocess.py`，活跃场景训练入口和 FILE_REPLAY 共用；24 组交付原函数像素对拍通过。PS 实机调用与跨环境对拍未验证，见[离板检查](offline-inspection.md)。
 - data/golden/vision/localize/reference.py 的拉伸64×64+定点双线性继续作为旧基线，不能替代本契约。
 - OpenCV 灰度与 RTL (77R+150G+29B)>>8 不保证逐像素一致；INTER_AREA 也不等于现有 RTL scaler。
 - 训练和板端记录 OpenCV/NumPy 版本；以真实 ROI 的 uint8 张量逐字节对拍作为兼容判据。
@@ -87,7 +87,8 @@
 
 ## 4. 当前未实现与参考
 
-- 未实现/未验：PS实帧采集验证、共用预处理模块、正式部署模型/运行时、LIVE协议、批次幂等与V0整机验收。
+- 已实现并离板验证：共用预处理模块、FP32 文件检查与 request_id 幂等复用；这些软件证据不替代板端验收。
+- 未实现/未验：PS实帧采集验证、正式部署模型/运行时、LIVE协议、在线批次幂等与V0整机验收。
 - 未实现：自定义overlay彩色帧读口、CNN协处理器、PS↔RISC-V应用接口与V1闭环。
 - 依据：create_hdmi_bd.tcl、vision_axi.v、video_pipeline.v、训练preprocess、旧ROI参考及主计划。
 - 官方取图/默认BGR依据：[PYNQ Video](https://pynq.readthedocs.io/en/latest/pynq_libraries/video.html)。

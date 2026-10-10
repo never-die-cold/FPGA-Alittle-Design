@@ -14,6 +14,10 @@ import time
 VERSION = 1
 MAX_TARGETS = 16
 MAX_TRIGGER_REF_LEN = 64
+PACKET_FIELDS = frozenset(("version", "mode", "session_id", "frame_id", "config_id",
+                          "check_id", "trigger_ref", "width", "height", "created_at",
+                          "status", "targets"))
+TARGET_FIELDS = frozenset(("target_id", "bbox"))
 
 
 def uint(value, name):
@@ -24,6 +28,8 @@ def uint(value, name):
 
 
 def validate_packet(packet):
+    if not isinstance(packet, dict) or set(packet) - PACKET_FIELDS:
+        raise ValueError("invalid packet fields")
     if packet.get("version") != VERSION or packet.get("mode") != "MOCK":
         raise ValueError("only explicitly marked M2 mock packets are supported")
     if not isinstance(packet.get("session_id"), str) or not packet["session_id"]:
@@ -45,6 +51,8 @@ def validate_packet(packet):
         raise ValueError("target limit")
     ids = set()
     for target in packet["targets"]:
+        if not isinstance(target, dict) or set(target) - TARGET_FIELDS:
+            raise ValueError("invalid target fields")
         identity = uint(target.get("target_id"), "target_id")
         if identity in ids:
             raise ValueError("duplicate target_id")
@@ -55,8 +63,6 @@ def validate_packet(packet):
         x0, y0, x1, y1 = box
         if not (0 <= x0 < x1 <= w and 0 <= y0 < y1 <= h):
             raise ValueError("invalid box bounds")
-        if "class" in target or "verdict" in target:
-            raise ValueError("classification is outside this mock contract")
     return packet
 
 

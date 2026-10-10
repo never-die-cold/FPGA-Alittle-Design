@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "E:\Projects\FPGA-Alittle-Design\sim\vision\test_vision_protocol.py", line 129, in <module>
+    main()
+  File "E:\Projects\FPGA-Alittle-Design\sim\vision\test_vision_protocol.py", line 45, in main
+    test_result_fields(packet)
+  File "E:\Projects\FPGA-Alittle-Design\sim\vision\test_vision_protocol.py", line 39, in test_result_fields
+    raise AssertionError(f"invalid {scope} fields accepted")
+AssertionError: invalid packet fields accepted

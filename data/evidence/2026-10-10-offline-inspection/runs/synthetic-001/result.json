@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "mode": "FILE_REPLAY",
+  "hardware_connected": false,
+  "width": 1280,
+  "height": 720,
+  "bbox_format": "XYXY_HALF_OPEN",
+  "preprocess": "scene-gray-border-padding-v1",
+  "model": {
+    "name": "cnn-border-fill-best.pt",
+    "sha256": "70fe3dc35bb592481f43e2086efe46b4ca5d2788d53a2b318d23a7169f7ecec6",
+    "architecture": "fastener-4conv-bn-v1",
+    "classes": [
+      "bolt",
+      "nut",
+      "washer"
+    ],
+    "preprocess": "scene-gray-border-padding-v1",
+    "input_size": 64,
+    "precision": "FP32"
+  },
+  "parameters": {
+    "min_score": 0.8,
+    "max_targets": 10,
+    "color_threshold": 22,
+    "min_area_ratio": 8e-05
+  },
+  "target_count": 3,
+  "targets": [
+    {
+      "class": "bolt",
+      "score": 0.9999895095825195,
+      "probabilities": [
+        0.9999895095825195,
+        1.470496755473505e-07,
+        1.0318804925191216e-05
+      ],
+      "target_id": 0,
+      "bbox": [
+        160,
+        180,
+        230,
+        300
+      ],
+      "touches_border": false,
+      "roi_path": "roi_000.png",
+      "roi_pixels_sha256": "ab0befc5f6960968e802438bed9249a2311ccf45a7648ab4a924c56a317621ec"
+    },
+    {
+      "class": "washer",
+      "score": 0.958003044128418,
+      "probabilities": [
+        0.0010004969080910087,
+        0.04099641740322113,
+        0.958003044128418
+      ],
+      "target_id": 1,
+      "bbox": [
+        586,
+        285,
+        715,
+        416
+      ],
+      "touches_border": false,
+      "roi_path": "roi_001.png",
+      "roi_pixels_sha256": "a19ffd7913827742b9a75d609aa80ddc654a161e61e424ca7d124f57b1082def"
+    },
+    {
+      "class": "bolt",
+      "score": 0.9999872446060181,
+      "probabilities": [
+        0.9999872446060181,
+        2.3329299381202873e-07,
+        1.2463658094929997e-05
+      ],
+      "target_id": 2,
+      "bbox": [
+        940,
+        410,
+        1040,
+        490
+      ],
+      "touches_border": false,
+      "roi_path": "roi_002.png",
+      "roi_pixels_sha256": "e5bdd48d0118bad7f82397c719214633757480391bd2d638e86dcce22723ab0b"
+    }
+  ],
+  "decision": {
+    "verdict": "CHECK_FAIL",
+    "expected": {
+      "bolt": 1,
+      "nut": 1,
+      "washer": 1
+    },
+    "actual": {
+      "bolt": 2,
+      "nut": 0,
+      "washer": 1
+    },
+    "delta": {
+      "bolt": 1,
+      "nut": -1,
+      "washer": 0
+    },
+    "missing": {
+      "bolt": 0,
+      "nut": 1,
+      "washer": 0
+    },
+    "extra": {
+      "bolt": 1,
+      "nut": 0,
+      "washer": 0
+    },
+    "reasons": []
+  },
+  "request_id": "synthetic-001",
+  "request_fingerprint": "cff59288d8d4eb65395c2fa245dd1f50812f1c6b33ffc12cf12805d62174d77d",
+  "provenance": {
+    "source_sha256": "bb9e05f3893353de880d310ecdbfbf603b529407a1c503c17e2213358ff0d73b",
+    "model": {
+      "name": "cnn-border-fill-best.pt",
+      "sha256": "70fe3dc35bb592481f43e2086efe46b4ca5d2788d53a2b318d23a7169f7ecec6",
+      "architecture": "fastener-4conv-bn-v1",
+      "classes": [
+        "bolt",
+        "nut",
+        "washer"
+      ],
+      "preprocess": "scene-gray-border-padding-v1",
+      "input_size": 64,
+      "precision": "FP32"
+    },
+    "order": {
+      "bolt": 1,
+      "nut": 1,
+      "washer": 1
+    },
+    "min_score": 0.8,
+    "max_targets": 10,
+    "code_sha256": {
+      "src/pynq_host/inspection_run.py": "e84927a01d5842635e6917af3b2f9c9337e119406cdc3ce4e8cfaf011a2b88ef",
+      "src/pynq_host/inspection_replay.py": "a88f3ea4c31b531b610a32d928166ffedd33ee392a936190e5e7c16a3ba76fc2",
+      "src/pynq_host/inspection_rules.py": "d0f5b2262260aa9480aeef36ee919edce2260082441e8a82111da4e34da9c932",
+      "src/pynq_host/inspection_model.py": "e6745df738ff9735d9d87114339d998598dd217df18c356a3957d4d01cb21c64",
+      "src/pynq_host/inspection_artifacts.py": "0dae9f2538cc2846068526c3b3ab360fbf55498ce96682316cadc66c8148bb8e",
+      "src/pynq_host/roi_preprocess.py": "5dfaef77a11fbeee743a48a69352e64a8c5e64a2de97437bd1012ba2ab20e669",
+      "sim/vision/localization_opencv.py": "de81e15e56496e82d1a747ea2946769213ac1e4aa6ab6973132e2de1184835d7",
+      "sim/vision/train_fastener_classifier.py": "151f784406c27db8ca112e42ca7bc22104d9f4e9a0f1e2c111bb4cf129cb86f1"
+    },
+    "runtime": {
+      "python": "3.12.10",
+      "opencv": "5.0.0",
+      "numpy": "2.5.1",
+      "torch": "2.14.0+cpu"
+    }
+  },
+  "source_name": "synthetic.png",
+  "replay_elapsed_ms": 150.3632,
+  "timing_scope": "localization/ROI/inference/rules; excludes load and file IO",
+  "artifacts": [
+    {
+      "path": "source.bin",
+      "sha256": "bb9e05f3893353de880d310ecdbfbf603b529407a1c503c17e2213358ff0d73b"
+    },
+    {
+      "path": "frame.png",
+      "sha256": "bb9e05f3893353de880d310ecdbfbf603b529407a1c503c17e2213358ff0d73b"
+    },
+    {
+      "path": "annotated.png",
+      "sha256": "c169671442bbc06b49c5db768b476ccb4cbda24f0652016f9194f44357af75b7"
+    },
+    {
+      "path": "roi_000.png",
+      "sha256": "4e8f8e17a6519468e608ea6ee878672ca98cf6ad6165544c2af7a9b9fc78a70f"
+    },
+    {
+      "path": "roi_000.hex",
+      "sha256": "77633d6eb9cc542f625d919a77c12d9ad12635688729c7abaeeb7f6d9dc30e49"
+    },
+    {
+      "path": "roi_001.png",
+      "sha256": "99475406ceb353dcc2a4654c18f9b3c3d1845d20f06310bb0936cbe4e2318d6b"
+    },
+    {
+      "path": "roi_001.hex",
+      "sha256": "ed2e419bd7466fd0312613ad41b1d21f3471cd8fa47d000f565cdf5eb9dc00d6"
+    },
+    {
+      "path": "roi_002.png",
+      "sha256": "20ee1f8553c5bf4ce7d4c99b2aea7e887ca9171e0262e7ff788ad8d9713df3d4"
+    },
+    {
+      "path": "roi_002.hex",
+      "sha256": "f5b25f19e1e442fe042198247cf9f880ff1539bf2fbc521074c6e254212998d0"
+    }
+  ]
+}
