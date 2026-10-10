@@ -6,7 +6,9 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
 
 已有 `vision_regs.py`／`vision_demo.py`／`m2_onboard.py`／`onboard_smoke.py` 配置及板端诊断；
 `data/golden/vision/localize/reference.py`／`arm_localize.py` 与打包工具提供定位／裁剪黄金参考，不等于实时部署。
-`vision_protocol.py`／`vision_mock_service.py` 为明确标注 MOCK 的接口；D6 字段白名单已修复、离板回归通过并随 PR #67 合并，见[核查注记](../../docs/vision-sync-protocol-decisions.md)。
+`vision_mock_service.py` 提供明确标注 MOCK 的服务；D6 字段白名单已随 PR #67 合并。
+远端 `7101a33` 将 `vision_protocol.py` 扩展为 MOCK/LIVE v1.2 校验，整合回归通过；
+网络预览的 PROTOTYPE 标识尚未实现，真实 LIVE 服务未验收，见[复验边界](../../data/logs/2026-10-10-dataset-integration/README.md)。
 下列 notebook／通用工具仍是规划，不能由 mock 或训练演练推断已实现。
 
 本轮新增 `roi_preprocess.py`、`inspection_model.py`、`inspection_rules.py`、
