@@ -27,3 +27,6 @@ data/logs/2026-10-06-pi-pynq/*.txt -whitespace
 data/logs/2026-10-06-pi-pynq/*.log -whitespace
 data/logs/2026-10-07-pi-pynq/*.txt -whitespace
 data/logs/2026-10-07-pi-pynq/*.log -whitespace
+
+# NumPy assertion output preserves the original trailing space after its colon.
+data/logs/2026-10-10-model-reference/numpy-parity-before.log -whitespace

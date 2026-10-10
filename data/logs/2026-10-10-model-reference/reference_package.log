@@ -1,0 +1,2 @@
+PASS: NumPy-only FP32 reference: 3 cases x 7 tensors; max_abs_error=0.00016784668
+PASS: reference package isolated replay, overwrite/tool/audit/numerical gates; max_abs_error=0.00016784668

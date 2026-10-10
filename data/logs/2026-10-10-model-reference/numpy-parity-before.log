@@ -1,0 +1,27 @@
+Traceback (most recent call last):
+  File "E:\Projects\FPGA-Alittle-Design\sim\vision\test_numpy_reference.py", line 47, in <module>
+    main()
+  File "E:\Projects\FPGA-Alittle-Design\sim\vision\test_numpy_reference.py", line 40, in main
+    np.testing.assert_allclose(trace[name], expected[number], rtol=2e-5, atol=2e-5)
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python312\Lib\site-packages\numpy\testing\_private\utils.py", line 1780, in assert_allclose
+    assert_array_compare(compare, actual, desired, err_msg=str(err_msg),
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python312\Lib\site-packages\numpy\testing\_private\utils.py", line 988, in assert_array_compare
+    raise AssertionError(msg)
+AssertionError: 
+Not equal to tolerance rtol=2e-05, atol=2e-05
+
+Mismatched elements: 22 / 16384 (0.134%)
+First 5 mismatches are at indices:
+ [2, 3, 14]: 1.13981294631958 (ACTUAL), 1.1397559642791748 (DESIRED)
+ [2, 4, 14]: 1.13981294631958 (ACTUAL), 1.1397559642791748 (DESIRED)
+ [2, 5, 14]: 1.139814853668213 (ACTUAL), 1.1397559642791748 (DESIRED)
+ [2, 6, 14]: 1.1398119926452637 (ACTUAL), 1.1397559642791748 (DESIRED)
+ [2, 7, 14]: 1.13981294631958 (ACTUAL), 1.1397559642791748 (DESIRED)
+Max absolute difference among violations: 5.888939e-05
+Max relative difference among violations: 5.3568332e-05
+ ACTUAL: array([[[0.000000e+00, 2.322285e+00, 1.138025e+01, ..., 1.465360e+01,
+         4.354856e+00, 6.875730e-01],
+        [1.654955e+00, 1.029886e+01, 2.803907e+01, ..., 3.246990e+01,...
+ DESIRED: array([[[0.000000e+00, 2.322294e+00, 1.138027e+01, ..., 1.465361e+01,
+         4.354864e+00, 6.875772e-01],
+        [1.654958e+00, 1.029888e+01, 2.803908e+01, ..., 3.246991e+01,...

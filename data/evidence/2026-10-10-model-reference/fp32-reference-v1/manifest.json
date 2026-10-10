@@ -1,0 +1,881 @@
+{
+  "schema_version": 1,
+  "mode": "FP32_SOFTWARE_REFERENCE",
+  "hardware_connected": false,
+  "model": {
+    "name": "cnn-border-fill-best.pt",
+    "sha256": "70fe3dc35bb592481f43e2086efe46b4ca5d2788d53a2b318d23a7169f7ecec6",
+    "architecture": "fastener-4conv-bn-v1",
+    "classes": [
+      "bolt",
+      "nut",
+      "washer"
+    ],
+    "preprocess": "scene-gray-border-padding-v1",
+    "input_size": 64,
+    "precision": "FP32"
+  },
+  "rtol": 2e-05,
+  "atol": 0.0001,
+  "audit": {
+    "layers": [
+      {
+        "name": "conv1",
+        "kind": "conv_relu",
+        "input_shape": [
+          1,
+          64,
+          64
+        ],
+        "output_shape": [
+          16,
+          32,
+          32
+        ],
+        "weights": 144,
+        "biases": 16,
+        "macs": 147456,
+        "bias_additions": 16384,
+        "pool_additions": 0,
+        "pool_divisions": 0,
+        "fp32_parameter_bytes": 640,
+        "output_elements": 16384
+      },
+      {
+        "name": "conv2",
+        "kind": "conv_relu",
+        "input_shape": [
+          16,
+          32,
+          32
+        ],
+        "output_shape": [
+          32,
+          32,
+          32
+        ],
+        "weights": 4608,
+        "biases": 32,
+        "macs": 4718592,
+        "bias_additions": 32768,
+        "pool_additions": 0,
+        "pool_divisions": 0,
+        "fp32_parameter_bytes": 18560,
+        "output_elements": 32768
+      },
+      {
+        "name": "conv3",
+        "kind": "conv_relu",
+        "input_shape": [
+          32,
+          32,
+          32
+        ],
+        "output_shape": [
+          32,
+          16,
+          16
+        ],
+        "weights": 9216,
+        "biases": 32,
+        "macs": 2359296,
+        "bias_additions": 8192,
+        "pool_additions": 0,
+        "pool_divisions": 0,
+        "fp32_parameter_bytes": 36992,
+        "output_elements": 8192
+      },
+      {
+        "name": "conv4",
+        "kind": "conv_relu",
+        "input_shape": [
+          32,
+          16,
+          16
+        ],
+        "output_shape": [
+          64,
+          16,
+          16
+        ],
+        "weights": 18432,
+        "biases": 64,
+        "macs": 4718592,
+        "bias_additions": 16384,
+        "pool_additions": 0,
+        "pool_divisions": 0,
+        "fp32_parameter_bytes": 73984,
+        "output_elements": 16384
+      },
+      {
+        "name": "gap",
+        "kind": "global_average",
+        "input_shape": [
+          64,
+          16,
+          16
+        ],
+        "output_shape": [
+          64
+        ],
+        "weights": 0,
+        "biases": 0,
+        "macs": 0,
+        "bias_additions": 0,
+        "pool_additions": 16320,
+        "pool_divisions": 64,
+        "fp32_parameter_bytes": 0,
+        "output_elements": 64
+      },
+      {
+        "name": "logits",
+        "kind": "linear",
+        "input_shape": [
+          64
+        ],
+        "output_shape": [
+          3
+        ],
+        "weights": 192,
+        "biases": 3,
+        "macs": 192,
+        "bias_additions": 3,
+        "pool_additions": 0,
+        "pool_divisions": 0,
+        "fp32_parameter_bytes": 780,
+        "output_elements": 3
+      }
+    ],
+    "macs_per_roi": 11944128,
+    "weight_elements": 32592,
+    "bias_elements": 147,
+    "fp32_parameter_bytes": 130956,
+    "largest_output_elements": 32768,
+    "adjacent_activation_elements": 49152,
+    "scope": "counts only; excludes framework/workspace/scale/IO and scheduling overhead"
+  },
+  "oracle": "original PyTorch model; evaluation BN retained",
+  "truth_labels": null,
+  "input_kind": "diagnostic pixels; no dataset accuracy claim",
+  "hex": "uint8 pixels or IEEE754 FP32; not INT8 weights",
+  "runtime": {
+    "python": "3.12.10",
+    "numpy": "2.5.1",
+    "torch": "2.14.0+cpu"
+  },
+  "code_sha256": {
+    "src/pynq_host/inspection_model.py": "e6745df738ff9735d9d87114339d998598dd217df18c356a3957d4d01cb21c64",
+    "src/pynq_host/model_reference.py": "e322095979500080d859635d8321cda43a4389fb421c8f2173547a7c0280f21c",
+    "src/pynq_host/model_audit.py": "3992af52b6f490054a61eaffaf180aaca2a5fcf9a905991e302494bd4a858439",
+    "src/pynq_host/numpy_reference.py": "e8ff1155c2cad773a3e285967f75d303839ab944eea8da1a50d1dd460fefc114",
+    "src/pynq_host/reference_tensors.py": "562991e94eb5e9794e5d9dece49792ea1333ac32feb3a6bf51513994973e2bf4",
+    "src/pynq_host/reference_package.py": "56df919bc985d3a0bacaf9585cb7715b01aa08a5a1559254513d44345292267d",
+    "sim/vision/train_fastener_classifier.py": "151f784406c27db8ca112e42ca7bc22104d9f4e9a0f1e2c111bb4cf129cb86f1",
+    "sim/vision/check_model_reference.py": "3ebbf96838286668bc58bb43cb75a6d18c54a85172065686731cfa2ce66f9df8"
+  },
+  "agreement_max_abs": {
+    "zero": {
+      "input": 0.0,
+      "conv1": 1.1920928955078125e-07,
+      "conv2": 4.76837158203125e-07,
+      "conv3": 4.172325134277344e-07,
+      "conv4": 2.1457672119140625e-06,
+      "gap": 1.0728836059570312e-06,
+      "logits": 9.5367431640625e-07
+    },
+    "seed2026": {
+      "input": 0.0,
+      "conv1": 3.814697265625e-06,
+      "conv2": 7.62939453125e-06,
+      "conv3": 8.58306884765625e-06,
+      "conv4": 1.71661376953125e-05,
+      "gap": 1.9073486328125e-06,
+      "logits": 3.814697265625e-06
+    },
+    "stripes": {
+      "input": 0.0,
+      "conv1": 3.814697265625e-06,
+      "conv2": 7.62939453125e-06,
+      "conv3": 2.288818359375e-05,
+      "conv4": 8.0108642578125e-05,
+      "gap": 5.340576171875e-05,
+      "logits": 0.0001678466796875
+    }
+  },
+  "layers": [
+    {
+      "name": "conv1",
+      "kind": "conv_relu",
+      "stride": [
+        2,
+        2
+      ],
+      "padding": [
+        1,
+        1
+      ],
+      "weight": "conv1_weight",
+      "bias": "conv1_bias"
+    },
+    {
+      "name": "conv2",
+      "kind": "conv_relu",
+      "stride": [
+        1,
+        1
+      ],
+      "padding": [
+        1,
+        1
+      ],
+      "weight": "conv2_weight",
+      "bias": "conv2_bias"
+    },
+    {
+      "name": "conv3",
+      "kind": "conv_relu",
+      "stride": [
+        2,
+        2
+      ],
+      "padding": [
+        1,
+        1
+      ],
+      "weight": "conv3_weight",
+      "bias": "conv3_bias"
+    },
+    {
+      "name": "conv4",
+      "kind": "conv_relu",
+      "stride": [
+        1,
+        1
+      ],
+      "padding": [
+        1,
+        1
+      ],
+      "weight": "conv4_weight",
+      "bias": "conv4_bias"
+    },
+    {
+      "name": "gap",
+      "kind": "global_average"
+    },
+    {
+      "name": "logits",
+      "kind": "linear",
+      "weight": "logits_weight",
+      "bias": "logits_bias"
+    }
+  ],
+  "tensors": {
+    "conv1_weight": {
+      "name": "conv1_weight",
+      "shape": [
+        16,
+        1,
+        3,
+        3
+      ],
+      "dtype": "float32",
+      "layout": "OIHW",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "conv1_weight.npy",
+      "npy_sha256": "c0469034536482799686f475bb98d2a4b916bf88586926466e3aac0b3f805274",
+      "hex": "conv1_weight.hex",
+      "hex_sha256": "0a194b40cdf289d9e414585dbe47174b341f9d6ea600b790be3afcdd8b85ee82"
+    },
+    "conv1_bias": {
+      "name": "conv1_bias",
+      "shape": [
+        16
+      ],
+      "dtype": "float32",
+      "layout": "O",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "conv1_bias.npy",
+      "npy_sha256": "ba1200edddd9ca80b5bd4913535f29fe8b35e59b397a1772ad604ac176fe40a2",
+      "hex": "conv1_bias.hex",
+      "hex_sha256": "ed1589b98600ed7e87773e5949f499ed7e82cdb1d530fe2e0e6f67416212eae6"
+    },
+    "conv2_weight": {
+      "name": "conv2_weight",
+      "shape": [
+        32,
+        16,
+        3,
+        3
+      ],
+      "dtype": "float32",
+      "layout": "OIHW",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "conv2_weight.npy",
+      "npy_sha256": "d0699a62db2ce3d0445630cbf95cee24a1b5ed0542cb10f5abe9a6e8e96c2fe1",
+      "hex": "conv2_weight.hex",
+      "hex_sha256": "6f4a938174e054e24a65f5dd86c743b6e99ed10b866dcefaa2cfd7a206f3d04d"
+    },
+    "conv2_bias": {
+      "name": "conv2_bias",
+      "shape": [
+        32
+      ],
+      "dtype": "float32",
+      "layout": "O",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "conv2_bias.npy",
+      "npy_sha256": "3351cfed711a737cae7a0d7ca0bc22b9e8c04fc3bae1066943f7fbb34bfb8bd1",
+      "hex": "conv2_bias.hex",
+      "hex_sha256": "5838da1c41fc2f310c6551d44c2da9645a040271ebc3571eaf0ec74052fb1c23"
+    },
+    "conv3_weight": {
+      "name": "conv3_weight",
+      "shape": [
+        32,
+        32,
+        3,
+        3
+      ],
+      "dtype": "float32",
+      "layout": "OIHW",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "conv3_weight.npy",
+      "npy_sha256": "c1e6d8b056950809e70d9036a133d08afd1605a0cd99bfba89f307358026cb41",
+      "hex": "conv3_weight.hex",
+      "hex_sha256": "5fb411707b936066409a9b385ce8ee4cc8907b09b8e4aed4bb1c91dcbcfef196"
+    },
+    "conv3_bias": {
+      "name": "conv3_bias",
+      "shape": [
+        32
+      ],
+      "dtype": "float32",
+      "layout": "O",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "conv3_bias.npy",
+      "npy_sha256": "12683f3c59852e056cfcdf66cbf66d066b8b4ec33d990fc9416d0bd2117dc2af",
+      "hex": "conv3_bias.hex",
+      "hex_sha256": "9820ece06e993ada1674df35d0da8ed537a2af467a41303119e8e2550920e373"
+    },
+    "conv4_weight": {
+      "name": "conv4_weight",
+      "shape": [
+        64,
+        32,
+        3,
+        3
+      ],
+      "dtype": "float32",
+      "layout": "OIHW",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "conv4_weight.npy",
+      "npy_sha256": "4383f6c940296afe5916afd3cae9f48db0bb405dbbdad0ca7e949afae13bab8e",
+      "hex": "conv4_weight.hex",
+      "hex_sha256": "9a3099526f76e346b608538abe67e124f94975e9a933e5a9a9823106c9244d7a"
+    },
+    "conv4_bias": {
+      "name": "conv4_bias",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "layout": "O",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "conv4_bias.npy",
+      "npy_sha256": "f8c254d583511ba4f35c44d0ca256bb98ae04dea309cc056bddbe18116b41782",
+      "hex": "conv4_bias.hex",
+      "hex_sha256": "d5fb9ad8d1e33a4ab8093a66e02aadba2e43c80253902f729ab02c544c3a2072"
+    },
+    "logits_weight": {
+      "name": "logits_weight",
+      "shape": [
+        3,
+        64
+      ],
+      "dtype": "float32",
+      "layout": "OI",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "logits_weight.npy",
+      "npy_sha256": "d32b45621575c076248b18fde9acf2dda210a9d30e597a71469a06aeb0985c4a",
+      "hex": "logits_weight.hex",
+      "hex_sha256": "80714c5838cb90d5ec2462b9f5f3eefbeb39f02d18a15f8021a297cd52d2a465"
+    },
+    "logits_bias": {
+      "name": "logits_bias",
+      "shape": [
+        3
+      ],
+      "dtype": "float32",
+      "layout": "O",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "logits_bias.npy",
+      "npy_sha256": "255e89b8355a596b57f443bbfbdbf7449417887bb5c6ba3f0b816f956184d932",
+      "hex": "logits_bias.hex",
+      "hex_sha256": "10b7eb56d70eeb01a185e90bc6bb532e45265f8472f5db2065351f0b1c8ad375"
+    },
+    "zero_pixels": {
+      "name": "zero_pixels",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "uint8",
+      "layout": "HW",
+      "word_bits": 8,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "zero_pixels.npy",
+      "npy_sha256": "9d578b979aaea26c86dcc69bf458fca9567ad85bea82b2c2858c125baf37da76",
+      "hex": "zero_pixels.hex",
+      "hex_sha256": "9b5ee346b05d90d1d624ecfcfb8a45471128a2734fd684cadee0f03a33439cc5"
+    },
+    "zero_input": {
+      "name": "zero_input",
+      "shape": [
+        1,
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "layout": "CHW",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "zero_input.npy",
+      "npy_sha256": "8f5c211663e7533e0d000722aa2b2afff8fa4db7064d02315cfe17f890806118",
+      "hex": "zero_input.hex",
+      "hex_sha256": "45a9a90476134800d5779947a148a36051d12de021e84a0a32b447e8c8189e51"
+    },
+    "zero_conv1": {
+      "name": "zero_conv1",
+      "shape": [
+        16,
+        32,
+        32
+      ],
+      "dtype": "float32",
+      "layout": "CHW",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "zero_conv1.npy",
+      "npy_sha256": "5c1e87a85ed86259bed3fb634d78ee4ccf79ac738688d3bb56758b257fd8fe40",
+      "hex": "zero_conv1.hex",
+      "hex_sha256": "1f69ebaf0a6545c6e7c3fa4699a9c7b036ca221b4c204ab1f484c38a03bb99d6"
+    },
+    "zero_conv2": {
+      "name": "zero_conv2",
+      "shape": [
+        32,
+        32,
+        32
+      ],
+      "dtype": "float32",
+      "layout": "CHW",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "zero_conv2.npy",
+      "npy_sha256": "2f8be6d43fd323150e5b67f83b4957860ed7e13a7932c716f53f16e7c1c28061",
+      "hex": "zero_conv2.hex",
+      "hex_sha256": "a71eb9edc593b59f36382cd637d66eef880f92fe2200cad518ec5905aa3938aa"
+    },
+    "zero_conv3": {
+      "name": "zero_conv3",
+      "shape": [
+        32,
+        16,
+        16
+      ],
+      "dtype": "float32",
+      "layout": "CHW",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "zero_conv3.npy",
+      "npy_sha256": "0c1f2f95a546b6a9e3695faeaf1e7ce0546865984e25d06d58ed9186d47bb20b",
+      "hex": "zero_conv3.hex",
+      "hex_sha256": "bec28a8d949bcc52e2cbc835052721a1436839f061a6aa8f55c46547f7251201"
+    },
+    "zero_conv4": {
+      "name": "zero_conv4",
+      "shape": [
+        64,
+        16,
+        16
+      ],
+      "dtype": "float32",
+      "layout": "CHW",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "zero_conv4.npy",
+      "npy_sha256": "9442ffd1a75e274a077789df1449b0730c36dc4afd7e3757c2ad4772bc03a892",
+      "hex": "zero_conv4.hex",
+      "hex_sha256": "a7cb995242d76aec0bf24dbd41ed3ba522480bcfcc4c1669ac777b3406aa0920"
+    },
+    "zero_gap": {
+      "name": "zero_gap",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "layout": "C",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "zero_gap.npy",
+      "npy_sha256": "d9ed7bb306ec1b0ef6a7d41e4573097c458af4f821cd0b05eab978d4735c5054",
+      "hex": "zero_gap.hex",
+      "hex_sha256": "af876e3ed2fdd4eaf5b0203081f4fcc0ab9af684ce74ce6eca55d33ef6619fe1"
+    },
+    "zero_logits": {
+      "name": "zero_logits",
+      "shape": [
+        3
+      ],
+      "dtype": "float32",
+      "layout": "C",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "zero_logits.npy",
+      "npy_sha256": "f4d3af04c4badbf4cb3066abcb26f3cbda3ef290187d7bae89889b08aa8d94c9",
+      "hex": "zero_logits.hex",
+      "hex_sha256": "1b840fd84fc6f0d886ec9d493a9280cd56342334323ab3f56c9d7ff75459448b"
+    },
+    "seed2026_pixels": {
+      "name": "seed2026_pixels",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "uint8",
+      "layout": "HW",
+      "word_bits": 8,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "seed2026_pixels.npy",
+      "npy_sha256": "71885c1255b268241d4d853cfcc8ce2eccbcf5a3be603936186417c808a67814",
+      "hex": "seed2026_pixels.hex",
+      "hex_sha256": "e64330069c1ccb6c601ad9eef3d2d96bd59039f7942d1701e885ad25174a4841"
+    },
+    "seed2026_input": {
+      "name": "seed2026_input",
+      "shape": [
+        1,
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "layout": "CHW",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "seed2026_input.npy",
+      "npy_sha256": "b4ea148dfc0715e71578226c05d3f7ec443b636d0fdfcf5542e60541f8ab9298",
+      "hex": "seed2026_input.hex",
+      "hex_sha256": "2500056dcd1bcafae7a31de33db7be24a6fe373d0a1803c96b8c14cc559383c1"
+    },
+    "seed2026_conv1": {
+      "name": "seed2026_conv1",
+      "shape": [
+        16,
+        32,
+        32
+      ],
+      "dtype": "float32",
+      "layout": "CHW",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "seed2026_conv1.npy",
+      "npy_sha256": "5a20c45fdde091aea4b4e4838473cb1bbb75dff390c20151a282ec3633c24cef",
+      "hex": "seed2026_conv1.hex",
+      "hex_sha256": "44600a4ec0526c4ea62b99b55d73e5d4ac4f5eaa00657d14c03e32aadc893118"
+    },
+    "seed2026_conv2": {
+      "name": "seed2026_conv2",
+      "shape": [
+        32,
+        32,
+        32
+      ],
+      "dtype": "float32",
+      "layout": "CHW",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "seed2026_conv2.npy",
+      "npy_sha256": "3ba0ca45b42a8c33f8a6969391afb70dc5cc3e76c73d5982239128f40dd0f522",
+      "hex": "seed2026_conv2.hex",
+      "hex_sha256": "ac2b091babef6d0aab4220872e3ab05f0e4243adf2cfbdd96fc17c2729e36de3"
+    },
+    "seed2026_conv3": {
+      "name": "seed2026_conv3",
+      "shape": [
+        32,
+        16,
+        16
+      ],
+      "dtype": "float32",
+      "layout": "CHW",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "seed2026_conv3.npy",
+      "npy_sha256": "a588d8b3629101fb0e18ec575520efc122d9cfc31dacadc349df9671e1fa94e4",
+      "hex": "seed2026_conv3.hex",
+      "hex_sha256": "a9322686c4bd6c77c7cef6781d815a39afe76ddf0993f00c925a94f41a6bf69d"
+    },
+    "seed2026_conv4": {
+      "name": "seed2026_conv4",
+      "shape": [
+        64,
+        16,
+        16
+      ],
+      "dtype": "float32",
+      "layout": "CHW",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "seed2026_conv4.npy",
+      "npy_sha256": "58767578a701f33c0745bfc6158c37e22f80a9d8a6718a2dddb5c16e46d00b9b",
+      "hex": "seed2026_conv4.hex",
+      "hex_sha256": "b1d976bb51f3497f3cd30bc30614475954b4f4e985f2d64cabda20476515bbb8"
+    },
+    "seed2026_gap": {
+      "name": "seed2026_gap",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "layout": "C",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "seed2026_gap.npy",
+      "npy_sha256": "31e71ff70d0d016a8f692f8f4feb2a44c9f793df159797bc1a226e77541f3298",
+      "hex": "seed2026_gap.hex",
+      "hex_sha256": "7d29a95dead8a4257678644a51e6d9236bbdd38aa8e9db77e247573fc5428a6f"
+    },
+    "seed2026_logits": {
+      "name": "seed2026_logits",
+      "shape": [
+        3
+      ],
+      "dtype": "float32",
+      "layout": "C",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "seed2026_logits.npy",
+      "npy_sha256": "3b039694ce4809b9d304e97063a72debf7a2bc18abd708c86fbadc566a074db9",
+      "hex": "seed2026_logits.hex",
+      "hex_sha256": "0b8f045b9eea486cd2a5fc047bcfe422ce51abe98631edfce2944b6c10b6a4a9"
+    },
+    "stripes_pixels": {
+      "name": "stripes_pixels",
+      "shape": [
+        64,
+        64
+      ],
+      "dtype": "uint8",
+      "layout": "HW",
+      "word_bits": 8,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "stripes_pixels.npy",
+      "npy_sha256": "222c8b115cb3fb05c5ecb6f51e9a9235a08f9f73808dde324b0865eeec81eca2",
+      "hex": "stripes_pixels.hex",
+      "hex_sha256": "3dfa20e258bbc8a35439a7e21159b9ee7be0a6bcb4a477395ff46c15352a45be"
+    },
+    "stripes_input": {
+      "name": "stripes_input",
+      "shape": [
+        1,
+        64,
+        64
+      ],
+      "dtype": "float32",
+      "layout": "CHW",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "stripes_input.npy",
+      "npy_sha256": "fe625f5c3b1b2f480a753a7272e028002ce83c2fb4278a97c64dc94c16a9bdab",
+      "hex": "stripes_input.hex",
+      "hex_sha256": "031dccee96441e83a75937403e22c5e3a2c2bf0ac2b38558b3ea5d577e66a445"
+    },
+    "stripes_conv1": {
+      "name": "stripes_conv1",
+      "shape": [
+        16,
+        32,
+        32
+      ],
+      "dtype": "float32",
+      "layout": "CHW",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "stripes_conv1.npy",
+      "npy_sha256": "7bfa7772d53becc0c48ee713a1a41e030383814d9aee32d9d447db813995b306",
+      "hex": "stripes_conv1.hex",
+      "hex_sha256": "d3f6c0634911893acc0c3bf0c4fadd18b1d34326474bd6a7a270d9391d3650c7"
+    },
+    "stripes_conv2": {
+      "name": "stripes_conv2",
+      "shape": [
+        32,
+        32,
+        32
+      ],
+      "dtype": "float32",
+      "layout": "CHW",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "stripes_conv2.npy",
+      "npy_sha256": "e0ad034692aa5562f9b54e7989019267df28efecd50dbd129b05569e9ca4f324",
+      "hex": "stripes_conv2.hex",
+      "hex_sha256": "934fc951835e267b1c3237541c3bedc6fb8d4c7143f45f6b8e8510343b0455cf"
+    },
+    "stripes_conv3": {
+      "name": "stripes_conv3",
+      "shape": [
+        32,
+        16,
+        16
+      ],
+      "dtype": "float32",
+      "layout": "CHW",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "stripes_conv3.npy",
+      "npy_sha256": "50f4c0e6c84b92419f37233884a8e03774300a68c7e24c41955ccbb2924b5350",
+      "hex": "stripes_conv3.hex",
+      "hex_sha256": "a058de09d01ec90794d4b415d4ac9ecb0a8b7a9aeb81f28ed69ac25ac7b613c3"
+    },
+    "stripes_conv4": {
+      "name": "stripes_conv4",
+      "shape": [
+        64,
+        16,
+        16
+      ],
+      "dtype": "float32",
+      "layout": "CHW",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "stripes_conv4.npy",
+      "npy_sha256": "83556be7b4340933ddcbc26368d92ccbbe4bf2efcaacead5f84a919d3e35cc87",
+      "hex": "stripes_conv4.hex",
+      "hex_sha256": "c3da37ed403eeec6ab1115abc6190b88bb9b2af8aa2413ee91455877a193f183"
+    },
+    "stripes_gap": {
+      "name": "stripes_gap",
+      "shape": [
+        64
+      ],
+      "dtype": "float32",
+      "layout": "C",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "stripes_gap.npy",
+      "npy_sha256": "7ea6a3b2476097397166d375870506e1151218d6d8909272636dcfaadb2794b3",
+      "hex": "stripes_gap.hex",
+      "hex_sha256": "f8bd4b092cabb0e6b499e9bb54d54c9954c2faf4b5b5d3c9df6ffe222243cf01"
+    },
+    "stripes_logits": {
+      "name": "stripes_logits",
+      "shape": [
+        3
+      ],
+      "dtype": "float32",
+      "layout": "C",
+      "word_bits": 32,
+      "byte_order": "little",
+      "element_order": "C",
+      "npy": "stripes_logits.npy",
+      "npy_sha256": "6e9c4f5dc6c9ecb55f0a4dcfde9e7f9a284ab3b547b1378ad55a3ecdaa181c74",
+      "hex": "stripes_logits.hex",
+      "hex_sha256": "7d005f872f296084516d046858537f3f21b658ba6bddfb7136094095a5a04fc5"
+    }
+  },
+  "cases": [
+    {
+      "name": "zero",
+      "pixels": "zero_pixels",
+      "expected": {
+        "input": "zero_input",
+        "conv1": "zero_conv1",
+        "conv2": "zero_conv2",
+        "conv3": "zero_conv3",
+        "conv4": "zero_conv4",
+        "gap": "zero_gap",
+        "logits": "zero_logits"
+      },
+      "predicted_class": "bolt"
+    },
+    {
+      "name": "seed2026",
+      "pixels": "seed2026_pixels",
+      "expected": {
+        "input": "seed2026_input",
+        "conv1": "seed2026_conv1",
+        "conv2": "seed2026_conv2",
+        "conv3": "seed2026_conv3",
+        "conv4": "seed2026_conv4",
+        "gap": "seed2026_gap",
+        "logits": "seed2026_logits"
+      },
+      "predicted_class": "bolt"
+    },
+    {
+      "name": "stripes",
+      "pixels": "stripes_pixels",
+      "expected": {
+        "input": "stripes_input",
+        "conv1": "stripes_conv1",
+        "conv2": "stripes_conv2",
+        "conv3": "stripes_conv3",
+        "conv4": "stripes_conv4",
+        "gap": "stripes_gap",
+        "logits": "stripes_logits"
+      },
+      "predicted_class": "bolt"
+    }
+  ],
+  "tools": {
+    "tools/model_audit.py": "3992af52b6f490054a61eaffaf180aaca2a5fcf9a905991e302494bd4a858439",
+    "tools/numpy_reference.py": "e8ff1155c2cad773a3e285967f75d303839ab944eea8da1a50d1dd460fefc114",
+    "tools/reference_tensors.py": "562991e94eb5e9794e5d9dece49792ea1333ac32feb3a6bf51513994973e2bf4",
+    "tools/check_model_reference.py": "3ebbf96838286668bc58bb43cb75a6d18c54a85172065686731cfa2ce66f9df8"
+  }
+}

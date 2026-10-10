@@ -1,0 +1,29 @@
+[
+  {
+    "path": "models\\cnn-bn64-baseline.pt",
+    "metadata": {
+      "classes": [
+        "bolt",
+        "nut",
+        "washer"
+      ],
+      "input_size": 64
+    },
+    "tensor_count": 26
+  },
+  {
+    "path": "models\\cnn-border-fill-best.pt",
+    "metadata": {
+      "classes": [
+        "bolt",
+        "nut",
+        "washer"
+      ],
+      "input_size": 64,
+      "architecture": "fastener-4conv-bn-v1",
+      "preprocess": "scene-gray-border-padding-v1",
+      "preprocess_mode": "border"
+    },
+    "tensor_count": 26
+  }
+]

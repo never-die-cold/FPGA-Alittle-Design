@@ -1,0 +1,6 @@
+PASS: ROI 24 training parity cases, BGR channels and 8 invalid inputs
+PASS: FP32 prototype load/repeatable inference and model/input rejection
+PASS: work-order pass/fail/recheck counts and invalid inputs
+PASS: persistent replay reuse and input/artifact conflict rejection
+PASS: replay detection/ROI/rules, real FP32 inference, persistent reuse and error gates
+PASS: checked FILE REPLAY HUD; normal/unknown counts and altered evidence rejection
