@@ -21,6 +21,8 @@ try {
     if ($LASTEXITCODE -ne 0) { throw "packaged runtime test failed" }
     & $Python sim/vision/test_vision_client.py
     if ($LASTEXITCODE -ne 0) { throw "packaged HTTP integration failed" }
+    & $Python sim/vision/test_inspection_viewer.py --exe sim/build/vision-client/dist/vision_preview/vision_preview.exe
+    if ($LASTEXITCODE -ne 0) { throw "packaged FILE REPLAY failed" }
     Write-Output "PASS: Windows M2 preview EXE build + packaged renderer test"
 } finally {
     $env:PYTHONPATH = $oldPythonPath

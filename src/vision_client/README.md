@@ -63,6 +63,20 @@ WAITING；连续 3 次 HTTP 失败自动重新握手（D5）。界面为 **HUD v
 离线测试 `py sim/vision/test_vision_rounds.py` 覆盖触发节流、超龄/配置变化/断联撤框、
 服务重启（新会话）自动恢复，已接入 `sim/scripts/run_vision_python.sh` 全量。
 
+## 离线文件回放（2026-10-10）
+
+新增 `--replay <result.json>`，读取经过哈希检查的 FILE_REPLAY 快照，显示目标框、
+原型类别/分数和三类“实际 / 工单”数量；状态为 OFFLINE FILE，不访问相机或网络。
+它与 `--mock`、`--endpoint`、`--records-dir`、`--selftest`、`--trigger-frame` 互斥，
+不生成新的联网批次。Python 与打包 EXE 都已通过离板回放测试。
+
+```powershell
+python src/vision_client/preview.py --replay data/evidence/2026-10-10-offline-inspection/runs/synthetic-001/result.json
+# 打包后也可使用 --replay；--headless --save <PNG> 可导出检查画面。
+```
+
+完整生成步骤和限制见[离板检查说明](../../docs/offline-inspection.md)。
+
 ## 模拟接口 v1
 
 - GET `/v1/status`：mode=MOCK、session_id、hardware_connected=false。

@@ -89,8 +89,9 @@ def _mask(size, radius):
 class Hud:
     """固定布局的 HUD 渲染器；线程内使用，不做并发保护。"""
 
-    def __init__(self, engine: TextEngine):
+    def __init__(self, engine: TextEngine, system=("SYSTEM ONLINE", GREEN)):
         self.engine = engine
+        self.system = system
         self.mask = _mask((VIEW[2], VIEW[3]), 14)
         self.base = self._build_base()
         self.view_frame = self._build_view_frame()
@@ -121,8 +122,8 @@ class Hud:
         bg = (np.array(BG_TOP) * (1 - t) + np.array(BG_BOT) * t).astype(np.uint8)
         base = np.ascontiguousarray(np.repeat(bg, W, axis=1)[:, :, [2, 1, 0]])
         cv2.line(base, (0, 64), (W, 64), bgr(BORDER), 1)
-        cv2.circle(base, (1120, 32), 5, bgr(GREEN), -1, cv2.LINE_AA)
-        self.engine.draw_cy(base, "SYSTEM ONLINE", 1134, 32, 16, (205, 212, 222))
+        cv2.circle(base, (1120, 32), 5, bgr(self.system[1]), -1, cv2.LINE_AA)
+        self.engine.draw_cy(base, self.system[0], 1134, 32, 16, (205, 212, 222))
         cv2.line(base, (1300, 16), (1300, 48), bgr(BORDER), 1)
         cv2.circle(base, (1330, 32), 9, (188, 196, 208), 2, cv2.LINE_AA)
         cv2.line(base, (1330, 32), (1330, 25), (188, 196, 208), 2, cv2.LINE_AA)
@@ -255,6 +256,9 @@ class Hud:
             self.engine.draw_cy(canvas, value, cx, my0 + 55, 36, color, "SemiBold", "center")
             if i:
                 cv2.line(canvas, (mx0 + cw * i, my0 + 16), (mx0 + cw * i, my1 - 16), bgr(BORDER), 1)
+        if state.get("counts_note"):
+            self.engine.draw(canvas, state["counts_note"], mx0 + 18, my0 + 92, 13, DIM)
+            return
         self.engine.draw(canvas, "FRESHNESS", mx0 + 18, my0 + 92, 13, DIM)
         bar_x0, bar_x1, by = self._bar_x0, self._bar_x1, my0 + 95
         _paste(canvas, self.track, bar_x0, by)
