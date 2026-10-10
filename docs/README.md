@@ -6,8 +6,8 @@
 
 ## 项目三句话
 
-1. 是什么：在 PYNQ-Z2 上用自研 RISC-V + HDMI 视觉流水线 + CNN 协处理器识别桌面紧固件，视频经采集卡进入 Windows EXE，统一显示识别框、类别、计数与工单异常（2026 嵌赛 FPGA 赛道 · AMD 自主选题）。
-2. 现在到哪：按下表区分模块收口与全项目验收。自由分散且互不遮挡、传统定位 + CNN 分类路线已确定；EXE 由 watercopper 负责。
+1. 是什么：在 PYNQ-Z2 上用自研 RISC-V + HDMI 视觉流水线 + CNN 协处理器识别受控工位的紧固件，视频经采集卡进入 Windows EXE，统一显示识别框、类别、计数与工单异常（2026 嵌赛 FPGA 赛道 · AMD 自主选题）。
+2. 现在到哪：按下表区分模块收口与全项目验收。OpenCV/HOG/小 CNN 离线原型和外包材料已接收，正式板端定位/ROI、INT8 模型和工业闭环未验收。自由分散且互不遮挡、传统定位 + CNN 分类路线已确定；EXE 由 watercopper 负责。
 3. 计划和验收：根目录 `plan.md` 管全项目收口、分工和交付看板；`src/riscv/plan.md` 只管核专项，`src/riscv/plan_calendar.md` 只管核任务与卡点。接口按模块与核版本看对应设计契约。
 
 | 层次 | 状态与证据 |
@@ -42,6 +42,7 @@
 | RISC-V 核专项计划与看板 | `src/riscv/plan.md`、`src/riscv/plan_calendar.md` |
 | Part B 验证与验收执行清单 | `docs/partB-verify-plan.md` |
 | 模块三训练与量化前期 | `docs/module3-model-training.md` |
+| 外包视觉交接包、接收差异与复现缺口 | [交接索引](outsource/fastener-handoff.md) |
 | 视频/结果同步协议决策单 | `docs/vision-sync-protocol-decisions.md` |
 | RISC-V v0 接口（基线唯一权威） | [src/riscv/design_v0.md](../src/riscv/design_v0.md) |
 | RISC-V v1 接口（Part B/C 唯一权威） | [src/riscv/design_v1.md](../src/riscv/design_v1.md) |

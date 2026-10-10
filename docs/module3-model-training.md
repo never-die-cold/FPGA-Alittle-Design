@@ -18,10 +18,10 @@
 
 | 路线 | 做法 | 优点 | 风险 |
 |:---|:---|:---|:---|
-| **QAT（推荐）** | PyTorch `torch.ao.quantization` 量化感知训练，或 Brevitas（FINN 生态，主计划列为架构参考） | 激活范围提前校准，精度损失需实际测量 | 训练周期略长 |
-| PTQ（备选） | 训练后校准量化（少量校准集） | 最快出结果 | 小网络也会掉点，且校准集要凑 |
+| **PTQ（先评估）** | FP32 基线训练后用代表性 ROI 校准量化 | 可先测量量化损失 | 小网络也会掉点，校准集须代表实际工位 |
+| QAT（精度不足时） | PyTorch `torch.ao.quantization` 或 Brevitas 量化感知训练 | 可针对量化损失重新训练 | 训练周期略长，仍须实测 |
 
-结论倾向：**Brevitas + QAT**，理由：与 FINN 部署流同生态；导出的量化参数仍须与硬件 INT8 MAC 契约核对。若环境受阻，降级用 torch.ao QAT，导出脚本隔离框架差异。
+按外包受控工位方案，先建立真实 ROI 的 FP32 基线，再评估 INT8 PTQ；精度损失超过团队冻结门槛时采用 QAT。Brevitas 演练保留为可用路线，导出的缩放、舍入、饱和与权重排布均须对齐协处理器契约。
 
 ✅ **路线演练通过（2026-10-03）**：brevitas 0.13.4 + torch 2.14 CPU。QAT 训练收敛（acc 1.00）后导出 INT8 权重 + scale，按**整数累加语义**（int8×int8→int32 累加→rescale→requant，即 MAC 阵列口径）独立复现，argmax 100% 一致。脚本 `data/scripts/m3_brevitas_drill.py` 一键复现，证据 `data/logs/2026-10-03-m3-brevitas-drill/`。接口注意：brevitas 0.13 无 `layer.quant_input_scale` 属性，激活 scale 须用 `QuantIdentity` 显式量化点持有（`IntQuantTensor.scale`），不碰框架内部 API。
 
@@ -36,6 +36,8 @@
 - **✅ 演练已完成（2026-09-30，torch 2.14 CPU）**：`data/scripts/m3_train_drill.py` 一键复现（`python data/scripts/m3_train_drill.py`），输出归档 `data/logs/2026-09-30-m3-train-drill/`。结论：链路可行——极简 CNN 训练收敛（acc 1.00）、手工 per-tensor 对称 INT8 量化后与 FP32 argmax 100% 一致、2740 权重导出 hex + scales + 逐层激活 golden。演练暴露的接口细节：① torch Sequential 参数名带占位索引（0/2/5），导出脚本必须显式层名映射，不能按 conv 序号拼；② 量化语义（对称 per-tensor、权重 [-127,127]）已按协处理器 MAC 阵列口径实现，`cop_top` 契约冻结时若改 per-channel/zp 需同步改演练脚本。
 
 ### 3.5 D5 拍板材料：输入尺寸与 MAC 阵列预算（2026-10-03，供 10/5 评审，拍板权在模块三）
+
+已接收的 [外包视觉原型](outsource/fastener-handoff.md) 包含两个 FP32 小 CNN 权重和 HOG/SVM 基线，均非正式 INT8 交付物。64×64 灰度 ROI 是候选输入；不得用整帧 224×224 缩放快照替代原分辨率逐目标裁剪。以下网络和 MAC 预算为独立草案，未证明与交接权重结构一致，须逐层核对后才能用于 RTL 实现。
 
 依据（仓库内可查）：
 
@@ -93,6 +95,7 @@ MAC 阵列规模预算（@100 MHz，INT8）：
 
 | 日期 | 变更 | 作者 |
 |:---|:---|:---|
+| 2026-10-10 | 接入外包原型来源，量化路线改为先测 PTQ、必要时 QAT；区分交接权重与候选硬件预算 | 文档同步 |
 | 2026-09-29 | 首版：路线选型 QAT/Brevitas、交付物定义、对齐点清单 | never-die-cold（训练侧） |
 | 2026-09-30 | 任务收敛为自由分散/互不遮挡的真实紧固件识别，采用传统定位 + CNN 分类；EXE 由 watercopper 负责，训练排期改为 M2/M3/M4 交付节点 | 文档同步 |
 | 2026-10-03 | §2 Brevitas QAT 路线演练 PASS（`data/scripts/m3_brevitas_drill.py`，整数累加复现 100% 一致）；新增 §3.5 D5 拍板材料（视觉链 DSP 0 占用实测 + 候选首网 + MAC 阵列预算，建议 64×64/128 MAC） | never-die-cold（训练侧） |
