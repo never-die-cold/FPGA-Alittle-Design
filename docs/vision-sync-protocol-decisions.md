@@ -75,9 +75,15 @@
 
 核查注记（2026-10-09，Q01）：上述 schema 与“未知字段拒绝”覆盖**结果报文**，
 不能解释为只针对 POST 请求。v1.1 落码证据见[原验证记录](../data/logs/2026-10-06-vision-sync-schema/README.md)。
-当前 `src/pynq_host/vision_protocol.py:validate_packet` 未实施完整结果字段白名单；
+核查当时 `src/pynq_host/vision_protocol.py:validate_packet` 未实施完整结果字段白名单；
 `vision_mock_service.py` 对请求字段的拒绝不能替代结果报文校验，现有 tb 未覆盖该负例。
 本轮只登记，不改协议、Python 或 tb；最小修复和负例测试须用户另批裁决。
+
+修复进展（2026-10-10，用户授权离板执行）：工作区已补齐顶层与逐目标字段白名单，
+非对象与未知字段统一拒绝；保留现有可选 trigger_ref 和空目标列表。
+仓库内 test_vision_protocol.py 覆盖3个合法/12个非法用例，旧代码先复现FAIL；
+run_vision_python.sh 八组退出0，证据见[data/logs](../data/logs/2026-10-10-q01-result-fields/README.md)。
+代码尚未提交，理解门槛待用户回答；此修复不开放 LIVE、分类或工单判定字段。
 
 ## D7 板端真实服务负责人（已定）
 
