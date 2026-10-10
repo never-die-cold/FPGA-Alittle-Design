@@ -1,0 +1,6 @@
+WARN: check failed (1/3): <urlopen error timed out>
+WARN: check failed (2/3): <urlopen error timed out>
+WARN: check failed (3/3): <urlopen error timed out>
+WARN: re-handshake failed: <urlopen error timed out>
+WARN: service session changed; re-handshaking
+PASS: round overlay trigger/throttle/manual/stale/config-change/outage/session-recovery

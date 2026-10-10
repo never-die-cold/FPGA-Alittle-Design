@@ -135,7 +135,7 @@
 | 定位与紧固件模型 | 定位/裁剪 Python 黄金参考已有；OpenCV、HOG/SVM、小 CNN 离线原型与外包快照已接收；真实工位、正式模型和板端部署未验收 | 实际工位采图、原分辨率 ROI、真实数据 FP32/PTQ 对比、INT8 模型与精度报告 | 训练 NC、数据 WC；定位 PS/PL 归属待协调 |
 | CNN 协处理器 | 尚未实现 | 算子契约、MAC/缓存、自测、首个网络结果 | JL；依赖模型/算子对齐，M1 后主力转入 |
 | 板端调度与服务 | 配置／快照与 mock 工具已有；正式识别服务、工业调度未实现 | RISC-V 工单规则、PS 真实结果接口 | NC 真实服务；核调度另行协调 |
-| Windows EXE | WC 的预览／mock 原型已实现，见[证据](data/logs/2026-10-06-vision-sync-schema/README.md) | 真实结果联调、工单／批次／导出及发布复验 | WC；依赖 NC 真实服务 |
+| Windows EXE | 预览/MOCK、轮次与批次记录、HUD v4、CSV导出及中文支持已实现；[本次八组回归](data/logs/2026-10-10-branch-integration/README.md)退出0 | LIVE真实结果联调、工单判定及发布复验；完整工业闭环未验收 | WC；依赖 NC 真实服务 |
 | 发布与证据 | 核/视觉已有部分证据；工业闭环证据未完成 | 实机验收、指标、EXE 发布包、操作说明与演示视频 | 全员；WC 主笔材料 |
 
 缩写：JL = `jianglibo`；NC = `never-die-cold`；WC = `watercopper`。
