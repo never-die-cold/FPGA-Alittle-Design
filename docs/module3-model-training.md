@@ -3,7 +3,8 @@
 > 是什么：模块三 CNN 推理协处理器对应的**训练侧**前期准备文档——训练/量化路线选型、交付物定义与接口对齐点。
 > 给谁看：never-die-cold（训练侧准备，经 9/29 授权）、jianglibo（`src/coprocessor/` RTL，第 5 节对齐点）、watercopper（第 6 节测试数据衔接）。
 > 什么时候读：紧固件数据准备、模型选型与协处理器契约评审时；契约定稿后回填第 5 节。
-> 状态：前期草案，不约束 RTL；RTL 与算子自测以 jianglibo 的契约为准。
+> 状态：训练侧前期草案；[C02 整数/硬件契约](../src/coprocessor/design_v0.md)
+> 与 [C03 集成接口契约](coprocessor-integration-v0.md)已由 JL 于 2026-10-11 冻结，但仍不代表 RTL 或正式 INT8 模型已完成。
 
 ## 1. 目标与交付物定义
 
@@ -101,6 +102,12 @@ NumPy-only 检查工具的 FP32 软件参考包。三个诊断输入是数值测
 4. MAC 阵列维度（并行度）→ 反推训练侧可接受的最大通道数/核尺寸；
 5. 推理完成信号与结果回读方式（A3 同屏对比依赖）。
 
+已冻结的回答是：规范黄金使用 CHW/OIHW，硬件按 C8 与 O16×I8 打包；
+scale/zero-point、bias、multiplier、shift 写入带哈希的模型 manifest/参数包；支持
+Conv+bias+ReLU+requant、GAP、FC；MAC 为 8×16；完成与逐目标结果通过 C03 的
+MMIO/result window 读取，权重/ROI/结果走 DMA。精确舍入、score 语义、ROI 传输排布、
+DMA 结构和 MMIO 地址以两份冻结契约为准；导出工具只能按该口径生成正式包。
+
 ## 6. 与 watercopper（测试数据）的衔接
 
 - 逐层黄金参考格式：输入图 hex + 每层期望输出切片，命名随 cop 契约定；
@@ -111,7 +118,9 @@ NumPy-only 检查工具的 FP32 软件参考包。三个诊断输入是数值测
 
 | 日期 | 变更 | 作者 |
 |:---|:---|:---|
+| 2026-10-11 | JL 冻结 C02/C03，允许进入 J02；正式 INT8 实现状态仍为未实现 | jianglibo / Codex 同步 |
 | 2026-10-10 | 接入外包原型来源，量化路线改为先测 PTQ、必要时 QAT；区分交接权重与候选硬件预算 | 文档同步 |
+| 2026-10-10 | 阶段 0 新增 C02/C03 契约草案链接与训练侧推荐对齐答案；待 JL 拍板，未宣称实现 | Codex |
 | 2026-09-29 | 首版：路线选型 QAT/Brevitas、交付物定义、对齐点清单 | never-die-cold（训练侧） |
 | 2026-09-30 | 任务收敛为自由分散/互不遮挡的真实紧固件识别，采用传统定位 + CNN 分类；EXE 由 watercopper 负责，训练排期改为 M2/M3/M4 交付节点 | 文档同步 |
 | 2026-10-03 | §2 Brevitas QAT 路线演练 PASS（`data/scripts/m3_brevitas_drill.py`，整数累加复现 100% 一致）；新增 §3.5 D5 拍板材料（视觉链 DSP 0 占用实测 + 候选首网 + MAC 阵列预算，建议 64×64/128 MAC） | never-die-cold（训练侧） |
