@@ -7,6 +7,9 @@ set -uo pipefail
 VIV="${VISION_VIVADO_BIN:-/d/Vivado_downloads/2026.1/Vivado/bin}"
 MODE="${1:-all}"
 case "$MODE" in
+    capture) TBS=(tb_capture_stream_monitor tb_capture_status_axi) ;;
+    capture_monitor) TBS=(tb_capture_stream_monitor) ;;
+    capture_status) TBS=(tb_capture_status_axi) ;;
     rgb2gray) TBS=(tb_rgb2gray) ;;
     linebuf)  TBS=(tb_line_buffer) ;;
     gaussian) TBS=(tb_gaussian3x3) ;;
@@ -18,6 +21,7 @@ case "$MODE" in
     osd)      TBS=(tb_osd) ;;
     axi)      TBS=(tb_axi_regs) ;;
     axi_split) TBS=(tb_axi_split) ;;
+    axi_lock) TBS=(tb_axi_lock_reset) ;;
     config) TBS=(tb_config_bridge) ;;
     top_async) TBS=(tb_top_async) ;;
     color) TBS=(tb_top_color) ;;
@@ -36,15 +40,19 @@ if [ "$MODE" = all ]; then TBS+=(tb_cop_buf_stress tb_axi_split tb_config_bridge
 if [ "$MODE" = all ]; then TBS+=(tb_video_pipeline tb_video_real); fi
 if [ "$MODE" = all ]; then TBS+=(tb_vision_axi); fi
 if [ "$MODE" = all ]; then TBS+=(tb_patterns); fi
+if [ "$MODE" = all ]; then TBS+=(tb_capture_stream_monitor tb_capture_status_axi tb_axi_lock_reset); fi
 cd "$(dirname "$0")/.." || exit 1
 source scripts/vision_gate.sh
 mkdir -p build/vision/xsim
+TB_FILES=()
 for t in "${TBS[@]}"; do
     vision_require_tb "vision/$t.v" || exit 1
+    TB_FILES+=("vision/$t.v")
 done
 
-"${VIV}/xvlog.bat" ../src/vision/*.v vision/tb_*.v > build/vision/xsim/compile.log 2>&1 \
+"${VIV}/xvlog.bat" ../src/vision/*.v > build/vision/xsim/compile.log 2>&1 \
     || { cat build/vision/xsim/compile.log; echo "ERROR: xvlog 编译失败"; exit 1; }
+"${VIV}/xvlog.bat" -sv "${TB_FILES[@]}" >> build/vision/xsim/compile.log 2>&1 || { cat build/vision/xsim/compile.log; echo "ERROR: xvlog testbench compile failed"; exit 1; }
 
 for t in "${TBS[@]}"; do
     echo "== $t =="
