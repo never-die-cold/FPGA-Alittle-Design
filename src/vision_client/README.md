@@ -29,13 +29,16 @@ sim/build/vision-client/dist/vision_preview/vision_preview.exe --mock --endpoint
 一轮检查（0.3s 防抖）；配 `--records-dir` 时该轮**有效**结果落批次记录（D8–D10）。
 设备索引需现场确认。当前没有验证实际 UVC 格式、驱动与目标电脑兼容性。
 
-批次记录（M3 起步，契约见决策单 D8–D10）：`--records-dir <目录>` 开启。只有手动触发的
-有效轮次记录——自动间隔轮次永不记录，结构性满足"重复帧不增加批次计数"；记录键
-`(session_id, check_id)` 去重；产物为 `records.jsonl`（一行一条：mode/session/check/config/
-frame/时间/结果年龄/目标数/boxes/verdict 预留/截图名）+ `screenshots/` 逐条 PNG。
-**MOCK 记录截图带 `mock_` 前缀、mode=MOCK，不得用作板上识别证据**（plan.md §3.4）。
+批次记录（M3 起步，契约见决策单 D8–D10；**W07 起 schema v2**）：`--records-dir <目录>` 开启。
+只有手动触发的有效轮次记录——自动间隔轮次永不记录，结构性满足"重复帧不增加批次计数"；
+记录键 `(session_id, check_id)` 去重；产物为 `records.jsonl`（一行一条：mode/session/check/
+config/frame/时间/结果年龄/目标数/boxes/**status**/**decision 原样**（当轮工单即
+decision.expected）/**prototype**/protocol_version/截图名）+ `screenshots/` 逐条 PNG。
+**截图前缀标来源（C04 §3.2/Q2）：MOCK=`mock_`、LIVE+prototype=`proto_`、真实 LIVE 无前缀——
+三者不得互换使用**，均不得用作板上识别证据（plan.md §3.4）。
 目录包含 `records.csv` 时即为完整导出件；**CSV 导出**：`py src/vision_client/export_records.py <记录目录>`
-（UTF-8-BOM，Excel 直接打开不乱码；targets 列保留 JSON）。离线测试：
+（UTF-8-BOM，Excel 直接打开不乱码；v2 增 status/missing/extra/prototype 列，v1 旧记录兼容；
+targets 列保留 JSON）。离线测试：
 `py sim/vision/test_vision_records.py`、`py sim/vision/test_vision_export.py`。
 
 异常事件日志（D11）：状态迁移（断联/超期/配置变化/恢复 ok）与会话变化、重握手失败写入

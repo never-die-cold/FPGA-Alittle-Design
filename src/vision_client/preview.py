@@ -270,8 +270,9 @@ def main():
             if will_record:
                 recorder.write(remote.packet, canvas, fresh - remote.received_at)
             if anomalies is not None and remote is not None:
+                proto = bool(remote.packet.get("prototype")) if remote.packet else False
                 for event in remote.drain_events():
-                    anomalies.log(remote.mode, event, canvas)
+                    anomalies.log(remote.mode, event, canvas, prototype=proto)
             if args.save and not cv2.imwrite(str(args.save), canvas):
                 raise RuntimeError("preview image save failed")
             if not args.headless:
