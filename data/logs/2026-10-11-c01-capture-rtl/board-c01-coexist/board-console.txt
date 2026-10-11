@@ -1,0 +1,3 @@
+sudo -n env C01_BIT=/home/xilinx/vision_m2/c01-a2a0452a39f94cfdbb0da5bcb750e5ca/capture.bit C01_BIT_SHA=550c2f1e4417aedbaf295e1ccd64bd09203a4e71b9dc11d3a1de099e12213d41 C01_HWH_SHA=9ba79d781164946140de27ac648d6fd9a6f5401c1be6865dd347aea27da62516 bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && timeout -k 5s 65s python3 -X faulthandler /home/xilinx/vision_m2/c01-a2a0452a39f94cfdbb0da5bcb750e5ca/c01_status_onboard.py'; printf '\n__PYNQ_RC_1cb2ed4e5c1a4b9bb1bc1a5d96c49a1c=%d\n' $?
+[?2004l
+SERIAL_COMMAND_EXIT=124

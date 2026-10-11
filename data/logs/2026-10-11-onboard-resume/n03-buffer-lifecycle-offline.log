@@ -1,0 +1,3 @@
+REPRODUCED: cached frame returned once; second release calls munmap
+PASS: candidate freed guard prevents second unmap in this replay
+LIMIT: spy replay proves the branch, not the cause of a native crash

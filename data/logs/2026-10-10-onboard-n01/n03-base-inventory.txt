@@ -1,0 +1,16 @@
+HOST_STARTED_UTC=2026-10-10T15:50:17.0350404Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=find /usr/local/share/pynq-venv -path "*/overlays/base/base.bit" -o -path "*/overlays/base/base.hwh"; ls -l /dev/dri /dev/video* 2>/dev/null; cat /proc/sys/kernel/random/boot_id
+find /usr/local/share/pynq-venv -path "*/overlays/base/base.bit" -o -path "*/overlays/base/base.hwh"; ls -l /dev/dri /dev/video* 2>/dev/null; cat /proc/sys/kernel/random/boot_id; printf '\n__PYNQ_RC_d8a56536c1c44a11932d801a1ffa2fcb=%d\n' $?
+[?2004l/usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/overlays/base/base.bit
+/usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/overlays/base/base.hwh
+/dev/dri:
+total 0
+drwxr-xr-x 2 root root         80 Sep 21 14:17 by-path
+crw-rw---- 1 root video  226,   0 Sep 21 14:17 card0
+crw-rw---- 1 root render 226, 128 Sep 21 14:17 renderD128
+46548310-bd10-4806-8c89-f92c2b7ce209
+
+__PYNQ_RC_d8a56536c1c44a11932d801a1ffa2fcb=0
+
+HOST_EXIT_CODE=0

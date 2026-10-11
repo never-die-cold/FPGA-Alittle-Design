@@ -1,0 +1,17 @@
+PASS: PS configuration staging/commit/ack/busy/timeout/epoch wrap mock protocol
+PASS: localization empty/multiple/non-grid/noise/limit/border + per-target crop/resize/frame metadata
+PASS: Q01 result fields: 3 valid / 12 invalid packets
+PASS: LIVE profile v1.2 status/decision/class/score/prototype rules
+PASS: M2 HTTP mock check/config/status/location + check/config/session/stale/error contract
+WARN: check failed (1/3): <urlopen error timed out>
+WARN: check failed (2/3): <urlopen error timed out>
+WARN: check failed (3/3): <urlopen error timed out>
+WARN: re-handshake failed: <urlopen error timed out>
+WARN: service session changed; re-handshaking
+PASS: round overlay trigger/throttle/manual/stale/config-change/outage/session-recovery/events
+PASS: batch records key-dedup/mock-prefix/fields + anomaly events (D8-D11)
+PASS: records CSV export header/rows/targets/BOM + missing-file error
+PASS: file localization exact boxes/crops, metadata, empty/recheck and invalid input
+PASS: PGM/hex exact row order, hashes, target association and stale manifest isolation
+PASS: ARM portable package E:\Projects\FPGA-Alittle-Design\sim\build\arm-localize-package-test.tar.gz
+PASS: isolated portable package, missing/tampered file gate and retained benchmark samples

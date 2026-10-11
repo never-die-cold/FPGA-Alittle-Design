@@ -1,0 +1,7 @@
+HOST_STARTED_UTC=2026-10-11T14:04:08.5651119Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=printf 'RESUME_CPU_ALIVE\n'; cat /proc/sys/kernel/random/boot_id; sudo -n true
+
+ERROR: Exception calling "Open" with "0" argument(s): "The port 'COM12' does not exist."
+
+HOST_EXIT_CODE=1

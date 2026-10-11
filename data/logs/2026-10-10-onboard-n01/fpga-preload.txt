@@ -1,0 +1,12 @@
+HOST_STARTED_UTC=2026-10-10T14:42:38.4569523Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n sh -c 'cat /sys/class/fpga_manager/fpga0/state; test -r /sys/class/fpga_manager/fpga0/firmware && cat /sys/class/fpga_manager/fpga0/firmware || true; ls -l /home/xilinx/vision_m2/vision.bit /home/xilinx/vision_m2/vision.hwh'
+sudo -n sh -c 'cat /sys/class/fpga_manager/fpga0/state; test -r /sys/class/fpga_manager/fpga0/firmware && cat /sys/class/fpga_manager/fpga0/firmware || true; ls -l /home/xilinx/vision_m2/vision.bit /home/xilinx/vision_m2/vision.hwh'; printf '\n__PYNQ_RC_7aeea20357ed4c1eadb842720c8f8f7c=%d\n' $?
+[?2004loperating
+cat: /sys/class/fpga_manager/fpga0/firmware: Permission denied
+-rw-r--r-- 1 xilinx xilinx 4045769 Sep 21 03:02 /home/xilinx/vision_m2/vision.bit
+-rw-r--r-- 1 xilinx xilinx  313989 Sep 21 03:02 /home/xilinx/vision_m2/vision.hwh
+
+__PYNQ_RC_7aeea20357ed4c1eadb842720c8f8f7c=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

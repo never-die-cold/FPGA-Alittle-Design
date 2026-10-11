@@ -1,0 +1,40 @@
+sudo -n env C01_BIT=/home/xilinx/vision_m2/c01-8b4d42b3653c4c31a70626bf9a971abf/capture.bit C01_BIT_SHA=86d2adb0343de1785270d207eee3c6b8fee2a6444bc64705bc068e3fc781d14f C01_HWH_SHA=eaaf68c3732f1a2bf85756fc0b3a8c6b07bb5cf5b36f32020882860a6aaebf5c bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && timeout -k 5s 65s python3 -u -X faulthandler /home/xilinx/vision_m2/c01-8b4d42b3653c4c31a70626bf9a971abf/c01_status_onboard.py'; printf '\n__PYNQ_RC_f185b875511a4af58dbe99101bff3484=%d\n' $?
+[?2004lSTAGE: board diagnostic entered
+STAGE: artifact pair verified; overlay load begins
+STAGE: HWH metadata parse before programming
+STAGE: HWH layout accepted; candidate download begins
+STAGE: candidate download returned
+STAGE: overlay load returned; address validation begins
+STAGE: VDMA halted-state MMIO reads begin
+STAGE: capture identity/geometry MMIO reads begin
+STAGE: capture lock accepted; allow 5 seconds for HDMI reacquisition
+STAGE: HDMI settling finished; pipe smoke begins
+R11 busy=0 R12 applied=0
+commit ÅäÖÃºÅ=1 status={'busy': False, 'applied_config_id': 1}
+PASS: smoke£¨ÊÓÆµÔÚÎ»£¬Ö¡Ê×Õû×éÓ¦ÓÃÒÑÈ·ÈÏ£©
+PASS: C01 addresses, identity, geometry, idle DMA and existing vision smoke
+WINDOW: C01 HDMI direct display active for 20 seconds
+Timeout (0:00:15)!
+Thread 0xb6fed020 (most recent call first):
+  File "/home/xilinx/vision_m2/c01-8b4d42b3653c4c31a70626bf9a971abf/c01_status_onboard.py", line 64 in probe
+  File "/home/xilinx/vision_m2/c01-8b4d42b3653c4c31a70626bf9a971abf/c01_status_onboard.py", line 94 in main
+  File "/home/xilinx/vision_m2/c01-8b4d42b3653c4c31a70626bf9a971abf/c01_status_onboard.py", line 99 in <module>
+Timeout (0:00:15)!
+Thread 0xb6fed020 (most recent call first):
+  File "/home/xilinx/vision_m2/c01-8b4d42b3653c4c31a70626bf9a971abf/c01_status_onboard.py", line 64 in probe
+  File "/home/xilinx/vision_m2/c01-8b4d42b3653c4c31a70626bf9a971abf/c01_status_onboard.py", line 94 in main
+  File "/home/xilinx/vision_m2/c01-8b4d42b3653c4c31a70626bf9a971abf/c01_status_onboard.py", line 99 in <module>
+STATUS: {'0x0': 1128353841, '0x4': 3, '0x8': 1474, '0xc': 0, '0x10': 0, '0x14': 1280, '0x18': 720, '0x1c': 0, '0x20': 0}
+STAGE: original vision restoration begins
+ip_dict:
+  pipe @ 0x40000000 range 0x10000
+  ps7 @ 0x00000000 range 0x0
+axi_regs ¶Î: pipe @ 0x40000000
+PASS: load
+STAGE: original vision loaded; allow 5 seconds for HDMI reacquisition
+R11 busy=0 R12 applied=0
+NOVIDEO: commit Î´ÔÚÖ¡Ê×È·ÈÏ¡ª¡ª¼Ä´æÆ÷Í¨Â· OK µ«ÎÞÊäÈëÊÓÆµ£¨²é HDMI IN Ô´/Ïß²Ä£©
+
+__PYNQ_RC_f185b875511a4af58dbe99101bff3484=3
+[?2004hxilinx@pynq:~$ 
+SERIAL_COMMAND_EXIT=3

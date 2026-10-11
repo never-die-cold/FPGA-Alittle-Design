@@ -1,0 +1,51 @@
+PHASE: loading PYNQ base overlay
+PHASE: base loaded
+MODE: namespace(width=1280, height=720, bits_per_pixel=24) COLOR: BGR
+PHASE: HDMI IN/OUT tied; capturing
+WARMUP: 0 0 200
+WARMUP: 1 0 200
+WARMUP: 2 0 200
+WARMUP: 3 0 200
+WARMUP: 4 0 200
+WARMUP: 5 0 200
+WARMUP: 6 0 200
+WARMUP: 7 0 200
+OUTPUT: E:\Projects\FPGA-Alittle-Design\sim\build\n03-capture-offline\ok-b7f7a09890fb4da29cb911f75d0f6ada.png
+FRAME: (720, 1280, 3) uint8 strides= (3840, 3, 1)
+COPY: True read_ms= 1.843
+PIXELS_SHA256: a53546c9776f4e92cdf8ec59301e9f24cac7ae6fac46207393362dfefbad11f9
+PNG_SHA256: 3ff898bdd0caffcec0e41508b9478ad4ac2406af78a428e6e779de9939e9f87f
+PNG_BYTES: 4584
+PIXEL_RANGE: 0 200
+PHASE: COEXIST_WINDOW 20s; host may capture HDMI OUT
+PASS: full BGR copy and HDMI IN/OUT lifecycle complete
+PASS: offline N03 ok cleanup and frame ownership
+PHASE: loading PYNQ base overlay
+PHASE: base loaded
+MODE: namespace(width=1280, height=720, bits_per_pixel=24) COLOR: BGR
+PHASE: HDMI IN/OUT tied; capturing
+WARMUP: 0 0 0
+WARMUP: 1 0 0
+WARMUP: 2 0 0
+WARMUP: 3 0 0
+WARMUP: 4 0 0
+WARMUP: 5 0 0
+WARMUP: 6 0 0
+WARMUP: 7 0 0
+OUTPUT: E:\Projects\FPGA-Alittle-Design\sim\build\n03-capture-offline\black-e75ffdd86e3c4c29a65d951b26c5a387.png
+FRAME: (720, 1280, 3) uint8 strides= (3840, 3, 1)
+COPY: True read_ms= 1.266
+PIXELS_SHA256: 822e3a311bc34185394aeb709bb83310f1243089b95cdadc218eee179b1d6f78
+PNG_SHA256: d18b6ed038c377e1b60de4ae5065fe2f67e0bbedccb9b74d25385d7aabd6930e
+PNG_BYTES: 3947
+PIXEL_RANGE: 0 0
+PHASE: COEXIST_WINDOW 20s; host may capture HDMI OUT
+PASS: offline N03 black cleanup and frame ownership
+PHASE: loading PYNQ base overlay
+PHASE: base loaded
+MODE: namespace(width=1280, height=720, bits_per_pixel=24) COLOR: BGR
+PHASE: HDMI IN/OUT tied; capturing
+PASS: offline N03 timeout cleanup and frame ownership
+PHASE: loading PYNQ base overlay
+PHASE: base loaded
+PASS: offline N03 configure cleanup and frame ownership

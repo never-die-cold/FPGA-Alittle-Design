@@ -1,0 +1,10 @@
+SOURCE=E:\Projects\FPGA-Alittle-Design\sim\build\c01-hdmi-1791713720540454\capture-1791713720540454.hwh
+TARGET=/home/xilinx/vision_m2/c01-cefc3ffab83448b1ae9e41b345276c4e/capture.hwh
+SHA256=eaaf68c3732f1a2bf85756fc0b3a8c6b07bb5cf5b36f32020882860a6aaebf5c
+BASE64_SENT=54272
+saved=$(stty -g); (trap 'stty "$saved"' EXIT; stty raw -echo; timeout --foreground -k 3s 180s python3 -c 'import base64,gzip;exec(gzip.decompress(base64.b64decode("H4sIAAAAAAAACo1UTY/TMBC991cMPqUQsh+0PSybQyVW4gSr7YKEEKom9aQZmtiR7ba7++uR7aTJogrRSzOfnvf8xkKIB9oQHwi0Iti+cHtRoKXFDEquCfSBDCAYPMK35cPjR1DkPd59NOwIEAqNRobsTAgx4abVxkFs0lu+b/9doa1qLnrTPttJaXQDLTrvh85/j66aTCaSSjBxwoTURkuSa8svlPqZui9b4fV8kYIk61ihY61ScHpHKgXrDGGTf9GKpjcTAAAuQWkHl3AL44Zwm8PVAt7C1eX1rP/Tps/NT+edS4yd/c8gW4LvWO/pzhhtEuEMKluSgVCs9w50CQbVlsQ0lMURIfdUZNZJVlmxL30Fl32QLXgIQLWlzhdqW8PKJQErvAOxfrhbfvohUijrva3yR7OneMam2qudhRx+/gq2oQZZsdpC/oqFEDxW/upPKQO40MUPGgbIDKFMGlbJYj7/sEiHimk8dMR2qBwanWfKVv7ivc6gxedao+wYGhBk2LakZBKsITjAeZ9DTWoc7+BBDoUQ2W/NXdTGsESHkAeFZpI2umkNWZtE/WbFYuad8iS+FA5Ys0RHkd3YhMtwqu81hTcjrWjT6z2LKo05WUVPkrdkXRLyY+xfKgrbWJPauupi9Xl5PV9Aw7ZBt6k6khyaLTnIw+Yko10Yh7MWDSmXNTvJJomGDUhSoCe2bq13I9kc2VV9pW5JJeKpEFNA63Xc7t0wMZedKwvvwkDFiZdzt/919erqA8hQ32Hi8m/6umG89NbFsyObTP+TzeEsPFB8sOA8k3GpxP1ytbqJcvTJIu2YSAdMw9szXrg/gQi6uVUFAAA=")));receive(54272,557643,"eaaf68c3732f1a2bf85756fc0b3a8c6b07bb5cf5b36f32020882860a6aaebf5c","/home/xilinx/vision_m2/c01-cefc3ffab83448b1ae9e41b345276c4e/capture.hwh","__UART_ffae0f225f9d4b778daac79bb033261c")'); printf '\n__UART_ffae0f225f9d4b778daac79bb033261c_EXIT=%d\n' $?
+[?2004l__UART_ffae0f225f9d4b778daac79bb033261c_READY
+PASS: UART file /home/xilinx/vision_m2/c01-cefc3ffab83448b1ae9e41b345276c4e/capture.hwh 557643 eaaf68c3732f1a2bf85756fc0b3a8c6b07bb5cf5b36f32020882860a6aaebf5c
+
+__UART_ffae0f225f9d4b778daac79bb033261c_EXIT=0
+[?2004hxilinx@pynq:~$ 

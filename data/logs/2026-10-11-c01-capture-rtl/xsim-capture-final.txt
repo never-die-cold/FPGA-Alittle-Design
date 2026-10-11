@@ -1,0 +1,37 @@
+== tb_capture_stream_monitor ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Sun Oct 11 17:23:06 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_capture_stream_monitor_xsim/xsim_script.tcl
+# xsim {tb_capture_stream_monitor_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: capture stream geometry, stalls, faults, lock loss, SOF recovery and reset
+$finish called at time : 2061 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_capture_stream_monitor.v" Line 64
+exit
+INFO: [Common 17-206] Exiting xsim at Sun Oct 11 17:23:08 2026...
+== tb_capture_status_axi ==
+
+****** xsim v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Sun Oct 11 17:23:12 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source xsim.dir/tb_capture_status_axi_xsim/xsim_script.tcl
+# xsim {tb_capture_status_axi_xsim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+PASS: capture CSR, split writes, backpressure, color lanes, fault CDC and clock/lock loss
+$finish called at time : 2791 ns : File "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_capture_status_axi.v" Line 92
+exit
+INFO: [Common 17-206] Exiting xsim at Sun Oct 11 17:23:14 2026...
+== XSim 全部完成（capture）==

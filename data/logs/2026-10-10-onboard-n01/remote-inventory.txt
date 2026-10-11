@@ -1,0 +1,33 @@
+HOST_STARTED_UTC=2026-10-10T14:43:45.4623027Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=ls -la /home/xilinx/vision_m2 /home/xilinx/vision; sha256sum /home/xilinx/vision/onboard_smoke.py 2>/dev/null || true
+ls -la /home/xilinx/vision_m2 /home/xilinx/vision; sha256sum /home/xilinx/vision/onboard_smoke.py 2>/dev/null || true; printf '\n__PYNQ_RC_c494a9d8c7874d0ca4517b3a24fd1a57=%d\n' $?
+[?2004lls: cannot access '/home/xilinx/vision': No such file or directory
+/home/xilinx/vision_m2:
+total 4344
+drwxrwxr-x  3 xilinx xilinx    4096 Sep 21 03:03 .
+drwxr-x--- 11 xilinx xilinx    4096 Sep 21 12:06 ..
+-rw-rw-r--  1 xilinx xilinx     219 Sep 20 16:37 demo.log
+-rw-r--r--  1 xilinx xilinx     114 Sep 20 16:38 env.log
+-rw-r--r--  1 root   root      3389 Sep 21 03:02 loaded.xclbin
+-rw-r--r--  1 xilinx xilinx     115 Sep 20 16:38 load.log
+-rwxr-xr-x  1 xilinx xilinx    3103 Sep 21 03:02 m2_onboard.py
+drwxrwxr-x  2 xilinx xilinx    4096 Sep 21 03:02 __pycache__
+-rw-r--r--  1 xilinx xilinx    2140 Sep 20 16:28 RUNBOOK.md
+-rw-r--r--  1 xilinx xilinx     131 Sep 20 16:38 smoke.log
+-rw-r--r--  1 xilinx xilinx 4045769 Sep 21 03:02 vision.bit
+-rwxr-xr-x  1 xilinx xilinx    2245 Sep 21 03:02 vision_demo.py
+-rw-r--r--  1 xilinx xilinx  313989 Sep 21 03:02 vision.hwh
+-rwxr-xr-x  1 xilinx xilinx    5626 Sep 21 03:02 vision_regs.py
+-rw-rw-r--  1 xilinx xilinx      74 Sep 20 17:16 watch2.log
+-rw-rw-r--  1 xilinx xilinx      54 Sep 20 17:17 watch3.log
+-rw-rw-r--  1 xilinx xilinx      28 Sep 21 02:25 watch4.log
+-rw-rw-r--  1 xilinx xilinx      28 Sep 21 02:20 watch5.log
+-rw-r--r--  1 root   root        24 Sep 21 02:24 watch6.log
+-rw-r--r--  1 root   root       102 Sep 21 03:07 watch7.log
+-rw-rw-r--  1 xilinx xilinx      72 Sep 20 17:12 watch.log
+-rwxr-xr-x  1 xilinx xilinx     998 Sep 21 03:02 watch_video.py
+
+__PYNQ_RC_c494a9d8c7874d0ca4517b3a24fd1a57=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

@@ -1,0 +1,11 @@
+HOST_STARTED_UTC=2026-10-10T15:22:18.6584467Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=uname -a; cat /proc/sys/kernel/random/boot_id; uptime
+uname -a; cat /proc/sys/kernel/random/boot_id; uptime; printf '\n__PYNQ_RC_8c55de1d668d4dd9b6de4230c5a290d4=%d\n' $?
+[?2004lLinux pynq 6.6.10-xilinx-v2024.1-gb36799f4e960 #1 SMP PREEMPT Sat Apr 27 05:22:24 UTC 2024 armv7l armv7l armv7l GNU/Linux
+46548310-bd10-4806-8c89-f92c2b7ce209
+ 14:20:31 up 4 min,  1 user,  load average: 0.40, 0.77, 0.37
+
+__PYNQ_RC_8c55de1d668d4dd9b6de4230c5a290d4=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

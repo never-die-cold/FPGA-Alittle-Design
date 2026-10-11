@@ -1,0 +1,9 @@
+HOST_STARTED_UTC=2026-10-10T14:27:02.3600046Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 /home/xilinx/vision_m2/m2_onboard.py env'
+sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 /home/xilinx/vision_m2/m2_onboard.py env'; printf '\n__PYNQ_RC_7fa82391397245f687a502944827f2a6=%d\n' $?
+[?2004lsudo: a password is required
+
+__PYNQ_RC_7fa82391397245f687a502944827f2a6=1
+[?20
+HOST_EXIT_CODE=1

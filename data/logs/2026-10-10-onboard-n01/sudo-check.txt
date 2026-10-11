@@ -1,0 +1,8 @@
+HOST_STARTED_UTC=2026-10-10T14:41:38.1000840Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n true
+sudo -n true; printf '\n__PYNQ_RC_d39fea7920894d34adad211d40b52e4e=%d\n' $?
+[?2004l
+__PYNQ_RC_d39fea7920894d34adad211d40b52e4e=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

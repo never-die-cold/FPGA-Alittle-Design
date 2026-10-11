@@ -1,0 +1,11 @@
+HOST_STARTED_UTC=2026-10-11T15:02:57.3103841Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n true 2>/dev/null && echo SUDO_OK || echo SUDO_EXPIRED; ls /home/xilinx/vision_m2/ | tr '\n' ' '; echo; sha256sum /home/xilinx/vision_m2/vision.bit | cut -c1-16
+sudo -n true 2>/dev/null && echo SUDO_OK || echo SUDO_EXPIRED; ls /home/xilinx/vision_m2/ | tr '\n' ' '; echo; sha256sum /home/xilinx/vision_m2/vision.bit | cut -c1-16; printf '\n__PYNQ_RC_1823b96f781f4d87a5a4983af674d170=%d\n' $?
+[?2004lSUDO_EXPIRED
+c01-8b4d42b3653c4c31a70626bf9a971abf c01-a2a0452a39f94cfdbb0da5bcb750e5ca c01-cefc3ffab83448b1ae9e41b345276c4e demo.log env.log loaded.xclbin load.log m2_onboard.py n03-base-35fbfda1e7ff404ba4cbc30c419bf235.png n03-base-4f8b00f27c734745bd95e6d7ad43f8a5.png n03-base-9caec930568c46a89bcddff859ffc954.png n03-base-c29e8a3a84a14ab8a20b5c6b17d9051d.png __pycache__ RUNBOOK.md smoke.log vision.bit vision_demo.py vision.hwh vision_regs.py watch2.log watch3.log watch4.log watch5.log watch6.log watch7.log watch.log watch_video.py 
+4f0c491a6383d8a1
+
+__PYNQ_RC_1823b96f781f4d87a5a4983af674d170=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

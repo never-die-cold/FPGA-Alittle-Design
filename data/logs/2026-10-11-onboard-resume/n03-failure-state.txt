@@ -1,0 +1,190 @@
+HOST_STARTED_UTC=2026-10-11T07:58:31.9172044Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=cat /proc/sys/kernel/random/boot_id; uptime; ps -eo pid,stat,comm,args | grep -E 'python|pl_server|timeout' | head -20; sudo -n dmesg | tail -50; sed -n '1,125p' /home/xilinx/pynq/lib/video/dma.py
+cat /proc/sys/kernel/random/boot_id; uptime; ps -eo pid,stat,comm,args | grep -E 'python|pl_server|timeout' | head -20; sudo -n dmesg | tail -50; sed -n '1,125p' /home/xilinx/pynq/lib/video/dma.py; printf '\n__PYNQ_RC_ff7b6461dfef4c99ade9f212ab0975f0=%d\n' $?
+[?2004l99577b4d-f0d4-4163-89f2-6231324b6fd8
+ 16:25:26 up  1:09,  1 user,  load average: 0.42, 0.38, 0.18
+  260 Ss   networkd-dispat /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
+  407 S    jupyter-noteboo /usr/local/share/pynq-venv/bin/python3 /usr/local/share/pynq-venv/bin/jupyter-notebook --no-browser --allow-root
+  552 Ssl  unattended-upgr /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+  747 S    python3         python3 /usr/local/bin/redirect_server
+ 6648 S+   grep            grep --color=auto -E python|pl_server|timeout
+[ 3881.403945] zocl-drm axi:zyxclmm_drm: zocl_create_client: created KDS client for pid(6210), ret: 0
+[ 3881.407135] [drm] bitstream f9f9c595-e44f-9d30-8ab7-72bb9a921e5f locked, ref=1
+[ 3881.407226] zocl-drm axi:zyxclmm_drm:  ffffffffc157c810 kds_add_context: Client pid(6210) add context Domain(65535) CU(0xffff) shared(true)
+[ 3881.410167] zocl-drm axi:zyxclmm_drm:  ffffffffc157c810 kds_del_context: Client pid(6210) del context Domain(65535) CU(0xffff)
+[ 3881.410251] [drm] bitstream f9f9c595-e44f-9d30-8ab7-72bb9a921e5f unlocked, ref=0
+[ 3904.497096] fpga_manager fpga0: writing base.bin to Xilinx Zynq FPGA Manager
+[ 3904.576788] [drm] Loading xclbin 5aa21deb-5f45-6423-3a47-8cc1439a04de to slot 0
+[ 3904.576823] [drm] skip kind 29(AIE_RESOURCES) return code: -22
+[ 3904.576863] [drm] skip kind 8(IP_LAYOUT) return code: -22
+[ 3904.576881] [drm] skip kind 9(DEBUG_IP_LAYOUT) return code: -22
+[ 3904.576896] [drm] skip kind 25(AIE_METADATA) return code: -22
+[ 3904.576909] [drm] skip kind 7(CONNECTIVITY) return code: -22
+[ 3904.576923] [drm] found kind 6(MEM_TOPOLOGY)
+[ 3904.577058] [drm] Memory 0 is not reserved in device tree. Will allocate memory from CMA
+[ 3904.577142] [drm] Memory 1 is not reserved in device tree. Will allocate memory from CMA
+[ 3904.577209] [drm] Memory 2 is not reserved in device tree. Will allocate memory from CMA
+[ 3904.577273] [drm] Memory 3 is not reserved in device tree. Will allocate memory from CMA
+[ 3904.577341] [drm] Memory 4 is not reserved in device tree. Will allocate memory from CMA
+[ 3904.577402] [drm] zocl_xclbin_read_axlf 5aa21deb-5f45-6423-3a47-8cc1439a04de ret: 0
+[ 3904.604900] [drm] bitstream 5aa21deb-5f45-6423-3a47-8cc1439a04de locked, ref=1
+[ 3904.605015] zocl-drm axi:zyxclmm_drm:  ffffffffc157c810 kds_add_context: Client pid(6210) add context Domain(65535) CU(0xffff) shared(true)
+[ 3904.605126] zocl-drm axi:zyxclmm_drm:  ffffffffc157c810 kds_del_context: Client pid(6210) del context Domain(65535) CU(0xffff)
+[ 3904.605179] [drm] bitstream 5aa21deb-5f45-6423-3a47-8cc1439a04de unlocked, ref=0
+[ 3929.742449] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(6210)
+[ 4018.588051] zocl-drm axi:zyxclmm_drm: zocl_create_client: created KDS client for pid(6416), ret: 0
+[ 4018.588169] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(6416)
+[ 4018.588835] zocl-drm axi:zyxclmm_drm: zocl_create_client: created KDS client for pid(6416), ret: 0
+[ 4018.592341] [drm] bitstream 5aa21deb-5f45-6423-3a47-8cc1439a04de locked, ref=1
+[ 4018.592441] zocl-drm axi:zyxclmm_drm:  ffffffffc157c810 kds_add_context: Client pid(6416) add context Domain(65535) CU(0xffff) shared(true)
+[ 4018.595054] zocl-drm axi:zyxclmm_drm:  ffffffffc157c810 kds_del_context: Client pid(6416) del context Domain(65535) CU(0xffff)
+[ 4018.595129] [drm] bitstream 5aa21deb-5f45-6423-3a47-8cc1439a04de unlocked, ref=0
+[ 4027.454832] fpga_manager fpga0: writing base.bin to Xilinx Zynq FPGA Manager
+[ 4027.536424] [drm] Loading xclbin d4ba16c0-0f27-d477-ed23-42ed0356130b to slot 0
+[ 4027.536458] [drm] skip kind 29(AIE_RESOURCES) return code: -22
+[ 4027.536494] [drm] skip kind 8(IP_LAYOUT) return code: -22
+[ 4027.536511] [drm] skip kind 9(DEBUG_IP_LAYOUT) return code: -22
+[ 4027.536525] [drm] skip kind 25(AIE_METADATA) return code: -22
+[ 4027.536539] [drm] skip kind 7(CONNECTIVITY) return code: -22
+[ 4027.536552] [drm] found kind 6(MEM_TOPOLOGY)
+[ 4027.536709] [drm] Memory 0 is not reserved in device tree. Will allocate memory from CMA
+[ 4027.536787] [drm] Memory 1 is not reserved in device tree. Will allocate memory from CMA
+[ 4027.536857] [drm] Memory 2 is not reserved in device tree. Will allocate memory from CMA
+[ 4027.536928] [drm] Memory 3 is not reserved in device tree. Will allocate memory from CMA
+[ 4027.536997] [drm] Memory 4 is not reserved in device tree. Will allocate memory from CMA
+[ 4027.537060] [drm] zocl_xclbin_read_axlf d4ba16c0-0f27-d477-ed23-42ed0356130b ret: 0
+[ 4027.568071] [drm] bitstream d4ba16c0-0f27-d477-ed23-42ed0356130b locked, ref=1
+[ 4027.568194] zocl-drm axi:zyxclmm_drm:  ffffffffc157c810 kds_add_context: Client pid(6416) add context Domain(65535) CU(0xffff) shared(true)
+[ 4027.568306] zocl-drm axi:zyxclmm_drm:  ffffffffc157c810 kds_del_context: Client pid(6416) del context Domain(65535) CU(0xffff)
+[ 4027.568359] [drm] bitstream d4ba16c0-0f27-d477-ed23-42ed0356130b unlocked, ref=0
+[ 4094.621283] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(6416)
+#   Copyright (c) 2018, Xilinx, Inc.
+#   SPDX-License-Identifier: BSD-3-Clause
+
+
+import asyncio
+
+import numpy as np
+
+from pynq import allocate
+from pynq import DefaultIP, UnsupportedConfiguration
+
+
+class _FrameCache:
+    def __init__(self, mode, memory, capacity=5, cacheable=0):
+        self._cache = []
+        self._mode = mode
+        self._capacity = capacity
+        self._cacheable = cacheable
+        self._memory = memory
+
+    def getframe(self):
+        """Retrieve a frame from the cache or create a new frame if the
+        cache is empty. The freebuffer method of the returned array is
+        overriden to return the object to the cache rather than freeing
+        the object.
+
+        """
+        if self._cache:
+            frame = allocate(
+                shape=self._mode.shape,
+                dtype="u1",
+                cacheable=self._cacheable,
+                pointer=self._cache.pop(),
+                cache=self,
+                target=self._memory,
+            )
+        else:
+            frame = allocate(
+                shape=self._mode.shape,
+                dtype=np.uint8,
+                cacheable=self._cacheable,
+                cache=self,
+                target=self._memory,
+            )
+        return frame
+
+    def return_pointer(self, pointer):
+        if len(self._cache) < self._capacity:
+            self._cache.append(pointer)
+
+    def clear(self):
+        self._cache.clear()
+
+
+class AxiVDMA(DefaultIP):
+    """Driver class for the Xilinx VideoDMA IP core
+
+    The driver is split into input and output channels are exposed using the
+    readchannel and writechannel attributes. Each channel has start and
+    stop methods to control the data transfer. All channels MUST be stopped
+    before reprogramming the bitstream or inconsistent behaviour may result.
+
+    The DMA uses a single ownership model of frames in that frames are either
+    owned by the DMA or the user code but not both. S2MMChannel.readframe
+    and MM2SChannel.newframe both return a frame to the user. It is the
+    user's responsibility to either free the frame using the freebuffer()
+    method or to hand ownership back to the DMA using MM2SChannel.writeframe.
+    Once ownership has been returned the user should not access the contents
+    of the frame as the underlying memory may be deleted without warning.
+
+    Attributes
+    ----------
+    readchannel : AxiVDMA.S2MMChannel
+        Video input DMA channel
+    writechannel : AxiVDMA.MM2SChannel
+        Video output DMA channel
+
+    """
+
+    class _FrameList:
+        """Internal helper class for handling the list of frames associated
+        with a DMA channel. Assumes ownership of all frames it contains
+        unless explicitly removed with takeownership
+
+        """
+
+        def __init__(self, parent, offset, count):
+            self._frames = [None] * count
+            self._mmio = parent._mmio
+            self._offset = offset
+            self._slaves = set()
+            self.count = count
+            self.reload = parent.reload
+
+        def __getitem__(self, index):
+            frame = self._frames[index]
+            return frame
+
+        def takeownership(self, index):
+            self._frames[index] = None
+
+        def __len__(self):
+            return self.count
+
+        def __setitem__(self, index, frame):
+            self._frames[index] = frame
+            if frame is not None:
+                self._mmio.write(self._offset + 4 * index, frame.physical_address)
+            else:
+                self._mmio.write(self._offset + 4 * index, 0)
+            self.reload()
+            for s in self._slaves:
+                s[index] = frame
+                s.takeownership(index)
+
+        def addslave(self, slave):
+            self._slaves.add(slave)
+            for i in range(len(self._frames)):
+                slave[i] = self[i]
+                slave.takeownership(i)
+            slave.reload()
+
+        def removeslave(self, slave):
+            self._slaves.remove(slave)
+
+
+__PYNQ_RC_ff7b6461dfef4c99ade9f212ab0975f0=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0
