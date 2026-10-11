@@ -37,6 +37,10 @@
 - 每轮结果锁定：session_id + check_id + config_id + **当轮工单内容（expected 计数）**。记录必须保存当轮 expected 与 config_id——只存 config_id 无法复现判定依据（W07）。
 - 配置不符即撤框（D3，`rounds._state` config 分支已实现）；换工单后旧轮结果不得显示。
 - **工单 ≤10 件（V0 候选）与协议 16 目标上限互不替换**：结果最多 16 个目标；超工单上限不截断放行——按[检查V0 §3](inspection-v0-contract.md) 转 RECHECK（**Q5** 确认表述）。
+- 超限映射注记（2026-10-10，W05 骨架实现，**待 NC/JL 追认**）：检查链候选超限时 decision 计数为
+  `null`（"未完整计数"语义），而报文契约要求五计数 dict 必填；服务端（`vision_live_service.complete_decision`）
+  映射为按报文内已列目标重算 actual/delta/missing/extra，verdict/reasons 保持 RECHECK——
+  "不截断放行"语义不变，计数口径变化仅此一处，评审通过后回写本条为已冻结。
 
 ### 2.3 记录 ↔ 服务产物（W05 实现要求）
 
@@ -125,3 +129,4 @@
 | 日期 | 变更 | 作者 |
 |:---|:---|:---|
 | 2026-10-10 | 首版设计稿：关联模型、快照/视频边界、来源四态、统计约束、记录扩展、版本评审条款；Q1–Q6 待 NC/JL 确认 | watercopper（EXE 前端） |
+| 2026-10-10 | W06/W07 落码：EXE LIVE 显示（PROTOTYPE/判定横幅/类别分数/实际工单）、记录 schema v2（decision/prototype/proto_ 前缀）；W05 骨架开工，登记超限映射注记待追认 | watercopper（离板应用链） |
