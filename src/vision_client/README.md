@@ -29,13 +29,16 @@ sim/build/vision-client/dist/vision_preview/vision_preview.exe --mock --endpoint
 一轮检查（0.3s 防抖）；配 `--records-dir` 时该轮**有效**结果落批次记录（D8–D10）。
 设备索引需现场确认。当前没有验证实际 UVC 格式、驱动与目标电脑兼容性。
 
-批次记录（M3 起步，契约见决策单 D8–D10）：`--records-dir <目录>` 开启。只有手动触发的
-有效轮次记录——自动间隔轮次永不记录，结构性满足"重复帧不增加批次计数"；记录键
-`(session_id, check_id)` 去重；产物为 `records.jsonl`（一行一条：mode/session/check/config/
-frame/时间/结果年龄/目标数/boxes/verdict 预留/截图名）+ `screenshots/` 逐条 PNG。
-**MOCK 记录截图带 `mock_` 前缀、mode=MOCK，不得用作板上识别证据**（plan.md §3.4）。
+批次记录（M3 起步，契约见决策单 D8–D10；**W07 起 schema v2**）：`--records-dir <目录>` 开启。
+只有手动触发的有效轮次记录——自动间隔轮次永不记录，结构性满足"重复帧不增加批次计数"；
+记录键 `(session_id, check_id)` 去重；产物为 `records.jsonl`（一行一条：mode/session/check/
+config/frame/时间/结果年龄/目标数/boxes/**status**/**decision 原样**（当轮工单即
+decision.expected）/**prototype**/protocol_version/截图名）+ `screenshots/` 逐条 PNG。
+**截图前缀标来源（C04 §3.2/Q2）：MOCK=`mock_`、LIVE+prototype=`proto_`、真实 LIVE 无前缀——
+三者不得互换使用**，均不得用作板上识别证据（plan.md §3.4）。
 目录包含 `records.csv` 时即为完整导出件；**CSV 导出**：`py src/vision_client/export_records.py <记录目录>`
-（UTF-8-BOM，Excel 直接打开不乱码；targets 列保留 JSON）。离线测试：
+（UTF-8-BOM，Excel 直接打开不乱码；v2 增 status/missing/extra/prototype 列，v1 旧记录兼容；
+targets 列保留 JSON）。离线测试：
 `py sim/vision/test_vision_records.py`、`py sim/vision/test_vision_export.py`。
 
 异常事件日志（D11）：状态迁移（断联/超期/配置变化/恢复 ok）与会话变化、重握手失败写入
@@ -58,6 +61,13 @@ WAITING；连续 3 次 HTTP 失败自动重新握手（D5）。界面为 **HUD v
 渲染，随 EXE 打包（含中文：Noto Sans SC 子集，GB2312 全集，OFL——类别名/判定文案可直接用）；
 启动时声明 DPI 感知并按屏幕工作区等比缩放（200% 缩放屏实测 1.8×），
 高分屏下不被系统拉伸切割。
+
+**LIVE 显示（W06，C04 §3.2）**：`mode=LIVE` 轮次显示判定横幅（CHECK_PASS 绿 / CHECK_FAIL 红 /
+RECHECK 琥珀，附 `-washerx1` 式缺多摘要）、TARGETS 格显示「实际/工单」、对象列表逐行显示
+类别与分数（`class=null` → unclassified）；报文带 `prototype=true` 时顶栏恒显红色
+`PROTOTYPE` 徽标（离线产物代实时结果，不可关闭）。判定横幅文本与差额由 `rounds.live_view`
+纯函数生成（离板可测）。LIVE 联调替身：`python src/pynq_host/vision_mock_service.py --live`
+（v1.2 LIVE 报文、prototype 恒 true、场景循环 PASS/FAIL/RECHECK；合成数据，不代表板上识别）。
 
 状态机（`rounds.py`，纯 stdlib）与取帧渲染解耦：preview.py 只负责取帧与画框。
 离线测试 `py sim/vision/test_vision_rounds.py` 覆盖触发节流、超龄/配置变化/断联撤框、

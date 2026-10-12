@@ -1,0 +1,80 @@
+PHASE: loading PYNQ base overlay
+PHASE: base loaded; cached-frame release guard enabled
+MODE: namespace(width=1280, height=720, bits_per_pixel=24) COLOR: BGR
+PHASE: INPUT ONLY
+WARMUP: 0 0 200
+WARMUP: 1 0 200
+OUTPUT: E:\Projects\FPGA-Alittle-Design\sim\build\n03-capture-offline\input-only-11a520c4a8814208ae63fd1b0986f0ef.png
+FRAME: (720, 1280, 3) uint8 strides= (3840, 3, 1)
+COPY: True read_ms= 1.874
+PIXELS_SHA256: a53546c9776f4e92cdf8ec59301e9f24cac7ae6fac46207393362dfefbad11f9
+PNG_SHA256: 3ff898bdd0caffcec0e41508b9478ad4ac2406af78a428e6e779de9939e9f87f
+PNG_BYTES: 4584
+PIXEL_RANGE: 0 200
+REPEAT: 0 0 200
+REPEAT: 1 0 200
+REPEAT: 2 0 200
+REPEAT: 3 0 200
+REPEAT: 4 0 200
+REPEAT: 5 0 200
+CLEANUP: HDMI IN closed
+CLEANUP: COMPLETE
+PASS: full BGR copy; input-only
+PASS: offline N03 input-only cleanup and frame ownership
+PHASE: loading PYNQ base overlay
+PHASE: base loaded; cached-frame release guard enabled
+MODE: namespace(width=1280, height=720, bits_per_pixel=24) COLOR: BGR
+PHASE: HDMI IN/OUT tied
+WARMUP: 0 0 200
+WARMUP: 1 0 200
+OUTPUT: E:\Projects\FPGA-Alittle-Design\sim\build\n03-capture-offline\ok-b64fdb39d7114bdab05411d5692548b0.png
+FRAME: (720, 1280, 3) uint8 strides= (3840, 3, 1)
+COPY: True read_ms= 4.952
+PIXELS_SHA256: a53546c9776f4e92cdf8ec59301e9f24cac7ae6fac46207393362dfefbad11f9
+PNG_SHA256: 3ff898bdd0caffcec0e41508b9478ad4ac2406af78a428e6e779de9939e9f87f
+PNG_BYTES: 4584
+PIXEL_RANGE: 0 200
+REPEAT: 0 0 200
+REPEAT: 1 0 200
+REPEAT: 2 0 200
+REPEAT: 3 0 200
+REPEAT: 4 0 200
+REPEAT: 5 0 200
+PHASE: COEXIST_WINDOW 20s; host may capture HDMI OUT
+CLEANUP: HDMI OUT closed
+CLEANUP: HDMI IN closed
+CLEANUP: COMPLETE
+PASS: full BGR copy; HDMI IN/OUT coexist
+PASS: offline N03 ok cleanup and frame ownership
+PHASE: loading PYNQ base overlay
+PHASE: base loaded; cached-frame release guard enabled
+MODE: namespace(width=1280, height=720, bits_per_pixel=24) COLOR: BGR
+PHASE: HDMI IN/OUT tied
+WARMUP: 0 0 0
+WARMUP: 1 0 0
+OUTPUT: E:\Projects\FPGA-Alittle-Design\sim\build\n03-capture-offline\black-3e3be478ecca450b9b4f39dd6d30a3a7.png
+FRAME: (720, 1280, 3) uint8 strides= (3840, 3, 1)
+COPY: True read_ms= 3.414
+PIXELS_SHA256: 822e3a311bc34185394aeb709bb83310f1243089b95cdadc218eee179b1d6f78
+PNG_SHA256: d18b6ed038c377e1b60de4ae5065fe2f67e0bbedccb9b74d25385d7aabd6930e
+PNG_BYTES: 3947
+PIXEL_RANGE: 0 0
+CLEANUP: HDMI OUT closed
+CLEANUP: HDMI IN closed
+PASS: offline N03 black cleanup and frame ownership
+PHASE: loading PYNQ base overlay
+PHASE: base loaded; cached-frame release guard enabled
+MODE: namespace(width=1280, height=720, bits_per_pixel=24) COLOR: BGR
+PHASE: HDMI IN/OUT tied
+CLEANUP: HDMI OUT closed
+CLEANUP: HDMI IN closed
+PASS: offline N03 timeout cleanup and frame ownership
+PHASE: loading PYNQ base overlay
+PHASE: base loaded; cached-frame release guard enabled
+CLEANUP: HDMI OUT closed
+CLEANUP: HDMI IN closed
+PASS: offline N03 configure cleanup and frame ownership
+REPRODUCED: cached frame returned once; second release calls munmap
+PASS: production guard prevents second unmap of a cached frame
+PASS: ordinary buffer still unmapped once
+LIMIT: spy replay proves the branch, not the cause of a native crash

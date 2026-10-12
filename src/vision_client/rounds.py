@@ -26,6 +26,28 @@ from vision_protocol import validate_packet
 REQUEST_TIMEOUT = 2.0
 FAIL_LIMIT = 3
 WAITING = "WAITING FOR RESULT"
+CLASSES = ("bolt", "nut", "washer")
+
+
+def live_view(packet):
+    """LIVE 报文 → 显示摘要（endpoint_state 消费；纯函数，离板可测）。
+
+    返回 verdict（报文 status 原文，判定横幅文本）、delta（缺/多摘要，如 "-washerx1"）、
+    targets（"实际/工单" 总数；无 decision 时退化为目标数）、labels（与 targets 对齐的
+    (类别显示名, 分数文本)；class=null → unclassified，缺分数 → "--"）。
+    """
+    labels = [(t.get("class") if t.get("class") in CLASSES else "unclassified",
+               f"{t['score']:.2f}" if isinstance(t.get("score"), (int, float)) else "--")
+              for t in packet["targets"]]
+    decision = packet.get("decision")
+    if packet["status"] == "LOCATION_ONLY" or not isinstance(decision, dict):
+        return {"verdict": "LOCATION_ONLY", "delta": "",
+                "targets": str(len(labels)), "labels": labels}
+    missing = [f"-{name}x{n}" for name, n in decision["missing"].items() if n]
+    extra = [f"+{name}x{n}" for name, n in decision["extra"].items() if n]
+    return {"verdict": packet["status"], "delta": " ".join(missing + extra),
+            "targets": f"{sum(decision['actual'].values())}/{sum(decision['expected'].values())}",
+            "labels": labels}
 
 
 def http_json(url, body=None):

@@ -133,3 +133,11 @@ protect-main要求1审批，并为当前用户270969795配置User/always管理�
 未验证备考移交独立issue #61并保持open；#20/#21以completed关闭。M1汇总计数曾仍显示2，但实际issue状态closed、按milestone=1过滤open列表为空；以真实列表核验后关闭M1，见m1-closed.json。
 分支同步范围：main、dev/bench、dev/rtl、dev/verify、dev/vision、dev/model、CNN、codex/module1-closure。dev/bench合并main保留原Pi/视觉及所有收口提交；其余分支按祖先关系快进，禁止强推。RTL工作树未跟踪的d3-repro/id_ex_ooc日志保留，detached的其他聊天工作树不改动。
 最终状态文档及API原始结果经后续纯文档PR发布；同步验收入口为git merge-base --is-ancestor origin/main origin/<branch>与git status --short，最终Git引用本身保留同步结果。
+
+
+---
+
+**审注（2026-10-10，全库审计回填；原文保留不改）**：
+- 元数据行"本轮未提交"仅指 §1–§4 时点；§8 起为提交/发布阶段（1cf5f2c、dev/bench@29e6864、PR #60 合并 f3668f7，见 §10）。
+- §3 末尾三题"答案与判定待补"已由 §7 追加记录闭环（用户已回答并通过），以追加记录为准。
+- 与 2026-09-14-vivado-2026-1-acceptance 的审注配套：其中"86.8 MHz"（v0）为外推值，本文"通过点 86.806 MHz"（v1+BHT2）为约束通过点——两个口径不得混用。

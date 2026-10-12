@@ -1,11 +1,16 @@
-"""批次记录存储（EXE 侧，M3 起步）——决策单 D8–D10。
+"""批次记录存储（EXE 侧，M3 起步）——决策单 D8–D10；W07 起 schema v2。
 
 规则：
 - D8 只有手动触发的轮次是记录候选；自动间隔轮次永不落记录
   （结构性满足 M3"重复帧不增加批次计数"）。
 - D9 记录键 = (session_id, check_id)，同键重复写入被拒（一次确认的检查只记一条）。
-- D10 存储 = records.jsonl（一行一条）+ screenshots/ 逐条截图；MOCK 模式截图带
-  `mock_` 前缀且记录含 mode 字段——不得用作板上识别证据（plan.md §3.4）。
+- D10 存储 = records.jsonl（一行一条）+ screenshots/ 逐条截图。截图前缀标来源
+  （C04 §3.2/Q2）：MOCK=`mock_`；LIVE+prototype=`proto_`（离线产物代实时结果）；
+  真实 LIVE 无前缀——三者不得互换使用（plan.md §3.4）。
+- v2 新增（W07，C04 §5）：status（报文 status 原文）、decision（工单判定原样，
+  含 expected/actual/delta/missing/extra/reasons——当轮工单即 decision.expected）、
+  prototype（来源标识）、protocol_version（报文契约版本）；替代 v1 的 verdict
+  预留字段（该字段误读顶层 verdict，对 v1.2 报文恒为 None）。
   result_age_s 按 EXE 接收时基传入（age_s），created_at 保留原始服务端时间戳供诊断。
 
 截图写入通过注入的 save_image(path, frame) 回调完成；缺省惰性导入 cv2（EXE 内可用），
@@ -16,7 +21,14 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
+
+
+def source_prefix(mode, prototype=False):
+    """截图前缀 = 来源标识：MOCK → mock_；LIVE+prototype → proto_；真实 LIVE → 空。"""
+    if mode == "MOCK":
+        return "mock_"
+    return "proto_" if prototype else ""
 
 
 class BatchRecords:
@@ -44,7 +56,7 @@ class BatchRecords:
         key = (packet["session_id"], packet["check_id"])
         if key in self.keys:
             return None
-        prefix = "mock_" if packet["mode"] == "MOCK" else ""
+        prefix = source_prefix(packet["mode"], bool(packet.get("prototype", False)))
         name = f"{prefix}{packet['session_id'][:8]}_{packet['check_id']:06d}.png"
         shot = self.shots / name
         if not self.save_image(shot, frame):
@@ -59,9 +71,12 @@ class BatchRecords:
             "recorded_at": datetime.now().isoformat(timespec="seconds"),
             "result_age_s": round(age_s if age_s is not None else time.time() - packet["created_at"], 3),
             "created_at": packet["created_at"],
+            "protocol_version": packet["version"],
             "target_count": len(packet["targets"]),
             "targets": packet["targets"],
-            "verdict": packet.get("verdict"),  # M3 工单判定预留
+            "status": packet["status"],
+            "decision": packet.get("decision"),
+            "prototype": bool(packet.get("prototype", False)),
             "screenshot": f"screenshots/{name}",
         }
         with (self.dir / "records.jsonl").open("a", encoding="utf-8") as handle:
@@ -88,8 +103,8 @@ class AnomalyLog:
         self.save_image = save_image
         self.count = 0
 
-    def log(self, mode, event, frame):
-        prefix = "mock_" if mode == "MOCK" else ""
+    def log(self, mode, event, frame, prototype=False):
+        prefix = source_prefix(mode, prototype)
         name = f"{prefix}anomaly_{self.count + 1:04d}.png"
         shot = self.shots / name
         if not self.save_image(shot, frame):
@@ -97,6 +112,7 @@ class AnomalyLog:
         row = {
             "schema_version": SCHEMA_VERSION,
             "mode": mode,
+            "prototype": bool(prototype),
             "recorded_at": datetime.now().isoformat(timespec="seconds"),
             "kind": event.get("kind"),
             "prev": event.get("prev"),

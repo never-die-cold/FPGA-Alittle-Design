@@ -14,8 +14,18 @@ import csv
 import json
 from pathlib import Path
 
-FIELDS = ["recorded_at", "mode", "session_id", "check_id", "config_id", "frame_id",
-          "result_age_s", "target_count", "verdict", "screenshot", "targets"]
+FIELDS = ["recorded_at", "mode", "prototype", "status", "missing", "extra",
+          "session_id", "check_id", "config_id", "frame_id",
+          "result_age_s", "target_count", "screenshot", "targets", "verdict"]
+
+
+def _derive(row):
+    """v2 行取 status/decision；v1 行（verdict 预留、无 decision）退化为 LOCATION_ONLY。"""
+    decision = row.get("decision") or {}
+    status = decision.get("verdict") or row.get("status") or row.get("verdict") or "LOCATION_ONLY"
+    missing = ";".join(f"{name}:{n}" for name, n in decision.get("missing", {}).items() if n)
+    extra = ";".join(f"{name}:{n}" for name, n in decision.get("extra", {}).items() if n)
+    return status, missing, extra
 
 
 def load_records(records_dir):
@@ -40,6 +50,11 @@ def export_records(records_dir, out_path=None):
         writer.writeheader()
         for row in rows:
             row = dict(row)
+            status, missing, extra = _derive(row)
+            row["status"] = status
+            row["missing"] = missing
+            row["extra"] = extra
+            row["prototype"] = int(bool(row.get("prototype")))
             row["targets"] = json.dumps(row.get("targets", []), ensure_ascii=False)
             writer.writerow(row)
     return out, len(rows)
