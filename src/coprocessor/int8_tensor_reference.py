@@ -1,6 +1,7 @@
 """Strict NumPy tensor wrappers for the C02 scalar quantization rules."""
 import numpy as np
-from int8_reference import INT32_MAX, INT32_MIN, quantize_bias, quantize_i8_sym
+from int8_reference import (INT32_MAX, INT32_MIN, quantize_bias, quantize_i8_sym,
+                            requantize_i8, round_shift, sat_i8_sym)
 
 
 def _float32_array(value, name):
@@ -82,3 +83,73 @@ def conv2d_accumulate(image, weight, bias, stride, padding):
                                     raise OverflowError("convolution accumulator overflow")
                 result[oc, oy, ox] = acc
     return result
+
+
+def requantize_channels(accumulators, multipliers, shifts, relu):
+    """Apply optional INT32 ReLU and per-output-channel requantization."""
+    if (not isinstance(accumulators, np.ndarray) or accumulators.dtype != np.int32
+            or accumulators.ndim not in (1, 3) or accumulators.size == 0
+            or not isinstance(multipliers, np.ndarray) or multipliers.dtype != np.int32
+            or not isinstance(shifts, np.ndarray) or shifts.dtype != np.uint8
+            or type(relu) is not bool):
+        raise ValueError("invalid requant tensors")
+    channels = accumulators.shape[0]
+    if (multipliers.shape != (channels,) or shifts.shape != (channels,)
+            or np.any(multipliers <= 0) or np.any(shifts > 62)):
+        raise ValueError("requant channel parameters mismatch")
+    result = np.empty(accumulators.shape, dtype=np.int8)
+    for index in np.ndindex(accumulators.shape):
+        value = int(accumulators[index])
+        if relu and value < 0:
+            value = 0
+        result[index] = requantize_i8(value, int(multipliers[index[0]]),
+                                      int(shifts[index[0]]))
+    return result
+
+
+def conv_relu_requant(image, weight, bias, stride, padding, multipliers, shifts):
+    """Compose checked Conv+bias accumulation, INT32 ReLU and requantization."""
+    accumulators = conv2d_accumulate(image, weight, bias, stride, padding)
+    return requantize_channels(accumulators, multipliers, shifts, True)
+
+
+def gap_16x16(activation):
+    """Average each nonnegative Cx16x16 INT8 channel with contract rounding."""
+    if (not isinstance(activation, np.ndarray) or activation.dtype != np.int8
+            or activation.ndim != 3 or activation.shape[0] == 0
+            or activation.shape[1:] != (16, 16) or np.any(activation < 0)):
+        raise ValueError("GAP requires nonnegative Cx16x16 INT8")
+    result = np.empty((activation.shape[0],), dtype=np.int8)
+    for channel in range(activation.shape[0]):
+        total = 0
+        for value in activation[channel].flat:
+            total += int(value)
+            if not INT32_MIN <= total <= INT32_MAX:
+                raise OverflowError("GAP accumulator overflow")
+        result[channel] = sat_i8_sym(round_shift(total, 8))
+    return result
+
+
+def linear_accumulate(vector, weight, bias):
+    """OI INT8 linear layer with checked INT32 bias and accumulation."""
+    if (not isinstance(vector, np.ndarray) or vector.dtype != np.int8 or vector.ndim != 1
+            or not isinstance(weight, np.ndarray) or weight.dtype != np.int8 or weight.ndim != 2
+            or not isinstance(bias, np.ndarray) or bias.dtype != np.int32 or bias.ndim != 1
+            or vector.size == 0 or weight.size == 0 or weight.shape[1] != vector.size
+            or bias.shape != (weight.shape[0],)):
+        raise ValueError("invalid linear tensors")
+    result = np.empty((weight.shape[0],), dtype=np.int32)
+    for output in range(weight.shape[0]):
+        acc = int(bias[output])
+        for index in range(vector.size):
+            acc += int(vector[index]) * int(weight[output, index])
+            if not INT32_MIN <= acc <= INT32_MAX:
+                raise OverflowError("linear accumulator overflow")
+        result[output] = acc
+    return result
+
+
+def linear_requant(vector, weight, bias, multipliers, shifts):
+    """Complete FC+bias+requant path; logits deliberately have no ReLU."""
+    return requantize_channels(linear_accumulate(vector, weight, bias),
+                               multipliers, shifts, False)
