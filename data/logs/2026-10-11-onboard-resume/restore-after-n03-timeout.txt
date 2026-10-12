@@ -1,0 +1,9 @@
+HOST_STARTED_UTC=2026-10-11T07:57:51.2892119Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 /home/xilinx/vision_m2/m2_onboard.py load'
+sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 /home/xilinx/vision_m2/m2_onboard.py load'; printf '\n__PYNQ_RC_b02a8f9657584a7494b55fa950c649a8=%d\n' $?
+[?2004lSegmentation fault
+
+__PYNQ_RC_b02a8f9657584a7494b55fa950c649a8=139
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=139

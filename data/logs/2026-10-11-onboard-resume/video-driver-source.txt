@@ -1,0 +1,196 @@
+HOST_STARTED_UTC=2026-10-11T07:50:41.6348296Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -c "import cv2,numpy,pynq,pynq.lib.video as v; print(cv2.__version__,numpy.__version__,pynq.__version__); print(v.__file__)"' && grep -n -A 25 -E 'def (tie|stop|configure|start|readframe)|class HDMI' /usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/lib/video/hierarchies.py
+bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -c "import cv2,numpy,pynq,pynq.lib.video as v; print(cv2.__version__,numpy.__version__,pynq.__version__); print(v.__file__)"' && grep -n -A 25 -E 'def (tie|stop|configure|start|readframe)|class HDMI' /usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/lib/video/hierarchies.py; printf '\n__PYNQ_RC_c326a4d62d3d48bb9e2bcf2aa063084d=%d\n' $?
+[?2004l4.5.4 1.21.5 3.1
+/home/xilinx/pynq/lib/video/__init__.py
+[32m[K65[m[K[36m[K:[m[K    [01;31m[Kdef configure[m[K(self, pixelformat=PIXEL_BGR):
+[32m[K66[m[K[36m[K-[m[K        """Configure the pipeline to use the specified pixel format.
+[32m[K67[m[K[36m[K-[m[K
+[32m[K68[m[K[36m[K-[m[K        If the pipeline is running it is stopped prior to the configuration
+[32m[K69[m[K[36m[K-[m[K        being changed
+[32m[K70[m[K[36m[K-[m[K
+[32m[K71[m[K[36m[K-[m[K        Parameters
+[32m[K72[m[K[36m[K-[m[K        ----------
+[32m[K73[m[K[36m[K-[m[K        pixelformat : PixelFormat
+[32m[K74[m[K[36m[K-[m[K            The pixel format to configure the pipeline for
+[32m[K75[m[K[36m[K-[m[K
+[32m[K76[m[K[36m[K-[m[K        """
+[32m[K77[m[K[36m[K-[m[K        if self._vdma.readchannel.running:
+[32m[K78[m[K[36m[K-[m[K            self._vdma.readchannel.stop()
+[32m[K79[m[K[36m[K-[m[K        self._color.colorspace = pixelformat.in_color
+[32m[K80[m[K[36m[K-[m[K        self._pixel.bits_per_pixel = pixelformat.bits_per_pixel
+[32m[K81[m[K[36m[K-[m[K        self._hdmi.start()
+[32m[K82[m[K[36m[K-[m[K        input_mode = self._hdmi.mode
+[32m[K83[m[K[36m[K-[m[K        self._vdma.readchannel.mode = VideoMode(
+[32m[K84[m[K[36m[K-[m[K            input_mode.width,
+[32m[K85[m[K[36m[K-[m[K            input_mode.height,
+[32m[K86[m[K[36m[K-[m[K            pixelformat.bits_per_pixel,
+[32m[K87[m[K[36m[K-[m[K            input_mode.fps,
+[32m[K88[m[K[36m[K-[m[K        )
+[32m[K89[m[K[36m[K-[m[K        return self._closecontextmanager()
+[32m[K90[m[K[36m[K-[m[K
+[32m[K91[m[K[36m[K:[m[K    [01;31m[Kdef start[m[K(self):
+[32m[K92[m[K[36m[K-[m[K        """Start the pipeline"""
+[32m[K93[m[K[36m[K-[m[K        self._vdma.readchannel.start()
+[32m[K94[m[K[36m[K-[m[K        return self._stopcontextmanager()
+[32m[K95[m[K[36m[K-[m[K
+[32m[K96[m[K[36m[K:[m[K    [01;31m[Kdef stop[m[K(self):
+[32m[K97[m[K[36m[K-[m[K        """Stop the pipeline"""
+[32m[K98[m[K[36m[K-[m[K        self._vdma.readchannel.stop()
+[32m[K99[m[K[36m[K-[m[K
+[32m[K100[m[K[36m[K-[m[K    @contextlib.contextmanager
+[32m[K101[m[K[36m[K-[m[K    def _stopcontextmanager(self):
+[32m[K102[m[K[36m[K-[m[K        """Context Manager to stop the VDMA at the end of the block"""
+[32m[K103[m[K[36m[K-[m[K        yield
+[32m[K104[m[K[36m[K-[m[K        self.stop()
+[32m[K105[m[K[36m[K-[m[K
+[32m[K106[m[K[36m[K-[m[K    @contextlib.contextmanager
+[32m[K107[m[K[36m[K-[m[K    def _closecontextmanager(self):
+[32m[K108[m[K[36m[K-[m[K        """Context Manager to close the HDMI port at the end of the block"""
+[32m[K109[m[K[36m[K-[m[K        yield
+[32m[K110[m[K[36m[K-[m[K        self.close()
+[32m[K111[m[K[36m[K-[m[K
+[32m[K112[m[K[36m[K-[m[K    def close(self):
+[32m[K113[m[K[36m[K-[m[K        """Uninitialise the drivers, stopping the pipeline beforehand"""
+[32m[K114[m[K[36m[K-[m[K        self.stop()
+[32m[K115[m[K[36m[K-[m[K        self._hdmi.stop()
+[32m[K116[m[K[36m[K-[m[K
+[32m[K117[m[K[36m[K-[m[K    @property
+[32m[K118[m[K[36m[K-[m[K    def colorspace(self):
+[32m[K119[m[K[36m[K-[m[K        """The colorspace of the pipeline, can be changed without stopping
+[32m[K120[m[K[36m[K-[m[K        the pipeline
+[32m[K121[m[K[36m[K-[m[K
+[36m[K--[m[K
+[32m[K153[m[K[36m[K:[m[K    [01;31m[Kdef readframe[m[K(self):
+[32m[K154[m[K[36m[K-[m[K        """Read a video frame
+[32m[K155[m[K[36m[K-[m[K
+[32m[K156[m[K[36m[K-[m[K        See AxiVDMA.S2MMChannel.readframe for details
+[32m[K157[m[K[36m[K-[m[K
+[32m[K158[m[K[36m[K-[m[K        """
+[32m[K159[m[K[36m[K-[m[K        return self._vdma.readchannel.readframe()
+[32m[K160[m[K[36m[K-[m[K
+[32m[K161[m[K[36m[K:[m[K    async [01;31m[Kdef readframe[m[K_async(self):
+[32m[K162[m[K[36m[K-[m[K        """Read a video frame
+[32m[K163[m[K[36m[K-[m[K
+[32m[K164[m[K[36m[K-[m[K        See AxiVDMA.S2MMChannel.readframe for details
+[32m[K165[m[K[36m[K-[m[K
+[32m[K166[m[K[36m[K-[m[K        """
+[32m[K167[m[K[36m[K-[m[K        return await self._vdma.readchannel.readframe_async()
+[32m[K168[m[K[36m[K-[m[K
+[32m[K169[m[K[36m[K:[m[K    [01;31m[Kdef tie[m[K(self, output):
+[32m[K170[m[K[36m[K-[m[K        """Mirror the video input on to an output channel
+[32m[K171[m[K[36m[K-[m[K
+[32m[K172[m[K[36m[K-[m[K        Parameters
+[32m[K173[m[K[36m[K-[m[K        ----------
+[32m[K174[m[K[36m[K-[m[K        output : HDMIOut
+[32m[K175[m[K[36m[K-[m[K            The output to mirror on to
+[32m[K176[m[K[36m[K-[m[K
+[32m[K177[m[K[36m[K-[m[K        """
+[32m[K178[m[K[36m[K-[m[K        self._vdma.readchannel.tie(output._vdma.writechannel)
+[32m[K179[m[K[36m[K-[m[K
+[32m[K180[m[K[36m[K-[m[K
+[32m[K181[m[K[36m[K-[m[Kclass VideoOut(DefaultHierarchy):
+[32m[K182[m[K[36m[K-[m[K    """Wrapper for the output video pipeline.
+[32m[K183[m[K[36m[K-[m[K
+[32m[K184[m[K[36m[K-[m[K    This wrapper assumes the following pipeline structure and naming
+[32m[K185[m[K[36m[K-[m[K
+[32m[K186[m[K[36m[K-[m[K    axi_vdma -> pixel_unpack -> color_convert -> frontend
+[32m[K187[m[K[36m[K-[m[K    with vtc_out and axi_dynclk helper IP
+[32m[K188[m[K[36m[K-[m[K
+[32m[K189[m[K[36m[K-[m[K    Attributes
+[32m[K190[m[K[36m[K-[m[K    ----------
+[32m[K191[m[K[36m[K-[m[K    frontend : pynq.lib.video.HDMIOutFrontend
+[32m[K192[m[K[36m[K-[m[K        The HDMI frontend for mode setting
+[32m[K193[m[K[36m[K-[m[K    color_convert : pynq.lib.video.ColorConverter
+[32m[K194[m[K[36m[K-[m[K        The output color format converter
+[36m[K--[m[K
+[32m[K231[m[K[36m[K:[m[K    [01;31m[Kdef configure[m[K(self, mode, pixelformat=None):
+[32m[K232[m[K[36m[K-[m[K        """Configure the pipeline to use the specified pixel format and size.
+[32m[K233[m[K[36m[K-[m[K
+[32m[K234[m[K[36m[K-[m[K        If the pipeline is running it is stopped prior to the configuration
+[32m[K235[m[K[36m[K-[m[K        being changed
+[32m[K236[m[K[36m[K-[m[K
+[32m[K237[m[K[36m[K-[m[K        Parameters
+[32m[K238[m[K[36m[K-[m[K        ----------
+[32m[K239[m[K[36m[K-[m[K        mode : VideoMode
+[32m[K240[m[K[36m[K-[m[K            The video mode to output
+[32m[K241[m[K[36m[K-[m[K        pixelformat : PixelFormat
+[32m[K242[m[K[36m[K-[m[K            The pixel format to configure the pipeline for
+[32m[K243[m[K[36m[K-[m[K
+[32m[K244[m[K[36m[K-[m[K        """
+[32m[K245[m[K[36m[K-[m[K        if self._vdma.writechannel.running:
+[32m[K246[m[K[36m[K-[m[K            self._vdma.writechannel.stop()
+[32m[K247[m[K[36m[K-[m[K        if pixelformat is None:
+[32m[K248[m[K[36m[K-[m[K            if mode.bits_per_pixel == 8:
+[32m[K249[m[K[36m[K-[m[K                pixelformat = PIXEL_GRAY
+[32m[K250[m[K[36m[K-[m[K            elif mode.bits_per_pixel == 24:
+[32m[K251[m[K[36m[K-[m[K                pixelformat = PIXEL_BGR
+[32m[K252[m[K[36m[K-[m[K            elif mode.bits_per_pixel == 32:
+[32m[K253[m[K[36m[K-[m[K                pixelformat = PIXEL_RGBA
+[32m[K254[m[K[36m[K-[m[K            else:
+[32m[K255[m[K[36m[K-[m[K                raise ValueError(
+[32m[K256[m[K[36m[K-[m[K                    "No default pixel format for ${mode.bits_per_pixel} bpp"
+[36m[K--[m[K
+[32m[K268[m[K[36m[K:[m[K    [01;31m[Kdef start[m[K(self):
+[32m[K269[m[K[36m[K-[m[K        """Start the pipeline"""
+[32m[K270[m[K[36m[K-[m[K        self._vdma.writechannel.start()
+[32m[K271[m[K[36m[K-[m[K        return self._stopcontextmanager()
+[32m[K272[m[K[36m[K-[m[K
+[32m[K273[m[K[36m[K:[m[K    [01;31m[Kdef stop[m[K(self):
+[32m[K274[m[K[36m[K-[m[K        """Stop the pipeline"""
+[32m[K275[m[K[36m[K-[m[K        self._vdma.writechannel.stop()
+[32m[K276[m[K[36m[K-[m[K
+[32m[K277[m[K[36m[K-[m[K    def close(self):
+[32m[K278[m[K[36m[K-[m[K        """Close the pipeline an unintialise the drivers"""
+[32m[K279[m[K[36m[K-[m[K        self.stop()
+[32m[K280[m[K[36m[K-[m[K        self._hdmi.stop()
+[32m[K281[m[K[36m[K-[m[K
+[32m[K282[m[K[36m[K-[m[K    @contextlib.contextmanager
+[32m[K283[m[K[36m[K-[m[K    def _stopcontextmanager(self):
+[32m[K284[m[K[36m[K-[m[K        """Context Manager to stop the VDMA at the end of the block"""
+[32m[K285[m[K[36m[K-[m[K        yield
+[32m[K286[m[K[36m[K-[m[K        self.stop()
+[32m[K287[m[K[36m[K-[m[K
+[32m[K288[m[K[36m[K-[m[K    @contextlib.contextmanager
+[32m[K289[m[K[36m[K-[m[K    def _closecontextmanager(self):
+[32m[K290[m[K[36m[K-[m[K        """Context Manager to close the HDMI port at the end of the block"""
+[32m[K291[m[K[36m[K-[m[K        yield
+[32m[K292[m[K[36m[K-[m[K        self.close()
+[32m[K293[m[K[36m[K-[m[K
+[32m[K294[m[K[36m[K-[m[K    @property
+[32m[K295[m[K[36m[K-[m[K    def colorspace(self):
+[32m[K296[m[K[36m[K-[m[K        """Set the colorspace for the pipeline - can be done without
+[32m[K297[m[K[36m[K-[m[K        stopping the pipeline
+[32m[K298[m[K[36m[K-[m[K
+[36m[K--[m[K
+[32m[K354[m[K[36m[K:[m[K[01;31m[Kclass HDMI[m[KWrapper(DefaultHierarchy):
+[32m[K355[m[K[36m[K-[m[K    """Hierarchy driver for the entire video subsystem.
+[32m[K356[m[K[36m[K-[m[K
+[32m[K357[m[K[36m[K-[m[K    Exposes the input, output and video DMA as attributes. For most
+[32m[K358[m[K[36m[K-[m[K    use cases the wrappers for the input and output pipelines are
+[32m[K359[m[K[36m[K-[m[K    sufficient and the VDMA will not need to be used directly.
+[32m[K360[m[K[36m[K-[m[K
+[32m[K361[m[K[36m[K-[m[K    Attributes
+[32m[K362[m[K[36m[K-[m[K    ----------
+[32m[K363[m[K[36m[K-[m[K    hdmi_in : pynq.lib.video.HDMIIn
+[32m[K364[m[K[36m[K-[m[K        The HDMI input pipeline
+[32m[K365[m[K[36m[K-[m[K    hdmi_out : pynq.lib.video.HDMIOut
+[32m[K366[m[K[36m[K-[m[K        The HDMI output pipeline
+[32m[K367[m[K[36m[K-[m[K    axi_vdma : pynq.lib.video.AxiVDMA
+[32m[K368[m[K[36m[K-[m[K        The video DMA.
+[32m[K369[m[K[36m[K-[m[K
+[32m[K370[m[K[36m[K-[m[K    """
+[32m[K371[m[K[36m[K-[m[K
+[32m[K372[m[K[36m[K-[m[K    @staticmethod
+[32m[K373[m[K[36m[K-[m[K    def checkhierarchy(description):
+[32m[K374[m[K[36m[K-[m[K        in_pipeline = None
+[32m[K375[m[K[36m[K-[m[K        out_pipeline = None
+[32m[K376[m[K[36m[K-[m[K        dma = None
+[32m[K377[m[K[36m[K-[m[K        for hier, details in description["hierarchies"].items():
+[32m[K378[m[K[36m[K-[m[K            if details["driver"] == VideoIn:
+[32m[K379[m[K[36m[K-[m[K                in_pipeline = hier
+
+__PYNQ_RC_c326a4d62d3d48bb9e2bcf2aa063084d=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

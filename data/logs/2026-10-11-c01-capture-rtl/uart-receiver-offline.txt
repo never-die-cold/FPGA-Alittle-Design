@@ -1,0 +1,10 @@
+TEST_READY
+PASS: UART file E:\Projects\FPGA-Alittle-Design\sim\build\uart-receiver-tep7n98n\capture.bit 8192 dc404a613fedaeb54034514bc6505f56b933caa5250299ba7d094377a51caa46
+TEST_READY
+PASS: UART file E:\Projects\FPGA-Alittle-Design\sim\build\uart-receiver-tep7n98n\fragmented.bit 8192 dc404a613fedaeb54034514bc6505f56b933caa5250299ba7d094377a51caa46
+TEST_READY
+TEST_READY
+TEST_READY
+TEST_READY
+TEST_READY
+PASS: UART receiver binary roundtrip, no overwrite, short/corrupt/length/hash rejection

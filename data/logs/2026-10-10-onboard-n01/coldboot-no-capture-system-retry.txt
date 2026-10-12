@@ -1,0 +1,7 @@
+HOST_STARTED_UTC=2026-10-10T15:20:50.8674558Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=uname -a; cat /proc/sys/kernel/random/boot_id; uptime
+
+ERROR: Exception calling "Open" with "0" argument(s): "Access to the port 'COM12' is denied."
+
+HOST_EXIT_CODE=1

@@ -1,0 +1,9 @@
+HOST_STARTED_UTC=2026-10-11T07:15:55.9584264Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=id
+id; printf '\n__PYNQ_RC_6d48570646ae41dc983d1170f771a487=%d\n' $? [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K?
+[?2004luid=1000(xilinx) gid=1000(xilinx) groups=1000(xilinx),4(adm),27(sudo),44(video),114(render)
+
+__PYNQ_RC_6d48570646ae41dc983d1170f771a487=0
+
+HOST_EXIT_CODE=0

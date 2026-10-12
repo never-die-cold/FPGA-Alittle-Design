@@ -1,0 +1,528 @@
+HOST_STARTED_UTC=2026-10-10T14:51:04.0144968Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && cd /home/xilinx/vision_m2 && python3 watch_video.py 180'
+sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && cd /home/xilinx/vision_m2 && python3 watch_video.py 180'; printf '\n__PYNQ_RC_d691c2d0d5e248909085d6c4143c77bf=%d\n' $?
+[?2004l    0.0s VIDEO_OK cfg=2
+   72.1s NO_VIDEO
+   73.1s BUSY
+
+
+U-Boot 2024.01 (May 14 2024 - 03:31:48 +0000)
+
+CPU:   Zynq 7z020
+Silicon: v3.1
+DRAM:  ECC disabled 512 MiB
+Core:  22 devices, 16 uclasses, devicetree: board
+Flash: 0 Bytes
+NAND:  0 MiB
+MMC:   mmc@e0100000: 0
+Loading Environment from FAT... *** Error - No Valid Environment Area found
+*** Warning - bad env area, using default environment
+
+In:    serial@e0000000
+Out:   serial@e0000000
+Err:   serial@e0000000
+Net:   
+ZYNQ GEM: e000b000, mdio bus e000b000, phyaddr 0, interface rgmii-id
+
+Error: ethernet@e000b000 No valid MAC address found.
+No ethernet found.
+
+Hit any key to stop autoboot:  2  1  0 
+switch to partitions #0, OK
+mmc0 is current device
+Scanning mmc 0:1...
+Found U-Boot script /boot.scr
+3473 bytes read in 10 ms (338.9 KiB/s)
+## Executing script at 03000000
+Trying to load boot images from mmc0
+7147788 bytes read in 404 ms (16.9 MiB/s)
+## Loading kernel from FIT Image at 10000000 ...
+   Using 'conf-1' configuration
+   Verifying Hash Integrity ... OK
+   Trying 'kernel-0' kernel subimage
+     Description:  Linux Kernel
+     Type:         Kernel Image
+     Compression:  uncompressed
+     Data Start:   0x100000d4
+     Data Size:    7126232 Bytes = 6.8 MiB
+     Architecture: ARM
+     OS:           Linux
+     Load Address: 0x00080000
+     Entry Point:  0x00080000
+     Hash algo:    sha1
+     Hash value:   c0977d81e30ecd4b66b8c441aa67668279fafe83
+   Verifying Hash Integrity ... sha1+ OK
+## Loading fdt from FIT Image at 10000000 ...
+   Using 'conf-1' configuration
+   Verifying Hash Integrity ... OK
+   Trying 'fdt-0' fdt subimage
+     Description:  Flattened Device Tree blob
+     Type:         Flat Device Tree
+     Compression:  uncompressed
+     Data Start:   0x106cbea0
+     Data Size:    19738 Bytes = 19.3 KiB
+     Architecture: ARM
+     Hash algo:    sha1
+     Hash value:   e2261b986180d301f33459eb0193258edf7ff558
+   Verifying Hash Integrity ... sha1+ OK
+   Booting using the fdt blob at 0x106cbea0
+Working FDT set to 106cbea0
+   Loading Kernel Image
+   Loading Device Tree to 1dabb000, end 1dac2d19 ... OK
+Working FDT set to 1dabb000
+
+Starting kernel ...
+
+Booting Linux on physical CPU 0x0
+Linux version 6.6.10-xilinx-v2024.1-gb36799f4e960 (oe-user@oe-host) (arm-xilinx-linux-gnueabi-gcc (GCC) 12.2.0, GNU ld (GNU Binutils) 2.39.0.20220819) #1 SMP PREEMPT Sat Apr 27 05:22:24 UTC 2024
+CPU: ARMv7 Processor [413fc090] revision 0 (ARMv7), cr=18c5387d
+CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing instruction cache
+OF: fdt: Machine model: xlnx,zynq-7000
+Memory policy: Data cache writealloc
+cma: Reserved 128 MiB at 0x15800000 on node -1
+Zone ranges:
+  Normal   [mem 0x0000000000000000-0x000000001fffffff]
+  HighMem  empty
+Movable zone start for each node
+Early memory node ranges
+  node   0: [mem 0x0000000000000000-0x000000001fffffff]
+Initmem setup node 0 [mem 0x0000000000000000-0x000000001fffffff]
+percpu: Embedded 13 pages/cpu s23956 r8192 d21100 u53248
+Kernel command line: root=/dev/mmcblk0p2 rw earlyprintk rootfstype=ext4 rootwait devtmpfs.mount=1 uio_pdrv_genirq.of_id="generic-uio" clk_ignore_unused
+Unknown kernel command line parameters "earlyprintk", will be passed to user space.
+Dentry cache hash table entries: 65536 (order: 6, 262144 bytes, linear)
+Inode-cache hash table entries: 32768 (order: 5, 131072 bytes, linear)
+Built 1 zonelists, mobility grouping on.  Total pages: 129920
+mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+Memory: 371368K/524288K available (10240K kernel code, 334K rwdata, 2860K rodata, 1024K init, 194K bss, 21848K reserved, 131072K cma-reserved, 0K highmem)
+SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
+rcu: Preemptible hierarchical RCU implementation.
+rcu: 	RCU event tracing is enabled.
+rcu: 	RCU restricting CPUs from NR_CPUS=4 to nr_cpu_ids=2.
+	Trampoline variant of Tasks RCU enabled.
+	Tracing variant of Tasks RCU enabled.
+rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
+rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=2
+NR_IRQS: 16, nr_irqs: 16, preallocated irqs: 16
+efuse mapped to (ptrval)
+slcr mapped to (ptrval)
+GIC physical location is 0xf8f01000
+L2C: platform modifies aux control register: 0x72360000 -> 0x72760000
+L2C: DT/platform modifies aux control register: 0x72360000 -> 0x72760000
+L2C-310 erratum 769419 enabled
+L2C-310 enabling early BRESP for Cortex-A9
+L2C-310 full line of zeros enabled for Cortex-A9
+L2C-310 ID prefetch enabled, offset 1 lines
+L2C-310 dynamic clock gating enabled, standby mode enabled
+L2C-310 cache controller enabled, 8 ways, 512 kB
+L2C-310: CACHE_ID 0x410000c8, AUX_CTRL 0x76760001
+rcu: srcu_init: Setting srcu_struct sizes based on contention.
+zynq_clock_init: clkc starts at (ptrval)
+Zynq clock init
+sched_clock: 64 bits at 163MHz, resolution 6ns, wraps every 4398046511101ns
+clocksource: arm_global_timer: mask: 0xffffffffffffffff max_cycles: 0x257a3bfb55, max_idle_ns: 440795207830 ns
+Switching to timer-based delay loop, resolution 6ns
+Console: colour dummy device 80x30
+printk: console [tty0] enabled
+Calibrating delay loop (skipped), value calculated using timer frequency.. 325.00 BogoMIPS (lpj=1625000)
+CPU: Testing write buffer coherency: ok
+CPU0: Spectre v2: using BPIALL workaround
+pid_max: default: 32768 minimum: 301
+Mount-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+CPU0: thread -1, cpu 0, socket 0, mpidr 80000000
+RCU Tasks: Setting shift to 1 and lim to 1 rcu_task_cb_adjust=1.
+RCU Tasks Trace: Setting shift to 1 and lim to 1 rcu_task_cb_adjust=1.
+Setting up static identity map for 0x100000 - 0x100060
+rcu: Hierarchical SRCU implementation.
+rcu: 	Max phase no-delay instances is 1000.
+smp: Bringing up secondary CPUs ...
+CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
+CPU1: Spectre v2: using BPIALL workaround
+smp: Brought up 1 node, 2 CPUs
+SMP: Total of 2 processors activated (650.00 BogoMIPS).
+CPU: All CPU(s) started in SVC mode.
+devtmpfs: initialized
+VFP support v0.3: implementor 41 architecture 3 part 30 variant 9 rev 4
+clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+futex hash table entries: 512 (order: 3, 32768 bytes, linear)
+pinctrl core: initialized pinctrl subsystem
+NET: Registered PF_NETLINK/PF_ROUTE protocol family
+DMA: preallocated 256 KiB pool for atomic coherent allocations
+thermal_sys: Registered thermal governor 'step_wise'
+cpuidle: using governor menu
+platform axi: Fixed dependency cycle(s) with /axi/interrupt-controller@f8f01000
+amba f8801000.etb: Fixed dependency cycle(s) with /replicator/out-ports/port@1/endpoint
+amba f8803000.tpiu: Fixed dependency cycle(s) with /replicator/out-ports/port@0/endpoint
+amba f8804000.funnel: Fixed dependency cycle(s) with /replicator/in-ports/port/endpoint
+amba f889c000.ptm: Fixed dependency cycle(s) with /axi/funnel@f8804000/in-ports/port@0/endpoint
+amba f889d000.ptm: Fixed dependency cycle(s) with /axi/funnel@f8804000/in-ports/port@1/endpoint
+hw-breakpoint: found 5 (+1 reserved) breakpoint and 1 watchpoint registers.
+hw-breakpoint: maximum watchpoint size is 4 bytes.
+e0000000.serial: ttyPS0 at MMIO 0xe0000000 (irq = 26, base_baud = 6250000) is a xuartps
+printk: console [ttyPS0] enabled
+raid6: int32x8  gen()   130 MB/s
+raid6: int32x4  gen()   132 MB/s
+raid6: int32x2  gen()   199 MB/s
+raid6: int32x1  gen()   177 MB/s
+raid6: using algorithm int32x2 gen() 199 MB/s
+raid6: .... xor() 121 MB/s, rmw enabled
+raid6: using intx1 recovery algorithm
+SCSI subsystem initialized
+usbcore: registered new interface driver usbfs
+usbcore: registered new interface driver hub
+usbcore: registered new device driver usb
+mc: Linux media interface: v0.10
+videodev: Linux video capture interface: v2.00
+pps_core: LinuxPPS API ver. 1 registered
+pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+PTP clock support registered
+EDAC MC: Ver: 3.0.0
+FPGA manager framework
+Advanced Linux Sound Architecture Driver Initialized.
+vgaarb: loaded
+clocksource: Switched to clocksource arm_global_timer
+NET: Registered PF_INET protocol family
+IP idents hash table entries: 8192 (order: 4, 65536 bytes, linear)
+tcp_listen_portaddr_hash hash table entries: 512 (order: 0, 4096 bytes, linear)
+Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+TCP established hash table entries: 4096 (order: 2, 16384 bytes, linear)
+TCP bind hash table entries: 4096 (order: 4, 65536 bytes, linear)
+TCP: Hash tables configured (established 4096 bind 4096)
+UDP hash table entries: 256 (order: 1, 8192 bytes, linear)
+UDP-Lite hash table entries: 256 (order: 1, 8192 bytes, linear)
+NET: Registered PF_UNIX/PF_LOCAL protocol family
+RPC: Registered named UNIX socket transport module.
+RPC: Registered udp transport module.
+RPC: Registered tcp transport module.
+RPC: Registered tcp-with-tls transport module.
+RPC: Registered tcp NFSv4.1 backchannel transport module.
+PCI: CLS 0 bytes, default 64
+armv7-pmu f8891000.pmu: hw perfevents: no interrupt-affinity property, guessing.
+hw perfevents: enabled with armv7_cortex_a9 PMU driver, 7 counters available
+Initialise system trusted keyrings
+workingset: timestamp_bits=14 max_order=17 bucket_order=3
+squashfs: version 4.0 (2009/01/31) Phillip Lougher
+jffs2: version 2.2. (NAND) (SUMMARY)  © 2001-2006 Red Hat, Inc.
+xor: measuring software checksum speed
+   arm4regs        :  1046 MB/sec
+   8regs           :   790 MB/sec
+   32regs          :   836 MB/sec
+xor: using function: arm4regs (1046 MB/sec)
+Key type asymmetric registered
+Asymmetric key parser 'x509' registered
+io scheduler mq-deadline registered
+io scheduler kyber registered
+io scheduler bfq registered
+zynq-pinctrl 700.pinctrl: zynq pinctrl initialized
+dma-pl330 f8003000.dma-controller: Loaded driver for PL330 DMAC-241330
+dma-pl330 f8003000.dma-controller: 	DBUFF-128x8bytes Num_Chans-8 Num_Peri-4 Num_Events-16
+brd: module loaded
+loop: module loaded
+spi_master spi0: cannot find modalias for /axi/spi@e000d000/flash@0
+spi_master spi0: Failed to create SPI device for /axi/spi@e000d000/flash@0
+tun: Universal TUN/TAP device driver, 1.6
+CAN device driver interface
+macb e000b000.ethernet: invalid hw address, using random
+macb e000b000.ethernet eth0: Cadence GEM rev 0x00020118 at 0xe000b000 irq 40 (e2:b4:0c:91:0f:5c)
+e1000e: Intel(R) PRO/1000 Network Driver
+e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+usbcore: registered new interface driver cdc_acm
+cdc_acm: USB Abstract Control Model driver for USB modems and ISDN adapters
+usbcore: registered new interface driver cdc_wdm
+usbcore: registered new interface driver usb-storage
+usbcore: registered new interface driver usbserial_generic
+usbserial: USB Serial support registered for generic
+usbcore: registered new interface driver usb_serial_simple
+usbserial: USB Serial support registered for carelink
+usbserial: USB Serial support registered for flashloader
+usbserial: USB Serial support registered for funsoft
+usbserial: USB Serial support registered for google
+usbserial: USB Serial support registered for hp4x
+usbserial: USB Serial support registered for kaufmann
+usbserial: USB Serial support registered for libtransistor
+usbserial: USB Serial support registered for moto_modem
+usbserial: USB Serial support registered for motorola_tetra
+usbserial: USB Serial support registered for nokia
+usbserial: USB Serial support registered for novatel_gps
+usbserial: USB Serial support registered for siemens_mpi
+usbserial: USB Serial support registered for suunto
+usbserial: USB Serial support registered for vivopay
+usbserial: USB Serial support registered for zio
+ULPI transceiver vendor/product ID 0x0451/0x1507
+Found TI TUSB1210 ULPI transceiver.
+ULPI integrity check: passed.
+ci_hdrc ci_hdrc.0: EHCI Host Controller
+ci_hdrc ci_hdrc.0: new USB bus registered, assigned bus number 1
+ci_hdrc ci_hdrc.0: USB 2.0 started, EHCI 1.00
+hub 1-0:1.0: USB hub found
+hub 1-0:1.0: 1 port detected
+i2c_dev: i2c /dev entries driver
+cdns-i2c e0004000.i2c: can't get pinctrl, bus recovery not supported
+cdns-i2c e0004000.i2c: 400 kHz mmio e0004000 irq 42
+cdns-i2c e0005000.i2c: can't get pinctrl, bus recovery not supported
+cdns-i2c e0005000.i2c: 400 kHz mmio e0005000 irq 43
+cdns-wdt f8005000.watchdog: Xilinx Watchdog Timer with timeout 10s
+device-mapper: ioctl: 4.48.0-ioctl (2023-03-01) initialised: dm-devel@redhat.com
+EDAC MC: ECC not enabled
+Xilinx Zynq CpuIdle Driver started
+sdhci: Secure Digital Host Controller Interface driver
+sdhci: Copyright(c) Pierre Ossman
+sdhci-pltfm: SDHCI platform and OF driver helper
+ledtrig-cpu: registered to indicate activity on CPUs
+clocksource: ttc_clocksource: mask: 0xffff max_cycles: 0xffff, max_idle_ns: 551318127 ns
+timer #0 at (ptrval), irq=46
+usbcore: registered new interface driver usbhid
+usbhid: USB HID core driver
+fpga_manager fpga0: Xilinx Zynq FPGA Manager registered
+mmc0: SDHCI controller on e0100000.mmc [e0100000.mmc] using ADMA
+IPVS: Registered protocols (TCP, UDP)
+IPVS: Connection hash table configured (size=4096, memory=16Kbytes)
+IPVS: ipvs loaded.
+IPVS: [rr] scheduler registered.
+Initializing XFRM netlink socket
+NET: Registered PF_INET6 protocol family
+Segment Routing with IPv6
+In-situ OAM (IOAM) with IPv6
+sit: IPv6, IPv4 and MPLS over IPv4 tunneling driver
+NET: Registered PF_PACKET protocol family
+can: controller area network core
+NET: Registered PF_CAN protocol family
+can: raw protocol
+can: broadcast manager protocol
+can: netlink gateway - max_hops=1
+Registering SWP/SWPB emulation handler
+mmc0: new high speed SDHC card at address aaaa
+mmcblk0: mmc0:aaaa SC16G 14.8 GiB
+Loading compiled-in X.509 certificates
+ mmcblk0: p1 p2
+Btrfs loaded, zoned=no, fsverity=no
+of-fpga-region fpga-region: FPGA Region probed
+of_cfs_init
+of_cfs_init: OK
+cfg80211: Loading compiled-in X.509 certificates for regulatory database
+Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+Loaded X.509 cert 'wens: 61c038651aabdcf94bd0ac7ff06c7248db18c600'
+platform regulatory.0: Direct firmware load for regulatory.db failed with error -2
+cfg80211: failed to load regulatory.db
+clk: Not disabling unused clocks
+ALSA device list:
+  No soundcards found.
+EXT4-fs (mmcblk0p2): recovery complete
+EXT4-fs (mmcblk0p2): mounted filesystem 5a7f11a7-449d-4143-9d28-f718a44a2eaa r/w with ordered data mode. Quota mode: disabled.
+VFS: Mounted root (ext4 filesystem) on device 179:2.
+devtmpfs: mounted
+Freeing unused kernel image (initmem) memory: 1024K
+Run /sbin/init as init process
+systemd[1]: System time before build time, advancing clock.
+systemd[1]: Failed to find module 'autofs4'
+systemd[1]: systemd 249.11-0ubuntu3 running in system mode (+PAM +AUDIT +SELINUX +APPARMOR +IMA +SMACK +SECCOMP +GCRYPT +GNUTLS -OPENSSL +ACL +BLKID +CURL +ELFUTILS -FIDO2 +IDN2 -IDN +IPTC +KMOD +LIBCRYPTSETUP -LIBFDISK +PCRE2 -PWQUALITY -P11KIT -QRENCODE +BZIP2 +LZ4 +XZ +ZLIB +ZSTD -XKBCOMMON +UTMP +SYSVINIT default-hierarchy=unified)
+systemd[1]: Detected architecture arm.
+
+Welcome to [1mPynqLinux, based on Ubuntu 22.04[0m!
+
+systemd[1]: Hostname set to <pynq>.
+systemd[1]: Queued start job for default target Multi-User System.
+random: crng init done
+systemd[1]: Created slice Slice /system/modprobe.
+[[0;32m  OK  [0m] Created slice [0;1;39mSlice /system/modprobe[0m.
+systemd[1]: Created slice Slice /system/serial-getty.
+[[0;32m  OK  [0m] Created slice [0;1;39mSlice /system/serial-getty[0m.
+systemd[1]: Created slice User and Session Slice.
+[[0;32m  OK  [0m] Created slice [0;1;39mUser and Session Slice[0m.
+systemd[1]: Started Dispatch Password Requests to Console Directory Watch.
+[[0;32m  OK  [0m] Started [0;1;39mDispatch Password …ts to Console Directory Watch[0m.
+systemd[1]: Started Forward Password Requests to Wall Directory Watch.
+[[0;32m  OK  [0m] Started [0;1;39mForward Password R…uests to Wall Directory Watch[0m.
+systemd[1]: Condition check resulted in Arbitrary Executable File Formats File System Automount Point being skipped.
+systemd[1]: Reached target Local Encrypted Volumes.
+[[0;32m  OK  [0m] Reached target [0;1;39mLocal Encrypted Volumes[0m.
+systemd[1]: Reached target Remote File Systems.
+[[0;32m  OK  [0m] Reached target [0;1;39mRemote File Systems[0m.
+systemd[1]: Reached target Slice Units.
+[[0;32m  OK  [0m] Reached target [0;1;39mSlice Units[0m.
+systemd[1]: Reached target Local Verity Protected Volumes.
+[[0;32m  OK  [0m] Reached target [0;1;39mLocal Verity Protected Volumes[0m.
+systemd[1]: Listening on Syslog Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39mSyslog Socket[0m.
+systemd[1]: Listening on initctl Compatibility Named Pipe.
+[[0;32m  OK  [0m] Listening on [0;1;39minitctl Compatibility Named Pipe[0m.
+systemd[1]: Condition check resulted in Journal Audit Socket being skipped.
+systemd[1]: Listening on Journal Socket (/dev/log).
+[[0;32m  OK  [0m] Listening on [0;1;39mJournal Socket (/dev/log)[0m.
+systemd[1]: Listening on Journal Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39mJournal Socket[0m.
+systemd[1]: Listening on udev Control Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39mudev Control Socket[0m.
+systemd[1]: Listening on udev Kernel Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39mudev Kernel Socket[0m.
+systemd[1]: Condition check resulted in Huge Pages File System being skipped.
+systemd[1]: Mounting POSIX Message Queue File System...
+         Mounting [0;1;39mPOSIX Message Queue File System[0m...
+systemd[1]: Mounting Kernel Debug File System...
+         Mounting [0;1;39mKernel Debug File System[0m...
+systemd[1]: Condition check resulted in Kernel Trace File System being skipped.
+systemd[1]: Starting Journal Service...
+         Starting [0;1;39mJournal Service[0m...
+systemd[1]: Starting Restore / save the current clock...
+         Starting [0;1;39mRestore / save the current clock[0m...
+systemd[1]: Starting Set the console keyboard layout...
+         Starting [0;1;39mSet the console keyboard layout[0m...
+systemd[1]: Condition check resulted in Create List of Static Device Nodes being skipped.
+systemd[1]: Starting Load Kernel Module configfs...
+         Starting [0;1;39mLoad Kernel Module configfs[0m...
+systemd[1]: Starting Load Kernel Module drm...
+         Starting [0;1;39mLoad Kernel Module drm[0m...
+systemd[1]: Starting Load Kernel Module fuse...
+         Starting [0;1;39mLoad Kernel Module fuse[0m...
+systemd[1]: Started Nameserver information manager.
+[[0;32m  OK  [0m] Started [0;1;39mNameserver information manager[0m.
+systemd[1]: Reached target Preparation for Network.
+[[0;32m  OK  [0m] Reached target [0;1;39mPreparation for Network[0m.
+systemd[1]: Starting Load Kernel Modules...
+         Starting [0;1;39mLoad Kernel Modules[0m...
+systemd[1]: Starting Remount Root and Kernel File Systems...
+         Starting [0;1;39mRemount Root and Kernel File Systems[0m...
+systemd[1]: Starting Coldplug All udev Devices...
+         Starting [0;1;39mColdplug All udev Devices[0m...
+systemd[1]: Started Journal Service.
+[[0;32m  OK  [0m] Started [0;1;39mJournal Service[0m.
+[[0;32m  OK  [0m] Mounted [0;1;39mPOSIX Message Queue File System[0m.
+[[0;32m  OK  [0m] Mounted [0;1;39mKernel Debug File System[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mRestore / save the current clock[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mLoad Kernel Module configfs[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mSet the console keyboard layout[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mLoad Kernel Module drm[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mLoad Kernel Module fuse[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mLoad Kernel Modules[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mRemount Root and Kernel File Systems[0m.
+         Activating swap [0;1;39m/var/swap[0m...
+         Mounting [0;1;39mKernel Configuration File System[0m..Adding 524284k swap on /var/swap.  Priority:-2 extents:2 across:2097148k SS
+.
+         Starting [0;1;39mFlush Journal to Persistent Storage[0m...
+         Starting [0;1;39mLoad/Save Random Seed[0m...
+systemd-journald[80]: Received client request to flush runtime journal.
+         Starting [0;1;39mApply Kernel Variables[0m...
+systemd-journald[80]: File /var/log/journal/c82cf5bcd3a14b95935d65bfb529d72d/system.journal corrupted or uncleanly shut down, renaming and replacing.
+         Starting [0;1;39mCreate System Users[0m...
+[[0;32m  OK  [0m] Activated swap [0;1;39m/var/swap[0m.
+[[0;32m  OK  [0m] Mounted [0;1;39mKernel Configuration File System[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mLoad/Save Random Seed[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mApply Kernel Variables[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mColdplug All udev Devices[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mSwaps[0m.
+         Starting [0;1;39mHelper to synchronize boot up for ifupdown[0m...
+[[0;32m  OK  [0m] Finished [0;1;39mCreate System Users[0m.
+         Starting [0;1;39mCreate Static Device Nodes in /dev[0m...
+[[0;32m  OK  [0m] Finished [0;1;39mCreate Static Device Nodes in /dev[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mPreparation for Local File Systems[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mLocal File Systems[0m.
+         Starting [0;1;39mEnable support fo…l executable binary formats[0m...
+         Starting [0;1;39mSet console font and keymap[0m...
+         Starting [0;1;39mRule-based Manage…for Device Events and Files[0m...
+[[0;32m  OK  [0m] Finished [0;1;39mFlush Journal to Persistent Storage[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mEnable support fo…nal executable binary formats[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mSet console font and keymap[0m.
+         Starting [0;1;39mCreate Volatile Files and Directories[0m...
+[[0;32m  OK  [0m] Started [0;1;39mRule-based Manager for Device Events and Files[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mCreate Volatile Files and Directories[0m.
+[[0;32m  OK  [0m] Started [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+         Starting [0;1;39mNetwork Name Resolution[0m...
+         Starting [0;1;39mNetwork Time Synchronization[0m...
+         Starting [0;1;39mRecord System Boot/Shutdown in UTMP[0m...
+[[0;32m  OK  [0m] Finished [0;1;39mRecord System Boot/Shutdown in UTMP[0m.
+zocl-drm axi:zyxclmm_drm: error -ENXIO: IRQ index 0 not found
+[[0;32m  OK  [0m] Found device [0;1;39m/dev/ttyPS0[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mHardware activated USB gadget[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mHelper to synchronize boot up for ifupdown[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[[0;32m  OK  [0m] Started [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[[0;32m  OK  [0m] Started [0;1;39mifup for eth0[0m.
+         Starting [0;1;39mRaise network interfaces[0m...
+[[0;32m  OK  [0m] Started [0;1;39mNetwork Time Synchronization[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mSystem Initialization[0m.
+[[0;32m  OK  [0m] Started [0;1;39mresolvconf-pull-resolved.path[0m.
+[[0;32m  OK  [0m] Started [0;1;39mTrigger to poll fo…y enabled on GCP LTS non-pro)[0m.
+[[0;32m  OK  [0m] Started [0;1;39mDaily Cleanup of Temporary Directories[0m.
+[[0;32m  OK  [0m] Started [0;1;39mUbuntu Advantage Timer for running repeated jobs[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mPath Units[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mSystem Time Set[0m.
+[[0;32m  OK  [0m] Started [0;1;39mDaily apt download activities[0m.
+[[0;32m  OK  [0m] Started [0;1;39mDaily apt upgrade and clean activities[0m.
+[[0;32m  OK  [0m] Started [0;1;39mDaily dpkg database backup timer[0m.
+[[0;32m  OK  [0m] Started [0;1;39mPeriodic ext4 Onli…ata Check for All Filesystems[0m.
+[[0;32m  OK  [0m] Started [0;1;39mDiscard unused blocks once a week[0m.
+[[0;32m  OK  [0m] Started [0;1;39mDaily rotation of log files[0m.
+[[0;32m  OK  [0m] Started [0;1;39mDaily man-db regeneration[0m.
+[[0;32m  OK  [0m] Started [0;1;39mMessage of the Day[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mTimer Units[0m.
+[[0;32m  OK  [0m] Listening on [0;1;39mD-Bus System Message Bus Socket[0m.
+[[0;32m  OK  [0m] Listening on [0;1;39mUUID daemon activation socket[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mSocket Units[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mBasic System[0m.
+         Starting [0;1;39mLSB: automatic crash report generation[0m...
+         Starting [0;1;39mExecuting boot.py from the boot partition[0m...
+[[0;32m  OK  [0m] Started [0;1;39mRegular background program processing daemon[0m.
+[[0;32m  OK  [0m] Started [0;1;39mD-Bus System Message Bus[0m.
+[[0;32m  OK  [0m] Started [0;1;39mSave initial kernel messages after boot[0m.
+         Starting [0;1;39mRemove Stale Onli…t4 Metadata Check Snapshots[0m...
+         Starting [0;1;39mJupyter Notebook Server[0m...
+         Starting [0;1;39mLSB: Load kernel …d to enable cpufreq scaling[0m...
+         Starting [0;1;39mDispatcher daemon for systemd-networkd[0m...
+         Starting [0;1;39mResize Filesystem on SD card[0m...
+         Starting [0;1;39mSystem Logging Service[0m...
+         Starting [0;1;39mUser Login Management[0m...
+[[0;32m  OK  [0m] Started [0;1;39mNetwork Name Resolution[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mResize Filesystem on SD card[0m.
+[[0;32m  OK  [0m] Started [0;1;39mSystem Logging Service[0m.
+[[0;32m  OK  [0m] Started [0;1;39mLSB: automatic crash report generation[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mHost and Network Name Lookups[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[[0;32m  OK  [0m] Started [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+         Starting [0;1;39mresolvconf-pull-resolved.service[0m...
+[[0;32m  OK  [0m] Started [0;1;39mUser Login Management[0m.
+[[0;32m  OK  [0m] Started [0;1;39mLSB: Load kernel m…ded to enable cpufreq scaling[0m.
+         Starting [0;1;39mLSB: set CPUFreq kernel parameters[0m...
+[[0;32m  OK  [0m] Finished [0;1;39mRemove Stale Onli…ext4 Metadata Check Snapshots[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mresolvconf-pull-resolved.service[0m.
+[[0;32m  OK  [0m] Started [0;1;39mLSB: set CPUFreq kernel parameters[0m.
+[[0;32m  OK  [0m] Started [0;1;39mDispatcher daemon for systemd-networkd[0m.
+[[0m[0;31m*     [0m] (1 of 3) A start job is running for…he boot partition (15s / no limit)
+M[K[[0;32m  OK  [0m] Stopped [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[K[[0;32m  OK  [0m] Started [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[[0;1;31m*[0m[0;31m*    [0m] (1 of 3) A start job is running for…he boot partition (17s / no limit)
+M[K[[0;32m  OK  [0m] Stopped [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[K[[0;32m  OK  [0m] Started [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[[0;31m*[0;1;31m*[0m[0;31m*   [0m] (1 of 3) A start job is running for…he boot partition (19s / no limit)
+M[K[[0;32m  OK  [0m] Stopped [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[K[[0;32m  OK  [0m] Started [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] (2 of 3) A start job is running for…r Notebook Server (21s / 1min 39s)
+M[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] (2 of 3) A start job is running for…r Notebook Server (22s / 1min 39s)
+M[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] (2 of 3) A start job is running for…r Notebook Server (22s / 1min 39s)
+M[K[[0;32m  OK  [0m] Stopped [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[K[[0;32m  OK  [0m] Started [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mRaise network interfaces[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mNetwork[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mNetwork is Online[0m.
+[[0;32m  OK  [0m] Started [0;1;39mISC DHCP IPv4 server[0m.
+[[0;32m  OK  [0m] Started [0;1;39mISC DHCP IPv6 server[0m.
+         Starting [0;1;39mSamba NMB Daemon[0m...
+         Starting [0;1;39mOpenBSD Secure Shell server[0m...
+         Starting [0;1;39mPermit User Sessions[0m...
+[[0;32m  OK  [0m] Started [0;1;39mUnattended Upgrades Shutdown[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mPermit User Sessions[0m.
+[[0;32m  OK  [0m] Started [0;1;39mSerial Getty on ttyPS0[0m.
+         Starting [0;1;39mSet console scheme[0m...
+
+PYNQ Linux, based on Ubuntu 22.04 pynq ttyPS0
+
+pynq login: xilinx (automatic login)
+
+Welcome to PYNQ Linux, based on Ubuntu 22.04 (GNU/Linux 6.6.10-xilinx-v2024.1-gb36799f4e960 armv7l)
+
+Last login: Mon Sep 21 13:17:24 UTC 2026 on ttyPS0
+[?2004hxilinx@pynq:~$ 
+ERROR: timeout; remote completion unconfirmed; no interrupt sent
+
+HOST_EXIT_CODE=124

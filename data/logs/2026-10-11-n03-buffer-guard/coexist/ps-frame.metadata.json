@@ -1,0 +1,22 @@
+{
+  "source": "/home/xilinx/vision_m2/n03-base-35fbfda1e7ff404ba4cbc30c419bf235.png",
+  "shape": [
+    720,
+    1280,
+    3
+  ],
+  "dtype": "uint8",
+  "png_bytes": 986678,
+  "png_sha256": "800847432dea2d0874f5d54d2c196ec7a3dc2905cb6bff254b988c7cf5532654",
+  "pixels_sha256": "771eefbeca42f3132cbd8b687ac452f78f785af27ac721e46cb8a0fbca3f1c8c",
+  "pixel_range": [
+    18,
+    255
+  ],
+  "bgr_mean": [
+    122.01266927083333,
+    123.61046006944444,
+    125.15643880208333
+  ],
+  "limit": "hash equality proves transport; temporal/color validity needs inspection"
+}

@@ -1,0 +1,11 @@
+HOST_STARTED_UTC=2026-10-10T15:50:58.8426470Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=bash -c "source /etc/profile.d/pynq_venv.sh && python3 -c \"import cv2,numpy,pynq; print(\\\"PYNQ\\\",pynq.__version__); print(\\\"CV2\\\",cv2.__version__); print(\\\"NUMPY\\\",numpy.__version__)\""
+bash -c "source /etc/profile.d/pynq_venv.sh && python3 -c \"import cv2,numpy,pynq; print(\\\"PYNQ\\\",pynq.__version__); print(\\\"CV2\\\",cv2.__version__); print(\\\"NUMPY\\\",numpy.__version__)\""; printf '\n__PYNQ_RC_0262e199b2d241c2a2e96a35dd9bce77=%d\n' $?
+[?2004lPYNQ 3.1
+CV2 4.5.4
+NUMPY 1.21.5
+
+__PYNQ_RC_0262e199b2d241c2a2e96a35dd9bce77=0
+
+HOST_EXIT_CODE=0

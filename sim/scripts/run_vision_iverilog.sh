@@ -13,6 +13,8 @@ set -uo pipefail
 MODE="${1:-all}"
 
 case "$MODE" in
+    capture_monitor) TBS=(vision/tb_capture_stream_monitor.v) ;;
+    capture_status) TBS=(vision/tb_capture_status_axi.v) ;;
     rgb2gray) TBS=(vision/tb_rgb2gray.v) ;;
     linebuf)  TBS=(vision/tb_line_buffer.v) ;;
     gaussian) TBS=(vision/tb_gaussian3x3.v) ;;
@@ -37,7 +39,7 @@ case "$MODE" in
     copbuf_stress) TBS=(vision/tb_cop_buf_stress.v) ;;
     top)      TBS=(vision/tb_top.v) ;;
     all)      TBS=(vision/tb_rgb2gray.v vision/tb_line_buffer.v vision/tb_gaussian3x3.v vision/tb_scaler.v vision/tb_scaler_ds.v vision/tb_sobel.v vision/tb_chain.v vision/tb_fullchain.v vision/tb_osd.v vision/tb_axi_regs.v vision/tb_in_align.v vision/tb_cop_buf.v vision/tb_top.v) ;;
-    *)   echo "用法: bash sim/scripts/run_vision_iverilog.sh [rgb2gray|linebuf|gaussian|scaler|scaler_ds|sobel|chain|fullchain|osd|axi|align|copbuf|top|all]"; exit 1 ;;
+    *)   echo "用法: bash sim/scripts/run_vision_iverilog.sh [capture_monitor|capture_status|rgb2gray|linebuf|gaussian|scaler|scaler_ds|sobel|chain|fullchain|osd|axi|align|copbuf|top|all]"; exit 1 ;;
 esac
 if [ "$MODE" = all ]; then TBS+=(vision/tb_cop_buf_stress.v vision/tb_axi_split.v vision/tb_config_bridge.v vision/tb_top_async.v vision/tb_top_color.v); fi
 if [ "$MODE" = all ]; then TBS+=(vision/tb_video_pipeline.v vision/tb_video_real.v); fi
@@ -45,6 +47,7 @@ if [ "$MODE" = all ]; then TBS+=(vision/tb_vision_axi.v); fi
 if [ "$MODE" = all ]; then TBS+=(vision/tb_axi_lock_reset.v); fi
 if [ "$MODE" = all ]; then TBS+=(vision/tb_patterns.v); fi
 
+if [ "$MODE" = all ]; then TBS+=(vision/tb_capture_stream_monitor.v vision/tb_capture_status_axi.v); fi
 cd "$(dirname "$0")/.." || exit 1  # -> sim/
 source scripts/vision_gate.sh
 

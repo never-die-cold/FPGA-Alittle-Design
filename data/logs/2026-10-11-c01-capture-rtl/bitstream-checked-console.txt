@@ -1,0 +1,2280 @@
+INFO: [Common 17-3922] A valid Vivado Design Suite BASIC license has been detected. Your current license is active and will expire on 14-sep-2027.
+
+****** Vivado v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Sun Oct 11 17:31:03 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source sim/scripts/build_capture_hdmi.tcl
+# if {[catch {
+#     set stage [lindex $argv 0]
+#     if {$stage ni {validate bitstream}} {error "stage must be validate or bitstream"}
+#     set tag [clock microseconds]
+#     set out [file normalize "sim/build/c01-hdmi-$tag"]
+#     set rep [file normalize "data/logs/2026-10-11-c01-hdmi-$tag"]
+#     file mkdir $rep
+#     set reuse [expr {[llength $argv] == 2}]
+#     if {$reuse} {
+#         if {$stage ne "bitstream"} {error "reuse requires bitstream stage"}
+#         set saved [file normalize [lindex $argv 1]]
+#         set allowed [file normalize sim/build]
+#         if {![string match "$allowed/c01-hdmi-*/c01_hdmi.xpr" $saved] || ![file isfile $saved]} {
+#             error "reuse path must be an existing C01 project in sim/build"
+#         }
+#         open_project $saved
+#         if {[get_property NAME [current_project]] ne "c01_hdmi" ||
+#             [get_property PROGRESS [get_runs synth_1]] ne "100%"} {error "reuse needs completed C01 synthesis"}
+#         set out [get_property DIRECTORY [current_project]]
+#         reset_run impl_1
+#     } else {
+#     create_project c01_hdmi $out -part xc7z020clg400-1
+#     set_property target_language Verilog [current_project]
+#     set_property ip_repo_paths [file normalize sim/build/hdmi-library-full] [current_project]
+#     update_ip_catalog
+#     add_files [glob src/vision/*.v]
+#     }
+#     puts "BUILD_DIR: $out"
+#     puts "REPORT_DIR: $rep"
+#     if {!$reuse} {source sim/scripts/create_capture_hdmi_bd.tcl}
+#     if {$stage eq "bitstream"} {
+#         if {!$reuse} {
+#         set bd [get_files */vision.bd]
+#         generate_target all $bd
+#         foreach f [get_files -all -filter {NAME =~ *rx_0*ila*.xdc}] {
+#             set_property USED_IN_SYNTHESIS false $f
+#             set_property USED_IN_IMPLEMENTATION false $f
+#         }
+#         add_files [make_wrapper -files $bd -top]
+#         add_files -fileset constrs_1 sim/build/hdmi-source/hdmi_pins.xdc
+#         foreach xdc {config_cdc capture_cdc} {
+#             add_files -fileset constrs_1 src/vision/$xdc.xdc
+#             set_property USED_IN_SYNTHESIS false [get_files $xdc.xdc]
+#             set_property PROCESSING_ORDER LATE [get_files $xdc.xdc]
+#         }
+#         set_property top vision_wrapper [current_fileset]
+#         update_compile_order -fileset sources_1
+#         launch_runs synth_1 -jobs 2
+#         wait_on_run synth_1
+#         }
+#         if {[get_property PROGRESS [get_runs synth_1]] ne "100%"} {error "capture HDMI synthesis failed"}
+#         open_run synth_1
+#         source sim/scripts/validate_vision_cdc.tcl
+#         vision_check_cdc 1
+#         close_design
+#         launch_runs impl_1 -to_step route_design -jobs 2
+#         wait_on_run impl_1
+#         if {[get_property PROGRESS [get_runs impl_1]] ne "100%"} {error "capture HDMI implementation failed"}
+#         open_run impl_1
+#         vision_check_cdc 1
+#         report_utilization -file $rep/utilization.rpt
+#         report_cdc -details -file $rep/cdc.rpt
+#         report_drc -file $rep/drc.rpt
+#         set timing [report_timing_summary -report_unconstrained -return_string -file $rep/timing.rpt]
+#         if {![string match {*All user specified timing constraints are met.*} $timing]} {error "capture HDMI timing failed"}
+#         foreach violation [get_drc_violations] {
+#             if {[get_property SEVERITY $violation] in {Error {Critical Warning}}} {error "blocking DRC $violation"}
+#         }
+#         foreach port [get_ports -filter {NAME !~ DDR* && NAME !~ FIXED_IO*}] {
+#             if {[get_property PACKAGE_PIN $port] eq ""} {error "missing physical pin $port"}
+#         }
+#         close_design
+#         launch_runs impl_1 -to_step write_bitstream -jobs 2
+#         wait_on_run impl_1
+#         if {[get_property PROGRESS [get_runs impl_1]] ne "100%"} {error "capture HDMI bitstream failed"}
+#         set runbit [file join [get_property DIRECTORY [get_runs impl_1]] vision_wrapper.bit]
+#         file copy $runbit $out/capture-$tag.bit
+#         set handoff [lindex [get_files */hw_handoff/vision.hwh] 0]
+#         if {$handoff eq ""} {set handoff [file join $out c01_hdmi.gen sources_1 bd vision hw_handoff vision.hwh]}
+#         file copy $handoff $out/capture-$tag.hwh
+#         write_hw_platform -fixed -include_bit -file $out/capture-$tag.xsa
+#         puts "PASS: C01 display/capture offline bitstream; PS ownership and board acceptance pending"
+#     }
+# } reason]} {puts stderr "ERROR: $reason"; exit 1}
+Scanning sources...
+Finished scanning sources
+WARNING: [Project 1-5713] Board part '' set for the project  is not found. BoardPart property will be unset. Please select board from latest repo build 
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'e:/Projects/FPGA-Alittle-Design/sim/build/hdmi-library-full'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'D:/Vivado_downloads/2026.1/Vivado/data/ip'.
+INFO: [Project 1-5698] Found the below utility IPs instantiated in block design E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.srcs/sources_1/bd/vision/vision.bd which have equivalent inline hdl with improved performance and reduced diskspace.
+It is recommended to migrate these utility IPs to inline hdl  using the command upgrade_project -migrate_to_inline_hdl.  The utility IPs may be deprecated in future releases.
+More information on inline hdl is available in UG994.
+Utility IP Component Instances:
+ vision_high_0
+vision_capture_low_0
+vision_capture_interrupt_0
+vision_capture_padding_0
+open_project: Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 701.504 ; gain = 357.496
+BUILD_DIR: E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742
+REPORT_DIR: E:/Projects/FPGA-Alittle-Design/data/logs/2026-10-11-c01-hdmi-1791711069004993
+Design is defaulting to impl run constrset: constrs_1
+Design is defaulting to synth run part: xc7z020clg400-1
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+INFO: [Project 1-5699] Read binary netlist with skipMacroContent - 1
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_dma_0/vision_capture_dma_0.dcp' for cell 'vision_i/capture_dma'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_input_0/vision_capture_input_0.dcp' for cell 'vision_i/capture_input'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_memory_0/vision_capture_memory_0.dcp' for cell 'vision_i/capture_memory'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_reset_0/vision_capture_reset_0.dcp' for cell 'vision_i/capture_reset'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_status_0/vision_capture_status_0.dcp' for cell 'vision_i/capture_status'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_converter_0/vision_converter_0.dcp' for cell 'vision_i/converter'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_pipe_0/vision_pipe_0.dcp' for cell 'vision_i/pipe'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_ps7_0/vision_ps7_0.dcp' for cell 'vision_i/ps7'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_rx_0/vision_rx_0.dcp' for cell 'vision_i/rx'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/vision_snapshot_ila_0.dcp' for cell 'vision_i/snapshot_ila'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_tx_0/vision_tx_0.dcp' for cell 'vision_i/tx'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_control_imp_xbar_0/vision_capture_control_imp_xbar_0.dcp' for cell 'vision_i/capture_control/xbar'
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.059 . Memory (MB): peak = 997.844 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 678 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2026.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Chipscope 16-324] Core: vision_i/snapshot_ila UUID: b2c5fb84-5fa2-5084-a4d8-02446e002ac6 
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_ps7_0/vision_ps7_0.xdc] for cell 'vision_i/ps7/inst'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_ps7_0/vision_ps7_0.xdc] for cell 'vision_i/ps7/inst'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_rx_0/src/dvi2rgb.xdc] for cell 'vision_i/rx/U0'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_rx_0/src/dvi2rgb.xdc] for cell 'vision_i/rx/U0'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_tx_0/src/rgb2dvi.xdc] for cell 'vision_i/tx/U0'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_tx_0/src/rgb2dvi.xdc] for cell 'vision_i/tx/U0'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/ila_v6_2/constraints/ila_impl.xdc] for cell 'vision_i/snapshot_ila/inst'
+WARNING: [Vivado_Tcl 4-921] Waiver ID 'CDC-10' -to list should not be empty. [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/ila_v6_2/constraints/ila_impl.xdc:31]
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/ila_v6_2/constraints/ila_impl.xdc] for cell 'vision_i/snapshot_ila/inst'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/ila_v6_2/constraints/ila.xdc] for cell 'vision_i/snapshot_ila/inst'
+WARNING: [Vivado_Tcl 4-921] Waiver ID 'CDC-10' -to list should not be empty. [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/ila_v6_2/constraints/ila.xdc:108]
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/ila_v6_2/constraints/ila.xdc] for cell 'vision_i/snapshot_ila/inst'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_dma_0/vision_capture_dma_0.xdc] for cell 'vision_i/capture_dma/U0'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_dma_0/vision_capture_dma_0.xdc] for cell 'vision_i/capture_dma/U0'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_reset_0/vision_capture_reset_0_board.xdc] for cell 'vision_i/capture_reset/U0'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_reset_0/vision_capture_reset_0_board.xdc] for cell 'vision_i/capture_reset/U0'
+Parsing XDC File [E:/Projects/FPGA-Alittle-Design/sim/build/hdmi-source/hdmi_pins.xdc]
+Finished Parsing XDC File [E:/Projects/FPGA-Alittle-Design/sim/build/hdmi-source/hdmi_pins.xdc]
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_tx_0/src/rgb2dvi_clocks.xdc] for cell 'vision_i/tx/U0'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_tx_0/src/rgb2dvi_clocks.xdc] for cell 'vision_i/tx/U0'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_dma_0/vision_capture_dma_0_clocks.xdc] for cell 'vision_i/capture_dma/U0'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_dma_0/vision_capture_dma_0_clocks.xdc] for cell 'vision_i/capture_dma/U0'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_input_0/vision_capture_input_0_clocks.xdc] for cell 'vision_i/capture_input/inst'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_input_0/vision_capture_input_0_clocks.xdc] for cell 'vision_i/capture_input/inst'
+Parsing XDC File [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc]
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[0]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[12]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[16]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[20]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[24]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[28]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[4]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[8]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+Finished Parsing XDC File [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc]
+Parsing XDC File [E:/Projects/FPGA-Alittle-Design/src/vision/capture_cdc.xdc]
+Finished Parsing XDC File [E:/Projects/FPGA-Alittle-Design/src/vision/capture_cdc.xdc]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/I_RST_MODULE/GEN_RESET_FOR_S2MM.RESET_I/GEN_RESET_FOR_ASYNC.AXIS_RESET_CDC_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/I_RST_MODULE/GEN_RESET_FOR_S2MM.RESET_I/GEN_MIN_FOR_ASYNC.LITE_IDLE_CDC_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/I_RST_MODULE/GEN_RESET_FOR_S2MM.RESET_I/GEN_MIN_FOR_ASYNC.LITE_MIN_CDC_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/I_RST_MODULE/GEN_RESET_FOR_S2MM.RESET_I/GEN_MIN_FOR_ASYNC.AXIS_IDLE_CDC_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/I_RST_MODULE/GEN_RESET_FOR_S2MM.RESET_I/GEN_MIN_FOR_ASYNC.AXIS_MIN_CDC_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/I_RST_MODULE/GEN_RESET_FOR_S2MM.RESET_I/GEN_RESET_FOR_ASYNC.HARD_RESET_CDC_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/AXI_LITE_REG_INTERFACE_I/GEN_S2MM_LITE_CROSSINGS.GEN_S2MM_CROSSINGS_ASYNC.S2MM_INTRPT_CROSSING_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+INFO: [Project 1-1714] 28 XPM XDC files have been applied to the design.
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+INFO: [Project 1-1687] 2 scoped IP constraints or related sub-commands were skipped due to synthesis logic optimizations usually triggered by constant connectivity or unconnected output pins. To review the skipped constraints and messages, run the command 'set_param netlist.IPMsgFiltering false' before opening the design.
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.006 . Memory (MB): peak = 1739.992 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 96 instances were transformed.
+  CFGLUT5 => CFGLUT5 (SRL16E, SRLC32E): 84 instances
+  IOBUF => IOBUF (IBUF, OBUFT): 2 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 10 instances
+
+open_run: Time (s): cpu = 00:00:26 ; elapsed = 00:00:30 . Memory (MB): peak = 1739.992 ; gain = 1038.488
+## proc vision_check_cdc {with_capture} {
+##     set config_first [get_pins -hier -filter {NAME =~ *req_meta_reg/D || NAME =~ *ack_meta_reg/D}]
+##     if {[llength $config_first] != 2} {error "expected two config handshake first-stage inputs"}
+##     foreach pattern {*u_config/hold_data_reg* *u_config/hold_id_reg* *u_config/dst_data_reg* *u_config/dst_id_reg*} {
+##         if {![llength [get_cells -hier -filter "NAME =~ $pattern"]]} {error "missing config CDC bundle: $pattern"}
+##     }
+##     if {$with_capture} {
+##         set capture_first [get_pins -hier -regexp {.*capture_status.*/(lock_sync_reg\[0\]|fault_bridge/(ack_sync_reg\[0\]|pending_sync_reg\[0\]))/D}]
+##         if {[llength $capture_first] != 3} {error "expected three capture CDC first-stage inputs, got [llength $capture_first]"}
+##         foreach pin $capture_first {
+##             if {![get_property ASYNC_REG [get_cells -of_objects $pin]]} {error "capture synchronizer missing ASYNC_REG: $pin"}
+##         }
+##         puts "PASS: CDC structural assertions (config first-stage=2, capture first-stage=3)"
+##     } else {puts "PASS: CDC structural assertions (config first-stage=2)"}
+## }
+PASS: CDC structural assertions (config first-stage=2, capture first-stage=3)
+[Sun Oct 11 17:32:03 2026] Launched impl_1...
+Run output will be captured here: E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1/runme.log
+launch_runs: Time (s): cpu = 00:00:00 ; elapsed = 00:00:05 . Memory (MB): peak = 1739.992 ; gain = 0.000
+[Sun Oct 11 17:32:03 2026] Waiting for impl_1 to finish...
+
+
+*** Running vivado
+    with args -log vision_wrapper.vdi -applog -m64 -product Vivado -messageDb vivado.pb -mode batch -source vision_wrapper.tcl -notrace
+
+
+INFO: [Common 17-3922] A valid Vivado Design Suite BASIC license has been detected. Your current license is active and will expire on 14-sep-2027.
+#-----------------------------------------------------------
+# Vivado v2026.1 (64-bit)
+# SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+# IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+# SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+# Start of session at: Sun Oct 11 17:32:10 2026
+# Process ID         : 41096
+# Current directory  : E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1
+# Command line       : vivado.exe -log vision_wrapper.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source vision_wrapper.tcl -notrace
+# Log file           : E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1/vision_wrapper.vdi
+# Journal file       : E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1\vivado.jou
+# Running On         : never-die-cold
+# Platform           : Windows 11
+# Operating System   : 26200
+# Processor Detail   : Intel(R) Core(TM) Ultra 7 255HX
+# CPU Frequency      : 2880 MHz
+# CPU Physical cores : 20
+# CPU Logical cores  : 20
+# Host memory        : 16496 MB
+# Swap memory        : 24696 MB
+# Total Virtual      : 41192 MB
+# Available Virtual  : 16962 MB
+#-----------------------------------------------------------
+
+****** Vivado v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Sun Oct 11 17:32:10 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source vision_wrapper.tcl -notrace
+create_project: Time (s): cpu = 00:00:09 ; elapsed = 00:00:08 . Memory (MB): peak = 613.570 ; gain = 270.098
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'e:/Projects/FPGA-Alittle-Design/sim/build/hdmi-library-full'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'D:/Vivado_downloads/2026.1/Vivado/data/ip'.
+WARNING: [IP_Flow 19-4995] The host OS only allows 260 characters in a normal path. The IP cache path is more than 80 characters. If you experience issues with IP caching, please consider changing the IP cache to a location with a shorter path. Alternately consider using the OS subst command to map part of the path to a drive letter. 
+Current IP cache path is E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.cache/ip 
+Command: link_design -top vision_wrapper -part xc7z020clg400-1
+Design is defaulting to srcset: sources_1
+Design is defaulting to constrset: constrs_1
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+INFO: [Project 1-5699] Read binary netlist with skipMacroContent - 1
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_dma_0/vision_capture_dma_0.dcp' for cell 'vision_i/capture_dma'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_input_0/vision_capture_input_0.dcp' for cell 'vision_i/capture_input'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_memory_0/vision_capture_memory_0.dcp' for cell 'vision_i/capture_memory'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_reset_0/vision_capture_reset_0.dcp' for cell 'vision_i/capture_reset'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_status_0/vision_capture_status_0.dcp' for cell 'vision_i/capture_status'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_converter_0/vision_converter_0.dcp' for cell 'vision_i/converter'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_pipe_0/vision_pipe_0.dcp' for cell 'vision_i/pipe'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_ps7_0/vision_ps7_0.dcp' for cell 'vision_i/ps7'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_rx_0/vision_rx_0.dcp' for cell 'vision_i/rx'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/vision_snapshot_ila_0.dcp' for cell 'vision_i/snapshot_ila'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_tx_0/vision_tx_0.dcp' for cell 'vision_i/tx'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_control_imp_xbar_0/vision_capture_control_imp_xbar_0.dcp' for cell 'vision_i/capture_control/xbar'
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.101 . Memory (MB): peak = 980.430 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 678 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2026.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Chipscope 16-324] Core: vision_i/snapshot_ila UUID: b2c5fb84-5fa2-5084-a4d8-02446e002ac6 
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_ps7_0/vision_ps7_0.xdc] for cell 'vision_i/ps7/inst'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_ps7_0/vision_ps7_0.xdc] for cell 'vision_i/ps7/inst'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_rx_0/src/dvi2rgb.xdc] for cell 'vision_i/rx/U0'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_rx_0/src/dvi2rgb.xdc] for cell 'vision_i/rx/U0'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_tx_0/src/rgb2dvi.xdc] for cell 'vision_i/tx/U0'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_tx_0/src/rgb2dvi.xdc] for cell 'vision_i/tx/U0'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/ila_v6_2/constraints/ila_impl.xdc] for cell 'vision_i/snapshot_ila/inst'
+WARNING: [Vivado_Tcl 4-921] Waiver ID 'CDC-10' -to list should not be empty. [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/ila_v6_2/constraints/ila_impl.xdc:31]
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/ila_v6_2/constraints/ila_impl.xdc] for cell 'vision_i/snapshot_ila/inst'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/ila_v6_2/constraints/ila.xdc] for cell 'vision_i/snapshot_ila/inst'
+WARNING: [Vivado_Tcl 4-921] Waiver ID 'CDC-10' -to list should not be empty. [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/ila_v6_2/constraints/ila.xdc:108]
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/ila_v6_2/constraints/ila.xdc] for cell 'vision_i/snapshot_ila/inst'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_dma_0/vision_capture_dma_0.xdc] for cell 'vision_i/capture_dma/U0'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_dma_0/vision_capture_dma_0.xdc] for cell 'vision_i/capture_dma/U0'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_reset_0/vision_capture_reset_0_board.xdc] for cell 'vision_i/capture_reset/U0'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_reset_0/vision_capture_reset_0_board.xdc] for cell 'vision_i/capture_reset/U0'
+Parsing XDC File [E:/Projects/FPGA-Alittle-Design/sim/build/hdmi-source/hdmi_pins.xdc]
+Finished Parsing XDC File [E:/Projects/FPGA-Alittle-Design/sim/build/hdmi-source/hdmi_pins.xdc]
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_tx_0/src/rgb2dvi_clocks.xdc] for cell 'vision_i/tx/U0'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_tx_0/src/rgb2dvi_clocks.xdc] for cell 'vision_i/tx/U0'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_dma_0/vision_capture_dma_0_clocks.xdc] for cell 'vision_i/capture_dma/U0'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_dma_0/vision_capture_dma_0_clocks.xdc] for cell 'vision_i/capture_dma/U0'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_input_0/vision_capture_input_0_clocks.xdc] for cell 'vision_i/capture_input/inst'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_input_0/vision_capture_input_0_clocks.xdc] for cell 'vision_i/capture_input/inst'
+Parsing XDC File [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc]
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[0]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[12]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[16]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[20]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[24]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[28]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[4]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[8]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+Finished Parsing XDC File [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc]
+Parsing XDC File [E:/Projects/FPGA-Alittle-Design/src/vision/capture_cdc.xdc]
+Finished Parsing XDC File [E:/Projects/FPGA-Alittle-Design/src/vision/capture_cdc.xdc]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/I_RST_MODULE/GEN_RESET_FOR_S2MM.RESET_I/GEN_RESET_FOR_ASYNC.AXIS_RESET_CDC_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/I_RST_MODULE/GEN_RESET_FOR_S2MM.RESET_I/GEN_MIN_FOR_ASYNC.LITE_IDLE_CDC_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/I_RST_MODULE/GEN_RESET_FOR_S2MM.RESET_I/GEN_MIN_FOR_ASYNC.LITE_MIN_CDC_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/I_RST_MODULE/GEN_RESET_FOR_S2MM.RESET_I/GEN_MIN_FOR_ASYNC.AXIS_IDLE_CDC_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/I_RST_MODULE/GEN_RESET_FOR_S2MM.RESET_I/GEN_MIN_FOR_ASYNC.AXIS_MIN_CDC_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/I_RST_MODULE/GEN_RESET_FOR_S2MM.RESET_I/GEN_RESET_FOR_ASYNC.HARD_RESET_CDC_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/AXI_LITE_REG_INTERFACE_I/GEN_S2MM_LITE_CROSSINGS.GEN_S2MM_CROSSINGS_ASYNC.S2MM_INTRPT_CROSSING_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+INFO: [Project 1-1714] 28 XPM XDC files have been applied to the design.
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+INFO: [Project 1-1687] 2 scoped IP constraints or related sub-commands were skipped due to synthesis logic optimizations usually triggered by constant connectivity or unconnected output pins. To review the skipped constraints and messages, run the command 'set_param netlist.IPMsgFiltering false' before opening the design.
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 1721.152 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 96 instances were transformed.
+  CFGLUT5 => CFGLUT5 (SRL16E, SRLC32E): 84 instances
+  IOBUF => IOBUF (IBUF, OBUFT): 2 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 10 instances
+
+26 Infos, 18 Warnings, 0 Critical Warnings and 0 Errors encountered.
+link_design completed successfully
+link_design: Time (s): cpu = 00:00:25 ; elapsed = 00:00:28 . Memory (MB): peak = 1721.152 ; gain = 1018.945
+Command: opt_design
+Attempting to get a license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+Running DRC as a precondition to command opt_design
+
+Starting DRC Task
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Project 1-461] DRC finished with 0 Errors
+INFO: [Project 1-462] Please refer to the DRC report (report_drc) for more information.
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.763 . Memory (MB): peak = 1721.152 ; gain = 0.000
+
+Starting Cache Timing Information Task
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Ending Cache Timing Information Task | Checksum: 224e13626
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.446 . Memory (MB): peak = 1721.152 ; gain = 0.000
+
+Starting Logic Optimization Task
+
+Phase 1 Initialization
+
+Phase 1.1 Core Generation And Design Setup
+
+Phase 1.1.1 Generate And Synthesize Debug Cores
+INFO: [Chipscope 16-329] Generating Script for core instance : dbg_hub 
+INFO: [IP_Flow 19-3806] Processing IP xilinx.com:ip:xsdbm:3.0 for cell dbg_hub_CV.
+INFO: [Chipscope 16-469] Using cached IP synthesis design for IP xilinx.com:ip:xsdbm:3.0, cache-ID = 7a34f210fa8c672c.
+Done building netlist checker database: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.006 . Memory (MB): peak = 2209.402 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.015 . Memory (MB): peak = 2209.402 ; gain = 0.000
+Phase 1.1.1 Generate And Synthesize Debug Cores | Checksum: fae0f841
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:24 . Memory (MB): peak = 2209.402 ; gain = 19.852
+Phase 1.1 Core Generation And Design Setup | Checksum: fae0f841
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:24 . Memory (MB): peak = 2209.402 ; gain = 19.852
+
+Phase 1.2 Setup Constraints And Sort Netlist
+Phase 1.2 Setup Constraints And Sort Netlist | Checksum: fae0f841
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:24 . Memory (MB): peak = 2209.402 ; gain = 19.852
+Phase 1 Initialization | Checksum: fae0f841
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:24 . Memory (MB): peak = 2209.402 ; gain = 19.852
+
+Phase 2 Timer Update And Timing Data Collection
+
+Phase 2.1 Detect if minReqCache needed
+Phase 2.1 Detect if minReqCache needed | Checksum: fae0f841
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:24 . Memory (MB): peak = 2209.402 ; gain = 19.852
+
+Phase 2.2 Timer Update
+Phase 2.2 Timer Update | Checksum: fae0f841
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:24 . Memory (MB): peak = 2209.402 ; gain = 19.852
+
+Phase 2.3 Timing Data Collection
+Phase 2.3 Timing Data Collection | Checksum: fae0f841
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:24 . Memory (MB): peak = 2209.402 ; gain = 19.852
+Phase 2 Timer Update And Timing Data Collection | Checksum: fae0f841
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:24 . Memory (MB): peak = 2209.402 ; gain = 19.852
+
+Phase 3 Retarget
+INFO: [Opt 31-1851] Number of loadless carry chains removed were: 0
+INFO: [Opt 31-1834] Total Chains To Be Transformed Were: 0 AND Number of Transformed insts Created are: 0
+INFO: [Opt 31-1566] Pulled 5 inverters resulting in an inversion of 46 pins
+INFO: [Opt 31-138] Pushed 5 inverter(s) to 24 load pin(s).
+INFO: [Opt 31-49] Retargeted 0 cell(s).
+Phase 3 Retarget | Checksum: 11aba1572
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:24 . Memory (MB): peak = 2209.402 ; gain = 19.852
+Retarget | Checksum: 11aba1572
+INFO: [Opt 31-389] Phase Retarget created 32 cells and removed 296 cells
+INFO: [Opt 31-1021] In phase Retarget, 84 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 4 Constant propagation
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Phase 4 Constant propagation | Checksum: 12c6e47e7
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:25 . Memory (MB): peak = 2209.402 ; gain = 19.852
+Constant propagation | Checksum: 12c6e47e7
+INFO: [Opt 31-389] Phase Constant propagation created 6 cells and removed 142 cells
+INFO: [Opt 31-1021] In phase Constant propagation, 65 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 5 Sweep
+INFO: [Constraints 18-11670] Building netlist checker database with flags, 0x8
+Done building netlist checker database: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.009 . Memory (MB): peak = 2209.402 ; gain = 0.000
+INFO: [Constraints 18-11670] Building netlist checker database with flags, 0x8
+Done building netlist checker database: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.012 . Memory (MB): peak = 2209.402 ; gain = 0.000
+Phase 5 Sweep | Checksum: 174c7d9ca
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:25 . Memory (MB): peak = 2209.402 ; gain = 19.852
+Sweep | Checksum: 174c7d9ca
+INFO: [Opt 31-389] Phase Sweep created 0 cells and removed 471 cells
+INFO: [Opt 31-1021] In phase Sweep, 1062 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 6 BUFG optimization
+Phase 6 BUFG optimization | Checksum: 174c7d9ca
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:25 . Memory (MB): peak = 2209.402 ; gain = 19.852
+BUFG optimization | Checksum: 174c7d9ca
+INFO: [Opt 31-662] Phase BUFG optimization created 0 cells of which 0 are BUFGs and removed 0 cells.
+
+Phase 7 Shift Register Optimization
+INFO: [Opt 31-1064] SRL Remap converted 0 SRLs to 0 registers and converted 0 registers of register chains to 0 SRLs
+Phase 7 Shift Register Optimization | Checksum: 174c7d9ca
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:25 . Memory (MB): peak = 2209.402 ; gain = 19.852
+Shift Register Optimization | Checksum: 174c7d9ca
+INFO: [Opt 31-389] Phase Shift Register Optimization created 0 cells and removed 0 cells
+
+Phase 8 Post Processing Netlist
+Phase 8 Post Processing Netlist | Checksum: 1846f82fe
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:25 . Memory (MB): peak = 2209.402 ; gain = 19.852
+Post Processing Netlist | Checksum: 1846f82fe
+INFO: [Opt 31-389] Phase Post Processing Netlist created 0 cells and removed 0 cells
+INFO: [Opt 31-1021] In phase Post Processing Netlist, 79 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 9 Finalization
+
+Phase 9.1 Finalizing Design Cores and Updating Shapes
+Phase 9.1 Finalizing Design Cores and Updating Shapes | Checksum: f4571301
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:26 . Memory (MB): peak = 2209.402 ; gain = 19.852
+
+Phase 9.2 Verifying Netlist Connectivity
+
+Starting Connectivity Check Task
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.036 . Memory (MB): peak = 2209.402 ; gain = 0.000
+Phase 9.2 Verifying Netlist Connectivity | Checksum: f4571301
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:26 . Memory (MB): peak = 2209.402 ; gain = 19.852
+Phase 9 Finalization | Checksum: f4571301
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:26 . Memory (MB): peak = 2209.402 ; gain = 19.852
+Opt_design Change Summary
+=========================
+
+
+-------------------------------------------------------------------------------------------------------------------------
+|  Phase                        |  #Cells created  |  #Cells Removed  |  #Constrained objects preventing optimizations  |
+-------------------------------------------------------------------------------------------------------------------------
+|  Retarget                     |              32  |             296  |                                             84  |
+|  Constant propagation         |               6  |             142  |                                             65  |
+|  Sweep                        |               0  |             471  |                                           1062  |
+|  BUFG optimization            |               0  |               0  |                                              0  |
+|  Shift Register Optimization  |               0  |               0  |                                              0  |
+|  Post Processing Netlist      |               0  |               0  |                                             79  |
+-------------------------------------------------------------------------------------------------------------------------
+
+
+Ending Logic Optimization Task | Checksum: f4571301
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:26 . Memory (MB): peak = 2209.402 ; gain = 19.852
+
+Starting Power Optimization Task
+INFO: [Pwropt 34-132] Skipping clock gating for clocks with a period < 2.00 ns.
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+INFO: [Pwropt 34-9] Applying IDT optimizations ...
+Running Vector-less Activity Propagation...
+INFO: [Pwropt 34-10] Applying ODC optimizations ...
+
+Finished Running Vector-less Activity Propagation
+
+
+Starting PowerOpt Patch Enables Task
+INFO: [Pwropt 34-162] WRITE_MODE attribute of 0 BRAM(s) out of a total of 51 has been updated to save power. Run report_power_opt to get a complete listing of the BRAMs updated.
+INFO: [Pwropt 34-201] Structural ODC has moved 1 WE to EN ports
+Number of BRAM Ports augmented: 40 newly gated: 21 Total Ports: 102
+Number of Flops added for Enable Generation: 9
+
+Ending PowerOpt Patch Enables Task | Checksum: 198ee9ce3
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.272 . Memory (MB): peak = 2251.836 ; gain = 0.000
+Ending Power Optimization Task | Checksum: 198ee9ce3
+
+Time (s): cpu = 00:00:07 ; elapsed = 00:00:05 . Memory (MB): peak = 2251.836 ; gain = 42.434
+
+Starting Final Cleanup Task
+
+Starting Logic Optimization Task
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Ending Logic Optimization Task | Checksum: 21478a38e
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 2267.367 ; gain = 15.531
+Ending Final Cleanup Task | Checksum: 21478a38e
+
+Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 2267.367 ; gain = 15.531
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.009 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Common 17-83] Releasing license: Vivado_Implementation
+65 Infos, 18 Warnings, 0 Critical Warnings and 0 Errors encountered.
+opt_design completed successfully
+opt_design: Time (s): cpu = 00:00:23 ; elapsed = 00:00:41 . Memory (MB): peak = 2267.367 ; gain = 546.215
+INFO: [Vivado 12-24828] Executing command : report_drc -file vision_wrapper_drc_opted.rpt -pb vision_wrapper_drc_opted.pb -rpx vision_wrapper_drc_opted.rpx
+Command: report_drc -file vision_wrapper_drc_opted.rpt -pb vision_wrapper_drc_opted.pb -rpx vision_wrapper_drc_opted.rpx
+INFO: [IP_Flow 19-1839] IP Catalog is up to date.
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 2-168] The results of DRC are in file E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1/vision_wrapper_drc_opted.rpt.
+report_drc completed successfully
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Wrote PlaceDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Writing XDEF routing.
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.030 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Wrote RouteStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.037 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote PlaceStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.011 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.009 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Write Physdb Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.074 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1/vision_wrapper_opt.dcp' has been generated.
+INFO: [Chipscope 16-240] Debug cores have already been implemented
+Command: place_design
+Attempting to get a license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+INFO: [Common 17-83] Releasing license: Vivado_Implementation
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Running DRC as a precondition to command place_design
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors, 42 Warnings
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+INFO: [Place 30-611] Multithreading enabled for place_design using a maximum of 2 CPUs
+
+Starting Placer Task
+
+Phase 1 Placer Initialization
+
+Phase 1.1 Placer Initialization Netlist Sorting
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.008 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Phase 1.1 Placer Initialization Netlist Sorting | Checksum: 14a15595e
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.019 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.007 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device | Checksum: e37179d3
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 1.3 Build Placer Netlist Model
+Phase 1.3 Build Placer Netlist Model | Checksum: 10bd76c01
+
+Time (s): cpu = 00:00:07 ; elapsed = 00:00:05 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 1.4 Constrain Clocks/Macros
+Phase 1.4 Constrain Clocks/Macros | Checksum: 10bd76c01
+
+Time (s): cpu = 00:00:07 ; elapsed = 00:00:05 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Phase 1 Placer Initialization | Checksum: 10bd76c01
+
+Time (s): cpu = 00:00:07 ; elapsed = 00:00:05 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 2 Global Placement
+
+Phase 2.1 Floorplanning
+Phase 2.1 Floorplanning | Checksum: 112d833a5
+
+Time (s): cpu = 00:00:09 ; elapsed = 00:00:06 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 2.2 Update Timing before SLR Path Opt
+Phase 2.2 Update Timing before SLR Path Opt | Checksum: b4e9ad8e
+
+Time (s): cpu = 00:00:10 ; elapsed = 00:00:07 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 2.3 Post-Processing in Floorplanning
+Phase 2.3 Post-Processing in Floorplanning | Checksum: b4e9ad8e
+
+Time (s): cpu = 00:00:10 ; elapsed = 00:00:07 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 2.4 Global Place Phase1
+Phase 2.4 Global Place Phase1 | Checksum: 139c5230e
+
+Time (s): cpu = 00:00:23 ; elapsed = 00:00:15 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 2.5 Global Place Phase2
+
+Phase 2.5.1 UpdateTiming Before Physical Synthesis
+Phase 2.5.1 UpdateTiming Before Physical Synthesis | Checksum: 12d75c620
+
+Time (s): cpu = 00:00:25 ; elapsed = 00:00:16 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 2.5.2 Physical Synthesis In Placer
+INFO: [Physopt 32-1035] Found 0 LUTNM shape to break, 487 LUT instances to create LUTNM shape
+INFO: [Physopt 32-1044] Break lutnm for timing: one critical 0, two critical 0, total 0, new lutff created 0
+INFO: [Physopt 32-1138] End 1 Pass. Optimized 194 nets or LUTs. Breaked 0 LUT, combined 194 existing LUTs and moved 0 existing LUT
+INFO: [Physopt 32-65] No nets found for high-fanout optimization.
+INFO: [Physopt 32-232] Optimized 0 net. Created 0 new instance.
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-670] No setup violation found.  DSP Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  Shift Register to Pipeline Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  Shift Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  BRAM Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  URAM Register Optimization was not performed.
+INFO: [Physopt 32-949] No candidate nets found for dynamic/static region interface net replication
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.007 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Summary of Physical Synthesis Optimizations
+============================================
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+|  Optimization                                     |  Added Cells  |  Removed Cells  |  Optimized Cells/Nets  |  Dont Touch  |  Iterations  |  Elapsed   |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+|  LUT Combining                                    |            0  |            194  |                   194  |           0  |           1  |  00:00:00  |
+|  Retime                                           |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Very High Fanout                                 |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  DSP Register                                     |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Shift Register to Pipeline                       |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Shift Register                                   |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  BRAM Register                                    |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  URAM Register                                    |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Dynamic/Static Region Interface Net Replication  |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Total                                            |            0  |            194  |                   194  |           0  |           4  |  00:00:00  |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Phase 2.5.2 Physical Synthesis In Placer | Checksum: 103cef618
+
+Time (s): cpu = 00:00:27 ; elapsed = 00:00:18 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Phase 2.5 Global Place Phase2 | Checksum: e21adcac
+
+Time (s): cpu = 00:00:28 ; elapsed = 00:00:19 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Phase 2 Global Placement | Checksum: e21adcac
+
+Time (s): cpu = 00:00:28 ; elapsed = 00:00:19 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 3 Detail Placement
+
+Phase 3.1 Commit Multi Column Macros
+Phase 3.1 Commit Multi Column Macros | Checksum: a48ebc5f
+
+Time (s): cpu = 00:00:30 ; elapsed = 00:00:20 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 3.2 Commit Most Macros & LUTRAMs
+Phase 3.2 Commit Most Macros & LUTRAMs | Checksum: e6daa76c
+
+Time (s): cpu = 00:00:33 ; elapsed = 00:00:22 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 3.3 Area Swap Optimization
+Phase 3.3 Area Swap Optimization | Checksum: bf9e33df
+
+Time (s): cpu = 00:00:33 ; elapsed = 00:00:22 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 3.4 Pipeline Register Optimization
+Phase 3.4 Pipeline Register Optimization | Checksum: 118742b14
+
+Time (s): cpu = 00:00:33 ; elapsed = 00:00:22 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 3.5 Fast Optimization
+Phase 3.5 Fast Optimization | Checksum: 124b926e9
+
+Time (s): cpu = 00:00:36 ; elapsed = 00:00:24 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 3.6 Small Shape Detail Placement
+Phase 3.6 Small Shape Detail Placement | Checksum: 2097bf9cf
+
+Time (s): cpu = 00:00:40 ; elapsed = 00:00:28 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 3.7 Re-assign LUT pins
+Phase 3.7 Re-assign LUT pins | Checksum: 205b854d8
+
+Time (s): cpu = 00:00:41 ; elapsed = 00:00:29 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 3.8 Pipeline Register Optimization
+Phase 3.8 Pipeline Register Optimization | Checksum: 1705a1b38
+
+Time (s): cpu = 00:00:41 ; elapsed = 00:00:29 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Phase 3 Detail Placement | Checksum: 1705a1b38
+
+Time (s): cpu = 00:00:41 ; elapsed = 00:00:29 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 4 Post Placement Optimization and Clean-Up
+
+Phase 4.1 Post Commit Optimization
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+
+Phase 4.1.1 Post Placement Optimization
+Post Placement Optimization Initialization | Checksum: 1f19b6995
+
+Phase 4.1.1.1 BUFG Insertion
+
+Starting Physical Synthesis Task
+
+Phase 1 Physical Synthesis Initialization
+INFO: [Physopt 32-721] Multithreading enabled for phys_opt_design using a maximum of 2 CPUs
+INFO: [Physopt 32-619] Estimated Timing Summary | WNS=0.589 | TNS=0.000 |
+Phase 1 Physical Synthesis Initialization | Checksum: 20cc2a1ff
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.269 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Place 46-56] BUFG insertion identified 0 candidate nets. Inserted BUFG: 0, Replicated BUFG Driver: 0, Skipped due to Placement/Routing Conflicts: 0, Skipped due to Timing Degradation: 0, Skipped due to netlist editing failed: 0.
+Ending Physical Synthesis Task | Checksum: 20541caf6
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.323 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Phase 4.1.1.1 BUFG Insertion | Checksum: 1f19b6995
+
+Time (s): cpu = 00:00:45 ; elapsed = 00:00:32 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 4.1.1.2 Post Placement Timing Optimization
+INFO: [Place 30-746] Post Placement Timing Summary WNS=0.589. For the most accurate timing information please run report_timing.
+Phase 4.1.1.2 Post Placement Timing Optimization | Checksum: 146e06fd3
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:32 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:32 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Phase 4.1 Post Commit Optimization | Checksum: 146e06fd3
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:32 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 4.2 Post Placement Cleanup
+Phase 4.2 Post Placement Cleanup | Checksum: 146e06fd3
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:32 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 4.3 Placer Reporting
+
+Phase 4.3.1 Print Estimated Congestion
+INFO: [Place 30-612] Post-Placement Estimated Congestion 
+ ____________________________________________________
+|           | Global Congestion | Short Congestion  |
+| Direction | Region Size       | Region Size       |
+|___________|___________________|___________________|
+|      North|                1x1|                1x1|
+|___________|___________________|___________________|
+|      South|                1x1|                1x1|
+|___________|___________________|___________________|
+|       East|                1x1|                1x1|
+|___________|___________________|___________________|
+|       West|                1x1|                2x2|
+|___________|___________________|___________________|
+
+Phase 4.3.1 Print Estimated Congestion | Checksum: 146e06fd3
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:32 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Phase 4.3 Placer Reporting | Checksum: 146e06fd3
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:33 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 4.4 Final Placement Cleanup
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.007 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:33 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Phase 4 Post Placement Optimization and Clean-Up | Checksum: d9813efa
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:33 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Ending Placer Task | Checksum: cd7f4fed
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:33 . Memory (MB): peak = 2267.367 ; gain = 0.000
+98 Infos, 18 Warnings, 0 Critical Warnings and 0 Errors encountered.
+place_design completed successfully
+place_design: Time (s): cpu = 00:00:49 ; elapsed = 00:00:35 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Vivado 12-24838] Running report commands "report_control_sets, report_io, report_utilization" in parallel.
+Running report generation with 2 threads.
+INFO: [Vivado 12-24828] Executing command : report_io -file vision_wrapper_io_placed.rpt
+report_io: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.112 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Vivado 12-24828] Executing command : report_control_sets -verbose -file vision_wrapper_control_sets_placed.rpt
+report_control_sets: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.049 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Vivado 12-24828] Executing command : report_utilization -file vision_wrapper_utilization_placed.rpt -pb vision_wrapper_utilization_placed.pb
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Wrote PlaceDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Wrote RouteStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.026 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.034 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote PlaceStorage: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.338 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.014 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.007 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Write Physdb Complete: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.403 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1/vision_wrapper_placed.dcp' has been generated.
+Command: phys_opt_design
+Attempting to get a license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+
+Starting Initial Update Timing Task
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:02 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Vivado_Tcl 4-2279] Estimated Timing Summary | WNS= 0.589 | TNS= 0.000 | 
+INFO: [Vivado_Tcl 4-383] Design worst setup slack (WNS) is greater than or equal to 0.000 ns. All physical synthesis setup optimizations will be skipped.
+INFO: [Vivado_Tcl 4-232] No setup violation found. The netlist was not modified.
+INFO: [Common 17-83] Releasing license: Vivado_Implementation
+109 Infos, 18 Warnings, 0 Critical Warnings and 0 Errors encountered.
+phys_opt_design completed successfully
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Wrote PlaceDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.037 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Writing XDEF routing special nets.
+Wrote RouteStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.035 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote PlaceStorage: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.355 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.012 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Write Physdb Complete: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.425 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1/vision_wrapper_physopt.dcp' has been generated.
+Command: route_design
+Attempting to get a license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+
+
+Starting Routing Task
+INFO: [Route 35-254] Multithreading enabled for route_design using a maximum of 2 CPUs
+
+Phase 1 Build RT Design
+Checksum: PlaceDB: 716994ec ConstDB: 0 ShapeSum: 461c4811 RouteDB: 15f972f0
+Post Restoration Checksum: NetGraph: 863b86d1 | NumContArr: 8cf7605d | Constraints: c2a8fa9d | Timing: c2a8fa9d
+Phase 1 Build RT Design | Checksum: 29884dc68
+
+Time (s): cpu = 00:00:22 ; elapsed = 00:00:18 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 2 Router Initialization
+
+Phase 2.1 Fix Topology Constraints
+Phase 2.1 Fix Topology Constraints | Checksum: 29884dc68
+
+Time (s): cpu = 00:00:22 ; elapsed = 00:00:18 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 2.2 Pre Route Cleanup
+Phase 2.2 Pre Route Cleanup | Checksum: 29884dc68
+
+Time (s): cpu = 00:00:22 ; elapsed = 00:00:18 . Memory (MB): peak = 2267.367 ; gain = 0.000
+ Number of Nodes with overlaps = 0
+
+Phase 2.3 Update Timing
+Phase 2.3 Update Timing | Checksum: 19259457e
+
+Time (s): cpu = 00:00:27 ; elapsed = 00:00:22 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.673  | TNS=0.000  | WHS=-0.811 | THS=-256.064|
+
+
+Phase 2.4 Update Timing for Bus Skew
+
+Phase 2.4.1 Update Timing
+Phase 2.4.1 Update Timing | Checksum: 182672ae3
+
+Time (s): cpu = 00:00:30 ; elapsed = 00:00:24 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.673  | TNS=0.000  | WHS=-1.666 | THS=-46.663|
+
+Phase 2.4 Update Timing for Bus Skew | Checksum: 2511af43a
+
+Time (s): cpu = 00:00:30 ; elapsed = 00:00:24 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 2.5 Soft Constraint Pins - Fast Budgeting
+Phase 2.5 Soft Constraint Pins - Fast Budgeting | Checksum: 2511af43a
+
+Time (s): cpu = 00:00:30 ; elapsed = 00:00:24 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Router Utilization Summary
+  Global Vertical Routing Utilization    = 0.00434918 %
+  Global Horizontal Routing Utilization  = 0.00371873 %
+  Routable Net Status*
+  *Does not include unroutable nets such as driverless and loadless.
+  Run report_route_status for detailed report.
+  Number of Failed Nets               = 13488
+    (Failed Nets is the sum of unrouted and partially routed nets)
+  Number of Unrouted Nets             = 13488
+  Number of Partially Routed Nets     = 0
+  Number of Node Overlaps             = 0
+
+Phase 2 Router Initialization | Checksum: 1f4ae0689
+
+Time (s): cpu = 00:00:31 ; elapsed = 00:00:24 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 3 Global Routing
+Phase 3 Global Routing | Checksum: 1f4ae0689
+
+Time (s): cpu = 00:00:31 ; elapsed = 00:00:24 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 4 Initial Routing
+
+Phase 4.1 Initial Net Routing Pass
+Phase 4.1 Initial Net Routing Pass | Checksum: 1c4b8417f
+
+Time (s): cpu = 00:00:36 ; elapsed = 00:00:27 . Memory (MB): peak = 2291.477 ; gain = 24.109
+Phase 4 Initial Routing | Checksum: 1c4b8417f
+
+Time (s): cpu = 00:00:36 ; elapsed = 00:00:27 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 5 Rip-up And Reroute
+
+Phase 5.1 Global Iteration 0
+ Number of Nodes with overlaps = 1148
+ Number of Nodes with overlaps = 102
+ Number of Nodes with overlaps = 24
+ Number of Nodes with overlaps = 4
+ Number of Nodes with overlaps = 2
+ Number of Nodes with overlaps = 1
+ Number of Nodes with overlaps = 0
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.376  | TNS=0.000  | WHS=N/A    | THS=N/A    |
+
+Phase 5.1 Global Iteration 0 | Checksum: 22d0580c8
+
+Time (s): cpu = 00:00:42 ; elapsed = 00:00:32 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 5.2 Global Iteration 1
+ Number of Nodes with overlaps = 1
+ Number of Nodes with overlaps = 0
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.376  | TNS=0.000  | WHS=N/A    | THS=N/A    |
+
+Phase 5.2 Global Iteration 1 | Checksum: 203f3cac7
+
+Time (s): cpu = 00:00:43 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+Phase 5 Rip-up And Reroute | Checksum: 203f3cac7
+
+Time (s): cpu = 00:00:43 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 6 Delay and Skew Optimization
+
+Phase 6.1 Delay CleanUp
+
+Phase 6.1.1 Update Timing
+Phase 6.1.1 Update Timing | Checksum: 2a3335294
+
+Time (s): cpu = 00:00:43 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.490  | TNS=0.000  | WHS=N/A    | THS=N/A    |
+
+Phase 6.1 Delay CleanUp | Checksum: 1cbaa320b
+
+Time (s): cpu = 00:00:43 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 6.2 Clock Skew Optimization
+Phase 6.2 Clock Skew Optimization | Checksum: 1cbaa320b
+
+Time (s): cpu = 00:00:43 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+Phase 6 Delay and Skew Optimization | Checksum: 1cbaa320b
+
+Time (s): cpu = 00:00:43 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 7 Post Hold Fix
+
+Phase 7.1 Hold Fix Iter
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.490  | TNS=0.000  | WHS=-0.086 | THS=-0.086 |
+
+Phase 7.1 Hold Fix Iter | Checksum: 2240b3fb9
+
+Time (s): cpu = 00:00:44 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 7.2 Non Free Resource Hold Fix Iter
+Phase 7.2 Non Free Resource Hold Fix Iter | Checksum: 1d5321e54
+
+Time (s): cpu = 00:00:44 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+Phase 7 Post Hold Fix | Checksum: 1d5321e54
+
+Time (s): cpu = 00:00:44 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 8 Route finalize
+
+Router Utilization Summary
+  Global Vertical Routing Utilization    = 2.31609 %
+  Global Horizontal Routing Utilization  = 3.07649 %
+  Routable Net Status*
+  *Does not include unroutable nets such as driverless and loadless.
+  Run report_route_status for detailed report.
+  Number of Failed Nets               = 0
+    (Failed Nets is the sum of unrouted and partially routed nets)
+  Number of Unrouted Nets             = 0
+  Number of Partially Routed Nets     = 0
+  Number of Node Overlaps             = 0
+
+Phase 8 Route finalize | Checksum: 1d5321e54
+
+Time (s): cpu = 00:00:44 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 9 Verifying routed nets
+
+ Verification completed successfully
+Phase 9 Verifying routed nets | Checksum: 1d5321e54
+
+Time (s): cpu = 00:00:44 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 10 Depositing Routes
+Phase 10 Depositing Routes | Checksum: 2386a8598
+
+Time (s): cpu = 00:00:45 ; elapsed = 00:00:34 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 11 Post Process Routing
+Phase 11 Post Process Routing | Checksum: 2386a8598
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:35 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 12 Post Router Timing
+
+Phase 12.1 Update Timing
+Phase 12.1 Update Timing | Checksum: 2386a8598
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:35 . Memory (MB): peak = 2291.477 ; gain = 24.109
+INFO: [Route 35-57] Estimated Timing Summary | WNS=0.490  | TNS=0.000  | WHS=0.050  | THS=0.000  |
+
+INFO: [Route 35-327] The final timing numbers are based on the router estimated timing analysis. For a complete and accurate timing signoff, please run report_timing_summary.
+Phase 12 Post Router Timing | Checksum: 2386a8598
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:35 . Memory (MB): peak = 2291.477 ; gain = 24.109
+Total Elapsed time in route_design: 34.769 secs
+
+Phase 13 Post-Route Event Processing
+Phase 13 Post-Route Event Processing | Checksum: 1403179cc
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:35 . Memory (MB): peak = 2291.477 ; gain = 24.109
+INFO: [Route 35-16] Router Completed Successfully
+Ending Routing Task | Checksum: 1403179cc
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:35 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Routing Is Done.
+INFO: [Common 17-83] Releasing license: Vivado_Implementation
+123 Infos, 18 Warnings, 0 Critical Warnings and 0 Errors encountered.
+route_design completed successfully
+route_design: Time (s): cpu = 00:00:46 ; elapsed = 00:00:35 . Memory (MB): peak = 2291.477 ; gain = 24.109
+INFO: [Vivado 12-24828] Executing command : report_drc -file vision_wrapper_drc_routed.rpt -pb vision_wrapper_drc_routed.pb -rpx vision_wrapper_drc_routed.rpx
+Command: report_drc -file vision_wrapper_drc_routed.rpt -pb vision_wrapper_drc_routed.pb -rpx vision_wrapper_drc_routed.rpx
+INFO: [IP_Flow 19-1839] IP Catalog is up to date.
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 2-168] The results of DRC are in file E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1/vision_wrapper_drc_routed.rpt.
+report_drc completed successfully
+INFO: [Vivado 12-24828] Executing command : report_methodology -file vision_wrapper_methodology_drc_routed.rpt -pb vision_wrapper_methodology_drc_routed.pb -rpx vision_wrapper_methodology_drc_routed.rpx
+Command: report_methodology -file vision_wrapper_methodology_drc_routed.rpt -pb vision_wrapper_methodology_drc_routed.pb -rpx vision_wrapper_methodology_drc_routed.rpx
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+INFO: [DRC 23-133] Running Methodology with 2 threads
+INFO: [Vivado_Tcl 2-1520] The results of Report Methodology are in file E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1/vision_wrapper_methodology_drc_routed.rpt.
+report_methodology completed successfully
+INFO: [Vivado 12-24828] Executing command : report_timing_summary -max_paths 10 -routable_nets -report_unconstrained -file vision_wrapper_timing_summary_routed.rpt -pb vision_wrapper_timing_summary_routed.pb -rpx vision_wrapper_timing_summary_routed.rpx -warn_on_violation 
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+WARNING: [Timing 38-436] There are set_bus_skew constraint(s) in this design. Please run report_bus_skew to ensure that bus skew requirements are met.
+INFO: [Vivado 12-24838] Running report commands "report_incremental_reuse, report_route_status" in parallel.
+Running report generation with 2 threads.
+INFO: [Vivado 12-24828] Executing command : report_incremental_reuse -file vision_wrapper_incremental_reuse_routed.rpt
+INFO: [Vivado_Tcl 4-1062] Incremental flow is disabled. No incremental reuse Info to report.
+INFO: [Vivado 12-24828] Executing command : report_route_status -file vision_wrapper_route_status.rpt -pb vision_wrapper_route_status.pb
+INFO: [Vivado 12-24828] Executing command : report_power -file vision_wrapper_power_routed.rpt -pb vision_wrapper_power_summary_routed.pb -rpx vision_wrapper_power_routed.rpx
+Command: report_power -file vision_wrapper_power_routed.rpt -pb vision_wrapper_power_summary_routed.pb -rpx vision_wrapper_power_routed.rpx
+Running Vector-less Activity Propagation...
+
+Finished Running Vector-less Activity Propagation
+WARNING: [Power 33-332] Found switching activity that implies high-fanout reset nets being asserted for excessive periods of time which may result in inaccurate power analysis.
+Resolution: To review and fix problems, please run Power Constraints Advisor in the GUI from Tools > Power Constraints Advisor or run report_power with the -advisory option to generate a text report.
+140 Infos, 20 Warnings, 0 Critical Warnings and 0 Errors encountered.
+report_power completed successfully
+INFO: [Vivado 12-24828] Executing command : report_clock_utilization -file vision_wrapper_clock_utilization_routed.rpt
+INFO: [Vivado 12-24828] Executing command : report_bus_skew -warn_on_violation -file vision_wrapper_bus_skew_routed.rpt -pb vision_wrapper_bus_skew_routed.pb -rpx vision_wrapper_bus_skew_routed.rpx
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+generate_parallel_reports: Time (s): cpu = 00:00:19 ; elapsed = 00:00:13 . Memory (MB): peak = 2291.477 ; gain = 0.000
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Wrote PlaceDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2291.477 ; gain = 0.000
+Wrote PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2291.477 ; gain = 0.000
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.031 . Memory (MB): peak = 2291.477 ; gain = 0.000
+Writing XDEF routing special nets.
+Wrote RouteStorage: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.153 . Memory (MB): peak = 2291.477 ; gain = 0.000
+Wrote PlaceStorage: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.320 . Memory (MB): peak = 2291.477 ; gain = 0.000
+Wrote Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.014 . Memory (MB): peak = 2291.477 ; gain = 0.000
+Wrote Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 2291.477 ; gain = 0.000
+Write Physdb Complete: Time (s): cpu = 00:00:02 ; elapsed = 00:00:00.511 . Memory (MB): peak = 2291.477 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1/vision_wrapper_routed.dcp' has been generated.
+INFO: [Common 17-206] Exiting Vivado at Sun Oct 11 17:35:13 2026...
+[Sun Oct 11 17:35:16 2026] impl_1 finished
+wait_on_runs: Time (s): cpu = 00:00:01 ; elapsed = 00:03:13 . Memory (MB): peak = 1739.992 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.063 . Memory (MB): peak = 1739.992 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 685 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2026.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Read ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.028 . Memory (MB): peak = 1739.992 ; gain = 0.000
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Project 1-853] Binary constraint restore complete.
+INFO: [Designutils 20-5722] Start Reading Physical Databases.
+Reading placement.
+Read Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.012 . Memory (MB): peak = 1789.199 ; gain = 0.000
+Reading placer database...
+Read Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.011 . Memory (MB): peak = 1789.199 ; gain = 0.000
+Read PlaceDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1789.199 ; gain = 0.000
+Read placeStorage: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.319 . Memory (MB): peak = 1807.785 ; gain = 18.586
+Read PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1807.785 ; gain = 0.000
+Reading routing.
+Read RouteStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.133 . Memory (MB): peak = 1807.785 ; gain = 0.000
+Read Physdb Files: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.495 . Memory (MB): peak = 1807.785 ; gain = 18.586
+Restored from archive | CPU: 1.000000 secs | Memory: 0.000000 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.495 . Memory (MB): peak = 1807.785 ; gain = 18.586
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 1807.785 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 102 instances were transformed.
+  CFGLUT5 => CFGLUT5 (SRL16E, SRLC32E): 84 instances
+  IOBUF => IOBUF (IBUF, OBUFT): 2 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 16 instances
+
+open_run: Time (s): cpu = 00:00:08 ; elapsed = 00:00:09 . Memory (MB): peak = 1807.785 ; gain = 67.793
+PASS: CDC structural assertions (config first-stage=2, capture first-stage=3)
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+INFO: [Timing 38-433] Consider using Xilinx recommended XPM_CDC modules to avoid Critical severities
+INFO: [Timing 38-314] The report_cdc command only analyzes and reports clock domain crossing paths where clocks have been defined on both source and destination sides. Ports with no input delay constraint are skipped. Please run check_timing to verify there are no missing clock definitions in your design, nor any unconstrained input port.
+Command: report_drc -file E:/Projects/FPGA-Alittle-Design/data/logs/2026-10-11-c01-hdmi-1791711069004993/drc.rpt
+INFO: [IP_Flow 19-1839] IP Catalog is up to date.
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 2-168] The results of DRC are in file E:/Projects/FPGA-Alittle-Design/data/logs/2026-10-11-c01-hdmi-1791711069004993/drc.rpt.
+report_drc completed successfully
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+WARNING: [Timing 38-436] There are set_bus_skew constraint(s) in this design. Please run report_bus_skew to ensure that bus skew requirements are met.
+[Sun Oct 11 17:35:35 2026] Launched impl_1...
+Run output will be captured here: E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1/runme.log
+[Sun Oct 11 17:35:35 2026] Waiting for impl_1 to finish...
+
+
+*** Running vivado
+    with args -log vision_wrapper.vdi -applog -m64 -product Vivado -messageDb vivado.pb -mode batch -source vision_wrapper.tcl -notrace
+
+
+INFO: [Common 17-3922] A valid Vivado Design Suite BASIC license has been detected. Your current license is active and will expire on 14-sep-2027.
+#-----------------------------------------------------------
+# Vivado v2026.1 (64-bit)
+# SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+# IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+# SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+# Start of session at: Sun Oct 11 17:32:10 2026
+# Process ID         : 41096
+# Current directory  : E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1
+# Command line       : vivado.exe -log vision_wrapper.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source vision_wrapper.tcl -notrace
+# Log file           : E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1/vision_wrapper.vdi
+# Journal file       : E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1\vivado.jou
+# Running On         : never-die-cold
+# Platform           : Windows 11
+# Operating System   : 26200
+# Processor Detail   : Intel(R) Core(TM) Ultra 7 255HX
+# CPU Frequency      : 2880 MHz
+# CPU Physical cores : 20
+# CPU Logical cores  : 20
+# Host memory        : 16496 MB
+# Swap memory        : 24696 MB
+# Total Virtual      : 41192 MB
+# Available Virtual  : 16962 MB
+#-----------------------------------------------------------
+
+****** Vivado v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Sun Oct 11 17:32:10 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source vision_wrapper.tcl -notrace
+create_project: Time (s): cpu = 00:00:09 ; elapsed = 00:00:08 . Memory (MB): peak = 613.570 ; gain = 270.098
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'e:/Projects/FPGA-Alittle-Design/sim/build/hdmi-library-full'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'D:/Vivado_downloads/2026.1/Vivado/data/ip'.
+WARNING: [IP_Flow 19-4995] The host OS only allows 260 characters in a normal path. The IP cache path is more than 80 characters. If you experience issues with IP caching, please consider changing the IP cache to a location with a shorter path. Alternately consider using the OS subst command to map part of the path to a drive letter. 
+Current IP cache path is E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.cache/ip 
+Command: link_design -top vision_wrapper -part xc7z020clg400-1
+Design is defaulting to srcset: sources_1
+Design is defaulting to constrset: constrs_1
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+INFO: [Project 1-5699] Read binary netlist with skipMacroContent - 1
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_dma_0/vision_capture_dma_0.dcp' for cell 'vision_i/capture_dma'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_input_0/vision_capture_input_0.dcp' for cell 'vision_i/capture_input'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_memory_0/vision_capture_memory_0.dcp' for cell 'vision_i/capture_memory'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_reset_0/vision_capture_reset_0.dcp' for cell 'vision_i/capture_reset'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_status_0/vision_capture_status_0.dcp' for cell 'vision_i/capture_status'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_converter_0/vision_converter_0.dcp' for cell 'vision_i/converter'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_pipe_0/vision_pipe_0.dcp' for cell 'vision_i/pipe'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_ps7_0/vision_ps7_0.dcp' for cell 'vision_i/ps7'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_rx_0/vision_rx_0.dcp' for cell 'vision_i/rx'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/vision_snapshot_ila_0.dcp' for cell 'vision_i/snapshot_ila'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_tx_0/vision_tx_0.dcp' for cell 'vision_i/tx'
+INFO: [Project 1-454] Reading design checkpoint 'e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_control_imp_xbar_0/vision_capture_control_imp_xbar_0.dcp' for cell 'vision_i/capture_control/xbar'
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.101 . Memory (MB): peak = 980.430 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 678 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2026.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Chipscope 16-324] Core: vision_i/snapshot_ila UUID: b2c5fb84-5fa2-5084-a4d8-02446e002ac6 
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_ps7_0/vision_ps7_0.xdc] for cell 'vision_i/ps7/inst'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_ps7_0/vision_ps7_0.xdc] for cell 'vision_i/ps7/inst'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_rx_0/src/dvi2rgb.xdc] for cell 'vision_i/rx/U0'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_rx_0/src/dvi2rgb.xdc] for cell 'vision_i/rx/U0'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_tx_0/src/rgb2dvi.xdc] for cell 'vision_i/tx/U0'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_tx_0/src/rgb2dvi.xdc] for cell 'vision_i/tx/U0'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/ila_v6_2/constraints/ila_impl.xdc] for cell 'vision_i/snapshot_ila/inst'
+WARNING: [Vivado_Tcl 4-921] Waiver ID 'CDC-10' -to list should not be empty. [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/ila_v6_2/constraints/ila_impl.xdc:31]
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/ila_v6_2/constraints/ila_impl.xdc] for cell 'vision_i/snapshot_ila/inst'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/ila_v6_2/constraints/ila.xdc] for cell 'vision_i/snapshot_ila/inst'
+WARNING: [Vivado_Tcl 4-921] Waiver ID 'CDC-10' -to list should not be empty. [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/ila_v6_2/constraints/ila.xdc:108]
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_snapshot_ila_0/ila_v6_2/constraints/ila.xdc] for cell 'vision_i/snapshot_ila/inst'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_dma_0/vision_capture_dma_0.xdc] for cell 'vision_i/capture_dma/U0'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_dma_0/vision_capture_dma_0.xdc] for cell 'vision_i/capture_dma/U0'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_reset_0/vision_capture_reset_0_board.xdc] for cell 'vision_i/capture_reset/U0'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_reset_0/vision_capture_reset_0_board.xdc] for cell 'vision_i/capture_reset/U0'
+Parsing XDC File [E:/Projects/FPGA-Alittle-Design/sim/build/hdmi-source/hdmi_pins.xdc]
+Finished Parsing XDC File [E:/Projects/FPGA-Alittle-Design/sim/build/hdmi-source/hdmi_pins.xdc]
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_tx_0/src/rgb2dvi_clocks.xdc] for cell 'vision_i/tx/U0'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_tx_0/src/rgb2dvi_clocks.xdc] for cell 'vision_i/tx/U0'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_dma_0/vision_capture_dma_0_clocks.xdc] for cell 'vision_i/capture_dma/U0'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_dma_0/vision_capture_dma_0_clocks.xdc] for cell 'vision_i/capture_dma/U0'
+Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_input_0/vision_capture_input_0_clocks.xdc] for cell 'vision_i/capture_input/inst'
+Finished Parsing XDC File [e:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.gen/sources_1/bd/vision/ip/vision_capture_input_0/vision_capture_input_0_clocks.xdc] for cell 'vision_i/capture_input/inst'
+Parsing XDC File [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc]
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[0]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[12]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[16]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[20]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[24]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[28]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[4]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+WARNING: [Constraints 18-402] set_max_delay: 'vision_i/pipe/inst/u_pipeline/u_vision/u_config/hold_id_reg[8]_i_1' is not a valid startpoint. [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc:6]
+Resolution: A valid start point is a main or generated clock pin or port, a clock pin of a sequential cell, or a primary input or inout port. Please validate that all the objects returned by your query belong to this list.
+Finished Parsing XDC File [E:/Projects/FPGA-Alittle-Design/src/vision/config_cdc.xdc]
+Parsing XDC File [E:/Projects/FPGA-Alittle-Design/src/vision/capture_cdc.xdc]
+Finished Parsing XDC File [E:/Projects/FPGA-Alittle-Design/src/vision/capture_cdc.xdc]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/I_RST_MODULE/GEN_RESET_FOR_S2MM.RESET_I/GEN_RESET_FOR_ASYNC.AXIS_RESET_CDC_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/I_RST_MODULE/GEN_RESET_FOR_S2MM.RESET_I/GEN_MIN_FOR_ASYNC.LITE_IDLE_CDC_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/I_RST_MODULE/GEN_RESET_FOR_S2MM.RESET_I/GEN_MIN_FOR_ASYNC.LITE_MIN_CDC_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/I_RST_MODULE/GEN_RESET_FOR_S2MM.RESET_I/GEN_MIN_FOR_ASYNC.AXIS_IDLE_CDC_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/I_RST_MODULE/GEN_RESET_FOR_S2MM.RESET_I/GEN_MIN_FOR_ASYNC.AXIS_MIN_CDC_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/I_RST_MODULE/GEN_RESET_FOR_S2MM.RESET_I/GEN_RESET_FOR_ASYNC.HARD_RESET_CDC_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+WARNING: [XPM_CDC_SINGLE: TCL-1000] The source and destination clocks are the same. 
+     Instance: vision_i/capture_dma/U0/AXI_LITE_REG_INTERFACE_I/GEN_S2MM_LITE_CROSSINGS.GEN_S2MM_CROSSINGS_ASYNC.S2MM_INTRPT_CROSSING_I 
+  This will add unnecessary latency to the design. Please check the design for the following: 
+ 1) Manually instantiated XPM_CDC modules: AMD recommends that you remove these modules. 
+ 2) AMD IP that contains XPM_CDC modules: Verify the connections to the IP to determine whether you can safely ignore this message.
+ [D:/Vivado_downloads/2026.1/Vivado/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl:5]
+INFO: [Project 1-1714] 28 XPM XDC files have been applied to the design.
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+INFO: [Project 1-1687] 2 scoped IP constraints or related sub-commands were skipped due to synthesis logic optimizations usually triggered by constant connectivity or unconnected output pins. To review the skipped constraints and messages, run the command 'set_param netlist.IPMsgFiltering false' before opening the design.
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 1721.152 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 96 instances were transformed.
+  CFGLUT5 => CFGLUT5 (SRL16E, SRLC32E): 84 instances
+  IOBUF => IOBUF (IBUF, OBUFT): 2 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 10 instances
+
+26 Infos, 18 Warnings, 0 Critical Warnings and 0 Errors encountered.
+link_design completed successfully
+link_design: Time (s): cpu = 00:00:25 ; elapsed = 00:00:28 . Memory (MB): peak = 1721.152 ; gain = 1018.945
+Command: opt_design
+Attempting to get a license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+Running DRC as a precondition to command opt_design
+
+Starting DRC Task
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Project 1-461] DRC finished with 0 Errors
+INFO: [Project 1-462] Please refer to the DRC report (report_drc) for more information.
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.763 . Memory (MB): peak = 1721.152 ; gain = 0.000
+
+Starting Cache Timing Information Task
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Ending Cache Timing Information Task | Checksum: 224e13626
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.446 . Memory (MB): peak = 1721.152 ; gain = 0.000
+
+Starting Logic Optimization Task
+
+Phase 1 Initialization
+
+Phase 1.1 Core Generation And Design Setup
+
+Phase 1.1.1 Generate And Synthesize Debug Cores
+INFO: [Chipscope 16-329] Generating Script for core instance : dbg_hub 
+INFO: [IP_Flow 19-3806] Processing IP xilinx.com:ip:xsdbm:3.0 for cell dbg_hub_CV.
+INFO: [Chipscope 16-469] Using cached IP synthesis design for IP xilinx.com:ip:xsdbm:3.0, cache-ID = 7a34f210fa8c672c.
+Done building netlist checker database: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.006 . Memory (MB): peak = 2209.402 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.015 . Memory (MB): peak = 2209.402 ; gain = 0.000
+Phase 1.1.1 Generate And Synthesize Debug Cores | Checksum: fae0f841
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:24 . Memory (MB): peak = 2209.402 ; gain = 19.852
+Phase 1.1 Core Generation And Design Setup | Checksum: fae0f841
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:24 . Memory (MB): peak = 2209.402 ; gain = 19.852
+
+Phase 1.2 Setup Constraints And Sort Netlist
+Phase 1.2 Setup Constraints And Sort Netlist | Checksum: fae0f841
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:24 . Memory (MB): peak = 2209.402 ; gain = 19.852
+Phase 1 Initialization | Checksum: fae0f841
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:24 . Memory (MB): peak = 2209.402 ; gain = 19.852
+
+Phase 2 Timer Update And Timing Data Collection
+
+Phase 2.1 Detect if minReqCache needed
+Phase 2.1 Detect if minReqCache needed | Checksum: fae0f841
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:24 . Memory (MB): peak = 2209.402 ; gain = 19.852
+
+Phase 2.2 Timer Update
+Phase 2.2 Timer Update | Checksum: fae0f841
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:24 . Memory (MB): peak = 2209.402 ; gain = 19.852
+
+Phase 2.3 Timing Data Collection
+Phase 2.3 Timing Data Collection | Checksum: fae0f841
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:24 . Memory (MB): peak = 2209.402 ; gain = 19.852
+Phase 2 Timer Update And Timing Data Collection | Checksum: fae0f841
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:24 . Memory (MB): peak = 2209.402 ; gain = 19.852
+
+Phase 3 Retarget
+INFO: [Opt 31-1851] Number of loadless carry chains removed were: 0
+INFO: [Opt 31-1834] Total Chains To Be Transformed Were: 0 AND Number of Transformed insts Created are: 0
+INFO: [Opt 31-1566] Pulled 5 inverters resulting in an inversion of 46 pins
+INFO: [Opt 31-138] Pushed 5 inverter(s) to 24 load pin(s).
+INFO: [Opt 31-49] Retargeted 0 cell(s).
+Phase 3 Retarget | Checksum: 11aba1572
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:24 . Memory (MB): peak = 2209.402 ; gain = 19.852
+Retarget | Checksum: 11aba1572
+INFO: [Opt 31-389] Phase Retarget created 32 cells and removed 296 cells
+INFO: [Opt 31-1021] In phase Retarget, 84 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 4 Constant propagation
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Phase 4 Constant propagation | Checksum: 12c6e47e7
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:25 . Memory (MB): peak = 2209.402 ; gain = 19.852
+Constant propagation | Checksum: 12c6e47e7
+INFO: [Opt 31-389] Phase Constant propagation created 6 cells and removed 142 cells
+INFO: [Opt 31-1021] In phase Constant propagation, 65 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 5 Sweep
+INFO: [Constraints 18-11670] Building netlist checker database with flags, 0x8
+Done building netlist checker database: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.009 . Memory (MB): peak = 2209.402 ; gain = 0.000
+INFO: [Constraints 18-11670] Building netlist checker database with flags, 0x8
+Done building netlist checker database: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.012 . Memory (MB): peak = 2209.402 ; gain = 0.000
+Phase 5 Sweep | Checksum: 174c7d9ca
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:25 . Memory (MB): peak = 2209.402 ; gain = 19.852
+Sweep | Checksum: 174c7d9ca
+INFO: [Opt 31-389] Phase Sweep created 0 cells and removed 471 cells
+INFO: [Opt 31-1021] In phase Sweep, 1062 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 6 BUFG optimization
+Phase 6 BUFG optimization | Checksum: 174c7d9ca
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:25 . Memory (MB): peak = 2209.402 ; gain = 19.852
+BUFG optimization | Checksum: 174c7d9ca
+INFO: [Opt 31-662] Phase BUFG optimization created 0 cells of which 0 are BUFGs and removed 0 cells.
+
+Phase 7 Shift Register Optimization
+INFO: [Opt 31-1064] SRL Remap converted 0 SRLs to 0 registers and converted 0 registers of register chains to 0 SRLs
+Phase 7 Shift Register Optimization | Checksum: 174c7d9ca
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:25 . Memory (MB): peak = 2209.402 ; gain = 19.852
+Shift Register Optimization | Checksum: 174c7d9ca
+INFO: [Opt 31-389] Phase Shift Register Optimization created 0 cells and removed 0 cells
+
+Phase 8 Post Processing Netlist
+Phase 8 Post Processing Netlist | Checksum: 1846f82fe
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:25 . Memory (MB): peak = 2209.402 ; gain = 19.852
+Post Processing Netlist | Checksum: 1846f82fe
+INFO: [Opt 31-389] Phase Post Processing Netlist created 0 cells and removed 0 cells
+INFO: [Opt 31-1021] In phase Post Processing Netlist, 79 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 9 Finalization
+
+Phase 9.1 Finalizing Design Cores and Updating Shapes
+Phase 9.1 Finalizing Design Cores and Updating Shapes | Checksum: f4571301
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:26 . Memory (MB): peak = 2209.402 ; gain = 19.852
+
+Phase 9.2 Verifying Netlist Connectivity
+
+Starting Connectivity Check Task
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.036 . Memory (MB): peak = 2209.402 ; gain = 0.000
+Phase 9.2 Verifying Netlist Connectivity | Checksum: f4571301
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:26 . Memory (MB): peak = 2209.402 ; gain = 19.852
+Phase 9 Finalization | Checksum: f4571301
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:26 . Memory (MB): peak = 2209.402 ; gain = 19.852
+Opt_design Change Summary
+=========================
+
+
+-------------------------------------------------------------------------------------------------------------------------
+|  Phase                        |  #Cells created  |  #Cells Removed  |  #Constrained objects preventing optimizations  |
+-------------------------------------------------------------------------------------------------------------------------
+|  Retarget                     |              32  |             296  |                                             84  |
+|  Constant propagation         |               6  |             142  |                                             65  |
+|  Sweep                        |               0  |             471  |                                           1062  |
+|  BUFG optimization            |               0  |               0  |                                              0  |
+|  Shift Register Optimization  |               0  |               0  |                                              0  |
+|  Post Processing Netlist      |               0  |               0  |                                             79  |
+-------------------------------------------------------------------------------------------------------------------------
+
+
+Ending Logic Optimization Task | Checksum: f4571301
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:26 . Memory (MB): peak = 2209.402 ; gain = 19.852
+
+Starting Power Optimization Task
+INFO: [Pwropt 34-132] Skipping clock gating for clocks with a period < 2.00 ns.
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+INFO: [Pwropt 34-9] Applying IDT optimizations ...
+Running Vector-less Activity Propagation...
+INFO: [Pwropt 34-10] Applying ODC optimizations ...
+
+Finished Running Vector-less Activity Propagation
+
+
+Starting PowerOpt Patch Enables Task
+INFO: [Pwropt 34-162] WRITE_MODE attribute of 0 BRAM(s) out of a total of 51 has been updated to save power. Run report_power_opt to get a complete listing of the BRAMs updated.
+INFO: [Pwropt 34-201] Structural ODC has moved 1 WE to EN ports
+Number of BRAM Ports augmented: 40 newly gated: 21 Total Ports: 102
+Number of Flops added for Enable Generation: 9
+
+Ending PowerOpt Patch Enables Task | Checksum: 198ee9ce3
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.272 . Memory (MB): peak = 2251.836 ; gain = 0.000
+Ending Power Optimization Task | Checksum: 198ee9ce3
+
+Time (s): cpu = 00:00:07 ; elapsed = 00:00:05 . Memory (MB): peak = 2251.836 ; gain = 42.434
+
+Starting Final Cleanup Task
+
+Starting Logic Optimization Task
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Ending Logic Optimization Task | Checksum: 21478a38e
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 2267.367 ; gain = 15.531
+Ending Final Cleanup Task | Checksum: 21478a38e
+
+Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 2267.367 ; gain = 15.531
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.009 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Common 17-83] Releasing license: Vivado_Implementation
+65 Infos, 18 Warnings, 0 Critical Warnings and 0 Errors encountered.
+opt_design completed successfully
+opt_design: Time (s): cpu = 00:00:23 ; elapsed = 00:00:41 . Memory (MB): peak = 2267.367 ; gain = 546.215
+INFO: [Vivado 12-24828] Executing command : report_drc -file vision_wrapper_drc_opted.rpt -pb vision_wrapper_drc_opted.pb -rpx vision_wrapper_drc_opted.rpx
+Command: report_drc -file vision_wrapper_drc_opted.rpt -pb vision_wrapper_drc_opted.pb -rpx vision_wrapper_drc_opted.rpx
+INFO: [IP_Flow 19-1839] IP Catalog is up to date.
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 2-168] The results of DRC are in file E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1/vision_wrapper_drc_opted.rpt.
+report_drc completed successfully
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Wrote PlaceDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Writing XDEF routing.
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.030 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Wrote RouteStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.037 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote PlaceStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.011 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.009 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Write Physdb Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.074 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1/vision_wrapper_opt.dcp' has been generated.
+INFO: [Chipscope 16-240] Debug cores have already been implemented
+Command: place_design
+Attempting to get a license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+INFO: [Common 17-83] Releasing license: Vivado_Implementation
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Running DRC as a precondition to command place_design
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors, 42 Warnings
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+INFO: [Place 30-611] Multithreading enabled for place_design using a maximum of 2 CPUs
+
+Starting Placer Task
+
+Phase 1 Placer Initialization
+
+Phase 1.1 Placer Initialization Netlist Sorting
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.008 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Phase 1.1 Placer Initialization Netlist Sorting | Checksum: 14a15595e
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.019 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.007 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device | Checksum: e37179d3
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 1.3 Build Placer Netlist Model
+Phase 1.3 Build Placer Netlist Model | Checksum: 10bd76c01
+
+Time (s): cpu = 00:00:07 ; elapsed = 00:00:05 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 1.4 Constrain Clocks/Macros
+Phase 1.4 Constrain Clocks/Macros | Checksum: 10bd76c01
+
+Time (s): cpu = 00:00:07 ; elapsed = 00:00:05 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Phase 1 Placer Initialization | Checksum: 10bd76c01
+
+Time (s): cpu = 00:00:07 ; elapsed = 00:00:05 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 2 Global Placement
+
+Phase 2.1 Floorplanning
+Phase 2.1 Floorplanning | Checksum: 112d833a5
+
+Time (s): cpu = 00:00:09 ; elapsed = 00:00:06 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 2.2 Update Timing before SLR Path Opt
+Phase 2.2 Update Timing before SLR Path Opt | Checksum: b4e9ad8e
+
+Time (s): cpu = 00:00:10 ; elapsed = 00:00:07 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 2.3 Post-Processing in Floorplanning
+Phase 2.3 Post-Processing in Floorplanning | Checksum: b4e9ad8e
+
+Time (s): cpu = 00:00:10 ; elapsed = 00:00:07 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 2.4 Global Place Phase1
+Phase 2.4 Global Place Phase1 | Checksum: 139c5230e
+
+Time (s): cpu = 00:00:23 ; elapsed = 00:00:15 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 2.5 Global Place Phase2
+
+Phase 2.5.1 UpdateTiming Before Physical Synthesis
+Phase 2.5.1 UpdateTiming Before Physical Synthesis | Checksum: 12d75c620
+
+Time (s): cpu = 00:00:25 ; elapsed = 00:00:16 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 2.5.2 Physical Synthesis In Placer
+INFO: [Physopt 32-1035] Found 0 LUTNM shape to break, 487 LUT instances to create LUTNM shape
+INFO: [Physopt 32-1044] Break lutnm for timing: one critical 0, two critical 0, total 0, new lutff created 0
+INFO: [Physopt 32-1138] End 1 Pass. Optimized 194 nets or LUTs. Breaked 0 LUT, combined 194 existing LUTs and moved 0 existing LUT
+INFO: [Physopt 32-65] No nets found for high-fanout optimization.
+INFO: [Physopt 32-232] Optimized 0 net. Created 0 new instance.
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-670] No setup violation found.  DSP Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  Shift Register to Pipeline Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  Shift Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  BRAM Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  URAM Register Optimization was not performed.
+INFO: [Physopt 32-949] No candidate nets found for dynamic/static region interface net replication
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.007 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Summary of Physical Synthesis Optimizations
+============================================
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+|  Optimization                                     |  Added Cells  |  Removed Cells  |  Optimized Cells/Nets  |  Dont Touch  |  Iterations  |  Elapsed   |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+|  LUT Combining                                    |            0  |            194  |                   194  |           0  |           1  |  00:00:00  |
+|  Retime                                           |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Very High Fanout                                 |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  DSP Register                                     |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Shift Register to Pipeline                       |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Shift Register                                   |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  BRAM Register                                    |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  URAM Register                                    |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Dynamic/Static Region Interface Net Replication  |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Total                                            |            0  |            194  |                   194  |           0  |           4  |  00:00:00  |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Phase 2.5.2 Physical Synthesis In Placer | Checksum: 103cef618
+
+Time (s): cpu = 00:00:27 ; elapsed = 00:00:18 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Phase 2.5 Global Place Phase2 | Checksum: e21adcac
+
+Time (s): cpu = 00:00:28 ; elapsed = 00:00:19 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Phase 2 Global Placement | Checksum: e21adcac
+
+Time (s): cpu = 00:00:28 ; elapsed = 00:00:19 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 3 Detail Placement
+
+Phase 3.1 Commit Multi Column Macros
+Phase 3.1 Commit Multi Column Macros | Checksum: a48ebc5f
+
+Time (s): cpu = 00:00:30 ; elapsed = 00:00:20 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 3.2 Commit Most Macros & LUTRAMs
+Phase 3.2 Commit Most Macros & LUTRAMs | Checksum: e6daa76c
+
+Time (s): cpu = 00:00:33 ; elapsed = 00:00:22 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 3.3 Area Swap Optimization
+Phase 3.3 Area Swap Optimization | Checksum: bf9e33df
+
+Time (s): cpu = 00:00:33 ; elapsed = 00:00:22 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 3.4 Pipeline Register Optimization
+Phase 3.4 Pipeline Register Optimization | Checksum: 118742b14
+
+Time (s): cpu = 00:00:33 ; elapsed = 00:00:22 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 3.5 Fast Optimization
+Phase 3.5 Fast Optimization | Checksum: 124b926e9
+
+Time (s): cpu = 00:00:36 ; elapsed = 00:00:24 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 3.6 Small Shape Detail Placement
+Phase 3.6 Small Shape Detail Placement | Checksum: 2097bf9cf
+
+Time (s): cpu = 00:00:40 ; elapsed = 00:00:28 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 3.7 Re-assign LUT pins
+Phase 3.7 Re-assign LUT pins | Checksum: 205b854d8
+
+Time (s): cpu = 00:00:41 ; elapsed = 00:00:29 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 3.8 Pipeline Register Optimization
+Phase 3.8 Pipeline Register Optimization | Checksum: 1705a1b38
+
+Time (s): cpu = 00:00:41 ; elapsed = 00:00:29 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Phase 3 Detail Placement | Checksum: 1705a1b38
+
+Time (s): cpu = 00:00:41 ; elapsed = 00:00:29 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 4 Post Placement Optimization and Clean-Up
+
+Phase 4.1 Post Commit Optimization
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+
+Phase 4.1.1 Post Placement Optimization
+Post Placement Optimization Initialization | Checksum: 1f19b6995
+
+Phase 4.1.1.1 BUFG Insertion
+
+Starting Physical Synthesis Task
+
+Phase 1 Physical Synthesis Initialization
+INFO: [Physopt 32-721] Multithreading enabled for phys_opt_design using a maximum of 2 CPUs
+INFO: [Physopt 32-619] Estimated Timing Summary | WNS=0.589 | TNS=0.000 |
+Phase 1 Physical Synthesis Initialization | Checksum: 20cc2a1ff
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.269 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Place 46-56] BUFG insertion identified 0 candidate nets. Inserted BUFG: 0, Replicated BUFG Driver: 0, Skipped due to Placement/Routing Conflicts: 0, Skipped due to Timing Degradation: 0, Skipped due to netlist editing failed: 0.
+Ending Physical Synthesis Task | Checksum: 20541caf6
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.323 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Phase 4.1.1.1 BUFG Insertion | Checksum: 1f19b6995
+
+Time (s): cpu = 00:00:45 ; elapsed = 00:00:32 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 4.1.1.2 Post Placement Timing Optimization
+INFO: [Place 30-746] Post Placement Timing Summary WNS=0.589. For the most accurate timing information please run report_timing.
+Phase 4.1.1.2 Post Placement Timing Optimization | Checksum: 146e06fd3
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:32 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:32 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Phase 4.1 Post Commit Optimization | Checksum: 146e06fd3
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:32 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 4.2 Post Placement Cleanup
+Phase 4.2 Post Placement Cleanup | Checksum: 146e06fd3
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:32 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 4.3 Placer Reporting
+
+Phase 4.3.1 Print Estimated Congestion
+INFO: [Place 30-612] Post-Placement Estimated Congestion 
+ ____________________________________________________
+|           | Global Congestion | Short Congestion  |
+| Direction | Region Size       | Region Size       |
+|___________|___________________|___________________|
+|      North|                1x1|                1x1|
+|___________|___________________|___________________|
+|      South|                1x1|                1x1|
+|___________|___________________|___________________|
+|       East|                1x1|                1x1|
+|___________|___________________|___________________|
+|       West|                1x1|                2x2|
+|___________|___________________|___________________|
+
+Phase 4.3.1 Print Estimated Congestion | Checksum: 146e06fd3
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:32 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Phase 4.3 Placer Reporting | Checksum: 146e06fd3
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:33 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 4.4 Final Placement Cleanup
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.007 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:33 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Phase 4 Post Placement Optimization and Clean-Up | Checksum: d9813efa
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:33 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Ending Placer Task | Checksum: cd7f4fed
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:33 . Memory (MB): peak = 2267.367 ; gain = 0.000
+98 Infos, 18 Warnings, 0 Critical Warnings and 0 Errors encountered.
+place_design completed successfully
+place_design: Time (s): cpu = 00:00:49 ; elapsed = 00:00:35 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Vivado 12-24838] Running report commands "report_control_sets, report_io, report_utilization" in parallel.
+Running report generation with 2 threads.
+INFO: [Vivado 12-24828] Executing command : report_io -file vision_wrapper_io_placed.rpt
+report_io: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.112 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Vivado 12-24828] Executing command : report_control_sets -verbose -file vision_wrapper_control_sets_placed.rpt
+report_control_sets: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.049 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Vivado 12-24828] Executing command : report_utilization -file vision_wrapper_utilization_placed.rpt -pb vision_wrapper_utilization_placed.pb
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Wrote PlaceDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Wrote RouteStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.026 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.034 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote PlaceStorage: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.338 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.014 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.007 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Write Physdb Complete: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.403 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1/vision_wrapper_placed.dcp' has been generated.
+Command: phys_opt_design
+Attempting to get a license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+
+Starting Initial Update Timing Task
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:02 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Vivado_Tcl 4-2279] Estimated Timing Summary | WNS= 0.589 | TNS= 0.000 | 
+INFO: [Vivado_Tcl 4-383] Design worst setup slack (WNS) is greater than or equal to 0.000 ns. All physical synthesis setup optimizations will be skipped.
+INFO: [Vivado_Tcl 4-232] No setup violation found. The netlist was not modified.
+INFO: [Common 17-83] Releasing license: Vivado_Implementation
+109 Infos, 18 Warnings, 0 Critical Warnings and 0 Errors encountered.
+phys_opt_design completed successfully
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Wrote PlaceDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.037 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Writing XDEF routing special nets.
+Wrote RouteStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.035 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote PlaceStorage: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.355 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.012 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Wrote Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 2267.367 ; gain = 0.000
+Write Physdb Complete: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.425 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1/vision_wrapper_physopt.dcp' has been generated.
+Command: route_design
+Attempting to get a license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+
+
+Starting Routing Task
+INFO: [Route 35-254] Multithreading enabled for route_design using a maximum of 2 CPUs
+
+Phase 1 Build RT Design
+Checksum: PlaceDB: 716994ec ConstDB: 0 ShapeSum: 461c4811 RouteDB: 15f972f0
+Post Restoration Checksum: NetGraph: 863b86d1 | NumContArr: 8cf7605d | Constraints: c2a8fa9d | Timing: c2a8fa9d
+Phase 1 Build RT Design | Checksum: 29884dc68
+
+Time (s): cpu = 00:00:22 ; elapsed = 00:00:18 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 2 Router Initialization
+
+Phase 2.1 Fix Topology Constraints
+Phase 2.1 Fix Topology Constraints | Checksum: 29884dc68
+
+Time (s): cpu = 00:00:22 ; elapsed = 00:00:18 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 2.2 Pre Route Cleanup
+Phase 2.2 Pre Route Cleanup | Checksum: 29884dc68
+
+Time (s): cpu = 00:00:22 ; elapsed = 00:00:18 . Memory (MB): peak = 2267.367 ; gain = 0.000
+ Number of Nodes with overlaps = 0
+
+Phase 2.3 Update Timing
+Phase 2.3 Update Timing | Checksum: 19259457e
+
+Time (s): cpu = 00:00:27 ; elapsed = 00:00:22 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.673  | TNS=0.000  | WHS=-0.811 | THS=-256.064|
+
+
+Phase 2.4 Update Timing for Bus Skew
+
+Phase 2.4.1 Update Timing
+Phase 2.4.1 Update Timing | Checksum: 182672ae3
+
+Time (s): cpu = 00:00:30 ; elapsed = 00:00:24 . Memory (MB): peak = 2267.367 ; gain = 0.000
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.673  | TNS=0.000  | WHS=-1.666 | THS=-46.663|
+
+Phase 2.4 Update Timing for Bus Skew | Checksum: 2511af43a
+
+Time (s): cpu = 00:00:30 ; elapsed = 00:00:24 . Memory (MB): peak = 2267.367 ; gain = 0.000
+
+Phase 2.5 Soft Constraint Pins - Fast Budgeting
+Phase 2.5 Soft Constraint Pins - Fast Budgeting | Checksum: 2511af43a
+
+Time (s): cpu = 00:00:30 ; elapsed = 00:00:24 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Router Utilization Summary
+  Global Vertical Routing Utilization    = 0.00434918 %
+  Global Horizontal Routing Utilization  = 0.00371873 %
+  Routable Net Status*
+  *Does not include unroutable nets such as driverless and loadless.
+  Run report_route_status for detailed report.
+  Number of Failed Nets               = 13488
+    (Failed Nets is the sum of unrouted and partially routed nets)
+  Number of Unrouted Nets             = 13488
+  Number of Partially Routed Nets     = 0
+  Number of Node Overlaps             = 0
+
+Phase 2 Router Initialization | Checksum: 1f4ae0689
+
+Time (s): cpu = 00:00:31 ; elapsed = 00:00:24 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 3 Global Routing
+Phase 3 Global Routing | Checksum: 1f4ae0689
+
+Time (s): cpu = 00:00:31 ; elapsed = 00:00:24 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 4 Initial Routing
+
+Phase 4.1 Initial Net Routing Pass
+Phase 4.1 Initial Net Routing Pass | Checksum: 1c4b8417f
+
+Time (s): cpu = 00:00:36 ; elapsed = 00:00:27 . Memory (MB): peak = 2291.477 ; gain = 24.109
+Phase 4 Initial Routing | Checksum: 1c4b8417f
+
+Time (s): cpu = 00:00:36 ; elapsed = 00:00:27 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 5 Rip-up And Reroute
+
+Phase 5.1 Global Iteration 0
+ Number of Nodes with overlaps = 1148
+ Number of Nodes with overlaps = 102
+ Number of Nodes with overlaps = 24
+ Number of Nodes with overlaps = 4
+ Number of Nodes with overlaps = 2
+ Number of Nodes with overlaps = 1
+ Number of Nodes with overlaps = 0
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.376  | TNS=0.000  | WHS=N/A    | THS=N/A    |
+
+Phase 5.1 Global Iteration 0 | Checksum: 22d0580c8
+
+Time (s): cpu = 00:00:42 ; elapsed = 00:00:32 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 5.2 Global Iteration 1
+ Number of Nodes with overlaps = 1
+ Number of Nodes with overlaps = 0
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.376  | TNS=0.000  | WHS=N/A    | THS=N/A    |
+
+Phase 5.2 Global Iteration 1 | Checksum: 203f3cac7
+
+Time (s): cpu = 00:00:43 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+Phase 5 Rip-up And Reroute | Checksum: 203f3cac7
+
+Time (s): cpu = 00:00:43 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 6 Delay and Skew Optimization
+
+Phase 6.1 Delay CleanUp
+
+Phase 6.1.1 Update Timing
+Phase 6.1.1 Update Timing | Checksum: 2a3335294
+
+Time (s): cpu = 00:00:43 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.490  | TNS=0.000  | WHS=N/A    | THS=N/A    |
+
+Phase 6.1 Delay CleanUp | Checksum: 1cbaa320b
+
+Time (s): cpu = 00:00:43 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 6.2 Clock Skew Optimization
+Phase 6.2 Clock Skew Optimization | Checksum: 1cbaa320b
+
+Time (s): cpu = 00:00:43 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+Phase 6 Delay and Skew Optimization | Checksum: 1cbaa320b
+
+Time (s): cpu = 00:00:43 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 7 Post Hold Fix
+
+Phase 7.1 Hold Fix Iter
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.490  | TNS=0.000  | WHS=-0.086 | THS=-0.086 |
+
+Phase 7.1 Hold Fix Iter | Checksum: 2240b3fb9
+
+Time (s): cpu = 00:00:44 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 7.2 Non Free Resource Hold Fix Iter
+Phase 7.2 Non Free Resource Hold Fix Iter | Checksum: 1d5321e54
+
+Time (s): cpu = 00:00:44 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+Phase 7 Post Hold Fix | Checksum: 1d5321e54
+
+Time (s): cpu = 00:00:44 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 8 Route finalize
+
+Router Utilization Summary
+  Global Vertical Routing Utilization    = 2.31609 %
+  Global Horizontal Routing Utilization  = 3.07649 %
+  Routable Net Status*
+  *Does not include unroutable nets such as driverless and loadless.
+  Run report_route_status for detailed report.
+  Number of Failed Nets               = 0
+    (Failed Nets is the sum of unrouted and partially routed nets)
+  Number of Unrouted Nets             = 0
+  Number of Partially Routed Nets     = 0
+  Number of Node Overlaps             = 0
+
+Phase 8 Route finalize | Checksum: 1d5321e54
+
+Time (s): cpu = 00:00:44 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 9 Verifying routed nets
+
+ Verification completed successfully
+Phase 9 Verifying routed nets | Checksum: 1d5321e54
+
+Time (s): cpu = 00:00:44 ; elapsed = 00:00:33 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 10 Depositing Routes
+Phase 10 Depositing Routes | Checksum: 2386a8598
+
+Time (s): cpu = 00:00:45 ; elapsed = 00:00:34 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 11 Post Process Routing
+Phase 11 Post Process Routing | Checksum: 2386a8598
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:35 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Phase 12 Post Router Timing
+
+Phase 12.1 Update Timing
+Phase 12.1 Update Timing | Checksum: 2386a8598
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:35 . Memory (MB): peak = 2291.477 ; gain = 24.109
+INFO: [Route 35-57] Estimated Timing Summary | WNS=0.490  | TNS=0.000  | WHS=0.050  | THS=0.000  |
+
+INFO: [Route 35-327] The final timing numbers are based on the router estimated timing analysis. For a complete and accurate timing signoff, please run report_timing_summary.
+Phase 12 Post Router Timing | Checksum: 2386a8598
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:35 . Memory (MB): peak = 2291.477 ; gain = 24.109
+Total Elapsed time in route_design: 34.769 secs
+
+Phase 13 Post-Route Event Processing
+Phase 13 Post-Route Event Processing | Checksum: 1403179cc
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:35 . Memory (MB): peak = 2291.477 ; gain = 24.109
+INFO: [Route 35-16] Router Completed Successfully
+Ending Routing Task | Checksum: 1403179cc
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:35 . Memory (MB): peak = 2291.477 ; gain = 24.109
+
+Routing Is Done.
+INFO: [Common 17-83] Releasing license: Vivado_Implementation
+123 Infos, 18 Warnings, 0 Critical Warnings and 0 Errors encountered.
+route_design completed successfully
+route_design: Time (s): cpu = 00:00:46 ; elapsed = 00:00:35 . Memory (MB): peak = 2291.477 ; gain = 24.109
+INFO: [Vivado 12-24828] Executing command : report_drc -file vision_wrapper_drc_routed.rpt -pb vision_wrapper_drc_routed.pb -rpx vision_wrapper_drc_routed.rpx
+Command: report_drc -file vision_wrapper_drc_routed.rpt -pb vision_wrapper_drc_routed.pb -rpx vision_wrapper_drc_routed.rpx
+INFO: [IP_Flow 19-1839] IP Catalog is up to date.
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 2-168] The results of DRC are in file E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1/vision_wrapper_drc_routed.rpt.
+report_drc completed successfully
+INFO: [Vivado 12-24828] Executing command : report_methodology -file vision_wrapper_methodology_drc_routed.rpt -pb vision_wrapper_methodology_drc_routed.pb -rpx vision_wrapper_methodology_drc_routed.rpx
+Command: report_methodology -file vision_wrapper_methodology_drc_routed.rpt -pb vision_wrapper_methodology_drc_routed.pb -rpx vision_wrapper_methodology_drc_routed.rpx
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+INFO: [DRC 23-133] Running Methodology with 2 threads
+INFO: [Vivado_Tcl 2-1520] The results of Report Methodology are in file E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1/vision_wrapper_methodology_drc_routed.rpt.
+report_methodology completed successfully
+INFO: [Vivado 12-24828] Executing command : report_timing_summary -max_paths 10 -routable_nets -report_unconstrained -file vision_wrapper_timing_summary_routed.rpt -pb vision_wrapper_timing_summary_routed.pb -rpx vision_wrapper_timing_summary_routed.rpx -warn_on_violation 
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+WARNING: [Timing 38-436] There are set_bus_skew constraint(s) in this design. Please run report_bus_skew to ensure that bus skew requirements are met.
+INFO: [Vivado 12-24838] Running report commands "report_incremental_reuse, report_route_status" in parallel.
+Running report generation with 2 threads.
+INFO: [Vivado 12-24828] Executing command : report_incremental_reuse -file vision_wrapper_incremental_reuse_routed.rpt
+INFO: [Vivado_Tcl 4-1062] Incremental flow is disabled. No incremental reuse Info to report.
+INFO: [Vivado 12-24828] Executing command : report_route_status -file vision_wrapper_route_status.rpt -pb vision_wrapper_route_status.pb
+INFO: [Vivado 12-24828] Executing command : report_power -file vision_wrapper_power_routed.rpt -pb vision_wrapper_power_summary_routed.pb -rpx vision_wrapper_power_routed.rpx
+Command: report_power -file vision_wrapper_power_routed.rpt -pb vision_wrapper_power_summary_routed.pb -rpx vision_wrapper_power_routed.rpx
+Running Vector-less Activity Propagation...
+
+Finished Running Vector-less Activity Propagation
+WARNING: [Power 33-332] Found switching activity that implies high-fanout reset nets being asserted for excessive periods of time which may result in inaccurate power analysis.
+Resolution: To review and fix problems, please run Power Constraints Advisor in the GUI from Tools > Power Constraints Advisor or run report_power with the -advisory option to generate a text report.
+140 Infos, 20 Warnings, 0 Critical Warnings and 0 Errors encountered.
+report_power completed successfully
+INFO: [Vivado 12-24828] Executing command : report_clock_utilization -file vision_wrapper_clock_utilization_routed.rpt
+INFO: [Vivado 12-24828] Executing command : report_bus_skew -warn_on_violation -file vision_wrapper_bus_skew_routed.rpt -pb vision_wrapper_bus_skew_routed.pb -rpx vision_wrapper_bus_skew_routed.rpx
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+generate_parallel_reports: Time (s): cpu = 00:00:19 ; elapsed = 00:00:13 . Memory (MB): peak = 2291.477 ; gain = 0.000
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Wrote PlaceDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2291.477 ; gain = 0.000
+Wrote PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2291.477 ; gain = 0.000
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.031 . Memory (MB): peak = 2291.477 ; gain = 0.000
+Writing XDEF routing special nets.
+Wrote RouteStorage: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.153 . Memory (MB): peak = 2291.477 ; gain = 0.000
+Wrote PlaceStorage: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.320 . Memory (MB): peak = 2291.477 ; gain = 0.000
+Wrote Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.014 . Memory (MB): peak = 2291.477 ; gain = 0.000
+Wrote Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 2291.477 ; gain = 0.000
+Write Physdb Complete: Time (s): cpu = 00:00:02 ; elapsed = 00:00:00.511 . Memory (MB): peak = 2291.477 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1/vision_wrapper_routed.dcp' has been generated.
+INFO: [Common 17-206] Exiting Vivado at Sun Oct 11 17:35:13 2026...
+
+*** Running vivado
+    with args -log vision_wrapper.vdi -applog -m64 -product Vivado -messageDb vivado.pb -mode batch -source vision_wrapper.tcl -notrace
+
+
+INFO: [Common 17-3922] A valid Vivado Design Suite BASIC license has been detected. Your current license is active and will expire on 14-sep-2027.
+#-----------------------------------------------------------
+# Vivado v2026.1 (64-bit)
+# SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+# IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+# SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+# Start of session at: Sun Oct 11 17:35:46 2026
+# Process ID         : 13100
+# Current directory  : E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1
+# Command line       : vivado.exe -log vision_wrapper.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source vision_wrapper.tcl -notrace
+# Log file           : E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1/vision_wrapper.vdi
+# Journal file       : E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/c01_hdmi.runs/impl_1\vivado.jou
+# Running On         : never-die-cold
+# Platform           : Windows 11
+# Operating System   : 26200
+# Processor Detail   : Intel(R) Core(TM) Ultra 7 255HX
+# CPU Frequency      : 2880 MHz
+# CPU Physical cores : 20
+# CPU Logical cores  : 20
+# Host memory        : 16496 MB
+# Swap memory        : 24696 MB
+# Total Virtual      : 41192 MB
+# Available Virtual  : 16728 MB
+#-----------------------------------------------------------
+
+****** Vivado v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Sun Oct 11 17:35:46 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source vision_wrapper.tcl -notrace
+Command: open_checkpoint vision_wrapper_routed.dcp
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.069 . Memory (MB): peak = 892.262 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 685 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2026.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Read ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.032 . Memory (MB): peak = 1019.465 ; gain = 2.301
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Project 1-853] Binary constraint restore complete.
+INFO: [Designutils 20-5722] Start Reading Physical Databases.
+Reading placement.
+Read Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.012 . Memory (MB): peak = 1633.801 ; gain = 0.000
+Reading placer database...
+Read Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.010 . Memory (MB): peak = 1633.801 ; gain = 0.000
+Read PlaceDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1633.801 ; gain = 0.000
+Read placeStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.277 . Memory (MB): peak = 1658.906 ; gain = 25.105
+Read PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1658.906 ; gain = 0.000
+Reading routing.
+Read RouteStorage: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.118 . Memory (MB): peak = 1658.906 ; gain = 0.000
+Read Physdb Files: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.435 . Memory (MB): peak = 1658.906 ; gain = 25.105
+Restored from archive | CPU: 1.000000 secs | Memory: 0.000000 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.481 . Memory (MB): peak = 1658.906 ; gain = 25.668
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.006 . Memory (MB): peak = 1658.906 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 102 instances were transformed.
+  CFGLUT5 => CFGLUT5 (SRL16E, SRLC32E): 84 instances
+  IOBUF => IOBUF (IBUF, OBUFT): 2 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 16 instances
+
+INFO: [Project 1-604] Checkpoint was created with Vivado v2026.1 (64-bit) build 6511674
+open_checkpoint: Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 1658.906 ; gain = 1315.082
+INFO: [Memdata 28-208] The XPM instance: <vision_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst> is part of IP: <vision_i/capture_input>. This XPM instance will be excluded from the .mmi because updatemem is prohibited from making changes to an XPM that is part of an IP.
+INFO: [Memdata 28-167] Found XPM memory block vision_i/capture_dma/U0/I_PRMRY_DATAMOVER/GEN_S2MM_FULL.I_S2MM_FULL_WRAPPER/GEN_ENABLE_INDET_BTT_SF.I_INDET_BTT/I_XD_FIFO/NON_BLK_MEM.I_SYNC_FIFOGEN_FIFO/xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst with a P_MEMORY_PRIMITIVE property set to auto. A value of block is required. You will not be able to use the updatemem program to update the bitstream with new data for the vision_i/capture_dma/U0/I_PRMRY_DATAMOVER/GEN_S2MM_FULL.I_S2MM_FULL_WRAPPER/GEN_ENABLE_INDET_BTT_SF.I_INDET_BTT/I_XD_FIFO/NON_BLK_MEM.I_SYNC_FIFOGEN_FIFO/xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst block.
+INFO: [Memdata 28-208] The XPM instance: <vision_i/capture_dma/U0/I_PRMRY_DATAMOVER/GEN_S2MM_FULL.I_S2MM_FULL_WRAPPER/GEN_ENABLE_INDET_BTT_SF.I_INDET_BTT/I_DATA_FIFO/BLK_MEM.I_SYNC_FIFOGEN_FIFO/xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst> is part of IP: <vision_i/capture_dma>. This XPM instance will be excluded from the .mmi because updatemem is prohibited from making changes to an XPM that is part of an IP.
+INFO: [Memdata 28-208] The XPM instance: <vision_i/capture_dma/U0/GEN_SPRT_FOR_S2MM.S2MM_LINEBUFFER_I/GEN_S2MM_FLUSH_SOF_LOGIC.GEN_LINEBUFFER_FLUSH_SOF.GEN_SYNC_FIFO_FLUSH_SOF.I_LINEBUFFER_FIFO/xpm_fifo_sync_inst/xpm_fifo_base_inst/gen_sdpram.xpm_memory_base_inst> is part of IP: <vision_i/capture_dma>. This XPM instance will be excluded from the .mmi because updatemem is prohibited from making changes to an XPM that is part of an IP.
+Command: write_bitstream -force vision_wrapper.bit
+Attempting to get a license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+Running DRC as a precondition to command write_bitstream
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'D:/Vivado_downloads/2026.1/Vivado/data/ip'.
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado 12-3199] DRC finished with 0 Errors
+INFO: [Vivado 12-3200] Please refer to the DRC report (report_drc) for more information.
+Integrating Hard IP ELF/MEM with the PDI.
+INFO: [Designutils 20-2272] Running write_bitstream with 2 threads.
+Initializing bitstream generation complete. Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.742 . Memory (MB): peak = 1940.414 ; gain = 82.148
+Loading data files...
+Loading site data...
+Loading route data...
+Processing options...
+Creating bitmap...
+Creating bitstream...
+Writing bitstream ./vision_wrapper.bit...
+Generate Bitstream complete. Time (s): cpu = 00:00:14 ; elapsed = 00:00:10 . Memory (MB): peak = 2214.281 ; gain = 356.016
+INFO: [Vivado 12-1842] Bitgen Completed Successfully.
+INFO: [Common 17-83] Releasing license: Vivado_Implementation
+26 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+write_bitstream completed successfully
+write_bitstream: Time (s): cpu = 00:00:18 ; elapsed = 00:00:23 . Memory (MB): peak = 2214.281 ; gain = 542.363
+INFO: [Common 17-206] Exiting Vivado at Sun Oct 11 17:36:34 2026...
+[Sun Oct 11 17:36:36 2026] impl_1 finished
+wait_on_runs: Time (s): cpu = 00:00:01 ; elapsed = 00:01:01 . Memory (MB): peak = 1925.590 ; gain = 0.000
+INFO: [Project 1-1918] Creating Hardware Platform: E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/capture-1791711069004993.xsa ...
+INFO: [Project 1-1943] The Hardware Platform can be used for Hardware
+INFO: [Project 1-1941] Successfully created Hardware Platform: E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791710185764742/capture-1791711069004993.xsa
+INFO: [Hsi 55-2053] elapsed time for repository (D:/Vivado_downloads/2026.1/Vivado/data/embeddedsw) loading 0 seconds
+PASS: C01 display/capture offline bitstream; PS ownership and board acceptance pending
+INFO: [Common 17-206] Exiting Vivado at Sun Oct 11 17:36:40 2026...

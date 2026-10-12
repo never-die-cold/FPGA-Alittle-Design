@@ -1,0 +1,43 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Projects/FPGA-Alittle-Design/src/vision/axi_regs.v" into library work
+INFO: [VRFC 10-311] analyzing module axi_regs
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Projects/FPGA-Alittle-Design/src/vision/capture_fault_cdc.v" into library work
+INFO: [VRFC 10-311] analyzing module capture_fault_cdc
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Projects/FPGA-Alittle-Design/src/vision/capture_status_axi.v" into library work
+INFO: [VRFC 10-311] analyzing module capture_status_axi
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Projects/FPGA-Alittle-Design/src/vision/capture_stream_monitor.v" into library work
+INFO: [VRFC 10-311] analyzing module capture_stream_monitor
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Projects/FPGA-Alittle-Design/src/vision/config_bridge.v" into library work
+INFO: [VRFC 10-311] analyzing module config_bridge
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Projects/FPGA-Alittle-Design/src/vision/cop_buf.v" into library work
+INFO: [VRFC 10-311] analyzing module cop_buf
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Projects/FPGA-Alittle-Design/src/vision/gaussian_3x3.v" into library work
+INFO: [VRFC 10-311] analyzing module gaussian_3x3
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Projects/FPGA-Alittle-Design/src/vision/in_align.v" into library work
+INFO: [VRFC 10-311] analyzing module in_align
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Projects/FPGA-Alittle-Design/src/vision/line_buffer.v" into library work
+INFO: [VRFC 10-311] analyzing module line_buffer
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Projects/FPGA-Alittle-Design/src/vision/osd_overlay.v" into library work
+INFO: [VRFC 10-311] analyzing module osd_overlay
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Projects/FPGA-Alittle-Design/src/vision/reset_sync.v" into library work
+INFO: [VRFC 10-311] analyzing module reset_sync
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Projects/FPGA-Alittle-Design/src/vision/rgb2gray.v" into library work
+INFO: [VRFC 10-311] analyzing module rgb2gray
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Projects/FPGA-Alittle-Design/src/vision/scaler.v" into library work
+INFO: [VRFC 10-311] analyzing module scaler
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Projects/FPGA-Alittle-Design/src/vision/sobel.v" into library work
+INFO: [VRFC 10-311] analyzing module sobel
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Projects/FPGA-Alittle-Design/src/vision/video_pipeline.v" into library work
+INFO: [VRFC 10-311] analyzing module video_pipeline
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Projects/FPGA-Alittle-Design/src/vision/vision_axi.v" into library work
+INFO: [VRFC 10-311] analyzing module vision_axi
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Projects/FPGA-Alittle-Design/src/vision/vision_top.v" into library work
+INFO: [VRFC 10-311] analyzing module vision_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Projects/FPGA-Alittle-Design/sim/vision/tb_axi_lock_reset.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_axi_lock_reset
+ERROR: [VRFC 10-4982] syntax error near '+' [E:/Projects/FPGA-Alittle-Design/sim/vision/tb_axi_lock_reset.v:44]
+ERROR: [VRFC 10-4982] syntax error near '+' [E:/Projects/FPGA-Alittle-Design/sim/vision/tb_axi_lock_reset.v:62]
+ERROR: [VRFC 10-4982] syntax error near '+' [E:/Projects/FPGA-Alittle-Design/sim/vision/tb_axi_lock_reset.v:92]
+ERROR: [VRFC 10-4982] syntax error near '+' [E:/Projects/FPGA-Alittle-Design/sim/vision/tb_axi_lock_reset.v:110]
+ERROR: [VRFC 10-4982] syntax error near '+' [E:/Projects/FPGA-Alittle-Design/sim/vision/tb_axi_lock_reset.v:130]
+ERROR: [VRFC 10-8530] module 'tb_axi_lock_reset' is ignored due to previous errors [E:/Projects/FPGA-Alittle-Design/sim/vision/tb_axi_lock_reset.v:10]
+ERROR: xvlog 编译失败

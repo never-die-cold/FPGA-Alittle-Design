@@ -1,0 +1,7 @@
+HOST_STARTED_UTC=2026-10-11T10:05:48.4078955Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=printf 'CPU_ALIVE\n'; cat /proc/sys/kernel/random/boot_id; ps -eo pid,ppid,stat,comm,wchan:24 | grep -E 'python|timeout|sudo|bash'; dmesg | tail -n 12
+
+ERROR: timeout; remote completion unconfirmed; no interrupt sent
+
+HOST_EXIT_CODE=124

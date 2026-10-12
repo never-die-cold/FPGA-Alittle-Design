@@ -1,0 +1,26 @@
+HOST_STARTED_UTC=2026-10-11T10:01:56.6994693Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=printf 'TTY_OK\n'; timeout --help | head -n 16; cat /proc/sys/kernel/random/boot_id; sudo -n true
+printf 'TTY_OK\n'; timeout --help | head -n 16; cat /proc/sys/kernel/random/boot_id; sudo -n true; printf '\n__PYNQ_RC_fd995ce81c94461189596ce849be0a9d=%d\n' $?
+[?2004lTTY_OK
+Usage: timeout [OPTION] DURATION COMMAND [ARG]...
+  or:  timeout [OPTION]
+Start COMMAND, and kill it if still running after DURATION.
+
+Mandatory arguments to long options are mandatory for short options too.
+      --preserve-status
+                 exit with the same status as COMMAND, even when the
+                   command times out
+      --foreground
+                 when not running timeout directly from a shell prompt,
+                   allow COMMAND to read from the TTY and get TTY signals;
+                   in this mode, children of COMMAND will not be timed out
+  -k, --kill-after=DURATION
+                 also send a KILL signal if COMMAND is still running
+                   this long after the initial signal was sent
+  -s, --signal=SIGNAL
+f3321177-d8ab-4db8-9c1e-04f9f0cfe40f
+
+__PYNQ_RC_fd995ce81c94461189596ce849be0a9d=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

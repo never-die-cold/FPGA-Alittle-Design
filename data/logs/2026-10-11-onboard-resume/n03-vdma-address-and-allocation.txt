@@ -1,0 +1,68 @@
+HOST_STARTED_UTC=2026-10-11T08:15:59.0278061Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=grep --color=never -n -E 'MEMRANGE.*vdma' /usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/overlays/base/base.hwh; grep --color=never -n -A 58 'def _xrt_allocate' /home/xilinx/pynq/pl_server/xrt_device.py
+grep --color=never -n -E 'MEMRANGE.*vdma' /usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/overlays/base/base.hwh; grep --color=never -n -A 58 'def _xrt_allocate' /home/xilinx/pynq/pl_server/xrt_device.py; printf '\n__PYNQ_RC_ebd9ac72081d4a6a971f573d75aecc1c=%d\n' $?
+[?2004l56178:        <MEMRANGE ADDRESSBLOCK="Reg" BASENAME="C_BASEADDR" BASEVALUE="0x43000000" HIGHNAME="C_HIGHADDR" HIGHVALUE="0x4300FFFF" INSTANCE="video_axi_vdma" IS_DATA="TRUE" IS_INSTRUCTION="TRUE" MASTERBUSINTERFACE="M_AXI_GP0" MEMTYPE="REGISTER" SLAVEBUSINTERFACE="S_AXI_LITE"/>
+59:def _xrt_allocate(shape, dtype, device, memidx, cacheable=0, pointer=None, cache=None):
+60-    elements = 1
+61-    try:
+62-        for s in shape:
+63-            elements *= s
+64-    except TypeError:
+65-        elements = shape
+66-    dtype = np.dtype(dtype)
+67-    size = elements * dtype.itemsize
+68-    if pointer is not None:
+69-        bo, buf, device_address = pointer
+70-    else:
+71-        bo = device.allocate_bo(size, memidx, cacheable)
+72-        buf = device.map_bo(bo)
+73-        device_address = device.get_device_address(bo)
+74-    ar = PynqBuffer(
+75-        shape,
+76-        dtype,
+77-        bo=bo,
+78-        device=device,
+79-        buffer=buf,
+80-        device_address=device_address,
+81-        coherent=False,
+82-    )
+83-    if pointer is not None:
+84-        weakref.finalize(buf, _free_bo, device, bo, ar.virtual_address, ar.nbytes)
+85-    if cache is not None:
+86-        ar.pointer = (bo, buf, device_address)
+87-        ar.return_to = cache
+88-    return ar
+89-
+90-
+91-def _free_bo(device, bo, ptr, length):
+92-    libc.munmap(ctypes.cast(ptr, ctypes.c_void_p), length)
+93-    del bo
+94-    
+95-
+96-
+97-class XrtMemory:
+98-    """Class representing a memory bank in a card
+99-
+100-    Memory banks can be both external DDR banks and internal buffers.
+101-    XrtMemory instances for the same bank are interchangeable and can
+102-    be compared and used as dictionary keys.
+103-
+104-    """
+105-
+106-    def __init__(self, device, desc):
+107-        self.idx = desc["idx"]
+108-        self.size = desc["size"]
+109-        self.base_address = desc["base_address"]
+110-        self.desc = desc
+111-        self.device = device
+112-
+113-    def allocate(self, shape, dtype, **kwargs):
+114-        """Create a new  buffer in the memory bank
+115-
+116-        Parameters
+117-        ----------
+
+__PYNQ_RC_ebd9ac72081d4a6a971f573d75aecc1c=0
+
+HOST_EXIT_CODE=0

@@ -1,0 +1,11 @@
+sudo -n true && printf 'AUTH_OK\n' && cat /proc/sys/kernel/random/boot_id && sha256sum /home/xilinx/vision_m2/vision.bit /home/xilinx/vision_m2/vision.hwh && sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -c "from pynq import PL; print(\"ACTIVE_BIT:\",PL.bitfile_name)"'; printf '\n__PYNQ_RC_ac410aa73b91470e980af0ec3b024e6f=%d\n' $?
+[?2004l
+AUTH_OK
+f3321177-d8ab-4db8-9c1e-04f9f0cfe40f
+4f0c491a6383d8a11f87cd2de260027f519dbd466942d0b1b6e36198e39d5be5  /home/xilinx/vision_m2/vision.bit
+c0adfd3656c2fdb0468de356dc8232857580286d48977c41d6ee61edc3b7b5a5  /home/xilinx/vision_m2/vision.hwh
+ACTIVE_BIT: /home/xilinx/vision_m2/vision.bit
+
+__PYNQ_RC_ac410aa73b91470e980af0ec3b024e6f=0
+[?2004hxilinx@pynq:~$ 
+SERIAL_COMMAND_EXIT=0

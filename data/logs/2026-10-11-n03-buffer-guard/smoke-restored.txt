@@ -1,0 +1,12 @@
+HOST_STARTED_UTC=2026-10-11T08:38:36.8855701Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && timeout -k 5s 25s python3 /home/xilinx/vision_m2/m2_onboard.py smoke'; cat /proc/sys/kernel/random/boot_id
+sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && timeout -k 5s 25s python3 /home/xilinx/vision_m2/m2_onboard.py smoke'; cat /proc/sys/kernel/random/boot_id; printf '\n__PYNQ_RC_e7c9fc12c6be4facb200d6e5b19fceb4=%d\n' $?
+[?2004lR11 busy=0 R12 applied=0
+commit 配置号=1 status={'busy': False, 'applied_config_id': 1}
+PASS: smoke（视频在位，帧首整组应用已确认）
+f3321177-d8ab-4db8-9c1e-04f9f0cfe40f
+
+__PYNQ_RC_e7c9fc12c6be4facb200d6e5b19fceb4=0
+
+HOST_EXIT_CODE=0

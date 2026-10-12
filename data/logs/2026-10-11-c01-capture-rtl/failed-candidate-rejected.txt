@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "E:\Projects\FPGA-Alittle-Design\sim\scripts\check_c01_artifacts.py", line 56, in <module>
+    args=parser.parse_args(); result=check(args.bit)
+                                     ^^^^^^^^^^^^^^^
+  File "E:\Projects\FPGA-Alittle-Design\sim\scripts\check_c01_artifacts.py", line 35, in check
+    check_reset_release(modules)
+  File "E:\Projects\FPGA-Alittle-Design\sim\scripts\check_c01_artifacts.py", line 23, in check_reset_release
+    raise ValueError("capture reset release mismatch: " + pin)
+ValueError: capture reset release mismatch: aux_reset_in

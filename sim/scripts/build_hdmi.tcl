@@ -29,6 +29,8 @@ if {[catch {
     wait_on_run impl_1
     if {[get_property PROGRESS [get_runs impl_1]] ne "100%"} { error "HDMI implementation failed" }
     open_run impl_1
+    source sim/scripts/validate_vision_cdc.tcl
+    vision_check_cdc 0
     set rep data/logs/2026-10-02-vision-offboard/hdmi
     file mkdir $rep
     report_utilization -file $rep/utilization.rpt

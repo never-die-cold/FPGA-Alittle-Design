@@ -1,0 +1,13 @@
+HOST_STARTED_UTC=2026-10-11T07:51:21.8818372Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -c "import pynq.lib.video as v; print(v.PIXEL_BGR); print(type(v.PIXEL_BGR)); print(type(v.COLOR_BGR)); print(v.VideoIn.configure.__code__.co_filename); print(v.AxiVDMA.__module__)"' && grep --color=never -n -A 28 -E 'def tie|def stop|def readframe' /home/xilinx/pynq/lib/video/dma.py
+bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -c "import pynq.lib.video as v; print(v.PIXEL_BGR); print(type(v.PIXEL_BGR)); print(type(v.COLOR_BGR)); print(v.VideoIn.configure.__code__.co_filename); print(v.AxiVDMA.__module__)"' && grep --color=never -n -A 28 -E 'def tie|def stop|def readframe' /home/xilinx/pynq/lib/video/dma.py; printf '\n__PYNQ_RC_1d8d0efe7b584928a771b45a8bbecedf=%d\n' $?
+[?2004l<pynq.lib.video.common.PixelFormat object at 0xb30edda8>
+<class 'pynq.lib.video.common.PixelFormat'>
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+AttributeError: module 'pynq.lib.video' has no attribute 'COLOR_BGR'. Did you mean: 'COLOR_IN_BGR'?
+
+__PYNQ_RC_1d8d0efe7b584928a771b45a8bbecedf=1
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=1

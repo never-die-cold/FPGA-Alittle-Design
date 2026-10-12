@@ -1,0 +1,11 @@
+HOST_STARTED_UTC=2026-10-11T07:49:45.6519493Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=cat /proc/sys/kernel/random/boot_id; sha256sum /usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/overlays/base/base.bit /usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/overlays/base/base.hwh; ls -l /home/xilinx/vision_m2/n03* 2>/dev/null; test -f /usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/overlays/base/base.bit
+cat /proc/sys/kernel/random/boot_id; sha256sum /usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/overlays/base/base.bit /usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/overlays/base/base.hwh; ls -l /home/xilinx/vision_m2/n03* 2>/dev/null; test -f /usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/overlays/base/base.bit; printf '\n__PYNQ_RC_a148bd86651947a3a91ba560da5f5278=%d\n' $?
+[?2004l99577b4d-f0d4-4163-89f2-6231324b6fd8
+d9aec0ff1cddeaf109dd08b1510c2ed38b4804bd29ef7648ee80eac8f06de505  /usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/overlays/base/base.bit
+94dee45319dfecb22d9684eb565916e62f910eb999650c9a99fda51bdc9158fe  /usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/overlays/base/base.hwh
+
+__PYNQ_RC_a148bd86651947a3a91ba560da5f5278=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0
