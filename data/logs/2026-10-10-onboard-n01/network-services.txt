@@ -1,0 +1,12 @@
+HOST_STARTED_UTC=2026-10-10T14:49:21.2473545Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'ip route; ip neigh show dev eth0; systemctl list-units --type=service --all --no-pager | grep -Ei "jupyter|notebook|pynq" || true; ss -lntp | grep -E ":8888|:9090" || true'
+sudo -n bash -c 'ip route; ip neigh show dev eth0; systemctl list-units --type=service --all --no-pager | grep -Ei "jupyter|notebook|pynq" || true; ss -lntp | grep -E ":8888|:9090" || true'; printf '\n__PYNQ_RC_4e9049fe5d6f49f38ce0c5635859d39f=%d\n' $?
+[?2004l169.254.0.0/16 dev eth0 proto kernel scope link src 169.254.87.99 
+192.168.2.0/24 dev eth0 proto kernel scope link src 192.168.2.99 
+  jupyter.service                      loaded    active   running Jupyter Notebook Server
+LISTEN 0      128          0.0.0.0:9090      0.0.0.0:*    users:(("jupyter-noteboo",pid=410,fd=7)) 
+
+__PYNQ_RC_4e9049fe5d6f49f38ce0c5635859d39f=0
+
+HOST_EXIT_CODE=0

@@ -1,0 +1,77 @@
+{
+  "failed_board_candidate": {
+    "hwh": "sim/build/c01-hdmi-1791710185764742/capture-1791711069004993.hwh",
+    "parameters": {
+      "C_AUX_RESET_HIGH": "0",
+      "C_EXT_RESET_HIGH": "0"
+    },
+    "inputs": {
+      "aux_reset_in": {
+        "DIR": "I",
+        "NAME": "aux_reset_in",
+        "POLARITY": "ACTIVE_LOW",
+        "SIGIS": "rst",
+        "SIGNAME": "capture_low_dout"
+      },
+      "dcm_locked": {
+        "DIR": "I",
+        "NAME": "dcm_locked",
+        "SIGIS": "undef",
+        "SIGNAME": "high_dout"
+      },
+      "ext_reset_in": {
+        "DIR": "I",
+        "NAME": "ext_reset_in",
+        "POLARITY": "ACTIVE_LOW",
+        "SIGIS": "rst",
+        "SIGNAME": "ps7_FCLK_RESET0_N"
+      },
+      "mb_debug_sys_rst": {
+        "DIR": "I",
+        "NAME": "mb_debug_sys_rst",
+        "POLARITY": "ACTIVE_HIGH",
+        "SIGIS": "rst",
+        "SIGNAME": "capture_low_dout"
+      }
+    },
+    "check": "REJECT",
+    "reason": "capture reset release mismatch: aux_reset_in"
+  },
+  "reset_fix_generated_handoff": {
+    "hwh": "sim/build/c01-hdmi-1791713720540454/c01_hdmi.gen/sources_1/bd/vision/hw_handoff/vision.hwh",
+    "parameters": {
+      "C_AUX_RESET_HIGH": "0",
+      "C_EXT_RESET_HIGH": "0"
+    },
+    "inputs": {
+      "aux_reset_in": {
+        "DIR": "I",
+        "NAME": "aux_reset_in",
+        "POLARITY": "ACTIVE_LOW",
+        "SIGIS": "rst",
+        "SIGNAME": "high_dout"
+      },
+      "dcm_locked": {
+        "DIR": "I",
+        "NAME": "dcm_locked",
+        "SIGIS": "undef",
+        "SIGNAME": "high_dout"
+      },
+      "ext_reset_in": {
+        "DIR": "I",
+        "NAME": "ext_reset_in",
+        "POLARITY": "ACTIVE_LOW",
+        "SIGIS": "rst",
+        "SIGNAME": "ps7_FCLK_RESET0_N"
+      },
+      "mb_debug_sys_rst": {
+        "DIR": "I",
+        "NAME": "mb_debug_sys_rst",
+        "POLARITY": "ACTIVE_HIGH",
+        "SIGIS": "rst",
+        "SIGNAME": "capture_low_dout"
+      }
+    },
+    "check": "PASS"
+  }
+}

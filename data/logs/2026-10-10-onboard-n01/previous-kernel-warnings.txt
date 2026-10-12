@@ -1,0 +1,24 @@
+HOST_STARTED_UTC=2026-10-10T14:59:07.3097671Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'journalctl --list-boots --no-pager | tail -n 5; journalctl -b -1 -k -p warning --no-pager | tail -n 80'
+sudo -n bash -c 'journalctl --list-boots --no-pager | tail -n 5; journalctl -b -1 -k -p warning --no-pager | tail -n 80'; printf '\n__PYNQ_RC_7b198963b0cb40b885c35ceff3f36d6c=%d\n' $?
+[?2004l-3 062b1ab8ba4f40008c2a777261d2e638 Thu 2022-04-07 19:28:19 UTC—Mon 2026-09-21 11:37:15 UTC
+-2 494f7d17223f460299237b98a3370c0e Mon 2026-09-21 11:37:17 UTC—Mon 2026-09-21 12:53:03 UTC
+-1 bd0c9ddb8063469d87542ab1e9017cb6 Mon 2026-09-21 12:53:04 UTC—Mon 2026-09-21 13:17:09 UTC
+ 0 20660a57318c47c6b77dbd8e7a0cbb60 Mon 2026-09-21 13:17:09 UTC—Mon 2026-09-21 14:59:35 UTC
+Apr 07 19:28:20 pynq kernel: L2C: platform modifies aux control register: 0x72360000 -> 0x72760000
+Apr 07 19:28:20 pynq kernel: L2C: DT/platform modifies aux control register: 0x72360000 -> 0x72760000
+Apr 07 19:28:20 pynq kernel: armv7-pmu f8891000.pmu: hw perfevents: no interrupt-affinity property, guessing.
+Apr 07 19:28:20 pynq kernel: spi_master spi0: cannot find modalias for /axi/spi@e000d000/flash@0
+Apr 07 19:28:20 pynq kernel: spi_master spi0: Failed to create SPI device for /axi/spi@e000d000/flash@0
+Apr 07 19:28:20 pynq kernel: platform regulatory.0: Direct firmware load for regulatory.db failed with error -2
+Apr 07 19:28:20 pynq kernel: clk: Not disabling unused clocks
+Apr 07 19:28:20 pynq systemd[1]: Failed to find module 'autofs4'
+Sep 21 07:17:04 pynq kernel: zocl: loading out-of-tree module taints kernel.
+Sep 21 07:17:04 pynq kernel: zocl-drm axi:zyxclmm_drm: error -ENXIO: IRQ index 0 not found
+Sep 21 07:17:07 pynq kernel: FAT-fs (mmcblk0p1): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+Sep 21 07:17:25 pynq kernel: systemd[576]: memfd_create() called without MFD_EXEC or MFD_NOEXEC_SEAL set
+
+__PYNQ_RC_7b198963b0cb40b885c35ceff3f36d6c=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

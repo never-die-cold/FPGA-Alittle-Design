@@ -1,0 +1,9 @@
+HOST_STARTED_UTC=2026-10-11T14:29:51.1201677Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && timeout -k 3s 20s python3 -u -c "from pynq import PL; print(PL.bitfile_name)"'
+sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && timeout -k 3s 20s python3 -u -c "from pynq import PL; print(PL.bitfile_name)"'; printf '\n__PYNQ_RC_3505a37e479b404199d10a90c8b9ba65=%d\n' $?
+[?2004l/home/xilinx/vision_m2/vision.bit
+
+__PYNQ_RC_3505a37e479b404199d10a90c8b9ba65=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

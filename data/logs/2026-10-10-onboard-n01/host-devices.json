@@ -1,0 +1,62 @@
+[
+  {
+    "Status": "OK",
+    "Class": "Ports",
+    "FriendlyName": "蓝牙链接上的标准串行 (COM7)",
+    "InstanceId": "BTHENUM\\{00001101-0000-1000-8000-00805F9B34FB}_VID&000105D6_PID&000A\\7&194F811B&0&B4E7B328F3E8_C00000000"
+  },
+  {
+    "Status": "OK",
+    "Class": "Camera",
+    "FriendlyName": "ASUS IR camera",
+    "InstanceId": "USB\\VID_3277&PID_0096&MI_02\\6&EAD33BB&0&0002"
+  },
+  {
+    "Status": "OK",
+    "Class": "Camera",
+    "FriendlyName": "ASUS FHD webcam",
+    "InstanceId": "USB\\VID_3277&PID_0096&MI_00\\6&EAD33BB&0&0000"
+  },
+  {
+    "Status": "OK",
+    "Class": "Ports",
+    "FriendlyName": "蓝牙链接上的标准串行 (COM4)",
+    "InstanceId": "BTHENUM\\{00001101-0000-1000-8000-00805F9B34FB}_LOCALMFG&005D\\7&194F811B&0&41428D75EE4D_C00000000"
+  },
+  {
+    "Status": "OK",
+    "Class": "Camera",
+    "FriendlyName": "USB Video",
+    "InstanceId": "USB\\VID_345F&PID_2109&MI_00\\6&15FC436&0&0000"
+  },
+  {
+    "Status": "OK",
+    "Class": "Ports",
+    "FriendlyName": "USB Serial Port (COM12)",
+    "InstanceId": "FTDIBUS\\VID_0403+PID_6010+1234-TULB\\0000"
+  },
+  {
+    "Status": "OK",
+    "Class": "Ports",
+    "FriendlyName": "蓝牙链接上的标准串行 (COM3)",
+    "InstanceId": "BTHENUM\\{00001101-0000-1000-8000-00805F9B34FB}_LOCALMFG&0000\\7&194F811B&0&000000000000_00000000"
+  },
+  {
+    "Status": "OK",
+    "Class": "Ports",
+    "FriendlyName": "蓝牙链接上的标准串行 (COM8)",
+    "InstanceId": "BTHENUM\\{00001101-0000-1000-8000-00805F9B34FB}_LOCALMFG&0000\\7&194F811B&0&000000000000_00000004"
+  },
+  {
+    "Status": "OK",
+    "Class": "Ports",
+    "FriendlyName": "蓝牙链接上的标准串行 (COM6)",
+    "InstanceId": "BTHENUM\\{00001101-0000-1000-8000-00805F9B34FB}_LOCALMFG&0000\\7&194F811B&0&000000000000_00000006"
+  },
+  {
+    "Status": "OK",
+    "Class": "Ports",
+    "FriendlyName": "蓝牙链接上的标准串行 (COM10)",
+    "InstanceId": "BTHENUM\\{00001101-0000-1000-8000-00805F9B34FB}_VID&000105D6_PID&000A\\7&194F811B&0&E47C9C7DD254_C00000000"
+  }
+]

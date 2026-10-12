@@ -1,0 +1,94 @@
+HOST_STARTED_UTC=2026-10-10T14:55:35.2477999Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=journalctl --list-boots --no-pager | tail -n 5; journalctl -b -1 -n 80 --no-pager
+journalctl --list-boots --no-pager | tail -n 5; journalctl -b -1 -n 80 --no-pager; printf '\n__PYNQ_RC_ae65f2e2db0f4e709364da4b29b19dee=%d\n' $?
+[?2004lFailed to search journal ACL: Operation not supported
+-3 062b1ab8ba4f40008c2a777261d2e638 Thu 2022-04-07 19:28:19 UTC—Mon 2026-09-21 11:37:15 UTC
+-2 494f7d17223f460299237b98a3370c0e Mon 2026-09-21 11:37:17 UTC—Mon 2026-09-21 12:53:03 UTC
+-1 bd0c9ddb8063469d87542ab1e9017cb6 Mon 2026-09-21 12:53:04 UTC—Mon 2026-09-21 13:17:09 UTC
+ 0 20660a57318c47c6b77dbd8e7a0cbb60 Mon 2026-09-21 13:17:09 UTC—Mon 2026-09-21 14:59:35 UTC
+[0;1;31mFailed to search journal ACL: Operation not supported[0m
+Sep 21 09:49:55 pynq dhclient[212]: No working leases in persistent database - sleeping.
+Sep 21 09:49:57 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0xee6fde3f)
+Sep 21 09:50:00 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 7 (xid=0xee6fde3f)
+Sep 21 09:50:07 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 1 (xid=0xee6fde3f)
+Sep 21 09:50:08 pynq dhclient[212]: No DHCPOFFERS received.
+Sep 21 09:50:08 pynq dhclient[212]: No working leases in persistent database - sleeping.
+Sep 21 09:50:09 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x7f364a3d)
+Sep 21 09:50:12 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 6 (xid=0x7f364a3d)
+Sep 21 09:50:18 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 2 (xid=0x7f364a3d)
+Sep 21 09:50:20 pynq dhclient[212]: No DHCPOFFERS received.
+Sep 21 09:50:20 pynq dhclient[212]: No working leases in persistent database - sleeping.
+Sep 21 09:50:22 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x12ef8b7b)
+Sep 21 09:50:25 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 8 (xid=0x12ef8b7b)
+Sep 21 09:50:33 pynq dhclient[212]: No DHCPOFFERS received.
+Sep 21 09:50:33 pynq dhclient[212]: No working leases in persistent database - sleeping.
+Sep 21 09:50:34 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0xb1c4265)
+Sep 21 09:50:37 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 4 (xid=0xb1c4265)
+Sep 21 09:50:41 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 4 (xid=0xb1c4265)
+Sep 21 09:50:45 pynq dhclient[212]: No DHCPOFFERS received.
+Sep 21 09:50:45 pynq dhclient[212]: No working leases in persistent database - sleeping.
+Sep 21 09:50:46 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x30b66654)
+Sep 21 09:50:49 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 7 (xid=0x30b66654)
+Sep 21 09:50:56 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 1 (xid=0x30b66654)
+Sep 21 09:50:57 pynq dhclient[212]: No DHCPOFFERS received.
+Sep 21 09:50:57 pynq dhclient[212]: No working leases in persistent database - sleeping.
+Sep 21 09:50:59 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x26e8b01d)
+Sep 21 09:51:02 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 4 (xid=0x26e8b01d)
+Sep 21 09:51:06 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 4 (xid=0x26e8b01d)
+Sep 21 09:51:10 pynq dhclient[212]: No DHCPOFFERS received.
+Sep 21 09:51:10 pynq dhclient[212]: No working leases in persistent database - sleeping.
+Sep 21 09:51:11 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0xc734b365)
+Sep 21 09:51:14 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 5 (xid=0xc734b365)
+Sep 21 09:51:19 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0xc734b365)
+Sep 21 09:51:22 pynq dhclient[212]: No DHCPOFFERS received.
+Sep 21 09:51:22 pynq dhclient[212]: No working leases in persistent database - sleeping.
+Sep 21 09:51:23 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x7d3de3b)
+Sep 21 09:51:26 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 4 (xid=0x7d3de3b)
+Sep 21 09:51:30 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 4 (xid=0x7d3de3b)
+Sep 21 09:51:34 pynq dhclient[212]: No DHCPOFFERS received.
+Sep 21 09:51:34 pynq dhclient[212]: No working leases in persistent database - sleeping.
+Sep 21 09:51:35 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x95d56f07)
+Sep 21 09:51:38 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 4 (xid=0x95d56f07)
+Sep 21 09:51:42 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 4 (xid=0x95d56f07)
+Sep 21 09:51:46 pynq dhclient[212]: No DHCPOFFERS received.
+Sep 21 09:51:46 pynq dhclient[212]: No working leases in persistent database - sleeping.
+Sep 21 09:51:47 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x598fa53b)
+Sep 21 09:51:50 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 6 (xid=0x598fa53b)
+Sep 21 09:51:56 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 2 (xid=0x598fa53b)
+Sep 21 09:51:58 pynq dhclient[212]: No DHCPOFFERS received.
+Sep 21 09:51:58 pynq dhclient[212]: No working leases in persistent database - sleeping.
+Sep 21 09:51:59 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x88e5fc28)
+Sep 21 09:52:02 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 4 (xid=0x88e5fc28)
+Sep 21 09:52:06 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 4 (xid=0x88e5fc28)
+Sep 21 09:52:10 pynq dhclient[212]: No DHCPOFFERS received.
+Sep 21 09:52:10 pynq dhclient[212]: No working leases in persistent database - sleeping.
+Sep 21 09:52:11 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x35a6ab64)
+Sep 21 09:52:14 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 5 (xid=0x35a6ab64)
+Sep 21 09:52:19 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x35a6ab64)
+Sep 21 09:52:22 pynq dhclient[212]: No DHCPOFFERS received.
+Sep 21 09:52:22 pynq dhclient[212]: No working leases in persistent database - sleeping.
+Sep 21 09:52:23 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0xe800264a)
+Sep 21 09:52:26 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 5 (xid=0xe800264a)
+Sep 21 09:52:31 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0xe800264a)
+Sep 21 09:52:34 pynq dhclient[212]: No DHCPOFFERS received.
+Sep 21 09:52:34 pynq dhclient[212]: No working leases in persistent database - sleeping.
+Sep 21 09:52:35 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0xb548c842)
+Sep 21 09:52:38 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 8 (xid=0xb548c842)
+Sep 21 09:52:46 pynq dhclient[212]: No DHCPOFFERS received.
+Sep 21 09:52:46 pynq dhclient[212]: No working leases in persistent database - sleeping.
+Sep 21 09:52:47 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x3f62ff7f)
+Sep 21 09:52:50 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 4 (xid=0x3f62ff7f)
+Sep 21 09:52:54 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 4 (xid=0x3f62ff7f)
+Sep 21 09:52:58 pynq dhclient[212]: No DHCPOFFERS received.
+Sep 21 09:52:58 pynq dhclient[212]: No working leases in persistent database - sleeping.
+Sep 21 09:53:00 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0xa7f71c)
+Sep 21 09:53:03 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 8 (xid=0xa7f71c)
+Sep 21 09:53:11 pynq dhclient[212]: No DHCPOFFERS received.
+Sep 21 09:53:11 pynq dhclient[212]: No working leases in persistent database - sleeping.
+Sep 21 09:53:12 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0xf5139b5d)
+Sep 21 09:53:15 pynq dhclient[212]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 7 (xid=0xf5139b5d)
+
+__PYNQ_RC_ae65f2e2db0f4e709364da4b29b19dee=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

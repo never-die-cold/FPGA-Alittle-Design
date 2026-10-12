@@ -1,0 +1,12 @@
+HOST_STARTED_UTC=2026-10-10T14:41:52.2671849Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=ip -br address
+ip -br address; printf '\n__PYNQ_RC_b946c7c78c86437ebefc0843e8378749=%d\n' $?
+[?2004llo               UNKNOWN        127.0.0.1/8 ::1/128 
+dummy0           DOWN           
+eth0             UP             169.254.87.99/16 192.168.2.99/24 fe80::941c:93ff:fef7:99cd/64 
+sit0@NONE        DOWN           
+
+__PYNQ_RC_b946c7c78c86437ebefc0843e8378749=0
+
+HOST_EXIT_CODE=0

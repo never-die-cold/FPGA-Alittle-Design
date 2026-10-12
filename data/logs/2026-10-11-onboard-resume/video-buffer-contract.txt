@@ -1,0 +1,11 @@
+HOST_STARTED_UTC=2026-10-11T07:51:57.7250617Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -c "import pynq.lib.video as v; print(v.VideoIn.configure.__code__.co_filename); print(v.AxiVDMA.__module__)"' && grep --color=never -n -A 30 -E 'def tie|def stop|def readframe' /home/xilinx/pynq/lib/video/dma.py
+bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -c "import pynq.lib.video as v; print(v.VideoIn.configure.__code__.co_filename); print(v.AxiVDMA.__module__)"' && grep --color=never -n -A 30 -E 'def tie|def stop|def readframe' /home/xilinx/pynq/lib/video/dma.py; printf '\n__PYNQ_RC_501e8a7c1ffa4f1594e44fa0197d6f51=%d\n' $?
+[?2004lTraceback (most recent call last):
+  File "<string>", line 1, in <module>
+AttributeError: module 'pynq.lib.video' has no attribute 'VideoIn'
+
+__PYNQ_RC_501e8a7c1ffa4f1594e44fa0197d6f51=1
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=1

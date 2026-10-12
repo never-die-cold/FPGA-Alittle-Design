@@ -1,0 +1,282 @@
+HOST_STARTED_UTC=2026-10-11T08:14:32.5084350Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=cat /proc/sys/kernel/random/boot_id; ps -eo pid,stat,args | grep --color=never -E '[p]ython3|[t]imeout'; sudo -n dmesg | tail -n 65; command -v gdb; cat /proc/sys/kernel/core_pattern; ls -lh /home/xilinx/core* /var/lib/systemd/coredump/* 2>/dev/null; sed -n '70,165p' /home/xilinx/pynq/lib/video/dma.py; sed -n '600,750p' /home/xilinx/pynq/lib/video/dma.py; sed -n '45,150p' /home/xilinx/pynq/buffer.py
+cat /proc/sys/kernel/random/boot_id; ps -eo pid,stat,args | grep --color=never -E '[p]ython3|[t]imeout'; sudo -n dmesg | tail -n 65; command -v gdb; cat /proc/sys/kernel/core_pattern; ls -lh /home/xilinx/core* /var/lib/systemd/coredump/* 2>/dev/null; sed -n '70,165p' /home/xilinx/pynq/lib/video/dma.py; sed -n '600,750p' /home/xilinx/pynq/lib/video/dma.py; sed -n '45,150p' /home/xilinx/pynq/buffer.py; printf '\n__PYNQ_RC_fe74b87e2733481aad10971806c602e1=%d\n' $? [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K?
+[?2004le1fcc6f5-cf8e-45bd-ba18-3c7eabffa1b2
+  261 Ss   /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
+  404 S    /usr/local/share/pynq-venv/bin/python3 /usr/local/share/pynq-venv/bin/jupyter-notebook --no-browser --allow-root
+  547 Ssl  /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+  752 S    python3 /usr/local/bin/redirect_server
+[  105.558970] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(280)
+[  112.233159] zocl-drm axi:zyxclmm_drm: zocl_create_client: created KDS client for pid(756), ret: 0
+[  112.233294] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(756)
+[  112.234153] zocl-drm axi:zyxclmm_drm: zocl_create_client: created KDS client for pid(756), ret: 0
+[  112.237693] [drm] bitstream a78bd70f-984a-e862-5808-85af84f54aad locked, ref=1
+[  112.237811] zocl-drm axi:zyxclmm_drm:  ffffffffc14a0810 kds_add_context: Client pid(756) add context Domain(65535) CU(0xffff) shared(true)
+[  112.238946] zocl-drm axi:zyxclmm_drm:  ffffffffc14a0810 kds_del_context: Client pid(756) del context Domain(65535) CU(0xffff)
+[  112.239016] [drm] bitstream a78bd70f-984a-e862-5808-85af84f54aad unlocked, ref=0
+[  123.738829] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(756)
+[  586.268368] zocl-drm axi:zyxclmm_drm: zocl_create_client: created KDS client for pid(1515), ret: 0
+[  586.268488] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(1515)
+[  586.269421] zocl-drm axi:zyxclmm_drm: zocl_create_client: created KDS client for pid(1515), ret: 0
+[  586.272956] [drm] bitstream a78bd70f-984a-e862-5808-85af84f54aad locked, ref=1
+[  586.273066] zocl-drm axi:zyxclmm_drm:  ffffffffc14a0810 kds_add_context: Client pid(1515) add context Domain(65535) CU(0xffff) shared(true)
+[  586.274189] zocl-drm axi:zyxclmm_drm:  ffffffffc14a0810 kds_del_context: Client pid(1515) del context Domain(65535) CU(0xffff)
+[  586.274256] [drm] bitstream a78bd70f-984a-e862-5808-85af84f54aad unlocked, ref=0
+[  590.096118] fpga_manager fpga0: writing vision.bin to Xilinx Zynq FPGA Manager
+[  590.178013] [drm] Loading xclbin b4ae2993-5640-27d5-2417-9b05aa462b48 to slot 0
+[  590.178048] [drm] skip kind 29(AIE_RESOURCES) return code: -22
+[  590.178087] [drm] skip kind 8(IP_LAYOUT) return code: -22
+[  590.178104] [drm] skip kind 9(DEBUG_IP_LAYOUT) return code: -22
+[  590.178118] [drm] skip kind 25(AIE_METADATA) return code: -22
+[  590.178131] [drm] skip kind 7(CONNECTIVITY) return code: -22
+[  590.178145] [drm] found kind 6(MEM_TOPOLOGY)
+[  590.178301] [drm] Memory 0 is not reserved in device tree. Will allocate memory from CMA
+[  590.178362] [drm] zocl_xclbin_read_axlf b4ae2993-5640-27d5-2417-9b05aa462b48 ret: 0
+[  590.205289] [drm] bitstream b4ae2993-5640-27d5-2417-9b05aa462b48 locked, ref=1
+[  590.205400] zocl-drm axi:zyxclmm_drm:  ffffffffc14a0810 kds_add_context: Client pid(1515) add context Domain(65535) CU(0xffff) shared(true)
+[  590.205507] zocl-drm axi:zyxclmm_drm:  ffffffffc14a0810 kds_del_context: Client pid(1515) del context Domain(65535) CU(0xffff)
+[  590.205558] [drm] bitstream b4ae2993-5640-27d5-2417-9b05aa462b48 unlocked, ref=0
+[  590.842554] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(1515)
+[  636.669678] zocl-drm axi:zyxclmm_drm: zocl_create_client: created KDS client for pid(1598), ret: 0
+[  636.669796] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(1598)
+[  636.670544] zocl-drm axi:zyxclmm_drm: zocl_create_client: created KDS client for pid(1598), ret: 0
+[  636.673825] [drm] bitstream b4ae2993-5640-27d5-2417-9b05aa462b48 locked, ref=1
+[  636.673937] zocl-drm axi:zyxclmm_drm:  ffffffffc14a0810 kds_add_context: Client pid(1598) add context Domain(65535) CU(0xffff) shared(true)
+[  636.674967] zocl-drm axi:zyxclmm_drm:  ffffffffc14a0810 kds_del_context: Client pid(1598) del context Domain(65535) CU(0xffff)
+[  636.675026] [drm] bitstream b4ae2993-5640-27d5-2417-9b05aa462b48 unlocked, ref=0
+[  637.233789] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(1598)
+[  861.276926] zocl-drm axi:zyxclmm_drm: zocl_create_client: created KDS client for pid(1919), ret: 0
+[  861.277044] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(1919)
+[  861.277855] zocl-drm axi:zyxclmm_drm: zocl_create_client: created KDS client for pid(1919), ret: 0
+[  861.281566] [drm] bitstream b4ae2993-5640-27d5-2417-9b05aa462b48 locked, ref=1
+[  861.281668] zocl-drm axi:zyxclmm_drm:  ffffffffc14a0810 kds_add_context: Client pid(1919) add context Domain(65535) CU(0xffff) shared(true)
+[  861.284399] zocl-drm axi:zyxclmm_drm:  ffffffffc14a0810 kds_del_context: Client pid(1919) del context Domain(65535) CU(0xffff)
+[  861.284471] [drm] bitstream b4ae2993-5640-27d5-2417-9b05aa462b48 unlocked, ref=0
+[  884.619638] fpga_manager fpga0: writing base.bin to Xilinx Zynq FPGA Manager
+[  884.701566] [drm] Loading xclbin 87d8ab7d-8568-6727-dc73-dc36f9f5a7fc to slot 0
+[  884.701600] [drm] skip kind 29(AIE_RESOURCES) return code: -22
+[  884.701641] [drm] skip kind 8(IP_LAYOUT) return code: -22
+[  884.701658] [drm] skip kind 9(DEBUG_IP_LAYOUT) return code: -22
+[  884.701673] [drm] skip kind 25(AIE_METADATA) return code: -22
+[  884.701686] [drm] skip kind 7(CONNECTIVITY) return code: -22
+[  884.701700] [drm] found kind 6(MEM_TOPOLOGY)
+[  884.701831] [drm] Memory 0 is not reserved in device tree. Will allocate memory from CMA
+[  884.701908] [drm] Memory 1 is not reserved in device tree. Will allocate memory from CMA
+[  884.701975] [drm] Memory 2 is not reserved in device tree. Will allocate memory from CMA
+[  884.702044] [drm] Memory 3 is not reserved in device tree. Will allocate memory from CMA
+[  884.702112] [drm] Memory 4 is not reserved in device tree. Will allocate memory from CMA
+[  884.702176] [drm] zocl_xclbin_read_axlf 87d8ab7d-8568-6727-dc73-dc36f9f5a7fc ret: 0
+[  884.741243] [drm] bitstream 87d8ab7d-8568-6727-dc73-dc36f9f5a7fc locked, ref=1
+[  884.741360] zocl-drm axi:zyxclmm_drm:  ffffffffc14a0810 kds_add_context: Client pid(1919) add context Domain(65535) CU(0xffff) shared(true)
+[  884.741471] zocl-drm axi:zyxclmm_drm:  ffffffffc14a0810 kds_del_context: Client pid(1919) del context Domain(65535) CU(0xffff)
+[  884.741530] [drm] bitstream 87d8ab7d-8568-6727-dc73-dc36f9f5a7fc unlocked, ref=0
+[  890.073124] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(1919)
+/usr/bin/gdb
+|/usr/share/apport/apport %p %s %c %d %P %E
+
+    Attributes
+    ----------
+    readchannel : AxiVDMA.S2MMChannel
+        Video input DMA channel
+    writechannel : AxiVDMA.MM2SChannel
+        Video output DMA channel
+
+    """
+
+    class _FrameList:
+        """Internal helper class for handling the list of frames associated
+        with a DMA channel. Assumes ownership of all frames it contains
+        unless explicitly removed with takeownership
+
+        """
+
+        def __init__(self, parent, offset, count):
+            self._frames = [None] * count
+            self._mmio = parent._mmio
+            self._offset = offset
+            self._slaves = set()
+            self.count = count
+            self.reload = parent.reload
+
+        def __getitem__(self, index):
+            frame = self._frames[index]
+            return frame
+
+        def takeownership(self, index):
+            self._frames[index] = None
+
+        def __len__(self):
+            return self.count
+
+        def __setitem__(self, index, frame):
+            self._frames[index] = frame
+            if frame is not None:
+                self._mmio.write(self._offset + 4 * index, frame.physical_address)
+            else:
+                self._mmio.write(self._offset + 4 * index, 0)
+            self.reload()
+            for s in self._slaves:
+                s[index] = frame
+                s.takeownership(index)
+
+        def addslave(self, slave):
+            self._slaves.add(slave)
+            for i in range(len(self._frames)):
+                slave[i] = self[i]
+                slave.takeownership(i)
+            slave.reload()
+
+        def removeslave(self, slave):
+            self._slaves.remove(slave)
+
+    class S2MMChannel:
+        """Read channel of the Video DMA
+
+        Brings frames from the video input into memory. Hands ownership of
+        the read frames to the user code.
+
+        Attributes
+        ----------
+        mode : VideoMode
+            The video mode of the DMA channel
+        cacheable_frames : bool
+            Whether frames should be stored in cacheable or
+            non-cacheable memory
+
+        """
+
+        def __init__(self, parent, interrupt, memory):
+            self._mmio = parent.mmio
+            self._frames = AxiVDMA._FrameList(self, 0xAC, parent.framecount)
+            self._interrupt = interrupt
+            self._sinkchannel = None
+            self._mode = None
+            self.memory = memory
+            self.cacheable_frames = True
+
+        def _readframe_internal(self):
+            if self._mmio.read(0x34) & 0x8980:
+                # Some spurious errors can occur at the start of transfers
+                # let's ignore them for now
+                self._mmio.write(0x34, 0x8980)
+            self.irqframecount = 1
+            nextframe = self._cache.getframe()
+            previous_frame = (self.activeframe + 2) % len(self._frames)
+            captured = self._frames[previous_frame]
+            self._frames.takeownership(previous_frame)
+            self._frames[previous_frame] = nextframe
+            post_frame = (self.activeframe + 2) % len(self._frames)
+            captured.invalidate()
+            return captured
+
+        self.device = device
+        self.offset = 0
+        self.freed = False
+        return self
+
+    def __array_finalize__(self, obj):
+        if isinstance(obj, PynqBuffer) and obj.coherent is not None:
+            self.coherent = obj.coherent
+            offset = self.virtual_address - obj.virtual_address
+            self.device_address = obj.device_address + offset
+            self.offset = obj.offset + offset
+            self.device = obj.device
+            self.bo = obj.bo
+        else:
+            self.device_address = None
+            self.coherent = None
+
+    def __del__(self):
+        self.freebuffer()
+
+    def freebuffer(self):
+        """Free the underlying memory
+
+        This will free the memory regardless of whether other objects
+        may still be using the buffer so ensure that no other references
+        to the array exist prior to freeing.
+
+        """
+        if hasattr(self, "memory"):
+            if hasattr(self, "pointer") and self.pointer:
+                if self.return_to:
+                    self.return_to.return_pointer(self.pointer)
+                self.pointer = 0
+            else:
+                if not self.freed:
+                    self.freed = True
+                    libc.munmap(ctypes.cast(self.virtual_address, ctypes.c_void_p), self.nbytes)
+                    del self.bo
+
+
+    @property
+    def cacheable(self):
+        return not self.coherent
+
+    @property
+    def physical_address(self):
+        return self.device_address
+
+    @property
+    def virtual_address(self):
+        return self.__array_interface__["data"][0]
+
+    def close(self):
+        """Unused - for backwards compatibility only"""
+        warnings.warn(
+            ".close no longer functional - use scopes to manage buffers",
+            DeprecationWarning,
+        )
+
+    def flush(self):
+        """Flush the underlying memory if necessary"""
+        if not self.coherent:
+            self.device.flush(self.bo, self.offset, self.virtual_address, self.nbytes)
+
+    def invalidate(self):
+        """Invalidate the underlying memory if necessary"""
+        if not self.coherent:
+            self.device.invalidate(
+                self.bo, self.offset, self.virtual_address, self.nbytes
+            )
+
+    def sync_to_device(self):
+        """Copy the contents of the host buffer into the mirrored
+        device buffer
+
+        """
+        self.flush()
+
+    def sync_from_device(self):
+        """Copy the contents of the device buffer into the mirrored
+        host buffer
+
+        """
+        self.invalidate()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.freebuffer()
+        return 0
+
+
+def allocate(shape, dtype="u4", target=None, **kwargs):
+    """Allocate a PYNQ buffer
+
+    This API mimics the numpy ndarray constructor with the following
+    differences:
+
+     * The default dtype is 32-bit unsigned int rather than float
+     * A new ``target`` keyword parameter to determine where the
+       buffer should be allocated
+
+    The target determines where the buffer gets allocated
+
+     * If None then the currently active device is used
+
+__PYNQ_RC_fe74b87e2733481aad10971806c602e1=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

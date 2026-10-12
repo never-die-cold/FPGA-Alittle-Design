@@ -1,0 +1,16 @@
+{
+  "updated_local": "2026-10-11 22:30 Asia/Shanghai",
+  "original_vision_restored": true,
+  "active_bitfile": "/home/xilinx/vision_m2/vision.bit",
+  "boot_id": "312c2889-f77a-438a-9c74-2a07e8a5b9c6",
+  "candidate_diagnostic_passed": false,
+  "candidate_stream_seq": 1474,
+  "candidate_uvc_png_sha256": "4cfc0e5166f08f11c3a7c6daa5936d7615712977c70d4fce0e2d3be1e97f9fac",
+  "final_original_uvc_png_sha256": "0f32b5451a486a59d1658154df432822b385106d2094a8165cc108b4a56f55d6",
+  "dma_started_by_probe": false,
+  "dma_end_state_measured": false,
+  "ddr_capture_tested": false,
+  "committed": false,
+  "serial_released": true,
+  "next": "Record DMA start/end CR/SR and stream counters; investigate halted TREADY behavior and bounded restoration."
+}

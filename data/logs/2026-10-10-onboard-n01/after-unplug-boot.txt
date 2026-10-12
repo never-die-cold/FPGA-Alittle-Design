@@ -1,0 +1,22 @@
+HOST_STARTED_UTC=2026-10-10T14:55:19.1217310Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=uptime; cat /proc/sys/kernel/random/boot_id; date -u; cat /sys/class/fpga_manager/fpga0/state; last -x -n 8 | head -n 10
+uptime; cat /proc/sys/kernel/random/boot_id; date -u; cat /sys/class/fpga_manager/fpga0/state; last -x -n 8 | head -n 10; printf '\n__PYNQ_RC_ac650ea1d68f494babdba0a9f16fffda=%d\n' $?
+[?2004l 14:18:49 up 2 min,  1 user,  load average: 2.17, 1.08, 0.42
+008a3015-24c6-4567-968e-2ba4eb741589
+Mon Sep 21 02:18:49 PM UTC 2026
+operating
+runlevel (to lvl 3)   6.6.10-xilinx-v2 Mon Sep 21 14:17   still running
+xilinx   ttyPS0                        Mon Sep 21 14:17   still logged in
+reboot   system boot  6.6.10-xilinx-v2 Mon Sep 21 14:16   still running
+runlevel (to lvl 3)   6.6.10-xilinx-v2 Mon Sep 21 13:17 - 14:17  (01:00)
+xilinx   ttyPS0                        Mon Sep 21 13:17 - crash  (00:59)
+reboot   system boot  6.6.10-xilinx-v2 Mon Sep 21 13:16   still running
+runlevel (to lvl 3)   6.6.10-xilinx-v2 Mon Sep 21 12:17 - 13:17  (00:59)
+xilinx   ttyPS0                        Mon Sep 21 12:17 - crash  (00:59)
+
+wtmp begins Sat May  3 16:43:55 2025
+
+__PYNQ_RC_ac650ea1d68f494babdba0a9f16fffda=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

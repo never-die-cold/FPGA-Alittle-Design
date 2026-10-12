@@ -1,0 +1,10 @@
+HOST_STARTED_UTC=2026-10-11T15:04:07.0007780Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=mkdir -p /home/xilinx/vision_m2/c01-ab75f5d26f8747418c4b6b0fd83995cd && cp /home/xilinx/vision_m2/c01-8b4d42b3653c4c31a70626bf9a971abf/capture.bit /home/xilinx/vision_m2/c01-8b4d42b3653c4c31a70626bf9a971abf/capture.hwh /home/xilinx/vision_m2/c01-ab75f5d26f8747418c4b6b0fd83995cd/ && sha256sum /home/xilinx/vision_m2/c01-ab75f5d26f8747418c4b6b0fd83995cd/capture.{bit,hwh}
+mkdir -p /home/xilinx/vision_m2/c01-ab75f5d26f8747418c4b6b0fd83995cd && cp /home/xilinx/vision_m2/c01-8b4d42b3653c4c31a70626bf9a971abf/capture.bit /home/xilinx/vision_m2/c01-8b4d42b3653c4c31a70626bf9a971abf/capture.hwh /home/xilinx/vision_m2/c01-ab75f5d26f8747418c4b6b0fd83995cd/ && sha256sum /home/xilinx/vision_m2/c01-ab75f5d26f8747418c4b6b0fd83995cd/capture.{bit,hwh}; printf '\n__PYNQ_RC_2adabb4a1b3c470db56e255eaaf3c2af=%d\n' $?
+[?2004l86d2adb0343de1785270d207eee3c6b8fee2a6444bc64705bc068e3fc781d14f  /home/xilinx/vision_m2/c01-ab75f5d26f8747418c4b6b0fd83995cd/capture.bit
+eaaf68c3732f1a2bf85756fc0b3a8c6b07bb5cf5b36f32020882860a6aaebf5c  /home/xilinx/vision_m2/c01-ab75f5d26f8747418c4b6b0fd83995cd/capture.hwh
+
+__PYNQ_RC_2adabb4a1b3c470db56e255eaaf3c2af=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

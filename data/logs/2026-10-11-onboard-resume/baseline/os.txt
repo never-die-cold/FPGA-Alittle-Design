@@ -1,0 +1,20 @@
+HOST_STARTED_UTC=2026-10-11T07:15:56.5996334Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=cat /etc/os-release
+cat /etc/os-release; printf '\n__PYNQ_RC_eb267dbd002646f68e55e48da0c0146d=%d\n' $?
+[?2004lNAME="PynqLinux"
+VERSION="3.0 (Carlisle)"
+ID=pynqlinux
+ID_LIKE=ubuntu
+PRETTY_NAME="PynqLinux, based on Ubuntu 22.04"
+VERSION_ID="3.0"
+HOME_URL="https://www.pynq.io/"
+SUPPORT_URL="https://discuss.pynq.io/"
+BUG_REPORT_URL="https://www.pynq.io"
+PRIVACY_POLICY_URL="https://www.pynq.io"
+VERSION_CODENAME=Carlisle
+UBUNTU_CODENAME=jammy
+
+__PYNQ_RC_eb267dbd002646f68e55e48da0c0146d=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

@@ -1,0 +1,174 @@
+HOST_STARTED_UTC=2026-10-11T07:52:42.4617030Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sed -n '135,166p' /home/xilinx/pynq/lib/video/dma.py; sed -n '60,116p' /home/xilinx/pynq/lib/video/hierarchies.py; sed -n '153,178p' /home/xilinx/pynq/lib/video/hierarchies.py; sed -n '231,281p' /home/xilinx/pynq/lib/video/hierarchies.py
+sed -n '135,166p' /home/xilinx/pynq/lib/video/dma.py; sed -n '60,116p' /home/xilinx/pynq/lib/video/hierarchies.py; sed -n '153,178p' /home/xilinx/pynq/lib/video/hierarchies.py; sed -n '231,281p' /home/xilinx/pynq/lib/video/hierarchies.py; printf '\n__PYNQ_RC_9c898442485d4f8ab24d75f1b73c0608=%d\n' $?
+[?2004l            The video mode of the DMA channel
+        cacheable_frames : bool
+            Whether frames should be stored in cacheable or
+            non-cacheable memory
+
+        """
+
+        def __init__(self, parent, interrupt, memory):
+            self._mmio = parent.mmio
+            self._frames = AxiVDMA._FrameList(self, 0xAC, parent.framecount)
+            self._interrupt = interrupt
+            self._sinkchannel = None
+            self._mode = None
+            self.memory = memory
+            self.cacheable_frames = True
+
+        def _readframe_internal(self):
+            if self._mmio.read(0x34) & 0x8980:
+                # Some spurious errors can occur at the start of transfers
+                # let's ignore them for now
+                self._mmio.write(0x34, 0x8980)
+            self.irqframecount = 1
+            nextframe = self._cache.getframe()
+            previous_frame = (self.activeframe + 2) % len(self._frames)
+            captured = self._frames[previous_frame]
+            self._frames.takeownership(previous_frame)
+            self._frames[previous_frame] = nextframe
+            post_frame = (self.activeframe + 2) % len(self._frames)
+            captured.invalidate()
+            return captured
+
+        def readframe(self):
+        self._vdma = vdma
+        self._color = self.color_convert
+        self._pixel = self.pixel_pack
+        self._hdmi = self.frontend
+
+    def configure(self, pixelformat=PIXEL_BGR):
+        """Configure the pipeline to use the specified pixel format.
+
+        If the pipeline is running it is stopped prior to the configuration
+        being changed
+
+        Parameters
+        ----------
+        pixelformat : PixelFormat
+            The pixel format to configure the pipeline for
+
+        """
+        if self._vdma.readchannel.running:
+            self._vdma.readchannel.stop()
+        self._color.colorspace = pixelformat.in_color
+        self._pixel.bits_per_pixel = pixelformat.bits_per_pixel
+        self._hdmi.start()
+        input_mode = self._hdmi.mode
+        self._vdma.readchannel.mode = VideoMode(
+            input_mode.width,
+            input_mode.height,
+            pixelformat.bits_per_pixel,
+            input_mode.fps,
+        )
+        return self._closecontextmanager()
+
+    def start(self):
+        """Start the pipeline"""
+        self._vdma.readchannel.start()
+        return self._stopcontextmanager()
+
+    def stop(self):
+        """Stop the pipeline"""
+        self._vdma.readchannel.stop()
+
+    @contextlib.contextmanager
+    def _stopcontextmanager(self):
+        """Context Manager to stop the VDMA at the end of the block"""
+        yield
+        self.stop()
+
+    @contextlib.contextmanager
+    def _closecontextmanager(self):
+        """Context Manager to close the HDMI port at the end of the block"""
+        yield
+        self.close()
+
+    def close(self):
+        """Uninitialise the drivers, stopping the pipeline beforehand"""
+        self.stop()
+        self._hdmi.stop()
+
+    def readframe(self):
+        """Read a video frame
+
+        See AxiVDMA.S2MMChannel.readframe for details
+
+        """
+        return self._vdma.readchannel.readframe()
+
+    async def readframe_async(self):
+        """Read a video frame
+
+        See AxiVDMA.S2MMChannel.readframe for details
+
+        """
+        return await self._vdma.readchannel.readframe_async()
+
+    def tie(self, output):
+        """Mirror the video input on to an output channel
+
+        Parameters
+        ----------
+        output : HDMIOut
+            The output to mirror on to
+
+        """
+        self._vdma.readchannel.tie(output._vdma.writechannel)
+    def configure(self, mode, pixelformat=None):
+        """Configure the pipeline to use the specified pixel format and size.
+
+        If the pipeline is running it is stopped prior to the configuration
+        being changed
+
+        Parameters
+        ----------
+        mode : VideoMode
+            The video mode to output
+        pixelformat : PixelFormat
+            The pixel format to configure the pipeline for
+
+        """
+        if self._vdma.writechannel.running:
+            self._vdma.writechannel.stop()
+        if pixelformat is None:
+            if mode.bits_per_pixel == 8:
+                pixelformat = PIXEL_GRAY
+            elif mode.bits_per_pixel == 24:
+                pixelformat = PIXEL_BGR
+            elif mode.bits_per_pixel == 32:
+                pixelformat = PIXEL_RGBA
+            else:
+                raise ValueError(
+                    "No default pixel format for ${mode.bits_per_pixel} bpp"
+                )
+        if pixelformat.bits_per_pixel != mode.bits_per_pixel:
+            raise ValueError("Video mode and pixel format have different sized pixels")
+
+        self._color.colorspace = pixelformat.out_color
+        self._pixel.bits_per_pixel = pixelformat.bits_per_pixel
+        self._hdmi.mode = mode
+        self._vdma.writechannel.mode = mode
+        self._hdmi.start()
+        return self._closecontextmanager()
+
+    def start(self):
+        """Start the pipeline"""
+        self._vdma.writechannel.start()
+        return self._stopcontextmanager()
+
+    def stop(self):
+        """Stop the pipeline"""
+        self._vdma.writechannel.stop()
+
+    def close(self):
+        """Close the pipeline an unintialise the drivers"""
+        self.stop()
+        self._hdmi.stop()
+
+
+__PYNQ_RC_9c898442485d4f8ab24d75f1b73c0608=0
+
+HOST_EXIT_CODE=0

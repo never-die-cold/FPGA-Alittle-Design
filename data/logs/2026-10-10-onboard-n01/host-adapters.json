@@ -1,0 +1,44 @@
+[
+  {
+    "Name": "VMware Network Adapter VMnet8",
+    "Status": "Up",
+    "InterfaceDescription": "VMware Virtual Ethernet Adapter for VMnet8",
+    "LinkSpeed": "100 Mbps"
+  },
+  {
+    "Name": "VMware Network Adapter VMnet1",
+    "Status": "Up",
+    "InterfaceDescription": "VMware Virtual Ethernet Adapter for VMnet1",
+    "LinkSpeed": "100 Mbps"
+  },
+  {
+    "Name": "以太网 3",
+    "Status": "Disconnected",
+    "InterfaceDescription": "TAP-Windows Adapter V9",
+    "LinkSpeed": "100 Mbps"
+  },
+  {
+    "Name": "WLAN",
+    "Status": "Up",
+    "InterfaceDescription": "Realtek 8852CE WiFi 6E PCI-E NIC",
+    "LinkSpeed": "573.5 Mbps"
+  },
+  {
+    "Name": "以太网",
+    "Status": "Up",
+    "InterfaceDescription": "Realtek PCIe GbE Family Controller",
+    "LinkSpeed": "1 Gbps"
+  },
+  {
+    "Name": "tun0",
+    "Status": "Up",
+    "InterfaceDescription": "sing-tun Tunnel",
+    "LinkSpeed": "100 Gbps"
+  },
+  {
+    "Name": "蓝牙网络连接",
+    "Status": "Disconnected",
+    "InterfaceDescription": "Bluetooth Device (Personal Area Network)",
+    "LinkSpeed": "3 Mbps"
+  }
+]

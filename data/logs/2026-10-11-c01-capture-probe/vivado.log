@@ -1,0 +1,127 @@
+INFO: [Common 17-3922] A valid Vivado Design Suite BASIC license has been detected. Your current license is active and will expire on 14-sep-2027.
+#-----------------------------------------------------------
+# Vivado v2026.1 (64-bit)
+# SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+# IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+# SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+# Start of session at: Sun Oct 11 16:39:44 2026
+# Process ID         : 41436
+# Current directory  : E:/Projects/FPGA-Alittle-Design
+# Command line       : vivado.exe -mode batch -source sim/scripts/probe_capture_ips.tcl -log data/logs/2026-10-11-c01-capture-probe/vivado.log -journal data/logs/2026-10-11-c01-capture-probe/vivado.jou
+# Log file           : E:/Projects/FPGA-Alittle-Design/data/logs/2026-10-11-c01-capture-probe/vivado.log
+# Journal file       : E:/Projects/FPGA-Alittle-Design\data/logs/2026-10-11-c01-capture-probe/vivado.jou
+# Running On         : never-die-cold
+# Platform           : Windows 11
+# Operating System   : 26200
+# Processor Detail   : Intel(R) Core(TM) Ultra 7 255HX
+# CPU Frequency      : 2880 MHz
+# CPU Physical cores : 20
+# CPU Logical cores  : 20
+# Host memory        : 16496 MB
+# Swap memory        : 24696 MB
+# Total Virtual      : 41192 MB
+# Available Virtual  : 16186 MB
+#-----------------------------------------------------------
+source sim/scripts/probe_capture_ips.tcl
+# if {[catch {
+#     create_project -in_memory -part xc7z020clg400-1
+#     create_bd_design capture_probe
+#     foreach {name pattern} {vdma xilinx.com:ip:axi_vdma:* vin xilinx.com:ip:v_vid_in_axi4s:*} {
+#         set defs [lsort -dictionary [get_ipdefs -all -quiet $pattern]]
+#         if {![llength $defs]} { error "capture IP missing: $pattern" }
+#         set cell [create_bd_cell -type ip -vlnv [get_property VLNV [lindex $defs end]] $name]
+#         puts "CAPTURE_IP: $name [get_property VLNV $cell]"
+#         foreach key [lsort [list_property $cell]] {
+#             if {[string match CONFIG.* $key]} { puts "$name $key=[get_property $key $cell]" }
+#         }
+#         puts "PINS: $name [get_bd_pins $name/*]"
+#         puts "INTERFACES: $name [get_bd_intf_pins $name/*]"
+#     }
+#     set_property -dict [list CONFIG.C_INCLUDE_MM2S 0 CONFIG.C_INCLUDE_S2MM 1 \
+#         CONFIG.C_NUM_FSTORES 4 CONFIG.C_S_AXIS_S2MM_TDATA_WIDTH 24 \
+#         CONFIG.C_M_AXI_S2MM_DATA_WIDTH 64 CONFIG.C_INCLUDE_S2MM_DRE 1] [get_bd_cells vdma]
+#     puts "PASS: capture IP catalog and 24-bit S2MM configuration accepted"
+# } reason]} {
+#     puts stderr "ERROR: $reason"
+#     exit 1
+# }
+create_project: Time (s): cpu = 00:00:14 ; elapsed = 00:00:13 . Memory (MB): peak = 613.711 ; gain = 267.992
+Wrote  : <E:\Projects\FPGA-Alittle-Design\.srcs\sources_1\bd\capture_probe\capture_probe.bd> 
+CAPTURE_IP: vdma xilinx.com:ip:axi_vdma:6.3
+vdma CONFIG.C_FAMILY=zynq
+vdma CONFIG.C_SELECT_XPM=0
+vdma CONFIG.Component_Name=capture_probe_vdma_0
+vdma CONFIG.c_addr_width=32
+vdma CONFIG.c_dlytmr_resolution=125
+vdma CONFIG.c_dynamic_resolution=1
+vdma CONFIG.c_enable_all=0
+vdma CONFIG.c_enable_mm2s_buf_empty=0
+vdma CONFIG.c_enable_mm2s_delay_counter=1
+vdma CONFIG.c_enable_mm2s_frm_counter=1
+vdma CONFIG.c_enable_mm2s_frmstr_reg=0
+vdma CONFIG.c_enable_mm2s_fsync_out=0
+vdma CONFIG.c_enable_mm2s_param_updt=0
+vdma CONFIG.c_enable_mm2s_rst_out=0
+vdma CONFIG.c_enable_s2mm_buf_full=0
+vdma CONFIG.c_enable_s2mm_delay_counter=1
+vdma CONFIG.c_enable_s2mm_frm_counter=1
+vdma CONFIG.c_enable_s2mm_frmstr_reg=0
+vdma CONFIG.c_enable_s2mm_fsync_out=0
+vdma CONFIG.c_enable_s2mm_param_updt=0
+vdma CONFIG.c_enable_s2mm_rst_out=0
+vdma CONFIG.c_enable_s2mm_sts_reg=0
+vdma CONFIG.c_enable_tstvec=0
+vdma CONFIG.c_enable_vert_flip=0
+vdma CONFIG.c_enable_vidprmtr_reads=1
+vdma CONFIG.c_flush_on_fsync=1
+vdma CONFIG.c_include_internal_genlock=1
+vdma CONFIG.c_include_mm2s=1
+vdma CONFIG.c_include_mm2s_dre=0
+vdma CONFIG.c_include_mm2s_sf=0
+vdma CONFIG.c_include_s2mm=1
+vdma CONFIG.c_include_s2mm_dre=0
+vdma CONFIG.c_include_s2mm_sf=1
+vdma CONFIG.c_include_sg=0
+vdma CONFIG.c_m_axi_mm2s_data_width=64
+vdma CONFIG.c_m_axi_s2mm_data_width=64
+vdma CONFIG.c_m_axis_mm2s_tdata_width=32
+vdma CONFIG.c_mm2s_genlock_mode=3
+vdma CONFIG.c_mm2s_genlock_num_masters=1
+vdma CONFIG.c_mm2s_genlock_repeat_en=0
+vdma CONFIG.c_mm2s_linebuffer_depth=512
+vdma CONFIG.c_mm2s_linebuffer_thresh=4
+vdma CONFIG.c_mm2s_max_burst_length=8
+vdma CONFIG.c_mm2s_sof_enable=1
+vdma CONFIG.c_num_fstores=3
+vdma CONFIG.c_prmry_is_aclk_async=1
+vdma CONFIG.c_s2mm_genlock_mode=2
+vdma CONFIG.c_s2mm_genlock_num_masters=1
+vdma CONFIG.c_s2mm_genlock_repeat_en=1
+vdma CONFIG.c_s2mm_linebuffer_depth=512
+vdma CONFIG.c_s2mm_linebuffer_thresh=4
+vdma CONFIG.c_s2mm_max_burst_length=8
+vdma CONFIG.c_s2mm_sof_enable=1
+vdma CONFIG.c_s_axis_s2mm_tdata_width=32
+vdma CONFIG.c_single_interface=0
+vdma CONFIG.c_use_fsync=1
+vdma CONFIG.c_use_mm2s_fsync=0
+vdma CONFIG.c_use_s2mm_fsync=2
+PINS: vdma /vdma/axi_resetn /vdma/m_axi_mm2s_aclk /vdma/m_axi_mm2s_araddr /vdma/m_axi_mm2s_arburst /vdma/m_axi_mm2s_arcache /vdma/m_axi_mm2s_arlen /vdma/m_axi_mm2s_arprot /vdma/m_axi_mm2s_arready /vdma/m_axi_mm2s_arsize /vdma/m_axi_mm2s_arvalid /vdma/m_axi_mm2s_rdata /vdma/m_axi_mm2s_rlast /vdma/m_axi_mm2s_rready /vdma/m_axi_mm2s_rresp /vdma/m_axi_mm2s_rvalid /vdma/m_axi_s2mm_aclk /vdma/m_axi_s2mm_awaddr /vdma/m_axi_s2mm_awburst /vdma/m_axi_s2mm_awcache /vdma/m_axi_s2mm_awlen /vdma/m_axi_s2mm_awprot /vdma/m_axi_s2mm_awready /vdma/m_axi_s2mm_awsize /vdma/m_axi_s2mm_awvalid /vdma/m_axi_s2mm_bready /vdma/m_axi_s2mm_bresp /vdma/m_axi_s2mm_bvalid /vdma/m_axi_s2mm_wdata /vdma/m_axi_s2mm_wlast /vdma/m_axi_s2mm_wready /vdma/m_axi_s2mm_wstrb /vdma/m_axi_s2mm_wvalid /vdma/m_axis_mm2s_aclk /vdma/m_axis_mm2s_tdata /vdma/m_axis_mm2s_tkeep /vdma/m_axis_mm2s_tlast /vdma/m_axis_mm2s_tready /vdma/m_axis_mm2s_tuser /vdma/m_axis_mm2s_tvalid /vdma/mm2s_frame_ptr_out /vdma/mm2s_introut /vdma/s2mm_frame_ptr_out /vdma/s2mm_introut /vdma/s_axi_lite_aclk /vdma/s_axi_lite_araddr /vdma/s_axi_lite_arready /vdma/s_axi_lite_arvalid /vdma/s_axi_lite_awaddr /vdma/s_axi_lite_awready /vdma/s_axi_lite_awvalid /vdma/s_axi_lite_bready /vdma/s_axi_lite_bresp /vdma/s_axi_lite_bvalid /vdma/s_axi_lite_rdata /vdma/s_axi_lite_rready /vdma/s_axi_lite_rresp /vdma/s_axi_lite_rvalid /vdma/s_axi_lite_wdata /vdma/s_axi_lite_wready /vdma/s_axi_lite_wvalid /vdma/s_axis_s2mm_aclk /vdma/s_axis_s2mm_tdata /vdma/s_axis_s2mm_tkeep /vdma/s_axis_s2mm_tlast /vdma/s_axis_s2mm_tready /vdma/s_axis_s2mm_tuser /vdma/s_axis_s2mm_tvalid
+INTERFACES: vdma /vdma/M_AXIS_MM2S /vdma/M_AXI_MM2S /vdma/M_AXI_S2MM /vdma/S_AXIS_S2MM /vdma/S_AXI_LITE
+CAPTURE_IP: vin xilinx.com:ip:v_vid_in_axi4s:5.0
+vin CONFIG.C_ADDR_WIDTH=10
+vin CONFIG.C_ADDR_WIDTH_PIXEL_REMAP_420=10
+vin CONFIG.C_HAS_ASYNC_CLK=0
+vin CONFIG.C_INCLUDE_PIXEL_DROP=0
+vin CONFIG.C_INCLUDE_PIXEL_REMAP_420=0
+vin CONFIG.C_M_AXIS_VIDEO_DATA_WIDTH=8
+vin CONFIG.C_M_AXIS_VIDEO_FORMAT=2
+vin CONFIG.C_NATIVE_COMPONENT_WIDTH=8
+vin CONFIG.C_PIXELS_PER_CLOCK=1
+vin CONFIG.C_VID_NATIVE_DE=0
+vin CONFIG.Component_Name=capture_probe_vin_0
+PINS: vin /vin/aclk /vin/aclken /vin/aresetn /vin/axis_enable /vin/fid /vin/m_axis_video_tdata /vin/m_axis_video_tlast /vin/m_axis_video_tready /vin/m_axis_video_tuser /vin/m_axis_video_tvalid /vin/overflow /vin/underflow /vin/vid_active_video /vin/vid_data /vin/vid_field_id /vin/vid_hblank /vin/vid_hsync /vin/vid_io_in_ce /vin/vid_vblank /vin/vid_vsync /vin/vtd_active_video /vin/vtd_field_id /vin/vtd_hblank /vin/vtd_hsync /vin/vtd_vblank /vin/vtd_vsync
+INTERFACES: vin /vin/vid_io_in /vin/video_out /vin/vtiming_out
+CRITICAL WARNING: [BD 41-737] Cannot set the parameter C_S_AXIS_S2MM_TDATA_WIDTH on /vdma. It is read-only.
+PASS: capture IP catalog and 24-bit S2MM configuration accepted
+INFO: [Common 17-206] Exiting Vivado at Sun Oct 11 16:40:12 2026...

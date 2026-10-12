@@ -1,0 +1,14 @@
+HOST_STARTED_UTC=2026-10-10T14:41:53.3147235Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 /home/xilinx/vision_m2/m2_onboard.py env'
+bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 /home/xilinx/vision_m2/m2_onboard.py env'; printf '\n__PYNQ_RC_92c30089c03e499694ecb30a2622ca0c=%d\n' $?
+[?2004lpython=3.10.4
+pynq=3.1
+vision.bit: OK (4045769 B)
+vision.hwh: OK (313989 B)
+vision_regs.py: OK (5626 B)
+PASS: env
+
+__PYNQ_RC_92c30089c03e499694ecb30a2622ca0c=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

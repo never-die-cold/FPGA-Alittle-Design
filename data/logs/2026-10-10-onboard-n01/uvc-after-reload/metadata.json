@@ -1,0 +1,47 @@
+{
+  "source": "USB Video UVC; no board check association",
+  "device_index": 1,
+  "frames_read": 24,
+  "shape": [
+    720,
+    1280,
+    3
+  ],
+  "dtype": "uint8",
+  "mode": {
+    "width": 1280.0,
+    "height": 720.0,
+    "fps_reported": 30.00003000003,
+    "fourcc": "MJPG"
+  },
+  "read_ms": [
+    160.89,
+    28.694,
+    31.934,
+    30.381,
+    33.855,
+    34.859,
+    32.832,
+    36.53,
+    32.605,
+    34.688,
+    32.754,
+    32.694,
+    32.922,
+    34.121,
+    30.869,
+    35.776,
+    33.74,
+    30.32,
+    35.672,
+    31.898,
+    31.557,
+    36.383,
+    30.453,
+    32.35
+  ],
+  "capture_elapsed_s": 0.919,
+  "read_calls_per_second": 26.12,
+  "pixels_sha256": "fcc3751a00cc05eb5b37fcb2e46c3c56580a14ebaeff8a96c361b6ba28279847",
+  "png_sha256": "f39d0c3799cb9f42a1e35c4cb4bdf9a246c1f9dd114d91b6bab893814023022f"
+}

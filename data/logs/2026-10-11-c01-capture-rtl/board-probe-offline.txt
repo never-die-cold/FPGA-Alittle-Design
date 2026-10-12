@@ -1,0 +1,10 @@
+PASS: C01 addresses, identity, geometry, idle DMA and existing vision smoke
+WINDOW: C01 HDMI direct display active for 20 seconds
+STATUS: {'0x0': 1128353841, '0x4': 1, '0x8': 0, '0xc': 0, '0x10': 0, '0x14': 1280, '0x18': 720, '0x1c': 0, '0x20': 0}
+PASS: C01 display/status diagnostic; DDR frame capture not tested
+CLEANUP: original vision load and smoke completed
+CLEANUP: original vision load and smoke completed
+CLEANUP: original vision load and smoke completed
+CLEANUP: original vision load and smoke completed
+CLEANUP: original vision load and smoke completed
+PASS: C01 board probe normal path, artifact reject, load/identity/lock/smoke cleanup and running-DMA protection
