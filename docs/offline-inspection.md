@@ -19,6 +19,12 @@
 实际版本以 `result.json` 的 `provenance.runtime` 为准。EXE 使用既有固定依赖构建。
 原交付环境不同，本次对拍是在同一个本地环境执行，尚未证明跨环境像素一致。
 
+无预装依赖的 Windows 机器可用仓库本地 venv 跑通全部重依赖检查（2026-10-12 实测 14/14）：
+`py -m venv sim/build/vision-venv` 后安装 `numpy==2.2.6 opencv-python==4.12.0.88 Pillow==12.3.0`
+与 `torch --index-url https://download.pytorch.org/whl/cpu`，再以
+`VISION_PYTHON=sim/build/vision-venv/Scripts/python.exe` 运行 `run_inspection_python.sh`；
+venv 位于 sim/build（gitignored），不进入交付包。
+
 ```powershell
 python sim/vision/generate_inspection_fixture.py data/evidence/2026-10-10-offline-inspection/fixtures
 python src/pynq_host/inspection_run.py data/evidence/2026-10-10-offline-inspection/fixtures/synthetic.png data/evidence/2026-10-10-offline-inspection/runs --weights models/cnn-border-fill-best.pt --request-id synthetic-001 --order 1 1 1 --min-score 0.8 --max-targets 10
