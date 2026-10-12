@@ -1,0 +1,10 @@
+HOST_STARTED_UTC=2026-10-10T15:25:45.7820908Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=cat /proc/sys/kernel/random/boot_id; uptime
+cat /proc/sys/kernel/random/boot_id; uptime; printf '\n__PYNQ_RC_1ec6f8bdaf144f0da798979e16c61139=%d\n' $?
+[?2004l46548310-bd10-4806-8c89-f92c2b7ce209
+ 14:23:58 up 7 min,  1 user,  load average: 0.21, 0.52, 0.35
+
+__PYNQ_RC_1ec6f8bdaf144f0da798979e16c61139=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

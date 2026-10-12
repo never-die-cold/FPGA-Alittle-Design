@@ -1,0 +1,7 @@
+E:\Projects\FPGA-Alittle-Design\sim\scripts\pynq_serial_command.ps1 : Exception calling "Open" with "0" argument(s): "T
+he port 'COM12' does not exist."
+    + CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
+    + FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException,pynq_serial_command.ps1
+ 
+
+SERIAL_COMMAND_EXIT=1

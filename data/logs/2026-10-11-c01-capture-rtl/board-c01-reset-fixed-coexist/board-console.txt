@@ -1,0 +1,24 @@
+sudo -n env C01_BIT=/home/xilinx/vision_m2/c01-cefc3ffab83448b1ae9e41b345276c4e/capture.bit C01_BIT_SHA=86d2adb0343de1785270d207eee3c6b8fee2a6444bc64705bc068e3fc781d14f C01_HWH_SHA=eaaf68c3732f1a2bf85756fc0b3a8c6b07bb5cf5b36f32020882860a6aaebf5c bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && timeout -k 5s 65s python3 -u -X faulthandler /home/xilinx/vision_m2/c01-cefc3ffab83448b1ae9e41b345276c4e/c01_status_onboard.py'; printf '\n__PYNQ_RC_93a07d2d75784fe2b02d4cfe6550e5f0=%d\n' $?
+[?2004lSTAGE: board diagnostic entered
+STAGE: artifact pair verified; overlay load begins
+STAGE: HWH metadata parse before programming
+STAGE: HWH layout accepted; candidate download begins
+STAGE: candidate download returned
+STAGE: overlay load returned; address validation begins
+STAGE: VDMA halted-state MMIO reads begin
+STAGE: capture identity/geometry MMIO reads begin
+STAGE: capture lock accepted; pipe smoke begins
+R11 busy=0 R12 applied=0
+NOVIDEO: commit Î´ÔÚÖ¡Ê×È·ÈÏ¡ª¡ª¼Ä´æÆ÷Í¨Â· OK µ«ÎÞÊäÈëÊÓÆµ£¨²é HDMI IN Ô´/Ïß²Ä£©
+STAGE: original vision restoration begins
+ip_dict:
+  pipe @ 0x40000000 range 0x10000
+  ps7 @ 0x00000000 range 0x0
+axi_regs ¶Î: pipe @ 0x40000000
+PASS: load
+R11 busy=0 R12 applied=0
+NOVIDEO: commit Î´ÔÚÖ¡Ê×È·ÈÏ¡ª¡ª¼Ä´æÆ÷Í¨Â· OK µ«ÎÞÊäÈëÊÓÆµ£¨²é HDMI IN Ô´/Ïß²Ä£©
+
+__PYNQ_RC_93a07d2d75784fe2b02d4cfe6550e5f0=3
+[?2004hxilinx@pynq:~$ 
+SERIAL_COMMAND_EXIT=3

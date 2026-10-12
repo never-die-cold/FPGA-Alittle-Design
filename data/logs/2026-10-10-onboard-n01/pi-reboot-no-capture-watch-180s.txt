@@ -1,0 +1,13 @@
+HOST_STARTED_UTC=2026-10-10T15:41:38.4836276Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && cd /home/xilinx/vision_m2 && python3 watch_video.py 180'
+sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && cd /home/xilinx/vision_m2 && python3 watch_video.py 180'; printf '\n__PYNQ_RC_5570e8ebae8e4c8080c894fe338c8602=%d\n' $?
+[?2004l    0.0s VIDEO_OK cfg=724
+   39.2s NO_VIDEO
+   40.2s BUSY
+   51.8s VIDEO_OK cfg=819
+  180.2s watch done
+
+__PYNQ_RC_5570e8ebae8e4c8080c894fe338c8602=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

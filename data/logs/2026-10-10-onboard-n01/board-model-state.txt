@@ -1,0 +1,11 @@
+HOST_STARTED_UTC=2026-10-10T14:50:21.3571669Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=tr -d '\000' < /proc/device-tree/model; printf '\n'; cat /sys/class/fpga_manager/fpga0/state
+tr -d '\000' < /proc/device-tree/model; printf '\n'; cat /sys/class/fpga_manager/fpga0/state; printf '\n__PYNQ_RC_3c24d77466c74bd680f63dbe1f7fdcc9=%d\n' $?
+[?2004l-bash: /proc/device-tree/model: No such file or directory
+
+operating
+
+__PYNQ_RC_3c24d77466c74bd680f63dbe1f7fdcc9=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

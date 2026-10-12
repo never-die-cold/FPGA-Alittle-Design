@@ -1,0 +1,34 @@
+{
+  "acceptance": "offline_candidate_only",
+  "addresses": {
+    "pipe": "0x40000000",
+    "capture_status": "0x42000000",
+    "capture_dma": "0x43000000"
+  },
+  "vdma": {
+    "C_INCLUDE_MM2S": "0",
+    "C_INCLUDE_S2MM": "1",
+    "C_NUM_FSTORES": "4",
+    "C_S_AXIS_S2MM_TDATA_WIDTH": "24",
+    "C_M_AXI_S2MM_DATA_WIDTH": "64",
+    "C_USE_S2MM_FSYNC": "2"
+  },
+  "files": {
+    ".bit": {
+      "path": "sim\\build\\c01-hdmi-1791710185764742\\capture-1791711069004993.bit",
+      "bytes": 4045769,
+      "sha256": "550c2f1e4417aedbaf295e1ccd64bd09203a4e71b9dc11d3a1de099e12213d41"
+    },
+    ".hwh": {
+      "path": "sim\\build\\c01-hdmi-1791710185764742\\capture-1791711069004993.hwh",
+      "bytes": 557657,
+      "sha256": "9ba79d781164946140de27ac648d6fd9a6f5401c1be6865dd347aea27da62516"
+    },
+    ".xsa": {
+      "path": "sim\\build\\c01-hdmi-1791710185764742\\capture-1791711069004993.xsa",
+      "bytes": 609681,
+      "sha256": "afb4b1e417b67c1bf59d3479f0c3bea78ee7937b60f4586fdbd6b429648c8992"
+    }
+  }
+}
+PASS: C01 XSA/bit/HWH pairing, address map, 24-bit S2MM/4 stores/64-bit HP0/RGB

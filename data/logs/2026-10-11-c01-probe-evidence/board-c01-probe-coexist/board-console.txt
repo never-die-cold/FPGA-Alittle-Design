@@ -1,0 +1,37 @@
+sudo -n env C01_BIT=/home/xilinx/vision_m2/c01-ab75f5d26f8747418c4b6b0fd83995cd/capture.bit C01_BIT_SHA=86d2adb0343de1785270d207eee3c6b8fee2a6444bc64705bc068e3fc781d14f C01_HWH_SHA=eaaf68c3732f1a2bf85756fc0b3a8c6b07bb5cf5b36f32020882860a6aaebf5c bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && timeout -k 5s 65s python3 -u -X faulthandler /home/xilinx/vision_m2/c01-ab75f5d26f8747418c4b6b0fd83995cd/c01_status_onboard.py'; printf '\n__PYNQ_RC_a50c0381ebde47b1b8b0ecdd3ce5e5cc=%d\n' $?
+[?2004lSTAGE: board diagnostic entered
+STAGE: artifact pair verified; overlay load begins
+STAGE: HWH metadata parse before programming
+STAGE: HWH layout accepted; candidate download begins
+STAGE: candidate download returned
+STAGE: overlay load returned; address validation begins
+STAGE: VDMA halted-state MMIO reads begin
+VDMA-START: CR=0x00010002 SR=0x00010001
+STAGE: capture identity/geometry MMIO reads begin
+STAGE: capture lock accepted; allow 5 seconds for HDMI reacquisition
+STAGE: HDMI settling finished; pipe smoke begins
+R11 busy=0 R12 applied=0
+commit ≈‰÷√∫≈=1 status={'busy': False, 'applied_config_id': 1}
+PASS: smoke£® ”∆µ‘⁄Œª£¨÷° ◊’˚◊È”¶”√“—»∑»œ£©
+PASS: C01 addresses, identity, geometry, idle DMA and existing vision smoke
+SEQ-START: stream_seq=81
+WINDOW: C01 HDMI direct display active for 20 seconds
+VDMA-END: CR=0x00010002 SR=0x00014811
+STATUS: {'0x0': 1128353841, '0x4': 3, '0x8': 1281, '0xc': 0, '0x10': 0, '0x14': 1280, '0x18': 720, '0x1c': 0, '0x20': 0}
+SEQ-END: stream_seq=1281 delta=1200
+PASS: C01 display/status diagnostic; stream_seq delta = halt-state accept-and-discard handshakes, not DDR writes
+STAGE: original vision restoration begins
+ip_dict:
+  pipe @ 0x40000000 range 0x10000
+  ps7 @ 0x00000000 range 0x0
+axi_regs ∂Œ: pipe @ 0x40000000
+PASS: load
+STAGE: original vision loaded; bounded settle before smoke
+R11 busy=0 R12 applied=0
+commit ≈‰÷√∫≈=1 status={'busy': False, 'applied_config_id': 1}
+PASS: smoke£® ”∆µ‘⁄Œª£¨÷° ◊’˚◊È”¶”√“—»∑»œ£©
+CLEANUP: original vision load and smoke completed
+
+__PYNQ_RC_a50c0381ebde47b1b8b0ecdd3ce5e5cc=0
+[?2004hxilinx@pynq:~$ 
+SERIAL_COMMAND_EXIT=0

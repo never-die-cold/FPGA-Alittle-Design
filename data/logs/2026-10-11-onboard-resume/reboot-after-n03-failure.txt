@@ -1,0 +1,8 @@
+HOST_STARTED_UTC=2026-10-11T07:59:05.7903059Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n systemctl reboot --no-block
+sudo -n systemctl reboot --no-block; printf '\n__PYNQ_RC_0883cbc26e2b409aa28ab9409d3923b9=%d\n' $?
+[?2004l
+__PYNQ_RC_0883cbc26e2b409aa28ab9409d3923b9=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

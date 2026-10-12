@@ -1,0 +1,7 @@
+HOST_STARTED_UTC=2026-10-11T10:07:13.2247434Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=printf 'CPU_AFTER_INTERRUPT\n'; cat /proc/sys/kernel/random/boot_id
+
+ERROR: timeout; remote completion unconfirmed; no interrupt sent
+
+HOST_EXIT_CODE=124

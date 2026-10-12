@@ -1,0 +1,15 @@
+HOST_STARTED_UTC=2026-10-10T15:00:51.7398099Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'ls -la /sys/class/watchdog /sys/fs/pstore; for f in /sys/class/watchdog/watchdog*/bootstatus /sys/class/watchdog/watchdog*/status; do test -r "$f" && { printf "%s=" "$f"; cat "$f"; }; done; dmesg | grep -iE "watchdog|pstore|panic" | tail -n 30'
+sudo -n bash -c 'ls -la /sys/class/watchdog /sys/fs/pstore; for f in /sys/class/watchdog/watchdog*/bootstatus /sys/class/watchdog/watchdog*/status; do test -r "$f" && { printf "%s=" "$f"; cat "$f"; }; done; dmesg | grep -iE "watchdog|pstore|panic" | tail -n 30'; printf '\n__PYNQ_RC_025f93f464d943d288e2eb0b88a27f6e=%d\n' $?
+[?2004lls: cannot access '/sys/fs/pstore': No such file or directory
+/sys/class/watchdog:
+total 0
+drwxr-xr-x  2 root root 0 Sep 21 14:17 .
+drwxr-xr-x 51 root root 0 Apr  7  2022 ..
+lrwxrwxrwx  1 root root 0 Sep 21 14:17 watchdog0 -> ../../devices/soc0/axi/f8005000.watchdog/watchdog/watchdog0
+[   40.162431] cdns-wdt f8005000.watchdog: Xilinx Watchdog Timer with timeout 10s
+
+__PYNQ_RC_025f93f464d943d288e2eb0b88a27f6e=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

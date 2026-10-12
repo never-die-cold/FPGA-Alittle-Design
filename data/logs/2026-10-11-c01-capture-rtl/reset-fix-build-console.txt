@@ -1,0 +1,17 @@
+EVIDENCE_DIR=E:\Projects\FPGA-Alittle-Design\data\logs\c01-capture-e2a602d6e0da49a2b6da072abca47c70
+INFO: [Vivado 12-1842] Bitgen Completed Successfully.
+INFO: [Common 17-83] Releasing license: Vivado_Implementation
+26 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+write_bitstream completed successfully
+write_bitstream: Time (s): cpu = 00:00:20 ; elapsed = 00:00:24 . Memory (MB): peak = 2213.160 ; gain = 540.734
+INFO: [Common 17-206] Exiting Vivado at Sun Oct 11 18:29:17 2026...
+[Sun Oct 11 18:29:21 2026] impl_1 finished
+wait_on_runs: Time (s): cpu = 00:00:01 ; elapsed = 00:01:06 . Memory (MB): peak = 2183.523 ; gain = 0.000
+INFO: [Project 1-1918] Creating Hardware Platform: E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791713720540454/capture-1791713720540454.xsa ...
+INFO: [Project 1-1943] The Hardware Platform can be used for Hardware
+INFO: [Project 1-1941] Successfully created Hardware Platform: E:/Projects/FPGA-Alittle-Design/sim/build/c01-hdmi-1791713720540454/capture-1791713720540454.xsa
+INFO: [Hsi 55-2053] elapsed time for repository (D:/Vivado_downloads/2026.1/Vivado/data/embeddedsw) loading 0 seconds
+write_hw_platform: Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 2183.523 ; gain = 0.000
+PASS: C01 display/capture offline bitstream; PS ownership and board acceptance pending
+INFO: [Common 17-206] Exiting Vivado at Sun Oct 11 18:29:27 2026...
+PASS: C01 bitstream (offline; board acceptance pending)

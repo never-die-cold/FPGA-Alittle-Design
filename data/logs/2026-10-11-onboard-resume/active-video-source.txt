@@ -1,0 +1,156 @@
+HOST_STARTED_UTC=2026-10-11T07:52:28.6186671Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=readlink -f /usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/lib/video; sed -n '1,90p' /home/xilinx/pynq/lib/video/__init__.py; grep --color=never -n -A 24 -E 'def tie|def stop|def readframe' /home/xilinx/pynq/lib/video/dma.py; grep --color=never -n -A 15 -E 'def tie|def configure' /home/xilinx/pynq/lib/video/hdmi.py
+readlink -f /usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/lib/video; sed -n '1,90p' /home/xilinx/pynq/lib/video/__init__.py; grep --color=never -n -A 24 -E 'def tie|def stop|def readframe' /home/xilinx/pynq/lib/video/dma.py; grep --color=never -n -A 15 -E 'def tie|def configure' /home/xilinx/pynq/lib/video/hdmi.py; printf '\n__PYNQ_RC_86132d98fa6b4bfa95a618f55ffdd37c=%d\n' $?
+[?2004l/usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/lib/video
+#   Copyright (c) 2021, Xilinx, Inc.
+#   SPDX-License-Identifier: BSD-3-Clause
+
+
+import pynq.ps
+
+from . import clocks, dma
+from .common import *
+
+if pynq.ps.CPU_ARCH == pynq.ps.ZYNQ_ARCH:
+    from . import dvi
+elif pynq.ps.CPU_ARCH == pynq.ps.ZU_ARCH:
+    from . import xilinx_hdmi
+    from . import pcam5c
+    from . import mipi_rx
+
+from . import frontend, hierarchies
+from .drm import *
+
+
+166:        def readframe(self):
+167-            """Read a frame from the channel and return to the user
+168-
+169-            This function may block until a complete frame has been read. A
+170-            single frame buffer is kept so the first frame read after a long
+171-            pause in reading may return a stale frame. To ensure an up-to-date
+172-            frame when starting processing video read an additional time
+173-            before starting the processing loop.
+174-
+175-            Returns
+176-            -------
+177-            numpy.ndarray of the video frame
+178-
+179-            """
+180-            if not self.running:
+181-                raise RuntimeError("DMA channel not started")
+182-            while self._mmio.read(0x34) & 0x1000 == 0:
+183-                loop = asyncio.get_event_loop()
+184-                loop.run_until_complete(asyncio.ensure_future(self._interrupt.wait()))
+185-                pass
+186-            self._mmio.write(0x34, 0x1000)
+187-            return self._readframe_internal()
+188-
+189:        async def readframe_async(self):
+190-            """Read a frame from the channel, yielding instead of blocking
+191-            if no data is available. See readframe for more details
+192-
+193-            """
+194-            if not self.running:
+195-                raise RuntimeError("DMA channel not started")
+196-            while self._mmio.read(0x34) & 0x1000 == 0:
+197-                await self._interrupt.wait()
+198-            self._mmio.write(0x34, 0x1000)
+199-            return self._readframe_internal()
+200-
+201-        @property
+202-        def activeframe(self):
+203-            """The frame index currently being processed by the DMA
+204-
+205-            This process requires clearing any error bits in the DMA channel
+206-
+207-            """
+208-            self._mmio.write(0x34, 0x4090)
+209-            return (self._mmio.read(0x28) >> 24) & 0x1F
+210-
+211-        @property
+212-        def desiredframe(self):
+213-            """The next frame index to the processed by the DMA"""
+--
+293:        def stop(self):
+294-            """Stops the DMA, clears the frame cache and unhooks any tied
+295-            outputs
+296-
+297-            """
+298-            self.tie(None)
+299-            self._mmio.write(0x30, 0x00011080)
+300-            while self.running:
+301-                pass
+302-            for i in range(len(self._frames)):
+303-                self._frames[i] = None
+304-            if hasattr(self, "_cache"):
+305-                self._cache.clear()
+306-
+307-        def _writemode(self):
+308-            self._mmio.write(0xA4, self._mode.width * self._mode.bytes_per_pixel)
+309-            self._mmio.write(0xA8, self._mode.stride)
+310-
+311-        def reload(self):
+312-            """Reload the configuration of the DMA. Should only be called
+313-            by the _FrameList class or if you really know what you are doing
+314-
+315-            """
+316-            if self.running:
+317-                self._mmio.write(0xA0, self._mode.height)
+--
+329:        def tie(self, channel):
+330-            """Ties an output channel to this input channel. This is used
+331-            to pass video from input to output without invoking the CPU
+332-            for each frame. Main use case is when some slow processing is
+333-            being done on a subset of frames while the video is passed
+334-            through directly to the output. Only one output may be tied
+335-            to an output. The tie is broken either by calling tie(None) or
+336-            writing a frame to the tied output channel.
+337-
+338-            """
+339-            if self._sinkchannel:
+340-                self._frames.removeslave(self._sinkchannel._frames)
+341-                self._sinkchannel.parked = True
+342-                self._sinkchannel.sourcechannel = None
+343-            self._sinkchannel = channel
+344-            if self._sinkchannel:
+345-                self._frames.addslave(self._sinkchannel._frames)
+346-                self._sinkchannel.parked = False
+347-                self._sinkchannel.framedelay = 1
+348-                self._sinkchannel.sourcechannel = self
+349-
+350-    class MM2SChannel:
+351-        """DMA channel from memory to a video output.
+352-
+353-        Will continually repeat the most recent frame written.
+--
+394:        def stop(self):
+395-            """Stop the DMA channel and empty the frame cache"""
+396-            self._mmio.write(0x00, 0x00011080)
+397-            while self.running:
+398-                pass
+399-            for i in range(len(self._frames)):
+400-                self._frames[i] = None
+401-            if hasattr(self, "_cache"):
+402-                self._cache.clear()
+403-
+404-        def reset(self):
+405-            """Soft reset the DMA channel"""
+406-            self.stop()
+407-            self._mmio.write(0x00, 0x00011084)
+408-            while self._mmio.read(0x00) & 0x4 == 4:
+409-                pass
+410-
+411-        def _writeframe_internal(self, frame):
+412-            if self.sourcechannel:
+413-                self.sourcechannel.tie(None)
+414-
+415-            frame.flush()
+416-            next_frame = (self.desiredframe + 1) % len(self._frames)
+417-            self._frames[next_frame] = frame
+418-            self.desiredframe = next_frame
+grep: /home/xilinx/pynq/lib/video/hdmi.py: No such file or directory
+
+__PYNQ_RC_86132d98fa6b4bfa95a618f55ffdd37c=2
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=2

@@ -1,0 +1,13 @@
+HOST_STARTED_UTC=2026-10-11T08:36:59.4363938Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && timeout -k 5s 50s python3 -X faulthandler /home/xilinx/vision_m2/m2_onboard.py load'
+sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && timeout -k 5s 50s python3 -X faulthandler /home/xilinx/vision_m2/m2_onboard.py load'; printf '\n__PYNQ_RC_d73e688e32704ff6b6ec2b6e22753e8a=%d\n' $?
+[?2004lip_dict:
+  pipe @ 0x40000000 range 0x10000
+  ps7 @ 0x00000000 range 0x0
+axi_regs 段: pipe @ 0x40000000
+PASS: load
+
+__PYNQ_RC_d73e688e32704ff6b6ec2b6e22753e8a=0
+
+HOST_EXIT_CODE=0

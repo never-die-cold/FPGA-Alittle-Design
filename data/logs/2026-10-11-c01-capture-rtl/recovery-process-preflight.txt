@@ -1,0 +1,12 @@
+HOST_STARTED_UTC=2026-10-11T14:18:19.0119607Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=ps -p 752 -o pid,ppid,args; cat /sys/class/fpga_manager/fpga0/state; cat /proc/sys/kernel/random/boot_id
+ps -p 752 -o pid,ppid,args; cat /sys/class/fpga_manager/fpga0/state; cat /proc/sys/kernel/random/boot_id; printf '\n__PYNQ_RC_98fdaa50e38d41f8a7f7173e98d70f0f=%d\n' $?
+[?2004l  PID  PPID COMMAND
+  752     1 python3 /usr/local/bin/redirect_server
+operating
+312c2889-f77a-438a-9c74-2a07e8a5b9c6
+
+__PYNQ_RC_98fdaa50e38d41f8a7f7173e98d70f0f=0
+
+HOST_EXIT_CODE=0

@@ -1,0 +1,12 @@
+HOST_STARTED_UTC=2026-10-11T08:25:14.5400317Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n true && printf "AUTH_OK\n" && cat /proc/sys/kernel/random/boot_id && uptime && id
+sudo -n true && printf "AUTH_OK\n" && cat /proc/sys/kernel/random/boot_id && uptime && id; printf '\n__PYNQ_RC_3131e6ad618d404182d79cd14c8dd4d2=%d\n' $?
+[?2004lAUTH_OK
+f3321177-d8ab-4db8-9c1e-04f9f0cfe40f
+ 16:50:21 up 7 min,  1 user,  load average: 0.01, 0.38, 0.27
+uid=1000(xilinx) gid=1000(xilinx) groups=1000(xilinx),4(adm),27(sudo),44(video),114(render)
+
+__PYNQ_RC_3131e6ad618d404182d79cd14c8dd4d2=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

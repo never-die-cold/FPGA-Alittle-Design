@@ -1,0 +1,3 @@
+== tb_capture_stream_monitor ==
+PASS: capture stream geometry, stalls, faults, lock loss, SOF recovery and reset
+vision/tb_capture_stream_monitor.v:64: $finish called at 2061000 (1ps)

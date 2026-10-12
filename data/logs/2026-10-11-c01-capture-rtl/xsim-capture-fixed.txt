@@ -1,0 +1,2 @@
+sim/scripts/run_vision_xsim.sh: line 55: syntax error near unexpected token `||'
+sim/scripts/run_vision_xsim.sh: line 55: `    || { cat build/vision/xsim/compile.log; echo "ERROR: xvlog testbench compile failed"; exit 1; }'

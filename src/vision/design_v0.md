@@ -177,3 +177,9 @@ R13–R15 仍保留。独立 axi_regs 默认旧模式，保留区行为兼容；
 | 2026-10-01 | sobel 接入 vision_top（D7 缩放前，R0 位定义 v0.2）；新增 in_align 输入归一化模块；OOC 新增 real75（74.25 MHz）随访档 | never-die-cold（模块二 RTL） |
 | 2026-10-01 | vision_top v0.3 双路径拓扑（显示全分辨率直通 + scaler 快照分支，§2 图更正）；双时钟域 s_axi_aclk/pclk + R0 位 2FF 同步（D10 落地） | never-die-cold（模块二 RTL） |
 | 2026-10-02 | 离板收口修订：§2 拓扑图改彩色直通三线 + dvi2rgb/rgb2dvi 前端；§3.1 新增 config_bridge/reset_sync/video_pipeline/vision_axi 口径、cop_buf 所有权修复、vision_top v0.4；§3.3 寄存器映射升 v1.1（R11 提交/R12 配置编号，废 D10 2FF/帧首锁存口径）；§5 开放问题 1–3 定案（板上无 ADV7611） | never-die-cold（模块二 RTL，ZCode/GLM 协助整理） |
+
+## 9. C01 捕获候选增补（2026-10-11，未冻结）
+
+当前原 vision 位流仍沿用本文 pipe ABI。新候选在显示旁路增加原彩色 AXIS/VDMA S2MM 捕获及只读状态，不修改 R0–R12 参数语义；新增 capture_status@0x42000000/64KiB、capture_dma@0x43000000/64KiB，pipe@0x40000000/64KiB 保留。
+
+详细 CSR、错误/复位/跨域及 `stream_seq` 的边界见[捕获状态候选契约](../../docs/c01-capture-status-contract.md)。该序号仅证明像素握手几何完整，不能证明 DDR 帧写完成或帧槽所有权。PS 帧所有权、原帧颜色/动态图像验收和核/CNN 集成未完成；最终资源、时序及保留的 CDC 缺口见[实现基线](../../docs/c01-capture-implementation-baseline.md)。现有冻结接口和历史验收均不因候选生成而自动升级。

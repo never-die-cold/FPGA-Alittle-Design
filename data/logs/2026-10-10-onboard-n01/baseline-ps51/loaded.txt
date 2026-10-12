@@ -1,0 +1,11 @@
+HOST_STARTED_UTC=2026-10-10T14:42:03.8078801Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -c "from pynq import PL; print(PL.bitfile_name); print(PL.timestamp); print(list(PL.ip_dict))"'
+bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -c "from pynq import PL; print(PL.bitfile_name); print(PL.timestamp); print(list(PL.ip_dict))"'; printf '\n__PYNQ_RC_3682fee671244f36b3f064b4f9424e0f=%d\n' $?
+[?2004lNone
+None
+['switches_gpio', 'btns_gpio', 'video/hdmi_in/frontend/axi_gpio_hdmiin', 'video/hdmi_out/frontend/hdmi_out_hpd_video', 'rgbleds_gpio', 'leds_gpio', 'system_interrupts', 'video/axi_vdma', 'audio_codec_ctrl_0', 'video/hdmi_out/frontend/axi_dynclk', 'video/hdmi_out/frontend/vtc_out', 'video/hdmi_in/frontend/vtc_in', 'video/hdmi_in/pixel_pack', 'video/hdmi_in/color_convert', 'video/hdmi_out/color_convert', 'video/hdmi_out/pixel_unpack', 'trace_analyzer_pmodb/axi_dma_0', 'trace_analyzer_pi/axi_dma_0', 'trace_analyzer_pi/trace_cntrl_64_0', 'trace_analyzer_pmodb/trace_cntrl_32_0', 'ps7_0']
+
+__PYNQ_RC_3682fee671244f36b3f064b4f9424e0f=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

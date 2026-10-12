@@ -1,0 +1,11 @@
+ERROR: no coexist window observed; no UVC capture started
+BOARD_EXIT=124
+UVC_EXIT=1
+UVC_FINISHED_BEFORE_CLEANUP=False
+C01 display/status check failed; preserve logs and plan recovery
+At E:\Projects\FPGA-Alittle-Design\sim\scripts\run_c01_status_coexist.ps1:60 char:5
++     throw 'C01 display/status check failed; preserve logs and plan re ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (C01 display/sta...d plan recovery:String) [], RuntimeException
+    + FullyQualifiedErrorId : C01 display/status check failed; preserve logs and plan recovery
+ 
