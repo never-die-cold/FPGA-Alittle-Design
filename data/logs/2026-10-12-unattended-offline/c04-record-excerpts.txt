@@ -1,0 +1,12 @@
+10:- v2 新增（W07，C04 §5）：status（报文 status 原文）、decision（工单判定原样，
+11:  含 expected/actual/delta/missing/extra/reasons——当轮工单即 decision.expected）、
+34:class BatchRecords:
+45:        self.keys = set()
+49:        return (packet["session_id"], packet["check_id"]) not in self.keys
+57:        if key in self.keys:
+65:            "schema_version": SCHEMA_VERSION,
+78:            "decision": packet.get("decision"),
+82:        with (self.dir / "records.jsonl").open("a", encoding="utf-8") as handle:
+84:        self.keys.add(key)
+113:            "schema_version": SCHEMA_VERSION,
+123:        with (self.dir / "anomalies.jsonl").open("a", encoding="utf-8") as handle:

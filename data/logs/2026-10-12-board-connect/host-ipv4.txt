@@ -1,0 +1,15 @@
+
+InterfaceAlias                IPAddress       PrefixLength
+--------------                ---------       ------------
+VMware Network Adapter VMnet8 192.168.237.1             24
+VMware Network Adapter VMnet1 192.168.91.1              24
+以太网 3                      169.254.240.150           16
+本地连接* 2                   169.254.78.116            16
+蓝牙网络连接                  169.254.125.114           16
+本地连接* 1                   169.254.146.4             16
+WLAN                          10.54.150.131             19
+tun0                          172.19.0.1                30
+以太网                        192.168.50.1              24
+Loopback Pseudo-Interface 1   127.0.0.1                  8
+
+

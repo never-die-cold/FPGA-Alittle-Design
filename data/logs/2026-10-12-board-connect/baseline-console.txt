@@ -1,0 +1,82 @@
+uname -a; printf '\n__PYNQ_RC_9766733fae724b879f724926a665243f=%d\n' $?
+[?2004l
+Linux pynq 6.6.10-xilinx-v2024.1-gb36799f4e960 #1 SMP PREEMPT Sat Apr 27 05:22:24 UTC 2024 armv7l armv7l armv7l GNU/Linux
+
+__PYNQ_RC_9766733fae724b879f724926a665243f=0
+[?2004hxilinx@pynq:/$ 
+SERIAL_COMMAND_EXIT=0
+uptime; printf '\n__PYNQ_RC_247c949fc22a45d98f90f116a12b197a=%d\n' $?
+[?2004l
+ 20:53:41 up 37 min,  1 user,  load average: 0.07, 0.04, 0.06
+
+__PYNQ_RC_247c949fc22a45d98f90f116a12b197a=0
+[?2004hxilinx@pynq:/$ 
+SERIAL_COMMAND_EXIT=0
+id; printf '\n__PYNQ_RC_7f20ad00ce874b6c81bce796859e13d6=%d\n' $? 
+[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K?
+[?2004l
+uid=1000(xilinx) gid=1000(xilinx) groups=1000(xilinx),4(adm),27(sudo),44(video),114(render)
+
+__PYNQ_RC_7f20ad00ce874b6c81bce796859e13d6=0
+[?2004hxilinx@pynq:/$ 
+SERIAL_COMMAND_EXIT=0
+ip -br address; printf '\n__PYNQ_RC_33a0ca92474b43a2bc7a46bee57e17ff=%d\n' $?
+[?2004l
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+dummy0           DOWN           
+eth0             DOWN           169.254.87.99/16 192.168.2.99/24 
+sit0@NONE        DOWN           
+
+__PYNQ_RC_33a0ca92474b43a2bc7a46bee57e17ff=0
+[?2004hxilinx@pynq:/$ 
+SERIAL_COMMAND_EXIT=0
+cat /etc/os-release; printf '\n__PYNQ_RC_0af5d4f1bea240dead5f11fc37577da9=%d\n' $?
+[?2004l
+NAME="PynqLinux"
+VERSION="3.0 (Carlisle)"
+ID=pynqlinux
+ID_LIKE=ubuntu
+PRETTY_NAME="PynqLinux, based on Ubuntu 22.04"
+VERSION_ID="3.0"
+HOME_URL="https://www.pynq.io/"
+SUPPORT_URL="https://discuss.pynq.io/"
+BUG_REPORT_URL="https://www.pynq.io"
+PRIVACY_POLICY_URL="https://www.pynq.io"
+VERSION_CODENAME=Carlisle
+UBUNTU_CODENAME=jammy
+
+__PYNQ_RC_0af5d4f1bea240dead5f11fc37577da9=0
+[?2004hxilinx@pynq:/$ 
+SERIAL_COMMAND_EXIT=0
+sha256sum /home/xilinx/vision_m2/vision.bit /home/xilinx/vision_m2/vision.hwh /home/xilinx/vision_m2/m2_onboard.py /home/xilinx/vision_m2/vision_regs.py; printf '\n__PYNQ_RC_5cb07e3a06f04a5a8863a78eff5fcabd=%d\n' $?
+[?2004l
+4f0c491a6383d8a11f87cd2de260027f519dbd466942d0b1b6e36198e39d5be5  /home/xilinx/vision_m2/vision.bit
+c0adfd3656c2fdb0468de356dc8232857580286d48977c41d6ee61edc3b7b5a5  /home/xilinx/vision_m2/vision.hwh
+679befc31ee11f0ab5ff4d7bf9d19ed83389750b12febdd3b90fdc27373664cd  /home/xilinx/vision_m2/m2_onboard.py
+1b30a62d27c9cedbc0e5cb94321984e343d903b4a84165fe5e0c4e13a7030479  /home/xilinx/vision_m2/vision_regs.py
+
+__PYNQ_RC_5cb07e3a06f04a5a8863a78eff5fcabd=0
+[?2004hxilinx@pynq:/$ 
+SERIAL_COMMAND_EXIT=0
+bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 /home/xilinx/vision_m2/m2_onboard.py env'; printf '\n__PYNQ_RC_0e4c3a5577ff43ada6244ac62e09f9c8=%d\n' $?
+[?2004l
+python=3.10.4
+pynq=3.1
+vision.bit: OK (4045769 B)
+vision.hwh: OK (313989 B)
+vision_regs.py: OK (5626 B)
+PASS: env
+
+__PYNQ_RC_0e4c3a5577ff43ada6244ac62e09f9c8=0
+[?2004hxilinx@pynq:/$ 
+SERIAL_COMMAND_EXIT=0
+bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -c "from pynq import PL; print(PL.bitfile_name); print(PL.timestamp); print(list(PL.ip_dict))"'; printf '\n__PYNQ_RC_3563e8cbc9814cd89acf7319917048e1=%d\n' $?
+[?2004l
+None
+None
+['switches_gpio', 'btns_gpio', 'video/hdmi_in/frontend/axi_gpio_hdmiin', 'video/hdmi_out/frontend/hdmi_out_hpd_video', 'rgbleds_gpio', 'leds_gpio', 'system_interrupts', 'video/axi_vdma', 'audio_codec_ctrl_0', 'video/hdmi_out/frontend/axi_dynclk', 'video/hdmi_out/frontend/vtc_out', 'video/hdmi_in/frontend/vtc_in', 'video/hdmi_in/pixel_pack', 'video/hdmi_in/color_convert', 'video/hdmi_out/color_convert', 'video/hdmi_out/pixel_unpack', 'trace_analyzer_pmodb/axi_dma_0', 'trace_analyzer_pi/axi_dma_0', 'trace_analyzer_pi/trace_cntrl_64_0', 'trace_analyzer_pmodb/trace_cntrl_32_0', 'ps7_0']
+
+__PYNQ_RC_3563e8cbc9814cd89acf7319917048e1=0
+[?2004hxilinx@pynq:/$ 
+SERIAL_COMMAND_EXIT=0
+PASS: baseline queries complete; hardware functionality is not inferred

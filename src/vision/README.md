@@ -19,7 +19,7 @@ Digilent 并行视频字节顺序是 R,B,G，`vision_axi.v` 双向转换为内�
 
 ## 已实现与验证
 
-- 原 22 个 RTL tb 有 Icarus／XSim 同判据记录；增加 `tb_axi_lock_reset` 后当前为 23 个，定向与实机修复见下方视频证据。含真实 720p 两帧，
+- 原 22 个 RTL tb 有 Icarus／XSim 同判据记录；增加 `tb_axi_lock_reset` 和两个 capture tb 后当前为25个，见[整合回归](../../data/logs/2026-10-12-pr-review/README.md)。历史视频 tb 含真实 720p 两帧，
   1,843,200 显示像素、100,352 快照像素、448 行及帧/配置号精确核对。
 - AXI AW/W 独立握手、响应反压；整组配置请求/确认；不同频率时钟测试。
 - 显示 RGB/原始同步波形恒延迟直通；分析使用内部单拍行尾/帧首标记。
@@ -28,7 +28,8 @@ Digilent 并行视频字节顺序是 R,B,G，`vision_axi.v` 双向转换为内�
   灰度诊断口延迟不能当作彩色 HDMI 延迟。
 - `video_pipeline` 内部 post-route：WNS +0.330 ns / WHS +0.027 ns，像素周期13.468ns、
   AXI周期10ns；1985 LUT、1515 寄存器、38 BRAM tile、0 DSP。
-- PS 配置绑定、定位/逐目标裁剪黄金参考、明确标为 MOCK 的 HTTP 接口和 Windows EXE 原型。
+- PS 配置绑定、定位/逐目标裁剪黄金参考；MOCK 与 FILE/LIVE HTTP 骨架、Windows LIVE 展示和记录已离板验证，替身/FILE 恒标来源。
+- C01 增加原彩色捕获支路与状态监测，候选 bit/hwh/XSA、显示/状态实机诊断已有；DDR BGR 完整副本与帧槽所有权尚未实现/验收，见[C01 基线](../../docs/c01-capture-implementation-baseline.md)。
 
 ## 一键入口
 
@@ -36,7 +37,7 @@ Digilent 并行视频字节顺序是 R,B,G，`vision_axi.v` 双向转换为内�
 
 ```bash
 bash sim/scripts/run_iverilog.sh all          # 核、CoreMark、门禁、视觉、stdlib Python
-bash sim/scripts/run_iverilog.sh vision all   # 当前 23 个视觉 tb
+bash sim/scripts/run_iverilog.sh vision all   # 当前25个视觉tb
 bash sim/scripts/run_iverilog.sh vision_python
 bash sim/scripts/run_vision_xsim.sh all
 bash sim/scripts/run_vivado_vision_impl.sh    # 并行边界 OOC 布线
@@ -66,11 +67,10 @@ PS 总线挂死（串口/网口同死）。修复为双复位拓扑（axi_rst_n 
 提交恢复后首帧应用 → 全程串口/网口在线零挂死。后续真实相机画面已有[10/07 证据](../../data/logs/2026-10-07-pi-pynq/README.md)；
 不能写成相机从未验证。EDID 换源、DDR 对照与现用位流长期复验仍待补。
 
-版本边界：10/06 板端既有位流与本地修复版 SHA256 不同；10/07 重载的是既有板端位流。
-画面恢复不证明它包含本地 lock-reset 修复，板端／源码／位流指纹须验证线闭环。
+版本边界：10/06–10/07 记录的位流差异是历史事实；10/10 已把原板端 bit/hwh 与归档 XSA 配对，但未锚定构建源码，见[追溯记录](../../data/evidence/2026-10-10-onboard-bit-provenance/README.md)。C01 候选是另一套产物，不能混用验收结果。
 
 灰度 `out_*` 的 OSD 是诊断能力；HDMI 主显示保留彩色原图。EXE 模拟框不是物体检测；
-单独 UVC 预览标为 `UNASSOCIATED`；当前[轮次协议](../../docs/vision-sync-protocol-decisions.md)允许原型按年龄窗叠加明确标注 MOCK 的结果，不代表逐帧精确关联或真实分类。
+单独 UVC 预览标为 `UNASSOCIATED`；[轮次协议](../../docs/vision-sync-protocol-decisions.md) v1.2 支持 MOCK/LIVE，FILE/LIVE 原型恒标 PROTOTYPE，按年龄窗叠加不代表逐帧精确关联或硬件分类。
 
-未实现 / 未接入：正式 CNN/协处理器、实际定位部署、工单检查服务、真实识别结果与
+未实现 / 未接入：CNN RTL/正式INT8模型、实际定位/硬件后端、核工业固件、真实识别结果与
 采集卡画面关联。它们属于模块三应用交接，整帧快照不代表逐目标硬件裁剪已经完成。

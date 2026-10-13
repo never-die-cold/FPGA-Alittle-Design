@@ -1,0 +1,15 @@
+HOST_STARTED_UTC=2026-10-12T16:53:14.7195703Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=cat /proc/sys/kernel/random/boot_id; find /home/xilinx/vision_m2 -maxdepth 2 -name "*.bit" -exec sha256sum {} \; ; sudo -n true
+cat /proc/sys/kernel/random/boot_id; find /home/xilinx/vision_m2 -maxdepth 2 -name "*.bit" -exec sha256sum {} \; ; sudo -n true; printf '\n__PYNQ_RC_57d62aa6ed3d45ce9c2368c27f8d3e5f=%d\n' $?
+[?2004l2d61ca6a-03dc-4628-88e3-1203ac8b0e3c
+550c2f1e4417aedbaf295e1ccd64bd09203a4e71b9dc11d3a1de099e12213d41  /home/xilinx/vision_m2/c01-a2a0452a39f94cfdbb0da5bcb750e5ca/capture.bit
+86d2adb0343de1785270d207eee3c6b8fee2a6444bc64705bc068e3fc781d14f  /home/xilinx/vision_m2/c01-ab75f5d26f8747418c4b6b0fd83995cd/capture.bit
+4f0c491a6383d8a11f87cd2de260027f519dbd466942d0b1b6e36198e39d5be5  /home/xilinx/vision_m2/vision.bit
+86d2adb0343de1785270d207eee3c6b8fee2a6444bc64705bc068e3fc781d14f  /home/xilinx/vision_m2/c01-cefc3ffab83448b1ae9e41b345276c4e/capture.bit
+86d2adb0343de1785270d207eee3c6b8fee2a6444bc64705bc068e3fc781d14f  /home/xilinx/vision_m2/c01-8b4d42b3653c4c31a70626bf9a971abf/capture.bit
+sudo: a password is required
+
+__PYNQ_RC_57d62aa6ed3d45ce9c2368c27f8d3e5f=1
+[?2004hxilinx@pynq:/$ 
+HOST_EXIT_CODE=1

@@ -1,0 +1,92 @@
+[
+  {
+    "path": "build/constraints/pynq_z2_soc.xdc",
+    "sha256": "DD59A027777580BC5D36DDCBA62917CA23234B6C917844E1EDAC30CC1B790F3B",
+    "bytes": 1366
+  },
+  {
+    "path": "src/riscv_fw/hello_v0.hex",
+    "sha256": "9C4B2F18E8F073EE939147E8D88137C46FF7C3BABEF8718F67984E47AC571DA4",
+    "bytes": 36846
+  },
+  {
+    "path": "src/riscv/alu.v",
+    "sha256": "95B963F6DE03DEAC8EFB965B44BA3662B09B5AE54D6052D660D42BCBA888DB9F",
+    "bytes": 1308
+  },
+  {
+    "path": "src/riscv/branch_predict.v",
+    "sha256": "27D40AD9C80F011C0E846818D4668AD0DCBB2DD1AD51D50AADF013F237B1D408",
+    "bytes": 1939
+  },
+  {
+    "path": "src/riscv/core_top.v",
+    "sha256": "E33859F33988ED765F075D12AAB5986A503CD232CB6B1EDED8B29C2C18C2B8E6",
+    "bytes": 10150
+  },
+  {
+    "path": "src/riscv/decode.v",
+    "sha256": "C502E5CCB977D754D0BD3EB5225B9B273597B9558907582B1F81ED8D7DE445BB",
+    "bytes": 7251
+  },
+  {
+    "path": "src/riscv/dmem.v",
+    "sha256": "9C8CF5FFA5609661783AF170F05A17FB2C9C2BA35A2811F3C4C44E562BFA91A2",
+    "bytes": 1063
+  },
+  {
+    "path": "src/riscv/forwarding.v",
+    "sha256": "0542D9899909B3D51F48E4482DFDB18488C298B314EE65D3AB3331CDC78E8A04",
+    "bytes": 1955
+  },
+  {
+    "path": "src/riscv/hazard.v",
+    "sha256": "305A84A0A00C0BE6DEC7F3A624596B7D648B21FDEB4C3FA78B4C75DA123D4761",
+    "bytes": 975
+  },
+  {
+    "path": "src/riscv/id_ex_stage.v",
+    "sha256": "BCE3386C041C4137F365575F46540E9046575D4442B5118E43FE918C1B7748D7",
+    "bytes": 3426
+  },
+  {
+    "path": "src/riscv/if_stage.v",
+    "sha256": "1CF0591BD01937AA98977B708FFF06BF636E4DC1B1F3B1215FCCC06127FA2C68",
+    "bytes": 1579
+  },
+  {
+    "path": "src/riscv/imem.v",
+    "sha256": "12FDD837FF7A9C4832638AE55AE3129A672EDDC1DFA294A949337FDD350FBB16",
+    "bytes": 613
+  },
+  {
+    "path": "src/riscv/mem_wb_stage.v",
+    "sha256": "215720A970951C1F081B3158ABDDF592A3556F552C87C987AAFA251BBF9A408B",
+    "bytes": 1363
+  },
+  {
+    "path": "src/riscv/muldiv.v",
+    "sha256": "0E0842E4F529E1604DB1A17E083C23B2F4CE13E6BBB1ED07CC3F745473E95530",
+    "bytes": 4666
+  },
+  {
+    "path": "src/riscv/pc.v",
+    "sha256": "B513D34A0AD21E2B58084E4B827BD53CCE7A875C728C8DCF9292D3E05767CD50",
+    "bytes": 688
+  },
+  {
+    "path": "src/riscv/pynq_z2_top.v",
+    "sha256": "02DBF4FD2BE92833FCE83295D7F1529518B3161EC758DC025A100FAD1D6B0421",
+    "bytes": 1983
+  },
+  {
+    "path": "src/riscv/regfile.v",
+    "sha256": "5A03842E3D86BDF3D86F63F9249197D236C64F9670B49466F879BD7B25EE5EC9",
+    "bytes": 669
+  },
+  {
+    "path": "src/riscv/soc_top.v",
+    "sha256": "453C8D14186F7203FC03C6187D7C5A14917A21A1DBA158692C24B5CCDEE2AE17",
+    "bytes": 2177
+  }
+]

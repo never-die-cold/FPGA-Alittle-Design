@@ -39,8 +39,8 @@ if {[catch {
         control_converter/aclk memory_converter/aclk capture_dma/s_axi_lite_aclk \
         capture_dma/m_axi_s2mm_aclk capture_dma/s_axis_s2mm_aclk capture_input/aclk
     cnet ps7/FCLK_RESET0_N reset/ext_reset_in
-    cnet high/dout reset/dcm_locked capture_input/aclken capture_input/axis_enable capture_input/vid_io_in_ce
-    cnet low/dout reset/aux_reset_in reset/mb_debug_sys_rst
+    cnet high/dout reset/aux_reset_in reset/dcm_locked capture_input/aclken capture_input/axis_enable capture_input/vid_io_in_ce
+    cnet low/dout reset/mb_debug_sys_rst
     cnet reset/peripheral_aresetn control_converter/aresetn memory_converter/aresetn capture_dma/axi_resetn capture_input/aresetn
     make_bd_intf_pins_external [get_bd_intf_pins capture_input/vid_io_in]
     set pixel [create_bd_port -dir I -type clk -freq_hz 74250000 pixel_clock]
@@ -61,6 +61,13 @@ if {[catch {
     assign_bd_address -offset 0x43000000 -range 64K -target_address_space [get_bd_addr_spaces ps7/Data] \
         [get_bd_addr_segs capture_dma/S_AXI_LITE/Reg] -force
     validate_bd_design
+    source sim/scripts/check_capture_reset_release.tcl
+    capture_check_reset_release reset high low
+    if {[llength $argv] > 1 || ([llength $argv] == 1 && [lindex $argv 0] ne "reset_tests")} {
+        error "usage: validate_capture_subsystem.tcl \[reset_tests\]"
+    }
+    if {[lindex $argv 0] eq "reset_tests"} {capture_test_reset_release}
+    save_bd_design
     set bits [expr {[get_property LEFT [get_bd_pins capture_dma/s_axis_s2mm_tdata]] + 1}]
     puts "READBACK: stream=$bits stores=[get_property CONFIG.c_num_fstores $vdma] mm2s=[get_property CONFIG.c_include_mm2s $vdma] reset_high=[get_property CONFIG.C_EXT_RESET_HIGH $reset] format=[get_property CONFIG.C_M_AXIS_VIDEO_FORMAT $vin]"
     if {$bits != 24 || [get_property CONFIG.c_num_fstores $vdma] != 4 || \

@@ -1,0 +1,75 @@
+﻿{
+    "clock_ns":  10,
+    "files":  [
+                  {
+                      "path":  "src/coprocessor/cnn_sequencer.v",
+                      "sha256":  "8765e582907eb2061d8f665a1126473172ee154e70b9c3fd8e5144d1fb608b12",
+                      "file":  "cnn_sequencer.v",
+                      "bytes":  7820
+                  },
+                  {
+                      "path":  "src/coprocessor/conv_engine.v",
+                      "sha256":  "2a474208bd56c5b0d0e4d3b3e103b2176863c5a43112612236b26da8f308e9b5",
+                      "file":  "conv_engine.v",
+                      "bytes":  9155
+                  },
+                  {
+                      "path":  "src/coprocessor/int8_gap.v",
+                      "sha256":  "0de05f7c755c6be7b3a69fd4fb75b70ee83e379edfc096f6c3bd336759125dee",
+                      "file":  "int8_gap.v",
+                      "bytes":  376
+                  },
+                  {
+                      "path":  "src/coprocessor/int8_logits.v",
+                      "sha256":  "3d8d167abd054a58c3871aec29dd14fd939668f9986bbeb2d896411965b93ad3",
+                      "file":  "int8_logits.v",
+                      "bytes":  1201
+                  },
+                  {
+                      "path":  "src/coprocessor/int8_mac.v",
+                      "sha256":  "081f0e9451fbdacc2c11d4d4b3d2eccbcdd584631d5cb00cdc481f9f1863de92",
+                      "file":  "int8_mac.v",
+                      "bytes":  649
+                  },
+                  {
+                      "path":  "src/coprocessor/int8_requant.v",
+                      "sha256":  "09636bf08811eb048abb1136d43b757fa41a3dd7787b303979d6144c4b7a5069",
+                      "file":  "int8_requant.v",
+                      "bytes":  979
+                  },
+                  {
+                      "path":  "src/coprocessor/int8_requant_pipeline.v",
+                      "sha256":  "4c3831f63fb96e49fbaa4dda74ef8bed69a13a8de179feaaffcff9dbd338a2e3",
+                      "file":  "int8_requant_pipeline.v",
+                      "bytes":  1456
+                  },
+                  {
+                      "path":  "src/coprocessor/mac_array.v",
+                      "sha256":  "8d51f13f6935a7564e81f45362277bab7425dba93ba632ca4d3b8c496544da8e",
+                      "file":  "mac_array.v",
+                      "bytes":  1420
+                  },
+                  {
+                      "path":  "src/coprocessor/mac_array_pipeline.v",
+                      "sha256":  "8cef4170d4100c8b56f5aa35d9b8d383e1e5d87d2036c14e19b5b21846c5c393",
+                      "file":  "mac_array_pipeline.v",
+                      "bytes":  2012
+                  },
+                  {
+                      "path":  "sim/scripts/synth_coprocessor_ooc.tcl",
+                      "sha256":  "c821b34629164223f7cdf292b934937247593dad4f499695308805fd26048a7e",
+                      "file":  "synth_coprocessor_ooc.tcl",
+                      "bytes":  2295
+                  },
+                  {
+                      "path":  "sim/scripts/run_cnn_ooc.ps1",
+                      "sha256":  "5c43748de24ade3f8bd9d16acaed7b350d9690d1a0def62ef2e1103c9a6a38ca",
+                      "file":  "run_cnn_ooc.ps1",
+                      "bytes":  1700
+                  }
+              ],
+    "part":  "xc7z020clg400-1",
+    "git_base":  "c3b6a1eb3d65d21e33a0fd9017f06f68a7bdb4a2",
+    "kind":  "CONTROLLER_ONLY_OOC_EXTERNAL_MEMORY_PORTS",
+    "uncommitted":  true
+}

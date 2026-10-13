@@ -1,6 +1,6 @@
 # C01 捕获状态接口：实现候选 v0.1
 
-2026-10-11，基于 dev/model@c292038；新增源码未提交。本候选不替代已冻结的 pipe 参数接口。
+初稿2026-10-11，原基线dev/model@c292038；源码已随PR #69合并，当前整合基线3e2e1c9。本文仍为捕获接口候选，不替代已冻结pipe参数，也不证明DDR帧槽所有权，最新验收边界见[C01基线](c01-capture-implementation-baseline.md)。
 
 显示保持 RX→vision_axi→TX；原彩色捕获并联到 RX。采集 FIFO/VDMA 的反压只影响捕获支路。
 首版 1280×720、单像素24位；Digilent R,B,G 转为总线高到低 R,G,B，DDR 低地址顺序 B,G,R。

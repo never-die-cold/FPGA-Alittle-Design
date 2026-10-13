@@ -16,10 +16,15 @@ module mem_wb_stage (
     output reg mem_sign_ext
 );
     always @(posedge clk or negedge rst_n) begin
-        if (!rst_n) begin
+        if (!rst_n)
             mem_valid <= 1'b0;
-        end else begin
+        else
             mem_valid      <= in_valid;
+    end
+
+    // Invalid payload has no architectural effect. Capture even during reset:
+    // putting this in the reset block's else branch infers rst_n-driven CEs.
+    always @(posedge clk) begin
             mem_instr      <= in_instr;
             mem_pc         <= in_pc;
             mem_rd         <= in_rd;
@@ -32,6 +37,5 @@ module mem_wb_stage (
             mem_wb_sel     <= in_wb_sel;
             mem_mask_sel   <= in_mask_sel;
             mem_sign_ext   <= in_sign_ext;
-        end
     end
 endmodule

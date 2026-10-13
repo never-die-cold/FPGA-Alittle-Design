@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "E:\Projects\FPGA-Alittle-Design\sim\scripts\audit_c01_build_inputs.py", line 55, in <module>
+    main()
+  File "E:\Projects\FPGA-Alittle-Design\sim\scripts\audit_c01_build_inputs.py", line 45, in main
+    result = audit(args.manifest, args.root)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Projects\FPGA-Alittle-Design\sim\scripts\audit_c01_build_inputs.py", line 25, in audit
+    raise ValueError("retained input changed: " + relative.as_posix())
+ValueError: retained input changed: sim/build/hdmi-source/ps7_config.tcl

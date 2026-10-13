@@ -1,0 +1,18 @@
+HOST_STARTED_UTC=2026-10-12T15:15:46.3939406Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=cat /proc/sys/kernel/random/boot_id; sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && timeout -k 5s 30s python3 -u /home/xilinx/vision_m2/m2_onboard.py load' && sleep 5 && sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && timeout -k 5s 15s python3 -u /home/xilinx/vision_m2/m2_onboard.py smoke' && cat /proc/sys/kernel/random/boot_id
+cat /proc/sys/kernel/random/boot_id; sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && timeout -k 5s 30s python3 -u /home/xilinx/vision_m2/m2_onboard.py load' && sleep 5 && sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && timeout -k 5s 15s python3 -u /home/xilinx/vision_m2/m2_onboard.py smoke' && cat /proc/sys/kernel/random/boot_id; printf '\n__PYNQ_RC_5b3031b423934aa789dce76aec4afb0f=%d\n' $?
+[?2004l2d61ca6a-03dc-4628-88e3-1203ac8b0e3c
+ip_dict:
+  pipe @ 0x40000000 range 0x10000
+  ps7 @ 0x00000000 range 0x0
+axi_regs 段: pipe @ 0x40000000
+PASS: load
+R11 busy=0 R12 applied=0
+commit 配置号=1 status={'busy': False, 'applied_config_id': 1}
+PASS: smoke（视频在位，帧首整组应用已确认）
+2d61ca6a-03dc-4628-88e3-1203ac8b0e3c
+
+__PYNQ_RC_5b3031b423934aa789dce76aec4afb0f=0
+[?2004hxilinx@pynq:/$ 
+HOST_EXIT_CODE=0

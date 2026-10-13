@@ -541,7 +541,8 @@ MEM+WB 是唯一架构副作用级：
 | `muldiv_result` | in | 32 | M 单元结果；仅 M done 被接受时进入下游 |
 
 `id_ex_stage` 不设 `clk/rst_n`，也不拥有 pending。组合输出可随输入变化，只有
-`core_top` 产生 `ex_accept=1` 时才允许其 payload 在时钟沿进入 `mem_wb_stage`。
+`core_top` 产生 `ex_accept=1` 时才允许该槽作为有效提交进入 `mem_wb_stage`；
+payload 每拍捕获，无效槽中的值不参与架构副作用。
 
 ### 12.3 `id_ex_stage.v` 译码与冒险输出
 
@@ -593,7 +594,9 @@ store data 必须直接等于 `rs2_value`，不能从 ALU B 端或实时 regfile
 `mem_wb_stage` 每个上升沿都捕获一组输入，不提供 hold/enable 端口。上游停顿时必须
 显式送 `in_valid=0`，让旧有效槽提交一次后排空；若加 hold 会造成重复提交风险。
 
-复位分支必须令 `mem_valid=0`；其余 payload 可清零改善波形，但功能不得依赖清零。
+复位分支必须令 `mem_valid=0`；其余 payload 放在独立、无复位且无使能的时序块，
+包括复位期间在内每个上升沿均捕获输入，避免综合出由复位驱动的 CE。
+复位期间的地址和数据允许变化；写内存、写寄存器及转发资格仍由 `mem_valid` 门控。
 输出在整拍内稳定，直接驱动 DMEM 地址/写口、load 扩展、regfile 写回和转发记录。
 
 ### 12.6 接口验收点

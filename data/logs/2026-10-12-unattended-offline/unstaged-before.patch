@@ -1,0 +1,879 @@
+diff --git a/README.md b/README.md
+index e9202b5..af4dd33 100644
+--- a/README.md
++++ b/README.md
+@@ -4,9 +4,9 @@
+ 
+ **目标形态**：在 AMD PYNQ-Z2（Zynq-7020）上，用**自研 RISC-V 核、HDMI 视觉流水线与 INT8 CNN 协处理器**分析相机拍到的螺栓、螺母、垫圈等紧固件。板卡 HDMI 视频经 USB 采集卡进入 Windows **EXE 前端**，识别结果经网口同步到前端；统一展示物体矩形框、类别标签、数量统计、工单缺件/错料提示和异常记录，并与 ARM 软件基线对比。
+ 
+-> **当前进度（2026-10-09）**：模块一核＋最小 SoC 已完成收口，见[核收口报告](report/module1-closure.md)。
++> **当前进度（2026-10-12）**：模块一核＋最小 SoC 已完成收口，见[核收口报告](report/module1-closure.md)。
+ > 模块二 HDMI 视觉预处理 RTL＋已验证视频链路已完成（RTL／链路级），见[视频记录](data/logs/2026-10-03-vision-onboard/README.md)和[真实相机链路](data/logs/2026-10-07-pi-pynq/README.md)。
+-> **全项目 M2 验收未完成**；CNN、网络硬件输出和工业闭环不得宣称完成。EXE 预览／mock 原型已有证据，正式板端识别服务与定位部署仍待完成，见[项目主计划](plan.md)。
++> **全项目 M2 验收未完成**；CNN RTL、首网硬件输出和工业闭环尚未实现。C02/C03 已冻结，INT8 标量/张量/卷积参考、FILE/LIVE 服务骨架、EXE 类别/工单展示与记录 v2 已离板验证；真实取帧与硬件后端仍待接入，见[项目主计划](plan.md)与[核对清单](docs/implementation-document-audit-2026-10-12.md)。
+ 
+ > 👋 新队友请先阅读 [docs/README.md](docs/README.md)（人读入口：5 分钟搞清目录与"找东西"规则），再读 [docs/onboarding.md](docs/onboarding.md)（Git / Markdown / Agent 上手指南）
+ 
+@@ -40,12 +40,12 @@
+ 
+ 1. **自研三级流水 RISC-V 核（而非直接例化现成软核）**：以两级流水基线为对照，通过流水线重构、数据转发（旁路）、轻量分支预测优化 CPI，把"流水线优化"本身作为可量化验证的设计内容；
+ 2. **RTL 图像预处理硬件流水线**：HDMI 视频流逐像素实时处理（灰度化 → 高斯滤波 → 缩放/边缘），零 CPU 占用，与 OpenCV 软件基线对比延迟与帧率；
+-3. **轻量 CNN 推理协处理器**：以自定义指令 + AXI 协处理器形式挂到 RISC-V 核上，INT8 量化，完成小型分类/检测网络推理，与 ARM Cortex-A9 纯软件推理对比加速比与能效。
++3. **轻量 CNN 推理协处理器（待实现）**：v0 已冻结为 RISC-V 本地 MMIO、PS AXI4-Lite 控制和 DMA 数据面，采用 INT8 小图分类，与 ARM Cortex-A9 软件推理对比；首版不启用自定义指令，见[C03](docs/coprocessor-integration-v0.md)。
+ 
+ **为什么自研核，而不用 PicoRV32 / E203 现成软核？（用数据回答，不用情怀）**
+ 
+ 1. **可审计的优化与面积数据**：当前同 RTL 四档 CoreMark CPI 为 1.885683／1.693399／1.616360／1.606121；BHT2 核 11.520 ns 实点 LUT=2443、FF=637（不含 SoC 存储器）。同负载参数收益与频率／资源口径见[核收口报告](report/module1-closure.md)；PicoRV32 仅有 OOC 和公开性能参考，不能据此宣称同负载面积能效领先。
+-2. **协处理器原生耦合**：现成核加 custom 指令需侵入他人微架构；自研核可在 EX 级原生集成 `conv.start/conv.wait`（协处理器 busy 直接进流水线 stall），这是外挂 AXI 方案做不到的集成深度
++2. **协处理器调度研究**：v0 计划在 SoC 增加本地 MMIO 窗口，由固件启动、轮询并汇总结果；当前核没有总线等待握手，接口尚未接入。自定义指令仅保留为后续研究，不计入现有能力。
+ 3. **裁剪的量化收益**：面向"推理控制负载"裁掉 CSR/trap（fence/ecall/ebreak 按 NOP），省掉用不到的特权级逻辑；代价与适用边界在报告中主动披露（不适用于需要中断/异常的通用场景）
+ 
+ **为什么不直接用 PYNQ Overlay + ARM？** 初级组考察的是 FPGA 基本设计能力。自研软核让我们的作品在"逻辑设计、状态机、时序约束、接口协议"四个考察点上全部有硬内容，而不是把难点都让给现成 IP。
+@@ -73,7 +73,7 @@ flowchart LR
+ 
+ **演示闭环**：放入紧固件 → EXE 展示实际识别框与类别 → 按工单核对类别和数量 → 缺件/错料提示 → 保存本次检查结果与异常截图。连续视频帧不重复累加批次；视频与网口结果须同步，断联或过期结果显示待确认。
+ 
+-**首版边界**：自由分散、互不遮挡；定位／裁剪 Python 黄金参考已有，板端部署与 CNN 分类未完成。模型和部署参数仍待冻结；同步协议已定轮次级／最多 16 目标，见[决策单](docs/vision-sync-protocol-decisions.md)。任意堆叠和遮挡识别不在首版范围。
++**首版边界**：自由分散、互不遮挡；定位／裁剪与 FP32 文件分类参考已有，真实板端部署与 CNN 硬件分类未完成。C02 已冻结 64×64 灰度 FastenerCNN 与整数算术；正式权重、阈值和实际工位条件仍待验收。C03 区分 16 目标硬件/协议能力与检查 V0 的 10 件业务策略；C04 应用语义仍待完整评审，见[决策单](docs/vision-sync-protocol-decisions.md)。
+ 
+ ---
+ 
+@@ -100,12 +100,12 @@ flowchart LR
+ - **架构对比点**：行缓存直通 vs 传统"DDR 帧缓存回写"方案，延迟/带宽/资源三列实测对比（借鉴往届国一作品 Ultra-Vision 的"算法直出"架构，见 [docs/proposal_upgrade.md](docs/proposal_upgrade.md)）
+ - 对照组：PS 侧 OpenCV / 裸机 C 软件实现同算法
+ 
+-模块二 RTL／链路级证据见[视频记录](data/logs/2026-10-03-vision-onboard/README.md)和[真实相机恢复记录](data/logs/2026-10-07-pi-pynq/README.md)。板端现用位流与本地修复版指纹尚未闭环；长时间、冷启动与该位流断连恢复不据此宣称全过。
++模块二 RTL／链路级证据见[视频记录](data/logs/2026-10-03-vision-onboard/README.md)和[真实相机恢复记录](data/logs/2026-10-07-pi-pynq/README.md)。现用原 vision 的 bit/hwh 已与归档 XSA 配对，构建源码锚定仍缺；C01 捕获候选另有构建输入与显示/状态诊断证据。完整长测、冷启动、断源恢复和 DDR 取帧仍待验收，见[C01 基线](docs/c01-capture-implementation-baseline.md)。
+ 
+ ### 模块三：轻量 CNN 推理协处理器
+ 
+-- 形态：RISC-V **自定义指令扩展**（如 `conv.start` / `conv.wait`）+ AXI 协处理器，片内 INT8 MAC 阵列；推理输入为预处理缩放后的**片上快照小图**（KB 级 BRAM），权重经 DMA 预载
+-- 目标任务：对自由分散、互不遮挡的螺栓、螺母、垫圈进行传统视觉定位，裁剪小图后由 CNN 分类；网络结构由实际数据和 XC7Z020 资源确定。正式模型未实现，当前合成图片训练演练只证明训练导出链路可行。
++- 形态（已冻结、未接入）：RISC-V 本地 MMIO + PS AXI4-Lite 控制面，DMA 搬运权重、逐目标 ROI 和结果；不启用自定义指令。现有整帧灰度快照不能代替原分辨率逐目标裁剪。
++- 目标任务：对自由分散、互不遮挡的螺栓、螺母、垫圈定位后，统一生成 64×64 灰度 ROI，再按 C02 量化供 FastenerCNN 分类。正式 INT8 模型与整网黄金尚未完成；现有训练演练和 FP32 原型不代表工业精度。
+ - 软件栈：PC 侧训练 + INT8 量化 → 导出权重 → RISC-V 裸机程序驱动协处理器
+ - 对照组：同一网络在 ARM Cortex-A9 上的纯软件推理
+ - **算子化验证**：CONV/POOL/GEMM 单算子逐一给出 ARM 基线加速比表（对标往届 HLS 算子赛道的评分打法）
+@@ -123,7 +123,7 @@ flowchart LR
+ | 板端服务/基准 | PS（PYNQ） | 寄存器配置、结果通信、ARM 软件基线、黄金参考与指标采集；Jupyter 调试 |
+ | 工业操作界面 | PC（Windows EXE） | 采集卡视频、框与标签叠加、工单配置、统计、异常截图与记录导出 |
+ 
+-**通信边界**：PS↔视觉 PL 寄存器／快照接口已冻结，EXE↔服务轮次协议见[决策单](docs/vision-sync-protocol-decisions.md)；真实识别服务未实现，mock 不代表硬件识别。视频独立走 HDMI＋采集卡，单框 OSD 仅作诊断。
++**通信边界**：PS↔视觉 PL 寄存器／快照接口已冻结，EXE↔服务采用 v1.2 轮次协议。FILE 服务与 LIVE 替身恒标 PROTOTYPE，真实硬件识别后端未实现。视频独立走 HDMI＋采集卡，单框 OSD 仅作诊断，轮次叠加不代表逐帧精确关联。
+ 
+ ---
+ 
+@@ -159,10 +159,11 @@ edgesight/
+ ├── LICENSE              # MIT 协议
+ ├── src/                 # 设计源码（RTL / 固件 / PS 侧软件）
+ │   ├── riscv/           # v1 三级＋转发＋BHT 核与最小 SoC；收口证据见上方报告
+-│   ├── vision/          # HDMI 预处理 RTL；23 tb、已验证视频链路，证据见上方链接
+-│   ├── coprocessor/     # CNN 推理协处理器 RTL（M1 验收后主力转入）
++│   ├── vision/          # HDMI 预处理/捕获状态 RTL；25 tb，DDR取帧未验收
++│   ├── coprocessor/     # 冻结C02与INT8参考；CNN RTL未实现
+ │   ├── riscv_fw/        # RISC-V 裸机固件（冒烟 / 逐指令自检 / 后续 benchmark）
+-│   └── pynq_host/       # PS 配置／快照工具、mock 服务；正式识别服务未实现
++│   ├── pynq_host/       # PS配置、定位/FP32参考、MOCK与FILE/LIVE服务骨架
++│   └── vision_client/   # UVC预览、轮次叠加、LIVE展示与记录/CSV
+ ├── sim/                 # testbench、仿真脚本（scripts/ 一键 iverilog；tools/ 含 RV32I 编解码自测）
+ ├── build/               # Vivado 可复现构建 tcl + 综合/实现报告
+ ├── board/               # 上板步骤、运行脚本与已有实机记录
+@@ -222,7 +223,7 @@ M1 检查点历史为 #19／#20／#21；正式合并和关闭记录见[模块一
+ 
+ > 分工不分家：每周例会互讲进度，确保三人都能讲清任一模块——答辩质询不分工。
+ 
+-EXE 由 `watercopper` 负责，已有[预览／mock 原型证据](data/logs/2026-10-06-vision-sync-schema/README.md)；板端真实服务主责已定 NC，正式服务与工业界面未完成。
++现行[三人清单](docs/project-closeout-three-person-checklist.md)：NC负责全部上板/采集/实测，JL负责训练/整数参考/RTL/核固件，WC负责数据/PS软件/EXE/材料。EXE已有LIVE展示与记录；NC仍是D7实机服务责任人，WC提供W04/W05软件包，真实硬件服务与整机发布未验收。
+ 
+ ---
+ 
+diff --git a/docs/README.md b/docs/README.md
+index 7f7a8c1..69adb19 100644
+--- a/docs/README.md
++++ b/docs/README.md
+@@ -20,7 +20,7 @@
+ 
+ | 目录 | 是什么 |
+ |:---|:---|
+-| `src/` | 设计源码。`riscv/` 是核与最小 SoC（RTL + plan + design_v0/design_v1）；`riscv_fw/` 裸机固件；`vision/` 图像预处理与视频链路；`coprocessor/` 未实现；`pynq_host/` PS 配置协议与 mock；`vision_client/` Windows EXE 原型 |
++| `src/` | 设计源码。`riscv/` 是核与最小 SoC；`riscv_fw/` 冒烟/基准固件；`vision/` 预处理与捕获状态 RTL；`coprocessor/` 冻结 C02 与 INT8 参考（RTL 未实现）；`pynq_host/` 配置、FP32 文件检查、MOCK/FILE-LIVE 骨架；`vision_client/` 视频/LIVE 展示与记录原型 |
+ | `sim/` | 验证。`riscv/` 放 tb；`scripts/run_iverilog.sh` 一键回归；`arch_test/` 第三方套件（脚本拉取，不入库） |
+ | `build/` | Vivado 可复现构建（build.tcl + constraints + 综合报告） |
+ | `board/` | 上板。`smoke_test/` 工程、`setup.md` 复现指南、`logs/` 上板实测记录（只追加） |
+@@ -39,6 +39,8 @@
+ | 协作记录 / 决策过程 | `report/llm_log/` |
+ | 全项目目标、收口、分工和验收 | 根目录 `plan.md` |
+ | 全项目下一交付物、依赖与卡点 | 根目录 `plan.md` §3 |
++| 当前源码与文档状态核对 | [实现/文档清单](implementation-document-audit-2026-10-12.md)；[三人执行清单](project-closeout-three-person-checklist.md) |
++| 原彩色捕获与DDR取帧边界 | [C01基线](c01-capture-implementation-baseline.md)、[帧槽所有权候选](c01-ddr-frame-ownership-v0.md) |
+ | RISC-V 核专项计划与看板 | `src/riscv/plan.md`、`src/riscv/plan_calendar.md` |
+ | Part B 验证与验收执行清单 | `docs/partB-verify-plan.md` |
+ | 模块三训练与量化前期 | `docs/module3-model-training.md` |
+@@ -90,7 +92,7 @@
+ 
+ ## 本轮只登记的事项（2026-10-09）
+ 
+-- Q01：D6 覆盖结果报文；未知字段拒绝的实现缺口另批裁决，见[核查注记](vision-sync-protocol-decisions.md)。
++- Q01：当时登记结果报文白名单缺口，已随 PR #67 修复；当前 v1.2 允许 LIVE 分类/判定字段并继续严格拒绝未知字段，见[协议注记](vision-sync-protocol-decisions.md)。
+ - Q02：`run_iverilog.sh` 缺失 tb 时 continue 的风险只登记，本轮不改 fail-fast 语义。
+ - Q03：本地有 `partA-v0`；未取得 `archive/pi-hdmi-diagnostics-2026-10-08`，不查远端、不建替代 tag。
+ - Q04：[中文探索报告](方案探索报告.md)与[英文名 audit](localization-exploration-audit.md)正文一致；保留两份，权威正文待用户裁决。
+@@ -102,4 +104,5 @@
+ 
+ | 日期 | 变更 |
+ |:---|:---|
++| 2026-10-12 | 导航同步整数参考、FILE/LIVE软件与C01；Q01标明已修复，旧索引/配图仍保留历史性质 |
+ | 2026-10-09 | B01：区分三层收口状态并链接证据；补齐对应版本接口导航；纠正提交纪律。 |
+diff --git a/docs/c01-capture-implementation-baseline.md b/docs/c01-capture-implementation-baseline.md
+index d463d9a..f5efb25 100644
+--- a/docs/c01-capture-implementation-baseline.md
++++ b/docs/c01-capture-implementation-baseline.md
+@@ -4,7 +4,7 @@
+ 改进版诊断（起止 CR/SR 实值 + SEQ 增量 + 异常分离 + 有界恢复）实机整体 PASS；显示/状态口径可复现，DDR 取帧验收仍未做。
+ 详见本轮证据 `data/logs/2026-10-11-c01-probe-evidence/README.md` 与 docs/project-handoff-2026-10-11.md 增补节。
+ 
+-2026-10-11；基线 dev/model@c292038，新源码尚未提交。状态：捕获状态 RTL、整体 BD、实现及配套 bit/hwh/XSA 已离板验证；C01 整体尚未冻结、正式 N03 尚未通过。
++当前核对基线：2026-10-12，`3e2e1c9`，C01源码已随PR #69合并。捕获RTL/BD/候选bit/hwh/XSA已构建并通过显示/状态实机诊断；C01整体与正式N03未验收。下方带日期章节是试验过程，当时“未上板/恢复未确认”不作为当前状态。
+ 现场结果与原始证据见 `data/logs/2026-10-11-c01-capture-rtl/README.md`。本文件替代早期“未实现 RTL/位流”的状态描述。
+ 
+ ## 已实现的连接
+@@ -26,7 +26,7 @@ VDMA S2MM IRQ → PS IRQ_F2P[0]
+ | pipe | 0x40000000/64KiB | 保留已有参数及帧首提交 ABI |
+ | capture_status | 0x42000000/64KiB | CAP1 只读状态；写及非法读返回 SLVERR |
+ | capture_dma | 0x43000000/64KiB | VDMA S2MM；本轮板端探针保持停止 |
+-| 核/CNN | 未接入 | 地址和握手仍待 C03 |
++| 核/CNN | 未接入 | C03已冻结本地MMIO/AXI-Lite + DMA；实际接入与核契约同步待实现 |
+ 
+ 状态与故障规则见 [捕获状态契约](c01-capture-status-contract.md)。`stream_seq` 仅统计接受到的完整像素几何，不证明 DDR 写完成或缓冲归 PS 所有。`rejected_frames` 统计已开始跟踪而作废的帧；保持故障和跨域握手会合并事件，不能当所有源帧丢失总数。
+ 
+@@ -62,12 +62,14 @@ Icarus 25 个视觉 tb、全项目回归退出0；新增两个捕获 tb 与原 a
+ ## 尚未完成
+ 
+ - PS/VDMA 帧槽所有权与完整 DDR 副本、真实颜色/动态对拍、断源恢复及长时间运行。
+-- 核/CNN/C02/C03、正式 INT8 模型、真实 LIVE 网络与工业闭环。
++- 核/CNN实际接入、正式INT8模型/整网黄金、真实硬件LIVE与工业闭环；C02/C03已冻结，FILE/LIVE软件骨架已实现。
+ - 工位定标、真实三类数据与正式 N03/N04/N05。现有天花板画面仅用于链路诊断。
+ 
+-显示/状态板端诊断只验证地址、锁定、原视觉 smoke 和 UVC 共存；它不启动 DMA，不代签完整 C01 验收。
++显示/状态板端诊断只验证地址、锁定、原视觉smoke和UVC共存；它不启动DMA、不代签完整C01验收。停止期stream_seq增长与粘滞SR实测见末节；启动捕获前仍须清错/复位和读回。
+ 
+-## 首次候选实机失败与离板复位修复（本节为最新状态）
++构建输入的原归档被Git行尾规范化；[精确恢复包](../data/evidence/2026-10-12-c01-exact-build-inputs/README.md)按原清单恢复68个CRLF文件、严格复核98/98。当前96项相符，2个构建包装脚本已变化。该结果证明输入完整性，不能独立证明bit源于当前源码；与原vision缺源码锚定是不同证据范围。
++
++## 历史过程：首次候选实机失败与离板复位修复
+ 
+ 首次上板候选 bit SHA550c2f... 经串口完整传输/保存验证；HWH9ba79...及实际执行探针5bd699...均核对。board-c01-coexist/board.txt 无 PASS/WINDOW/CLEANUP，主机85秒等待退出124，远端完成未确认。普通 CPU 只读命令20秒、一次 Ctrl-C 后15秒探测均无回包；只读 BREAK+w 内核请求收到0字符（不能据此断言 SysRq 已启用）。uvc-after-c01-timeout/ 24次读取退出0，但原始图像为均匀黑屏，BGR min=max=[8,6,8]、空间跨度0；这不算显示通过。原 vision 恢复未确认，当前 boot/活动位流/板端进程未知。
+ 
+diff --git a/docs/c01-capture-status-contract.md b/docs/c01-capture-status-contract.md
+index e0ba1ad..dde07d1 100644
+--- a/docs/c01-capture-status-contract.md
++++ b/docs/c01-capture-status-contract.md
+@@ -1,6 +1,6 @@
+ # C01 捕获状态接口：实现候选 v0.1
+ 
+-2026-10-11，基于 dev/model@c292038；新增源码未提交。本候选不替代已冻结的 pipe 参数接口。
++初稿2026-10-11，原基线dev/model@c292038；源码已随PR #69合并，当前整合基线3e2e1c9。本文仍为捕获接口候选，不替代已冻结pipe参数，也不证明DDR帧槽所有权，最新验收边界见[C01基线](c01-capture-implementation-baseline.md)。
+ 
+ 显示保持 RX→vision_axi→TX；原彩色捕获并联到 RX。采集 FIFO/VDMA 的反压只影响捕获支路。
+ 首版 1280×720、单像素24位；Digilent R,B,G 转为总线高到低 R,G,B，DDR 低地址顺序 B,G,R。
+diff --git a/docs/coprocessor-integration-v0.md b/docs/coprocessor-integration-v0.md
+index a239373..40a3602 100644
+--- a/docs/coprocessor-integration-v0.md
++++ b/docs/coprocessor-integration-v0.md
+@@ -278,7 +278,7 @@ major 变化表示不兼容的寄存器/二进制布局变化；minor 只允许
+ | C03-P3 | 控制权 | 推荐 PS 配配置/数据、RISC-V 独占 START 与工单判定；备选双主控仲裁 | 决定冲突、恢复和软件职责 | 单写者最容易复现；PS 与核真实并发尚未验证 |
+ | C03-P4 | DMA 实现 | 推荐外部 DataMover/AXI DMA，`dma_ctrl` 管描述符/流；备选自研完整 AXI master | 影响 RTL 规模、吞吐和 IP 依赖 | 外部 IP 缩小协议验证；需在目标 Vivado/BD 中验证连接与背压 |
+ | C03-P5 | 完成通知 | 推荐 RISC-V 轮询、IRQ 只给 PS；备选给核新增中断 | 后者扩大核异常/CSR/固件范围 | 当前 core_top 无 IRQ 口，轮询可复用现有语义但占核周期 |
+-| C03-P6 | 目标上限 | 推荐硬件/协议能力 16、检查 V0 policy 10，超 10 RECHECK；备选全链硬限 10 | 影响协议兼容与 BRAM/结果表 | v1.2 已是 16；检查 V0 文档的 10 仍是业务建议，须 JL 统一 |
++| C03-P6 | 目标上限 | 推荐硬件/协议能力 16、检查 V0 policy 10，超 10 RECHECK；备选全链硬限 10 | 影响协议兼容与 BRAM/结果表 | JL 已冻结能力/策略区分；C04 的应用层一致性评审仍需完成 |
+ | C03-P7 | 逐目标结果 | 推荐 16 B，保留 target_id、三 logits、margin、score、错误；备选精简结果 | 影响诊断、带宽与错贴框防护 | 16×16 B 很小；只返 argmax 无法逐层/低置信定位 |
+ | C03-P8 | 配置/结果原子性 | 推荐 seq 最后提交，busy 时 commit 拒绝不排队；备选单级队列 | 决定跨域一致性和轮次归属 | 无 seq 易读到撕裂数据；队列会增加本轮/下轮歧义 |
+ | C03-P9 | 状态语义 | 推荐 sticky done/error/timeout + W1C，START 不自动抹旧错 | 影响驱动恢复和错误证据 | 明确首错最利于复现；软件必须多一步清状态 |
+diff --git a/docs/inspection-v0-contract.md b/docs/inspection-v0-contract.md
+index 926da70..70e9777 100644
+--- a/docs/inspection-v0-contract.md
++++ b/docs/inspection-v0-contract.md
+@@ -1,13 +1,13 @@
+ # 检查 V0：取图、ROI 预处理与首次成功检查契约（建议稿）
+ 
+ 日期：2026-10-09；审查基线 dev/exe @ 051aefa。
+-状态：设计建议；2026-10-10 共享 ROI 与 FILE_REPLAY 候选实现已完成离板验证，板端取图/实机验收未完成；不自动替换既有核、视频与 MOCK 协议契约。
++状态：应用建议稿；共享ROI、FILE_REPLAY、FILE/LIVE骨架已有离板验证，真实取帧/整机未验收。64×64首网/整数与16能力/10策略已在C02/C03冻结，C04整体仍待评审；本文其他建议不自动冻结。
+ “检查 V0/V1”是应用版本，与 RISC-V 核 v0/v1 分开命名。
+ 
+ ## 1. 当前事实与首版取图选择
+ 
+-- 当前自定义 vision.bit：HDMI 彩色显示已上板；PS 经 AXI-Lite 配置，不具备完整图像读取通路。
+-- create_hdmi_bd.tcl 只将 snapshot_debug 接 ILA；没有视频 VDMA/像素存储读口。
++- 原自定义vision.bit：彩色显示已上板，PS仅配置；`create_hdmi_bd.tcl`的snapshot_debug只接ILA，没有VDMA读帧通路。
++- C01候选由`create_capture_hdmi_bd.tcl`新增彩色Video In/VDMA支路及状态监测，显示/状态诊断已过；custom PS帧槽交接/缓存/完整副本尚未实现，见[C01基线](c01-capture-implementation-baseline.md)。
+ - video_pipeline 默认分析快照 224×224、GRAY8，可经过高斯/Sobel；它不是原图 ROI。
+ - 10/07 的 1280×720、MJPG/30fps 是 Windows UVC 采集证据，不是 PS 读帧证据。
+ - 检查 V0 建议加载具备视频 VDMA 的 PYNQ base overlay，PS 用 hdmi_in.readframe()。
+@@ -21,7 +21,7 @@
+ - 使用软件 capture_id 明确标记来源；不假称它是当前 RTL 的 cop_frame_id。
+ - 清晰度待真实零件采图确认：记录最小零件/孔洞像素大小、对焦、运动模糊和曝光。
+ - 新增取图的同一帧同时用于训练采集与部署；base/custom 两条来源未经比对不得视为像素一致。
+-- 检查 V1 再在自定义 overlay 接原彩色帧捕获分支；现有低分辨率灰度快照不能替代它。
++- 检查V1的原彩色捕获支路已有C01候选，仍须完成DDR安全取帧与核/CNN集成；低分辨率灰度快照不能替代原图ROI。
+ 
+ ## 2. 建议采用的统一预处理
+ 
+@@ -88,7 +88,8 @@
+ ## 4. 当前未实现与参考
+ 
+ - 已实现并离板验证：共用预处理模块、FP32 文件检查与 request_id 幂等复用；这些软件证据不替代板端验收。
+-- 未实现/未验：PS实帧采集验证、正式部署模型/运行时、LIVE协议、在线批次幂等与V0整机验收。
+-- 未实现：自定义overlay彩色帧读口、CNN协处理器、PS↔RISC-V应用接口与V1闭环。
++- 已实现：v1.2 LIVE校验、FILE/LIVE服务、前端手动有效轮记录与session/check去重；FILE_REPLAY按request_id复用产物。HTTP `/v1/check`每次递增check_id，trigger_ref只回显，不能称网络请求重试已幂等。
++- 未实现/未验：custom DDR安全完整帧副本、正式部署模型/运行时、HTTP请求级幂等、真实V0整机验收；base已有27帧短测，不替代custom或长测。
++- 未实现：CNN RTL、PS↔RISC-V应用接口与V1闭环；C01彩色捕获硬件候选已有，不再列为从零未实现。
+ - 依据：create_hdmi_bd.tcl、vision_axi.v、video_pipeline.v、训练preprocess、旧ROI参考及主计划。
+ - 官方取图/默认BGR依据：[PYNQ Video](https://pynq.readthedocs.io/en/latest/pynq_libraries/video.html)。
+diff --git a/docs/module3-model-training.md b/docs/module3-model-training.md
+index df99c9c..703bc8f 100644
+--- a/docs/module3-model-training.md
++++ b/docs/module3-model-training.md
+@@ -1,7 +1,7 @@
+ # 模块三模型训练前期准备（INT8 CNN 训练与量化路线）
+ 
+ > 是什么：模块三 CNN 推理协处理器对应的**训练侧**前期准备文档——训练/量化路线选型、交付物定义与接口对齐点。
+-> 给谁看：never-die-cold（训练侧准备，经 9/29 授权）、jianglibo（`src/coprocessor/` RTL，第 5 节对齐点）、watercopper（第 6 节测试数据衔接）。
++> 给谁看：jianglibo（现行训练/量化/整数参考与RTL主责）、watercopper（数据/定位/ROI）、never-die-cold（采集与实机复验）；当前分工见[三人执行清单](project-closeout-three-person-checklist.md)，早期演练人员保留在历史记录中。
+ > 什么时候读：紧固件数据准备、模型选型与协处理器契约评审时；契约定稿后回填第 5 节。
+ > 状态：训练侧前期草案；[C02 整数/硬件契约](../src/coprocessor/design_v0.md)
+ > 与 [C03 集成接口契约](coprocessor-integration-v0.md)已由 JL 于 2026-10-11 冻结，但仍不代表 RTL 或正式 INT8 模型已完成。
+@@ -11,7 +11,7 @@
+ 训练侧最终交付四样东西（均为协处理器可用格式）：
+ 
+ 1. **定点模型**：INT8 权重 + INT8 激活（含 scale/zero-point 参数表）；
+-2. **权重 hex 导出**：位宽、排布（逐层/逐通道）、初始化文件格式——参数化脚本，具体排布等 `cop_top` 契约回填；
++2. **权重 hex 导出**：位宽、排布与参数包按已冻结C02/C03生成；正式导出工具/包仍待实现；
+ 3. **精度报告**：浮点基线 vs INT8 的 top-1/精度差，作为"模型训练之类的"验收证据；
+ 4. **黄金参考**：逐层 activation 数值抽查（若干输入图、每层前 64 个输出），供 watercopper 做协处理器逐层比对测试数据。
+ 
+@@ -88,9 +88,9 @@ NumPy-only 检查工具的 FP32 软件参考包。三个诊断输入是数值测
+ 
+ | 收口节点 | 交付物 | 负责人 |
+ |:---|:---|:---|
+-| M2 | 对齐首个网络的结构、量化参数、权重与黄金参考，支撑协处理器首网验证 | never-die-cold；watercopper 衔接数据 |
+-| M3 | 真实紧固件任务的正式模型、相机测试、精度报告及端到端黄金参考 | never-die-cold + watercopper |
+-| M4 | 模型、数据划分、权重与配置版本归档，复现步骤进入材料 | never-die-cold + watercopper |
++| M2 | 正式首网参数/权重与整网黄金，支撑硬件首网验证；INT8基础/卷积参考已有 | JL计算链；WC数据；NC实机 |
++| M3 | 正式模型/精度报告与端到端黄金、真实相机验收 | JL模型；WC数据/定位；NC实测 |
++| M4 | 模型/参数、数据划分及配置版本归档，复现步骤入材料 | JL计算包；WC材料；NC最终复验 |
+ 
+ 收口时间以根目录 [主计划 §1.2](../plan.md#12-收口时间总览) 为准，不规定逐日训练任务。模型、定位与硬件契约按依赖交接；M2 的首网验证不等于正式工业应用已完成。
+ 
+@@ -118,6 +118,7 @@ DMA 结构和 MMIO 地址以两份冻结契约为准；导出工具只能按该
+ 
+ | 日期 | 变更 | 作者 |
+ |:---|:---|:---|
++| 2026-10-12 | 同步现行三人分工、冻结排布与INT8基础/整网黄金边界，保留早期演练预算 | 文档核对 |
+ | 2026-10-11 | JL 冻结 C02/C03，允许进入 J02；正式 INT8 实现状态仍为未实现 | jianglibo / Codex 同步 |
+ | 2026-10-10 | 接入外包原型来源，量化路线改为先测 PTQ、必要时 QAT；区分交接权重与候选硬件预算 | 文档同步 |
+ | 2026-10-10 | 阶段 0 新增 C02/C03 契约草案链接与训练侧推荐对齐答案；待 JL 拍板，未宣称实现 | Codex |
+diff --git a/docs/non-algorithm-plan.md b/docs/non-algorithm-plan.md
+index 8048aae..f10c781 100644
+--- a/docs/non-algorithm-plan.md
++++ b/docs/non-algorithm-plan.md
+@@ -1,32 +1,32 @@
+ # 非识别算法工作包看板
+ 
+-日期：2026-10-07。范围排除 CNN、定位、训练、量化和识别算子；现有算法交付只按接口接入，不以 mock 代替真实识别验收。
++更新日期：2026-10-12。范围排除CNN/定位/训练/量化算子实现，维护启动、接口、EXE与发布依赖；软件原型不替代真实硬件验收。
+ 
+ ## 基线与状态
+ 
+-当前集成基线为 `c2bb910`（`dev/bench`）。HDMI 四视图候选提交 `95b853d` 尚未进入该基线；整合时逐文件移植并保留 Part C 核变更。当前主工作区有用户未提交的 Part C 与树莓派文件，实施时不得覆盖。
++当前已合并基线为`3e2e1c9`（PR #69/#70/#71），旧dev/bench/Part C分叉不再是当前整合待办。本工作区另有未提交NC离板修复/输入审计，证据见[离板记录](../data/logs/2026-10-12-nc-offline/README.md)。执行分工以[三人清单](project-closeout-three-person-checklist.md)为准。
+ 
+ | 工作包 | 状态 | 依赖 | 版本与证据 |
+ |---|---|---|---|
+-| HDMI 四视图与集成 | 🟡 功能已在板出图，待并入基线 | `95b853d` 与 `c2bb910` 的重叠核改动需逐项复核 | 候选提交 `95b853d`；`data/logs/2026-10-07-hdmi-diagnostic/` |
+-| 树莓派相机预览 | ✅ 开机预览已验证；HDMI 接收热插拔仍待收口 | HDMI 输入时序与 EDID 配置 | `sim/scripts/pi-camera-preview.service`；`data/logs/2026-10-06-pi-boot/`（当前未提交） |
++| HDMI显示/捕获候选 | 显示链路已验证；C01捕获RTL/BD/候选位流与显示/状态诊断已有 | 原vision源码追溯、custom DDR完整副本和完整N02/N03验收 | [C01基线](c01-capture-implementation-baseline.md)；UVC正常不证明取帧安全 |
++| 树莓派相机预览 | 开机预览有历史证据；完整HDMI恢复仍未验收 | 当前源/接收时序与EDID | `sim/scripts/pi-camera-preview.service`；[真实相机记录](../data/logs/2026-10-07-pi-pynq/README.md) |
+ | PYNQ 开机加载 | ⬜ 未实现 | 已验证 bit、XRT/PYNQ 环境、systemd 启动顺序 | 尚无“重启后未手动加载且出图”的证据 |
+-| HDMI 启动与恢复 | 🟡 手动恢复可用；自动热插拔恢复未通过 | Pi CEA 720p60、已校验 EDID、UVC 诊断 | `95b853d:data/logs/2026-10-07-hdmi-diagnostic/`；不能因黑屏循环重载 bit |
+-| RISC-V 核验收 | 🟡 四档仿真/CoreMark 有既有证据；实现、板测及统计口径待补 | 固定源码版本、统一负载和计数窗口 | `src/riscv/plan.md`；BHT2 11.520 ns 日志在当前未提交 `data/logs/2026-10-07-partC-postopt/` |
+-| 板端控制与结果接口 | ⬜ 真实服务未实现；当前为 mock 协议 | 真实设备状态、MMIO、R12 应用确认；结果提供端契约 | `src/pynq_host/vision_protocol.py` 只接收 MOCK；接口决策见 `docs/vision-sync-protocol-decisions.md` |
+-| Windows EXE | 🟡 视频/轮次 mock 原型已实现；设备兼容、异步请求、重连和 LIVE 未验收 | UVC 720p 格式及真实板端 HTTP 服务 | `src/vision_client/README.md`；原型明确标记 `MOCK ONLY` / `VIDEO ONLY` |
+-| 工单与系统发布 | ⬜ 工单、批次记录和正式发布未实现 | 版本化有效目标列表、PS/RISC-V 控制契约、目标 Windows 电脑 | 需测试导出、安装、恢复及全机复验；算法准确率是外部依赖 |
++| HDMI启动/恢复 | 特定配置手动恢复有证据；完整冷启动/长测/物理拔插仍未验收 | Pi CEA720p60、采集卡共存与实际位流 | [N01现场记录](../data/logs/2026-10-10-onboard-n01/README.md)；不能用另一位流代签 |
++| RISC-V核验收 | 核与最小SoC已收口 | 后续协处理器接入不退化 | [核收口报告](../report/module1-closure.md)；MMIO/工业固件仍未接入 |
++| 板端控制/结果接口 | v1.2 MOCK/LIVE与FILE服务骨架已实现 | 真实取帧/MMIO/CNN、R12应用回执、HTTP请求级幂等 | [协议](vision-sync-protocol-decisions.md)；软件config_id不代表硬件生效 |
++| Windows EXE | 视频/轮次、重连撤框、LIVE类别/分数/工单横幅、PROTOTYPE已离板验证 | 检查快照查看、真实硬件/目标机复验 | [客户端说明](../src/vision_client/README.md)；轮次叠加不是逐帧同步 |
++| 工单/记录/发布 | 文件候选规则、手动有效轮幂等记录、v2/CSV/异常截图已有 | 核侧工单判定、真实闭环与最终发布 | [离板检查](offline-inspection.md)；记录去重不等于网络重试幂等 |
+ 
+ ## 实施门槛
+ 
+-1. P0：逐项整合 `95b853d`，更新主计划和核计划；完成 PYNQ 开机加载与可控 HDMI 恢复入口。服务“加载成功”与“视频健康”分开报告。
+-2. P1：固定同一源码版本完成四档核验收；板端服务拥有唯一硬件会话，配置只有 R12 确认后才报告生效；EXE 的网络轮询不得阻塞视频刷新。
+-3. P2：先以确定性目标列表实现类别计数、工单比较、缺件/多余件/错料/复检和幂等入账，再接入已有结果；完成批次、截图、CSV/JSON、安装与回退材料。
+-4. 真实图像获取与模块三数据接口未冻结前，不假定 `cop_*`/ILA 可供 PS 读取像素，不新增未经验证的整帧 DDR 通路，也不占用协处理器保留地址。
+-5. 验收必须留仓库内可复现入口与原始证据。移动场景用于检查视频更新；静止画面哈希不变不能单独作为冻结判据。mock 数据永远不能计为 LIVE 识别或真实工单通过。
++1. P0：NC按N01–N03复验实际位流与取帧；WC交DDR槽所有权/缓存适配，不能用stream_seq推测槽完成。PYNQ自动加载仍是独立待办。
++2. P1：接真实后端时固定session/config/capture与硬件版本，配置须经R12确认。保留原核四档回归；新核MMIO按C03实现并同步核契约。
++3. P2：复用已有规则/记录/CSV，补HTTP请求重试幂等、检查快照查看、真实工业场景与最终发布复验；不把“显示判定”写成“核已判定”。
++4. C02/C03已冻结，C01完整取帧与C04应用语义仍待验收/评审。cop_*是分析快照接口，ILA不是PS像素读口；地址按真实BD与冻结契约核对。
++5. 每例保存原始证据与实际版本；MOCK/FILE/PROTOTYPE不并入硬件识别统计，视频正常与DDR帧槽安全分别验证。
+ 
+ ## 节点与未实现项
+ 
+ 沿用主计划节点：10 月 12 日优先收口启动、视频、核验收、控制接口和 EXE 原型；10 月 20 日完成非算法工单与记录闭环；10 月 26 日完成发布材料和复现清单。模块三识别结果及准确率仍是外部依赖，不因节点到期改记为完成。
+ 
+-当前明确未实现：PYNQ 自动加载；HDMI 自动热插拔恢复；真实板端 HTTP/MMIO 服务；R12 生效回执联通；有效结果 LIVE 协议；工单与幂等批次；目标机安装包和整机发布验收。
++当前明确未实现/未验收：PYNQ自动加载、完整HDMI恢复/长测、custom DDR所有权/完整取帧、真实硬件HTTP/MMIO/CNN后端及R12回执、核工单固件、网络请求级幂等、检查快照查看与目标机最终发布。LIVE协议、文件规则与批次/CSV已实现，不能继续列为从零待办。
+diff --git a/docs/offline-inspection.md b/docs/offline-inspection.md
+index 1933c4e..7dd8089 100644
+--- a/docs/offline-inspection.md
++++ b/docs/offline-inspection.md
+@@ -9,8 +9,8 @@
+   FP32 原型加载/推理；三类工单候选规则；文件定位/裁剪/推理/判定；证据保存与重复请求复用；
+   Python 和 Windows EXE 的文件回放展示。
+ - 已实现但未验证：上述新模块的 PYNQ 环境兼容性、真实零件精度与工位效果。
+-- 未实现/未接入：板端原分辨率取帧、LIVE 分类服务、正式模型/PTQ/QAT、CNN 协处理器、
+-  RISC-V 工单判定和真实工业闭环。现用位流追溯、长时间/冷启动/断连复验仍待补。
++- 后续已有FILE/LIVE HTTP骨架、LIVE分类/工单展示与PROTOTYPE标识；其输入仍为文件。FILE_REPLAY的request_id复用不代表HTTP请求重试幂等，见[核对清单](implementation-document-audit-2026-10-12.md)。
++- 未实现/未接入：custom DDR安全完整取帧、真实硬件LIVE后端、正式INT8模型/整网黄金、CNN RTL、RISC-V工单判定和工业闭环。原vision已与归档XSA配对但缺源码锚定；完整长测/冷启动/断源复验仍待补。
+ 
+ ## 运行入口
+ 
+diff --git a/docs/onboard-2026-10-11-c01-draft.md b/docs/onboard-2026-10-11-c01-draft.md
+index bb979e6..da5a5a2 100644
+--- a/docs/onboard-2026-10-11-c01-draft.md
++++ b/docs/onboard-2026-10-11-c01-draft.md
+@@ -1,6 +1,6 @@
+ # C01 集成与取帧方案：2026-10-11 审查稿
+ 
+-最新状态（2026-10-11 22:30）：原 vision 已恢复，活动路径/提交应答/实际画面及 boot_id 均确认。修复候选已完成实机加载、MMIO、起始DMA停止与等待后帧首提交，20秒窗口UVC画面正常；但停止检查后 stream_seq=1474、恢复5秒等待仍不足，诊断整体未通过。C01/正式N03尚未验收；旧持续复位候选禁止重试。详见末尾本轮记录及 docs/project-handoff-2026-10-11.md。
++本文保留10/11方案与现场过程；当前状态以[C01实现基线](c01-capture-implementation-baseline.md)为准。23:15的后续诊断已整体PASS，停止期stream_seq增长有IP/实测解释；旧22:30的失败仍保留，但不再代表最新结论。C01/正式N03尚未验收，旧持续复位候选禁止重试。
+ 
+ 状态：方案草稿，未冻结；不代表集成 RTL、位流或 N03 已验收。
+ 基线：dev/model @ c292038；现场接线依据用户本次说明。
+diff --git a/docs/project-closeout-three-person-checklist.md b/docs/project-closeout-three-person-checklist.md
+index 6e8b6dd..50f92f9 100644
+--- a/docs/project-closeout-three-person-checklist.md
++++ b/docs/project-closeout-three-person-checklist.md
+@@ -45,9 +45,11 @@ JL 可以在电脑上生成 bit/hwh；下载到板卡、在线 ILA、实机网
+ | C03 | JL设计，WC对接 | 冻结核/协处理器/PS接口、结果布局、busy/done/error/timeout/reset、配置生效 | MMIO或自定义指令通路选定，寄存器与协议对应；score/低置信处理与整数输出衔接明确 |
+ | C04 | WC设计，NC/JL确认 | 统一LIVE检查、显示与来源语义 | session/check/capture/工单配置关联、检查快照与连续视频边界、PROTOTYPE与不完整统计表达明确；新增字段须版本评审，不绕过白名单 |
+ 
++C02/C03 已由 JL 冻结，表中项目进入实现/对拍阶段：C03 选 MMIO/AXI4-Lite + DMA，v0 不启用自定义指令。C01 仍缺完整取帧/集成验收，C04 仍缺完整应用评审。
++
+ base overlay 可用于取图与 PS 软件诊断，但与当前自定义整片位流互斥；它不能证明自研核/CNN已经运行。
+ 最终硬件闭环需 C01 中的集成位流。静止工位、人工触发是首版；逐帧精确关联与连续运动不默认纳入首版。
+-应用最多10件仍为候选，协议最多16目标已冻结；先明确两者适用范围，不能相互替换。
++C03 已冻结协议/硬件能力16与检查V0业务策略10；C04的超限计数映射及界面/记录一致性仍须确认，不能把能力上限直接当业务放行条件。
+ 
+ ## 4. NC：全部上板待办
+ 
+diff --git a/docs/project-overview.md b/docs/project-overview.md
+index 4dccdf9..2e747a5 100644
+--- a/docs/project-overview.md
++++ b/docs/project-overview.md
+@@ -6,7 +6,7 @@
+ > 不用比喻和口语。模块名、信号名、寄存器名按代码原名写（STE 允许技术名）。
+ > **配图**：7 幅图由 [img/make_project_diagrams.py](img/make_project_diagrams.py) 生成。
+ > **历史快照：BHT 尚未绘制。**7 幅图保留 2026-10-03 版本；重绘另列批次，本轮不运行生成脚本。
+-> **状态口径**：2026-10-09；当前实现以正文、冻结契约和收口证据为准。更细的契约见 [design_v0.md](../src/riscv/design_v0.md)、
++> **状态口径**：2026-10-12；当前实现以正文、冻结契约和收口证据为准，逐项核对见[实现/文档清单](implementation-document-audit-2026-10-12.md)。更细的契约见 [design_v0.md](../src/riscv/design_v0.md)、
+ > [design_v1.md](../src/riscv/design_v1.md)、[vision design_v0.md](../src/vision/design_v0.md)。
+ 
+ ---
+@@ -17,7 +17,7 @@
+ 视频进入 PYNQ-Z2 板卡。板卡完成三件事：图像预处理、物体定位、CNN 分类。
+ 板上的 RISC-V 核调度检查、汇总数量、对照工单做判定。
+ 识别结果发给 Windows EXE。EXE 显示视频、矩形框、类别标签和工单判定结果。
+-工单判定只有三类结论：缺件、多余件、错料。异常时 EXE 保存截图和批次记录。
++有效检查结果为 CHECK_PASS、CHECK_FAIL 或 RECHECK；缺件、多余件、错料是差额原因。无结果/断联时等待新结果。异常时 EXE 保存事件与截图，批次仅记录有效手动轮次。
+ 
+ ![图 1 系统总览](img/fig1_system.png)
+ 
+@@ -31,8 +31,8 @@
+ |:---|:---|:---|:---|
+ | 模块一 | RISC-V 核＋最小 SoC | jianglibo | 已完成收口。[核收口报告](../report/module1-closure.md) |
+ | 模块二 | HDMI 视觉预处理 RTL＋已验证视频链路 | never-die-cold | 已完成（RTL／链路级）。[视频记录](../data/logs/2026-10-03-vision-onboard/README.md)、[真实相机记录](../data/logs/2026-10-07-pi-pynq/README.md) |
+-| 模块三 | INT8 CNN 推理协处理器 | jianglibo | 未实现 |
+-| EXE 前端 | 视频预览、mock 原型；正式工业界面 | watercopper | [原型已验证](../data/logs/2026-10-06-vision-sync-schema/README.md)；正式版未实现 |
++| 模块三 | INT8 CNN 推理协处理器 | jianglibo | C02/C03 已冻结，整数基础/卷积参考已验证；RTL、整网黄金和正式模型未实现 |
++| EXE 前端 | 视频/轮次、LIVE 展示、记录与回放 | watercopper | 类别/分数/工单横幅、来源标识、记录 v2 与 CSV 已离板验证；真实硬件闭环与目标机发布未验收 |
+ 
+ 里程碑：M1（10/4）核验收；M2（10/12）预处理 + 首个网络 + EXE 原型；
+ M3（10/20）工业闭环；M4（10/26）材料收口；11/4 提交。
+@@ -42,19 +42,19 @@ M3（10/20）工业闭环；M4（10/26）材料收口；11/4 提交。
+ - ✅ **已实现并验证**
+   - v0 保留 `partA-v0` 锚点；v1 三级、转发、Radix-4、BHT 三档及四档入口已收口。[核收口报告](../report/module1-closure.md)
+   - v1：44 组 arch-test 子集签名、四档 XSim 对拍；BHT2 核 OOC 11.520 ns 实点 WNS +0.538，40 MHz 主档真实下载并观察 LED，均见核收口报告。
+-  - 视觉：当前回归入口含 23 个 RTL tb；[10/03 实机记录](../data/logs/2026-10-03-vision-onboard/README.md)含配置、彩色直通及修复后拔插复验，物理实现 WNS +0.956。
++  - 视觉：当前入口含 25 个 RTL tb，新增捕获几何/状态测试；[10/12 整合证据](../data/logs/2026-10-12-pr-review/README.md)与[10/03 特定配置实机记录](../data/logs/2026-10-03-vision-onboard/README.md)分开引用，原视频物理实现 WNS +0.956。
+   - 相机：CM3 经 PYNQ 到采集卡取得真实画面，720p 连续 24 帧；[10/07 记录](../data/logs/2026-10-07-pi-pynq/README.md)保留原黑屏、恢复过程与用户确认。
+   - v0/PicoRV32 OOC 对比已入档；83.8 MHz 等是 Slack 外推，不是该频率实点通过，见[对比记录](../data/logs/2026-10-03-picorv32-compare/README.md)。
+ - 🟡 **已实现但仍有验证／追溯缺口**
+-  - 当前相机所用板端位流与本地修复版的对应关系、该配置的长时间／冷启动／断连恢复待验证；不覆盖 10/03 已通过的特定配置记录。
++  - 原 vision 的 bit/hwh 已与归档 XSA 配对，构建源码锚定仍缺；C01 捕获候选有独立构建输入和显示/状态实机诊断。完整 DDR 取帧、长测/冷启动/断源恢复未验收，见[C01 基线](c01-capture-implementation-baseline.md)。
+   - 采集卡观测延迟上界 125 ms 已记录，不能当作 PL 本体延迟；PL／识别端到端延迟仍缺同口径实测。
+ - ⬜ **未实现 / 未接入**
+-  - CNN 协处理器、正式紧固件模型、实际定位部署与逐目标推理、工业检查固件、真实结果服务及视频关联、EXE 正式版、PYNQ 开机自动加载。
++  - CNN RTL、正式 INT8 模型/整网黄金、DDR 帧槽所有权/完整副本、真实定位/推理后端、核工业检查固件、真实硬件 LIVE 与发布验收、PYNQ 开机自动加载。
+ 
+ ## 3. RTL 代码组成
+ 
+ RTL 有两棵树，加一处预留。核树在 `src/riscv/`，视觉树在 `src/vision/`。
+-`src/coprocessor/` 现在只有 README；旧图中的行数和实现标记只对应历史快照。
++`src/coprocessor/` 已有冻结的 C02 文档、INT8 标量/张量/卷积软件参考，没有 CNN RTL。旧图中的行数和实现标记只对应历史快照。
+ 
+ ![图 2 RTL 组成树](img/fig2_rtl_tree.png)
+ 
+@@ -72,6 +72,7 @@ RTL 有两棵树，加一处预留。核树在 `src/riscv/`，视觉树在 `src/
+ - 处理单元：`rgb2gray`、`gaussian_3x3`、`sobel`、`osd_overlay`、`scaler`、`cop_buf`。
+ - 接口与基础设施：`in_align`、`config_bridge`、`axi_regs`、`vision_axi`、
+   `reset_sync`、`line_buffer`（被窗口级和 scaler 复用，共 5 片）。
++- C01 捕获旁路：`capture_stream_monitor`、`capture_fault_cdc`、`capture_status_axi`；与 Video In/VDMA 构成候选捕获支路。`stream_seq` 只证实 AXIS 完整几何，不能授权 PS 复制 DDR 槽。
+ 
+ ## 4. 模块一：核的数据流
+ 
+@@ -173,9 +174,9 @@ PS 的配置时钟和像素时钟异步。直接写寄存器会撕裂配置。
+ 不用异步 clock group 掩盖）；两级同步器全部加 `ASYNC_REG`；
+ 锁定丢失时 AXI 域不复位，在途响应照常完成（2026-10-03 上板挂死 bug 的教训）。
+ 
+-### 5.5 快照如何交给 CNN（图 7）
++### 5.5 分析快照回放接口（图 7）
+ 
+-`cop_buf` 是模块二和模块三的交接件。它用两个存储银行做乒乓帧缓冲；银行数不等于 BRAM 块数。
++`cop_buf`是已有的分析快照回放接口，目前仅作快照/诊断，未接CNN。它用两个存储银行做乒乓帧缓冲；银行数不等于BRAM块数。C02/C03的首网输入来自原图逐目标ROI，不能直接以整帧224×224快照替代。
+ 
+ ![图 7 cop_buf 乒乓帧缓冲](img/fig7_copbuf.png)
+ 
+@@ -191,7 +192,7 @@ PS 的配置时钟和像素时钟异步。直接写寄存器会撕裂配置。
+ 新帧覆盖未消费帧时 `drop_count` 加一；
+ 读缓冲恒不等于写缓冲，同拍读写无冲突。
+ 
+-接口是占位。cop 契约冻结后只改读侧封装，存储体和写侧不动。
++接口保留现有快照语义；将来用途调整须明确版本并验证。C03已选DMA搬运PS生成的ROI，不据此假定只改读侧封装即可接入CNN。
+ 
+ ## 6. 一帧数据的完整旅程
+ 
+@@ -203,17 +204,16 @@ PS 的配置时钟和像素时钟异步。直接写寄存器会撕裂配置。
+ 4. 显示通路：原始波形寄存 1 拍，`rgb2dvi` 串化，HDMI OUT 出图。
+ 5. 分析通路：灰度化、平滑、边缘、OSD 叠加，出灰度诊断流。
+ 6. 快照通路：缩放到 224×224，`cop_buf` 存成整帧。
+-7. （未来）`cop_top` 做 INT8 推理。RISC-V 核汇总类别和分数。
+-8. PS 对照工单，生成判定。网口发给 EXE。
+-9. EXE 在对应帧上叠框、标签和判定。
++7. （待完成的应用路径）原彩色捕获支路写DDR，PS取得安全完整副本后定位、裁剪64×64灰度ROI并量化；DMA把小ROI送入`cop_top`。
++8. （未接入）`cop_top`返回INT8分类结果，RISC-V汇总数量/对照工单判定，PS合并本轮bbox并发报文。
++9. EXE按session/config/接收后年龄叠框、标签和判定；不校验采集卡帧号，不能称“对应帧精确叠加”。
+ 
+-显示走第 4 步，结果走第 5–9 步。两条路延迟不同。
+-所以帧/检查的对应关系必须显式携带（`display_frame_id`、`cop_frame_id`），不能靠时序猜。
++第5–6步是已有分析/快照诊断路径，第7–8步是C03应用目标；当前FILE/LIVE用软件文件副本代替硬件捕获。显示与结果延迟不同，来源capture/check关联和轮次标识必须显式保存。
+ 
+ ## 7. 验证体系
+ 
+ 全量功能回归入口：`bash sim/scripts/run_iverilog.sh all`；arch-test、XSim 与 Vivado 另有专项入口。
+-它覆盖核 tb、四档 CoreMark/benchmark、门禁自检、23 个视觉 tb 和 Python 检查。门禁故意注入的 FAIL 由自检判据处理，真正测试失败使整体失败。
++它覆盖核 tb、四档 CoreMark/benchmark、门禁自检、25 个视觉 tb 和 Python 检查。视觉 Python 当前有 14 组（第 14 组构建输入审计尚未提交），INT8 参考另有 3 组入口；历史全量结果与当前定向回归分别留痕。门禁故意注入的 FAIL 由自检判据处理，真正测试失败使整体失败。
+ 
+ - 每个视觉单元都有黄金参考。Python 生成输入和期望，tb 逐像素比对。数据在 `data/golden/vision/`。
+ - iverilog 全 PASS 后，XSim 用同一判据复跑（`bash sim/scripts/run_vision_xsim.sh all`）。
+@@ -222,12 +222,12 @@ PS 的配置时钟和像素时钟异步。直接写寄存器会撕裂配置。
+ 
+ ## 8. 未实现清单（明确标注）
+ 
+-- `cop_top`（CNN 协处理器）：未实现。算子契约未冻结。
++- `cop_top`（CNN 协处理器）：RTL 未实现；C02/C03 已冻结，INT8 标量/张量/卷积参考已有，整网黄金尚缺。
+ - 实际定位部署与逐目标推理：未实现；ARM／Python 定位和裁剪参考已有验证，不等于实时板端部署。
+ - 正式紧固件数据集与模型：未完成。采集规程已入库。
+-- 工业检查固件与工单规则：未实现。
+-- EXE 正式版：未实现。前端原型联调在 M2。
+-- 真实板端结果服务与画面关联：未实现；已冻结的轮次级协议及 mock 原型不能替代真实识别。
++- 核侧工业检查固件未实现；PS 文件检查的候选工单规则已实现，不等于核侧判定。
++- EXE 检查快照查看、真实硬件结果联调与目标机发布验收尚未完成；现有 LIVE 展示、记录 v2、CSV 和文件回放已实现。
++- FILE/LIVE 服务骨架与替身已实现，恒显 PROTOTYPE；真实硬件后端未实现。轮次级叠加不代表逐帧精确关联。
+ - PL 本体及识别闭环延迟、当前相机配置的长期运行／冷启动／断连恢复：待验证；已有采集卡观测上界不能替代。
+ 
+ ## 9. 文档关系与复现入口
+@@ -245,8 +245,10 @@ PS 的配置时钟和像素时钟异步。直接写寄存器会撕裂配置。
+ 
+ ```bash
+ python docs/img/make_project_diagrams.py      # 旧图生成器；重绘须另批授权，本轮不执行
+-bash sim/scripts/run_iverilog.sh all          # 全量回归（核四档 + 视觉 23 tb）
++bash sim/scripts/run_iverilog.sh all          # 全量回归（核四档 + 视觉 25 tb）
+ bash sim/scripts/run_vision_xsim.sh all       # XSim 同判据复跑
++bash sim/scripts/run_vision_python.sh        # 14组；VISION_PYTHON可指定真实解释器
++bash sim/scripts/run_coprocessor_python.sh all # 3组INT8参考，需python3与NumPy
+ ```
+ 
+ ## 自测题（理解门槛演练）
+@@ -259,4 +261,5 @@ bash sim/scripts/run_vision_xsim.sh all       # XSim 同判据复跑
+ 
+ | 日期 | 变更 |
+ |:---|:---|
++| 2026-10-12 | 校正25 tb、捕获旁路、C02/C03、软件参考/服务/EXE实现及验收边界；历史配图保持原样 |
+ | 2026-10-09 | B02：同步三层状态与证据、当前核/转发/BHT 说明及 23 tb 入口；配图保留历史快照，未重绘。 |
+diff --git a/docs/vision-sync-protocol-decisions.md b/docs/vision-sync-protocol-decisions.md
+index d4d2caf..87c8a0f 100644
+--- a/docs/vision-sync-protocol-decisions.md
++++ b/docs/vision-sync-protocol-decisions.md
+@@ -1,9 +1,9 @@
+ # 视频/结果同步协议决策单（EXE 前端 × 板端服务）
+ 
+ > 是什么：Windows EXE 与板端结果服务之间"检查轮次"同步契约的决策底稿——补全根目录 [plan.md](../plan.md) §1.3 悬置的"视频与网口结果对应关系"。
+-> 给谁看：watercopper（EXE 前端，本文维护者）、板端真实服务实现者（主责待定，见 D7）、never-die-cold（frame_id 硬件来源在快照通路）。
++> 给谁看：watercopper（EXE与服务适配实现）、never-die-cold（D7板端真实服务责任人及实机验收）。当前执行分工见[三人清单](project-closeout-three-person-checklist.md)。
+ > 怎么用：评审逐项追认；冻结后回写 [vision_client README](../src/vision_client/README.md) 与 `vision_protocol.py`（schema 代码改动另起步骤，不在本单内动手）。
+-> 基线：dev/bench @ 01b3750（2026-10-06）。mock 接口 v1 现状见 [vision_client README](../src/vision_client/README.md) §模拟接口 v1。
++> 初始决策基线：dev/bench @ 01b3750（2026-10-06）；当前schema为v1.2，软件实现见[客户端说明](../src/vision_client/README.md)与[10/12整合证据](../data/logs/2026-10-12-pr-review/README.md)。
+ 
+ ## 0. 决策总览
+ 
+@@ -46,7 +46,7 @@
+ ## D3 有效性判据与过期/断联语义
+ 
+ - **推荐**：
+-  - EXE 侧有效性判据 = session_id 一致 + config_id 与 EXE 当前确认生效的配置一致 + created_at 年龄 ≤ max_age（默认 1.0s，与 mock v1 `is_current` 一致，命令行可调）。**frame_id 不参与匹配，仅透传展示**——这是对 mock v1 的语义修订，代码步骤同步。
++  - EXE 侧有效性判据 = session_id 一致 + config_id 与当前确认配置一致 + EXE接收后年龄 ≤ max_age（默认1.0s、命令行可调）。按10/08修订使用本地received_at；服务端created_at仅诊断与留档，不作跨机年龄比较。**frame_id 不参与匹配，仅透传展示**。
+   - 撤框条件（任一即撤）：年龄超窗；session 不匹配；config_id 不符（结果产生于旧配置，坐标可能失效）；HTTP 连续失败 ≥3 次；/v1/status 返回 hardware_connected=false。
+   - 撤框后横幅显示"等待新结果"，不得保留旧框；恢复后以新轮次重新叠加。
+   - 实现注记（2026-10-06，经 WC 质询修正）：EXE 触发间隔必须**小于**年龄窗口（默认 interval
+@@ -81,17 +81,12 @@
+ `vision_mock_service.py` 对请求字段的拒绝不能替代结果报文校验，现有 tb 未覆盖该负例。
+ 本轮只登记，不改协议、Python 或 tb；最小修复和负例测试须用户另批裁决。
+ 
+-修复进展（2026-10-10，用户授权离板执行）：工作区已补齐顶层与逐目标字段白名单，
+-非对象与未知字段统一拒绝；保留现有可选 trigger_ref 和空目标列表。
+-仓库内 test_vision_protocol.py 覆盖3个合法/12个非法用例，旧代码先复现FAIL；
+-run_vision_python.sh 八组退出0，证据见[data/logs](../data/logs/2026-10-10-q01-result-fields/README.md)。
+-代码尚未提交，理解门槛待用户回答；此修复不开放 LIVE、分类或工单判定字段。
+-**同日后续：WC+NC 现场确认 v1.2（见上），LIVE/分类/工单判定字段正式开放，Q01 的"不开放"限制随之解除。**
++Q01已随PR #67合并：顶层与逐目标严格白名单拒绝非对象/未知字段，保留trigger_ref与空目标列表；[首次失败→修复证据](../data/logs/2026-10-10-q01-result-fields/README.md)仍保留当时用例数量。当前v1.2允许LIVE分类/判定/prototype字段，后续LIVE测试与整合见[10/12证据](../data/logs/2026-10-12-pr-review/README.md)，不再是“未提交/待回答”。
+ 
+ ## D7 板端真实服务负责人（已定）
+ 
+ - EXE 前端 = watercopper（已定）。板端 PS 上的真实 HTTP 服务（消费 cop_* 快照、响应触发、MMIO 配置）主责 = **never-die-cold（2026-10-06 NC 本人确认接任）**。理由——EXE 开发机无网口，实机网口联调依赖队长环境；队长已有上板操作经验（2026-10-03 vision onboard 由其执行）。plan.md §3.4/§5.3 已同步。
+-- 过渡方案：服务未就绪期间，EXE 联调用 mock 服务（PC 或 Pi 宿主，pi-dev-roles R2），结果恒标 MOCK。
++- 过渡方案：定位mock恒标MOCK；`vision_mock_service.py --live`合成替身与`vision_live_service.py` FILE后端使用LIVE报文但恒标PROTOTYPE。真实硬件后端未接入，来源不能由mode或hardware_connected字段单独推断。
+ 
+ ## D8–D10 批次记录（M3 起步，2026-10-08 随离板实现落地）
+ 
+@@ -100,11 +95,8 @@ run_vision_python.sh 八组退出0，证据见[data/logs](../data/logs/2026-10-1
+   视频帧/自动轮询再多也不产生记录。
+ - **D9 去重**：记录键 = (session_id, check_id)；同键重复写入被拒，"一次确认的检查只记一条"。
+   结果未到/过期/断联不记录（异常事件与异常截图列 M3 项，独立于批次）。
+-- **D10 存储与标识**：`records.jsonl`（一行一条：schema_version / mode / session_id / check_id /
+-  config_id / frame_id / recorded_at / result_age_s（EXE 接收时基）/ created_at（原始服务端
+-  时间戳）/ target_count / targets / verdict 预留 / screenshot）+ `screenshots/` 逐条 PNG
+-  （记录时的含框画面）。**MOCK 记录截图带 `mock_` 前缀且 mode=MOCK——不得用作板上识别证据**
+-  （plan.md §3.4）。导出 = 记录目录本身；CSV 导出已实装（export_records.py，2026-10-09）。
++  当前实现只维护进程内键集合，跨进程复用同目录未恢复旧键；持久去重与HTTP请求重试幂等仍待实现，不能由D9同进程测试推导。
++- **D10 存储与标识**：当前`records.jsonl`为schema v2，保存session/check/config/frame、记录时间/接收时基年龄/原created_at、目标、status、原decision、prototype、protocol_version与截图名；兼容导出旧v1记录。`screenshots/`保存记录时含框画面：MOCK=`mock_`，LIVE+prototype=`proto_`，真实LIVE无前缀。MOCK/PROTOTYPE不得当板上识别证据；无前缀也不独立证明硬件来源。CSV已实现，字段以[records.py](../src/vision_client/records.py)及[export_records.py](../src/vision_client/export_records.py)为准，C04整体仍待评审。
+ - **D8 补充（记录资格时间点，2026-10-08 经理解题推演修正）**：手动标记在**报文被采纳**时
+   才生效——断联中的手动触发失败后，残留旧报文不得冒充手动轮结果被记入批次档案。
+ - **D11 异常事件日志**：overlay 状态迁移（no_result/outage/stale/config/offline/ok，含恢复）、
+@@ -120,6 +112,7 @@ run_vision_python.sh 八组退出0，证据见[data/logs](../data/logs/2026-10-1
+ 
+ | 日期 | 变更 | 作者 |
+ |:---|:---|:---|
++| 2026-10-12 | 统一D3接收时基、Q01已合并状态、D10记录v2和FILE/LIVE来源；不新增协议字段 | 文档核对 |
+ | 2026-10-06 | 首版：D1 拍板（轮次级起步），D2–D6 预填推荐待评审，D7 风险项 | watercopper（EXE 前端） |
+ | 2026-10-06 | 理解门槛问答通过后：D7 更新为提议定 NC（队长），待 NC 评审确认 |
+ | 2026-10-06 | 契约收口：D2–D6 watercopper 确认沿用推荐；D7 NC 本人确认接任，plan.md §3.4/§5.3 同步 | watercopper（EXE 前端） |
+diff --git a/plan.md b/plan.md
+index 1723b83..65c2f0f 100644
+--- a/plan.md
++++ b/plan.md
+@@ -1,6 +1,6 @@
+ # 项目主计划：收口节点、交付物与验收
+ 
+-更新日期：2026-10-10。目标形态为**受控工位紧固件识别与工业检查系统**；只固定收口时间，阶段内按依赖和实际进度安排。
++更新日期：2026-10-12。目标形态为**受控工位紧固件识别与工业检查系统**；只固定收口时间，阶段内按依赖和实际进度安排。
+ 
+ **三层状态**：模块一核＋最小 SoC 已完成收口，见[核收口报告](report/module1-closure.md)。
+ 模块二 HDMI 视觉预处理 RTL＋已验证视频链路已完成（RTL／链路级），见[视频记录](data/logs/2026-10-03-vision-onboard/README.md)和[真实相机链路](data/logs/2026-10-07-pi-pynq/README.md)。
+@@ -50,9 +50,9 @@
+ 
+ **已确定负责人**：Windows EXE 由 `watercopper` 负责。
+ 
+-外包视觉材料已按文档、模型、脚本和结果拆分并入项目目录，来源、接收核对和复现缺口见 [交接索引](docs/outsource/fastener-handoff.md)。采用 OpenCV 定位 + 逐目标 64×64 灰度小 CNN 的原型路线；先评估 PS 定位与原分辨率 ROI 取图，再决定是否下沉 PL。首版按单张稳定图检查推进；连续运动的触发、关联和去重未实现，需单独确认节拍与线速。部署分工、输入与模型仍须契约评审，不能把方案建议记作已接入。
++外包视觉材料已按文档、模型、脚本和结果拆分并入项目目录，来源、接收核对和复现缺口见 [交接索引](docs/outsource/fastener-handoff.md)。采用 OpenCV 定位 + 逐目标64×64灰度小CNN；C03已选PS定位/ROI，后续下沉PL另评审。首版按单张稳定图检查推进；连续运动的触发、关联和去重未实现，需另定节拍与线速。正式参数与真实部署仍待完成，不能把冻结方案记作已接入。
+ 
+-**已冻结部分**：轮次协议最多 16 目标、Python/OpenCV 前端目录 `src/vision_client/`、板端服务主责 NC，见[同步协议](docs/vision-sync-protocol-decisions.md)。**待冻结**：真实场景条件、模型／硬件算子及定位部署分配等；任意接触、堆叠和遮挡不在首版范围。 检查 V0 建议稿的最多10件尚未冻结，不替换现有轮次协议16目标上限。
++**已冻结部分**：轮次协议 v1.2 最多 16 目标、前端目录 `src/vision_client/`、板端服务责任人 NC；[C02](src/coprocessor/design_v0.md)固定首网及整数/张量语义，[C03](docs/coprocessor-integration-v0.md)固定 MMIO/AXI4-Lite + DMA、PS 定位/ROI 和核判定分工，并区分 16 目标能力与检查 V0 的 10 件策略。**待冻结/验收**：实际工位支持条件、正式模型参数/阈值及 C04 应用语义完整评审；任意接触、堆叠和遮挡不在首版范围。冻结契约不代表接口已接入。
+ 
+ 分类模型负责类别，自动框还需要定位算法。裂纹、尺寸超差等质量缺陷检测，以及跨帧跟踪，属于额外能力；当前首版只承诺上述工单与数量检查目标。
+ 
+@@ -86,9 +86,11 @@
+ 
+ | 成员 | 模块一职责 | 后续职责 | 工作分支 |
+ |:---|:---|:---|:---|
+-| `jianglibo` | 全部 RTL、自测及缺陷修复 | 模块三 RTL 与算子级自测 | `dev/riscv` |
+-| `never-die-cold` | 专项 tb、波形检查、全量回归、综合与问题定位 | 模块二 RTL；抽查模块三端到端结果 | `dev/vision`、`dev/model` |
+-| `watercopper` | arch-test、benchmark、四档指标、日志与验收材料 | 模块二黄金参考、测试数据、板务、EXE 前端及文档 | `dev/exe`（板务/基准跨模块协调） |
++| `jianglibo` | RTL、自测及缺陷修复；核已收口 | 训练/量化/整数参考、CNN RTL、核固件与集成位流 | `dev/riscv`、模型工作按包协调 |
++| `never-die-cold` | 专项验证、综合与问题定位；核已收口 | 全部上板/采集/实测、集成验收与最终提交；视觉离板遗留核对 | `dev/vision`、`dev/model` |
++| `watercopper` | arch-test/benchmark、日志与材料；核已收口 | 数据/定位/ROI、PS驱动/服务软件、EXE、发布与材料 | `dev/exe` |
++
++当前执行依赖与N/J/W工作包以[三人清单](docs/project-closeout-three-person-checklist.md)为准；旧“训练NC、板务WC”安排只作历史，不再作为续工分配。
+ 
+ 分支用途：`dev/riscv` 管核与协处理器 RTL；`dev/vision` 管视觉链路；`dev/model` 管训练、模型与黄金参考；`dev/exe` 管前端与联调；`main` 管经 PR 审查的集成版本。模型负责人仍按具体工作包协调，本次不改变成员职责。
+ 
+@@ -122,20 +124,20 @@
+ 
+ ### 3.1 当前状态
+ 
+-- 已实现并验证：核与最小 SoC 收口见[核报告](report/module1-closure.md)；视觉 23 个 RTL tb、彩色分流、物理 HDMI 与采集链路见[视频记录](data/logs/2026-10-03-vision-onboard/README.md)、[真实相机恢复](data/logs/2026-10-07-pi-pynq/README.md)；EXE mock 原型见[原型证据](data/logs/2026-10-06-vision-sync-schema/README.md)。
+-- 已实现但验证缺口未闭环：板端现用 vision.bit 与本地修复版指纹不同；现用位流的长时间、冷启动、断连恢复待复验，不能借用另一位流结果。原 8.14%／25% FAIL、组合 28.30% 均保留在历史记录。
+-- 未实现／未接入：定位与裁剪已有 Python 黄金参考，**板端实时部署**未完成；正式紧固件模型、CNN、网络硬件输出、工业固件／正式服务与正式 EXE 仍待完成。
++- 已实现并验证：核与最小 SoC 收口见[核报告](report/module1-closure.md)；25 个视觉 RTL tb、13 组视觉 Python 与 3 组 INT8 参考测试见[PR 整合证据](data/logs/2026-10-12-pr-review/README.md)。FILE/LIVE 原型、前端类别/工单展示、PROTOTYPE、记录 v2 与 CSV 已离板验证。当前未提交的构建输入审计将视觉 Python 扩至 14 组，见[离板证据](data/logs/2026-10-12-nc-offline/README.md)。
++- 已实现但验收缺口未闭环：原 vision 的 bit/hwh 与归档 XSA 配对，仍缺构建源码锚定；C01 候选有独立输入清单、构建日志和实机显示/状态诊断，DDR 取帧及完整长测/断源恢复未验收。原 8.14%／25% FAIL、组合 28.30% 均保留在历史记录。
++- 未实现／未接入：正式 INT8 模型与整网黄金、CNN RTL/首网硬件输出、custom DDR 所有权与完整取帧、核工业固件、真实硬件 LIVE 后端及整机发布验收。逐项源码与证据核对见[文档核对清单](docs/implementation-document-audit-2026-10-12.md)。
+ 
+ ### 3.2 交付看板
+ 
+ | 工作包 | 当前事实 | 下一交付物 | 主责 / 依赖 |
+ |:---|:---|:---|:---|
+ | RISC-V 核 | 模块一收口完成：PR #60已合并，#20/#21及M1已关闭；全量退出0、四档XSim/arch扩展、BHT2核86.806MHz时序与40MHz真实上板有证据；仅转发收益10.20% | 移交模块三；备考#61独立待办；见 [收口报告](report/module1-closure.md) | JL；NC/WC 复验 |
+-| 视频链路 | RTL／已验证链路完成，见[10/03 视频](data/logs/2026-10-03-vision-onboard/README.md)、[10/07 相机](data/logs/2026-10-07-pi-pynq/README.md)；现有 23 RTL tb | 板端与本地位流指纹闭环；现用配置长时间／冷启动／断连复验 | NC/WC 板务与黄金参考 |
+-| 定位与紧固件模型 | 定位/裁剪 Python 黄金参考已有；OpenCV、HOG/SVM、小 CNN 离线原型与外包快照已接收；真实工位、正式模型和板端部署未验收 | 实际工位采图、原分辨率 ROI、真实数据 FP32/PTQ 对比、INT8 模型与精度报告 | 训练 NC、数据 WC；定位 PS/PL 归属待协调 |
+-| CNN 协处理器 | 尚未实现 | 算子契约、MAC/缓存、自测、首个网络结果 | JL；依赖模型/算子对齐，M1 后主力转入 |
+-| 板端调度与服务 | 配置／快照与 mock 工具已有；正式识别服务、工业调度未实现 | RISC-V 工单规则、PS 真实结果接口 | NC 真实服务；核调度另行协调 |
+-| Windows EXE | 预览/MOCK、轮次与批次记录、HUD v4、CSV导出及中文支持已实现；[本次八组回归](data/logs/2026-10-10-branch-integration/README.md)退出0 | LIVE真实结果联调、工单判定及发布复验；完整工业闭环未验收 | WC；依赖 NC 真实服务 |
++| 视频链路 | 25 RTL tb；历史真实相机视频已验证；C01 彩色捕获 RTL/BD/候选位流与显示/状态诊断已有 | 帧槽所有权、DDR BGR/动态对拍；完整 N02/N03 复验 | NC 实机；WC 驱动/软件适配 |
++| 定位与紧固件模型 | 定位/ROI、FP32 原型与 INT8 标量/张量/卷积参考已有；正式模型与实机部署未验收 | 真实数据、FP32/PTQ 对比、正式 INT8 参数/权重/整网黄金 | JL 训练/量化；WC 数据/定位；NC 采图/实测 |
++| CNN 协处理器 | C02/C03 已冻结；RTL 与接口接入未实现 | MAC/缓存/算子自测、首网硬件输出 | JL；依赖正式整数包 |
++| 板端调度与服务 | 配置诊断、MOCK、FILE/LIVE 骨架与文件工单候选规则已有；核工业调度未实现 | 真实取帧/MMIO/CNN 后端、核工单规则与服务联调 | NC 按 D7 负责实机服务；WC 按 W04/W05 编写适配/服务；JL 核固件 |
++| Windows EXE | UVC/轮次、LIVE 类别/分数/工单横幅、PROTOTYPE、记录 v2、CSV 与离线回放已有 | 检查快照查看、真实硬件结果联调与目标机发布复验 | WC；依赖真实服务与实机证据 |
+ | 发布与证据 | 核/视觉已有部分证据；工业闭环证据未完成 | 实机验收、指标、EXE 发布包、操作说明与演示视频 | 全员；WC 主笔材料 |
+ 
+ 缩写：JL = `jianglibo`；NC = `never-die-cold`；WC = `watercopper`。
+@@ -162,8 +164,8 @@
+ | 卡点 | 处理方式 |
+ |:---|:---|
+ | 阴影/反光使定位分裂或合并 | 实测背景、光照与最小间距；统计漏框/多框，加入形态与面积过滤验证；支持条件外提示复检 |
+-| 定位 PS/PL 分配未冻结 | 在应用接口交接前协调；EXE 已由 WC 负责；板端服务已定 NC（2026-10-06 本人确认，见 [同步协议决策单](docs/vision-sync-protocol-decisions.md) D7） |
+-| 720p 缩放时序 | 历史 OOC +0.330 与后续物理实现 +0.956 分开记录，见[视频证据](data/logs/2026-10-03-vision-onboard/README.md)；现用板端位流与本地修复版指纹仍须闭环 |
++| PS 定位/ROI 的真实部署未验收 | C03 已选 PS 生产量化 ROI；WC 实现适配，NC 上板复验；后续下沉 PL 须另评审 |
++| 720p 时序与位流追溯 | 原视频 +0.956 与 C01 候选 +0.495 分开记录；原 vision 缺源码锚定，C01 输入清单完整性见[恢复证据](data/evidence/2026-10-12-c01-exact-build-inputs/README.md)，不据此代签 bit-to-source 与实机验收 |
+ | 视频与结果有不同延迟 | 明确帧/检查关联和过期处理；采集卡显示延迟与板端推理耗时分开测量 |
+ | 多帧重复统计 | 当前画面数量与批次累计分开；一次确认的检查只计一次 |
+ | 模型或协处理器未就绪 | 可用明确标注的样例结果联调界面；不能用它替代真实识别验收 |
+@@ -204,10 +206,10 @@
+ 
+ ### 5.3 后续模块安排
+ 
+-- **模块二**：`never-die-cold` 负责 RTL 和仿真，`watercopper` 负责黄金参考、测试数据与板上操作，目标是 M2 完成 HDMI 直通演示。
++- **模块二**：已有 HDMI RTL/链路收口；后续 `never-die-cold` 执行上板、取帧/恢复验收与机位采集，`watercopper` 提供驱动适配、数据审计与黄金参考，见[三人执行清单](docs/project-closeout-three-person-checklist.md)。
+ - **模块三**：`jianglibo` 完成 INT8 MAC 阵列、缓冲与地址生成、顶层集成和算子级测试，目标是 M2 跑通首个网络。`never-die-cold` 在 M2/M3 验收时抽查端到端结果。
+-- **训练与定位**：采用传统视觉定位 + CNN 分类；训练准备由 `never-die-cold` 推进、`watercopper` 衔接数据与黄金参考，定位的 PS/PL 分配及实现主责在接口评审时协调。训练计划见 [模块三训练文档](docs/module3-model-training.md)。
+-- **EXE 与板端服务**：EXE 由 `watercopper` 负责，板端服务主责已定 `never-die-cold`（2026-10-06 本人确认：EXE 开发机无网口，实机网口联调依赖队长环境）；M2 交付视频/结果接口原型，M3 完成叠加、配置、统计与异常记录，M4 交付发布包。不得把前端展示样例结果记为板上识别完成。
++- **训练与定位**：按现行三人清单，JL 负责训练/量化/整数黄金并与 RTL 闭环，WC 负责数据/标注与 PS 定位/ROI，NC 负责采集和实测。训练计划见[模块三训练文档](docs/module3-model-training.md)。
++- **EXE 与板端服务**：WC 负责 EXE 和 W04/W05 软件适配/服务包；D7 的板端真实服务责任人仍为 NC，由 NC 执行实机联调和验收。FILE/LIVE 原型已验证，完整硬件闭环和发布包仍待验收，样例结果不计为板上识别。
+ - **系统集成与材料**：M3 全员联调，由 `never-die-cold` 主持实测；M4 由 `watercopper` 主笔，全员提供证据和演示素材。
+ - **PicoRV32 对比**：M4 材料收口前完成，要求见 [核计划 §4.4](src/riscv/plan.md)，不占用 M1 验收时间。
+ 
+@@ -219,6 +221,7 @@
+ 
+ | 日期 | 变更 |
+ |:---|:---|
++| 2026-10-12 | 按合并源码、C02/C03 与三人执行清单校正测试数量、软件实现、接口/ROI方案、责任分工及原 vision/C01 证据边界；保持 M2 未通过 |
+ | 2026-10-10 | 接收外包视觉包并保留原文，补充受控工位、单张稳定检查、PS 定位/ROI 评审和 FP32→PTQ→必要时 QAT 路线；不视为板端验收 |
+ | 2026-09-10 | 从早期计划草稿整理出执行计划 |
+ | 2026-09-14 | 建立三分支协作方式和第一阶段任务表 |
+diff --git a/src/coprocessor/README.md b/src/coprocessor/README.md
+index 0a1a21f..8cb4b1b 100644
+--- a/src/coprocessor/README.md
++++ b/src/coprocessor/README.md
+@@ -1,4 +1,4 @@
+-# src/coprocessor —— CNN 推理协处理器 RTL
++# src/coprocessor —— CNN 契约与 INT8 软件参考
+ 
+ 规划中的轻量 INT8 CNN 加速器。v0 已冻结为 MMIO/AXI4-Lite 控制面 + DMA 数据面，
+ RISC-V 以 load/store 访问且不启用自定义指令。
+@@ -24,7 +24,12 @@ RISC-V 以 load/store 访问且不启用自定义指令。
+ - 与 RISC-V 核：`soc_top` 本地 MMIO 窗口，固件以 load/store 启动和轮询；现有核数据口没有等待握手，不能直接冒充 AXI master
+ - 与 PS：AXI4-Lite 配置/状态；数据通过 AXI DMA/DataMover 搬运
+ - 与存储系统：只搬权重、逐目标 64×64 ROI 与小结果；中间特征默认驻留 BRAM，不默认全分辨率逐帧 DDR 回写
+-- 寄存器映射表定稿后同步更新到 `docs/` 与 `src/riscv_fw/`
++- C03 已给出寄存器映射；实际接入时须同步核/SoC 契约与驱动，当前 MMIO/DMA 均未接入
++
++## 已实现的软件参考
++
++`int8_reference.py` 实现输入/bias量化、舍入、scale编码与requant；`int8_tensor_reference.py` 实现张量/逐通道权重量化、bias和OIHW卷积累加，溢出拒绝。3组测试由 `bash sim/scripts/run_coprocessor_python.sh all` 复现，需真实 `python3` 与 NumPy；[10/12证据](../../data/logs/2026-10-12-pr-review/README.md)通过。
++这些函数不是整网黄金；逐层算子链、正式参数/权重包与硬件对拍仍待完成。
+ 
+ ## 设计参考
+ 
+@@ -32,4 +37,4 @@ RISC-V 以 load/store 访问且不启用自定义指令。
+ - 算子化验证（CONV/POOL/GEMM 加速比表）与吞吐率指标（每拍采样数/SSR 思路）：[docs/proposal_upgrade.md](../../docs/proposal_upgrade.md)
+ - 训练/量化侧前期准备与接口对齐点：[docs/module3-model-training.md](../../docs/module3-model-training.md)
+ 
+-> 状态：C02/C03 已冻结；FP32 逐层参考和训练导出演练已有仓库证据。正式 INT8 模型、整数黄金、协处理器 RTL、MMIO/DMA 接入与工业固件均未实现。
++> 状态：C02/C03、FP32逐层参考、INT8基础/卷积参考已有；正式INT8模型、整网黄金、协处理器RTL、MMIO/DMA接入与工业固件未实现。
+diff --git a/src/coprocessor/design_v0.md b/src/coprocessor/design_v0.md
+index f46831f..97533d9 100644
+--- a/src/coprocessor/design_v0.md
++++ b/src/coprocessor/design_v0.md
+@@ -19,7 +19,7 @@
+ 
+ ### 1.2 当前仍未实现
+ 
+-- 正式 PTQ/QAT、逐层整数黄金和生产权重包；
++- 正式 PTQ/QAT、整网逐层整数黄金和生产权重包（已有标量/张量量化与卷积累加参考，不等于整网实现）；
+ - MAC、卷积地址生成、缓存、bias、ReLU、requant、GAP、FC RTL；
+ - 128 MAC @100 MHz 的综合、时序、资源和实测延迟；
+ - 与核、PS、DMA、固件及真实数据的集成。
+diff --git a/src/pynq_host/README.md b/src/pynq_host/README.md
+index 12a1d36..67ae0bd 100644
+--- a/src/pynq_host/README.md
++++ b/src/pynq_host/README.md
+@@ -2,13 +2,15 @@
+ 
+ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采集；Jupyter 保留为板端调试与复现入口。最终工业操作界面为 Windows EXE，由 `watercopper` 负责：采集卡视频和网口识别结果统一展示，见根目录 [项目主计划](../../plan.md) §1.3。
+ 
+-## 当前实现与规划边界（2026-10-10）
++## 当前实现与规划边界（2026-10-12）
+ 
+ 已有 `vision_regs.py`／`vision_demo.py`／`m2_onboard.py`／`onboard_smoke.py` 配置及板端诊断；
+ `data/golden/vision/localize/reference.py`／`arm_localize.py` 与打包工具提供定位／裁剪黄金参考，不等于实时部署。
+ `vision_mock_service.py` 提供明确标注 MOCK 的服务；D6 字段白名单已随 PR #67 合并。
+-远端 `7101a33` 将 `vision_protocol.py` 扩展为 MOCK/LIVE v1.2 校验，整合回归通过；
+-网络预览的 PROTOTYPE 标识尚未实现，真实 LIVE 服务未验收，见[复验边界](../../data/logs/2026-10-10-dataset-integration/README.md)。
++`vision_protocol.py` 已支持严格 MOCK/LIVE v1.2 校验；`vision_mock_service.py --live` 提供合成 LIVE 替身。
++`vision_live_service.py` 已实现 FILE 后端、每轮捕获副本/引擎调用/报文与产物落盘；FILE 恒 `prototype=true`，前端 PROTOTYPE 徽标已实现。
++它没有真实 HDMI/DDR/MMIO/CNN 后端，`/v1/config` 仅推进软件配置号，不证明 R12 硬件应用；见[整合证据](../../data/logs/2026-10-12-pr-review/README.md)。
++工单由服务启动参数提供，HTTP配置仅接收control；在线工单编辑和请求重试幂等尚未实现。
+ 下列 notebook／通用工具仍是规划，不能由 mock 或训练演练推断已实现。
+ 
+ 本轮新增 `roi_preprocess.py`、`inspection_model.py`、`inspection_rules.py`、
+@@ -20,18 +22,18 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采
+ 后续新增 `model_reference.py`、`numpy_reference.py`、`model_audit.py`、
+ `reference_tensors.py`、`reference_package.py`：交付原型的 BN 折叠、独立逐层对拍、
+ 预算审计及可移交的 FP32 软件参考包已离板验证并随 PR #67 合并；
+-见[模块三逐层参考](../../docs/module3-prototype-reference.md)。正式 INT8 与硬件尚未实现。
++见[模块三逐层参考](../../docs/module3-prototype-reference.md)。`src/coprocessor/` 另有 INT8 标量/张量/卷积参考；正式 INT8 模型、整网黄金与硬件尚未实现。
+ 
+ 后续新增 `dataset_manifest.py`、`dataset_audit.py` 和仓库 CLI：720p 采集清单、
+ 会话/精确重复像素/实物编号泄漏、覆盖统计和来源声明已用测试夹具验证，理解题及补测已通过。
+-十三组统一回归通过；这不验收真实标签或模型精度，见[数据集审计](../../docs/fastener-dataset-audit.md)。
++这些工具的测试夹具证据见[数据集审计](../../docs/fastener-dataset-audit.md)，不验收真实标签或模型精度。统一视觉 Python 当前为14组，含尚未提交的构建输入审计；[离板证据](../../data/logs/2026-10-12-nc-offline/README.md)退出0。
+ 
+ - `demo.ipynb`：板端调试与复现 notebook
+ - `benchmark.ipynb`：基线对比与指标采集（CPI、延迟、帧率、加速比）
+ - `golden_ref.py`：软件黄金参考实现（OpenCV / 纯 Python 推理）
+ - `metrics.py`：数据自动采集与报告生成（→ `data/`）
+-- 板端正式识别服务未实现；轮次协议与 NC 主责已冻结，见[协议决策单](../../docs/vision-sync-protocol-decisions.md)。
+-- EXE 在 `src/vision_client/`，已有[Python/OpenCV 预览／mock 原型](../../data/logs/2026-10-06-vision-sync-schema/README.md)；正式工单、统计、导出及真实服务联调待完成。
++- 真实硬件识别后端未实现；FILE/LIVE 骨架已有，不把软件会话/配置号当硬件状态。NC 的实机服务责任与 WC 的适配/服务实现工作见[三人清单](../../docs/project-closeout-three-person-checklist.md)。
++- EXE 在 `src/vision_client/`，已有 LIVE 类别/工单展示、批次、CSV 和 FILE_REPLAY；真实硬件联调、检查快照查看和目标机发布仍待完成。
+ 
+ ## 板卡访问
+ 
+diff --git a/src/riscv_fw/README.md b/src/riscv_fw/README.md
+index 262029b..9eb2171 100644
+--- a/src/riscv_fw/README.md
++++ b/src/riscv_fw/README.md
+@@ -5,7 +5,7 @@
+ ## 规划内容
+ 
+ - `main.c`：主调度流程（触发预处理 → 启动推理 → 取结果 → 上报 PS）
+-- `cop_driver.c/h`：CNN 协处理器驱动（自定义指令封装）
++- `cop_driver.c/h`：CNN协处理器驱动（尚未实现；按[C03](../../docs/coprocessor-integration-v0.md)使用本地MMIO load/store启动/轮询，v0不启用自定义指令）
+ - `bench.c`：CPI/性能基准测试程序
+ - `link.ld` / `start.S`：链接脚本与启动代码
+ - `Makefile`：工具链构建脚本
+diff --git a/src/vision/README.md b/src/vision/README.md
+index 1bac9a5..588151c 100644
+--- a/src/vision/README.md
++++ b/src/vision/README.md
+@@ -19,7 +19,7 @@ Digilent 并行视频字节顺序是 R,B,G，`vision_axi.v` 双向转换为内
+ 
+ ## 已实现与验证
+ 
+-- 原 22 个 RTL tb 有 Icarus／XSim 同判据记录；增加 `tb_axi_lock_reset` 后当前为 23 个，定向与实机修复见下方视频证据。含真实 720p 两帧，
++- 原 22 个 RTL tb 有 Icarus／XSim 同判据记录；增加 `tb_axi_lock_reset` 和两个 capture tb 后当前为25个，见[整合回归](../../data/logs/2026-10-12-pr-review/README.md)。历史视频 tb 含真实 720p 两帧，
+   1,843,200 显示像素、100,352 快照像素、448 行及帧/配置号精确核对。
+ - AXI AW/W 独立握手、响应反压；整组配置请求/确认；不同频率时钟测试。
+ - 显示 RGB/原始同步波形恒延迟直通；分析使用内部单拍行尾/帧首标记。
+@@ -28,7 +28,8 @@ Digilent 并行视频字节顺序是 R,B,G，`vision_axi.v` 双向转换为内
+   灰度诊断口延迟不能当作彩色 HDMI 延迟。
+ - `video_pipeline` 内部 post-route：WNS +0.330 ns / WHS +0.027 ns，像素周期13.468ns、
+   AXI周期10ns；1985 LUT、1515 寄存器、38 BRAM tile、0 DSP。
+-- PS 配置绑定、定位/逐目标裁剪黄金参考、明确标为 MOCK 的 HTTP 接口和 Windows EXE 原型。
++- PS 配置绑定、定位/逐目标裁剪黄金参考；MOCK 与 FILE/LIVE HTTP 骨架、Windows LIVE 展示和记录已离板验证，替身/FILE 恒标来源。
++- C01 增加原彩色捕获支路与状态监测，候选 bit/hwh/XSA、显示/状态实机诊断已有；DDR BGR 完整副本与帧槽所有权尚未实现/验收，见[C01 基线](../../docs/c01-capture-implementation-baseline.md)。
+ 
+ ## 一键入口
+ 
+@@ -36,7 +37,7 @@ Digilent 并行视频字节顺序是 R,B,G，`vision_axi.v` 双向转换为内
+ 
+ ```bash
+ bash sim/scripts/run_iverilog.sh all          # 核、CoreMark、门禁、视觉、stdlib Python
+-bash sim/scripts/run_iverilog.sh vision all   # 当前 23 个视觉 tb
++bash sim/scripts/run_iverilog.sh vision all   # 当前25个视觉tb
+ bash sim/scripts/run_iverilog.sh vision_python
+ bash sim/scripts/run_vision_xsim.sh all
+ bash sim/scripts/run_vivado_vision_impl.sh    # 并行边界 OOC 布线
+@@ -66,11 +67,10 @@ PS 总线挂死（串口/网口同死）。修复为双复位拓扑（axi_rst_n
+ 提交恢复后首帧应用 → 全程串口/网口在线零挂死。后续真实相机画面已有[10/07 证据](../../data/logs/2026-10-07-pi-pynq/README.md)；
+ 不能写成相机从未验证。EDID 换源、DDR 对照与现用位流长期复验仍待补。
+ 
+-版本边界：10/06 板端既有位流与本地修复版 SHA256 不同；10/07 重载的是既有板端位流。
+-画面恢复不证明它包含本地 lock-reset 修复，板端／源码／位流指纹须验证线闭环。
++版本边界：10/06–10/07 记录的位流差异是历史事实；10/10 已把原板端 bit/hwh 与归档 XSA 配对，但未锚定构建源码，见[追溯记录](../../data/evidence/2026-10-10-onboard-bit-provenance/README.md)。C01 候选是另一套产物，不能混用验收结果。
+ 
+ 灰度 `out_*` 的 OSD 是诊断能力；HDMI 主显示保留彩色原图。EXE 模拟框不是物体检测；
+-单独 UVC 预览标为 `UNASSOCIATED`；当前[轮次协议](../../docs/vision-sync-protocol-decisions.md)允许原型按年龄窗叠加明确标注 MOCK 的结果，不代表逐帧精确关联或真实分类。
++单独 UVC 预览标为 `UNASSOCIATED`；[轮次协议](../../docs/vision-sync-protocol-decisions.md) v1.2 支持 MOCK/LIVE，FILE/LIVE 原型恒标 PROTOTYPE，按年龄窗叠加不代表逐帧精确关联或硬件分类。
+ 
+-未实现 / 未接入：正式 CNN/协处理器、实际定位部署、工单检查服务、真实识别结果与
++未实现 / 未接入：CNN RTL/正式INT8模型、实际定位/硬件后端、核工业固件、真实识别结果与
+ 采集卡画面关联。它们属于模块三应用交接，整帧快照不代表逐目标硬件裁剪已经完成。
+diff --git a/src/vision_client/README.md b/src/vision_client/README.md
+index 834768c..27b119c 100644
+--- a/src/vision_client/README.md
++++ b/src/vision_client/README.md
+@@ -1,8 +1,8 @@
+ # M2 Windows 视频预览和结果接口原型
+ 
+ `preview.py` 显示 UVC 采集卡视频，或明确标为 `MOCK ONLY` 的模拟图。
+-原型没有 CNN 分类、工单判定、批次数量或真实板卡结果。实际视频显示 `VIDEO ONLY | UNASSOCIATED`；
+-不能凭两台设备的帧率相同就把网口框叠到采集卡画面上。
++已有 LIVE 类别/分数/工单判定展示、批次与 CSV、文件回放；分类/工单结果来自报文或文件，前端不执行硬件推理。
++UVC-only 显示 `VIDEO ONLY | UNASSOCIATED`；配置 endpoint 后按轮次与年龄窗叠加结果，不代表逐帧精确关联。真实硬件 LIVE 和最终发布验收仍未完成。
+ 
+ ## 离板构建与复验
+ 
+@@ -27,7 +27,7 @@ sim/build/vision-client/dist/vision_preview/vision_preview.exe --mock --endpoint
+ 
+ 采集卡接入后的验收入口为 `vision_preview.exe --source 0`，按 q 或 Esc 退出。按 `c` 手动触发
+ 一轮检查（0.3s 防抖）；配 `--records-dir` 时该轮**有效**结果落批次记录（D8–D10）。
+-设备索引需现场确认。当前没有验证实际 UVC 格式、驱动与目标电脑兼容性。
++设备索引需现场确认。10/03 与后续现场记录已有真实采集卡画面证据；完整目标电脑/设备兼容与发布复验仍待完成，不能推为所有 UVC 设备已验证。
+ 
+ 批次记录（M3 起步，契约见决策单 D8–D10；**W07 起 schema v2**）：`--records-dir <目录>` 开启。
+ 只有手动触发的有效轮次记录——自动间隔轮次永不记录，结构性满足"重复帧不增加批次计数"；
+@@ -35,12 +35,14 @@ sim/build/vision-client/dist/vision_preview/vision_preview.exe --mock --endpoint
+ config/frame/时间/结果年龄/目标数/boxes/**status**/**decision 原样**（当轮工单即
+ decision.expected）/**prototype**/protocol_version/截图名）+ `screenshots/` 逐条 PNG。
+ **截图前缀标来源（C04 §3.2/Q2）：MOCK=`mock_`、LIVE+prototype=`proto_`、真实 LIVE 无前缀——
+-三者不得互换使用**，均不得用作板上识别证据（plan.md §3.4）。
++三者不得互换使用**；MOCK/PROTOTYPE 不得用作板上识别证据。真实 LIVE 记录仍需对应原帧、硬件版本和实测证据，文件名前缀不能单独证明来源。
+ 目录包含 `records.csv` 时即为完整导出件；**CSV 导出**：`py src/vision_client/export_records.py <记录目录>`
+ （UTF-8-BOM，Excel 直接打开不乱码；v2 增 status/missing/extra/prototype 列，v1 旧记录兼容；
+ targets 列保留 JSON）。离线测试：
+ `py sim/vision/test_vision_records.py`、`py sim/vision/test_vision_export.py`。
+ 
++当前去重集合仅在进程内，不从旧JSONL恢复；跨进程复用记录目录的持久去重尚未实现。服务HTTP重试每次新建check_id，不能用记录键去重证明请求重试幂等。
++
+ 异常事件日志（D11）：状态迁移（断联/超期/配置变化/恢复 ok）与会话变化、重握手失败写入
+ 同目录 `anomalies.jsonl`（一行一事件，含 prev/check_id/fails）+ `screenshots/anomaly_*.png`。
+ `--trigger-frame N` 为联调自检入口：在第 N 帧模拟一次手动触发（等效按 `c`），
+@@ -101,5 +103,5 @@ python src/vision_client/preview.py --replay data/evidence/2026-10-10-offline-in
+ 
+ `vision_protocol.py` 验证类型、坐标、编号和状态。结果有效性按 D3 = 会话 + 配置号 + 年龄窗
+ （frame_id 只透传展示、不参与匹配——EXE 无法把结果帧号对应到采集卡画面）；复位/重连需要新会话。
+-设备服务尚未实现，这里的立即确认只模拟 API 形态，真实 PS 配置仍必须用 `VisionRegs.commit()`
++FILE/LIVE 服务骨架已实现；这里的立即确认仍只模拟 API 形态，真实 PS 配置必须用 `VisionRegs.commit()`
+ 等待 R12 生效（NC 负责，见决策单 D7）。

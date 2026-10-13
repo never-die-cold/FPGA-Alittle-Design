@@ -1,0 +1,7 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+PASS: full diagnostic integer network golden {'pattern': {'class_id': 0, 'margin_q': 0, 'score_q15': 0, 'low_conf': True}, 'zero': {'class_id': 2, 'margin_q': 2, 'score_q15': 258, 'low_conf': True}}
+PASS: cnn_sequencer E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/network-vectors/pattern all 9225 packed words/73795 elements match integer network; logits=01fd01 class=0 margin=0 cycles=273625
+PASS: cnn_sequencer invalid parameters/watchdog/reset/invalid GAP and successful fresh run; no false DONE
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cnn_sequencer.v:136: $finish called at 8161206000 (1ps)
+PASS: cnn_sequencer E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/network-vectors/zero all 9225 packed words/73795 elements match integer network; logits=04fd02 class=2 margin=2 cycles=273625
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cnn_sequencer.v:136: $finish called at 2736296000 (1ps)

@@ -79,8 +79,8 @@
 
 - 目标标注：T 序号 + bbox + `class`（null → “未分类”）+ `score`（两位小数；缺失不显示）。
 - 判定横幅：status（CHECK_PASS / CHECK_FAIL / RECHECK）+ 差额（missing / extra，取自 decision）；LOCATION_ONLY 显示“仅定位，无判定”。
-- **现状（dev/exe @ fb168b1）**：已实现＝框 / ROUND / TARGETS / REC / FRESHNESS / 撤框与等待 / MOCK ONLY / LIVE 徽标位 / 文件回放视图；
-  **未实现＝LIVE 类别/分数、工单差额、PROTOTYPE 徽标、快照查看、判定横幅（均为 W06 范围）**。
+- **现状（2026-10-12，集成基线 `3e2e1c9`）**：已实现并离板验证＝框 / ROUND / TARGETS / REC / FRESHNESS / 撤框与等待 / MOCK ONLY / LIVE与PROTOTYPE徽标 / 文件回放 / LIVE类别与分数 / 工单差额 / 判定横幅。
+  **未实现/未验收＝检查快照查看、真实硬件取帧/分类后端及完整LIVE实机闭环**。替身/FILE结果不替代硬件验收。
 
 ## 4. 统计表达（不完整统计的诚实约束）
 
@@ -93,10 +93,9 @@
 
 - 只有手动触发的有效轮次落记录（D8）；键 (session_id, check_id) 去重（D9）。
 - 每条记录必须能回答：**哪个 session/round、用哪张 capture、按哪版工单、什么来源、判定依据是什么**。
-- 现状缺口（W07）：
-  - `records.jsonl` 的 `verdict` 预留字段读取顶层 verdict——v1.2 判定在 `decision` 内，现恒为 None；修正为保存 `decision` 原样。
-  - 新增字段：`source` / `prototype` / 当轮工单内容；`schema_version` 递增为 2（**Q2**）。
-  - 截图前缀：MOCK=`mock_`（已有）；PROTOTYPE 建议 `proto_`（**Q2**；MOCK 与 prototype 互斥——协议仅 LIVE 可带 prototype）。
+- W07实现（2026-10-12核对）：schema v2 保存 `status`、原 `decision`（含当轮工单）、`prototype`、`protocol_version`；来源以现有 `mode+prototype` 表达，未新增报文字段。
+  - 截图前缀已实现：MOCK=`mock_`、LIVE+prototype=`proto_`、真实LIVE无前缀；CSV兼容v1旧记录。
+  - NC在本轮PR审查的理解题①②中明确认可来源标记和有效轮次证据绑定，[全文记录](../report/llm_log/2026-10-12-three-pr-review.md)。该确认不代替其他C04未决项或JL评审。
 
 ## 6. 版本评审条款（不绕过白名单）
 
@@ -116,6 +115,8 @@
 | Q5 | 工单 ≤10 件与协议 16 目标的边界表述 | NC/JL | 验收矩阵 |
 | Q6 | V0 的 status/decision 由 PS 软件判定产出，V1 迁 RISC-V 后同契约消费 | JL | C03 衔接 |
 
+2026-10-12评审状态：Q2的PROTOTYPE前缀/记录v2来源语义已有NC明确确认，Q4的来源分组原则已有NC明确确认；Q4仍需JL一致。Q1/Q3/Q5/Q6及超限计数映射继续待相应责任人确认，C04整体仍为设计稿。C03已冻结16能力/10策略，但这不自动替代C04的应用层一致性评审。
+
 ## 参考
 
 - [协议决策单](vision-sync-protocol-decisions.md)（D1–D11，唯一报文出处）
@@ -131,3 +132,4 @@
 |:---|:---|:---|
 | 2026-10-10 | 首版设计稿：关联模型、快照/视频边界、来源四态、统计约束、记录扩展、版本评审条款；Q1–Q6 待 NC/JL 确认 | watercopper（EXE 前端） |
 | 2026-10-10 | W06/W07 落码：EXE LIVE 显示（PROTOTYPE/判定横幅/类别分数/实际工单）、记录 schema v2（decision/prototype/proto_ 前缀）；W05 骨架开工，登记超限映射注记待追认 | watercopper（离板应用链） |
+| 2026-10-12 | 按PR整合与实际回归更新W06/W07状态，记录已有NC来源/有效轮次确认；不新增协议字段，不代签C04整体冻结或实机验收 | NC离板续工 |

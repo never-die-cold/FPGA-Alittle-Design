@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EdgeSight · 逐文件说明</title>
+<style>
+:root{color-scheme:light;--ink:#18352f;--muted:#597067;--line:#d5dfd8;--green:#186653}*{box-sizing:border-box}
+body{margin:0;background:#f4f5ef;color:var(--ink);font:15px/1.7 "Microsoft YaHei",system-ui,sans-serif}main{max-width:1440px;margin:auto;padding:42px 32px}
+.eyebrow{font:12px monospace;letter-spacing:2px;color:var(--green)}h1{font-size:38px;letter-spacing:-1px;margin:6px 0 10px}p{max-width:1050px;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0}.flow button{background:#e6eee7;border:1px solid var(--line);border-radius:10px;padding:10px 18px;color:var(--ink)}
+.filters{position:sticky;top:0;z-index:2;background:#f4f5eff5;padding:14px 0;display:flex;gap:10px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+input,select,button{font:inherit}input,select{padding:11px 14px;border:1px solid var(--line);border-radius:8px;background:white;color:var(--ink)}input{flex:1;min-width:260px}
+button{cursor:pointer;border:1px solid var(--line);border-radius:6px;background:white;color:var(--green);padding:6px 12px}button:hover{background:#dcebe1}button:disabled{opacity:.4;cursor:default}
+.meta{display:flex;justify-content:space-between;align-items:center;margin:18px 0;color:var(--muted);gap:10px}.pager{display:flex;gap:8px;align-items:center}
+.row{display:grid;grid-template-columns:minmax(220px,32%) 1fr;gap:24px;padding:22px 0;border-top:1px solid var(--line)}.path{font:13px/1.7 monospace;overflow-wrap:anywhere;color:var(--green);text-align:left;border:0;padding:0;background:none}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}.tag{font-size:11px;border-radius:4px;background:#e5e9e1;color:var(--muted);padding:2px 6px}.desc{margin:0;color:var(--ink)}.relations{font-size:12px;color:var(--muted);margin-top:8px}
+a{color:var(--green)}dialog{border:1px solid var(--line);border-radius:14px;max-width:1000px;width:calc(100% - 36px);padding:30px;background:#fafbf7;color:var(--ink)}dialog::backdrop{background:#10292188}
+dialog h2{font:19px/1.7 monospace;overflow-wrap:anywhere}.rel-list{display:grid;gap:9px}.rel-list button{text-align:left;overflow-wrap:anywhere;font-size:13px}
+.detail-meta{font-size:13px;color:var(--muted)}.close{float:right}footer{margin-top:35px;color:var(--muted);font-size:12px}@media(max-width:750px){main{padding:24px 16px}h1{font-size:28px}.row{grid-template-columns:1fr;gap:10px}.filters{position:static}.meta{align-items:flex-start;flex-direction:column}}
+</style></head><body><main>
+<div class="eyebrow">EDGESIGHT / REPOSITORY FIELD GUIDE</div><h1>每个文件，做什么、连到哪里</h1>
+<p>__COUNT__ 个项目文件逐项说明 · __DATE__ · 基线 __REV__。只包含 Git 项目文件及未忽略的新文件，排除 .git 与被忽略的依赖/构建产物。</p>
+<p>点击文件名可查看关联、谁引用它和原文件；“文本引用”表示静态提及，不能当作实际执行。归档副本、候选规范和原型结果都不自动代表已接入或实机验收。</p>
+<div class="flow"><button data-group="root">① 项目规则</button><button data-group="src">② 实现源码</button><button data-group="sim">③ 测试与脚本</button><button data-group="build">④ 综合与时序</button><button data-group="board">⑤ 板卡操作</button><button data-group="data-logs">⑥ 原始证据</button></div>
+<div class="filters"><input id="query" aria-label="搜索文件" placeholder="搜索路径、作用或关联，例如 core_top、帧槽、PROTOTYPE…"><select id="group" aria-label="按目录过滤"><option value="">所有目录</option></select><select id="kind" aria-label="按类型过滤"><option value="">所有类型</option></select><button id="clear">清空</button></div>
+<div class="meta"><span id="count"></span><div class="pager"><button id="prev">上一页</button><span id="page"></span><button id="next">下一页</button></div></div>
+<div id="rows"></div><footer>完整数据：<a href="files.csv">CSV</a> · <a href="files.json">JSON</a> · <a href="README.md">阅读路线与Markdown目录</a>。说明依据在每个文件详情中标注，静态提取的关系可能不覆盖动态拼接路径。</footer>
+<dialog id="detail"><button class="close" id="close">关闭</button><h2 id="detail-title"></h2><p id="detail-desc"></p><p id="detail-meta" class="detail-meta"></p><a id="original" target="_blank" rel="noopener">打开原文件</a><h3>它关联的文件</h3><div id="outgoing" class="rel-list"></div><h3>引用它的文件</h3><div id="incoming" class="rel-list"></div></dialog>
+<script id="records" type="application/json">__DATA__</script>
+<script>
+const data=JSON.parse(document.getElementById('records').textContent),byPath=new Map(data.map(r=>[r.path,r])),incoming=new Map(),$=id=>document.getElementById(id);
+for(const r of data)for(const rel of r.relations){if(!incoming.has(rel.path))incoming.set(rel.path,[]);incoming.get(rel.path).push({path:r.path,type:rel.type});}
+for(const id of ['group','kind'])for(const name of [...new Set(data.map(r=>r[id]))].sort()){const o=document.createElement('option');o.value=name;o.textContent=name;$(id).append(o);}
+let filtered=data,page=0;const size=60;
+const make=(tag,text,cls)=>{const e=document.createElement(tag);if(text)e.textContent=text;if(cls)e.className=cls;return e;};
+function show(path){const r=byPath.get(path);if(!r)return;$('detail-title').textContent=r.path;$('detail-desc').textContent=r.description;$('detail-meta').textContent=`${r.kind} · ${r.state} · 说明依据：${r.basis}`;$('original').href='../../'+r.path.split('/').map(encodeURIComponent).join('/');
+for(const [id,items] of [['outgoing',r.relations],['incoming',incoming.get(path)||[]]]){const box=$(id);box.replaceChildren();if(!items.length)box.append(make('p','没有提取到明确的局部关系；可从所在目录README和同轮证据继续查找。'));for(const x of items){const b=make('button',`${x.type} → ${x.path}`);b.onclick=()=>show(x.path);box.append(b);}}
+if(!$('detail').open)$('detail').showModal();}
+function render(){const start=page*size;$('rows').replaceChildren();for(const r of filtered.slice(start,start+size)){const row=make('div',null,'row'),left=make('div'),path=make('button',r.path,'path');path.onclick=()=>show(r.path);left.append(path);const tags=make('div',null,'tags');for(const t of [r.kind,r.state])tags.append(make('span',t,'tag'));left.append(tags);const right=make('div');right.append(make('p',r.description,'desc'));right.append(make('div',r.relations.slice(0,3).map(x=>x.type+'：'+x.path).join(' · ')+(r.relations.length>3?` · 共${r.relations.length}条` : ''),'relations'));row.append(left,right);$('rows').append(row);}
+$('count').textContent=`找到 ${filtered.length.toLocaleString()} / ${data.length.toLocaleString()} 个文件`;$('page').textContent=`${filtered.length?page+1:0} / ${Math.ceil(filtered.length/size)}`;$('prev').disabled=page===0;$('next').disabled=start+size>=filtered.length;}
+function filter(){const q=$('query').value.trim().toLowerCase(),g=$('group').value,k=$('kind').value;filtered=data.filter(r=>(!g||r.group===g)&&(!k||r.kind===k)&&(!q||(r.path+' '+r.description+' '+r.relations.map(x=>x.path).join(' ')).toLowerCase().includes(q)));if(q){const score=r=>r.path.toLowerCase()===q?0:r.path.toLowerCase().includes(q)?1:2;filtered.sort((a,b)=>score(a)-score(b));}page=0;render();}
+for(const id of ['query','group','kind'])$(id).addEventListener(id==='query'?'input':'change',filter);
+$('clear').onclick=()=>{for(const id of ['query','group','kind'])$(id).value='';filter();};$('prev').onclick=()=>{page--;render();};$('next').onclick=()=>{page++;render();};$('close').onclick=()=>$('detail').close();for(const b of document.querySelectorAll('[data-group]'))b.onclick=()=>{$('group').value=b.dataset.group;filter();};render();
+</script></main></body></html>

@@ -106,3 +106,28 @@ def requantize_i8(acc, multiplier, shift):
     if not INT64_MIN <= product <= INT64_MAX:
         raise OverflowError("requant product does not fit signed INT64")
     return sat_i8_sym(round_shift(product, shift))
+
+
+def gap_average256(total):
+    """C02 GAP of 256 nonnegative INT8 values, given the exact sum."""
+    total = _exact_int(total, "total")
+    if not 0 <= total <= 256 * 127:
+        raise ValueError("GAP sum must represent 256 values in [0,127]")
+    return round_shift(total, 8)
+
+
+def classify_logits(logits, min_margin):
+    """C02 integer logit margin; explicitly not a softmax probability."""
+    if not isinstance(logits, (list, tuple)) or len(logits) != 3:
+        raise ValueError("exactly three logits required")
+    values = [_exact_int(value, "logit") for value in logits]
+    if any(not -127 <= value <= 127 for value in values):
+        raise ValueError("logit outside symmetric INT8 range")
+    min_margin = _exact_int(min_margin, "min_margin")
+    if not 0 <= min_margin <= 255:
+        raise ValueError("min_margin must fit UINT8")
+    ranked = sorted(range(3), key=lambda index: (-values[index], index))
+    margin = values[ranked[0]] - values[ranked[1]]
+    return {"class_id": ranked[0], "margin_q": margin,
+            "score_q15": (margin * 32767 + 127) // 254,
+            "low_conf": margin < min_margin}

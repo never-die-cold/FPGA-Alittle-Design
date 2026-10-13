@@ -1,0 +1,25 @@
+PASS: C02 scalar quantize/bias/scale-encode/requant/GAP/logit boundaries and invalid inputs
+PASS: C02 tensor/per-channel quantization values, layouts and rejection gates
+PASS: INT8 Conv2d addressing, bias, padding, stride and INT32 overflow gate
+Traceback (most recent call last):
+  File "E:\Projects\FPGA-Alittle-Design\sim\coprocessor\test_int8_network.py", line 52, in <module>
+    if __name__=='__main__': main()
+                             ^^^^^^
+  File "E:\Projects\FPGA-Alittle-Design\sim\coprocessor\test_int8_network.py", line 45, in main
+    for value in (-1,256,True,1.5): rejected(lambda:run_network(image,layers,value))
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Projects\FPGA-Alittle-Design\sim\coprocessor\test_int8_network.py", line 13, in rejected
+    try: call()
+         ^^^^^^
+  File "E:\Projects\FPGA-Alittle-Design\sim\coprocessor\test_int8_network.py", line 45, in <lambda>
+    for value in (-1,256,True,1.5): rejected(lambda:run_network(image,layers,value))
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Projects\FPGA-Alittle-Design\src\coprocessor\int8_network_reference.py", line 28, in run_network
+    classify_logits([0,0,0],min_margin)  # Reject invalid thresholds before expensive convolution.
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Projects\FPGA-Alittle-Design\src\coprocessor\int8_reference.py", line 126, in classify_logits
+    min_margin = _exact_int(min_margin, "min_margin")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Projects\FPGA-Alittle-Design\src\coprocessor\int8_reference.py", line 9, in _exact_int
+    raise TypeError(f"{name} must be an int")
+TypeError: min_margin must be an int

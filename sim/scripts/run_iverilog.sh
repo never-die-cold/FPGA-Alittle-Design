@@ -35,6 +35,8 @@
 #   bash sim/scripts/run_iverilog.sh bench_fwd|bench_nofwd|bench_bht1|bench_bht2 # benchmark 四档
 #   bash sim/scripts/run_iverilog.sh vision [单项|all] # 视觉专项；all 含核与视觉
 #   bash sim/scripts/run_iverilog.sh vision_gate # 视觉回归失败门禁自检
+#   bash sim/scripts/run_iverilog.sh cop_mac # CNN INT8 乘加原语；Verilog-2001
+#   bash sim/scripts/run_iverilog.sh coprocessor [all|pipeline|conv|network] # CNN 算子/全网逐元素对拍
 # 前置：PATH 中含 iverilog / vvp；原验收 13.0，本轮 Linux 11.0 结果另记
 set -u
 
@@ -42,6 +44,9 @@ MODE="${1:-all}"
 IVERILOG_ARGS=()
 
 case "$MODE" in
+    cop_mac) exec bash "$(dirname "$0")/run_coprocessor_iverilog.sh" mac ;;
+    cop_array) exec bash "$(dirname "$0")/run_coprocessor_iverilog.sh" array ;;
+    coprocessor) exec bash "$(dirname "$0")/run_coprocessor_iverilog.sh" "${2:-all}" ;;
     vision) exec bash "$(dirname "$0")/run_vision_iverilog.sh" "${2:-all}" ;;
     vision_gate) exec bash "$(dirname "$0")/test_vision_gate.sh" ;;
     vision_python) exec bash "$(dirname "$0")/run_vision_python.sh" ;;
@@ -136,6 +141,8 @@ for tb in "${TBS[@]}"; do
     fi
 done
 if [ "$MODE" = "all" ]; then
+    bash scripts/run_iverilog.sh coprocessor all || exit 1
+    bash scripts/run_coprocessor_python.sh all || exit 1
     for bench_mode in bench_nofwd bench_fwd bench_bht1 bench_bht2; do
         bash scripts/run_iverilog.sh "$bench_mode" || exit 1
     done

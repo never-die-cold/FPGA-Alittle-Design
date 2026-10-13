@@ -3,7 +3,7 @@ import math
 
 from int8_reference import (INT32_MAX, INT32_MIN, encode_requant_scale, quantize_bias,
                             quantize_i8_sym, requantize_i8, round_float_away,
-                            round_shift, sat_i8_sym)
+                            round_shift, sat_i8_sym, gap_average256, classify_logits)
 
 
 def expect_rejected(call, error):
@@ -53,6 +53,19 @@ def main():
     assert requantize_i8(INT32_MIN, INT32_MAX, 62) == -1
     assert requantize_i8(INT32_MAX, INT32_MAX, 0) == 127
     assert requantize_i8(INT32_MIN, INT32_MAX, 0) == -127
+    assert gap_average256(127) == 0 and gap_average256(128) == 1
+    assert gap_average256(32512) == 127
+    assert classify_logits([7, 7, 7], 1) == {"class_id": 0, "margin_q": 0,
+        "score_q15": 0, "low_conf": True}
+    assert classify_logits([-127, 127, -127], 254) == {"class_id": 1, "margin_q": 254,
+        "score_q15": 32767, "low_conf": False}
+    for call, error in ((lambda: gap_average256(32513), ValueError),
+                        (lambda: gap_average256(True), TypeError),
+                        (lambda: classify_logits([0, 0], 0), ValueError),
+                        (lambda: classify_logits([-128, 0, 0], 0), ValueError),
+                        (lambda: classify_logits([0, 0, True], 0), TypeError),
+                        (lambda: classify_logits([0, 0, 0], 256), ValueError)):
+        expect_rejected(call, error)
 
     invalid = ((lambda: round_shift(1, -1), ValueError),
                (lambda: round_shift(1, 63), ValueError),
@@ -73,7 +86,7 @@ def main():
                (lambda: requantize_i8(0, INT32_MAX + 1, 0), ValueError))
     for call, error in invalid:
         expect_rejected(call, error)
-    print("PASS: C02 scalar quantize/bias/scale-encode/requant boundaries and invalid inputs")
+    print("PASS: C02 scalar quantize/bias/scale-encode/requant/GAP/logit boundaries and invalid inputs")
 
 
 if __name__ == "__main__":

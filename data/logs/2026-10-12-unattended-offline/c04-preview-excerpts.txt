@@ -1,0 +1,16 @@
+1:"""Windows preview prototype（EdgeSight 应用外壳，HUD v4）。
+130:    if packet is not None and packet.get("prototype"):
+161:    parser.add_argument("--replay", type=Path, help="checked file inspection result.json (offline snapshot)")
+163:    parser.add_argument("--source", type=int, default=0, help="UVC capture device index")
+177:    if args.replay:
+179:            parser.error("--replay cannot combine with mock, endpoint, records, selftest or trigger")
+180:        from replay_viewer import show_replay
+181:        show_replay(args, _work_area)
+232:    capture = None if args.mock else cv2.VideoCapture(args.source, cv2.CAP_DSHOW)
+242:            if capture is not None:
+243:                ok, frame = capture.read()
+253:                if capture is None:
+273:                proto = bool(remote.packet.get("prototype")) if remote.packet else False
+275:                    anomalies.log(remote.mode, event, canvas, prototype=proto)
+294:        if capture is not None:
+295:            capture.release()
