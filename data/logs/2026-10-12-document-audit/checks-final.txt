@@ -1,0 +1,4 @@
+PASS: 23 documents, 245 local link targets exist
+PASS: current inventory = 25 vision RTL tb / 14 vision Python groups
+PASS: git diff --check and git diff --cached --check (exit 0)
+No RTL/Python functional regressions rerun; use cited original evidence.

@@ -1,0 +1,3 @@
+PASS: C02 scalar quantize/bias/scale-encode/requant boundaries and invalid inputs
+PASS: C02 tensor/per-channel quantization values, layouts and rejection gates
+PASS: INT8 Conv2d addressing, bias, padding, stride and INT32 overflow gate

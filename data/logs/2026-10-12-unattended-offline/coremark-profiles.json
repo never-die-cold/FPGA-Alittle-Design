@@ -1,0 +1,66 @@
+[
+  {
+    "profile": "bench_nofwd",
+    "cycles": 2850,
+    "retired": 1205,
+    "bubbles": 1645,
+    "cpi": 2.3651452282157677,
+    "raw_line": 763
+  },
+  {
+    "profile": "bench_fwd",
+    "cycles": 2423,
+    "retired": 1205,
+    "bubbles": 1218,
+    "cpi": 2.0107883817427386,
+    "raw_line": 803
+  },
+  {
+    "profile": "bench_bht1",
+    "cycles": 2380,
+    "retired": 1205,
+    "bubbles": 1175,
+    "cpi": 1.9751037344398341,
+    "raw_line": 843
+  },
+  {
+    "profile": "bench_bht2",
+    "cycles": 2351,
+    "retired": 1205,
+    "bubbles": 1146,
+    "cpi": 1.9510373443983402,
+    "raw_line": 883
+  },
+  {
+    "profile": "coremark_nofwd",
+    "cycles": 19057438,
+    "retired": 10106386,
+    "bubbles": 8951052,
+    "cpi": 1.8856827752274652,
+    "raw_line": 933
+  },
+  {
+    "profile": "coremark_fwd",
+    "cycles": 17114141,
+    "retired": 10106386,
+    "bubbles": 7007755,
+    "cpi": 1.6933987084997546,
+    "raw_line": 982
+  },
+  {
+    "profile": "coremark_bht1",
+    "cycles": 16335562,
+    "retired": 10106386,
+    "bubbles": 6229176,
+    "cpi": 1.6163603883722628,
+    "raw_line": 1031
+  },
+  {
+    "profile": "coremark_bht2",
+    "cycles": 16232079,
+    "retired": 10106386,
+    "bubbles": 6125693,
+    "cpi": 1.606121020906979,
+    "raw_line": 1080
+  }
+]

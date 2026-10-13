@@ -1,0 +1,18 @@
+docs/fastener-collection-log-template.csv:2:sess-20261012-0930-L0-wood,2026-10-12,NC,train,Camera Module 3 75dAF,default,60,L0,wood,"bolt-a,nut-a",12,"1;3-5","bolt;nut;washer",bolt:轴向+斜置,示例行：交付前删除
+docs/fastener-collection-handoff.md:6:> 给谁看：never-die-cold（N04/N05 执行与交付）、watercopper（W02/W03 接收与标注）。
+docs/fastener-collection-handoff.md:14:| 会话 | session_id | `sess-YYYYMMDD-HHMM-<L0..L3>-<bg>`，小写、禁空格；同日多会话用 HHMM 区分；**重拍＝新会话，不覆盖** | `sess-20261012-0930-L0-wood` |
+docs/fastener-collection-handoff.md:17:| 实物 | specimen_id | `类别缩写-小写字母`：`bolt-a…` `nut-a…` `washer-a…`；同实物跨会话复用 | `bolt-a` |
+docs/fastener-collection-handoff.md:34:| light / bg | L0–L3 / dark·gray·wood |
+docs/fastener-collection-handoff.md:51:| 朝向 \ 光照 | L0 | L1 | L2 | L3 |
+docs/fastener-collection-handoff.md:106:| 2026-10-10 | 首版：三层编号 + 实物标签规则、逐会话采集表与模板、覆盖矩阵、A1–A8 验收矩阵；待 NC 确认后执行 | watercopper（离板应用链） |
+docs/fastener-data-collection-protocol.md:4:> 给谁看：watercopper（数据采集与审计）、never-die-cold（训练侧接收）、上板执行人。
+docs/fastener-data-collection-protocol.md:6:> 状态：草案——只定方法与占位参数，⚠️ 标记项待实测或拍板后冻结；本文不授权任何硬件操作。
+docs/fastener-data-collection-protocol.md:12:| 取帧路径 | 必须经 PYNQ HDMI IN 链路取帧（base overlay `hdmi_in.readframe()`），不用 Pi 侧直接存图——数据集像素 = 部署像素 | board/hardware.md §1/§3 |
+docs/fastener-data-collection-protocol.md:18:| 输入尺寸 | ⚠️ 64×64 待 10/5 拍板（96×96 为升级档）；本文门限以 S 表示，默认 S=64 | docs/module3-model-training.md §3.5 |
+docs/fastener-data-collection-protocol.md:34:| L0 | 均匀漫射（顶灯 + 白纸/漫射罩柔光） | 无明显投影 | 部署主条件，正式训练/测试主数据 |
+docs/fastener-data-collection-protocol.md:44:2. 每种背景 × L0，摆固定 5 零件组合（3 类各 1–2 个、随机朝向），拍 10 帧（每帧轻微扰动位置）。
+docs/fastener-data-collection-protocol.md:59:维度：类别(3) × 光照(L0–L3) × 朝向（螺栓：轴向/斜置/头朝上；螺母垫圈：正扣/斜扣）× 数量档（1 / 3–5 / 8–10 个/帧）。
+docs/fastener-data-collection-protocol.md:78:├── raw/sess-YYYYMMDD-HHMM-<L0..L3>-<bg>/frame_00001.png   # 720p 原帧，PNG 无损
+docs/fastener-data-collection-protocol.md:83:- 会话名小写连字符，禁空格；`<bg>` ∈ {dark, gray, wood}；class ∈ {bolt, nut, washer}。
+docs/fastener-data-collection-protocol.md:114:1. §4 验线 PASS（base overlay 直通在采集窗口可见）→ 按 `board/logs/README.md` 留记录。
+docs/fastener-data-collection-protocol.md:125:| 2026-10-03 | 首版草案：机位/光照/背景/间距定标方法、批次矩阵与命名规范、阴影反光专项用例、审计清单与验线衔接顺序；⚠️ 项待 10/5 拍板与到货实测冻结 | never-die-cold（verify 线） |

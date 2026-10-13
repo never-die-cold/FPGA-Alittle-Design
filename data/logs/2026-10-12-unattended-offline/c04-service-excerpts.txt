@@ -1,0 +1,27 @@
+3:与 vision_mock_service 的区别：真实引擎、每轮新捕获复制落盘、(session_id, check_id) 唯一定位产物。
+7:- prototype 由捕获后端结构性决定：FILE 后端恒 true（离线产物代实时，C04 §3.2），无开关；
+23:from vision_mock_service import parse_trigger_ref
+37:    """FILE 捕获后端：目录内 PNG 按序轮换，每轮复制一份作为本轮 capture；prototype 恒 true。"""
+40:    prototype = True
+46:        self.seq = 0
+49:        path = self.files[self.seq % len(self.files)]
+50:        self.seq = (self.seq + 1) & 0xFFFFFFFF
+56:def complete_decision(decision, targets):
+72:    """会话状态：check_id 单调回绕；每轮 = 新捕获 → 引擎 → 报文校验 → 产物原子落盘。"""
+76:        self.config_id = 0
+77:        self.check_id = 0
+87:             "backend": captures.backend, "prototype": captures.prototype,
+90:    def check(self, trigger_ref):
+92:            self.check_id = (self.check_id + 1) & 0xFFFFFFFF
+93:            check = self.check_id
+100:                "frame_id": self.captures.seq, "config_id": self.config_id,
+101:                "check_id": check, "width": fields["width"], "height": fields["height"],
+105:                "prototype": self.captures.prototype,
+106:                **({"trigger_ref": trigger_ref} if trigger_ref is not None else {})})
+150:                                 "prototype": state.captures.prototype})
+166:                    self.reply(200, state.check(parse_trigger_ref(body)))
+175:                        state.config_id = (state.config_id + 1) & 0xFFFFFFFF
+176:                        applied = state.config_id
+177:                    self.reply(200, {"mode": "LIVE", "applied_config_id": applied})
+195:    parser.add_argument("--max-targets", type=int, default=16)
+200:    print(f"LIVE SERVICE (backend={captures.backend}, prototype={captures.prototype}): "
