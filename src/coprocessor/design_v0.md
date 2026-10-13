@@ -237,14 +237,22 @@ MAC 阵列起步固定为 8×16=128，基线按一 MAC/DSP 预算 128 DSP。x7z0
 
 ## 8. 正式模型包与黄金包最低内容
 
-正式 J02/J06 包至少包含：
+J02 诊断包和 J06 正式模型/黄金包至少包含：
 
-1. `manifest.json`：模型/preprocess ID、类别、逐层 shape/layout/dtype、全部 scale、
+1. `manifest.json`：显式分配的 `model_id:uint32`、preprocess ID、类别、逐层 shape/layout/dtype、全部 scale、
    multiplier、shift、margin 阈值、offset/length 和工具版本；
-2. 打包 INT8 权重、INT32 bias、INT32 multiplier、shift 及 SHA256；
+2. 单一参数 payload：按 64 B 对齐打包全部 INT8 权重、INT32 bias、INT32 multiplier、
+   UINT8 shift 及对齐填充；`WEIGHT_BYTES/WEIGHT_CRC32` 覆盖整个 payload，并同时记录 SHA256；
 3. 至少覆盖零、正负、半舍入、INT8 饱和、INT32 边界附近、GAP 和 argmax 平票的单算子向量；
 4. 固定诊断 ROI 的每层完整 INT8 黄金和最终结果；
 5. 导出、复算、篡改拒绝的一键仓库脚本与原始退出码。
+
+`model_id` 只是受版本管理的快速选择编号，不是完整模型身份；manifest/payload 的完整 SHA256
+才是交付身份依据，CRC32 只用于板端 payload 装载检查。preprocess ID 与 MODEL_ID/SHA256
+在 manifest 和 PS 服务中绑定，不新增 v0 MMIO 寄存器；`SOURCE_CONFIG_ID` 仍表示本轮 ROI/定位配置。
+
+J02 可使用明确标注的非正式诊断参数验证结构和逐位语义，不得冒充真实精度或正式模型证据；
+只有经过 J05 真实数据评估并在 J06 发布的包才称为正式模型包。
 
 真实精度报告另需真实、有标注、按实物/会话隔离的数据；数值诊断输入不能冒充准确率数据集。
 

@@ -120,6 +120,7 @@
 ## 参考
 
 - [协议决策单](vision-sync-protocol-decisions.md)（D1–D11，唯一报文出处）
+- [LIVE 接口样例（G0 互交件）](../data/evidence/2026-10-12-live-interface-sample/README.md)（合成数据非板上识别；含报文→显示映射与复现命令）
 - [检查 V0 契约](inspection-v0-contract.md)（取图 / ROI / 成功定义）
 - [离板检查](offline-inspection.md)（FILE_REPLAY 与证据规则）
 - [EXE README](../src/vision_client/README.md)（当前实现与入口）

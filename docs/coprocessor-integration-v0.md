@@ -86,7 +86,7 @@ Editor 分配，但寄存器 offset 必须相同。
 | 0x01C | `CFG_SEQ` | PS | 本次配置序号，非 0，单调递增可回绕 |
 | 0x020 | `CFG_APPLIED` | RO | 已原子应用的配置序号 |
 | 0x024 | `MODEL_ID` | PS | 正式 manifest 中的 32 位模型 ID |
-| 0x028 | `WEIGHT_CRC32` | PS | 生产包记录的 payload CRC32；SHA256 由 PS 验证 |
+| 0x028 | `WEIGHT_CRC32` | PS | 完整对齐参数 payload 的 CRC32；SHA256 由 PS 验证 |
 | 0x02C | `ROI_COUNT` | PS | 硬件 1–16；检查 V0 策略另限 1–10 |
 | 0x030 | `TIMEOUT_CYCLES` | PS | 从 start 接受到完成的 cop 时钟拍上限，0 非法 |
 | 0x034 | `WORK_ORDER` | PS | `[7:0] bolt,[15:8] nut,[23:16] washer,[31:24] policy_max` |
@@ -95,7 +95,7 @@ Editor 分配，但寄存器 offset 必须相同。
 | 0x040 | `CAPTURE_ID` | PS | 软件取帧号；不冒充 RTL `cop_frame_id` |
 | 0x044 | `SOURCE_CONFIG_ID` | PS | ROI/定位所用配置 ID |
 | 0x048 | `WEIGHT_ADDR` | PS | 64 B 对齐的 32 位物理地址 |
-| 0x04C | `WEIGHT_BYTES` | PS | 与 manifest 完全一致 |
+| 0x04C | `WEIGHT_BYTES` | PS | 完整对齐参数 payload 字节数，与 manifest 完全一致 |
 | 0x050 | `TARGET_DESC_ADDR` | PS | 16 B/目标的描述符数组，64 B 对齐 |
 | 0x054 | `ROI_ADDR` | PS | 第一张 HW INT8 ROI 的 64 B 对齐地址 |
 | 0x058 | `ROI_STRIDE` | PS | v0 固定 4096 B |
@@ -166,7 +166,8 @@ ERROR=`ERROR=1`；TIMEOUT=`ERROR=TIMEOUT=1`。终止状态下 BUSY 必须为 0�
 DDR 协议；`dma_ctrl.v` 只产生描述符、检查状态/长度并把 AXI-Stream 数据写入本地 BRAM。
 这仍是“AXI4-Lite 控制 + DMA 数据面”，同时缩小自研总线验证范围。
 
-- 权重：按 C02 的 O16×I8 包一次装入 BRAM，精确字节数和 CRC 匹配后 MODEL_VALID=1；
+- 参数：按 C02 打包全部 O16×I8 权重、bias、multiplier、shift 和对齐填充，完整 payload
+  的精确字节数和 CRC 匹配后 MODEL_VALID=1；
 - ROI：每目标固定 4,096 个规范 HW INT8 像素；输入装载器在 conv1 读取时为其余 7 个
   输入 lane 生成 0，不经 DMA 传输填充 lane；
 - 中间激活：只在片上 ping-pong BRAM，不默认回写 DDR；
@@ -245,6 +246,10 @@ DMA_READ、DMA_WRITE、DMA_SHORT、RESULT_MISMATCH、ACC_OVERFLOW_GUARD、ABORTE
 CAPTURE_ID、SOURCE_CONFIG_ID、WORK_ORDER_REV、RESULT_SEQ`。session_id 和 trigger_ref 由服务
 端维护；硬件不生成 UUID。若任一 ID 与当前 LIVE 会话/配置不符，PS 撤框并要求重检。
 
+`MODEL_ID` 是显式分配的 32 位选择编号，不能替代完整 SHA256。preprocess_id 不占独立 v0
+寄存器，由 manifest 与 MODEL_ID/SHA256 绑定并由 PS 服务核验；`SOURCE_CONFIG_ID` 只标识
+本轮定位/ROI 配置。改变 preprocess 必须形成新的受版本管理模型包并重新校验配置。
+
 major 变化表示不兼容的寄存器/二进制布局变化；minor 只允许向保留区添加能力，旧软件必须
 通过 CAPABILITY 判断。模型包、固件、位流和协议版本均进入 J08 交付清单与 SHA256。
 
@@ -278,7 +283,7 @@ major 变化表示不兼容的寄存器/二进制布局变化；minor 只允许�
 | C03-P3 | 控制权 | 推荐 PS 配配置/数据、RISC-V 独占 START 与工单判定；备选双主控仲裁 | 决定冲突、恢复和软件职责 | 单写者最容易复现；PS 与核真实并发尚未验证 |
 | C03-P4 | DMA 实现 | 推荐外部 DataMover/AXI DMA，`dma_ctrl` 管描述符/流；备选自研完整 AXI master | 影响 RTL 规模、吞吐和 IP 依赖 | 外部 IP 缩小协议验证；需在目标 Vivado/BD 中验证连接与背压 |
 | C03-P5 | 完成通知 | 推荐 RISC-V 轮询、IRQ 只给 PS；备选给核新增中断 | 后者扩大核异常/CSR/固件范围 | 当前 core_top 无 IRQ 口，轮询可复用现有语义但占核周期 |
-| C03-P6 | 目标上限 | 推荐硬件/协议能力 16、检查 V0 policy 10，超 10 RECHECK；备选全链硬限 10 | 影响协议兼容与 BRAM/结果表 | JL 已冻结能力/策略区分；C04 的应用层一致性评审仍需完成 |
+| C03-P6 | 目标上限 | 推荐硬件/协议能力 16、检查 V0 policy 10，超 10 RECHECK；备选全链硬限 10 | 影响协议兼容与 BRAM/结果表 | v1.2 已是 16；10/16 分层已由 JL 在正文 §1/§8 冻结；C04 的应用层一致性评审仍需完成 |
 | C03-P7 | 逐目标结果 | 推荐 16 B，保留 target_id、三 logits、margin、score、错误；备选精简结果 | 影响诊断、带宽与错贴框防护 | 16×16 B 很小；只返 argmax 无法逐层/低置信定位 |
 | C03-P8 | 配置/结果原子性 | 推荐 seq 最后提交，busy 时 commit 拒绝不排队；备选单级队列 | 决定跨域一致性和轮次归属 | 无 seq 易读到撕裂数据；队列会增加本轮/下轮歧义 |
 | C03-P9 | 状态语义 | 推荐 sticky done/error/timeout + W1C，START 不自动抹旧错 | 影响驱动恢复和错误证据 | 明确首错最利于复现；软件必须多一步清状态 |
