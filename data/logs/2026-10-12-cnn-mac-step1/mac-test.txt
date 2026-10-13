@@ -1,0 +1,4 @@
+E:/Projects/FPGA-Alittle-Design/src/coprocessor/int8_mac.v:3: warning: timescale for int8_mac inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_int8_mac.v:1: ...: The inherited timescale is here.
+PASS: int8_mac 65035 vectors; signed product/addition and overflow
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_int8_mac.v:41: $finish called at 65035000 (1ps)
