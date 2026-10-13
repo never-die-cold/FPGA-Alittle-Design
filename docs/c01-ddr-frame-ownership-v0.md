@@ -1,6 +1,6 @@
 # C01 custom DDR帧槽所有权：NC交接候选
 
-2026-10-12，基线 `3e2e1c9`。状态：**设计候选，待WC/JL评审与NC实机确认**；未实现PS适配、未冻结VDMA驱动序列。
+2026-10-13，基线 `3e2e1c9`。状态：**单帧 PS 适配已实现并通过离板异常测试，待WC/JL评审与NC实机确认**；完整 custom DDR 帧尚未取得，驱动序列未冻结。
 依据：[捕获CSR](c01-capture-status-contract.md)、[实现基线](c01-capture-implementation-baseline.md)、[停止期实测](../data/logs/2026-10-11-c01-probe-evidence/README.md)、[C03](coprocessor-integration-v0.md)。不新增CAP1寄存器或LIVE报文字段。
 
 ## 1. 已有硬件与证据能力
@@ -66,7 +66,11 @@ WC适配必须给出实际IP/驱动依据，证明：目标槽确实完成一整
 | 复制/PNG/下游异常 | DMA缓冲恰一次归还，文件原子发布 | 故障记录、DMA停止/释放、原vision恢复及UVC内容 |
 | 缓冲环绕/背压 | 无可用槽时有界等待或拒绝，禁止覆盖PS槽 | 持久运行、错误统计、地址/内存稳定与HDMI共存 |
 
-当前仅base缓冲释放保护与假驱动测试已有；以上custom适配和矩阵尚未实现/实测。NC不代WC/JL宣称驱动/RTL已完成。
+`src/pynq_host/c01_capture.py` 实现 park slot 0、FrameCntEn/IRQFrameCount=1 自动停机、完成/槽/描述符/代次复核、缓存 invalidate、独立完整副本与幂等关闭。依据 [PG020 S2MM 控制](https://docs.amd.com/r/en-US/pg020_axi_vdma/S2MM_VDMACR-S2MM-VDMA-Control-Register-Offset-30h)及[状态](https://docs.amd.com/r/en-US/pg020_axi_vdma/S2MM_VDMASR-S2MM-VDMA-Status-Register-Offset-34h)，完整转移后自动清 RS，Halted 只在通道完全停止后确认；人工 stop 仅用于异常释放，不授权正常发布。
+
+`sim/vision/test_c01_capture.py` 的七组离板测试覆盖 IRQ 先于停机、无 IRQ/错误槽/描述符变化/失锁/超时、分配/缓存/释放失败、复制期间源变化和未确认停机时的缓冲隔离；入口 `bash sim/scripts/run_vision_python.sh`。未确认停止时持有原生缓冲且板端进程保持存活，禁止析构释放或重载 overlay。
+
+`sim/scripts/c01_ddr_onboard.py` 提供候选哈希/地址校验、实验与原 vision 恢复。两次实测均在 DMA 启动前失败并恢复：首次配置前清理粘滞错误失败，第二次 HDMI 未就绪；最终配置顺序与等待修正仅离板验证。2026-10-13 用户要求转为离板任务，未继续板端复测。[原始证据](../data/logs/2026-10-13-ddr-single-frame/README.md)。完整帧颜色、无混帧、持续运行和 N03 矩阵仍待实机。
 
 ## 6. 交接门
 

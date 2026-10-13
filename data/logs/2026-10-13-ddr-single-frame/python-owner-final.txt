@@ -1,0 +1,13 @@
+test_complete_copy_and_release (__main__.Tests.test_complete_copy_and_release) ... ok
+test_configured_idle_precedes_clean_and_run (__main__.Tests.test_configured_idle_precedes_clean_and_run) ... ok
+test_failures_never_copy (__main__.Tests.test_failures_never_copy) ... ok
+test_refuse_external_owner (__main__.Tests.test_refuse_external_owner) ... ok
+test_release_failure_attempts_remaining_buffers_once (__main__.Tests.test_release_failure_attempts_remaining_buffers_once) ... ok
+test_source_changes_during_copy_not_published (__main__.Tests.test_source_changes_during_copy_not_published) ... ok
+test_unsafe_stop_keeps_buffers (__main__.Tests.test_unsafe_stop_keeps_buffers) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.018s
+
+OK
+PASS: C01 single-frame ownership, cache, faults and quarantine

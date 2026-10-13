@@ -1,0 +1,28 @@
+HOST_STARTED_UTC=2026-10-12T17:00:46.2049338Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n true; python3 -c "import inspect; from pynq import allocate; from pynq.buffer import PynqBuffer; print(inspect.getsource(PynqBuffer.freebuffer)); print(inspect.signature(allocate))"
+sudo -n true; python3 -c "import inspect; from pynq import allocate; from pynq.buffer import PynqBuffer; print(inspect.getsource(PynqBuffer.freebuffer)); print(inspect.signature(allocate))"; printf '\n__PYNQ_RC_039144769a1543ffaf749083fa8dcab2=%d\n' $?
+[?2004l    def freebuffer(self):
+        """Free the underlying memory
+
+        This will free the memory regardless of whether other objects
+        may still be using the buffer so ensure that no other references
+        to the array exist prior to freeing.
+
+        """
+        if hasattr(self, "memory"):
+            if hasattr(self, "pointer") and self.pointer:
+                if self.return_to:
+                    self.return_to.return_pointer(self.pointer)
+                self.pointer = 0
+            else:
+                if not self.freed:
+                    self.freed = True
+                    libc.munmap(ctypes.cast(self.virtual_address, ctypes.c_void_p), self.nbytes)
+                    del self.bo
+
+(shape, dtype='u4', target=None, **kwargs)
+
+__PYNQ_RC_039144769a1543ffaf749083fa8dcab2=0
+[?2004hxilinx@pynq:/$ 
+HOST_EXIT_CODE=0
