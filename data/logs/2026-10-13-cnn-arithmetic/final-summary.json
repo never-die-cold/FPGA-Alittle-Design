@@ -1,0 +1,54 @@
+{
+  "ddr": {
+    "custom_complete_frame_verified": false,
+    "offline_groups": 7,
+    "final_driver_board_run": false
+  },
+  "diff_check_exit": 0,
+  "full_regression_exit": 0,
+  "cached_diff_check_exit": 0,
+  "coremark": [
+    {
+      "cycles": 19057438,
+      "retired": 10106386,
+      "mode": "nofwd",
+      "cpi": 1.8856827752274652
+    },
+    {
+      "cycles": 17114141,
+      "retired": 10106386,
+      "mode": "fwd",
+      "cpi": 1.6933987084997546
+    },
+    {
+      "cycles": 16335562,
+      "retired": 10106386,
+      "mode": "fwd_bht1",
+      "cpi": 1.6163603883722628
+    },
+    {
+      "cycles": 16232079,
+      "retired": 10106386,
+      "mode": "fwd_bht2",
+      "cpi": 1.606121020906979
+    }
+  ],
+  "git_base": "c3b6a1eb3d65d21e33a0fd9017f06f68a7bdb4a2",
+  "branch": "dev/model",
+  "cnn": {
+    "lut": 10100,
+    "physical_memory_included": false,
+    "elements_per_case": 73795,
+    "cycles_per_case": 1123109,
+    "ooc_wns_ns": 0.058,
+    "cases": 2,
+    "ff": 6940,
+    "ooc_whs_ns": 0.049,
+    "weights": "DIAGNOSTIC_NOT_TRAINED",
+    "dsp": 192
+  },
+  "uncommitted": true,
+  "log_sha256": "d6ef72f9195e55293b714b7b1536cc2365709471cddf7f8514f62c98dc3000a3",
+  "kind": "OFFLINE_VALIDATION_NOT_BOARD_ACCEPTANCE",
+  "source_golden_files": 65
+}

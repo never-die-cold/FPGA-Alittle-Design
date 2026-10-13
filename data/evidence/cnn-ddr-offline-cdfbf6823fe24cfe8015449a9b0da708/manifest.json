@@ -1,0 +1,337 @@
+﻿{
+    "uncommitted":  true,
+    "commands":  [
+                     "bash sim/scripts/run_iverilog.sh all",
+                     "bash sim/scripts/run_coprocessor_python.sh all",
+                     "powershell.exe -NoProfile -File sim/scripts/run_cnn_ooc.ps1"
+                 ],
+    "files":  [
+                  {
+                      "path":  "src/coprocessor/cnn_sequencer.v",
+                      "sha256":  "8765e582907eb2061d8f665a1126473172ee154e70b9c3fd8e5144d1fb608b12",
+                      "bytes":  7820
+                  },
+                  {
+                      "path":  "src/coprocessor/conv_engine.v",
+                      "sha256":  "2a474208bd56c5b0d0e4d3b3e103b2176863c5a43112612236b26da8f308e9b5",
+                      "bytes":  9155
+                  },
+                  {
+                      "path":  "src/coprocessor/int8_gap.v",
+                      "sha256":  "0de05f7c755c6be7b3a69fd4fb75b70ee83e379edfc096f6c3bd336759125dee",
+                      "bytes":  376
+                  },
+                  {
+                      "path":  "src/coprocessor/int8_logits.v",
+                      "sha256":  "3d8d167abd054a58c3871aec29dd14fd939668f9986bbeb2d896411965b93ad3",
+                      "bytes":  1201
+                  },
+                  {
+                      "path":  "src/coprocessor/int8_mac.v",
+                      "sha256":  "081f0e9451fbdacc2c11d4d4b3d2eccbcdd584631d5cb00cdc481f9f1863de92",
+                      "bytes":  649
+                  },
+                  {
+                      "path":  "src/coprocessor/int8_network_reference.py",
+                      "sha256":  "1f29bf3e66d0fc7bd2904de6076764fc467c893c7849cb2ae301de9dcd03261c",
+                      "bytes":  2941
+                  },
+                  {
+                      "path":  "src/coprocessor/int8_reference.py",
+                      "sha256":  "484bb6a8f58574440b84ca91ca68308da2bc1b73c20c058a74fb70daadbeb313",
+                      "bytes":  5069
+                  },
+                  {
+                      "path":  "src/coprocessor/int8_requant.v",
+                      "sha256":  "09636bf08811eb048abb1136d43b757fa41a3dd7787b303979d6144c4b7a5069",
+                      "bytes":  979
+                  },
+                  {
+                      "path":  "src/coprocessor/int8_requant_pipeline.v",
+                      "sha256":  "4c3831f63fb96e49fbaa4dda74ef8bed69a13a8de179feaaffcff9dbd338a2e3",
+                      "bytes":  1456
+                  },
+                  {
+                      "path":  "src/coprocessor/int8_tensor_reference.py",
+                      "sha256":  "8b617005feaf14e1d638d5f443c49c7a3856425194b7fdf9b6b013ebb7e32047",
+                      "bytes":  4182
+                  },
+                  {
+                      "path":  "src/coprocessor/mac_array.v",
+                      "sha256":  "8d51f13f6935a7564e81f45362277bab7425dba93ba632ca4d3b8c496544da8e",
+                      "bytes":  1420
+                  },
+                  {
+                      "path":  "src/coprocessor/mac_array_pipeline.v",
+                      "sha256":  "8cef4170d4100c8b56f5aa35d9b8d383e1e5d87d2036c14e19b5b21846c5c393",
+                      "bytes":  2012
+                  },
+                  {
+                      "path":  "sim/coprocessor/generate_arithmetic_vectors.py",
+                      "sha256":  "8f4ddc6e12c2b22dfe6ece3bff7dc33b157be52cc5070dc1510473ea189350de",
+                      "bytes":  3201
+                  },
+                  {
+                      "path":  "sim/coprocessor/generate_conv_vectors.py",
+                      "sha256":  "741ec0d22afda1154f32ced4848533ad1e5a549473281e83a4ed70fb20257a88",
+                      "bytes":  3976
+                  },
+                  {
+                      "path":  "sim/coprocessor/generate_network_vectors.py",
+                      "sha256":  "0bf804f6a064cc6e18a08b056df05773df0dd0be5c8ca49be1b013bb1cf8e3d2",
+                      "bytes":  4260
+                  },
+                  {
+                      "path":  "sim/coprocessor/tb_cnn_sequencer.v",
+                      "sha256":  "537a41989f2cd439fdcef968ef9c440480920b382b085d3c0d7f6e4e7d8adec0",
+                      "bytes":  8193
+                  },
+                  {
+                      "path":  "sim/coprocessor/tb_conv_engine.v",
+                      "sha256":  "be62c8a3373b7c3dde9bc035be02ebbdac39917b3725fd2703d6c4512ba43ada",
+                      "bytes":  6297
+                  },
+                  {
+                      "path":  "sim/coprocessor/tb_int8_gap.v",
+                      "sha256":  "658db0e4fdbc1f93b3b06d686583aabf7065114042f26ab810a90086a2b36e15",
+                      "bytes":  1012
+                  },
+                  {
+                      "path":  "sim/coprocessor/tb_int8_logits.v",
+                      "sha256":  "61723b55de67af3b39310ef413e5636212675f4a391ebf7df4141d8f1f5a652d",
+                      "bytes":  1489
+                  },
+                  {
+                      "path":  "sim/coprocessor/tb_int8_mac.v",
+                      "sha256":  "8918fd9dccead6907a2f705104f5cc5fbf5d7110ae08cba78134546013df5096",
+                      "bytes":  1757
+                  },
+                  {
+                      "path":  "sim/coprocessor/tb_int8_requant.v",
+                      "sha256":  "d772f7fee43976f62b6d93285571d5e865e327e3cdedf9c27f4ec5410238c1e0",
+                      "bytes":  1366
+                  },
+                  {
+                      "path":  "sim/coprocessor/tb_int8_requant_pipeline.v",
+                      "sha256":  "af0ce13c868ae7427980a63886a5ad7ddded664a7d667a409e94f734ddcf37aa",
+                      "bytes":  2647
+                  },
+                  {
+                      "path":  "sim/coprocessor/tb_mac_array.v",
+                      "sha256":  "2cdb8c64dc919122a57ebb53a7e1f6dbe42dd8874231df21e41661bd36dd375f",
+                      "bytes":  2567
+                  },
+                  {
+                      "path":  "sim/coprocessor/tb_mac_array_pipeline.v",
+                      "sha256":  "29bca7a2993f3f9ace8c45bf45e6d18d0413af897fe5461be6b9d88d8c0d053d",
+                      "bytes":  3371
+                  },
+                  {
+                      "path":  "sim/coprocessor/test_int8_conv.py",
+                      "sha256":  "c3dfcba1b88998b5f2e36907b73366c93575fbb5b309f8df6ee0e6fd6885eb5a",
+                      "bytes":  2185
+                  },
+                  {
+                      "path":  "sim/coprocessor/test_int8_network.py",
+                      "sha256":  "81cf942db848457e248e09f1e62f6c92ef90875443c1c6ca4624b88b489ade6c",
+                      "bytes":  2856
+                  },
+                  {
+                      "path":  "sim/coprocessor/test_int8_primitives.py",
+                      "sha256":  "c0d8745fd1e8b95790e62779774f2faa4638a1308a54986c32589c7fcb92ca6e",
+                      "bytes":  4508
+                  },
+                  {
+                      "path":  "sim/coprocessor/test_int8_tensors.py",
+                      "sha256":  "310f8fc55f78d684da155e6f35d0c770b5d6bd56c8d74761371420b83b1ea9e3",
+                      "bytes":  1828
+                  },
+                  {
+                      "path":  "src/pynq_host/c01_capture.py",
+                      "sha256":  "e34b4f9579377eef7b4c3db1d4a3f880bb04e4a446f0e350d1f207d50cc7ef8b",
+                      "bytes":  9155
+                  },
+                  {
+                      "path":  "sim/vision/test_c01_capture.py",
+                      "sha256":  "8bf898fdfce9abf00c988b97994d7b6a2cf4ef5f34da1a59a1c42b3644c65600",
+                      "bytes":  7430
+                  },
+                  {
+                      "path":  "sim/scripts/c01_ddr_onboard.py",
+                      "sha256":  "0b3997104c037090650f9929ced21f6cda3dfdb3566e5907a76e7030321fe989",
+                      "bytes":  5252
+                  },
+                  {
+                      "path":  "sim/scripts/c01_status_onboard.py",
+                      "sha256":  "894bf7dc01ba9260c48cde7ab0b1aecdd6bfa157f7fa43252170cea1752e1810",
+                      "bytes":  6667
+                  },
+                  {
+                      "path":  "sim/scripts/pynq_file_receiver.py",
+                      "sha256":  "5de1b6378b0a8543272a019ee63af9eb582e87a0bea333eba3ab46d46d552e52",
+                      "bytes":  1365
+                  },
+                  {
+                      "path":  "sim/scripts/send_pynq_file.ps1",
+                      "sha256":  "4510675ec1b145dc407b541d27c6cc4b3a971fdf1d68a7fd8e68833dc2826c52",
+                      "bytes":  3860
+                  },
+                  {
+                      "path":  "sim/scripts/pynq_serial_command.ps1",
+                      "sha256":  "0351c7b5db4dab0dfcb66c86b6815f59313252e19e47229c372332a5430a4055",
+                      "bytes":  2843
+                  },
+                  {
+                      "path":  "sim/scripts/vision_gate.sh",
+                      "sha256":  "47e99385a82b6267fb2b340a71f13bb90f63fa2b0d8b213ca9a899b84bc6bd79",
+                      "bytes":  576
+                  },
+                  {
+                      "path":  "sim/scripts/run_coprocessor_iverilog.sh",
+                      "sha256":  "bae236a4f997cb138f49499785edfc0c93e62cbaf8ce7a4302622c4576d1c5ce",
+                      "bytes":  2622
+                  },
+                  {
+                      "path":  "sim/scripts/run_coprocessor_python.sh",
+                      "sha256":  "06c1d592e0c9272cf9ff3489aedb2982d7a6c13c2cc27d49421e1505b5ad3f03",
+                      "bytes":  784
+                  },
+                  {
+                      "path":  "sim/scripts/run_iverilog.sh",
+                      "sha256":  "2b6071ad44c26827e17f89992be2b3a3c02dcc3f18c0291dac8d1c515ac9d387",
+                      "bytes":  10528
+                  },
+                  {
+                      "path":  "sim/scripts/run_vision_python.sh",
+                      "sha256":  "36adb71ac961660514edb669b1e12ad8ff54b7cc3994bb9123de8671a8fc129c",
+                      "bytes":  791
+                  },
+                  {
+                      "path":  "sim/scripts/run_cnn_ooc.ps1",
+                      "sha256":  "5c43748de24ade3f8bd9d16acaed7b350d9690d1a0def62ef2e1103c9a6a38ca",
+                      "bytes":  1700
+                  },
+                  {
+                      "path":  "sim/scripts/synth_coprocessor_ooc.tcl",
+                      "sha256":  "c821b34629164223f7cdf292b934937247593dad4f499695308805fd26048a7e",
+                      "bytes":  2295
+                  },
+                  {
+                      "path":  "sim/scripts/archive_cnn_ddr_offline.ps1",
+                      "sha256":  "768bc901cbae2c8559cbff4388fd0b8558c1cca8e3bbb881cad8a33e95ce05a4",
+                      "bytes":  3070
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/bias.hex",
+                      "sha256":  "425e34a96c6b4617cf6479d03248c22f831df8da96b245adec5b0341f80af26f",
+                      "bytes":  1440
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/cases.txt",
+                      "sha256":  "6c1530c3463ea58018d493cca4629a570af9e8155c5f23d33ee60e1efa0d3342",
+                      "bytes":  13
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/manifest.json",
+                      "sha256":  "2c8f43b63154f7262afe3a8d8b662fb7fa51fc335a5d5943d1611f02c1fdfb64",
+                      "bytes":  4207
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/multipliers.hex",
+                      "sha256":  "05cc593cc6d597f5cf9e973f73df43ef2e619653b6954f697378ee432f32a4a4",
+                      "bytes":  1440
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/shifts.hex",
+                      "sha256":  "21ed088be9decf136849fa0e69dc614d275b4e2e74fad1ada1f80cf817e12d46",
+                      "bytes":  480
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/weights.hex",
+                      "sha256":  "cc8331220639d8714aecc81ecf15458bd369a789059c79745acbd7a1c68b5768",
+                      "bytes":  69133
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/pattern/conv1.hex",
+                      "sha256":  "bab823af6f3ef829800ebaf561549b5f5ea49c5202c9456c8fc1c793df0fe86e",
+                      "bytes":  34816
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/pattern/conv2.hex",
+                      "sha256":  "23c5cbf3170a52ff3eb2c7a319d51632a1c8859e55c5af01ad29efa808a5edc6",
+                      "bytes":  69632
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/pattern/conv3.hex",
+                      "sha256":  "4127de0b3db8f28fb5dc1f7b799b21d94f1cd683a3e62394f9ce1201f8824658",
+                      "bytes":  17408
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/pattern/conv4.hex",
+                      "sha256":  "3a9ac03d758dbc4dbba947a01a5c64c627065f92e82fac1b08b3493b06ed6f17",
+                      "bytes":  34816
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/pattern/gap.hex",
+                      "sha256":  "4e67628e8be18aec608818cb0ef1c1f3de1eb72354ac43014c3d0b483905bad0",
+                      "bytes":  136
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/pattern/input.hex",
+                      "sha256":  "9bee293aefe4242b30b8b4717d0161a37610e268dcb30f01ef99ea86b00f959e",
+                      "bytes":  12288
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/pattern/logits.hex",
+                      "sha256":  "d11807a6efed06ae0fbe18419cd067c183cd604926f8819475e543965025f219",
+                      "bytes":  17
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/pattern/result.txt",
+                      "sha256":  "eca6ce17b101c8c1a25450153d174fbf217fae5a4a180e8eadd58212fe88488e",
+                      "bytes":  10
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/zero/conv1.hex",
+                      "sha256":  "9da07a8493d278d9efd1ea4a703a2e5c165f79dd41688f50524e568d14b13dc5",
+                      "bytes":  34816
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/zero/conv2.hex",
+                      "sha256":  "29735618e4ed18340ada2e0d49dded3648673119ce3b4be1c0ad5df8eaeae66f",
+                      "bytes":  69632
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/zero/conv3.hex",
+                      "sha256":  "7eaa080412a44d9b184f3daea32c4633dfd200b23c1e631c03260bc72998fa3c",
+                      "bytes":  17408
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/zero/conv4.hex",
+                      "sha256":  "601d80263ba73caaa767b8e7a4b0ae960c21d80aa7748150f815a5d574fa8b12",
+                      "bytes":  34816
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/zero/gap.hex",
+                      "sha256":  "2da94e753d510c5cf290cc1ac357cd30bc57f9a98b6a85ba548934d56be2c722",
+                      "bytes":  136
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/zero/input.hex",
+                      "sha256":  "9b5ee346b05d90d1d624ecfcfb8a45471128a2734fd684cadee0f03a33439cc5",
+                      "bytes":  12288
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/zero/logits.hex",
+                      "sha256":  "f344ffce0feea0e888254faebd8213ef14e913d6c6ab86b9cf50dfe2bad14093",
+                      "bytes":  17
+                  },
+                  {
+                      "path":  "sim/build/coprocessor/network-vectors/zero/result.txt",
+                      "sha256":  "26c345f55482606011aeaaa81d716953eec103140ed8cff88a5fc310cef4ac97",
+                      "bytes":  12
+                  }
+              ],
+    "git_base":  "c3b6a1eb3d65d21e33a0fd9017f06f68a7bdb4a2",
+    "kind":  "OFFLINE_CNN_DDR_SOURCE_AND_DIAGNOSTIC_GOLDEN_NOT_BOARD_ACCEPTANCE"
+}

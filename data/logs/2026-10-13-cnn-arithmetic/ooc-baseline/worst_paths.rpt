@@ -1,0 +1,1497 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+----------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Tue Oct 13 01:00:42 2026
+| Host         : never-die-cold running 64-bit major release  (build 9200)
+| Command      : report_timing -max_paths 10 -file E:/Projects/FPGA-Alittle-Design/data/logs/2026-10-13-cnn-arithmetic/ooc-baseline/worst_paths.rpt
+| Design       : cnn_sequencer
+| Device       : 7z020-clg400
+| Speed File   : -1  PRODUCTION 1.12 2019-11-22
+| Design State : Routed
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (VIOLATED) :        -19.892ns  (required time - arrival time)
+  Source:                 engine/stride_reg[0]_replica/C
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/accumulators_reg[268]/CE
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cnn_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cnn_clk rise@10.000ns - cnn_clk rise@0.000ns)
+  Data Path Delay:        29.603ns  (logic 10.945ns (36.973%)  route 18.658ns (63.027%))
+  Logic Levels:           41  (CARRY4=21 LUT2=4 LUT3=3 LUT4=4 LUT5=2 LUT6=7)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cnn_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=2012, unset)         0.973     0.973    engine/clk
+    SLICE_X60Y108        FDCE                                         r  engine/stride_reg[0]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X60Y108        FDCE (Prop_fdce_C_Q)         0.456     1.429 r  engine/stride_reg[0]_replica/Q
+                         net (fo=7, routed)           0.759     2.188    engine/array_mac/outputs[15].inputs[0].cell_mac/stride_0[0]_repN_alias
+    SLICE_X61Y107        LUT4 (Prop_lut4_I1_O)        0.124     2.312 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87/O
+                         net (fo=1, routed)           0.000     2.312    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87_n_0
+    SLICE_X61Y107        CARRY4 (Prop_carry4_S[1]_O[2])
+                                                      0.580     2.892 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59/O[2]
+                         net (fo=3, routed)           0.593     3.485    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59_n_5
+    SLICE_X63Y107        LUT5 (Prop_lut5_I0_O)        0.302     3.787 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60/O
+                         net (fo=5, routed)           0.674     4.461    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60_n_0
+    SLICE_X63Y108        LUT6 (Prop_lut6_I3_O)        0.124     4.585 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55/O
+                         net (fo=2, routed)           0.435     5.020    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55_n_0
+    SLICE_X62Y109        LUT3 (Prop_lut3_I1_O)        0.124     5.144 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35/O
+                         net (fo=1, routed)           0.000     5.144    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35_n_0
+    SLICE_X62Y109        CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     5.677 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14/CO[3]
+                         net (fo=1, routed)           0.000     5.677    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14_n_0
+    SLICE_X62Y110        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.794 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13/CO[3]
+                         net (fo=1, routed)           0.000     5.794    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13_n_0
+    SLICE_X62Y111        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.911 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47/CO[3]
+                         net (fo=1, routed)           0.000     5.911    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47_n_0
+    SLICE_X62Y112        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.028 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27/CO[3]
+                         net (fo=1, routed)           0.000     6.028    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27_n_0
+    SLICE_X62Y113        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.145 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7/CO[3]
+                         net (fo=1, routed)           0.000     6.145    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7_n_0
+    SLICE_X62Y114        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315     6.460 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_3/O[3]
+                         net (fo=39, routed)          0.904     7.364    engine/array_mac/outputs[15].inputs[0].cell_mac/padding_reg[0]_rep__3_0[0]
+    SLICE_X61Y114        LUT2 (Prop_lut2_I0_O)        0.307     7.671 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13/O
+                         net (fo=1, routed)           0.000     7.671    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13_n_0
+    SLICE_X61Y114        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.401     8.072 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_4/CO[3]
+                         net (fo=37, routed)          0.700     8.772    engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry__0_i_13__31_1[0]
+    SLICE_X64Y114        LUT4 (Prop_lut4_I2_O)        0.124     8.896 r  engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry_i_13/O
+                         net (fo=140, routed)         0.664     9.560    engine/array_mac/outputs[0].inputs[6].cell_mac/product__59_carry__1_i_2__77
+    SLICE_X64Y113        LUT6 (Prop_lut6_I0_O)        0.124     9.684 r  engine/array_mac/outputs[0].inputs[6].cell_mac/product__0_carry_i_9__20/O
+                         net (fo=133, routed)         1.902    11.586    engine/array_mac/outputs[6].inputs[6].cell_mac/product__59_carry_0
+    SLICE_X43Y103        LUT6 (Prop_lut6_I3_O)        0.124    11.710 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53/O
+                         net (fo=1, routed)           0.630    12.340    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53_n_0
+    SLICE_X43Y105        CARRY4 (Prop_carry4_DI[3]_CO[3])
+                                                      0.385    12.725 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry/CO[3]
+                         net (fo=1, routed)           0.000    12.725    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_n_0
+    SLICE_X43Y106        CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334    13.059 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry__0/O[1]
+                         net (fo=2, routed)           1.003    14.061    engine/array_mac_n_1027
+    SLICE_X42Y100        LUT2 (Prop_lut2_I1_O)        0.332    14.393 r  engine/product__86_carry_i_1__53/O
+                         net (fo=2, routed)           0.708    15.101    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[203]_i_25_0[0]
+    SLICE_X42Y100        LUT4 (Prop_lut4_I3_O)        0.331    15.432 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53/O
+                         net (fo=1, routed)           0.000    15.432    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53_n_0
+    SLICE_X42Y100        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    15.808 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry/CO[3]
+                         net (fo=1, routed)           0.000    15.808    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_n_0
+    SLICE_X42Y101        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315    16.123 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0/O[3]
+                         net (fo=2, routed)           1.451    17.574    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0_n_4
+    SLICE_X54Y94         LUT3 (Prop_lut3_I0_O)        0.336    17.910 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22/O
+                         net (fo=2, routed)           0.679    18.590    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22_n_0
+    SLICE_X54Y94         LUT4 (Prop_lut4_I3_O)        0.331    18.921 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26/O
+                         net (fo=1, routed)           0.000    18.921    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26_n_0
+    SLICE_X54Y94         CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    19.297 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19/CO[3]
+                         net (fo=1, routed)           0.000    19.297    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19_n_0
+    SLICE_X54Y95         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.219    19.516 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_16/O[0]
+                         net (fo=3, routed)           1.205    20.721    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_12_1[0]
+    SLICE_X57Y79         LUT3 (Prop_lut3_I2_O)        0.295    21.016 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18/O
+                         net (fo=2, routed)           0.587    21.603    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18_n_0
+    SLICE_X57Y79         LUT5 (Prop_lut5_I1_O)        0.124    21.727 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10/O
+                         net (fo=2, routed)           0.951    22.678    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10_n_0
+    SLICE_X60Y79         LUT6 (Prop_lut6_I0_O)        0.124    22.802 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14/O
+                         net (fo=1, routed)           0.000    22.802    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14_n_0
+    SLICE_X60Y79         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    23.352 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators_reg[207]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.352    engine/array_mac/outputs[6].inputs[6].cell_mac/CO[0]
+    SLICE_X60Y80         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.466 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.466    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7_n_0
+    SLICE_X60Y81         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.580 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.580    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7_n_0
+    SLICE_X60Y82         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.222    23.802 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7/O[0]
+                         net (fo=1, routed)           0.647    24.449    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7_n_7
+    SLICE_X61Y82         LUT2 (Prop_lut2_I1_O)        0.299    24.748 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6/O
+                         net (fo=1, routed)           0.000    24.748    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6_n_0
+    SLICE_X61Y82         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532    25.280 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.280    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2_n_0
+    SLICE_X61Y83         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    25.394 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.394    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2_n_0
+    SLICE_X61Y84         CARRY4 (Prop_carry4_CI_CO[0])
+                                                      0.271    25.665 r  engine/array_mac/outputs[6].inputs[6].cell_mac/ib_reg[3]_i_33/CO[0]
+                         net (fo=1, routed)           0.608    26.273    engine/array_mac_n_3632
+    SLICE_X62Y88         LUT2 (Prop_lut2_I1_O)        0.373    26.646 f  engine/ib[3]_i_18/O
+                         net (fo=1, routed)           1.329    27.975    engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_3
+    SLICE_X91Y89         LUT6 (Prop_lut6_I0_O)        0.124    28.099 f  engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_8/O
+                         net (fo=1, routed)           0.732    28.831    engine/array_mac/outputs[3].inputs[6].cell_mac/ib_reg[0]_1
+    SLICE_X95Y89         LUT6 (Prop_lut6_I2_O)        0.124    28.955 f  engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3/O
+                         net (fo=12, routed)          0.360    29.316    engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3_n_0
+    SLICE_X95Y88         LUT6 (Prop_lut6_I5_O)        0.124    29.440 r  engine/array_mac/outputs[3].inputs[6].cell_mac/accumulators[511]_i_1/O
+                         net (fo=512, routed)         1.136    30.576    engine/accumulators[0]
+    SLICE_X89Y86         FDCE                                         r  engine/accumulators_reg[268]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cnn_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  clk
+                         net (fo=2012, unset)         0.924    10.924    engine/clk
+    SLICE_X89Y86         FDCE                                         r  engine/accumulators_reg[268]/C
+                         clock pessimism              0.000    10.924    <hidden>
+                         clock uncertainty           -0.035    10.889    <hidden>
+    SLICE_X89Y86         FDCE (Setup_fdce_C_CE)      -0.205    10.684    engine/accumulators_reg[268]
+  -------------------------------------------------------------------
+                         required time                         10.684    <hidden>
+                         arrival time                         -30.576    <hidden>
+  -------------------------------------------------------------------
+                         slack                                -19.892    <hidden>
+
+Slack (VIOLATED) :        -19.892ns  (required time - arrival time)
+  Source:                 engine/stride_reg[0]_replica/C
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/accumulators_reg[269]/CE
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cnn_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cnn_clk rise@10.000ns - cnn_clk rise@0.000ns)
+  Data Path Delay:        29.603ns  (logic 10.945ns (36.973%)  route 18.658ns (63.027%))
+  Logic Levels:           41  (CARRY4=21 LUT2=4 LUT3=3 LUT4=4 LUT5=2 LUT6=7)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cnn_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=2012, unset)         0.973     0.973    engine/clk
+    SLICE_X60Y108        FDCE                                         r  engine/stride_reg[0]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X60Y108        FDCE (Prop_fdce_C_Q)         0.456     1.429 r  engine/stride_reg[0]_replica/Q
+                         net (fo=7, routed)           0.759     2.188    engine/array_mac/outputs[15].inputs[0].cell_mac/stride_0[0]_repN_alias
+    SLICE_X61Y107        LUT4 (Prop_lut4_I1_O)        0.124     2.312 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87/O
+                         net (fo=1, routed)           0.000     2.312    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87_n_0
+    SLICE_X61Y107        CARRY4 (Prop_carry4_S[1]_O[2])
+                                                      0.580     2.892 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59/O[2]
+                         net (fo=3, routed)           0.593     3.485    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59_n_5
+    SLICE_X63Y107        LUT5 (Prop_lut5_I0_O)        0.302     3.787 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60/O
+                         net (fo=5, routed)           0.674     4.461    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60_n_0
+    SLICE_X63Y108        LUT6 (Prop_lut6_I3_O)        0.124     4.585 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55/O
+                         net (fo=2, routed)           0.435     5.020    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55_n_0
+    SLICE_X62Y109        LUT3 (Prop_lut3_I1_O)        0.124     5.144 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35/O
+                         net (fo=1, routed)           0.000     5.144    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35_n_0
+    SLICE_X62Y109        CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     5.677 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14/CO[3]
+                         net (fo=1, routed)           0.000     5.677    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14_n_0
+    SLICE_X62Y110        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.794 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13/CO[3]
+                         net (fo=1, routed)           0.000     5.794    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13_n_0
+    SLICE_X62Y111        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.911 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47/CO[3]
+                         net (fo=1, routed)           0.000     5.911    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47_n_0
+    SLICE_X62Y112        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.028 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27/CO[3]
+                         net (fo=1, routed)           0.000     6.028    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27_n_0
+    SLICE_X62Y113        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.145 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7/CO[3]
+                         net (fo=1, routed)           0.000     6.145    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7_n_0
+    SLICE_X62Y114        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315     6.460 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_3/O[3]
+                         net (fo=39, routed)          0.904     7.364    engine/array_mac/outputs[15].inputs[0].cell_mac/padding_reg[0]_rep__3_0[0]
+    SLICE_X61Y114        LUT2 (Prop_lut2_I0_O)        0.307     7.671 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13/O
+                         net (fo=1, routed)           0.000     7.671    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13_n_0
+    SLICE_X61Y114        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.401     8.072 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_4/CO[3]
+                         net (fo=37, routed)          0.700     8.772    engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry__0_i_13__31_1[0]
+    SLICE_X64Y114        LUT4 (Prop_lut4_I2_O)        0.124     8.896 r  engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry_i_13/O
+                         net (fo=140, routed)         0.664     9.560    engine/array_mac/outputs[0].inputs[6].cell_mac/product__59_carry__1_i_2__77
+    SLICE_X64Y113        LUT6 (Prop_lut6_I0_O)        0.124     9.684 r  engine/array_mac/outputs[0].inputs[6].cell_mac/product__0_carry_i_9__20/O
+                         net (fo=133, routed)         1.902    11.586    engine/array_mac/outputs[6].inputs[6].cell_mac/product__59_carry_0
+    SLICE_X43Y103        LUT6 (Prop_lut6_I3_O)        0.124    11.710 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53/O
+                         net (fo=1, routed)           0.630    12.340    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53_n_0
+    SLICE_X43Y105        CARRY4 (Prop_carry4_DI[3]_CO[3])
+                                                      0.385    12.725 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry/CO[3]
+                         net (fo=1, routed)           0.000    12.725    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_n_0
+    SLICE_X43Y106        CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334    13.059 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry__0/O[1]
+                         net (fo=2, routed)           1.003    14.061    engine/array_mac_n_1027
+    SLICE_X42Y100        LUT2 (Prop_lut2_I1_O)        0.332    14.393 r  engine/product__86_carry_i_1__53/O
+                         net (fo=2, routed)           0.708    15.101    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[203]_i_25_0[0]
+    SLICE_X42Y100        LUT4 (Prop_lut4_I3_O)        0.331    15.432 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53/O
+                         net (fo=1, routed)           0.000    15.432    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53_n_0
+    SLICE_X42Y100        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    15.808 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry/CO[3]
+                         net (fo=1, routed)           0.000    15.808    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_n_0
+    SLICE_X42Y101        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315    16.123 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0/O[3]
+                         net (fo=2, routed)           1.451    17.574    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0_n_4
+    SLICE_X54Y94         LUT3 (Prop_lut3_I0_O)        0.336    17.910 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22/O
+                         net (fo=2, routed)           0.679    18.590    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22_n_0
+    SLICE_X54Y94         LUT4 (Prop_lut4_I3_O)        0.331    18.921 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26/O
+                         net (fo=1, routed)           0.000    18.921    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26_n_0
+    SLICE_X54Y94         CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    19.297 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19/CO[3]
+                         net (fo=1, routed)           0.000    19.297    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19_n_0
+    SLICE_X54Y95         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.219    19.516 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_16/O[0]
+                         net (fo=3, routed)           1.205    20.721    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_12_1[0]
+    SLICE_X57Y79         LUT3 (Prop_lut3_I2_O)        0.295    21.016 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18/O
+                         net (fo=2, routed)           0.587    21.603    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18_n_0
+    SLICE_X57Y79         LUT5 (Prop_lut5_I1_O)        0.124    21.727 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10/O
+                         net (fo=2, routed)           0.951    22.678    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10_n_0
+    SLICE_X60Y79         LUT6 (Prop_lut6_I0_O)        0.124    22.802 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14/O
+                         net (fo=1, routed)           0.000    22.802    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14_n_0
+    SLICE_X60Y79         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    23.352 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators_reg[207]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.352    engine/array_mac/outputs[6].inputs[6].cell_mac/CO[0]
+    SLICE_X60Y80         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.466 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.466    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7_n_0
+    SLICE_X60Y81         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.580 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.580    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7_n_0
+    SLICE_X60Y82         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.222    23.802 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7/O[0]
+                         net (fo=1, routed)           0.647    24.449    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7_n_7
+    SLICE_X61Y82         LUT2 (Prop_lut2_I1_O)        0.299    24.748 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6/O
+                         net (fo=1, routed)           0.000    24.748    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6_n_0
+    SLICE_X61Y82         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532    25.280 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.280    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2_n_0
+    SLICE_X61Y83         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    25.394 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.394    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2_n_0
+    SLICE_X61Y84         CARRY4 (Prop_carry4_CI_CO[0])
+                                                      0.271    25.665 r  engine/array_mac/outputs[6].inputs[6].cell_mac/ib_reg[3]_i_33/CO[0]
+                         net (fo=1, routed)           0.608    26.273    engine/array_mac_n_3632
+    SLICE_X62Y88         LUT2 (Prop_lut2_I1_O)        0.373    26.646 f  engine/ib[3]_i_18/O
+                         net (fo=1, routed)           1.329    27.975    engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_3
+    SLICE_X91Y89         LUT6 (Prop_lut6_I0_O)        0.124    28.099 f  engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_8/O
+                         net (fo=1, routed)           0.732    28.831    engine/array_mac/outputs[3].inputs[6].cell_mac/ib_reg[0]_1
+    SLICE_X95Y89         LUT6 (Prop_lut6_I2_O)        0.124    28.955 f  engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3/O
+                         net (fo=12, routed)          0.360    29.316    engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3_n_0
+    SLICE_X95Y88         LUT6 (Prop_lut6_I5_O)        0.124    29.440 r  engine/array_mac/outputs[3].inputs[6].cell_mac/accumulators[511]_i_1/O
+                         net (fo=512, routed)         1.136    30.576    engine/accumulators[0]
+    SLICE_X89Y86         FDCE                                         r  engine/accumulators_reg[269]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cnn_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  clk
+                         net (fo=2012, unset)         0.924    10.924    engine/clk
+    SLICE_X89Y86         FDCE                                         r  engine/accumulators_reg[269]/C
+                         clock pessimism              0.000    10.924    <hidden>
+                         clock uncertainty           -0.035    10.889    <hidden>
+    SLICE_X89Y86         FDCE (Setup_fdce_C_CE)      -0.205    10.684    engine/accumulators_reg[269]
+  -------------------------------------------------------------------
+                         required time                         10.684    <hidden>
+                         arrival time                         -30.576    <hidden>
+  -------------------------------------------------------------------
+                         slack                                -19.892    <hidden>
+
+Slack (VIOLATED) :        -19.887ns  (required time - arrival time)
+  Source:                 engine/stride_reg[0]_replica/C
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/accumulators_reg[146]/CE
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cnn_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cnn_clk rise@10.000ns - cnn_clk rise@0.000ns)
+  Data Path Delay:        29.634ns  (logic 10.945ns (36.934%)  route 18.689ns (63.066%))
+  Logic Levels:           41  (CARRY4=21 LUT2=4 LUT3=3 LUT4=4 LUT5=2 LUT6=7)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cnn_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=2012, unset)         0.973     0.973    engine/clk
+    SLICE_X60Y108        FDCE                                         r  engine/stride_reg[0]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X60Y108        FDCE (Prop_fdce_C_Q)         0.456     1.429 r  engine/stride_reg[0]_replica/Q
+                         net (fo=7, routed)           0.759     2.188    engine/array_mac/outputs[15].inputs[0].cell_mac/stride_0[0]_repN_alias
+    SLICE_X61Y107        LUT4 (Prop_lut4_I1_O)        0.124     2.312 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87/O
+                         net (fo=1, routed)           0.000     2.312    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87_n_0
+    SLICE_X61Y107        CARRY4 (Prop_carry4_S[1]_O[2])
+                                                      0.580     2.892 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59/O[2]
+                         net (fo=3, routed)           0.593     3.485    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59_n_5
+    SLICE_X63Y107        LUT5 (Prop_lut5_I0_O)        0.302     3.787 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60/O
+                         net (fo=5, routed)           0.674     4.461    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60_n_0
+    SLICE_X63Y108        LUT6 (Prop_lut6_I3_O)        0.124     4.585 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55/O
+                         net (fo=2, routed)           0.435     5.020    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55_n_0
+    SLICE_X62Y109        LUT3 (Prop_lut3_I1_O)        0.124     5.144 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35/O
+                         net (fo=1, routed)           0.000     5.144    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35_n_0
+    SLICE_X62Y109        CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     5.677 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14/CO[3]
+                         net (fo=1, routed)           0.000     5.677    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14_n_0
+    SLICE_X62Y110        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.794 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13/CO[3]
+                         net (fo=1, routed)           0.000     5.794    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13_n_0
+    SLICE_X62Y111        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.911 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47/CO[3]
+                         net (fo=1, routed)           0.000     5.911    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47_n_0
+    SLICE_X62Y112        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.028 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27/CO[3]
+                         net (fo=1, routed)           0.000     6.028    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27_n_0
+    SLICE_X62Y113        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.145 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7/CO[3]
+                         net (fo=1, routed)           0.000     6.145    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7_n_0
+    SLICE_X62Y114        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315     6.460 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_3/O[3]
+                         net (fo=39, routed)          0.904     7.364    engine/array_mac/outputs[15].inputs[0].cell_mac/padding_reg[0]_rep__3_0[0]
+    SLICE_X61Y114        LUT2 (Prop_lut2_I0_O)        0.307     7.671 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13/O
+                         net (fo=1, routed)           0.000     7.671    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13_n_0
+    SLICE_X61Y114        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.401     8.072 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_4/CO[3]
+                         net (fo=37, routed)          0.700     8.772    engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry__0_i_13__31_1[0]
+    SLICE_X64Y114        LUT4 (Prop_lut4_I2_O)        0.124     8.896 r  engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry_i_13/O
+                         net (fo=140, routed)         0.664     9.560    engine/array_mac/outputs[0].inputs[6].cell_mac/product__59_carry__1_i_2__77
+    SLICE_X64Y113        LUT6 (Prop_lut6_I0_O)        0.124     9.684 r  engine/array_mac/outputs[0].inputs[6].cell_mac/product__0_carry_i_9__20/O
+                         net (fo=133, routed)         1.902    11.586    engine/array_mac/outputs[6].inputs[6].cell_mac/product__59_carry_0
+    SLICE_X43Y103        LUT6 (Prop_lut6_I3_O)        0.124    11.710 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53/O
+                         net (fo=1, routed)           0.630    12.340    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53_n_0
+    SLICE_X43Y105        CARRY4 (Prop_carry4_DI[3]_CO[3])
+                                                      0.385    12.725 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry/CO[3]
+                         net (fo=1, routed)           0.000    12.725    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_n_0
+    SLICE_X43Y106        CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334    13.059 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry__0/O[1]
+                         net (fo=2, routed)           1.003    14.061    engine/array_mac_n_1027
+    SLICE_X42Y100        LUT2 (Prop_lut2_I1_O)        0.332    14.393 r  engine/product__86_carry_i_1__53/O
+                         net (fo=2, routed)           0.708    15.101    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[203]_i_25_0[0]
+    SLICE_X42Y100        LUT4 (Prop_lut4_I3_O)        0.331    15.432 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53/O
+                         net (fo=1, routed)           0.000    15.432    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53_n_0
+    SLICE_X42Y100        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    15.808 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry/CO[3]
+                         net (fo=1, routed)           0.000    15.808    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_n_0
+    SLICE_X42Y101        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315    16.123 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0/O[3]
+                         net (fo=2, routed)           1.451    17.574    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0_n_4
+    SLICE_X54Y94         LUT3 (Prop_lut3_I0_O)        0.336    17.910 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22/O
+                         net (fo=2, routed)           0.679    18.590    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22_n_0
+    SLICE_X54Y94         LUT4 (Prop_lut4_I3_O)        0.331    18.921 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26/O
+                         net (fo=1, routed)           0.000    18.921    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26_n_0
+    SLICE_X54Y94         CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    19.297 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19/CO[3]
+                         net (fo=1, routed)           0.000    19.297    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19_n_0
+    SLICE_X54Y95         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.219    19.516 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_16/O[0]
+                         net (fo=3, routed)           1.205    20.721    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_12_1[0]
+    SLICE_X57Y79         LUT3 (Prop_lut3_I2_O)        0.295    21.016 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18/O
+                         net (fo=2, routed)           0.587    21.603    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18_n_0
+    SLICE_X57Y79         LUT5 (Prop_lut5_I1_O)        0.124    21.727 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10/O
+                         net (fo=2, routed)           0.951    22.678    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10_n_0
+    SLICE_X60Y79         LUT6 (Prop_lut6_I0_O)        0.124    22.802 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14/O
+                         net (fo=1, routed)           0.000    22.802    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14_n_0
+    SLICE_X60Y79         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    23.352 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators_reg[207]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.352    engine/array_mac/outputs[6].inputs[6].cell_mac/CO[0]
+    SLICE_X60Y80         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.466 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.466    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7_n_0
+    SLICE_X60Y81         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.580 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.580    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7_n_0
+    SLICE_X60Y82         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.222    23.802 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7/O[0]
+                         net (fo=1, routed)           0.647    24.449    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7_n_7
+    SLICE_X61Y82         LUT2 (Prop_lut2_I1_O)        0.299    24.748 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6/O
+                         net (fo=1, routed)           0.000    24.748    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6_n_0
+    SLICE_X61Y82         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532    25.280 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.280    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2_n_0
+    SLICE_X61Y83         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    25.394 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.394    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2_n_0
+    SLICE_X61Y84         CARRY4 (Prop_carry4_CI_CO[0])
+                                                      0.271    25.665 r  engine/array_mac/outputs[6].inputs[6].cell_mac/ib_reg[3]_i_33/CO[0]
+                         net (fo=1, routed)           0.608    26.273    engine/array_mac_n_3632
+    SLICE_X62Y88         LUT2 (Prop_lut2_I1_O)        0.373    26.646 f  engine/ib[3]_i_18/O
+                         net (fo=1, routed)           1.329    27.975    engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_3
+    SLICE_X91Y89         LUT6 (Prop_lut6_I0_O)        0.124    28.099 f  engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_8/O
+                         net (fo=1, routed)           0.732    28.831    engine/array_mac/outputs[3].inputs[6].cell_mac/ib_reg[0]_1
+    SLICE_X95Y89         LUT6 (Prop_lut6_I2_O)        0.124    28.955 f  engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3/O
+                         net (fo=12, routed)          0.360    29.316    engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3_n_0
+    SLICE_X95Y88         LUT6 (Prop_lut6_I5_O)        0.124    29.440 r  engine/array_mac/outputs[3].inputs[6].cell_mac/accumulators[511]_i_1/O
+                         net (fo=512, routed)         1.167    30.607    engine/accumulators[0]
+    SLICE_X86Y84         FDCE                                         r  engine/accumulators_reg[146]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cnn_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  clk
+                         net (fo=2012, unset)         0.924    10.924    engine/clk
+    SLICE_X86Y84         FDCE                                         r  engine/accumulators_reg[146]/C
+                         clock pessimism              0.000    10.924    <hidden>
+                         clock uncertainty           -0.035    10.889    <hidden>
+    SLICE_X86Y84         FDCE (Setup_fdce_C_CE)      -0.169    10.720    engine/accumulators_reg[146]
+  -------------------------------------------------------------------
+                         required time                         10.720    <hidden>
+                         arrival time                         -30.607    <hidden>
+  -------------------------------------------------------------------
+                         slack                                -19.887    <hidden>
+
+Slack (VIOLATED) :        -19.887ns  (required time - arrival time)
+  Source:                 engine/stride_reg[0]_replica/C
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/accumulators_reg[147]/CE
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cnn_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cnn_clk rise@10.000ns - cnn_clk rise@0.000ns)
+  Data Path Delay:        29.634ns  (logic 10.945ns (36.934%)  route 18.689ns (63.066%))
+  Logic Levels:           41  (CARRY4=21 LUT2=4 LUT3=3 LUT4=4 LUT5=2 LUT6=7)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cnn_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=2012, unset)         0.973     0.973    engine/clk
+    SLICE_X60Y108        FDCE                                         r  engine/stride_reg[0]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X60Y108        FDCE (Prop_fdce_C_Q)         0.456     1.429 r  engine/stride_reg[0]_replica/Q
+                         net (fo=7, routed)           0.759     2.188    engine/array_mac/outputs[15].inputs[0].cell_mac/stride_0[0]_repN_alias
+    SLICE_X61Y107        LUT4 (Prop_lut4_I1_O)        0.124     2.312 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87/O
+                         net (fo=1, routed)           0.000     2.312    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87_n_0
+    SLICE_X61Y107        CARRY4 (Prop_carry4_S[1]_O[2])
+                                                      0.580     2.892 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59/O[2]
+                         net (fo=3, routed)           0.593     3.485    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59_n_5
+    SLICE_X63Y107        LUT5 (Prop_lut5_I0_O)        0.302     3.787 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60/O
+                         net (fo=5, routed)           0.674     4.461    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60_n_0
+    SLICE_X63Y108        LUT6 (Prop_lut6_I3_O)        0.124     4.585 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55/O
+                         net (fo=2, routed)           0.435     5.020    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55_n_0
+    SLICE_X62Y109        LUT3 (Prop_lut3_I1_O)        0.124     5.144 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35/O
+                         net (fo=1, routed)           0.000     5.144    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35_n_0
+    SLICE_X62Y109        CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     5.677 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14/CO[3]
+                         net (fo=1, routed)           0.000     5.677    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14_n_0
+    SLICE_X62Y110        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.794 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13/CO[3]
+                         net (fo=1, routed)           0.000     5.794    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13_n_0
+    SLICE_X62Y111        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.911 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47/CO[3]
+                         net (fo=1, routed)           0.000     5.911    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47_n_0
+    SLICE_X62Y112        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.028 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27/CO[3]
+                         net (fo=1, routed)           0.000     6.028    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27_n_0
+    SLICE_X62Y113        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.145 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7/CO[3]
+                         net (fo=1, routed)           0.000     6.145    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7_n_0
+    SLICE_X62Y114        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315     6.460 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_3/O[3]
+                         net (fo=39, routed)          0.904     7.364    engine/array_mac/outputs[15].inputs[0].cell_mac/padding_reg[0]_rep__3_0[0]
+    SLICE_X61Y114        LUT2 (Prop_lut2_I0_O)        0.307     7.671 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13/O
+                         net (fo=1, routed)           0.000     7.671    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13_n_0
+    SLICE_X61Y114        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.401     8.072 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_4/CO[3]
+                         net (fo=37, routed)          0.700     8.772    engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry__0_i_13__31_1[0]
+    SLICE_X64Y114        LUT4 (Prop_lut4_I2_O)        0.124     8.896 r  engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry_i_13/O
+                         net (fo=140, routed)         0.664     9.560    engine/array_mac/outputs[0].inputs[6].cell_mac/product__59_carry__1_i_2__77
+    SLICE_X64Y113        LUT6 (Prop_lut6_I0_O)        0.124     9.684 r  engine/array_mac/outputs[0].inputs[6].cell_mac/product__0_carry_i_9__20/O
+                         net (fo=133, routed)         1.902    11.586    engine/array_mac/outputs[6].inputs[6].cell_mac/product__59_carry_0
+    SLICE_X43Y103        LUT6 (Prop_lut6_I3_O)        0.124    11.710 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53/O
+                         net (fo=1, routed)           0.630    12.340    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53_n_0
+    SLICE_X43Y105        CARRY4 (Prop_carry4_DI[3]_CO[3])
+                                                      0.385    12.725 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry/CO[3]
+                         net (fo=1, routed)           0.000    12.725    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_n_0
+    SLICE_X43Y106        CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334    13.059 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry__0/O[1]
+                         net (fo=2, routed)           1.003    14.061    engine/array_mac_n_1027
+    SLICE_X42Y100        LUT2 (Prop_lut2_I1_O)        0.332    14.393 r  engine/product__86_carry_i_1__53/O
+                         net (fo=2, routed)           0.708    15.101    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[203]_i_25_0[0]
+    SLICE_X42Y100        LUT4 (Prop_lut4_I3_O)        0.331    15.432 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53/O
+                         net (fo=1, routed)           0.000    15.432    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53_n_0
+    SLICE_X42Y100        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    15.808 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry/CO[3]
+                         net (fo=1, routed)           0.000    15.808    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_n_0
+    SLICE_X42Y101        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315    16.123 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0/O[3]
+                         net (fo=2, routed)           1.451    17.574    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0_n_4
+    SLICE_X54Y94         LUT3 (Prop_lut3_I0_O)        0.336    17.910 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22/O
+                         net (fo=2, routed)           0.679    18.590    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22_n_0
+    SLICE_X54Y94         LUT4 (Prop_lut4_I3_O)        0.331    18.921 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26/O
+                         net (fo=1, routed)           0.000    18.921    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26_n_0
+    SLICE_X54Y94         CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    19.297 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19/CO[3]
+                         net (fo=1, routed)           0.000    19.297    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19_n_0
+    SLICE_X54Y95         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.219    19.516 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_16/O[0]
+                         net (fo=3, routed)           1.205    20.721    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_12_1[0]
+    SLICE_X57Y79         LUT3 (Prop_lut3_I2_O)        0.295    21.016 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18/O
+                         net (fo=2, routed)           0.587    21.603    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18_n_0
+    SLICE_X57Y79         LUT5 (Prop_lut5_I1_O)        0.124    21.727 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10/O
+                         net (fo=2, routed)           0.951    22.678    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10_n_0
+    SLICE_X60Y79         LUT6 (Prop_lut6_I0_O)        0.124    22.802 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14/O
+                         net (fo=1, routed)           0.000    22.802    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14_n_0
+    SLICE_X60Y79         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    23.352 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators_reg[207]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.352    engine/array_mac/outputs[6].inputs[6].cell_mac/CO[0]
+    SLICE_X60Y80         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.466 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.466    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7_n_0
+    SLICE_X60Y81         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.580 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.580    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7_n_0
+    SLICE_X60Y82         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.222    23.802 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7/O[0]
+                         net (fo=1, routed)           0.647    24.449    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7_n_7
+    SLICE_X61Y82         LUT2 (Prop_lut2_I1_O)        0.299    24.748 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6/O
+                         net (fo=1, routed)           0.000    24.748    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6_n_0
+    SLICE_X61Y82         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532    25.280 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.280    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2_n_0
+    SLICE_X61Y83         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    25.394 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.394    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2_n_0
+    SLICE_X61Y84         CARRY4 (Prop_carry4_CI_CO[0])
+                                                      0.271    25.665 r  engine/array_mac/outputs[6].inputs[6].cell_mac/ib_reg[3]_i_33/CO[0]
+                         net (fo=1, routed)           0.608    26.273    engine/array_mac_n_3632
+    SLICE_X62Y88         LUT2 (Prop_lut2_I1_O)        0.373    26.646 f  engine/ib[3]_i_18/O
+                         net (fo=1, routed)           1.329    27.975    engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_3
+    SLICE_X91Y89         LUT6 (Prop_lut6_I0_O)        0.124    28.099 f  engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_8/O
+                         net (fo=1, routed)           0.732    28.831    engine/array_mac/outputs[3].inputs[6].cell_mac/ib_reg[0]_1
+    SLICE_X95Y89         LUT6 (Prop_lut6_I2_O)        0.124    28.955 f  engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3/O
+                         net (fo=12, routed)          0.360    29.316    engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3_n_0
+    SLICE_X95Y88         LUT6 (Prop_lut6_I5_O)        0.124    29.440 r  engine/array_mac/outputs[3].inputs[6].cell_mac/accumulators[511]_i_1/O
+                         net (fo=512, routed)         1.167    30.607    engine/accumulators[0]
+    SLICE_X86Y84         FDCE                                         r  engine/accumulators_reg[147]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cnn_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  clk
+                         net (fo=2012, unset)         0.924    10.924    engine/clk
+    SLICE_X86Y84         FDCE                                         r  engine/accumulators_reg[147]/C
+                         clock pessimism              0.000    10.924    <hidden>
+                         clock uncertainty           -0.035    10.889    <hidden>
+    SLICE_X86Y84         FDCE (Setup_fdce_C_CE)      -0.169    10.720    engine/accumulators_reg[147]
+  -------------------------------------------------------------------
+                         required time                         10.720    <hidden>
+                         arrival time                         -30.607    <hidden>
+  -------------------------------------------------------------------
+                         slack                                -19.887    <hidden>
+
+Slack (VIOLATED) :        -19.887ns  (required time - arrival time)
+  Source:                 engine/stride_reg[0]_replica/C
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/accumulators_reg[294]/CE
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cnn_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cnn_clk rise@10.000ns - cnn_clk rise@0.000ns)
+  Data Path Delay:        29.634ns  (logic 10.945ns (36.934%)  route 18.689ns (63.066%))
+  Logic Levels:           41  (CARRY4=21 LUT2=4 LUT3=3 LUT4=4 LUT5=2 LUT6=7)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cnn_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=2012, unset)         0.973     0.973    engine/clk
+    SLICE_X60Y108        FDCE                                         r  engine/stride_reg[0]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X60Y108        FDCE (Prop_fdce_C_Q)         0.456     1.429 r  engine/stride_reg[0]_replica/Q
+                         net (fo=7, routed)           0.759     2.188    engine/array_mac/outputs[15].inputs[0].cell_mac/stride_0[0]_repN_alias
+    SLICE_X61Y107        LUT4 (Prop_lut4_I1_O)        0.124     2.312 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87/O
+                         net (fo=1, routed)           0.000     2.312    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87_n_0
+    SLICE_X61Y107        CARRY4 (Prop_carry4_S[1]_O[2])
+                                                      0.580     2.892 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59/O[2]
+                         net (fo=3, routed)           0.593     3.485    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59_n_5
+    SLICE_X63Y107        LUT5 (Prop_lut5_I0_O)        0.302     3.787 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60/O
+                         net (fo=5, routed)           0.674     4.461    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60_n_0
+    SLICE_X63Y108        LUT6 (Prop_lut6_I3_O)        0.124     4.585 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55/O
+                         net (fo=2, routed)           0.435     5.020    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55_n_0
+    SLICE_X62Y109        LUT3 (Prop_lut3_I1_O)        0.124     5.144 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35/O
+                         net (fo=1, routed)           0.000     5.144    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35_n_0
+    SLICE_X62Y109        CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     5.677 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14/CO[3]
+                         net (fo=1, routed)           0.000     5.677    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14_n_0
+    SLICE_X62Y110        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.794 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13/CO[3]
+                         net (fo=1, routed)           0.000     5.794    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13_n_0
+    SLICE_X62Y111        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.911 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47/CO[3]
+                         net (fo=1, routed)           0.000     5.911    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47_n_0
+    SLICE_X62Y112        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.028 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27/CO[3]
+                         net (fo=1, routed)           0.000     6.028    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27_n_0
+    SLICE_X62Y113        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.145 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7/CO[3]
+                         net (fo=1, routed)           0.000     6.145    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7_n_0
+    SLICE_X62Y114        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315     6.460 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_3/O[3]
+                         net (fo=39, routed)          0.904     7.364    engine/array_mac/outputs[15].inputs[0].cell_mac/padding_reg[0]_rep__3_0[0]
+    SLICE_X61Y114        LUT2 (Prop_lut2_I0_O)        0.307     7.671 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13/O
+                         net (fo=1, routed)           0.000     7.671    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13_n_0
+    SLICE_X61Y114        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.401     8.072 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_4/CO[3]
+                         net (fo=37, routed)          0.700     8.772    engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry__0_i_13__31_1[0]
+    SLICE_X64Y114        LUT4 (Prop_lut4_I2_O)        0.124     8.896 r  engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry_i_13/O
+                         net (fo=140, routed)         0.664     9.560    engine/array_mac/outputs[0].inputs[6].cell_mac/product__59_carry__1_i_2__77
+    SLICE_X64Y113        LUT6 (Prop_lut6_I0_O)        0.124     9.684 r  engine/array_mac/outputs[0].inputs[6].cell_mac/product__0_carry_i_9__20/O
+                         net (fo=133, routed)         1.902    11.586    engine/array_mac/outputs[6].inputs[6].cell_mac/product__59_carry_0
+    SLICE_X43Y103        LUT6 (Prop_lut6_I3_O)        0.124    11.710 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53/O
+                         net (fo=1, routed)           0.630    12.340    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53_n_0
+    SLICE_X43Y105        CARRY4 (Prop_carry4_DI[3]_CO[3])
+                                                      0.385    12.725 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry/CO[3]
+                         net (fo=1, routed)           0.000    12.725    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_n_0
+    SLICE_X43Y106        CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334    13.059 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry__0/O[1]
+                         net (fo=2, routed)           1.003    14.061    engine/array_mac_n_1027
+    SLICE_X42Y100        LUT2 (Prop_lut2_I1_O)        0.332    14.393 r  engine/product__86_carry_i_1__53/O
+                         net (fo=2, routed)           0.708    15.101    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[203]_i_25_0[0]
+    SLICE_X42Y100        LUT4 (Prop_lut4_I3_O)        0.331    15.432 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53/O
+                         net (fo=1, routed)           0.000    15.432    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53_n_0
+    SLICE_X42Y100        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    15.808 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry/CO[3]
+                         net (fo=1, routed)           0.000    15.808    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_n_0
+    SLICE_X42Y101        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315    16.123 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0/O[3]
+                         net (fo=2, routed)           1.451    17.574    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0_n_4
+    SLICE_X54Y94         LUT3 (Prop_lut3_I0_O)        0.336    17.910 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22/O
+                         net (fo=2, routed)           0.679    18.590    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22_n_0
+    SLICE_X54Y94         LUT4 (Prop_lut4_I3_O)        0.331    18.921 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26/O
+                         net (fo=1, routed)           0.000    18.921    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26_n_0
+    SLICE_X54Y94         CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    19.297 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19/CO[3]
+                         net (fo=1, routed)           0.000    19.297    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19_n_0
+    SLICE_X54Y95         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.219    19.516 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_16/O[0]
+                         net (fo=3, routed)           1.205    20.721    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_12_1[0]
+    SLICE_X57Y79         LUT3 (Prop_lut3_I2_O)        0.295    21.016 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18/O
+                         net (fo=2, routed)           0.587    21.603    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18_n_0
+    SLICE_X57Y79         LUT5 (Prop_lut5_I1_O)        0.124    21.727 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10/O
+                         net (fo=2, routed)           0.951    22.678    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10_n_0
+    SLICE_X60Y79         LUT6 (Prop_lut6_I0_O)        0.124    22.802 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14/O
+                         net (fo=1, routed)           0.000    22.802    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14_n_0
+    SLICE_X60Y79         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    23.352 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators_reg[207]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.352    engine/array_mac/outputs[6].inputs[6].cell_mac/CO[0]
+    SLICE_X60Y80         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.466 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.466    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7_n_0
+    SLICE_X60Y81         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.580 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.580    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7_n_0
+    SLICE_X60Y82         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.222    23.802 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7/O[0]
+                         net (fo=1, routed)           0.647    24.449    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7_n_7
+    SLICE_X61Y82         LUT2 (Prop_lut2_I1_O)        0.299    24.748 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6/O
+                         net (fo=1, routed)           0.000    24.748    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6_n_0
+    SLICE_X61Y82         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532    25.280 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.280    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2_n_0
+    SLICE_X61Y83         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    25.394 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.394    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2_n_0
+    SLICE_X61Y84         CARRY4 (Prop_carry4_CI_CO[0])
+                                                      0.271    25.665 r  engine/array_mac/outputs[6].inputs[6].cell_mac/ib_reg[3]_i_33/CO[0]
+                         net (fo=1, routed)           0.608    26.273    engine/array_mac_n_3632
+    SLICE_X62Y88         LUT2 (Prop_lut2_I1_O)        0.373    26.646 f  engine/ib[3]_i_18/O
+                         net (fo=1, routed)           1.329    27.975    engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_3
+    SLICE_X91Y89         LUT6 (Prop_lut6_I0_O)        0.124    28.099 f  engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_8/O
+                         net (fo=1, routed)           0.732    28.831    engine/array_mac/outputs[3].inputs[6].cell_mac/ib_reg[0]_1
+    SLICE_X95Y89         LUT6 (Prop_lut6_I2_O)        0.124    28.955 f  engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3/O
+                         net (fo=12, routed)          0.360    29.316    engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3_n_0
+    SLICE_X95Y88         LUT6 (Prop_lut6_I5_O)        0.124    29.440 r  engine/array_mac/outputs[3].inputs[6].cell_mac/accumulators[511]_i_1/O
+                         net (fo=512, routed)         1.167    30.607    engine/accumulators[0]
+    SLICE_X86Y84         FDCE                                         r  engine/accumulators_reg[294]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cnn_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  clk
+                         net (fo=2012, unset)         0.924    10.924    engine/clk
+    SLICE_X86Y84         FDCE                                         r  engine/accumulators_reg[294]/C
+                         clock pessimism              0.000    10.924    <hidden>
+                         clock uncertainty           -0.035    10.889    <hidden>
+    SLICE_X86Y84         FDCE (Setup_fdce_C_CE)      -0.169    10.720    engine/accumulators_reg[294]
+  -------------------------------------------------------------------
+                         required time                         10.720    <hidden>
+                         arrival time                         -30.607    <hidden>
+  -------------------------------------------------------------------
+                         slack                                -19.887    <hidden>
+
+Slack (VIOLATED) :        -19.887ns  (required time - arrival time)
+  Source:                 engine/stride_reg[0]_replica/C
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/accumulators_reg[295]/CE
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cnn_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cnn_clk rise@10.000ns - cnn_clk rise@0.000ns)
+  Data Path Delay:        29.634ns  (logic 10.945ns (36.934%)  route 18.689ns (63.066%))
+  Logic Levels:           41  (CARRY4=21 LUT2=4 LUT3=3 LUT4=4 LUT5=2 LUT6=7)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cnn_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=2012, unset)         0.973     0.973    engine/clk
+    SLICE_X60Y108        FDCE                                         r  engine/stride_reg[0]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X60Y108        FDCE (Prop_fdce_C_Q)         0.456     1.429 r  engine/stride_reg[0]_replica/Q
+                         net (fo=7, routed)           0.759     2.188    engine/array_mac/outputs[15].inputs[0].cell_mac/stride_0[0]_repN_alias
+    SLICE_X61Y107        LUT4 (Prop_lut4_I1_O)        0.124     2.312 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87/O
+                         net (fo=1, routed)           0.000     2.312    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87_n_0
+    SLICE_X61Y107        CARRY4 (Prop_carry4_S[1]_O[2])
+                                                      0.580     2.892 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59/O[2]
+                         net (fo=3, routed)           0.593     3.485    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59_n_5
+    SLICE_X63Y107        LUT5 (Prop_lut5_I0_O)        0.302     3.787 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60/O
+                         net (fo=5, routed)           0.674     4.461    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60_n_0
+    SLICE_X63Y108        LUT6 (Prop_lut6_I3_O)        0.124     4.585 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55/O
+                         net (fo=2, routed)           0.435     5.020    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55_n_0
+    SLICE_X62Y109        LUT3 (Prop_lut3_I1_O)        0.124     5.144 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35/O
+                         net (fo=1, routed)           0.000     5.144    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35_n_0
+    SLICE_X62Y109        CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     5.677 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14/CO[3]
+                         net (fo=1, routed)           0.000     5.677    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14_n_0
+    SLICE_X62Y110        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.794 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13/CO[3]
+                         net (fo=1, routed)           0.000     5.794    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13_n_0
+    SLICE_X62Y111        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.911 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47/CO[3]
+                         net (fo=1, routed)           0.000     5.911    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47_n_0
+    SLICE_X62Y112        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.028 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27/CO[3]
+                         net (fo=1, routed)           0.000     6.028    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27_n_0
+    SLICE_X62Y113        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.145 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7/CO[3]
+                         net (fo=1, routed)           0.000     6.145    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7_n_0
+    SLICE_X62Y114        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315     6.460 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_3/O[3]
+                         net (fo=39, routed)          0.904     7.364    engine/array_mac/outputs[15].inputs[0].cell_mac/padding_reg[0]_rep__3_0[0]
+    SLICE_X61Y114        LUT2 (Prop_lut2_I0_O)        0.307     7.671 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13/O
+                         net (fo=1, routed)           0.000     7.671    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13_n_0
+    SLICE_X61Y114        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.401     8.072 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_4/CO[3]
+                         net (fo=37, routed)          0.700     8.772    engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry__0_i_13__31_1[0]
+    SLICE_X64Y114        LUT4 (Prop_lut4_I2_O)        0.124     8.896 r  engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry_i_13/O
+                         net (fo=140, routed)         0.664     9.560    engine/array_mac/outputs[0].inputs[6].cell_mac/product__59_carry__1_i_2__77
+    SLICE_X64Y113        LUT6 (Prop_lut6_I0_O)        0.124     9.684 r  engine/array_mac/outputs[0].inputs[6].cell_mac/product__0_carry_i_9__20/O
+                         net (fo=133, routed)         1.902    11.586    engine/array_mac/outputs[6].inputs[6].cell_mac/product__59_carry_0
+    SLICE_X43Y103        LUT6 (Prop_lut6_I3_O)        0.124    11.710 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53/O
+                         net (fo=1, routed)           0.630    12.340    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53_n_0
+    SLICE_X43Y105        CARRY4 (Prop_carry4_DI[3]_CO[3])
+                                                      0.385    12.725 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry/CO[3]
+                         net (fo=1, routed)           0.000    12.725    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_n_0
+    SLICE_X43Y106        CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334    13.059 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry__0/O[1]
+                         net (fo=2, routed)           1.003    14.061    engine/array_mac_n_1027
+    SLICE_X42Y100        LUT2 (Prop_lut2_I1_O)        0.332    14.393 r  engine/product__86_carry_i_1__53/O
+                         net (fo=2, routed)           0.708    15.101    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[203]_i_25_0[0]
+    SLICE_X42Y100        LUT4 (Prop_lut4_I3_O)        0.331    15.432 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53/O
+                         net (fo=1, routed)           0.000    15.432    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53_n_0
+    SLICE_X42Y100        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    15.808 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry/CO[3]
+                         net (fo=1, routed)           0.000    15.808    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_n_0
+    SLICE_X42Y101        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315    16.123 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0/O[3]
+                         net (fo=2, routed)           1.451    17.574    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0_n_4
+    SLICE_X54Y94         LUT3 (Prop_lut3_I0_O)        0.336    17.910 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22/O
+                         net (fo=2, routed)           0.679    18.590    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22_n_0
+    SLICE_X54Y94         LUT4 (Prop_lut4_I3_O)        0.331    18.921 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26/O
+                         net (fo=1, routed)           0.000    18.921    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26_n_0
+    SLICE_X54Y94         CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    19.297 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19/CO[3]
+                         net (fo=1, routed)           0.000    19.297    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19_n_0
+    SLICE_X54Y95         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.219    19.516 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_16/O[0]
+                         net (fo=3, routed)           1.205    20.721    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_12_1[0]
+    SLICE_X57Y79         LUT3 (Prop_lut3_I2_O)        0.295    21.016 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18/O
+                         net (fo=2, routed)           0.587    21.603    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18_n_0
+    SLICE_X57Y79         LUT5 (Prop_lut5_I1_O)        0.124    21.727 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10/O
+                         net (fo=2, routed)           0.951    22.678    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10_n_0
+    SLICE_X60Y79         LUT6 (Prop_lut6_I0_O)        0.124    22.802 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14/O
+                         net (fo=1, routed)           0.000    22.802    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14_n_0
+    SLICE_X60Y79         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    23.352 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators_reg[207]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.352    engine/array_mac/outputs[6].inputs[6].cell_mac/CO[0]
+    SLICE_X60Y80         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.466 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.466    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7_n_0
+    SLICE_X60Y81         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.580 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.580    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7_n_0
+    SLICE_X60Y82         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.222    23.802 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7/O[0]
+                         net (fo=1, routed)           0.647    24.449    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7_n_7
+    SLICE_X61Y82         LUT2 (Prop_lut2_I1_O)        0.299    24.748 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6/O
+                         net (fo=1, routed)           0.000    24.748    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6_n_0
+    SLICE_X61Y82         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532    25.280 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.280    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2_n_0
+    SLICE_X61Y83         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    25.394 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.394    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2_n_0
+    SLICE_X61Y84         CARRY4 (Prop_carry4_CI_CO[0])
+                                                      0.271    25.665 r  engine/array_mac/outputs[6].inputs[6].cell_mac/ib_reg[3]_i_33/CO[0]
+                         net (fo=1, routed)           0.608    26.273    engine/array_mac_n_3632
+    SLICE_X62Y88         LUT2 (Prop_lut2_I1_O)        0.373    26.646 f  engine/ib[3]_i_18/O
+                         net (fo=1, routed)           1.329    27.975    engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_3
+    SLICE_X91Y89         LUT6 (Prop_lut6_I0_O)        0.124    28.099 f  engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_8/O
+                         net (fo=1, routed)           0.732    28.831    engine/array_mac/outputs[3].inputs[6].cell_mac/ib_reg[0]_1
+    SLICE_X95Y89         LUT6 (Prop_lut6_I2_O)        0.124    28.955 f  engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3/O
+                         net (fo=12, routed)          0.360    29.316    engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3_n_0
+    SLICE_X95Y88         LUT6 (Prop_lut6_I5_O)        0.124    29.440 r  engine/array_mac/outputs[3].inputs[6].cell_mac/accumulators[511]_i_1/O
+                         net (fo=512, routed)         1.167    30.607    engine/accumulators[0]
+    SLICE_X86Y84         FDCE                                         r  engine/accumulators_reg[295]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cnn_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  clk
+                         net (fo=2012, unset)         0.924    10.924    engine/clk
+    SLICE_X86Y84         FDCE                                         r  engine/accumulators_reg[295]/C
+                         clock pessimism              0.000    10.924    <hidden>
+                         clock uncertainty           -0.035    10.889    <hidden>
+    SLICE_X86Y84         FDCE (Setup_fdce_C_CE)      -0.169    10.720    engine/accumulators_reg[295]
+  -------------------------------------------------------------------
+                         required time                         10.720    <hidden>
+                         arrival time                         -30.607    <hidden>
+  -------------------------------------------------------------------
+                         slack                                -19.887    <hidden>
+
+Slack (VIOLATED) :        -19.884ns  (required time - arrival time)
+  Source:                 engine/stride_reg[0]_replica/C
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/accumulators_reg[140]/CE
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cnn_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cnn_clk rise@10.000ns - cnn_clk rise@0.000ns)
+  Data Path Delay:        29.595ns  (logic 10.945ns (36.982%)  route 18.650ns (63.018%))
+  Logic Levels:           41  (CARRY4=21 LUT2=4 LUT3=3 LUT4=4 LUT5=2 LUT6=7)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cnn_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=2012, unset)         0.973     0.973    engine/clk
+    SLICE_X60Y108        FDCE                                         r  engine/stride_reg[0]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X60Y108        FDCE (Prop_fdce_C_Q)         0.456     1.429 r  engine/stride_reg[0]_replica/Q
+                         net (fo=7, routed)           0.759     2.188    engine/array_mac/outputs[15].inputs[0].cell_mac/stride_0[0]_repN_alias
+    SLICE_X61Y107        LUT4 (Prop_lut4_I1_O)        0.124     2.312 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87/O
+                         net (fo=1, routed)           0.000     2.312    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87_n_0
+    SLICE_X61Y107        CARRY4 (Prop_carry4_S[1]_O[2])
+                                                      0.580     2.892 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59/O[2]
+                         net (fo=3, routed)           0.593     3.485    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59_n_5
+    SLICE_X63Y107        LUT5 (Prop_lut5_I0_O)        0.302     3.787 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60/O
+                         net (fo=5, routed)           0.674     4.461    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60_n_0
+    SLICE_X63Y108        LUT6 (Prop_lut6_I3_O)        0.124     4.585 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55/O
+                         net (fo=2, routed)           0.435     5.020    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55_n_0
+    SLICE_X62Y109        LUT3 (Prop_lut3_I1_O)        0.124     5.144 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35/O
+                         net (fo=1, routed)           0.000     5.144    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35_n_0
+    SLICE_X62Y109        CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     5.677 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14/CO[3]
+                         net (fo=1, routed)           0.000     5.677    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14_n_0
+    SLICE_X62Y110        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.794 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13/CO[3]
+                         net (fo=1, routed)           0.000     5.794    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13_n_0
+    SLICE_X62Y111        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.911 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47/CO[3]
+                         net (fo=1, routed)           0.000     5.911    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47_n_0
+    SLICE_X62Y112        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.028 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27/CO[3]
+                         net (fo=1, routed)           0.000     6.028    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27_n_0
+    SLICE_X62Y113        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.145 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7/CO[3]
+                         net (fo=1, routed)           0.000     6.145    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7_n_0
+    SLICE_X62Y114        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315     6.460 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_3/O[3]
+                         net (fo=39, routed)          0.904     7.364    engine/array_mac/outputs[15].inputs[0].cell_mac/padding_reg[0]_rep__3_0[0]
+    SLICE_X61Y114        LUT2 (Prop_lut2_I0_O)        0.307     7.671 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13/O
+                         net (fo=1, routed)           0.000     7.671    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13_n_0
+    SLICE_X61Y114        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.401     8.072 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_4/CO[3]
+                         net (fo=37, routed)          0.700     8.772    engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry__0_i_13__31_1[0]
+    SLICE_X64Y114        LUT4 (Prop_lut4_I2_O)        0.124     8.896 r  engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry_i_13/O
+                         net (fo=140, routed)         0.664     9.560    engine/array_mac/outputs[0].inputs[6].cell_mac/product__59_carry__1_i_2__77
+    SLICE_X64Y113        LUT6 (Prop_lut6_I0_O)        0.124     9.684 r  engine/array_mac/outputs[0].inputs[6].cell_mac/product__0_carry_i_9__20/O
+                         net (fo=133, routed)         1.902    11.586    engine/array_mac/outputs[6].inputs[6].cell_mac/product__59_carry_0
+    SLICE_X43Y103        LUT6 (Prop_lut6_I3_O)        0.124    11.710 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53/O
+                         net (fo=1, routed)           0.630    12.340    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53_n_0
+    SLICE_X43Y105        CARRY4 (Prop_carry4_DI[3]_CO[3])
+                                                      0.385    12.725 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry/CO[3]
+                         net (fo=1, routed)           0.000    12.725    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_n_0
+    SLICE_X43Y106        CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334    13.059 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry__0/O[1]
+                         net (fo=2, routed)           1.003    14.061    engine/array_mac_n_1027
+    SLICE_X42Y100        LUT2 (Prop_lut2_I1_O)        0.332    14.393 r  engine/product__86_carry_i_1__53/O
+                         net (fo=2, routed)           0.708    15.101    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[203]_i_25_0[0]
+    SLICE_X42Y100        LUT4 (Prop_lut4_I3_O)        0.331    15.432 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53/O
+                         net (fo=1, routed)           0.000    15.432    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53_n_0
+    SLICE_X42Y100        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    15.808 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry/CO[3]
+                         net (fo=1, routed)           0.000    15.808    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_n_0
+    SLICE_X42Y101        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315    16.123 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0/O[3]
+                         net (fo=2, routed)           1.451    17.574    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0_n_4
+    SLICE_X54Y94         LUT3 (Prop_lut3_I0_O)        0.336    17.910 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22/O
+                         net (fo=2, routed)           0.679    18.590    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22_n_0
+    SLICE_X54Y94         LUT4 (Prop_lut4_I3_O)        0.331    18.921 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26/O
+                         net (fo=1, routed)           0.000    18.921    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26_n_0
+    SLICE_X54Y94         CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    19.297 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19/CO[3]
+                         net (fo=1, routed)           0.000    19.297    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19_n_0
+    SLICE_X54Y95         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.219    19.516 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_16/O[0]
+                         net (fo=3, routed)           1.205    20.721    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_12_1[0]
+    SLICE_X57Y79         LUT3 (Prop_lut3_I2_O)        0.295    21.016 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18/O
+                         net (fo=2, routed)           0.587    21.603    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18_n_0
+    SLICE_X57Y79         LUT5 (Prop_lut5_I1_O)        0.124    21.727 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10/O
+                         net (fo=2, routed)           0.951    22.678    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10_n_0
+    SLICE_X60Y79         LUT6 (Prop_lut6_I0_O)        0.124    22.802 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14/O
+                         net (fo=1, routed)           0.000    22.802    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14_n_0
+    SLICE_X60Y79         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    23.352 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators_reg[207]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.352    engine/array_mac/outputs[6].inputs[6].cell_mac/CO[0]
+    SLICE_X60Y80         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.466 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.466    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7_n_0
+    SLICE_X60Y81         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.580 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.580    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7_n_0
+    SLICE_X60Y82         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.222    23.802 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7/O[0]
+                         net (fo=1, routed)           0.647    24.449    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7_n_7
+    SLICE_X61Y82         LUT2 (Prop_lut2_I1_O)        0.299    24.748 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6/O
+                         net (fo=1, routed)           0.000    24.748    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6_n_0
+    SLICE_X61Y82         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532    25.280 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.280    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2_n_0
+    SLICE_X61Y83         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    25.394 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.394    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2_n_0
+    SLICE_X61Y84         CARRY4 (Prop_carry4_CI_CO[0])
+                                                      0.271    25.665 r  engine/array_mac/outputs[6].inputs[6].cell_mac/ib_reg[3]_i_33/CO[0]
+                         net (fo=1, routed)           0.608    26.273    engine/array_mac_n_3632
+    SLICE_X62Y88         LUT2 (Prop_lut2_I1_O)        0.373    26.646 f  engine/ib[3]_i_18/O
+                         net (fo=1, routed)           1.329    27.975    engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_3
+    SLICE_X91Y89         LUT6 (Prop_lut6_I0_O)        0.124    28.099 f  engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_8/O
+                         net (fo=1, routed)           0.732    28.831    engine/array_mac/outputs[3].inputs[6].cell_mac/ib_reg[0]_1
+    SLICE_X95Y89         LUT6 (Prop_lut6_I2_O)        0.124    28.955 f  engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3/O
+                         net (fo=12, routed)          0.360    29.316    engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3_n_0
+    SLICE_X95Y88         LUT6 (Prop_lut6_I5_O)        0.124    29.440 r  engine/array_mac/outputs[3].inputs[6].cell_mac/accumulators[511]_i_1/O
+                         net (fo=512, routed)         1.129    30.568    engine/accumulators[0]
+    SLICE_X91Y79         FDCE                                         r  engine/accumulators_reg[140]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cnn_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  clk
+                         net (fo=2012, unset)         0.924    10.924    engine/clk
+    SLICE_X91Y79         FDCE                                         r  engine/accumulators_reg[140]/C
+                         clock pessimism              0.000    10.924    <hidden>
+                         clock uncertainty           -0.035    10.889    <hidden>
+    SLICE_X91Y79         FDCE (Setup_fdce_C_CE)      -0.205    10.684    engine/accumulators_reg[140]
+  -------------------------------------------------------------------
+                         required time                         10.684    <hidden>
+                         arrival time                         -30.568    <hidden>
+  -------------------------------------------------------------------
+                         slack                                -19.884    <hidden>
+
+Slack (VIOLATED) :        -19.884ns  (required time - arrival time)
+  Source:                 engine/stride_reg[0]_replica/C
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/accumulators_reg[141]/CE
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cnn_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cnn_clk rise@10.000ns - cnn_clk rise@0.000ns)
+  Data Path Delay:        29.595ns  (logic 10.945ns (36.982%)  route 18.650ns (63.018%))
+  Logic Levels:           41  (CARRY4=21 LUT2=4 LUT3=3 LUT4=4 LUT5=2 LUT6=7)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cnn_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=2012, unset)         0.973     0.973    engine/clk
+    SLICE_X60Y108        FDCE                                         r  engine/stride_reg[0]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X60Y108        FDCE (Prop_fdce_C_Q)         0.456     1.429 r  engine/stride_reg[0]_replica/Q
+                         net (fo=7, routed)           0.759     2.188    engine/array_mac/outputs[15].inputs[0].cell_mac/stride_0[0]_repN_alias
+    SLICE_X61Y107        LUT4 (Prop_lut4_I1_O)        0.124     2.312 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87/O
+                         net (fo=1, routed)           0.000     2.312    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87_n_0
+    SLICE_X61Y107        CARRY4 (Prop_carry4_S[1]_O[2])
+                                                      0.580     2.892 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59/O[2]
+                         net (fo=3, routed)           0.593     3.485    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59_n_5
+    SLICE_X63Y107        LUT5 (Prop_lut5_I0_O)        0.302     3.787 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60/O
+                         net (fo=5, routed)           0.674     4.461    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60_n_0
+    SLICE_X63Y108        LUT6 (Prop_lut6_I3_O)        0.124     4.585 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55/O
+                         net (fo=2, routed)           0.435     5.020    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55_n_0
+    SLICE_X62Y109        LUT3 (Prop_lut3_I1_O)        0.124     5.144 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35/O
+                         net (fo=1, routed)           0.000     5.144    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35_n_0
+    SLICE_X62Y109        CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     5.677 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14/CO[3]
+                         net (fo=1, routed)           0.000     5.677    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14_n_0
+    SLICE_X62Y110        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.794 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13/CO[3]
+                         net (fo=1, routed)           0.000     5.794    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13_n_0
+    SLICE_X62Y111        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.911 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47/CO[3]
+                         net (fo=1, routed)           0.000     5.911    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47_n_0
+    SLICE_X62Y112        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.028 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27/CO[3]
+                         net (fo=1, routed)           0.000     6.028    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27_n_0
+    SLICE_X62Y113        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.145 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7/CO[3]
+                         net (fo=1, routed)           0.000     6.145    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7_n_0
+    SLICE_X62Y114        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315     6.460 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_3/O[3]
+                         net (fo=39, routed)          0.904     7.364    engine/array_mac/outputs[15].inputs[0].cell_mac/padding_reg[0]_rep__3_0[0]
+    SLICE_X61Y114        LUT2 (Prop_lut2_I0_O)        0.307     7.671 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13/O
+                         net (fo=1, routed)           0.000     7.671    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13_n_0
+    SLICE_X61Y114        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.401     8.072 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_4/CO[3]
+                         net (fo=37, routed)          0.700     8.772    engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry__0_i_13__31_1[0]
+    SLICE_X64Y114        LUT4 (Prop_lut4_I2_O)        0.124     8.896 r  engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry_i_13/O
+                         net (fo=140, routed)         0.664     9.560    engine/array_mac/outputs[0].inputs[6].cell_mac/product__59_carry__1_i_2__77
+    SLICE_X64Y113        LUT6 (Prop_lut6_I0_O)        0.124     9.684 r  engine/array_mac/outputs[0].inputs[6].cell_mac/product__0_carry_i_9__20/O
+                         net (fo=133, routed)         1.902    11.586    engine/array_mac/outputs[6].inputs[6].cell_mac/product__59_carry_0
+    SLICE_X43Y103        LUT6 (Prop_lut6_I3_O)        0.124    11.710 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53/O
+                         net (fo=1, routed)           0.630    12.340    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53_n_0
+    SLICE_X43Y105        CARRY4 (Prop_carry4_DI[3]_CO[3])
+                                                      0.385    12.725 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry/CO[3]
+                         net (fo=1, routed)           0.000    12.725    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_n_0
+    SLICE_X43Y106        CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334    13.059 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry__0/O[1]
+                         net (fo=2, routed)           1.003    14.061    engine/array_mac_n_1027
+    SLICE_X42Y100        LUT2 (Prop_lut2_I1_O)        0.332    14.393 r  engine/product__86_carry_i_1__53/O
+                         net (fo=2, routed)           0.708    15.101    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[203]_i_25_0[0]
+    SLICE_X42Y100        LUT4 (Prop_lut4_I3_O)        0.331    15.432 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53/O
+                         net (fo=1, routed)           0.000    15.432    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53_n_0
+    SLICE_X42Y100        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    15.808 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry/CO[3]
+                         net (fo=1, routed)           0.000    15.808    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_n_0
+    SLICE_X42Y101        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315    16.123 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0/O[3]
+                         net (fo=2, routed)           1.451    17.574    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0_n_4
+    SLICE_X54Y94         LUT3 (Prop_lut3_I0_O)        0.336    17.910 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22/O
+                         net (fo=2, routed)           0.679    18.590    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22_n_0
+    SLICE_X54Y94         LUT4 (Prop_lut4_I3_O)        0.331    18.921 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26/O
+                         net (fo=1, routed)           0.000    18.921    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26_n_0
+    SLICE_X54Y94         CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    19.297 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19/CO[3]
+                         net (fo=1, routed)           0.000    19.297    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19_n_0
+    SLICE_X54Y95         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.219    19.516 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_16/O[0]
+                         net (fo=3, routed)           1.205    20.721    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_12_1[0]
+    SLICE_X57Y79         LUT3 (Prop_lut3_I2_O)        0.295    21.016 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18/O
+                         net (fo=2, routed)           0.587    21.603    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18_n_0
+    SLICE_X57Y79         LUT5 (Prop_lut5_I1_O)        0.124    21.727 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10/O
+                         net (fo=2, routed)           0.951    22.678    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10_n_0
+    SLICE_X60Y79         LUT6 (Prop_lut6_I0_O)        0.124    22.802 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14/O
+                         net (fo=1, routed)           0.000    22.802    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14_n_0
+    SLICE_X60Y79         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    23.352 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators_reg[207]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.352    engine/array_mac/outputs[6].inputs[6].cell_mac/CO[0]
+    SLICE_X60Y80         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.466 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.466    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7_n_0
+    SLICE_X60Y81         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.580 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.580    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7_n_0
+    SLICE_X60Y82         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.222    23.802 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7/O[0]
+                         net (fo=1, routed)           0.647    24.449    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7_n_7
+    SLICE_X61Y82         LUT2 (Prop_lut2_I1_O)        0.299    24.748 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6/O
+                         net (fo=1, routed)           0.000    24.748    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6_n_0
+    SLICE_X61Y82         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532    25.280 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.280    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2_n_0
+    SLICE_X61Y83         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    25.394 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.394    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2_n_0
+    SLICE_X61Y84         CARRY4 (Prop_carry4_CI_CO[0])
+                                                      0.271    25.665 r  engine/array_mac/outputs[6].inputs[6].cell_mac/ib_reg[3]_i_33/CO[0]
+                         net (fo=1, routed)           0.608    26.273    engine/array_mac_n_3632
+    SLICE_X62Y88         LUT2 (Prop_lut2_I1_O)        0.373    26.646 f  engine/ib[3]_i_18/O
+                         net (fo=1, routed)           1.329    27.975    engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_3
+    SLICE_X91Y89         LUT6 (Prop_lut6_I0_O)        0.124    28.099 f  engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_8/O
+                         net (fo=1, routed)           0.732    28.831    engine/array_mac/outputs[3].inputs[6].cell_mac/ib_reg[0]_1
+    SLICE_X95Y89         LUT6 (Prop_lut6_I2_O)        0.124    28.955 f  engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3/O
+                         net (fo=12, routed)          0.360    29.316    engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3_n_0
+    SLICE_X95Y88         LUT6 (Prop_lut6_I5_O)        0.124    29.440 r  engine/array_mac/outputs[3].inputs[6].cell_mac/accumulators[511]_i_1/O
+                         net (fo=512, routed)         1.129    30.568    engine/accumulators[0]
+    SLICE_X91Y79         FDCE                                         r  engine/accumulators_reg[141]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cnn_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  clk
+                         net (fo=2012, unset)         0.924    10.924    engine/clk
+    SLICE_X91Y79         FDCE                                         r  engine/accumulators_reg[141]/C
+                         clock pessimism              0.000    10.924    <hidden>
+                         clock uncertainty           -0.035    10.889    <hidden>
+    SLICE_X91Y79         FDCE (Setup_fdce_C_CE)      -0.205    10.684    engine/accumulators_reg[141]
+  -------------------------------------------------------------------
+                         required time                         10.684    <hidden>
+                         arrival time                         -30.568    <hidden>
+  -------------------------------------------------------------------
+                         slack                                -19.884    <hidden>
+
+Slack (VIOLATED) :        -19.884ns  (required time - arrival time)
+  Source:                 engine/stride_reg[0]_replica/C
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/accumulators_reg[198]/CE
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cnn_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cnn_clk rise@10.000ns - cnn_clk rise@0.000ns)
+  Data Path Delay:        29.595ns  (logic 10.945ns (36.982%)  route 18.650ns (63.018%))
+  Logic Levels:           41  (CARRY4=21 LUT2=4 LUT3=3 LUT4=4 LUT5=2 LUT6=7)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cnn_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=2012, unset)         0.973     0.973    engine/clk
+    SLICE_X60Y108        FDCE                                         r  engine/stride_reg[0]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X60Y108        FDCE (Prop_fdce_C_Q)         0.456     1.429 r  engine/stride_reg[0]_replica/Q
+                         net (fo=7, routed)           0.759     2.188    engine/array_mac/outputs[15].inputs[0].cell_mac/stride_0[0]_repN_alias
+    SLICE_X61Y107        LUT4 (Prop_lut4_I1_O)        0.124     2.312 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87/O
+                         net (fo=1, routed)           0.000     2.312    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87_n_0
+    SLICE_X61Y107        CARRY4 (Prop_carry4_S[1]_O[2])
+                                                      0.580     2.892 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59/O[2]
+                         net (fo=3, routed)           0.593     3.485    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59_n_5
+    SLICE_X63Y107        LUT5 (Prop_lut5_I0_O)        0.302     3.787 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60/O
+                         net (fo=5, routed)           0.674     4.461    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60_n_0
+    SLICE_X63Y108        LUT6 (Prop_lut6_I3_O)        0.124     4.585 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55/O
+                         net (fo=2, routed)           0.435     5.020    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55_n_0
+    SLICE_X62Y109        LUT3 (Prop_lut3_I1_O)        0.124     5.144 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35/O
+                         net (fo=1, routed)           0.000     5.144    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35_n_0
+    SLICE_X62Y109        CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     5.677 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14/CO[3]
+                         net (fo=1, routed)           0.000     5.677    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14_n_0
+    SLICE_X62Y110        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.794 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13/CO[3]
+                         net (fo=1, routed)           0.000     5.794    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13_n_0
+    SLICE_X62Y111        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.911 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47/CO[3]
+                         net (fo=1, routed)           0.000     5.911    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47_n_0
+    SLICE_X62Y112        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.028 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27/CO[3]
+                         net (fo=1, routed)           0.000     6.028    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27_n_0
+    SLICE_X62Y113        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.145 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7/CO[3]
+                         net (fo=1, routed)           0.000     6.145    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7_n_0
+    SLICE_X62Y114        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315     6.460 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_3/O[3]
+                         net (fo=39, routed)          0.904     7.364    engine/array_mac/outputs[15].inputs[0].cell_mac/padding_reg[0]_rep__3_0[0]
+    SLICE_X61Y114        LUT2 (Prop_lut2_I0_O)        0.307     7.671 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13/O
+                         net (fo=1, routed)           0.000     7.671    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13_n_0
+    SLICE_X61Y114        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.401     8.072 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_4/CO[3]
+                         net (fo=37, routed)          0.700     8.772    engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry__0_i_13__31_1[0]
+    SLICE_X64Y114        LUT4 (Prop_lut4_I2_O)        0.124     8.896 r  engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry_i_13/O
+                         net (fo=140, routed)         0.664     9.560    engine/array_mac/outputs[0].inputs[6].cell_mac/product__59_carry__1_i_2__77
+    SLICE_X64Y113        LUT6 (Prop_lut6_I0_O)        0.124     9.684 r  engine/array_mac/outputs[0].inputs[6].cell_mac/product__0_carry_i_9__20/O
+                         net (fo=133, routed)         1.902    11.586    engine/array_mac/outputs[6].inputs[6].cell_mac/product__59_carry_0
+    SLICE_X43Y103        LUT6 (Prop_lut6_I3_O)        0.124    11.710 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53/O
+                         net (fo=1, routed)           0.630    12.340    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53_n_0
+    SLICE_X43Y105        CARRY4 (Prop_carry4_DI[3]_CO[3])
+                                                      0.385    12.725 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry/CO[3]
+                         net (fo=1, routed)           0.000    12.725    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_n_0
+    SLICE_X43Y106        CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334    13.059 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry__0/O[1]
+                         net (fo=2, routed)           1.003    14.061    engine/array_mac_n_1027
+    SLICE_X42Y100        LUT2 (Prop_lut2_I1_O)        0.332    14.393 r  engine/product__86_carry_i_1__53/O
+                         net (fo=2, routed)           0.708    15.101    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[203]_i_25_0[0]
+    SLICE_X42Y100        LUT4 (Prop_lut4_I3_O)        0.331    15.432 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53/O
+                         net (fo=1, routed)           0.000    15.432    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53_n_0
+    SLICE_X42Y100        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    15.808 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry/CO[3]
+                         net (fo=1, routed)           0.000    15.808    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_n_0
+    SLICE_X42Y101        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315    16.123 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0/O[3]
+                         net (fo=2, routed)           1.451    17.574    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0_n_4
+    SLICE_X54Y94         LUT3 (Prop_lut3_I0_O)        0.336    17.910 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22/O
+                         net (fo=2, routed)           0.679    18.590    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22_n_0
+    SLICE_X54Y94         LUT4 (Prop_lut4_I3_O)        0.331    18.921 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26/O
+                         net (fo=1, routed)           0.000    18.921    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26_n_0
+    SLICE_X54Y94         CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    19.297 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19/CO[3]
+                         net (fo=1, routed)           0.000    19.297    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19_n_0
+    SLICE_X54Y95         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.219    19.516 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_16/O[0]
+                         net (fo=3, routed)           1.205    20.721    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_12_1[0]
+    SLICE_X57Y79         LUT3 (Prop_lut3_I2_O)        0.295    21.016 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18/O
+                         net (fo=2, routed)           0.587    21.603    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18_n_0
+    SLICE_X57Y79         LUT5 (Prop_lut5_I1_O)        0.124    21.727 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10/O
+                         net (fo=2, routed)           0.951    22.678    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10_n_0
+    SLICE_X60Y79         LUT6 (Prop_lut6_I0_O)        0.124    22.802 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14/O
+                         net (fo=1, routed)           0.000    22.802    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14_n_0
+    SLICE_X60Y79         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    23.352 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators_reg[207]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.352    engine/array_mac/outputs[6].inputs[6].cell_mac/CO[0]
+    SLICE_X60Y80         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.466 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.466    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7_n_0
+    SLICE_X60Y81         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.580 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.580    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7_n_0
+    SLICE_X60Y82         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.222    23.802 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7/O[0]
+                         net (fo=1, routed)           0.647    24.449    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7_n_7
+    SLICE_X61Y82         LUT2 (Prop_lut2_I1_O)        0.299    24.748 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6/O
+                         net (fo=1, routed)           0.000    24.748    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6_n_0
+    SLICE_X61Y82         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532    25.280 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.280    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2_n_0
+    SLICE_X61Y83         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    25.394 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.394    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2_n_0
+    SLICE_X61Y84         CARRY4 (Prop_carry4_CI_CO[0])
+                                                      0.271    25.665 r  engine/array_mac/outputs[6].inputs[6].cell_mac/ib_reg[3]_i_33/CO[0]
+                         net (fo=1, routed)           0.608    26.273    engine/array_mac_n_3632
+    SLICE_X62Y88         LUT2 (Prop_lut2_I1_O)        0.373    26.646 f  engine/ib[3]_i_18/O
+                         net (fo=1, routed)           1.329    27.975    engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_3
+    SLICE_X91Y89         LUT6 (Prop_lut6_I0_O)        0.124    28.099 f  engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_8/O
+                         net (fo=1, routed)           0.732    28.831    engine/array_mac/outputs[3].inputs[6].cell_mac/ib_reg[0]_1
+    SLICE_X95Y89         LUT6 (Prop_lut6_I2_O)        0.124    28.955 f  engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3/O
+                         net (fo=12, routed)          0.360    29.316    engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3_n_0
+    SLICE_X95Y88         LUT6 (Prop_lut6_I5_O)        0.124    29.440 r  engine/array_mac/outputs[3].inputs[6].cell_mac/accumulators[511]_i_1/O
+                         net (fo=512, routed)         1.129    30.568    engine/accumulators[0]
+    SLICE_X91Y79         FDCE                                         r  engine/accumulators_reg[198]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cnn_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  clk
+                         net (fo=2012, unset)         0.924    10.924    engine/clk
+    SLICE_X91Y79         FDCE                                         r  engine/accumulators_reg[198]/C
+                         clock pessimism              0.000    10.924    <hidden>
+                         clock uncertainty           -0.035    10.889    <hidden>
+    SLICE_X91Y79         FDCE (Setup_fdce_C_CE)      -0.205    10.684    engine/accumulators_reg[198]
+  -------------------------------------------------------------------
+                         required time                         10.684    <hidden>
+                         arrival time                         -30.568    <hidden>
+  -------------------------------------------------------------------
+                         slack                                -19.884    <hidden>
+
+Slack (VIOLATED) :        -19.884ns  (required time - arrival time)
+  Source:                 engine/stride_reg[0]_replica/C
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/accumulators_reg[199]/CE
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cnn_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cnn_clk rise@10.000ns - cnn_clk rise@0.000ns)
+  Data Path Delay:        29.595ns  (logic 10.945ns (36.982%)  route 18.650ns (63.018%))
+  Logic Levels:           41  (CARRY4=21 LUT2=4 LUT3=3 LUT4=4 LUT5=2 LUT6=7)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cnn_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=2012, unset)         0.973     0.973    engine/clk
+    SLICE_X60Y108        FDCE                                         r  engine/stride_reg[0]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X60Y108        FDCE (Prop_fdce_C_Q)         0.456     1.429 r  engine/stride_reg[0]_replica/Q
+                         net (fo=7, routed)           0.759     2.188    engine/array_mac/outputs[15].inputs[0].cell_mac/stride_0[0]_repN_alias
+    SLICE_X61Y107        LUT4 (Prop_lut4_I1_O)        0.124     2.312 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87/O
+                         net (fo=1, routed)           0.000     2.312    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87_n_0
+    SLICE_X61Y107        CARRY4 (Prop_carry4_S[1]_O[2])
+                                                      0.580     2.892 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59/O[2]
+                         net (fo=3, routed)           0.593     3.485    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59_n_5
+    SLICE_X63Y107        LUT5 (Prop_lut5_I0_O)        0.302     3.787 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60/O
+                         net (fo=5, routed)           0.674     4.461    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60_n_0
+    SLICE_X63Y108        LUT6 (Prop_lut6_I3_O)        0.124     4.585 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55/O
+                         net (fo=2, routed)           0.435     5.020    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55_n_0
+    SLICE_X62Y109        LUT3 (Prop_lut3_I1_O)        0.124     5.144 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35/O
+                         net (fo=1, routed)           0.000     5.144    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35_n_0
+    SLICE_X62Y109        CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     5.677 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14/CO[3]
+                         net (fo=1, routed)           0.000     5.677    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14_n_0
+    SLICE_X62Y110        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.794 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13/CO[3]
+                         net (fo=1, routed)           0.000     5.794    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13_n_0
+    SLICE_X62Y111        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.911 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47/CO[3]
+                         net (fo=1, routed)           0.000     5.911    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47_n_0
+    SLICE_X62Y112        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.028 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27/CO[3]
+                         net (fo=1, routed)           0.000     6.028    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27_n_0
+    SLICE_X62Y113        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.145 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7/CO[3]
+                         net (fo=1, routed)           0.000     6.145    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7_n_0
+    SLICE_X62Y114        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315     6.460 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_3/O[3]
+                         net (fo=39, routed)          0.904     7.364    engine/array_mac/outputs[15].inputs[0].cell_mac/padding_reg[0]_rep__3_0[0]
+    SLICE_X61Y114        LUT2 (Prop_lut2_I0_O)        0.307     7.671 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13/O
+                         net (fo=1, routed)           0.000     7.671    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13_n_0
+    SLICE_X61Y114        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.401     8.072 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_4/CO[3]
+                         net (fo=37, routed)          0.700     8.772    engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry__0_i_13__31_1[0]
+    SLICE_X64Y114        LUT4 (Prop_lut4_I2_O)        0.124     8.896 r  engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry_i_13/O
+                         net (fo=140, routed)         0.664     9.560    engine/array_mac/outputs[0].inputs[6].cell_mac/product__59_carry__1_i_2__77
+    SLICE_X64Y113        LUT6 (Prop_lut6_I0_O)        0.124     9.684 r  engine/array_mac/outputs[0].inputs[6].cell_mac/product__0_carry_i_9__20/O
+                         net (fo=133, routed)         1.902    11.586    engine/array_mac/outputs[6].inputs[6].cell_mac/product__59_carry_0
+    SLICE_X43Y103        LUT6 (Prop_lut6_I3_O)        0.124    11.710 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53/O
+                         net (fo=1, routed)           0.630    12.340    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53_n_0
+    SLICE_X43Y105        CARRY4 (Prop_carry4_DI[3]_CO[3])
+                                                      0.385    12.725 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry/CO[3]
+                         net (fo=1, routed)           0.000    12.725    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_n_0
+    SLICE_X43Y106        CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334    13.059 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry__0/O[1]
+                         net (fo=2, routed)           1.003    14.061    engine/array_mac_n_1027
+    SLICE_X42Y100        LUT2 (Prop_lut2_I1_O)        0.332    14.393 r  engine/product__86_carry_i_1__53/O
+                         net (fo=2, routed)           0.708    15.101    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[203]_i_25_0[0]
+    SLICE_X42Y100        LUT4 (Prop_lut4_I3_O)        0.331    15.432 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53/O
+                         net (fo=1, routed)           0.000    15.432    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53_n_0
+    SLICE_X42Y100        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    15.808 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry/CO[3]
+                         net (fo=1, routed)           0.000    15.808    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_n_0
+    SLICE_X42Y101        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315    16.123 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0/O[3]
+                         net (fo=2, routed)           1.451    17.574    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0_n_4
+    SLICE_X54Y94         LUT3 (Prop_lut3_I0_O)        0.336    17.910 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22/O
+                         net (fo=2, routed)           0.679    18.590    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22_n_0
+    SLICE_X54Y94         LUT4 (Prop_lut4_I3_O)        0.331    18.921 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26/O
+                         net (fo=1, routed)           0.000    18.921    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26_n_0
+    SLICE_X54Y94         CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    19.297 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19/CO[3]
+                         net (fo=1, routed)           0.000    19.297    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19_n_0
+    SLICE_X54Y95         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.219    19.516 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_16/O[0]
+                         net (fo=3, routed)           1.205    20.721    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_12_1[0]
+    SLICE_X57Y79         LUT3 (Prop_lut3_I2_O)        0.295    21.016 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18/O
+                         net (fo=2, routed)           0.587    21.603    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18_n_0
+    SLICE_X57Y79         LUT5 (Prop_lut5_I1_O)        0.124    21.727 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10/O
+                         net (fo=2, routed)           0.951    22.678    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10_n_0
+    SLICE_X60Y79         LUT6 (Prop_lut6_I0_O)        0.124    22.802 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14/O
+                         net (fo=1, routed)           0.000    22.802    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14_n_0
+    SLICE_X60Y79         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    23.352 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators_reg[207]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.352    engine/array_mac/outputs[6].inputs[6].cell_mac/CO[0]
+    SLICE_X60Y80         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.466 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.466    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7_n_0
+    SLICE_X60Y81         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.580 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.580    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7_n_0
+    SLICE_X60Y82         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.222    23.802 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7/O[0]
+                         net (fo=1, routed)           0.647    24.449    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7_n_7
+    SLICE_X61Y82         LUT2 (Prop_lut2_I1_O)        0.299    24.748 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6/O
+                         net (fo=1, routed)           0.000    24.748    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6_n_0
+    SLICE_X61Y82         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532    25.280 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.280    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2_n_0
+    SLICE_X61Y83         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    25.394 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.394    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2_n_0
+    SLICE_X61Y84         CARRY4 (Prop_carry4_CI_CO[0])
+                                                      0.271    25.665 r  engine/array_mac/outputs[6].inputs[6].cell_mac/ib_reg[3]_i_33/CO[0]
+                         net (fo=1, routed)           0.608    26.273    engine/array_mac_n_3632
+    SLICE_X62Y88         LUT2 (Prop_lut2_I1_O)        0.373    26.646 f  engine/ib[3]_i_18/O
+                         net (fo=1, routed)           1.329    27.975    engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_3
+    SLICE_X91Y89         LUT6 (Prop_lut6_I0_O)        0.124    28.099 f  engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_8/O
+                         net (fo=1, routed)           0.732    28.831    engine/array_mac/outputs[3].inputs[6].cell_mac/ib_reg[0]_1
+    SLICE_X95Y89         LUT6 (Prop_lut6_I2_O)        0.124    28.955 f  engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3/O
+                         net (fo=12, routed)          0.360    29.316    engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3_n_0
+    SLICE_X95Y88         LUT6 (Prop_lut6_I5_O)        0.124    29.440 r  engine/array_mac/outputs[3].inputs[6].cell_mac/accumulators[511]_i_1/O
+                         net (fo=512, routed)         1.129    30.568    engine/accumulators[0]
+    SLICE_X91Y79         FDCE                                         r  engine/accumulators_reg[199]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cnn_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  clk
+                         net (fo=2012, unset)         0.924    10.924    engine/clk
+    SLICE_X91Y79         FDCE                                         r  engine/accumulators_reg[199]/C
+                         clock pessimism              0.000    10.924    <hidden>
+                         clock uncertainty           -0.035    10.889    <hidden>
+    SLICE_X91Y79         FDCE (Setup_fdce_C_CE)      -0.205    10.684    engine/accumulators_reg[199]
+  -------------------------------------------------------------------
+                         required time                         10.684    <hidden>
+                         arrival time                         -30.568    <hidden>
+  -------------------------------------------------------------------
+                         slack                                -19.884    <hidden>
+
+
+
+

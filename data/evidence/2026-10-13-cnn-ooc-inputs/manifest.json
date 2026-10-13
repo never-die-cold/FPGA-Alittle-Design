@@ -1,0 +1,30 @@
+[
+  {
+    "file": "cnn_sequencer.v",
+    "sha256": "d4aa7a7d7da6496bb5f59793801c2874e897f6e822d2e74eb471889147e10fe7"
+  },
+  {
+    "file": "conv_engine.v",
+    "sha256": "de0687da8aa7c1577fbe87bf231729e374ea08dd6b92611920adc3817febbcaf"
+  },
+  {
+    "file": "int8_gap.v",
+    "sha256": "0de05f7c755c6be7b3a69fd4fb75b70ee83e379edfc096f6c3bd336759125dee"
+  },
+  {
+    "file": "int8_logits.v",
+    "sha256": "170fdfbaa7fffa442ac6eb787d7b5f2afc95f056cb2623b77455f510d7589fed"
+  },
+  {
+    "file": "int8_mac.v",
+    "sha256": "081f0e9451fbdacc2c11d4d4b3d2eccbcdd584631d5cb00cdc481f9f1863de92"
+  },
+  {
+    "file": "int8_requant.v",
+    "sha256": "09636bf08811eb048abb1136d43b757fa41a3dd7787b303979d6144c4b7a5069"
+  },
+  {
+    "file": "mac_array.v",
+    "sha256": "8d51f13f6935a7564e81f45362277bab7425dba93ba632ca4d3b8c496544da8e"
+  }
+]

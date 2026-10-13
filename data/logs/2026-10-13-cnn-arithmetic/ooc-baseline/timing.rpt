@@ -1,0 +1,524 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Tue Oct 13 01:00:42 2026
+| Host         : never-die-cold running 64-bit major release  (build 9200)
+| Command      : report_timing_summary -warn_on_violation -file E:/Projects/FPGA-Alittle-Design/data/logs/2026-10-13-cnn-arithmetic/ooc-baseline/timing.rpt
+| Design       : cnn_sequencer
+| Device       : 7z020-clg400
+| Speed File   : -1  PRODUCTION 1.12 2019-11-22
+| Design State : Routed
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Summary Report
+
+------------------------------------------------------------------------------------------------
+| Timer Settings
+| --------------
+------------------------------------------------------------------------------------------------
+
+  Enable Multi Corner Analysis               :  Yes
+  Enable Pessimism Removal                   :  Yes
+  Pessimism Removal Resolution               :  Nearest Common Node
+  Enable Input Delay Default Clock           :  No
+  Enable Preset / Clear Arcs                 :  No
+  Disable Flight Delays                      :  No
+  Ignore I/O Paths                           :  No
+  Timing Early Launch at Borrowing Latches   :  No
+  Borrow Time for Max Delay Exceptions       :  Yes
+  Merge Timing Exceptions                    :  Yes
+  Inter-SLR Compensation                     :  Conservative
+
+  Corner  Analyze    Analyze    
+  Name    Max Paths  Min Paths  
+  ------  ---------  ---------  
+  Slow    Yes        Yes        
+  Fast    Yes        Yes        
+
+
+------------------------------------------------------------------------------------------------
+| Report Methodology
+| ------------------
+------------------------------------------------------------------------------------------------
+
+No report available as report_methodology has not been run prior. Run report_methodology on the current design for the summary of methodology violations.
+
+
+
+check_timing report
+
+Table of Contents
+-----------------
+1. checking no_clock (0)
+2. checking constant_clock (0)
+3. checking pulse_width_clock (0)
+4. checking unconstrained_internal_endpoints (0)
+5. checking no_input_delay (1)
+6. checking no_output_delay (0)
+7. checking multiple_clock (0)
+8. checking generated_clocks (0)
+9. checking loops (0)
+10. checking partial_input_delay (0)
+11. checking partial_output_delay (0)
+12. checking latch_loops (0)
+
+1. checking no_clock (0)
+------------------------
+ There are 0 register/latch pins with no clock.
+
+
+2. checking constant_clock (0)
+------------------------------
+ There are 0 register/latch pins with constant_clock.
+
+
+3. checking pulse_width_clock (0)
+---------------------------------
+ There are 0 register/latch pins which need pulse_width check
+
+
+4. checking unconstrained_internal_endpoints (0)
+------------------------------------------------
+ There are 0 pins that are not constrained for maximum delay.
+
+ There are 0 pins that are not constrained for maximum delay due to constant clock.
+
+
+5. checking no_input_delay (1)
+------------------------------
+ There are 0 input ports with no input delay specified.
+
+ There is 1 input port with no input delay but user has a false path constraint. (MEDIUM)
+
+
+6. checking no_output_delay (0)
+-------------------------------
+ There are 0 ports with no output delay specified.
+
+ There are 0 ports with no output delay but user has a false path constraint
+
+ There are 0 ports with no output delay but with a timing clock defined on it or propagating through it
+
+
+7. checking multiple_clock (0)
+------------------------------
+ There are 0 register/latch pins with multiple clocks.
+
+
+8. checking generated_clocks (0)
+--------------------------------
+ There are 0 generated clocks that are not connected to a clock source.
+
+
+9. checking loops (0)
+---------------------
+ There are 0 combinational loops in the design.
+
+
+10. checking partial_input_delay (0)
+------------------------------------
+ There are 0 input ports with partial input delay specified.
+
+
+11. checking partial_output_delay (0)
+-------------------------------------
+ There are 0 ports with partial output delay specified.
+
+
+12. checking latch_loops (0)
+----------------------------
+ There are 0 combinational latch loops in the design through latch input
+
+
+
+------------------------------------------------------------------------------------------------
+| Design Timing Summary
+| ---------------------
+------------------------------------------------------------------------------------------------
+
+    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+    -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+    -19.892   -25138.420                   3048                 5804        0.180        0.000                      0                 5804        4.500        0.000                       0                  2013  
+
+
+Timing constraints are not met.
+
+
+------------------------------------------------------------------------------------------------
+| Clock Summary
+| -------------
+------------------------------------------------------------------------------------------------
+
+Clock    Waveform(ns)       Period(ns)      Frequency(MHz)
+-----    ------------       ----------      --------------
+cnn_clk  {0.000 5.000}      10.000          100.000         
+
+
+------------------------------------------------------------------------------------------------
+| Intra Clock Table
+| -----------------
+------------------------------------------------------------------------------------------------
+
+Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+-----             -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+cnn_clk           -19.892   -24852.434                   2719                 4216        0.180        0.000                      0                 4216        4.500        0.000                       0                  2013  
+
+
+------------------------------------------------------------------------------------------------
+| Inter Clock Table
+| -----------------
+------------------------------------------------------------------------------------------------
+
+From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints  
+----------    --------          -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------  
+
+
+------------------------------------------------------------------------------------------------
+| Other Path Groups Table
+| -----------------------
+------------------------------------------------------------------------------------------------
+
+Path Group         From Clock         To Clock               WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints  
+----------         ----------         --------               -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------  
+**async_default**  cnn_clk            cnn_clk                 -2.637     -285.984                    329                 1588        0.772        0.000                      0                 1588  
+
+
+------------------------------------------------------------------------------------------------
+| Timing Details
+| --------------
+------------------------------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------------------------
+From Clock:  cnn_clk
+  To Clock:  cnn_clk
+
+Setup :         2719  Failing Endpoints,  Worst Slack      -19.892ns,  Total Violation   -24852.434ns
+Hold  :            0  Failing Endpoints,  Worst Slack        0.180ns,  Total Violation        0.000ns
+PW    :            0  Failing Endpoints,  Worst Slack        4.500ns,  Total Violation        0.000ns
+---------------------------------------------------------------------------------------------------
+
+
+Max Delay Paths
+--------------------------------------------------------------------------------------
+Slack (VIOLATED) :        -19.892ns  (required time - arrival time)
+  Source:                 engine/stride_reg[0]_replica/C
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/accumulators_reg[268]/CE
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cnn_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cnn_clk rise@10.000ns - cnn_clk rise@0.000ns)
+  Data Path Delay:        29.603ns  (logic 10.945ns (36.973%)  route 18.658ns (63.027%))
+  Logic Levels:           41  (CARRY4=21 LUT2=4 LUT3=3 LUT4=4 LUT5=2 LUT6=7)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cnn_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=2012, unset)         0.973     0.973    engine/clk
+    SLICE_X60Y108        FDCE                                         r  engine/stride_reg[0]_replica/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X60Y108        FDCE (Prop_fdce_C_Q)         0.456     1.429 r  engine/stride_reg[0]_replica/Q
+                         net (fo=7, routed)           0.759     2.188    engine/array_mac/outputs[15].inputs[0].cell_mac/stride_0[0]_repN_alias
+    SLICE_X61Y107        LUT4 (Prop_lut4_I1_O)        0.124     2.312 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87/O
+                         net (fo=1, routed)           0.000     2.312    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_87_n_0
+    SLICE_X61Y107        CARRY4 (Prop_carry4_S[1]_O[2])
+                                                      0.580     2.892 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59/O[2]
+                         net (fo=3, routed)           0.593     3.485    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_59_n_5
+    SLICE_X63Y107        LUT5 (Prop_lut5_I0_O)        0.302     3.787 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60/O
+                         net (fo=5, routed)           0.674     4.461    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_60_n_0
+    SLICE_X63Y108        LUT6 (Prop_lut6_I3_O)        0.124     4.585 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55/O
+                         net (fo=2, routed)           0.435     5.020    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_55_n_0
+    SLICE_X62Y109        LUT3 (Prop_lut3_I1_O)        0.124     5.144 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35/O
+                         net (fo=1, routed)           0.000     5.144    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_35_n_0
+    SLICE_X62Y109        CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.533     5.677 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14/CO[3]
+                         net (fo=1, routed)           0.000     5.677    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_14_n_0
+    SLICE_X62Y110        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.794 r  engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13/CO[3]
+                         net (fo=1, routed)           0.000     5.794    engine/array_mac/outputs[15].inputs[0].cell_mac/input_address1_i_13_n_0
+    SLICE_X62Y111        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     5.911 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47/CO[3]
+                         net (fo=1, routed)           0.000     5.911    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_47_n_0
+    SLICE_X62Y112        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.028 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27/CO[3]
+                         net (fo=1, routed)           0.000     6.028    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_27_n_0
+    SLICE_X62Y113        CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117     6.145 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7/CO[3]
+                         net (fo=1, routed)           0.000     6.145    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_7_n_0
+    SLICE_X62Y114        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315     6.460 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_3/O[3]
+                         net (fo=39, routed)          0.904     7.364    engine/array_mac/outputs[15].inputs[0].cell_mac/padding_reg[0]_rep__3_0[0]
+    SLICE_X61Y114        LUT2 (Prop_lut2_I0_O)        0.307     7.671 r  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13/O
+                         net (fo=1, routed)           0.000     7.671    engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_13_n_0
+    SLICE_X61Y114        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.401     8.072 f  engine/array_mac/outputs[15].inputs[0].cell_mac/read_address[15]_INST_0_i_4/CO[3]
+                         net (fo=37, routed)          0.700     8.772    engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry__0_i_13__31_1[0]
+    SLICE_X64Y114        LUT4 (Prop_lut4_I2_O)        0.124     8.896 r  engine/array_mac/outputs[15].inputs[7].cell_mac/product__0_carry_i_13/O
+                         net (fo=140, routed)         0.664     9.560    engine/array_mac/outputs[0].inputs[6].cell_mac/product__59_carry__1_i_2__77
+    SLICE_X64Y113        LUT6 (Prop_lut6_I0_O)        0.124     9.684 r  engine/array_mac/outputs[0].inputs[6].cell_mac/product__0_carry_i_9__20/O
+                         net (fo=133, routed)         1.902    11.586    engine/array_mac/outputs[6].inputs[6].cell_mac/product__59_carry_0
+    SLICE_X43Y103        LUT6 (Prop_lut6_I3_O)        0.124    11.710 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53/O
+                         net (fo=1, routed)           0.630    12.340    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_i_1__53_n_0
+    SLICE_X43Y105        CARRY4 (Prop_carry4_DI[3]_CO[3])
+                                                      0.385    12.725 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry/CO[3]
+                         net (fo=1, routed)           0.000    12.725    engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry_n_0
+    SLICE_X43Y106        CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334    13.059 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__0_carry__0/O[1]
+                         net (fo=2, routed)           1.003    14.061    engine/array_mac_n_1027
+    SLICE_X42Y100        LUT2 (Prop_lut2_I1_O)        0.332    14.393 r  engine/product__86_carry_i_1__53/O
+                         net (fo=2, routed)           0.708    15.101    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[203]_i_25_0[0]
+    SLICE_X42Y100        LUT4 (Prop_lut4_I3_O)        0.331    15.432 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53/O
+                         net (fo=1, routed)           0.000    15.432    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_i_4__53_n_0
+    SLICE_X42Y100        CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    15.808 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry/CO[3]
+                         net (fo=1, routed)           0.000    15.808    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry_n_0
+    SLICE_X42Y101        CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.315    16.123 r  engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0/O[3]
+                         net (fo=2, routed)           1.451    17.574    engine/array_mac/outputs[6].inputs[6].cell_mac/product__86_carry__0_n_4
+    SLICE_X54Y94         LUT3 (Prop_lut3_I0_O)        0.336    17.910 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22/O
+                         net (fo=2, routed)           0.679    18.590    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_22_n_0
+    SLICE_X54Y94         LUT4 (Prop_lut4_I3_O)        0.331    18.921 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26/O
+                         net (fo=1, routed)           0.000    18.921    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[207]_i_26_n_0
+    SLICE_X54Y94         CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.376    19.297 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19/CO[3]
+                         net (fo=1, routed)           0.000    19.297    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[207]_i_19_n_0
+    SLICE_X54Y95         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.219    19.516 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_16/O[0]
+                         net (fo=3, routed)           1.205    20.721    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_12_1[0]
+    SLICE_X57Y79         LUT3 (Prop_lut3_I2_O)        0.295    21.016 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18/O
+                         net (fo=2, routed)           0.587    21.603    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_18_n_0
+    SLICE_X57Y79         LUT5 (Prop_lut5_I1_O)        0.124    21.727 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10/O
+                         net (fo=2, routed)           0.951    22.678    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_10_n_0
+    SLICE_X60Y79         LUT6 (Prop_lut6_I0_O)        0.124    22.802 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14/O
+                         net (fo=1, routed)           0.000    22.802    engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators[207]_i_14_n_0
+    SLICE_X60Y79         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.550    23.352 r  engine/array_mac/outputs[6].inputs[1].cell_mac/accumulators_reg[207]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.352    engine/array_mac/outputs[6].inputs[6].cell_mac/CO[0]
+    SLICE_X60Y80         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.466 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.466    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[211]_i_7_n_0
+    SLICE_X60Y81         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    23.580 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7/CO[3]
+                         net (fo=1, routed)           0.000    23.580    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[215]_i_7_n_0
+    SLICE_X60Y82         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.222    23.802 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7/O[0]
+                         net (fo=1, routed)           0.647    24.449    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_7_n_7
+    SLICE_X61Y82         LUT2 (Prop_lut2_I1_O)        0.299    24.748 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6/O
+                         net (fo=1, routed)           0.000    24.748    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators[219]_i_6_n_0
+    SLICE_X61Y82         CARRY4 (Prop_carry4_S[0]_CO[3])
+                                                      0.532    25.280 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.280    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[219]_i_2_n_0
+    SLICE_X61Y83         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    25.394 r  engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2/CO[3]
+                         net (fo=1, routed)           0.000    25.394    engine/array_mac/outputs[6].inputs[6].cell_mac/accumulators_reg[223]_i_2_n_0
+    SLICE_X61Y84         CARRY4 (Prop_carry4_CI_CO[0])
+                                                      0.271    25.665 r  engine/array_mac/outputs[6].inputs[6].cell_mac/ib_reg[3]_i_33/CO[0]
+                         net (fo=1, routed)           0.608    26.273    engine/array_mac_n_3632
+    SLICE_X62Y88         LUT2 (Prop_lut2_I1_O)        0.373    26.646 f  engine/ib[3]_i_18/O
+                         net (fo=1, routed)           1.329    27.975    engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_3
+    SLICE_X91Y89         LUT6 (Prop_lut6_I0_O)        0.124    28.099 f  engine/array_mac/outputs[6].inputs[6].cell_mac/ib[3]_i_8/O
+                         net (fo=1, routed)           0.732    28.831    engine/array_mac/outputs[3].inputs[6].cell_mac/ib_reg[0]_1
+    SLICE_X95Y89         LUT6 (Prop_lut6_I2_O)        0.124    28.955 f  engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3/O
+                         net (fo=12, routed)          0.360    29.316    engine/array_mac/outputs[3].inputs[6].cell_mac/ib[3]_i_3_n_0
+    SLICE_X95Y88         LUT6 (Prop_lut6_I5_O)        0.124    29.440 r  engine/array_mac/outputs[3].inputs[6].cell_mac/accumulators[511]_i_1/O
+                         net (fo=512, routed)         1.136    30.576    engine/accumulators[0]
+    SLICE_X89Y86         FDCE                                         r  engine/accumulators_reg[268]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cnn_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  clk
+                         net (fo=2012, unset)         0.924    10.924    engine/clk
+    SLICE_X89Y86         FDCE                                         r  engine/accumulators_reg[268]/C
+                         clock pessimism              0.000    10.924    <hidden>
+                         clock uncertainty           -0.035    10.889    <hidden>
+    SLICE_X89Y86         FDCE (Setup_fdce_C_CE)      -0.205    10.684    engine/accumulators_reg[268]
+  -------------------------------------------------------------------
+                         required time                         10.684    <hidden>
+                         arrival time                         -30.576    <hidden>
+  -------------------------------------------------------------------
+                         slack                                -19.892    <hidden>
+
+
+
+
+
+Min Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             0.180ns  (arrival time - required time)
+  Source:                 limit_reg[23]/C
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/limit_reg[23]/D
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cnn_clk
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (cnn_clk rise@0.000ns - cnn_clk rise@0.000ns)
+  Data Path Delay:        0.271ns  (logic 0.141ns (52.001%)  route 0.130ns (47.999%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cnn_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=2012, unset)         0.410     0.410    clk
+    SLICE_X109Y64        FDCE                                         r  limit_reg[23]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X109Y64        FDCE (Prop_fdce_C_Q)         0.141     0.551 r  limit_reg[23]/Q
+                         net (fo=4, routed)           0.130     0.681    engine/limit_reg[31]_0[23]
+    SLICE_X109Y65        FDCE                                         r  engine/limit_reg[23]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cnn_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=2012, unset)         0.432     0.432    engine/clk
+    SLICE_X109Y65        FDCE                                         r  engine/limit_reg[23]/C
+                         clock pessimism              0.000     0.432    <hidden>
+    SLICE_X109Y65        FDCE (Hold_fdce_C_D)         0.070     0.502    engine/limit_reg[23]
+  -------------------------------------------------------------------
+                         required time                         -0.502    <hidden>
+                         arrival time                           0.681    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.180    <hidden>
+
+
+
+
+
+Pulse Width Checks
+--------------------------------------------------------------------------------------
+Clock Name:         cnn_clk
+Waveform(ns):       { 0.000 5.000 }
+Period(ns):         10.000
+Sources:            { clk }
+
+Check Type        Corner  Lib Pin  Reference Pin  Required(ns)  Actual(ns)  Slack(ns)  Location       Pin
+Min Period        n/a     FDCE/C   n/a            1.000         10.000      9.000      SLICE_X112Y67  busy_reg/C
+Low Pulse Width   Slow    FDCE/C   n/a            0.500         5.000       4.500      SLICE_X112Y67  busy_reg/C
+High Pulse Width  Slow    FDCE/C   n/a            0.500         5.000       4.500      SLICE_X112Y67  busy_reg/C
+
+
+
+---------------------------------------------------------------------------------------------------
+Path Group:  **async_default**
+From Clock:  cnn_clk
+  To Clock:  cnn_clk
+
+Setup :          329  Failing Endpoints,  Worst Slack       -2.637ns,  Total Violation     -285.984ns
+Hold  :            0  Failing Endpoints,  Worst Slack        0.772ns,  Total Violation        0.000ns
+---------------------------------------------------------------------------------------------------
+
+
+Max Delay Paths
+--------------------------------------------------------------------------------------
+Slack (VIOLATED) :        -2.637ns  (required time - arrival time)
+  Source:                 busy_reg/C
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/quantized_reg[87]/CLR
+                            (recovery check against rising-edge clock cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             **async_default**
+  Path Type:              Recovery (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cnn_clk rise@10.000ns - cnn_clk rise@0.000ns)
+  Data Path Delay:        12.148ns  (logic 0.642ns (5.285%)  route 11.506ns (94.715%))
+  Logic Levels:           1  (LUT2=1)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cnn_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=2012, unset)         0.973     0.973    clk
+    SLICE_X112Y67        FDCE                                         r  busy_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X112Y67        FDCE (Prop_fdce_C_Q)         0.518     1.491 r  busy_reg/Q
+                         net (fo=19, routed)          0.652     2.143    engine/busy
+    SLICE_X108Y66        LUT2 (Prop_lut2_I0_O)        0.124     2.267 f  engine/shifts[95]_i_2/O
+                         net (fo=1588, routed)       10.854    13.121    engine/shifts[95]_i_2_n_0
+    SLICE_X80Y141        FDCE                                         f  engine/quantized_reg[87]/CLR
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cnn_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  clk
+                         net (fo=2012, unset)         0.924    10.924    engine/clk
+    SLICE_X80Y141        FDCE                                         r  engine/quantized_reg[87]/C
+                         clock pessimism              0.000    10.924    <hidden>
+                         clock uncertainty           -0.035    10.889    <hidden>
+    SLICE_X80Y141        FDCE (Recov_fdce_C_CLR)     -0.405    10.484    engine/quantized_reg[87]
+  -------------------------------------------------------------------
+                         required time                         10.484    <hidden>
+                         arrival time                         -13.121    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 -2.637    <hidden>
+
+
+
+
+
+Min Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             0.772ns  (arrival time - required time)
+  Source:                 busy_reg/C
+                            (rising edge-triggered cell FDCE clocked by cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/limit_reg[21]/CLR
+                            (removal check against rising-edge clock cnn_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             **async_default**
+  Path Type:              Removal (Min at Fast Process Corner)
+  Requirement:            0.000ns  (cnn_clk rise@0.000ns - cnn_clk rise@0.000ns)
+  Data Path Delay:        0.701ns  (logic 0.209ns (29.803%)  route 0.492ns (70.197%))
+  Logic Levels:           1  (LUT2=1)
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cnn_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=2012, unset)         0.410     0.410    clk
+    SLICE_X112Y67        FDCE                                         r  busy_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X112Y67        FDCE (Prop_fdce_C_Q)         0.164     0.574 r  busy_reg/Q
+                         net (fo=19, routed)          0.226     0.800    engine/busy
+    SLICE_X108Y66        LUT2 (Prop_lut2_I0_O)        0.045     0.845 f  engine/shifts[95]_i_2/O
+                         net (fo=1588, routed)        0.266     1.111    engine/shifts[95]_i_2_n_0
+    SLICE_X109Y65        FDCE                                         f  engine/limit_reg[21]/CLR
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cnn_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  clk
+                         net (fo=2012, unset)         0.432     0.432    engine/clk
+    SLICE_X109Y65        FDCE                                         r  engine/limit_reg[21]/C
+                         clock pessimism              0.000     0.432    <hidden>
+    SLICE_X109Y65        FDCE (Remov_fdce_C_CLR)     -0.092     0.340    engine/limit_reg[21]
+  -------------------------------------------------------------------
+                         required time                         -0.340    <hidden>
+                         arrival time                           1.111    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.772    <hidden>
+
+
+
+
+

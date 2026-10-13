@@ -1,0 +1,11 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+PASS: int8_mac 65035 vectors; signed product/addition and overflow
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_int8_mac.v:41: $finish called at 65035000 (1ps)
+PASS: mac_array 4272 output vectors; O16/I8 packing, signs, overflow
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_mac_array.v:54: $finish called at 275000 (1ps)
+PASS: int8_requant 8075 Python-golden vectors; rounding, saturation, ReLU, invalid params
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_int8_requant.v:30: $finish called at 8075000 (1ps)
+PASS: int8_gap all 32513 legal sums and invalid sums; Python golden
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_int8_gap.v:23: $finish called at 32515000 (1ps)
+PASS: int8_logits 2814 Python-golden vectors; ties, all margins, low confidence, invalid INT8
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_int8_logits.v:30: $finish called at 2814000 (1ps)

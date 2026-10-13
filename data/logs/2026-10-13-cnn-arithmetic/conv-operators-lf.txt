@@ -1,0 +1,15 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+PASS: full-shape C02 convolution/FC diagnostics ['padding_tail', 'conv1', 'conv2', 'conv3', 'conv4', 'fc']
+PASS: conv_engine case=E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/padding_tail words=36 read_transactions=216 cycles=658; every pixel/lane matches Python
+PASS: conv_engine bad requant/overflow/config/watchdog/reset recovery; ce stalls tested
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_conv_engine.v:110: $finish called at 13796000 (1ps)
+PASS: conv_engine case=E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/conv1 words=2048 read_transactions=9216 cycles=28672; every pixel/lane matches Python
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_conv_engine.v:110: $finish called at 286766000 (1ps)
+PASS: conv_engine case=E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/conv2 words=4096 read_transactions=36864 cycles=100352; every pixel/lane matches Python
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_conv_engine.v:110: $finish called at 1003566000 (1ps)
+PASS: conv_engine case=E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/conv3 words=1024 read_transactions=18432 cycles=46592; every pixel/lane matches Python
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_conv_engine.v:110: $finish called at 465966000 (1ps)
+PASS: conv_engine case=E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/conv4 words=2048 read_transactions=36864 cycles=93184; every pixel/lane matches Python
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_conv_engine.v:110: $finish called at 931886000 (1ps)
+PASS: conv_engine case=E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/fc words=1 read_transactions=8 cycles=24; every pixel/lane matches Python
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_conv_engine.v:110: $finish called at 286000 (1ps)

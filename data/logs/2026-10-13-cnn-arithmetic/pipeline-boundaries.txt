@@ -1,0 +1,5 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+PASS: MAC pipeline 4272 lane results, streaming, signs, overflow, stalls and abort
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_mac_array_pipeline.v:68: $finish called at 3770000 (1ps)
+PASS: requant pipeline 8075 Python golden vectors, bubbles, CE stalls, abort
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_int8_requant_pipeline.v:52: $finish called at 242350000 (1ps)

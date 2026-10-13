@@ -1,0 +1,6 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+PASS: full-shape C02 convolution/FC diagnostics ['padding_tail', 'conv1', 'conv2', 'conv3', 'conv4', 'fc']
+WARNING: E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_con $fopen's file name argument contains non-printable characters.
+                                                                "E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/padding_tail\015/config.txt"
+FATAL: E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_conv_engine.v:86: 
+       Time: 0  Scope: tb_conv_engine

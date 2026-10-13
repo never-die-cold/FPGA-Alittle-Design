@@ -1,0 +1,137 @@
+{
+  "kind": "DIAGNOSTIC_INTEGER_NETWORK_NOT_TRAINED",
+  "seed": 20261013,
+  "weight_words": 269,
+  "weight_bytes": 34432,
+  "model_files_sha256": {
+    "weights.hex": "cc8331220639d8714aecc81ecf15458bd369a789059c79745acbd7a1c68b5768",
+    "bias.hex": "425e34a96c6b4617cf6479d03248c22f831df8da96b245adec5b0341f80af26f",
+    "multipliers.hex": "05cc593cc6d597f5cf9e973f73df43ef2e619653b6954f697378ee432f32a4a4",
+    "shifts.hex": "21ed088be9decf136849fa0e69dc614d275b4e2e74fad1ada1f80cf817e12d46"
+  },
+  "layout": {
+    "activation": "C8HW8; ROI low byte per 64-bit word",
+    "weight": "O16_KH_KW_I8; input lane fastest"
+  },
+  "source_sha256": {
+    "sim/coprocessor/generate_network_vectors.py": "0bf804f6a064cc6e18a08b056df05773df0dd0be5c8ca49be1b013bb1cf8e3d2",
+    "sim/coprocessor/generate_conv_vectors.py": "741ec0d22afda1154f32ced4848533ad1e5a549473281e83a4ed70fb20257a88",
+    "src/coprocessor/int8_reference.py": "484bb6a8f58574440b84ca91ca68308da2bc1b73c20c058a74fb70daadbeb313",
+    "src/coprocessor/int8_tensor_reference.py": "8b617005feaf14e1d638d5f443c49c7a3856425194b7fdf9b6b013ebb7e32047",
+    "src/coprocessor/int8_network_reference.py": "1f29bf3e66d0fc7bd2904de6076764fc467c893c7849cb2ae301de9dcd03261c"
+  },
+  "cases": {
+    "pattern": {
+      "result": {
+        "class_id": 0,
+        "margin_q": 0,
+        "score_q15": 0,
+        "low_conf": true
+      },
+      "logits": [
+        1,
+        -3,
+        1
+      ],
+      "shapes": {
+        "input": [
+          1,
+          64,
+          64
+        ],
+        "conv1": [
+          16,
+          32,
+          32
+        ],
+        "conv2": [
+          32,
+          32,
+          32
+        ],
+        "conv3": [
+          32,
+          16,
+          16
+        ],
+        "conv4": [
+          64,
+          16,
+          16
+        ],
+        "gap": [
+          64
+        ],
+        "logits": [
+          3
+        ]
+      },
+      "files_sha256": {
+        "input.hex": "9bee293aefe4242b30b8b4717d0161a37610e268dcb30f01ef99ea86b00f959e",
+        "conv1.hex": "bab823af6f3ef829800ebaf561549b5f5ea49c5202c9456c8fc1c793df0fe86e",
+        "conv2.hex": "23c5cbf3170a52ff3eb2c7a319d51632a1c8859e55c5af01ad29efa808a5edc6",
+        "conv3.hex": "4127de0b3db8f28fb5dc1f7b799b21d94f1cd683a3e62394f9ce1201f8824658",
+        "conv4.hex": "3a9ac03d758dbc4dbba947a01a5c64c627065f92e82fac1b08b3493b06ed6f17",
+        "gap.hex": "4e67628e8be18aec608818cb0ef1c1f3de1eb72354ac43014c3d0b483905bad0",
+        "logits.hex": "d11807a6efed06ae0fbe18419cd067c183cd604926f8819475e543965025f219",
+        "result.txt": "eca6ce17b101c8c1a25450153d174fbf217fae5a4a180e8eadd58212fe88488e"
+      }
+    },
+    "zero": {
+      "result": {
+        "class_id": 2,
+        "margin_q": 2,
+        "score_q15": 258,
+        "low_conf": true
+      },
+      "logits": [
+        2,
+        -3,
+        4
+      ],
+      "shapes": {
+        "input": [
+          1,
+          64,
+          64
+        ],
+        "conv1": [
+          16,
+          32,
+          32
+        ],
+        "conv2": [
+          32,
+          32,
+          32
+        ],
+        "conv3": [
+          32,
+          16,
+          16
+        ],
+        "conv4": [
+          64,
+          16,
+          16
+        ],
+        "gap": [
+          64
+        ],
+        "logits": [
+          3
+        ]
+      },
+      "files_sha256": {
+        "input.hex": "9b5ee346b05d90d1d624ecfcfb8a45471128a2734fd684cadee0f03a33439cc5",
+        "conv1.hex": "9da07a8493d278d9efd1ea4a703a2e5c165f79dd41688f50524e568d14b13dc5",
+        "conv2.hex": "29735618e4ed18340ada2e0d49dded3648673119ce3b4be1c0ad5df8eaeae66f",
+        "conv3.hex": "7eaa080412a44d9b184f3daea32c4633dfd200b23c1e631c03260bc72998fa3c",
+        "conv4.hex": "601d80263ba73caaa767b8e7a4b0ae960c21d80aa7748150f815a5d574fa8b12",
+        "gap.hex": "2da94e753d510c5cf290cc1ac357cd30bc57f9a98b6a85ba548934d56be2c722",
+        "logits.hex": "f344ffce0feea0e888254faebd8213ef14e913d6c6ab86b9cf50dfe2bad14093",
+        "result.txt": "26c345f55482606011aeaaa81d716953eec103140ed8cff88a5fc310cef4ac97"
+      }
+    }
+  }
+}

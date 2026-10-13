@@ -1,0 +1,4 @@
+PASS: int8_mac 65035 vectors; signed product/addition and overflow
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_int8_mac.v:41: $finish called at 65035000 (1ps)
+PASS: mac_array 4272 output vectors; O16/I8 packing, signs, overflow
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_mac_array.v:54: $finish called at 275000 (1ps)
