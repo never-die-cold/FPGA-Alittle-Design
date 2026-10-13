@@ -1,6 +1,6 @@
-# src/coprocessor —— CNN 推理协处理器 RTL
+# src/coprocessor —— CNN 整数算子与整网控制器
 
-规划中的轻量 INT8 CNN 加速器。v0 已冻结为 MMIO/AXI4-Lite 控制面 + DMA 数据面，
+轻量 INT8 CNN 的计算链已进入离板验证。v0 已冻结为 MMIO/AXI4-Lite 控制面 + DMA 数据面，
 RISC-V 以 load/store 访问且不启用自定义指令。
 
 ## 阶段 0 契约
@@ -13,7 +13,6 @@ RISC-V 以 load/store 访问且不启用自定义指令。
 ## 规划内容
 
 - `cop_top.v`：协处理器顶层
-- `mac_array.v`：INT8 MAC 阵列
 - `dma_ctrl.v`：权重/ROI/结果 DMA 描述符与流控制
 - `cop_ctrl_regs.v`：PS AXI4-Lite + RISC-V 本地 MMIO 的逻辑寄存器契约
 - `isa_extension.v`：后续可选研究项；v0 不例化、不占 opcode
@@ -24,7 +23,20 @@ RISC-V 以 load/store 访问且不启用自定义指令。
 - 与 RISC-V 核：`soc_top` 本地 MMIO 窗口，固件以 load/store 启动和轮询；现有核数据口没有等待握手，不能直接冒充 AXI master
 - 与 PS：AXI4-Lite 配置/状态；数据通过 AXI DMA/DataMover 搬运
 - 与存储系统：只搬权重、逐目标 64×64 ROI 与小结果；中间特征默认驻留 BRAM，不默认全分辨率逐帧 DDR 回写
-- 寄存器映射表定稿后同步更新到 `docs/` 与 `src/riscv_fw/`
+- C03 已给出寄存器映射；实际接入时须同步核/SoC 契约与驱动，当前 MMIO/DMA 均未接入
+
+## 已实现的离板计算链（2026-10-13）
+
+`int8_mac.v` 和 `mac_array.v` 提供组合乘加与 O16/I8 阵列；`mac_array_pipeline.v` 提供 128 路乘法和分拍加法树。`int8_requant.v` / `int8_requant_pipeline.v` 按 C02 实现 ReLU、远离零舍入与对称饱和；`int8_gap.v`、`int8_logits.v` 实现 GAP、稳定 argmax、margin/score 和低置信判定。INT32 溢出导致失败，不回绕或饱和后继续。
+
+`conv_engine.v` 实现一拍同步 BRAM 读接口、分拍地址生成、padding/尾通道、bias 和卷积/FC 调度；`cnn_sequencer.v` 串联四层 Conv→GAP→FC。暂停保持数据和有效位，复位/取消/超时使结果无效。外部 ROI/ping/pong/权重/参数存储须共享复位，busy 期间禁止修改；该模块不包含实体 BRAM、C03 寄存器、DMA 或核接入。
+
+仓库入口：`bash sim/scripts/run_iverilog.sh coprocessor all`，支持 `pipeline`、`conv`、`network` 专项；默认 Verilog-2001 编译。总回归 `bash sim/scripts/run_iverilog.sh all` 已包含这些入口。原始结果和失败记录见[本轮证据](../../data/logs/2026-10-13-cnn-arithmetic/README.md)。
+
+`int8_reference.py` 实现输入/bias量化、舍入、scale编码与requant；`int8_tensor_reference.py` 实现张量/逐通道权重量化、bias和OIHW卷积累加，溢出拒绝。3组测试由 `bash sim/scripts/run_coprocessor_python.sh all` 复现，需真实 `python3` 与 NumPy；[10/12证据](../../data/logs/2026-10-12-pr-review/README.md)通过。
+`int8_network_reference.py` 新增完整固定结构整数链、模型形状/类型/范围和通用累加界检查；独立常量网络黄金检查 Conv/GAP/FC。`generate_network_vectors.py` 提供固定种子诊断权重和两组输入的逐层黄金及文件/源码哈希，**不是训练后的正式模型**。Python 回归现在为四组，支持 `COPROCESSOR_PYTHON` 或 `VISION_PYTHON` 指定解释器。
+
+综合入口：`powershell.exe -NoProfile -File sim/scripts/run_cnn_ooc.ps1`，自动存档源码/脚本，运行 100 MHz 控制器 OOC 综合与布局布线，保存时序/资源/DRC和退出码。外部存储、SoC与视频未计入，OOC报告不代替整机时序或板端实测。
 
 ## 设计参考
 
@@ -32,4 +44,4 @@ RISC-V 以 load/store 访问且不启用自定义指令。
 - 算子化验证（CONV/POOL/GEMM 加速比表）与吞吐率指标（每拍采样数/SSR 思路）：[docs/proposal_upgrade.md](../../docs/proposal_upgrade.md)
 - 训练/量化侧前期准备与接口对齐点：[docs/module3-model-training.md](../../docs/module3-model-training.md)
 
-> 状态：C02/C03 已冻结；FP32 逐层参考和训练导出演练已有仓库证据。正式 INT8 模型、整数黄金、协处理器 RTL、MMIO/DMA 接入与工业固件均未实现。
+> 未实现：正式 INT8 训练/权重发布、实体 BRAM 与完整协处理器顶层、C03 MMIO/DMA、核接入和工业固件；首网板端输出与整机时序/性能尚未验证。
