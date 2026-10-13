@@ -9,7 +9,7 @@ module tb_mem_wb_stage;
     wire [31:0] mem_result, mem_addr, mem_store_data;
     wire mem_reg_write, mem_mem_read, mem_mem_write;
     wire [1:0] mem_wb_sel, mem_mask_sel; wire mem_sign_ext;
-    integer checks;
+    integer checks, i, seed;
     mem_wb_stage dut (.*);
     always #5 clk = ~clk;
 
@@ -19,7 +19,7 @@ module tb_mem_wb_stage;
             if ({mem_valid,mem_instr,mem_pc,mem_rd,mem_result,mem_addr,
                  mem_store_data,mem_reg_write,mem_mem_read,mem_mem_write,
                  mem_wb_sel,mem_mask_sel,mem_sign_ext} !==
-                {in_valid,in_instr,in_pc,in_rd,in_result,in_addr,
+                {(rst_n && in_valid),in_instr,in_pc,in_rd,in_result,in_addr,
                  in_store_data,in_reg_write,in_mem_read,in_mem_write,
                  in_wb_sel,in_mask_sel,in_sign_ext}) begin
                 $display("FAIL %0d: MEM+WB capture mismatch", checks);
@@ -29,7 +29,7 @@ module tb_mem_wb_stage;
     endtask
 
     initial begin
-        clk=0; rst_n=0; checks=0;
+        clk=0; rst_n=0; checks=0; seed=32'h013ce202;
         in_valid=0; in_instr=0; in_pc=0; in_rd=0;
         in_result=0; in_addr=0; in_store_data=0;
         in_reg_write=0; in_mem_read=0; in_mem_write=0;
@@ -46,7 +46,31 @@ module tb_mem_wb_stage;
         capture_check;
         @(negedge clk); #1 rst_n=0; #1;
         if (mem_valid !== 0) $fatal(1, "async reset did not clear valid");
-        $display("PASS: MEM+WB capture, bubble overwrite and reset (%0d captures)", checks);
+        // Payload continues capturing while valid is forced low. Exercise every
+        // field, including hostile write controls and nonzero rd during reset.
+        for (i=0; i<32; i=i+1) begin
+            in_valid=1; in_instr=$random(seed); in_pc=$random(seed);
+            in_rd=$random(seed); in_result=$random(seed); in_addr=$random(seed);
+            in_store_data=$random(seed); in_reg_write=1; in_mem_write=1;
+            in_mem_read=$random(seed); in_wb_sel=$random(seed);
+            in_mask_sel=$random(seed); in_sign_ext=$random(seed);
+            capture_check;
+            @(negedge clk);
+        end
+        rst_n=1; in_valid=0;
+        capture_check; // A bubble after release must not resurrect the old slot.
+        @(negedge clk); in_valid=1;
+        capture_check;
+        // An asynchronous pulse entirely between rising edges clears valid,
+        // but must not clock new payload into the register.
+        #1 rst_n=0; in_instr=~in_instr; #1;
+        if (mem_valid !== 0 || mem_instr !== ~in_instr)
+            $fatal(1, "short reset pulse changed payload or failed to clear valid");
+        rst_n=1; in_valid=0;
+        capture_check;
+        @(negedge clk); in_valid=1;
+        capture_check;
+        $display("PASS: MEM+WB capture, bubbles, reset-time payload, release and short pulse (%0d captures)", checks);
         $finish;
     end
 endmodule

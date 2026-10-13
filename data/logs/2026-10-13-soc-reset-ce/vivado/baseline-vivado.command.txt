@@ -1,0 +1,1 @@
+cmd //c build\run\run_vivado.bat -mode batch -log <evidence>/baseline-vivado.log -journal <evidence>/baseline-vivado.jou -source sim/scripts/build_soc_ab.tcl -tclargs baseline data/logs/2026-10-13-soc-reset-ce/vivado/baseline_root/src/riscv 40 bht2
