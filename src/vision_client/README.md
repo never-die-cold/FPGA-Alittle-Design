@@ -1,8 +1,8 @@
 # M2 Windows 视频预览和结果接口原型
 
 `preview.py` 显示 UVC 采集卡视频，或明确标为 `MOCK ONLY` 的模拟图。
-原型没有 CNN 分类、工单判定、批次数量或真实板卡结果。实际视频显示 `VIDEO ONLY | UNASSOCIATED`；
-不能凭两台设备的帧率相同就把网口框叠到采集卡画面上。
+已有 LIVE 类别/分数/工单判定展示、批次与 CSV、文件回放；分类/工单结果来自报文或文件，前端不执行硬件推理。
+UVC-only 显示 `VIDEO ONLY | UNASSOCIATED`；配置 endpoint 后按轮次与年龄窗叠加结果，不代表逐帧精确关联。真实硬件 LIVE 和最终发布验收仍未完成。
 
 ## 离板构建与复验
 
@@ -27,7 +27,7 @@ sim/build/vision-client/dist/vision_preview/vision_preview.exe --mock --endpoint
 
 采集卡接入后的验收入口为 `vision_preview.exe --source 0`，按 q 或 Esc 退出。按 `c` 手动触发
 一轮检查（0.3s 防抖）；配 `--records-dir` 时该轮**有效**结果落批次记录（D8–D10）。
-设备索引需现场确认。当前没有验证实际 UVC 格式、驱动与目标电脑兼容性。
+设备索引需现场确认。10/03 与后续现场记录已有真实采集卡画面证据；完整目标电脑/设备兼容与发布复验仍待完成，不能推为所有 UVC 设备已验证。
 
 批次记录（M3 起步，契约见决策单 D8–D10；**W07 起 schema v2**）：`--records-dir <目录>` 开启。
 只有手动触发的有效轮次记录——自动间隔轮次永不记录，结构性满足"重复帧不增加批次计数"；
@@ -35,11 +35,13 @@ sim/build/vision-client/dist/vision_preview/vision_preview.exe --mock --endpoint
 config/frame/时间/结果年龄/目标数/boxes/**status**/**decision 原样**（当轮工单即
 decision.expected）/**prototype**/protocol_version/截图名）+ `screenshots/` 逐条 PNG。
 **截图前缀标来源（C04 §3.2/Q2）：MOCK=`mock_`、LIVE+prototype=`proto_`、真实 LIVE 无前缀——
-三者不得互换使用**，均不得用作板上识别证据（plan.md §3.4）。
+三者不得互换使用**；MOCK/PROTOTYPE 不得用作板上识别证据。真实 LIVE 记录仍需对应原帧、硬件版本和实测证据，文件名前缀不能单独证明来源。
 目录包含 `records.csv` 时即为完整导出件；**CSV 导出**：`py src/vision_client/export_records.py <记录目录>`
 （UTF-8-BOM，Excel 直接打开不乱码；v2 增 status/missing/extra/prototype 列，v1 旧记录兼容；
 targets 列保留 JSON）。离线测试：
 `py sim/vision/test_vision_records.py`、`py sim/vision/test_vision_export.py`。
+
+当前去重集合仅在进程内，不从旧JSONL恢复；跨进程复用记录目录的持久去重尚未实现。服务HTTP重试每次新建check_id，不能用记录键去重证明请求重试幂等。
 
 异常事件日志（D11）：状态迁移（断联/超期/配置变化/恢复 ok）与会话变化、重握手失败写入
 同目录 `anomalies.jsonl`（一行一事件，含 prev/check_id/fails）+ `screenshots/anomaly_*.png`。
@@ -101,5 +103,5 @@ python src/vision_client/preview.py --replay data/evidence/2026-10-10-offline-in
 
 `vision_protocol.py` 验证类型、坐标、编号和状态。结果有效性按 D3 = 会话 + 配置号 + 年龄窗
 （frame_id 只透传展示、不参与匹配——EXE 无法把结果帧号对应到采集卡画面）；复位/重连需要新会话。
-设备服务尚未实现，这里的立即确认只模拟 API 形态，真实 PS 配置仍必须用 `VisionRegs.commit()`
+FILE/LIVE 服务骨架已实现；这里的立即确认仍只模拟 API 形态，真实 PS 配置必须用 `VisionRegs.commit()`
 等待 R12 生效（NC 负责，见决策单 D7）。

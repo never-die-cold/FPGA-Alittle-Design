@@ -9,8 +9,8 @@
   FP32 原型加载/推理；三类工单候选规则；文件定位/裁剪/推理/判定；证据保存与重复请求复用；
   Python 和 Windows EXE 的文件回放展示。
 - 已实现但未验证：上述新模块的 PYNQ 环境兼容性、真实零件精度与工位效果。
-- 未实现/未接入：板端原分辨率取帧、LIVE 分类服务、正式模型/PTQ/QAT、CNN 协处理器、
-  RISC-V 工单判定和真实工业闭环。现用位流追溯、长时间/冷启动/断连复验仍待补。
+- 后续已有FILE/LIVE HTTP骨架、LIVE分类/工单展示与PROTOTYPE标识；其输入仍为文件。FILE_REPLAY的request_id复用不代表HTTP请求重试幂等，见[核对清单](implementation-document-audit-2026-10-12.md)。
+- 未实现/未接入：custom DDR安全完整取帧、真实硬件LIVE后端、正式INT8模型/整网黄金、CNN RTL、RISC-V工单判定和工业闭环。原vision已与归档XSA配对但缺源码锚定；完整长测/冷启动/断源复验仍待补。
 
 ## 运行入口
 

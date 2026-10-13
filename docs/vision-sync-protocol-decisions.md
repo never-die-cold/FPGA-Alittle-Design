@@ -1,9 +1,9 @@
 # 视频/结果同步协议决策单（EXE 前端 × 板端服务）
 
 > 是什么：Windows EXE 与板端结果服务之间"检查轮次"同步契约的决策底稿——补全根目录 [plan.md](../plan.md) §1.3 悬置的"视频与网口结果对应关系"。
-> 给谁看：watercopper（EXE 前端，本文维护者）、板端真实服务实现者（主责待定，见 D7）、never-die-cold（frame_id 硬件来源在快照通路）。
+> 给谁看：watercopper（EXE与服务适配实现）、never-die-cold（D7板端真实服务责任人及实机验收）。当前执行分工见[三人清单](project-closeout-three-person-checklist.md)。
 > 怎么用：评审逐项追认；冻结后回写 [vision_client README](../src/vision_client/README.md) 与 `vision_protocol.py`（schema 代码改动另起步骤，不在本单内动手）。
-> 基线：dev/bench @ 01b3750（2026-10-06）。mock 接口 v1 现状见 [vision_client README](../src/vision_client/README.md) §模拟接口 v1。
+> 初始决策基线：dev/bench @ 01b3750（2026-10-06）；当前schema为v1.2，软件实现见[客户端说明](../src/vision_client/README.md)与[10/12整合证据](../data/logs/2026-10-12-pr-review/README.md)。
 
 ## 0. 决策总览
 
@@ -46,7 +46,7 @@
 ## D3 有效性判据与过期/断联语义
 
 - **推荐**：
-  - EXE 侧有效性判据 = session_id 一致 + config_id 与 EXE 当前确认生效的配置一致 + created_at 年龄 ≤ max_age（默认 1.0s，与 mock v1 `is_current` 一致，命令行可调）。**frame_id 不参与匹配，仅透传展示**——这是对 mock v1 的语义修订，代码步骤同步。
+  - EXE 侧有效性判据 = session_id 一致 + config_id 与当前确认配置一致 + EXE接收后年龄 ≤ max_age（默认1.0s、命令行可调）。按10/08修订使用本地received_at；服务端created_at仅诊断与留档，不作跨机年龄比较。**frame_id 不参与匹配，仅透传展示**。
   - 撤框条件（任一即撤）：年龄超窗；session 不匹配；config_id 不符（结果产生于旧配置，坐标可能失效）；HTTP 连续失败 ≥3 次；/v1/status 返回 hardware_connected=false。
   - 撤框后横幅显示"等待新结果"，不得保留旧框；恢复后以新轮次重新叠加。
   - 实现注记（2026-10-06，经 WC 质询修正）：EXE 触发间隔必须**小于**年龄窗口（默认 interval
@@ -81,17 +81,12 @@
 `vision_mock_service.py` 对请求字段的拒绝不能替代结果报文校验，现有 tb 未覆盖该负例。
 本轮只登记，不改协议、Python 或 tb；最小修复和负例测试须用户另批裁决。
 
-修复进展（2026-10-10，用户授权离板执行）：工作区已补齐顶层与逐目标字段白名单，
-非对象与未知字段统一拒绝；保留现有可选 trigger_ref 和空目标列表。
-仓库内 test_vision_protocol.py 覆盖3个合法/12个非法用例，旧代码先复现FAIL；
-run_vision_python.sh 八组退出0，证据见[data/logs](../data/logs/2026-10-10-q01-result-fields/README.md)。
-代码尚未提交，理解门槛待用户回答；此修复不开放 LIVE、分类或工单判定字段。
-**同日后续：WC+NC 现场确认 v1.2（见上），LIVE/分类/工单判定字段正式开放，Q01 的"不开放"限制随之解除。**
+Q01已随PR #67合并：顶层与逐目标严格白名单拒绝非对象/未知字段，保留trigger_ref与空目标列表；[首次失败→修复证据](../data/logs/2026-10-10-q01-result-fields/README.md)仍保留当时用例数量。当前v1.2允许LIVE分类/判定/prototype字段，后续LIVE测试与整合见[10/12证据](../data/logs/2026-10-12-pr-review/README.md)，不再是“未提交/待回答”。
 
 ## D7 板端真实服务负责人（已定）
 
 - EXE 前端 = watercopper（已定）。板端 PS 上的真实 HTTP 服务（消费 cop_* 快照、响应触发、MMIO 配置）主责 = **never-die-cold（2026-10-06 NC 本人确认接任）**。理由——EXE 开发机无网口，实机网口联调依赖队长环境；队长已有上板操作经验（2026-10-03 vision onboard 由其执行）。plan.md §3.4/§5.3 已同步。
-- 过渡方案：服务未就绪期间，EXE 联调用 mock 服务（PC 或 Pi 宿主，pi-dev-roles R2），结果恒标 MOCK。
+- 过渡方案：定位mock恒标MOCK；`vision_mock_service.py --live`合成替身与`vision_live_service.py` FILE后端使用LIVE报文但恒标PROTOTYPE。真实硬件后端未接入，来源不能由mode或hardware_connected字段单独推断。
 
 ## D8–D10 批次记录（M3 起步，2026-10-08 随离板实现落地）
 
@@ -100,11 +95,8 @@ run_vision_python.sh 八组退出0，证据见[data/logs](../data/logs/2026-10-1
   视频帧/自动轮询再多也不产生记录。
 - **D9 去重**：记录键 = (session_id, check_id)；同键重复写入被拒，"一次确认的检查只记一条"。
   结果未到/过期/断联不记录（异常事件与异常截图列 M3 项，独立于批次）。
-- **D10 存储与标识**：`records.jsonl`（一行一条：schema_version / mode / session_id / check_id /
-  config_id / frame_id / recorded_at / result_age_s（EXE 接收时基）/ created_at（原始服务端
-  时间戳）/ target_count / targets / verdict 预留 / screenshot）+ `screenshots/` 逐条 PNG
-  （记录时的含框画面）。**MOCK 记录截图带 `mock_` 前缀且 mode=MOCK——不得用作板上识别证据**
-  （plan.md §3.4）。导出 = 记录目录本身；CSV 导出已实装（export_records.py，2026-10-09）。
+  当前实现只维护进程内键集合，跨进程复用同目录未恢复旧键；持久去重与HTTP请求重试幂等仍待实现，不能由D9同进程测试推导。
+- **D10 存储与标识**：当前`records.jsonl`为schema v2，保存session/check/config/frame、记录时间/接收时基年龄/原created_at、目标、status、原decision、prototype、protocol_version与截图名；兼容导出旧v1记录。`screenshots/`保存记录时含框画面：MOCK=`mock_`，LIVE+prototype=`proto_`，真实LIVE无前缀。MOCK/PROTOTYPE不得当板上识别证据；无前缀也不独立证明硬件来源。CSV已实现，字段以[records.py](../src/vision_client/records.py)及[export_records.py](../src/vision_client/export_records.py)为准，C04整体仍待评审。
 - **D8 补充（记录资格时间点，2026-10-08 经理解题推演修正）**：手动标记在**报文被采纳**时
   才生效——断联中的手动触发失败后，残留旧报文不得冒充手动轮结果被记入批次档案。
 - **D11 异常事件日志**：overlay 状态迁移（no_result/outage/stale/config/offline/ok，含恢复）、
@@ -120,6 +112,7 @@ run_vision_python.sh 八组退出0，证据见[data/logs](../data/logs/2026-10-1
 
 | 日期 | 变更 | 作者 |
 |:---|:---|:---|
+| 2026-10-12 | 统一D3接收时基、Q01已合并状态、D10记录v2和FILE/LIVE来源；不新增协议字段 | 文档核对 |
 | 2026-10-06 | 首版：D1 拍板（轮次级起步），D2–D6 预填推荐待评审，D7 风险项 | watercopper（EXE 前端） |
 | 2026-10-06 | 理解门槛问答通过后：D7 更新为提议定 NC（队长），待 NC 评审确认 |
 | 2026-10-06 | 契约收口：D2–D6 watercopper 确认沿用推荐；D7 NC 本人确认接任，plan.md §3.4/§5.3 同步 | watercopper（EXE 前端） |

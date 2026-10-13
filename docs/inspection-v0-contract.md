@@ -1,13 +1,13 @@
 # 检查 V0：取图、ROI 预处理与首次成功检查契约（建议稿）
 
 日期：2026-10-09；审查基线 dev/exe @ 051aefa。
-状态：设计建议；2026-10-10 共享 ROI 与 FILE_REPLAY 候选实现已完成离板验证，板端取图/实机验收未完成；不自动替换既有核、视频与 MOCK 协议契约。
+状态：应用建议稿；共享ROI、FILE_REPLAY、FILE/LIVE骨架已有离板验证，真实取帧/整机未验收。64×64首网/整数与16能力/10策略已在C02/C03冻结，C04整体仍待评审；本文其他建议不自动冻结。
 “检查 V0/V1”是应用版本，与 RISC-V 核 v0/v1 分开命名。
 
 ## 1. 当前事实与首版取图选择
 
-- 当前自定义 vision.bit：HDMI 彩色显示已上板；PS 经 AXI-Lite 配置，不具备完整图像读取通路。
-- create_hdmi_bd.tcl 只将 snapshot_debug 接 ILA；没有视频 VDMA/像素存储读口。
+- 原自定义vision.bit：彩色显示已上板，PS仅配置；`create_hdmi_bd.tcl`的snapshot_debug只接ILA，没有VDMA读帧通路。
+- C01候选由`create_capture_hdmi_bd.tcl`新增彩色Video In/VDMA支路及状态监测，显示/状态诊断已过；custom PS帧槽交接/缓存/完整副本尚未实现，见[C01基线](c01-capture-implementation-baseline.md)。
 - video_pipeline 默认分析快照 224×224、GRAY8，可经过高斯/Sobel；它不是原图 ROI。
 - 10/07 的 1280×720、MJPG/30fps 是 Windows UVC 采集证据，不是 PS 读帧证据。
 - 检查 V0 建议加载具备视频 VDMA 的 PYNQ base overlay，PS 用 hdmi_in.readframe()。
@@ -21,7 +21,7 @@
 - 使用软件 capture_id 明确标记来源；不假称它是当前 RTL 的 cop_frame_id。
 - 清晰度待真实零件采图确认：记录最小零件/孔洞像素大小、对焦、运动模糊和曝光。
 - 新增取图的同一帧同时用于训练采集与部署；base/custom 两条来源未经比对不得视为像素一致。
-- 检查 V1 再在自定义 overlay 接原彩色帧捕获分支；现有低分辨率灰度快照不能替代它。
+- 检查V1的原彩色捕获支路已有C01候选，仍须完成DDR安全取帧与核/CNN集成；低分辨率灰度快照不能替代原图ROI。
 
 ## 2. 建议采用的统一预处理
 
@@ -88,7 +88,8 @@
 ## 4. 当前未实现与参考
 
 - 已实现并离板验证：共用预处理模块、FP32 文件检查与 request_id 幂等复用；这些软件证据不替代板端验收。
-- 未实现/未验：PS实帧采集验证、正式部署模型/运行时、LIVE协议、在线批次幂等与V0整机验收。
-- 未实现：自定义overlay彩色帧读口、CNN协处理器、PS↔RISC-V应用接口与V1闭环。
+- 已实现：v1.2 LIVE校验、FILE/LIVE服务、前端手动有效轮记录与session/check去重；FILE_REPLAY按request_id复用产物。HTTP `/v1/check`每次递增check_id，trigger_ref只回显，不能称网络请求重试已幂等。
+- 未实现/未验：custom DDR安全完整帧副本、正式部署模型/运行时、HTTP请求级幂等、真实V0整机验收；base已有27帧短测，不替代custom或长测。
+- 未实现：CNN RTL、PS↔RISC-V应用接口与V1闭环；C01彩色捕获硬件候选已有，不再列为从零未实现。
 - 依据：create_hdmi_bd.tcl、vision_axi.v、video_pipeline.v、训练preprocess、旧ROI参考及主计划。
 - 官方取图/默认BGR依据：[PYNQ Video](https://pynq.readthedocs.io/en/latest/pynq_libraries/video.html)。
