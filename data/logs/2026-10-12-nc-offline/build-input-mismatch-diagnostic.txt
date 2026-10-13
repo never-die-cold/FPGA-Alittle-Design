@@ -1,0 +1,19 @@
+{
+  "expected": {
+    "path": "sim\\build\\hdmi-source\\ps7_config.tcl",
+    "sha256": "5029fd4d1d5fca3248edcdeef38ef94505357d577a9ba22bcf8333d8f0a10ecc",
+    "bytes": 37925
+  },
+  "checkout": {
+    "bytes": 37064,
+    "sha256": "de589f06b605b75b31224c19932f169c299e7a5e56f9cab79e2887b73962cd7b",
+    "crlf": 0,
+    "lf": 861
+  },
+  "git_blob": {
+    "bytes": 37064,
+    "sha256": "de589f06b605b75b31224c19932f169c299e7a5e56f9cab79e2887b73962cd7b",
+    "crlf": 0,
+    "lf": 861
+  }
+}
