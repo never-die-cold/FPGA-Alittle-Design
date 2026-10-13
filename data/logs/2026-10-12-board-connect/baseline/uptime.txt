@@ -1,0 +1,9 @@
+HOST_STARTED_UTC=2026-10-12T14:45:47.7819121Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=uptime
+uptime; printf '\n__PYNQ_RC_247c949fc22a45d98f90f116a12b197a=%d\n' $?
+[?2004l 20:53:41 up 37 min,  1 user,  load average: 0.07, 0.04, 0.06
+
+__PYNQ_RC_247c949fc22a45d98f90f116a12b197a=0
+[?2004hxilinx@pynq:/$ 
+HOST_EXIT_CODE=0

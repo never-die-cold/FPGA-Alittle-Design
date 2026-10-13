@@ -1,0 +1,45 @@
+HOST_STARTED_UTC=2026-10-12T15:01:04.1133092Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=cat /proc/sys/kernel/random/boot_id; sha256sum /home/xilinx/vision_m2/vision.bit /home/xilinx/vision_m2/vision.hwh /home/xilinx/vision_m2/watch_video.py /home/xilinx/vision_m2/vision_regs.py; cat /home/xilinx/vision_m2/watch_video.py; sudo -n true
+cat /proc/sys/kernel/random/boot_id; sha256sum /home/xilinx/vision_m2/vision.bit /home/xilinx/vision_m2/vision.hwh /home/xilinx/vision_m2/watch_video.py /home/xilinx/vision_m2/vision_regs.py; cat /home/xilinx/vision_m2/watch_video.py; sudo -n true; printf '\n__PYNQ_RC_fdbb71cfcd454adababbfd22e834e6e9=%d\n' $?
+[?2004l2d61ca6a-03dc-4628-88e3-1203ac8b0e3c
+4f0c491a6383d8a11f87cd2de260027f519dbd466942d0b1b6e36198e39d5be5  /home/xilinx/vision_m2/vision.bit
+c0adfd3656c2fdb0468de356dc8232857580286d48977c41d6ee61edc3b7b5a5  /home/xilinx/vision_m2/vision.hwh
+6aa40e6762d8304299397ad6e0d6f52dee5fbe12abfa5fb7c3790826e22585ef  /home/xilinx/vision_m2/watch_video.py
+1b30a62d27c9cedbc0e5cb94321984e343d903b4a84165fe5e0c4e13a7030479  /home/xilinx/vision_m2/vision_regs.py
+#!/usr/bin/env python3
+"""watch_video —— 板端视频在位监视器（上板诊断用）
+
+周期性 commit（短超时）探测帧首确认：能确认=VIDEO_OK（视频在位）；
+超时=NO_VIDEO（dvi2rgb 未锁定/无源）；busy=BUSY。输出带相对时间戳。
+用法（root）: python3 watch_video.py [时长秒，默认120]
+"""
+import sys
+import time
+
+from vision_regs import VisionRegs
+
+BASE = 0x40000000
+DURATION = float(sys.argv[1]) if len(sys.argv) > 1 else 120.0
+
+v = VisionRegs(base=BASE)
+t0 = time.monotonic()
+last = None
+while time.monotonic() - t0 < DURATION:
+    rel = time.monotonic() - t0
+    try:
+        cfg = v.commit(timeout=0.6)
+        state = f"VIDEO_OK cfg={cfg}"
+    except TimeoutError:
+        state = "NO_VIDEO"
+    except RuntimeError:
+        state = "BUSY"
+    if state.split()[0] != last:
+        print(f"{rel:7.1f}s {state}", flush=True)
+        last = state.split()[0]
+    time.sleep(0.4)
+print(f"{time.monotonic() - t0:7.1f}s watch done", flush=True)
+
+__PYNQ_RC_fdbb71cfcd454adababbfd22e834e6e9=0
+[?2004hxilinx@pynq:/$ 
+HOST_EXIT_CODE=0

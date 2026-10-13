@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "mode": "FILE_REPLAY",
+  "hardware_connected": false,
+  "width": 1280,
+  "height": 720,
+  "bbox_format": "XYXY_HALF_OPEN",
+  "preprocess": "scene-gray-border-padding-v1",
+  "model": {
+    "name": "cnn-border-fill-best.pt",
+    "sha256": "70fe3dc35bb592481f43e2086efe46b4ca5d2788d53a2b318d23a7169f7ecec6",
+    "architecture": "fastener-4conv-bn-v1",
+    "classes": [
+      "bolt",
+      "nut",
+      "washer"
+    ],
+    "preprocess": "scene-gray-border-padding-v1",
+    "input_size": 64,
+    "precision": "FP32"
+  },
+  "parameters": {
+    "min_score": 0.8,
+    "max_targets": 10,
+    "color_threshold": 22,
+    "min_area_ratio": 8e-05
+  },
+  "target_count": 36,
+  "targets": [],
+  "decision": {
+    "verdict": "RECHECK",
+    "expected": {
+      "bolt": 2,
+      "nut": 1,
+      "washer": 1
+    },
+    "actual": null,
+    "delta": null,
+    "missing": null,
+    "extra": null,
+    "reasons": [
+      "target_limit"
+    ]
+  },
+  "request_id": "test-real-board-001",
+  "request_fingerprint": "59ebddf3b100bd94ef5140810575c1eb4fe6a764e1c623511304448778878686",
+  "provenance": {
+    "source_sha256": "7e08be8bf54c40a0d19dd798ab8aaddfa68eda4e66f81b4e8ed0eb4c0016e015",
+    "model": {
+      "name": "cnn-border-fill-best.pt",
+      "sha256": "70fe3dc35bb592481f43e2086efe46b4ca5d2788d53a2b318d23a7169f7ecec6",
+      "architecture": "fastener-4conv-bn-v1",
+      "classes": [
+        "bolt",
+        "nut",
+        "washer"
+      ],
+      "preprocess": "scene-gray-border-padding-v1",
+      "input_size": 64,
+      "precision": "FP32"
+    },
+    "order": {
+      "bolt": 2,
+      "nut": 1,
+      "washer": 1
+    },
+    "min_score": 0.8,
+    "max_targets": 10,
+    "code_sha256": {
+      "src/pynq_host/inspection_run.py": "e84927a01d5842635e6917af3b2f9c9337e119406cdc3ce4e8cfaf011a2b88ef",
+      "src/pynq_host/inspection_replay.py": "a88f3ea4c31b531b610a32d928166ffedd33ee392a936190e5e7c16a3ba76fc2",
+      "src/pynq_host/inspection_rules.py": "d0f5b2262260aa9480aeef36ee919edce2260082441e8a82111da4e34da9c932",
+      "src/pynq_host/inspection_model.py": "e6745df738ff9735d9d87114339d998598dd217df18c356a3957d4d01cb21c64",
+      "src/pynq_host/inspection_artifacts.py": "0dae9f2538cc2846068526c3b3ab360fbf55498ce96682316cadc66c8148bb8e",
+      "src/pynq_host/roi_preprocess.py": "5dfaef77a11fbeee743a48a69352e64a8c5e64a2de97437bd1012ba2ab20e669",
+      "sim/vision/localization_opencv.py": "de81e15e56496e82d1a747ea2946769213ac1e4aa6ab6973132e2de1184835d7",
+      "sim/vision/train_fastener_classifier.py": "151f784406c27db8ca112e42ca7bc22104d9f4e9a0f1e2c111bb4cf129cb86f1"
+    },
+    "runtime": {
+      "python": "3.12.10",
+      "opencv": "5.0.0",
+      "numpy": "2.5.1",
+      "torch": "2.14.0+cpu"
+    }
+  },
+  "source_name": "board-raw.png",
+  "replay_elapsed_ms": 232.754,
+  "timing_scope": "localization/ROI/inference/rules; excludes load and file IO",
+  "artifacts": [
+    {
+      "path": "source.bin",
+      "sha256": "7e08be8bf54c40a0d19dd798ab8aaddfa68eda4e66f81b4e8ed0eb4c0016e015"
+    },
+    {
+      "path": "frame.png",
+      "sha256": "7e08be8bf54c40a0d19dd798ab8aaddfa68eda4e66f81b4e8ed0eb4c0016e015"
+    },
+    {
+      "path": "annotated.png",
+      "sha256": "ae8d5bfb864d2563c15d811ceafc69db2f7ed692310dddb954abfe55b3f972ff"
+    }
+  ]
+}

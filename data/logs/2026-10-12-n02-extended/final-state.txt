@@ -1,0 +1,13 @@
+HOST_STARTED_UTC=2026-10-12T15:16:52.9213907Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=cat /proc/sys/kernel/random/boot_id; sha256sum /home/xilinx/vision_m2/vision.bit /home/xilinx/vision_m2/vision.hwh; sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -c "from pynq import PL; print(PL.bitfile_name); print(list(PL.ip_dict))"'
+cat /proc/sys/kernel/random/boot_id; sha256sum /home/xilinx/vision_m2/vision.bit /home/xilinx/vision_m2/vision.hwh; sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -c "from pynq import PL; print(PL.bitfile_name); print(list(PL.ip_dict))"'; printf '\n__PYNQ_RC_52d0b6110c9c4d08bd21ad06b08ade8a=%d\n' $?
+[?2004l2d61ca6a-03dc-4628-88e3-1203ac8b0e3c
+4f0c491a6383d8a11f87cd2de260027f519dbd466942d0b1b6e36198e39d5be5  /home/xilinx/vision_m2/vision.bit
+c0adfd3656c2fdb0468de356dc8232857580286d48977c41d6ee61edc3b7b5a5  /home/xilinx/vision_m2/vision.hwh
+/home/xilinx/vision_m2/vision.bit
+['pipe', 'ps7']
+
+__PYNQ_RC_52d0b6110c9c4d08bd21ad06b08ade8a=0
+
+HOST_EXIT_CODE=0
