@@ -4,9 +4,9 @@
 
 **目标形态**：在 AMD PYNQ-Z2（Zynq-7020）上，用**自研 RISC-V 核、HDMI 视觉流水线与 INT8 CNN 协处理器**分析相机拍到的螺栓、螺母、垫圈等紧固件。板卡 HDMI 视频经 USB 采集卡进入 Windows **EXE 前端**，识别结果经网口同步到前端；统一展示物体矩形框、类别标签、数量统计、工单缺件/错料提示和异常记录，并与 ARM 软件基线对比。
 
-> **当前进度（2026-10-09）**：模块一核＋最小 SoC 已完成收口，见[核收口报告](report/module1-closure.md)。
+> **当前进度（2026-10-13）**：模块一核＋最小 SoC 已完成收口，见[核收口报告](report/module1-closure.md)。
 > 模块二 HDMI 视觉预处理 RTL＋已验证视频链路已完成（RTL／链路级），见[视频记录](data/logs/2026-10-03-vision-onboard/README.md)和[真实相机链路](data/logs/2026-10-07-pi-pynq/README.md)。
-> **全项目 M2 验收未完成**；CNN、网络硬件输出和工业闭环不得宣称完成。EXE 预览／mock 原型已有证据，正式板端识别服务与定位部署仍待完成，见[项目主计划](plan.md)。
+> **全项目 M2 验收未完成**；CNN 算子/整网控制器与诊断整数黄金已有，控制器 100 MHz OOC 时序通过，见[计算链证据](data/logs/2026-10-13-cnn-arithmetic/README.md)。DDR 单帧驱动已有离板测试；完整 custom DDR 帧、首网板端输出、实体缓存/MMIO/DMA接入和工业闭环未完成。诊断权重未经训练，不能作为正式分类精度，见[项目主计划](plan.md)。
 
 > 👋 新队友请先阅读 [docs/README.md](docs/README.md)（人读入口：5 分钟搞清目录与"找东西"规则），再读 [docs/onboarding.md](docs/onboarding.md)（Git / Markdown / Agent 上手指南）
 
@@ -40,12 +40,12 @@
 
 1. **自研三级流水 RISC-V 核（而非直接例化现成软核）**：以两级流水基线为对照，通过流水线重构、数据转发（旁路）、轻量分支预测优化 CPI，把"流水线优化"本身作为可量化验证的设计内容；
 2. **RTL 图像预处理硬件流水线**：HDMI 视频流逐像素实时处理（灰度化 → 高斯滤波 → 缩放/边缘），零 CPU 占用，与 OpenCV 软件基线对比延迟与帧率；
-3. **轻量 CNN 推理协处理器**：以自定义指令 + AXI 协处理器形式挂到 RISC-V 核上，INT8 量化，完成小型分类/检测网络推理，与 ARM Cortex-A9 纯软件推理对比加速比与能效。
+3. **轻量 CNN 推理协处理器（算子已有，整机接入待实现）**：v0 已冻结为 RISC-V 本地 MMIO、PS AXI4-Lite 控制和 DMA 数据面，采用 INT8 小图分类，与 ARM Cortex-A9 软件推理对比；首版不启用自定义指令，见[C03](docs/coprocessor-integration-v0.md)。
 
 **为什么自研核，而不用 PicoRV32 / E203 现成软核？（用数据回答，不用情怀）**
 
 1. **可审计的优化与面积数据**：当前同 RTL 四档 CoreMark CPI 为 1.885683／1.693399／1.616360／1.606121；BHT2 核 11.520 ns 实点 LUT=2443、FF=637（不含 SoC 存储器）。同负载参数收益与频率／资源口径见[核收口报告](report/module1-closure.md)；PicoRV32 仅有 OOC 和公开性能参考，不能据此宣称同负载面积能效领先。
-2. **协处理器原生耦合**：现成核加 custom 指令需侵入他人微架构；自研核可在 EX 级原生集成 `conv.start/conv.wait`（协处理器 busy 直接进流水线 stall），这是外挂 AXI 方案做不到的集成深度
+2. **协处理器调度研究**：v0 计划在 SoC 增加本地 MMIO 窗口，由固件启动、轮询并汇总结果；当前核没有总线等待握手，接口尚未接入。自定义指令仅保留为后续研究，不计入现有能力。
 3. **裁剪的量化收益**：面向"推理控制负载"裁掉 CSR/trap（fence/ecall/ebreak 按 NOP），省掉用不到的特权级逻辑；代价与适用边界在报告中主动披露（不适用于需要中断/异常的通用场景）
 
 **为什么不直接用 PYNQ Overlay + ARM？** 初级组考察的是 FPGA 基本设计能力。自研软核让我们的作品在"逻辑设计、状态机、时序约束、接口协议"四个考察点上全部有硬内容，而不是把难点都让给现成 IP。
@@ -73,7 +73,7 @@ flowchart LR
 
 **演示闭环**：放入紧固件 → EXE 展示实际识别框与类别 → 按工单核对类别和数量 → 缺件/错料提示 → 保存本次检查结果与异常截图。连续视频帧不重复累加批次；视频与网口结果须同步，断联或过期结果显示待确认。
 
-**首版边界**：自由分散、互不遮挡；定位／裁剪 Python 黄金参考已有，板端部署与 CNN 分类未完成。模型和部署参数仍待冻结；同步协议已定轮次级／最多 16 目标，见[决策单](docs/vision-sync-protocol-decisions.md)。任意堆叠和遮挡识别不在首版范围。
+**首版边界**：自由分散、互不遮挡；定位／裁剪与 FP32 文件分类参考已有，真实板端部署与 CNN 硬件分类未完成。C02 已冻结 64×64 灰度 FastenerCNN 与整数算术；正式权重、阈值和实际工位条件仍待验收。C03 区分 16 目标硬件/协议能力与检查 V0 的 10 件业务策略；C04 应用语义仍待完整评审，见[决策单](docs/vision-sync-protocol-decisions.md)。
 
 ---
 
@@ -100,12 +100,12 @@ flowchart LR
 - **架构对比点**：行缓存直通 vs 传统"DDR 帧缓存回写"方案，延迟/带宽/资源三列实测对比（借鉴往届国一作品 Ultra-Vision 的"算法直出"架构，见 [docs/proposal_upgrade.md](docs/proposal_upgrade.md)）
 - 对照组：PS 侧 OpenCV / 裸机 C 软件实现同算法
 
-模块二 RTL／链路级证据见[视频记录](data/logs/2026-10-03-vision-onboard/README.md)和[真实相机恢复记录](data/logs/2026-10-07-pi-pynq/README.md)。板端现用位流与本地修复版指纹尚未闭环；长时间、冷启动与该位流断连恢复不据此宣称全过。
+模块二 RTL／链路级证据见[视频记录](data/logs/2026-10-03-vision-onboard/README.md)和[真实相机恢复记录](data/logs/2026-10-07-pi-pynq/README.md)。现用原 vision 的 bit/hwh 已与归档 XSA 配对，构建源码锚定仍缺；C01 捕获候选另有构建输入与显示/状态诊断证据。完整长测、冷启动、断源恢复和 DDR 取帧仍待验收，见[C01 基线](docs/c01-capture-implementation-baseline.md)。
 
 ### 模块三：轻量 CNN 推理协处理器
 
-- 形态：RISC-V **自定义指令扩展**（如 `conv.start` / `conv.wait`）+ AXI 协处理器，片内 INT8 MAC 阵列；推理输入为预处理缩放后的**片上快照小图**（KB 级 BRAM），权重经 DMA 预载
-- 目标任务：对自由分散、互不遮挡的螺栓、螺母、垫圈进行传统视觉定位，裁剪小图后由 CNN 分类；网络结构由实际数据和 XC7Z020 资源确定。正式模型未实现，当前合成图片训练演练只证明训练导出链路可行。
+- 形态（已冻结、未接入）：RISC-V 本地 MMIO + PS AXI4-Lite 控制面，DMA 搬运权重、逐目标 ROI 和结果；不启用自定义指令。现有整帧灰度快照不能代替原分辨率逐目标裁剪。
+- 目标任务：对自由分散、互不遮挡的螺栓、螺母、垫圈定位后，统一生成 64×64 灰度 ROI，再按 C02 量化供 FastenerCNN 分类。正式 INT8 模型与生产黄金尚未完成；诊断整数黄金、训练演练和 FP32 原型不代表工业精度。
 - 软件栈：PC 侧训练 + INT8 量化 → 导出权重 → RISC-V 裸机程序驱动协处理器
 - 对照组：同一网络在 ARM Cortex-A9 上的纯软件推理
 - **算子化验证**：CONV/POOL/GEMM 单算子逐一给出 ARM 基线加速比表（对标往届 HLS 算子赛道的评分打法）
@@ -123,7 +123,7 @@ flowchart LR
 | 板端服务/基准 | PS（PYNQ） | 寄存器配置、结果通信、ARM 软件基线、黄金参考与指标采集；Jupyter 调试 |
 | 工业操作界面 | PC（Windows EXE） | 采集卡视频、框与标签叠加、工单配置、统计、异常截图与记录导出 |
 
-**通信边界**：PS↔视觉 PL 寄存器／快照接口已冻结，EXE↔服务轮次协议见[决策单](docs/vision-sync-protocol-decisions.md)；真实识别服务未实现，mock 不代表硬件识别。视频独立走 HDMI＋采集卡，单框 OSD 仅作诊断。
+**通信边界**：PS↔视觉 PL 寄存器／快照接口已冻结，EXE↔服务采用 v1.2 轮次协议。FILE 服务与 LIVE 替身恒标 PROTOTYPE，真实硬件识别后端未实现。视频独立走 HDMI＋采集卡，单框 OSD 仅作诊断，轮次叠加不代表逐帧精确关联。
 
 ---
 
@@ -159,10 +159,11 @@ edgesight/
 ├── LICENSE              # MIT 协议
 ├── src/                 # 设计源码（RTL / 固件 / PS 侧软件）
 │   ├── riscv/           # v1 三级＋转发＋BHT 核与最小 SoC；收口证据见上方报告
-│   ├── vision/          # HDMI 预处理 RTL；23 tb、已验证视频链路，证据见上方链接
-│   ├── coprocessor/     # CNN 推理协处理器 RTL（M1 验收后主力转入）
+│   ├── vision/          # HDMI 预处理/捕获状态 RTL；25 tb，DDR取帧未验收
+│   ├── coprocessor/     # C02整数参考、CNN算子与整网控制器；MMIO/DMA未接入
 │   ├── riscv_fw/        # RISC-V 裸机固件（冒烟 / 逐指令自检 / 后续 benchmark）
-│   └── pynq_host/       # PS 配置／快照工具、mock 服务；正式识别服务未实现
+│   ├── pynq_host/       # PS配置、定位/FP32参考、MOCK与FILE/LIVE服务骨架
+│   └── vision_client/   # UVC预览、轮次叠加、LIVE展示与记录/CSV
 ├── sim/                 # testbench、仿真脚本（scripts/ 一键 iverilog；tools/ 含 RV32I 编解码自测）
 ├── build/               # Vivado 可复现构建 tcl + 综合/实现报告
 ├── board/               # 上板步骤、运行脚本与已有实机记录
@@ -222,7 +223,7 @@ M1 检查点历史为 #19／#20／#21；正式合并和关闭记录见[模块一
 
 > 分工不分家：每周例会互讲进度，确保三人都能讲清任一模块——答辩质询不分工。
 
-EXE 由 `watercopper` 负责，已有[预览／mock 原型证据](data/logs/2026-10-06-vision-sync-schema/README.md)；板端真实服务主责已定 NC，正式服务与工业界面未完成。
+现行[三人清单](docs/project-closeout-three-person-checklist.md)：NC负责全部上板/采集/实测，JL负责训练/整数参考/RTL/核固件，WC负责数据/PS软件/EXE/材料。EXE已有LIVE展示与记录；NC仍是D7实机服务责任人，WC提供W04/W05软件包，真实硬件服务与整机发布未验收。
 
 ---
 

@@ -14,13 +14,14 @@
 |:---|:---|
 | 模块一 | 核＋最小 SoC 已完成收口。[核收口报告](../report/module1-closure.md) |
 | 模块二 | HDMI 视觉预处理 RTL＋已验证视频链路已完成（RTL／链路级）。[RTL 与视频记录](../data/logs/2026-10-03-vision-onboard/README.md)、[真实相机链路记录](../data/logs/2026-10-07-pi-pynq/README.md) |
+| 模块三 | CNN算子/整网控制器、诊断整数黄金与控制器OOC已有；实体缓存/MMIO/DMA、正式模型与板端输出仍缺。[CNN/DDR离板交接](cnn-ddr-offline-handoff-2026-10-13.md) |
 | 全项目 M2 | 全项目 M2 验收未完成；CNN、网络硬件输出和工业闭环不得宣称完成。验收范围见[主计划](../plan.md) §1.4；前两层收口不替代全项目验收。 |
 
 ## 目录地图（每个目录一句话）
 
 | 目录 | 是什么 |
 |:---|:---|
-| `src/` | 设计源码。`riscv/` 是核与最小 SoC（RTL + plan + design_v0/design_v1）；`riscv_fw/` 裸机固件；`vision/` 图像预处理与视频链路；`coprocessor/` 未实现；`pynq_host/` PS 配置协议与 mock；`vision_client/` Windows EXE 原型 |
+| `src/` | 设计源码。`riscv/` 是核与最小 SoC；`riscv_fw/` 冒烟/基准固件；`vision/` 预处理与捕获状态 RTL；`coprocessor/` C02整数参考、CNN算子与整网控制器；`pynq_host/` 配置、DDR单帧候选驱动、FP32文件检查、MOCK/FILE-LIVE骨架；`vision_client/` 视频/LIVE展示与记录原型 |
 | `sim/` | 验证。`riscv/` 放 tb；`scripts/run_iverilog.sh` 一键回归；`arch_test/` 第三方套件（脚本拉取，不入库） |
 | `build/` | Vivado 可复现构建（build.tcl + constraints + 综合报告） |
 | `board/` | 上板。`smoke_test/` 工程、`setup.md` 复现指南、`logs/` 上板实测记录（只追加） |
@@ -34,11 +35,14 @@
 
 | 要找什么 | 去哪里 |
 |:---|:---|
+| 每个项目文件的用途与相互关系 | [逐文件说明](file-guide/README.md)、[可搜索页面](file-guide/index.html)、[完整CSV](file-guide/files.csv) |
 | 仿真 / Vivado 构建日志 | `data/logs/` |
 | 上板实测记录 | `board/logs/` |
 | 协作记录 / 决策过程 | `report/llm_log/` |
 | 全项目目标、收口、分工和验收 | 根目录 `plan.md` |
 | 全项目下一交付物、依赖与卡点 | 根目录 `plan.md` §3 |
+| 当前源码与文档状态核对 | [实现/文档清单](implementation-document-audit-2026-10-12.md)；[三人执行清单](project-closeout-three-person-checklist.md) |
+| 原彩色捕获与DDR取帧边界 | [C01基线](c01-capture-implementation-baseline.md)、[帧槽所有权候选](c01-ddr-frame-ownership-v0.md) |
 | RISC-V 核专项计划与看板 | `src/riscv/plan.md`、`src/riscv/plan_calendar.md` |
 | Part B 验证与验收执行清单 | `docs/partB-verify-plan.md` |
 | 模块三训练与量化前期 | `docs/module3-model-training.md` |
@@ -90,7 +94,7 @@
 
 ## 本轮只登记的事项（2026-10-09）
 
-- Q01：D6 覆盖结果报文；未知字段拒绝的实现缺口另批裁决，见[核查注记](vision-sync-protocol-decisions.md)。
+- Q01：当时登记结果报文白名单缺口，已随 PR #67 修复；当前 v1.2 允许 LIVE 分类/判定字段并继续严格拒绝未知字段，见[协议注记](vision-sync-protocol-decisions.md)。
 - Q02：`run_iverilog.sh` 缺失 tb 时 continue 的风险只登记，本轮不改 fail-fast 语义。
 - Q03：本地有 `partA-v0`；未取得 `archive/pi-hdmi-diagnostics-2026-10-08`，不查远端、不建替代 tag。
 - Q04：[中文探索报告](方案探索报告.md)与[英文名 audit](localization-exploration-audit.md)正文一致；保留两份，权威正文待用户裁决。
@@ -102,4 +106,5 @@
 
 | 日期 | 变更 |
 |:---|:---|
+| 2026-10-12 | 导航同步整数参考、FILE/LIVE软件与C01；Q01标明已修复，旧索引/配图仍保留历史性质 |
 | 2026-10-09 | B01：区分三层收口状态并链接证据；补齐对应版本接口导航；纠正提交纪律。 |

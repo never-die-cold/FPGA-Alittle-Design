@@ -2,13 +2,15 @@
 
 PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采集；Jupyter 保留为板端调试与复现入口。最终工业操作界面为 Windows EXE，由 `watercopper` 负责：采集卡视频和网口识别结果统一展示，见根目录 [项目主计划](../../plan.md) §1.3。
 
-## 当前实现与规划边界（2026-10-10）
+## 当前实现与规划边界（2026-10-12）
 
 已有 `vision_regs.py`／`vision_demo.py`／`m2_onboard.py`／`onboard_smoke.py` 配置及板端诊断；
 `data/golden/vision/localize/reference.py`／`arm_localize.py` 与打包工具提供定位／裁剪黄金参考，不等于实时部署。
 `vision_mock_service.py` 提供明确标注 MOCK 的服务；D6 字段白名单已随 PR #67 合并。
-远端 `7101a33` 将 `vision_protocol.py` 扩展为 MOCK/LIVE v1.2 校验，整合回归通过；
-网络预览的 PROTOTYPE 标识尚未实现，真实 LIVE 服务未验收，见[复验边界](../../data/logs/2026-10-10-dataset-integration/README.md)。
+`vision_protocol.py` 已支持严格 MOCK/LIVE v1.2 校验；`vision_mock_service.py --live` 提供合成 LIVE 替身。
+`vision_live_service.py` 已实现 FILE 后端、每轮捕获副本/引擎调用/报文与产物落盘；FILE 恒 `prototype=true`，前端 PROTOTYPE 徽标已实现。
+它没有真实 HDMI/DDR/MMIO/CNN 后端，`/v1/config` 仅推进软件配置号，不证明 R12 硬件应用；见[整合证据](../../data/logs/2026-10-12-pr-review/README.md)。
+工单由服务启动参数提供，HTTP配置仅接收control；在线工单编辑和请求重试幂等尚未实现。
 下列 notebook／通用工具仍是规划，不能由 mock 或训练演练推断已实现。
 
 本轮新增 `roi_preprocess.py`、`inspection_model.py`、`inspection_rules.py`、
@@ -20,18 +22,20 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
 后续新增 `model_reference.py`、`numpy_reference.py`、`model_audit.py`、
 `reference_tensors.py`、`reference_package.py`：交付原型的 BN 折叠、独立逐层对拍、
 预算审计及可移交的 FP32 软件参考包已离板验证并随 PR #67 合并；
-见[模块三逐层参考](../../docs/module3-prototype-reference.md)。正式 INT8 与硬件尚未实现。
+见[模块三逐层参考](../../docs/module3-prototype-reference.md)。`src/coprocessor/` 另有完整 INT8 整网参考、算子 RTL 与诊断黄金；正式 INT8 模型和 MMIO/DMA 后端尚未实现，见[计算链现状](../coprocessor/README.md)。
+
+10/13 新增 `c01_capture.py`：custom DDR 单帧候选所有权驱动，完整转移自动停机后 invalidate 并复制；七组离板异常测试通过，未接入 LIVE 服务。板端入口 `sim/scripts/c01_ddr_onboard.py` 的两次实测均启动前失败并安全恢复，最终驱动修正尚待返板，见[DDR证据](../../data/logs/2026-10-13-ddr-single-frame/README.md)。
 
 后续新增 `dataset_manifest.py`、`dataset_audit.py` 和仓库 CLI：720p 采集清单、
 会话/精确重复像素/实物编号泄漏、覆盖统计和来源声明已用测试夹具验证，理解题及补测已通过。
-十三组统一回归通过；这不验收真实标签或模型精度，见[数据集审计](../../docs/fastener-dataset-audit.md)。
+这些工具的测试夹具证据见[数据集审计](../../docs/fastener-dataset-audit.md)，不验收真实标签或模型精度。10/12统一视觉Python为14组，含尚未提交的构建输入审计；[离板证据](../../data/logs/2026-10-12-nc-offline/README.md)退出0。10/13加入DDR单帧异常组后总入口为15组，见本轮总回归记录。
 
 - `demo.ipynb`：板端调试与复现 notebook
 - `benchmark.ipynb`：基线对比与指标采集（CPI、延迟、帧率、加速比）
 - `golden_ref.py`：软件黄金参考实现（OpenCV / 纯 Python 推理）
 - `metrics.py`：数据自动采集与报告生成（→ `data/`）
-- 板端正式识别服务未实现；轮次协议与 NC 主责已冻结，见[协议决策单](../../docs/vision-sync-protocol-decisions.md)。
-- EXE 在 `src/vision_client/`，已有[Python/OpenCV 预览／mock 原型](../../data/logs/2026-10-06-vision-sync-schema/README.md)；正式工单、统计、导出及真实服务联调待完成。
+- 真实硬件识别后端未实现；FILE/LIVE 骨架已有，不把软件会话/配置号当硬件状态。NC 的实机服务责任与 WC 的适配/服务实现工作见[三人清单](../../docs/project-closeout-three-person-checklist.md)。
+- EXE 在 `src/vision_client/`，已有 LIVE 类别/工单展示、批次、CSV 和 FILE_REPLAY；真实硬件联调、检查快照查看和目标机发布仍待完成。
 
 ## 板卡访问
 
