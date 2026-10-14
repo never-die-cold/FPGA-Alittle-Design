@@ -1,0 +1,22 @@
+from pathlib import Path
+import hashlib, json, subprocess
+root = Path.cwd()
+paths = subprocess.check_output(["git","diff","--cached","--name-only","-z"]).decode().split("\0")
+count = 0
+for path in filter(None, paths):
+    if not path.startswith(("docs/","report/llm_log/","data/logs/2026-10-14-")):
+        raise RuntimeError("Unexpected staged scope: " + path)
+    if path.endswith(".md"):
+        continue
+    staged = subprocess.check_output(["git","show",":" + path])
+    current = (root / path).read_bytes()
+    if staged != current:
+        raise RuntimeError("Index changes retained bytes: " + path)
+    count += 1
+rows = json.loads((root/"data/logs/2026-10-14-n03-return-review/runner-inputs.json").read_text(encoding="utf-8-sig"))
+for row in rows:
+    path = "data/logs/2026-10-14-n03-return-review/inputs/" + row["retained"]
+    raw = subprocess.check_output(["git","show",":" + path])
+    if len(raw) != row["bytes"] or hashlib.sha256(raw).hexdigest().upper() != row["sha256"].upper():
+        raise RuntimeError("Runner index SHA mismatch: " + path)
+print("PASS: staged scope; exact bytes for", count, "non-Markdown records; three runner SHA/length entries")

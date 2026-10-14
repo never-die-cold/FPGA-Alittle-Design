@@ -35,6 +35,7 @@ JL 可以在电脑上生成 bit/hwh；下载到板卡、在线 ILA、实机网�
 
 当前不具备实机执行条件；NC先做 C01遗留检查、证据/版本盘点、N02/N03/N04/N05返板准备与C04评审。
 执行表、返板顺序和填写模板见[NC离板准备](nc-offline-readiness-2026-10-12.md)；custom DDR写完成/槽交接交给WC实现前先核对[所有权候选交接](c01-ddr-frame-ownership-v0.md)。文档准备完成不勾选N02–N05实机通过。
+2026-10-14扩展：当前源码Windows便携候选已离板验收，N04/N05采集组织、N10–N12场景/指标、N13/N14发布/演示/提交准备见[NC工作板](nc-offboard-workboard-2026-10-14.md)及[原始证据](../data/logs/2026-10-14-nc-offboard-closeout/README.md)。Q1/Q3及Q5的NC口径已确认，Q5交[#75](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/75)与JL对齐、修复后再验收。
 
 ## 3. 首先冻结的交接（G0）
 

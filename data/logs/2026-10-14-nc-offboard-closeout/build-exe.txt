@@ -1,0 +1,92 @@
+1032 INFO: PyInstaller: 6.16.0, contrib hooks: 2026.8
+1032 INFO: Python: 3.12.10
+1080 INFO: Platform: Windows-11-10.0.26200-SP0
+1080 INFO: Python environment: C:\Users\ASUS\AppData\Local\Programs\Python\Python312
+1082 INFO: wrote sim/build/vision-client\vision_preview.spec
+1096 INFO: Module search paths (PYTHONPATH):
+['E:\\Projects\\FPGA-Alittle-Design',
+ 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps',
+ 'E:\\Projects\\FPGA-Alittle-Design',
+ 'C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\python312.zip',
+ 'C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\DLLs',
+ 'C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\Lib',
+ 'C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312',
+ 'C:\\Users\\ASUS\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages',
+ 'E:\\Projects\\FPGA-Alittle-Design\\src\\vision_client',
+ 'E:\\Projects\\FPGA-Alittle-Design\\src\\pynq_host']
+2096 INFO: Appending 'datas' from .spec
+2098 INFO: checking Analysis
+2107 INFO: Building because E:\Projects\FPGA-Alittle-Design\src\vision_client\preview.py changed
+2107 INFO: Looking for Python shared library...
+2107 INFO: Using Python shared library: C:\Users\ASUS\AppData\Local\Programs\Python\Python312\python312.dll
+2107 INFO: Running Analysis Analysis-00.toc
+2107 INFO: Target bytecode optimization level: 0
+2107 INFO: Initializing module dependency graph...
+2108 INFO: Initializing module graph hook caches...
+2133 INFO: Analyzing modules for base_library.zip ...
+3933 INFO: Processing standard module hook 'hook-encodings.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+6172 INFO: Processing standard module hook 'hook-pickle.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+8100 INFO: Processing standard module hook 'hook-heapq.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+9060 INFO: Caching module dependency graph...
+9119 INFO: Analyzing E:\Projects\FPGA-Alittle-Design\src\vision_client\preview.py
+9650 INFO: Processing standard module hook 'hook-cv2.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\_pyinstaller_hooks_contrib\\stdhooks'
+10242 INFO: Processing standard module hook 'hook-numpy.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+10589 INFO: Processing standard module hook 'hook-platform.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+10840 INFO: Processing standard module hook 'hook-sysconfig.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+12230 INFO: Processing standard module hook 'hook-difflib.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+12590 INFO: Processing standard module hook 'hook-multiprocessing.util.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+12808 INFO: Processing standard module hook 'hook-xml.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+13488 INFO: Processing standard module hook 'hook-_ctypes.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+14756 INFO: Processing standard module hook 'hook-psutil.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\_pyinstaller_hooks_contrib\\stdhooks'
+15777 INFO: Processing pre-safe-import-module hook 'hook-typing_extensions.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\PyInstaller\\hooks\\pre_safe_import_module'
+15800 INFO: SetuptoolsInfo: initializing cached setuptools info...
+18613 INFO: Processing standard module hook 'hook-charset_normalizer.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\_pyinstaller_hooks_contrib\\stdhooks'
+19438 INFO: Processing standard module hook 'hook-PIL.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+19590 INFO: Processing standard module hook 'hook-PIL.Image.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+20175 INFO: Processing standard module hook 'hook-xml.etree.cElementTree.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+20356 INFO: Processing standard module hook 'hook-xml.dom.domreg.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+21192 INFO: Processing standard module hook 'hook-PIL.ImageFilter.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+21829 INFO: Processing module hooks (post-graph stage)...
+22422 INFO: Processing standard module hook 'hook-PIL.SpiderImagePlugin.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\PyInstaller\\hooks'
+22542 INFO: Performing binary vs. data reclassification (13 entries)
+22561 INFO: Looking for ctypes DLLs
+22599 INFO: Analyzing run-time hooks ...
+22603 INFO: Including run-time hook 'pyi_rth_inspect.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\PyInstaller\\hooks\\rthooks'
+22613 INFO: Including run-time hook 'pyi_rth_pkgutil.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\PyInstaller\\hooks\\rthooks'
+22621 INFO: Including run-time hook 'pyi_rth_multiprocessing.py' from 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\PyInstaller\\hooks\\rthooks'
+22646 INFO: Creating base_library.zip...
+22679 INFO: Looking for dynamic libraries
+23612 INFO: Extra DLL search directories (AddDllDirectory): ['E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\numpy.libs', 'E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\cv2\\../../x64/vc17/bin']
+23612 INFO: Extra DLL search directories (PATH): ['E:\\Projects\\FPGA-Alittle-Design\\sim\\build\\vision-client-deps\\cv2\\../../x64/vc17/bin']
+24913 INFO: Warnings written to E:\Projects\FPGA-Alittle-Design\sim\build\vision-client\build\vision_preview\warn-vision_preview.txt
+24976 INFO: Graph cross-reference written to E:\Projects\FPGA-Alittle-Design\sim\build\vision-client\build\vision_preview\xref-vision_preview.html
+25051 INFO: checking PYZ
+25105 INFO: Building because E:\Projects\FPGA-Alittle-Design\src\vision_client\hud.py changed
+25105 INFO: Building PYZ (ZlibArchive) E:\Projects\FPGA-Alittle-Design\sim\build\vision-client\build\vision_preview\PYZ-00.pyz
+25991 INFO: Building PYZ (ZlibArchive) E:\Projects\FPGA-Alittle-Design\sim\build\vision-client\build\vision_preview\PYZ-00.pyz completed successfully.
+26015 INFO: checking PKG
+26016 INFO: Building because E:\Projects\FPGA-Alittle-Design\sim\build\vision-client\build\vision_preview\PYZ-00.pyz changed
+26016 INFO: Building PKG (CArchive) vision_preview.pkg
+26068 INFO: Building PKG (CArchive) vision_preview.pkg completed successfully.
+26070 INFO: Bootloader E:\Projects\FPGA-Alittle-Design\sim\build\vision-client-deps\PyInstaller\bootloader\Windows-64bit-intel\run.exe
+26070 INFO: checking EXE
+26072 INFO: Rebuilding EXE-00.toc because pkg is more recent
+26072 INFO: Building EXE from EXE-00.toc
+26072 INFO: Copying bootloader EXE to E:\Projects\FPGA-Alittle-Design\sim\build\vision-client\build\vision_preview\vision_preview.exe
+26598 INFO: Copying icon to EXE
+26890 INFO: Copying 0 resources to EXE
+26890 INFO: Embedding manifest in EXE
+27160 INFO: Appending PKG archive to EXE
+27167 INFO: Fixing EXE headers
+27252 INFO: Building EXE from EXE-00.toc completed successfully.
+27256 INFO: checking COLLECT
+27260 INFO: Removing dir E:\Projects\FPGA-Alittle-Design\sim\build\vision-client\dist\vision_preview
+27376 INFO: Building COLLECT COLLECT-00.toc
+27910 INFO: Building COLLECT COLLECT-00.toc completed successfully.
+27916 INFO: Build complete! The results are available in: E:\Projects\FPGA-Alittle-Design\sim\build\vision-client\dist
+PASS: preview mock renderer packaged runtime
+PASS: packaged EXE HTTP mock preview + unreachable route rejects, no UVC/board access
+PASS: packaged EXE x live service joint e2e (overlay render, proto_ record, artifacts)
+PASS: packaged FILE REPLAY rendering and conflicting mode rejection
+PASS: checked FILE REPLAY HUD; normal/unknown counts and altered evidence rejection
+PASS: Windows M2 preview EXE build + packaged renderer test

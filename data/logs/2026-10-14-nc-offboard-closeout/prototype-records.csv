@@ -1,0 +1,2 @@
+﻿recorded_at,mode,prototype,status,missing,extra,session_id,check_id,config_id,frame_id,result_age_s,target_count,screenshot,targets,verdict
+2026-10-14T15:37:45,LIVE,1,CHECK_FAIL,bolt:1;nut:1;washer:1,,9eef7dfc-934b-4363-a270-fcddb77bf8c9,2,1,2,0.0,3,screenshots/proto_9eef7dfc_000002.png,"[{""target_id"": 0, ""bbox"": [180, 170, 339, 289], ""class"": ""bolt"", ""score"": 0.97}, {""target_id"": 1, ""bbox"": [730, 380, 929, 520], ""class"": ""nut"", ""score"": 0.91}, {""target_id"": 2, ""bbox"": [300, 460, 470, 620], ""class"": ""washer"", ""score"": 0.95}]",

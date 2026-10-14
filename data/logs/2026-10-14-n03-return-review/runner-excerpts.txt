@@ -1,0 +1,63 @@
+23-    bit = Path(os.environ['C01_BIT'])
+24-    output = root / 'ddr-result.json'
+25:    if output.exists(): raise RuntimeError('new evidence directory required')
+26:    lock = (Path('/home/xilinx/vision_m2') / 'c01-capture.lock').open('a')
+27:    fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+28-    original = Path('/home/xilinx/vision_m2/vision.bit')
+29-    verify(original, '4f0c491a6383d8a11f87cd2de260027f519dbd466942d0b1b6e36198e39d5be5')
+--
+32-    # Do not unload an unknown active owner.
+33-    if Path(PL.bitfile_name).resolve() != original.resolve():
+34:        raise RuntimeError('active overlay is not the expected idle original vision')
+35-    boot = Path('/proc/sys/kernel/random/boot_id').read_text().strip()
+36-    def identity():
+37-        return (Path('/proc/sys/kernel/random/boot_id').read_text().strip(), PL.bitfile_name, str(PL.timestamp))
+38-    result = {'boot_before': boot, 'bit_sha256': BIT_SHA, 'hwh_sha256': HWH_SHA,
+39:              'driver_sha256': hashlib.sha256((root / 'c01_capture.py').read_bytes()).hexdigest(),
+40:              'runner_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+41:              'helper_sha256': hashlib.sha256((root / 'c01_status_onboard.py').read_bytes()).hexdigest(),
+42-              'kind': 'CUSTOM_DDR_SINGLE_FRAME_EXPERIMENT_NOT_FORMAL_N03'}
+43-    owner = None
+--
+54-            if status.read(4) & 1: break
+55-            time.sleep(.05)
+56:        else: raise RuntimeError('video lock did not settle')
+57-        for attempt in (1, 2):
+58-            time.sleep(5)
+--
+64-                print('STAGE: candidate HDMI smoke NOVIDEO; bounded settle retry', flush=True)
+65-        owner = SingleFrameCapture(dma, status, allocate, identity)
+66:        print('STAGE: custom single-frame DMA begins', flush=True)
+67-        frame = owner.capture()
+68-        result['capture'] = owner.evidence
+--
+88-            result['unsafe_stop'] = True
+89-            output.write_text(json.dumps(result, indent=2))
+90:            print('UNSAFE-STOP: buffers held; process stays alive; physical board reset required', flush=True)
+91-            # Never exit and run native-buffer finalizers while DMA stop is unknown.
+92:            while True: time.sleep(1)
+93-        if attempted:
+94-            try:
+95-                restore_original(m2_onboard.cmd_load, m2_onboard.cmd_smoke)
+96:                result['restored'] = True
+97-            except BaseException as exc:
+98-                result['restore_error'] = repr(exc)
+99-                if primary is None: primary = exc
+100:        result['boot_after'] = Path('/proc/sys/kernel/random/boot_id').read_text().strip()
+101-        output.write_text(json.dumps(result, indent=2))
+102-        print('RESULT:', json.dumps(result), flush=True)
+103-    if primary is not None: raise primary
+104:    if result['boot_after'] != boot: raise RuntimeError('board rebooted during capture')
+105-    print('PASS: custom DDR cleanup and original vision restoration', flush=True)
+106-
+sim/scripts/run_c01_status.ps1-6-$ErrorActionPreference='Stop'
+sim/scripts/run_c01_status.ps1-7-if($RemoteDirectory -notmatch '^/home/xilinx/vision_m2/c01-[0-9a-f]{32}$') {throw 'Invalid C01 directory'}
+sim/scripts/run_c01_status.ps1:8:$remote="sudo -n env C01_BIT=$RemoteDirectory/capture.bit C01_BIT_SHA=$BitSha256 C01_HWH_SHA=$HwhSha256 bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && timeout -k 5s 65s python3 -u -X faulthandler $RemoteDirectory/c01_status_onboard.py'"
+sim/scripts/run_c01_status.ps1-9-$marker="; printf '\n__PYNQ_RC_"+('0'*32)+"=%d\n' "+'$?'
+sim/scripts/run_c01_status.ps1-10-$wire=[Text.Encoding]::UTF8.GetByteCount($remote+$marker)
+--
+sim/scripts/pynq_serial_command.ps1-49-    if (-not $match.Success) {
+sim/scripts/pynq_serial_command.ps1-50-        $exitCode = 124
+sim/scripts/pynq_serial_command.ps1:51:        $writer.WriteLine("`nERROR: timeout; remote completion unconfirmed; no interrupt sent")
+sim/scripts/pynq_serial_command.ps1-52-    }
+sim/scripts/pynq_serial_command.ps1-53-} catch {
