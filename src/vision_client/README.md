@@ -31,7 +31,8 @@ sim/build/vision-client/dist/vision_preview/vision_preview.exe --mock --endpoint
 
 批次记录（M3 起步，契约见决策单 D8–D10；**W07 起 schema v2**）：`--records-dir <目录>` 开启。
 只有手动触发的有效轮次记录——自动间隔轮次永不记录，结构性满足"重复帧不增加批次计数"；
-记录键 `(session_id, check_id)` 去重；产物为 `records.jsonl`（一行一条：mode/session/check/
+记录键 `(session_id, check_id)` 去重（**跨进程生效**：启动时从既有 records.jsonl 重建键与计数，
+损坏行大声失败；异常事件截图序号同样续编）；产物为 `records.jsonl`（一行一条：mode/session/check/
 config/frame/时间/结果年龄/目标数/boxes/**status**/**decision 原样**（当轮工单即
 decision.expected）/**prototype**/protocol_version/截图名）+ `screenshots/` 逐条 PNG。
 **截图前缀标来源（C04 §3.2/Q2）：MOCK=`mock_`、LIVE+prototype=`proto_`、真实 LIVE 无前缀——
@@ -41,7 +42,8 @@ decision.expected）/**prototype**/protocol_version/截图名）+ `screenshots/`
 targets 列保留 JSON）。离线测试：
 `py sim/vision/test_vision_records.py`、`py sim/vision/test_vision_export.py`。
 
-当前去重集合仅在进程内，不从旧JSONL恢复；跨进程复用记录目录的持久去重尚未实现。服务HTTP重试每次新建check_id，不能用记录键去重证明请求重试幂等。
+去重集合启动时从既有 records.jsonl 重建（**2026-10-13 起跨进程生效**，损坏行大声失败）。服务 HTTP 重试每次新建 check_id——重试语义草案见 [C04 §2.4](../../docs/vision-live-semantics.md)（待 NC/JL 确认）；记录键去重不用于证明请求重试幂等。
+快照读取与哈希核对：`py src/pynq_host/round_artifacts.py <root> <session_id> <check_id>`（packet 绑定 + capture 字节哈希 + 引擎源哈希；不符大声失败；旧轮次无 `capture.sha256` 按缺件拒绝）。
 
 异常事件日志（D11）：状态迁移（断联/超期/配置变化/恢复 ok）与会话变化、重握手失败写入
 同目录 `anomalies.jsonl`（一行一事件，含 prev/check_id/fails）+ `screenshots/anomaly_*.png`。

@@ -1,6 +1,7 @@
 """W05 正式检查服务骨架：HTTP 轮次/产物/幂等层 + 可插拔检查引擎（C04 §2.3）。
 
-与 vision_mock_service 的区别：真实引擎、每轮新捕获复制落盘、(session_id, check_id) 唯一定位产物。
+与 vision_mock_service 的区别：真实引擎、每轮新捕获复制落盘、(session_id, check_id) 唯一定位
+产物（capture.png + capture.sha256 + packet.json，读取与哈希核对入口 src/pynq_host/round_artifacts.py）。
 - 引擎契约：engine(capture_path, round_dir, request_id) -> {status, targets, decision, width, height}；
   默认 file_engine（懒加载 inspection_run——cv2/numpy/torch 仅在真正服务时导入，
   本文件保持 stdlib 可测，接入 run_vision_python.sh）。
@@ -13,6 +14,7 @@
   端点与 mock 同形（/v1/status /v1/check /v1/config），EXE 无需改动即可消费。
 """
 import argparse
+import hashlib
 import json
 import threading
 import time
@@ -94,6 +96,9 @@ class State:
             round_dir = self.session_dir / f"check-{check:06d}"
             round_dir.mkdir(exist_ok=False)
             capture_path = self.captures.capture(round_dir)
+            # 快照哈希侧车（C04 §2.3）：供读取方核对 capture 字节未被替换/篡改
+            atomic_write(round_dir / "capture.sha256",
+                         (hashlib.sha256(capture_path.read_bytes()).hexdigest() + "\n").encode())
             fields = self.engine(capture_path, round_dir, f"chk{check:06d}")
             packet = validate_packet({
                 "version": VERSION, "mode": "LIVE", "session_id": self.session_id,
