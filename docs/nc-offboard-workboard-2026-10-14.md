@@ -15,4 +15,5 @@
 
 优先顺序：候选包现在就可运行→实物与独立test准备→工业场景/证据字段准备→接包评审与答辩演练；不用等待整网硬件完成。
 本轮候选运行入口/包SHA/实测退出码见[离板验收证据](../data/logs/2026-10-14-nc-offboard-closeout/README.md)。示例回放来自合成FP32原型，不是工位精度或CNN硬件证据。
+10/14已上传：[便携包草稿附件](https://github.com/never-die-cold/FPGA-Alittle-Design/releases/tag/untagged-2811b27604fdc693611f)，文档/证据交付提交eeff74f已push到dev/model；[上传校验](../data/logs/2026-10-14-nc-push/README.md)保存远端大小/SHA。返板先执行N01基线核查，再按N03执行单推进。
 备考独立待办[#61](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/61)：可先做现有RTL讲解、仿真环境/命令演练和断网流程准备；历史真题/90min全真模拟仍缺记录，不代签完成。
