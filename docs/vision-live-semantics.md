@@ -36,7 +36,7 @@
 - 工单与参数由 EXE 提交，服务端返回 applied_config_id；EXE 以确认生效的 config_id 为准（沿用现有 `/v1/config` 流程）。
 - 每轮结果锁定：session_id + check_id + config_id + **当轮工单内容（expected 计数）**。记录必须保存当轮 expected 与 config_id——只存 config_id 无法复现判定依据（W07）。
 - 配置不符即撤框（D3，`rounds._state` config 分支已实现）；换工单后旧轮结果不得显示。
-- **工单 ≤10 件（V0 候选）与协议 16 目标上限互不替换**：结果最多 16 个目标；超工单上限不截断放行——按[检查V0 §3](inspection-v0-contract.md) 转 RECHECK（**Q5** 确认表述）。
+- **工单 ≤10 件（V0 候选）与协议 16 目标上限互不替换**：结果最多 16 个目标；超工单上限不截断放行——按[检查V0 §3](inspection-v0-contract.md) 转 RECHECK（**Q5** 确认表述）。C03 已冻结口径：16 为目标检测能力、10 件为检查 V0 业务策略候选（[三人清单](project-closeout-three-person-checklist.md)）；**能力上限不自动成为业务放行条件**。Q5 剩余项 = WC/JL 对齐超限 RECHECK 与部分计数标识（CSV 已加 `reasons` 列暴露 `target_limit`；界面口径待 NC 验收）。
 - 超限映射注记（2026-10-10，W05 骨架实现，**待 NC/JL 追认**）：检查链候选超限时 decision 计数为
   `null`（"未完整计数"语义），而报文契约要求五计数 dict 必填；服务端（`vision_live_service.complete_decision`）
   映射为按报文内已列目标重算 actual/delta/missing/extra，verdict/reasons 保持 RECHECK——
