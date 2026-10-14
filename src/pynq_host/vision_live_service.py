@@ -57,6 +57,8 @@ class FileCaptures:
 
 def complete_decision(decision, targets):
     """超限映射：actual/delta/missing/extra 为 None 时按报文内目标重算；verdict/reasons 不动。"""
+    if not isinstance(decision, dict):
+        return decision  # LOCATION_ONLY 等无判定场景原样透传
     if all(isinstance(decision.get(name), dict)
            for name in ("actual", "delta", "missing", "extra")):
         return decision
@@ -182,6 +184,9 @@ def make_server(host="127.0.0.1", port=8765, root=None, captures=None, engine=No
                     self.reply(200, {"mode": "LIVE", "applied_config_id": applied})
             except (ValueError, TypeError) as error:
                 self.reply(400, {"error": str(error)})
+            except RuntimeError as error:
+                # 捕获（C01 所有权/超时/错误）或引擎运行失败：服务侧故障，不产生正常结果
+                self.reply(503, {"error": f"capture/engine failed: {error}"})
 
         def log_message(self, *args):
             pass

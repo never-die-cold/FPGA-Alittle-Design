@@ -13,7 +13,7 @@ else
     exit 1
 fi
 mkdir -p sim/build/vision/python
-for name in vision_regs localize vision_protocol vision_rounds vision_records vision_export vision_live_standin vision_live_service vision_joint arm_localize arm_localize_package pynq_file_receiver c01_status_onboard c01_artifacts c01_build_inputs c01_capture; do
+for name in vision_regs localize vision_protocol vision_rounds vision_records vision_export vision_live_standin vision_live_service vision_joint arm_localize arm_localize_package pynq_file_receiver c01_status_onboard c01_artifacts c01_build_inputs c01_capture c01_backend; do
     vision_run_checked "sim/build/vision/python/$name.log" \
         "$PY" "sim/vision/test_$name.py" || exit 1
 done
