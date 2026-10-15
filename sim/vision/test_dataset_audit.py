@@ -17,14 +17,21 @@ def check_audit():
     build = ROOT / "sim/build/vision/inspection"
     build.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(dir=build) as temporary:
-        root, row = Path(temporary), sample()
-        other = {**row, "session": "sess-20261010-b", "split": "test", "class": "nut", "specimen_id": "nut-b"}
+        root, row = Path(temporary), {**sample(), "orientation": "axial"}
+        other = {**row, "session": "sess-20261010-b", "split": "test", "class": "nut",
+                 "specimen_id": "nut-b", "orientation": "face_up"}
         fixture(root, [row, other])
         result = audit_dataset(root, "TEST_FIXTURE")
         assert result["frame_count"] == result["target_count"] == 2
         assert result["coverage"]["train"]["classes"]["bolt"] == 1
         assert result["missing_classes"]["test"] == ["bolt", "washer"]
         assert result["all_specimen_ids_present"] and not result["label_accuracy_verified"]
+        assert result["gt_checked"] is True
+        assert result["coverage"]["train"]["orientations"]["axial"] == 1
+        assert result["coverage"]["test"]["orientation_lights"]["nut/face_up/L0"] == 1
+        assert "bolt/axial" not in result["missing_orientation_combos"]["train"]
+        assert "bolt/tilted" in result["missing_orientation_combos"]["train"]
+        assert result["all_orientations_labeled"] and result["missing_orientation_labels"] == 0
         rejected(lambda: audit_dataset(root, "LIVE"))
         for second in ({**other, "session": row["session"], "frame_id": "frame_00002"},
                        {**other, "class": "bolt", "specimen_id": row["specimen_id"]}):
@@ -42,6 +49,9 @@ def check_audit():
         fixture(root, [{**row, "specimen_id": ""}, other])
         assert audit_dataset(root, "PUBLIC")["missing_specimen_ids"] == 1
         assert not audit_dataset(root, "PUBLIC")["all_specimen_ids_present"]
+        fixture(root, [{**row, "orientation": ""}, other])
+        assert audit_dataset(root, "PUBLIC")["missing_orientation_labels"] == 1
+        assert not audit_dataset(root, "PUBLIC")["all_orientations_labeled"]
         fixture(root, [row, {**other, "split": "train", "specimen_id": row["specimen_id"]}])
         rejected(lambda: audit_dataset(root, "TEST_FIXTURE"))
         fixture(root, [row, {**other, "split": "train"}])
@@ -67,10 +77,15 @@ def check_cli():
         original = output.read_bytes()
         report = json.loads(original)
         assert report["status"] == "STRUCTURE_PASS" and report["source_kind"] == "TEST_FIXTURE"
+        assert report["schema_version"] == 2 and report["gt_checked"] is True
         assert report["frame_count"] == 4 and report["target_count"] == 3
         assert report["coverage"]["test"]["empty_frames"] == 1
         assert report["coverage"]["test"]["frame_target_counts"] == {"0": 1, "1": 1}
         assert report["missing_classes"]["val"] == ["bolt", "washer"]
+        assert report["coverage"]["train"]["orientations"]["axial"] == 1
+        assert report["coverage"]["test"]["orientations"]["face_tilted"] == 1
+        assert report["missing_orientation_labels"] == 0
+        assert "bolt/axial" not in report["missing_orientation_combos"]["train"]
         assert not report["capture_origin_authenticated"] and len(report["code_sha256"]) == 3
         assert not output.with_name(output.name + ".pending").exists()
         assert subprocess.run(command, capture_output=True).returncode == 1

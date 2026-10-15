@@ -13,7 +13,8 @@ from dataset_manifest import validate_row, load_manifest, contained
 def sample():
     return dict(frame_id="frame_00001", session="sess-20261010-a", split="train", light="L0",
                 bg="gray", spacing="1D", obj_id="obj01", **{"class": "bolt"},
-                x0="10", y0="20", x1="11", y1="21", notes="TEST_FIXTURE", specimen_id="bolt-a")
+                x0="10", y0="20", x1="11", y1="21", notes="TEST_FIXTURE", specimen_id="bolt-a",
+                orientation="")
 
 
 def rejected(call):
@@ -29,6 +30,8 @@ def fixture(root, rows):
     root.mkdir(parents=True, exist_ok=True)
     for path in (root / "raw").rglob("*.png"):
         path.unlink()
+    for path in (root / "gt").rglob("*.csv"):
+        path.unlink()
     with (root / "manifest.csv").open("w", encoding="utf-8", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator="\n")
         writer.writeheader()
@@ -37,6 +40,15 @@ def fixture(root, rows):
         path = root / "raw" / session / (frame + ".png")
         path.parent.mkdir(parents=True, exist_ok=True)
         assert cv2.imwrite(str(path), np.full((720, 1280, 3), 31 * index + 10, np.uint8))
+        gt = root / "gt" / session / (frame + ".csv")
+        gt.parent.mkdir(parents=True, exist_ok=True)
+        with gt.open("w", encoding="utf-8", newline="") as stream:
+            writer = csv.writer(stream, lineterminator="\n")
+            writer.writerow(("obj_id", "class", "x0", "y0", "x1", "y1"))
+            for row in rows:
+                if (row["session"], row["frame_id"]) == (session, frame) and row["class"]:
+                    writer.writerow((row["obj_id"], row["class"], row["x0"], row["y0"],
+                                     row["x1"], row["y1"]))
 
 
 def check_frames():
@@ -84,22 +96,56 @@ def check_frames():
     print("PASS: collection frames, paths, identities, overlap, limits, raw omissions and PNG format")
 
 
+def check_gt():
+    build = ROOT / "sim/build/vision/inspection"
+    build.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(dir=build) as temporary:
+        root, row = Path(temporary), sample()
+        fixture(root, [row])
+        assert load_manifest(root)["gt_checked"] is True
+        gt = root / "gt" / row["session"] / (row["frame_id"] + ".csv")
+        original = gt.read_text(encoding="utf-8")
+        gt.write_text(original.replace("11,21", "13,21"), encoding="utf-8")
+        rejected(lambda: load_manifest(root))
+        gt.write_text(original.replace("bolt", "nut"), encoding="utf-8")
+        rejected(lambda: load_manifest(root))
+        gt.write_text("obj_id,class,x0,y0,x1,y1\nobj01,bolt,10,20\n", encoding="utf-8")
+        rejected(lambda: load_manifest(root))
+        gt.write_text("obj_id,class,notes,x0,y0,x1,y1\n", encoding="utf-8")
+        rejected(lambda: load_manifest(root))
+        gt.write_text(original, encoding="utf-8")
+        gt.unlink()
+        rejected(lambda: load_manifest(root))
+        fixture(root, [row])
+        extra = root / "gt" / row["session"] / "frame_00009.csv"
+        extra.write_text(original, encoding="utf-8")
+        rejected(lambda: load_manifest(root))
+        extra.unlink()
+        (root / "gt").rename(root / "gt-moved")
+        assert load_manifest(root)["gt_checked"] is False
+    print("PASS: per-frame GT cross-check, tamper/missing/extra rejection, gt-absent flag")
+
+
 def main():
     row = sample()
     assert validate_row(row)["bbox"] == [10, 20, 11, 21]
+    assert validate_row({**row, "orientation": "tilted"})["orientation"] == "tilted"
     empty = {**row, "split": "test", "obj_id": "", "class": "", "specimen_id": "",
              **dict.fromkeys(("x0", "y0", "x1", "y1"), "")}
     assert validate_row(empty) is None
     for key, value in (("session", "../escape"), ("frame_id", "../../other"), ("split", "validation"),
                        ("class", "pin"), ("x0", "-1"), ("x1", "10"), ("y1", "721"),
-                       ("x1", "11.0"), ("light", "L4"), ("extra", "field"), ("x0", None)):
+                       ("x1", "11.0"), ("light", "L4"), ("extra", "field"), ("x0", None),
+                       ("orientation", "sideways"), ("orientation", "face_up")):
         rejected(lambda: validate_row({**row, key: value}))
     rejected(lambda: validate_row(None))
     rejected(lambda: validate_row({**empty, "split": "train"}))
     rejected(lambda: validate_row({**empty, "obj_id": "obj01"}))
+    rejected(lambda: validate_row({**empty, "orientation": "axial"}))
     print("PASS: collection rows, half-open boxes, explicit empty scenes and invalid fields")
 
 
 if __name__ == "__main__":
     main()
     check_frames()
+    check_gt()

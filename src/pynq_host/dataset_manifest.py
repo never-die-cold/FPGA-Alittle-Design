@@ -1,4 +1,4 @@
-"""Validate the proposed 720p collection manifest; labels remain human claims."""
+"""Validate the proposed 720p collection manifest and per-frame GT cross-check; labels remain human claims."""
 import csv
 import hashlib
 import io
@@ -9,9 +9,15 @@ import numpy as np
 
 CLASSES = ("bolt", "nut", "washer")
 REQUIRED = frozenset("frame_id session split light bg spacing obj_id class x0 y0 x1 y1".split())
-OPTIONAL = frozenset(("notes", "specimen_id"))
+OPTIONAL = frozenset(("notes", "specimen_id", "orientation"))
 BOX = ("x0", "y0", "x1", "y1")
 IDENTITY = r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}"
+# 朝向受控词表（采集规程 §4.1 的可执行化）；空 = 未标注（计入 missing，不拒绝）
+ORIENTATIONS = {"bolt": ("axial", "tilted", "head_up"),
+                "nut": ("face_up", "face_tilted"), "washer": ("face_up", "face_tilted")}
+ORIENTATION_COMBOS = tuple(f"{name}/{token}" for name, tokens in ORIENTATIONS.items()
+                           for token in tokens)
+GT_HEADER = ("obj_id", "class", "x0", "y0", "x1", "y1")
 
 
 def validate_row(row):
@@ -25,7 +31,8 @@ def validate_row(row):
             or row["bg"] not in ("dark", "gray", "wood") or not row["spacing"]):
         raise ValueError("invalid manifest identity or conditions")
     if not row["class"]:
-        if any(row[name] for name in ("obj_id", *BOX)) or row.get("specimen_id", ""):
+        if (any(row[name] for name in ("obj_id", *BOX)) or row.get("specimen_id", "")
+                or row.get("orientation", "")):
             raise ValueError("empty frame must not contain a target")
         if row["split"] != "test":
             raise ValueError("empty collection frames belong to test")
@@ -38,8 +45,11 @@ def validate_row(row):
     x0, y0, x1, y1 = (int(row[name]) for name in BOX)
     if not (0 <= x0 < x1 <= 1280 and 0 <= y0 < y1 <= 720):
         raise ValueError("target outside half-open 720p bounds")
+    orientation = row.get("orientation", "")
+    if orientation and orientation not in ORIENTATIONS[row["class"]]:
+        raise ValueError("invalid target orientation")
     return {"obj_id": row["obj_id"], "class": row["class"], "bbox": [x0, y0, x1, y1],
-            "specimen_id": specimen}
+            "specimen_id": specimen, "orientation": orientation}
 
 
 def contained(root, relative):
@@ -47,6 +57,31 @@ def contained(root, relative):
     if not path.is_relative_to(root):
         raise ValueError("collection file escapes dataset root")
     return path
+
+
+def load_gt(root, relative):
+    """读取逐帧 GT CSV（obj_id,class,x0,y0,x1,y1，半开区间）；行按 (id,class,x0,y0,x1,y1) 排序返回。"""
+    path = contained(root, relative)
+    if not path.is_file():
+        raise ValueError(f"missing GT file: {relative}")
+    reader = csv.reader(io.StringIO(path.read_bytes().decode("utf-8-sig"), newline=""))
+    header = tuple(next(reader, ()))
+    if header != GT_HEADER:
+        raise ValueError(f"invalid GT header: {relative}")
+    rows = []
+    for index, row in enumerate(reader, start=2):
+        if len(row) != 6 or any(not cell for cell in row):
+            raise ValueError(f"invalid GT row {index}: {relative}")
+        identity, label = row[0], row[1]
+        if not re.fullmatch(IDENTITY, identity) or label not in CLASSES:
+            raise ValueError(f"invalid GT identity/class row {index}: {relative}")
+        if any(not re.fullmatch(r"[0-9]+", cell) for cell in row[2:]):
+            raise ValueError(f"invalid GT coordinates row {index}: {relative}")
+        x0, y0, x1, y1 = (int(cell) for cell in row[2:])
+        if not (0 <= x0 < x1 <= 1280 and 0 <= y0 < y1 <= 720):
+            raise ValueError(f"GT target outside half-open 720p bounds row {index}: {relative}")
+        rows.append((identity, label, x0, y0, x1, y1))
+    return sorted(rows)
 
 
 def load_manifest(root, max_targets=10):
@@ -99,5 +134,19 @@ def load_manifest(root, max_targets=10):
               if path.is_file() and path.suffix.lower() == ".png"}
     if actual != listed:
         raise ValueError("unlisted raw PNG frames")
+    gt_checked, gt_dir = False, root / "gt"
+    if gt_dir.is_dir():
+        gt_checked = True
+        expected_gt = set()
+        for key, frame in frames.items():
+            relative = f"gt/{key[0]}/{key[1]}.csv"
+            expected_gt.add(contained(root, relative))
+            manifest_rows = sorted((t["obj_id"], t["class"], *t["bbox"]) for t in frame["targets"])
+            if load_gt(root, relative) != manifest_rows:
+                raise ValueError(f"manifest/GT mismatch: {key[0]}/{key[1]}")
+        listed_gt = {path.resolve() for path in gt_dir.rglob("*")
+                     if path.is_file() and path.suffix.lower() == ".csv"}
+        if listed_gt != expected_gt:
+            raise ValueError("unlisted or missing GT files")
     return {"manifest_sha256": hashlib.sha256(raw).hexdigest(), "max_targets": max_targets,
-            "frames": [frames[key] for key in sorted(frames)]}
+            "gt_checked": gt_checked, "frames": [frames[key] for key in sorted(frames)]}
