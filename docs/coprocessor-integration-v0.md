@@ -292,3 +292,26 @@ major 变化表示不兼容的寄存器/二进制布局变化；minor 只允许�
 
 上表各行的“推荐”项均已成为 v0 实现基线；备选只作取舍记录。不改变既有
 decode/ISA 语义，且实现必须验证 busy/done/error/timeout/reset，是不得静默改动的硬边界。
+
+## 13. WC（PS 侧）对接注记（2026-10-13，实现前预备）
+
+现状：控制面 RTL（`cop_ctrl_regs`/`cop_top`/`dma_ctrl`）与 PS 驱动均未交付；本节钉住 WC 侧接入面
+与 J08 交付要求，**不改变本契约任何冻结项**。
+
+**WC 规划的适配形状**（经 `vision_live_service` 引擎接口）：capture → PS 定位/ROI
+（scene-gray-border-padding-v1）→ INT8 输入与权重包搬运 → AXI4-Lite 提交 config（§5 步 1–2：
+shadow+`CFG_SEQ`→`CFG_COMMIT`）→ 轮询 `CFG_APPLIED==CFG_SEQ && READY` →（`START` 由 RISC-V 固件
+按 §3.2 独占写入，PS 不抢控制）→ 轮询 `DONE/ERROR/TIMEOUT`（§4.2 sticky + W1C）→ `RESULT_SEQ`
+原子读结果窗（§4 结果索引 + §6.2 目标描述/16 B 结果）→ 与同一轮 bbox 合并 → 按 `FW_DECISION`
+复算校验后产出 v1.2 `decision`（§8；与 `inspection_rules.judge` 对拍）。硬件路径 `prototype=false`；
+离线产物代理仍须 true（§7）。
+
+**J08 软件/驱动包需要提供**（请写进交付清单）：驱动入口与寄存器映射版本（对应 `VERSION`）；
+权重包字节布局与 `WEIGHT_CRC32` 口径（对齐 C02）；DMA 描述符/背压约定的可执行样例；
+错误恢复序列（W1C/ABORT/SOFT_RESET 的可复现故障注入）与固件轮询节奏、`FW_DECISION` 关联语义。
+节拍边界：PS 不写 `START`；"一次触发一轮"以固件对 `CFG_APPLIED` 的响应为准。
+
+**WC 离板替身验收（W04 条款：超时、背压/错误、复位与配置回执）**：以镜像 §4 语义的 fake 寄存器
+模型（busy 拒 commit、sticky 错误 W1C、`RESULT_SEQ` 最后提交、watchdog 超时、SLVERR 注入）驱动
+适配器；断言配置回执、结果窗原子读、首错保留与恢复序列。**替身 PASS 不代表硬件接入**——实机由
+NC 执行（§11.2）；适配器实现以 J04 的 `cop_ctrl_regs` 首次可用为门，全量对拍以 J08 首包为门。
