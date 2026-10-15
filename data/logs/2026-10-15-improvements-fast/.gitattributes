@@ -1,0 +1,4 @@
+# Preserve raw evidence and exact snapshots on Windows.
+* -text -whitespace
+*.md text eol=lf whitespace
+inputs/** -text -whitespace

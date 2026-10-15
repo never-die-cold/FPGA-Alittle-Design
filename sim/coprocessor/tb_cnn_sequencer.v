@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 module tb_cnn_sequencer;
-    reg clk=0,rst_n=0,ce=1,start=0;
+    reg clk=0,rst_n=0,ce=1,start=0,force_pause=0;
     reg [7:0] min_margin;
     reg [31:0] cycle_limit=2000000;
     wire ready,busy,done,error,low_conf;
@@ -24,12 +24,12 @@ module tb_cnn_sequencer;
     reg [5:0] shifts [0:159];
     reg [63:0] golden [0:16392];
     reg visited [0:16392];
-    integer written=0,reads=0,weight_reads=0,tb_cycles=0,fault=0;
+    integer written=0,reads=0,weight_reads=0,parameter_reads=0,tb_cycles=0,fault=0;
     integer lane,index,position,fd,fields,cls_expected,margin_expected,score_expected,low_expected,threshold;
     integer found,faults;
     reg [4095:0] model_folder,folder,filename;
     always #5 clk=~clk;
-    always @(negedge clk) begin tb_cycles=tb_cycles+1; ce=(tb_cycles%7)!=3; end
+    always @(negedge clk) begin tb_cycles=tb_cycles+1; ce=!force_pause && (tb_cycles%7)!=3; end
     cnn_sequencer dut (.clk(clk),.rst_n(rst_n),.ce(ce),.start(start),.min_margin(min_margin),
         .cycle_limit(cycle_limit),.ready(ready),.busy(busy),.done(done),.error(error),.error_layer(error_layer),
         .cycles(cycles),.result_class(classification),.result_margin(margin),.result_score(score),
@@ -55,6 +55,7 @@ module tb_cnn_sequencer;
                 if(weight_address>=269) $fatal(1); weight_data<=weights[weight_address]; weight_reads=weight_reads+1;
             end
             if(parameter_enable) begin
+                parameter_reads=parameter_reads+1;
                 if(parameter_address+15>=160) $fatal(1);
                 for(lane=0;lane<16;lane=lane+1) begin
                     bias_data[lane*32 +: 32]<=biases[parameter_address+lane];
@@ -82,7 +83,7 @@ module tb_cnn_sequencer;
     end
     task launch;
         begin
-            written=0; reads=0; weight_reads=0;
+            written=0; reads=0; weight_reads=0; parameter_reads=0;
             for(index=0;index<=16392;index=index+1) visited[index]=0;
             @(negedge clk); #1; while(!ready) begin @(negedge clk); #1; end
             start=1; @(posedge clk); #1; start=0;
@@ -94,13 +95,33 @@ module tb_cnn_sequencer;
             while(busy) begin @(posedge clk); #1; end
             if(error!==expect_error || done!==!expect_error) $fatal(1);
             if(!expect_error) begin
-                if(written!=9225 || reads!=103432 || weight_reads!=101384
+                if(written!=9225 || reads!=103432 || weight_reads!=101384 || parameter_reads!=10
                     || logits!==golden[16392][23:0] || classification!==cls_expected[1:0]
                     || margin!==margin_expected[7:0] || score!==score_expected[14:0] || low_conf!==low_expected[0]) begin
                     $display("FAIL: final network writes=%0d reads=%0d weight_reads=%0d class=%0d margin=%0d logits=%h",
                         written,reads,weight_reads,classification,margin,logits); $fatal(1);
                 end
             end
+        end
+    endtask
+    task check_watchdog;
+        integer budget, paused, elapsed;
+        begin
+            for(paused=0;paused<2;paused=paused+1)
+            for(budget=0;budget<=40;budget=budget+1) begin
+                cycle_limit=budget; launch; force_pause=paused; cycle_limit=0; elapsed=0;
+                while(busy) begin
+                    if(cycles==budget-1 && (memory_enable || weight_enable || parameter_enable || write_enable)) $fatal(1);
+                    @(posedge clk); #1; elapsed=elapsed+1;
+                end
+                if(error!==1'b1 || done || elapsed!=budget || cycles!==budget || written
+                    || (budget!=0 && error_layer!=7) || (paused && (reads || weight_reads))) begin
+                    $display("FAIL: network watchdog budget=%0d paused=%0d elapsed=%0d cycles=%0d",budget,paused,elapsed,cycles); $fatal(1);
+                end
+                force_pause=0;
+            end
+            cycle_limit=2000000;
+            $display("PASS: cnn_sequencer watchdog 82 exact-cycle cases; CE pause, latched budget and terminal strobes");
         end
     endtask
     initial begin
@@ -120,10 +141,13 @@ module tb_cnn_sequencer;
         $sformat(filename,"%0s/result.txt",folder); fd=$fopen(filename,"r"); if(!fd) $fatal(1);
         fields=$fscanf(fd,"%d %d %d %d %d\n",cls_expected,margin_expected,score_expected,low_expected,threshold);
         $fclose(fd); if(fields!=5) $fatal(1); min_margin=threshold;
-        repeat(3) @(negedge clk); rst_n=1; launch; finish_run(0);
+        repeat(3) @(negedge clk); rst_n=1;
+        if($test$plusargs("watchdog_only")) begin check_watchdog; $finish; end
+        launch; finish_run(0);
         $display("PASS: cnn_sequencer %0s all 9225 packed words/73795 elements match integer network; logits=%h class=%0d margin=%0d cycles=%0d",
             folder,logits,classification,margin,cycles);
         if(faults) begin
+            check_watchdog;
             fault=1; launch; finish_run(1); if(written || error_layer!=0) $fatal(1);
             fault=0; cycle_limit=2; launch; finish_run(1); if(written || error_layer!=7) $fatal(1); cycle_limit=2000000;
             launch; repeat(15) @(negedge clk); rst_n=0; #1;

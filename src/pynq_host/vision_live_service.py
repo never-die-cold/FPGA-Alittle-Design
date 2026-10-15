@@ -1,6 +1,8 @@
 """W05 正式检查服务骨架：HTTP 轮次/产物/幂等层 + 可插拔检查引擎（C04 §2.3）。
 
-与 vision_mock_service 的区别：真实引擎、每轮新捕获复制落盘、(session_id, check_id) 唯一定位产物。
+与 vision_mock_service 的区别：真实引擎、每轮新捕获、(session_id, check_id) 唯一定位产物。
+FILE 原型自动轮询在内存中检查并更新 latest_packet.json；手动触发保存完整产物。
+--archive-every-round 恢复逐轮归档。分类器复用，权重文件变化后须重启服务。
 - 引擎契约：engine(capture_path, round_dir, request_id) -> {status, targets, decision, width, height}；
   默认 file_engine（懒加载 inspection_run——cv2/numpy/torch 仅在真正服务时导入，
   本文件保持 stdlib 可测，接入 run_vision_python.sh）。
@@ -52,6 +54,16 @@ class FileCaptures:
         atomic_write(round_dir / "capture.png", raw)
         return round_dir / "capture.png"
 
+    def capture_frame(self):
+        import cv2
+        import numpy as np
+        raw = self.files[self.seq % len(self.files)].read_bytes()
+        self.seq = (self.seq + 1) & 0xFFFFFFFF
+        frame = cv2.imdecode(np.frombuffer(raw, dtype=np.uint8), cv2.IMREAD_COLOR)
+        if frame is None:
+            raise ValueError("capture is not a decodable color image")
+        return frame
+
 
 def complete_decision(decision, targets):
     """超限映射：actual/delta/missing/extra 为 None 时按报文内目标重算；verdict/reasons 不动。"""
@@ -71,13 +83,14 @@ def complete_decision(decision, targets):
 class State:
     """会话状态：check_id 单调回绕；每轮 = 新捕获 → 引擎 → 报文校验 → 产物原子落盘。"""
 
-    def __init__(self, root, captures, engine, order):
+    def __init__(self, root, captures, engine, order, archive_every_round=False):
         self.session_id = str(uuid.uuid4())
         self.config_id = 0
         self.check_id = 0
         self.captures = captures
         self.engine = engine
         self.order = dict(order)
+        self.archive_every_round = archive_every_round
         self.last_packet = None
         self.lock = threading.Lock()
         self.session_dir = Path(root) / self.session_id[:8]
@@ -92,9 +105,16 @@ class State:
             self.check_id = (self.check_id + 1) & 0xFFFFFFFF
             check = self.check_id
             round_dir = self.session_dir / f"check-{check:06d}"
-            round_dir.mkdir(exist_ok=False)
-            capture_path = self.captures.capture(round_dir)
-            fields = self.engine(capture_path, round_dir, f"chk{check:06d}")
+            memory_round = (trigger_ref is None and not self.archive_every_round
+                            and self.captures.prototype is True
+                            and hasattr(self.captures, "capture_frame")
+                            and hasattr(self.engine, "inspect_frame"))
+            if memory_round:
+                fields = self.engine.inspect_frame(self.captures.capture_frame())
+            else:
+                round_dir.mkdir(exist_ok=False)
+                capture_path = self.captures.capture(round_dir)
+                fields = self.engine(capture_path, round_dir, f"chk{check:06d}")
             packet = validate_packet({
                 "version": VERSION, "mode": "LIVE", "session_id": self.session_id,
                 "frame_id": self.captures.seq, "config_id": self.config_id,
@@ -104,29 +124,49 @@ class State:
                 "decision": complete_decision(fields["decision"], fields["targets"]),
                 "prototype": self.captures.prototype,
                 **({"trigger_ref": trigger_ref} if trigger_ref is not None else {})})
-            atomic_write(round_dir / "packet.json",
-                         json.dumps(packet, sort_keys=True).encode())
+            payload = json.dumps(packet, sort_keys=True).encode()
+            if not memory_round:
+                atomic_write(round_dir / "packet.json", payload)
+            atomic_write(self.session_dir / "latest_packet.json", payload)
             self.last_packet = packet
             return packet
 
 
 def file_engine(weights, order, min_score, max_targets):
-    """默认引擎：调 inspection_run.run（幂等、产物/哈希齐全）；产物落 round_dir/<request_id>/。"""
-    def run(capture_path, round_dir, request_id):
-        from inspection_run import run as inspect  # 重依赖（cv2/torch）仅真正服务时导入
-        result = inspect(source=capture_path, weights=weights, order=order, output=round_dir,
-                         request_id=request_id, min_score=min_score, max_targets=max_targets)
+    """Cached model; polling inspects memory, manual/diagnostic rounds archive provenance."""
+    cached = []
+    weight_path = Path(weights)
+    def classifier():
+        signature = (weight_path.stat().st_mtime_ns, weight_path.stat().st_size)
+        if not cached:
+            from inspection_model import PrototypeClassifier
+            cached.extend((PrototypeClassifier(weight_path), signature))
+        if signature != cached[1]:
+            raise ValueError("model file changed; restart service to load a new model")
+        return cached[0]
+    def fields(result):
         return {"status": result["decision"]["verdict"],
                 "targets": [{"target_id": t["target_id"], "bbox": t["bbox"],
                              "class": t.get("class"), "score": t.get("score")}
                             for t in result["targets"]],
-                "decision": result["decision"],
-                "width": result["width"], "height": result["height"]}
+                "decision": result["decision"], "width": result["width"], "height": result["height"]}
+    def run(capture_path, round_dir, request_id):
+        from inspection_run import run as inspect  # 重依赖（cv2/torch）仅真正服务时导入
+        result = inspect(source=capture_path, weights=weights, order=order, output=round_dir,
+                         request_id=request_id, min_score=min_score, max_targets=max_targets,
+                         classifier=classifier())
+        return fields(result)
+    def memory(frame):
+        from inspection_replay import inspect_frame
+        result, _ = inspect_frame(frame, classifier(), order, min_score, max_targets)
+        return fields(result)
+    run.inspect_frame = memory
     return run
 
 
-def make_server(host="127.0.0.1", port=8765, root=None, captures=None, engine=None, order=None):
-    state = State(root, captures, engine, order)
+def make_server(host="127.0.0.1", port=8765, root=None, captures=None, engine=None, order=None,
+                archive_every_round=False):
+    state = State(root, captures, engine, order, archive_every_round)
 
     class Handler(BaseHTTPRequestHandler):
         def reply(self, status, body):
@@ -193,6 +233,7 @@ if __name__ == "__main__":
     parser.add_argument("--order", type=int, nargs=3, required=True, metavar=("BOLT", "NUT", "WASHER"))
     parser.add_argument("--min-score", type=float, required=True)
     parser.add_argument("--max-targets", type=int, default=16)
+    parser.add_argument("--archive-every-round", action="store_true", help="archive automatic rounds as well as manual checks")
     args = parser.parse_args()
     order = dict(zip(CLASSES, args.order))
     captures = FileCaptures(args.capture_dir)
@@ -200,4 +241,5 @@ if __name__ == "__main__":
     print(f"LIVE SERVICE (backend={captures.backend}, prototype={captures.prototype}): "
           f"http://{args.host}:{args.port}/v1/status", flush=True)
     make_server(host=args.host, port=args.port, root=args.root,
-                captures=captures, engine=engine, order=order).serve_forever()
+                captures=captures, engine=engine, order=order,
+                archive_every_round=args.archive_every_round).serve_forever()

@@ -20,6 +20,10 @@ run_convolution() {
     iverilog -g2001 -Wall -s tb_conv_engine -o "$BUILD/conv_engine.vvp" \
         "$ROOT/sim/coprocessor/tb_conv_engine.v" "$ROOT"/src/coprocessor/*.v
     while IFS= read -r name; do
+        if [ "${1:-}" = watchdog ]; then
+            vision_run_checked "$BUILD/watchdog_conv.log" vvp "$BUILD/conv_engine.vvp" "+case=$dir/$name" +watchdog_only
+            break
+        fi
         if [ "$name" = padding_tail ]; then
             vision_run_checked "$BUILD/conv_$name.log" vvp "$BUILD/conv_engine.vvp" "+case=$dir/$name" +fault_tests
         else
@@ -33,6 +37,10 @@ run_network() {
     iverilog -g2001 -Wall -s tb_cnn_sequencer -o "$BUILD/cnn_sequencer.vvp" \
         "$ROOT/sim/coprocessor/tb_cnn_sequencer.v" "$ROOT"/src/coprocessor/*.v
     while IFS= read -r name; do
+        if [ "${1:-}" = watchdog ]; then
+            vision_run_checked "$BUILD/watchdog_network.log" vvp "$BUILD/cnn_sequencer.vvp" "+model=$dir" "+case=$dir/$name" +watchdog_only
+            break
+        fi
         if [ "$name" = pattern ]; then
             vision_run_checked "$BUILD/network_$name.log" vvp "$BUILD/cnn_sequencer.vvp" "+model=$dir" "+case=$dir/$name" +fault_tests
         else
@@ -48,7 +56,8 @@ case "${1:-all}" in
     logits) run_test int8_logits ;;
     conv) run_convolution ;;
     network) run_network ;;
+    watchdog) run_convolution watchdog; run_network watchdog ;;
     pipeline) run_test mac_array_pipeline; run_test int8_requant_pipeline ;;
     all) run_test int8_mac; run_test mac_array; run_test int8_requant; run_test int8_gap; run_test int8_logits; run_test mac_array_pipeline; run_test int8_requant_pipeline; run_convolution; run_network ;;
-    *) echo 'usage: run_coprocessor_iverilog.sh [mac|array|requant|gap|logits|pipeline|conv|network|all]'; exit 2 ;;
+    *) echo 'usage: run_coprocessor_iverilog.sh [mac|array|requant|gap|logits|pipeline|conv|network|watchdog|all]'; exit 2 ;;
 esac

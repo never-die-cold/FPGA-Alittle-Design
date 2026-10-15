@@ -1,0 +1,26 @@
+[
+  {
+    "path": "src/coprocessor/conv_engine.v",
+    "sha256": "eb94d587e217a7779f865ff757ccb0d70fd96addf279843fc61e9301872b23db"
+  },
+  {
+    "path": "src/coprocessor/cnn_sequencer.v",
+    "sha256": "6d33b0a139d07a14af6e8d613c3ab758da818aba0915166c8b472e2c14f58c3e"
+  },
+  {
+    "path": "sim/coprocessor/tb_conv_engine.v",
+    "sha256": "821df6f99176431b2d2277bd63fcf530b2d8547706dac1edf76809f2df27e4a0"
+  },
+  {
+    "path": "sim/coprocessor/tb_cnn_sequencer.v",
+    "sha256": "84acb5d20eaf653efbb9f32720d1fff583d28c9833fadc391e0a1f1ef70fe25a"
+  },
+  {
+    "path": "sim/scripts/run_coprocessor_iverilog.sh",
+    "sha256": "936c52d5e455dd0be06a351cc7ebcc72ab1e515cbc28ee644941606d6b97f0de"
+  },
+  {
+    "path": "sim/scripts/run_iverilog.sh",
+    "sha256": "2b6071ad44c26827e17f89992be2b3a3c02dcc3f18c0291dac8d1c515ac9d387"
+  }
+]

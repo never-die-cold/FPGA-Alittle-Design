@@ -16,7 +16,7 @@ from pathlib import Path
 
 root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(root / "src/pynq_host"))
-from vision_live_service import FileCaptures, make_server
+from vision_live_service import FileCaptures, State, make_server
 from vision_protocol import validate_packet
 
 
@@ -127,6 +127,38 @@ def main():
         server.shutdown()
         server.server_close()
     print("PASS: live service rounds/artifacts/idempotent-latest/config/over-limit-mapping/400-404")
+    class MemoryCaptures(FileCaptures):
+        def capture_frame(self):
+            self.seq += 1
+            return b"frame-in-memory"
+    counter = [0]
+    engine = stub_engine(counter)
+    def memory(frame):
+        assert frame == b"frame-in-memory"
+        # Reuse the stub's decision generator without any image or capture write.
+        scratch = out / "memory-engine"
+        scratch.mkdir(exist_ok=True)
+        return engine(None, scratch, "memory")
+    engine.inspect_frame = memory
+    state = State(out, MemoryCaptures(captures_dir), engine, {"bolt": 2, "nut": 2, "washer": 2})
+    first = state.check(None)
+    assert not list(state.session_dir.glob("check-*"))
+    assert json.loads((state.session_dir / "latest_packet.json").read_text()) == first
+    manual = state.check("manual-archive")
+    assert manual["trigger_ref"] == "manual-archive"
+    assert (state.session_dir / "check-000002/capture.png").exists()
+    state.check(None)
+    assert len(list(state.session_dir.glob("check-*"))) == 1
+    state = State(out, MemoryCaptures(captures_dir), engine, {"bolt": 2, "nut": 2, "washer": 2}, True)
+    state.check(None)
+    assert (state.session_dir / "check-000001/capture.png").exists()
+    # Future non-prototype backends retain C04 Q3 per-round capture evidence.
+    real_captures = MemoryCaptures(captures_dir)
+    real_captures.prototype = False
+    state = State(out, real_captures, engine, {"bolt": 2, "nut": 2, "washer": 2})
+    state.check(None)
+    assert (state.session_dir / "check-000001/capture.png").exists()
+    print("PASS: prototype memory polling; manual, diagnostic and non-prototype rounds retain archives")
 
 
 if __name__ == "__main__":

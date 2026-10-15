@@ -1,0 +1,228 @@
+{
+  "base": "891cba26bc294f157227e7dcd158d8ec81830f2e",
+  "files": [
+    {
+      "path": ".gitignore",
+      "bytes": 1323,
+      "sha256": "cc462a3f84c1152a7d0a7ff8c61c3480a8d389fa5f8b2b9a1db1c77489cb9eba"
+    },
+    {
+      "path": "src/coprocessor/README.md",
+      "bytes": 5038,
+      "sha256": "07455b5b4089921ad5689191bcb76205db3eaaebee78197d658b8744ec60c5dd"
+    },
+    {
+      "path": "src/coprocessor/design_v0.md",
+      "bytes": 16533,
+      "sha256": "f5ae39de8a46b038c84658bc2ad0768a2e4ac26abcf0eb9bd2a54338a85c9d86"
+    },
+    {
+      "path": "src/coprocessor/conv_engine.v",
+      "bytes": 11394,
+      "sha256": "dde0c5c41a6b9335dc8eb1b3fa3eaf6a703ad79e2c44d535d36ee55a0b71b6f9"
+    },
+    {
+      "path": "src/coprocessor/cnn_sequencer.v",
+      "bytes": 7904,
+      "sha256": "6d33b0a139d07a14af6e8d613c3ab758da818aba0915166c8b472e2c14f58c3e"
+    },
+    {
+      "path": "src/riscv/id_ex_stage.v",
+      "bytes": 3538,
+      "sha256": "9476305648d1b3c0daa27a6d64ec4fb068ab7a7e42f9d3a4aacabb96e3903391"
+    },
+    {
+      "path": "src/vision/cop_buf.v",
+      "bytes": 7458,
+      "sha256": "6fedcb1313638d63722c72eb2aab862b704dd0ab34b6311a86f9741c511e67d0"
+    },
+    {
+      "path": "src/pynq_host/c01_park_capture.py",
+      "bytes": 5933,
+      "sha256": "ee424fc537941b75daf42c801841f25805b29a8f62184d180c6a5d12f6337be6"
+    },
+    {
+      "path": "src/pynq_host/c01_capture.py",
+      "bytes": 9515,
+      "sha256": "1f11aefdc11805387b0c345583828fd733e5e38b0b0e043b0510808f648e8430"
+    },
+    {
+      "path": "src/pynq_host/inspection_run.py",
+      "bytes": 4686,
+      "sha256": "a7cc77692e05b147be3c8250e113dd30f6820d3264e0ceeba62677568b7d3901"
+    },
+    {
+      "path": "src/pynq_host/vision_live_service.py",
+      "bytes": 12228,
+      "sha256": "8c163ccab3fcd73310615c37c637658904111b05bca2cd424fde8e9fc19fc8d1"
+    },
+    {
+      "path": "src/vision_client/rounds.py",
+      "bytes": 10660,
+      "sha256": "6563679a04b4b65f5f83a3308fd1746d961ba1e8ec2344f4ca77bedf846829f4"
+    },
+    {
+      "path": "src/vision_client/preview.py",
+      "bytes": 13975,
+      "sha256": "0c90b0e9ea91e3e6e3581a1b01bd386cc36246d84ed9175605e42393ca535872"
+    },
+    {
+      "path": "sim/coprocessor/tb_conv_engine.v",
+      "bytes": 9447,
+      "sha256": "9dc20300655bd256004dc4eb094bd0bf226301f129992a8948152cb890bc9749"
+    },
+    {
+      "path": "sim/coprocessor/tb_cnn_sequencer.v",
+      "bytes": 9541,
+      "sha256": "133ff0aa009449a409983d33af5afdfb17ec42f0daf112b51b1f708d808f28cc"
+    },
+    {
+      "path": "sim/riscv/tb_id_ex_stage.v",
+      "bytes": 5219,
+      "sha256": "d7156c0b477c547806aa6c6dc841687e8139ffd538968efc0d07d3c5081fd0eb"
+    },
+    {
+      "path": "sim/vision/tb_cop_buf_stress.v",
+      "bytes": 3426,
+      "sha256": "9901e951c0b40285a143dc10ba120582fd6407a944a8bc41023f75bcba2cc8e8"
+    },
+    {
+      "path": "sim/vision/localization_opencv.py",
+      "bytes": 3525,
+      "sha256": "b40a46178f5c7b8c2ee0ef4916e840e02c263fef89310b576aeb34a0acdc2965"
+    },
+    {
+      "path": "sim/vision/test_localize.py",
+      "bytes": 3189,
+      "sha256": "cd4616319af5e07be40be2c556f1503d664f684ae20f81b7e708fdcff1e5d022"
+    },
+    {
+      "path": "sim/vision/test_vision_rounds.py",
+      "bytes": 6558,
+      "sha256": "de9b795b1edea86bda2a8830076b98adabbb2330aca9ec56e685a50f8ba379e8"
+    },
+    {
+      "path": "sim/vision/test_vision_live_service.py",
+      "bytes": 8573,
+      "sha256": "121766f1cde2990822be3fff772d72d5a621e849cced7d0cc5dc3a6498beb6e1"
+    },
+    {
+      "path": "sim/vision/test_service_engine.py",
+      "bytes": 5367,
+      "sha256": "4714370334da607b95ce43946dce066f690c5a36f38e0d02cbea50a5d34e04cc"
+    },
+    {
+      "path": "sim/vision/test_c01_park_capture.py",
+      "bytes": 5249,
+      "sha256": "440f16a2c161bc0b3d0e50ce5b37df7c420d8cc4c248bc28bfab28e24165e853"
+    },
+    {
+      "path": "sim/scripts/run_iverilog.sh",
+      "bytes": 10528,
+      "sha256": "2b6071ad44c26827e17f89992be2b3a3c02dcc3f18c0291dac8d1c515ac9d387"
+    },
+    {
+      "path": "sim/scripts/run_coprocessor_iverilog.sh",
+      "bytes": 3096,
+      "sha256": "936c52d5e455dd0be06a351cc7ebcc72ab1e515cbc28ee644941606d6b97f0de"
+    },
+    {
+      "path": "sim/scripts/run_vision_iverilog.sh",
+      "bytes": 4084,
+      "sha256": "beeb93c52e4486999093418e50960e09c338ef60fe8b8a00ff8d1c794e7fd9fc"
+    },
+    {
+      "path": "sim/scripts/run_vision_python.sh",
+      "bytes": 877,
+      "sha256": "27cf6a79a099b3e3fb63f33ce683082531e02040fe9a15b296a0fddcc214dcd1"
+    },
+    {
+      "path": "sim/scripts/run_inspection_python.sh",
+      "bytes": 617,
+      "sha256": "a8f7becc2aabcc5b244cf12bcef3b8c77266b811e04016edd6b140a16a945ece"
+    },
+    {
+      "path": "sim/scripts/c01_ddr_onboard.py",
+      "bytes": 5960,
+      "sha256": "54dd5d64cb251bccfeb1176681a50ef7994852238e7d3917dfc72b6477fa0e82"
+    },
+    {
+      "path": "sim/scripts/synth_coprocessor_ooc.tcl",
+      "bytes": 2312,
+      "sha256": "e458602d3c29d3e6c3f16b217cdd287ddc170f20a94144d6814df119cac6df61"
+    },
+    {
+      "path": "sim/scripts/run_cnn_ooc.ps1",
+      "bytes": 1700,
+      "sha256": "5c43748de24ade3f8bd9d16acaed7b350d9690d1a0def62ef2e1103c9a6a38ca"
+    },
+    {
+      "path": "docs/c01-ddr-frame-ownership-v0.md",
+      "bytes": 8430,
+      "sha256": "9bbfefd2dc22cfd8c4c8f490c348cef07f7f0113f94393c1a7e28309c1336ea8"
+    },
+    {
+      "path": "src/pynq_host/README.md",
+      "bytes": 6336,
+      "sha256": "e9c90c029700612ee33a78df30083c949b32c02db2804e26553d4b8ce78554c0"
+    },
+    {
+      "path": "src/vision_client/README.md",
+      "bytes": 8785,
+      "sha256": "4e9e026dafa1ff3f14b0cbce08d8ea74c74ebf41d0afa5083b174fc7d245d326"
+    },
+    {
+      "path": "src/riscv/plan.md",
+      "bytes": 17172,
+      "sha256": "b48720587e1d80fce403556afbf81107a9d6adad77a8b41e4a6976a15999820d"
+    },
+    {
+      "path": "docs/vision-live-semantics.md",
+      "bytes": 13584,
+      "sha256": "661d36430643ea85a13dd38b0e32a502300e5140772dd62cb96a0de14dff6e25"
+    },
+    {
+      "path": "sim/scripts/build_vision_client.ps1",
+      "bytes": 1887,
+      "sha256": "0d5c980cd5de2d3b7efa353d8f9eb49d30d6609d74c0e7401290cdb088f790f9"
+    },
+    {
+      "path": "sim/vision/test_vision_client.py",
+      "bytes": 3710,
+      "sha256": "8570a34fc9046aa41e7d8d1ecca309c445762ca52423ba5e32bee1c5ac7bacf3"
+    },
+    {
+      "path": "sim/vision/test_vision_service_e2e.py",
+      "bytes": 4380,
+      "sha256": "0b88e6e064d2d5a58fb2751e731aa60963f597557007ea89c07951ce983160a5"
+    },
+    {
+      "path": "sim/vision/test_inspection_viewer.py",
+      "bytes": 3080,
+      "sha256": "3de7221ddfcbc7ed60d3cc582cbb07fa389289cf209ea9e4d458da96199e8986"
+    },
+    {
+      "path": "src/vision_client/requirements.txt",
+      "bytes": 198,
+      "sha256": "39d14f7e4bdef282edb7231606a26a86d69730af12f5d93ee23baea14e28878e"
+    },
+    {
+      "path": "sim/vision/test_c01_capture.py",
+      "bytes": 10123,
+      "sha256": "f2804d9861d37a9d190c1b81aad85b03134d50c6d90bebb46aa0072f42f58142",
+      "role": "parallel_session_dependency"
+    },
+    {
+      "path": "sim/vision/test_c01_capture_ordering.py",
+      "bytes": 2445,
+      "sha256": "1dc20be372b0c5c992106365c9b63a1bd04efcc71eb52756e7cd2043a880d9ea",
+      "role": "parallel_session_dependency"
+    },
+    {
+      "path": "sim/vision/test_c01_ddr_onboard.py",
+      "bytes": 12445,
+      "sha256": "c37c613ee77e39f2730d3b4d9c96f6e780643c27857fc11c7dcab2abb8a5e615",
+      "role": "parallel_session_dependency"
+    }
+  ]
+}

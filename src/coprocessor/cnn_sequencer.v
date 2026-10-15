@@ -30,7 +30,7 @@ module cnn_sequencer (
 );
     localparam IDLE=0, LAYER_START=1, LAYER_WAIT=2, GAP_REQ=3, GAP_USE=4, GAP_WRITE=5, RESULT=6;
     reg [2:0] state, layer;
-    reg [31:0] limit;
+    reg [31:0] limit, limit_last;
     reg [7:0] margin_threshold;
     reg [10:0] gap_index;
     reg [255:0] gap_sums;
@@ -52,7 +52,7 @@ module cnn_sequencer (
     wire [7:0] gap_errors;
     wire permitted;
     assign ready=ce && !busy;
-    assign permitted=rst_n && busy && cycles < limit-1;
+    assign permitted=rst_n && busy && cycles < limit_last;
     always @* begin
         ci=1; co=16; h=64; w=64; kernel=3; stride=2; padding=1;
         in_bank=0; out_bank=2; weight_base=0; param_base=0;
@@ -94,16 +94,17 @@ module cnn_sequencer (
     always @(posedge clk or negedge rst_n) begin
         if(!rst_n) begin
             state<=IDLE; layer<=0; busy<=0; done<=0; error<=0; cycles<=0; error_layer<=0;
-            limit<=0; margin_threshold<=0; gap_index<=0; gap_sums<=0; logits<=0;
+            limit<=0; limit_last<=0; margin_threshold<=0; gap_index<=0; gap_sums<=0; logits<=0;
             result_class<=3; result_margin<=0; result_score<=0; result_low_conf<=1; result_logits<=0;
         end else begin
             if(busy) cycles<=cycles+1;
-            if(busy && cycles>=limit-1) begin busy<=0; done<=0; error<=1; error_layer<=7; state<=IDLE; end
+            if(busy && cycles>=limit_last) begin busy<=0; done<=0; error<=1; error_layer<=7; state<=IDLE; end
             else if(ce) case(state)
                 IDLE: if(start) begin
                     done<=0; error<=0; cycles<=0; layer<=0; error_layer<=0; logits<=0;
                     result_class<=3; result_margin<=0; result_score<=0; result_low_conf<=1; result_logits<=0;
                     margin_threshold<=min_margin; limit<=cycle_limit;
+                    limit_last<=cycle_limit-32'd1;
                     if(cycle_limit==0) error<=1;
                     else begin busy<=1; state<=LAYER_START; end
                 end

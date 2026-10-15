@@ -1,0 +1,9 @@
+test_active_errors_never_masked (__main__.Tests.test_active_errors_never_masked) ... ok
+test_persistent_halt_errors_and_slow_copy (__main__.Tests.test_persistent_halt_errors_and_slow_copy) ... ok
+test_unknown_owner_quarantines (__main__.Tests.test_unknown_owner_quarantines) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.020s
+
+OK
+PASS: park candidate halted sticky errors, slow copy, active faults, ownership and cleanup

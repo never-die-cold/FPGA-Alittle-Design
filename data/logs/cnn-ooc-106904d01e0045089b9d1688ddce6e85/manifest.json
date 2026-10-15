@@ -1,0 +1,75 @@
+{
+  "git_base": "891cba26bc294f157227e7dcd158d8ec81830f2e",
+  "clock_ns": 10,
+  "kind": "CONTROLLER_ONLY_OOC_EXTERNAL_MEMORY_PORTS",
+  "files": [
+    {
+      "path": "src/coprocessor/cnn_sequencer.v",
+      "file": "cnn_sequencer.v",
+      "bytes": 7820,
+      "sha256": "8765e582907eb2061d8f665a1126473172ee154e70b9c3fd8e5144d1fb608b12"
+    },
+    {
+      "path": "src/coprocessor/conv_engine.v",
+      "file": "conv_engine.v",
+      "bytes": 9349,
+      "sha256": "f7fb387872613ca9df56ab63d23475d22de6b1b9a75403ab1adc1fbac12b9ac7"
+    },
+    {
+      "path": "src/coprocessor/int8_gap.v",
+      "file": "int8_gap.v",
+      "bytes": 376,
+      "sha256": "0de05f7c755c6be7b3a69fd4fb75b70ee83e379edfc096f6c3bd336759125dee"
+    },
+    {
+      "path": "src/coprocessor/int8_logits.v",
+      "file": "int8_logits.v",
+      "bytes": 1201,
+      "sha256": "3d8d167abd054a58c3871aec29dd14fd939668f9986bbeb2d896411965b93ad3"
+    },
+    {
+      "path": "src/coprocessor/int8_mac.v",
+      "file": "int8_mac.v",
+      "bytes": 649,
+      "sha256": "081f0e9451fbdacc2c11d4d4b3d2eccbcdd584631d5cb00cdc481f9f1863de92"
+    },
+    {
+      "path": "src/coprocessor/int8_requant_pipeline.v",
+      "file": "int8_requant_pipeline.v",
+      "bytes": 1456,
+      "sha256": "4c3831f63fb96e49fbaa4dda74ef8bed69a13a8de179feaaffcff9dbd338a2e3"
+    },
+    {
+      "path": "src/coprocessor/int8_requant.v",
+      "file": "int8_requant.v",
+      "bytes": 979,
+      "sha256": "09636bf08811eb048abb1136d43b757fa41a3dd7787b303979d6144c4b7a5069"
+    },
+    {
+      "path": "src/coprocessor/mac_array_pipeline.v",
+      "file": "mac_array_pipeline.v",
+      "bytes": 2012,
+      "sha256": "8cef4170d4100c8b56f5aa35d9b8d383e1e5d87d2036c14e19b5b21846c5c393"
+    },
+    {
+      "path": "src/coprocessor/mac_array.v",
+      "file": "mac_array.v",
+      "bytes": 1420,
+      "sha256": "8d51f13f6935a7564e81f45362277bab7425dba93ba632ca4d3b8c496544da8e"
+    },
+    {
+      "path": "sim/scripts/synth_coprocessor_ooc.tcl",
+      "file": "synth_coprocessor_ooc.tcl",
+      "bytes": 2295,
+      "sha256": "c821b34629164223f7cdf292b934937247593dad4f499695308805fd26048a7e"
+    },
+    {
+      "path": "sim/scripts/run_cnn_ooc.ps1",
+      "file": "run_cnn_ooc.ps1",
+      "bytes": 1700,
+      "sha256": "5c43748de24ade3f8bd9d16acaed7b350d9690d1a0def62ef2e1103c9a6a38ca"
+    }
+  ],
+  "part": "xc7z020clg400-1",
+  "uncommitted": true
+}

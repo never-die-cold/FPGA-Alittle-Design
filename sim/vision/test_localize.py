@@ -6,6 +6,17 @@ from reference import locate, crop_resize, prepare_targets
 
 
 def main():
+    import numpy as np
+    from localization_opencv import contrast_mask
+    lab = np.random.default_rng(20261015).integers(0, 256, (64, 96, 3), dtype=np.uint8)
+    thresholds = [-1, 0, 22, 22.5, 512, float("inf"), float("nan")]
+    for background in (np.array([.5, 127.5, 254.5]), np.array([0., 255., 127.])):
+        distance = np.linalg.norm(lab.astype(np.float32) - background, axis=2)
+        for value in distance.ravel()[::199]:
+            thresholds.extend((value, np.nextafter(value, -np.inf), np.nextafter(value, np.inf)))
+        for threshold in thresholds:
+            expected = (distance >= threshold).astype(np.uint8) * 255
+            np.testing.assert_array_equal(contrast_mask(lab, background, threshold), expected)
     image = [[240] * 32 for _ in range(24)]
     assert locate(image, 7, 3)["targets"] == []
     for y in range(3, 8):
@@ -44,7 +55,7 @@ def main():
         raise AssertionError("malformed image accepted")
     except ValueError:
         pass
-    print("PASS: localization empty/multiple/non-grid/noise/limit/border + per-target crop/resize/frame metadata")
+    print("PASS: localization exact integer distance/threshold parity, empty/multiple/noise/limit/border and ROI metadata")
 
 
 if __name__ == "__main__":

@@ -17,9 +17,13 @@ preview.py 只负责取帧与渲染；状态机抽离为纯 stdlib 模块（不�
   （板卡/EXE 时钟不同源）；同迭代"先取钟再请求"的负年龄不判超龄（2026-10-08 实机 flap 修复）。
 """
 import json
+import copy
+import queue
+import threading
 import time
 import urllib.error
 import urllib.request
+import uuid
 
 from vision_protocol import validate_packet
 
@@ -119,7 +123,8 @@ class RemoteRounds:
         self.manual_pending = False
         try:
             # 传空 JSON 对象：http_json 以"有无 body"区分 GET/POST，/v1/check 仅接受 POST。
-            packet = validate_packet(http_json(self.endpoint + "/v1/check", {}))
+            body = {"trigger_ref": uuid.uuid4().hex} if manual else {}
+            packet = validate_packet(http_json(self.endpoint + "/v1/check", body))
         except (urllib.error.URLError, OSError, ValueError) as error:
             self.fails += 1
             print(f"WARN: check failed ({self.fails}/{FAIL_LIMIT}): {error}", flush=True)
@@ -171,3 +176,70 @@ class RemoteRounds:
     def drain_events(self):
         events, self.events = self.events, []
         return events
+
+
+class AsyncRemoteRounds(RemoteRounds):
+    """GUI-owned snapshot; a single worker owns HTTP and its session state."""
+
+    SNAPSHOT_FIELDS = ("session", "mode", "hardware_connected", "expected_config", "fails",
+                       "packet", "received_at", "last_round_manual")
+
+    def __init__(self, endpoint, max_age):
+        super().__init__(endpoint, max_age)
+        self._network = RemoteRounds(endpoint, max_age)
+        self._results = queue.SimpleQueue()
+        self._in_flight = False
+        self._closed = False
+        self._thread = None
+
+    def _snapshot(self):
+        return ({key: copy.deepcopy(getattr(self._network, key)) for key in self.SNAPSHOT_FIELDS},
+                self._network.drain_events())
+
+    def _adopt(self, result):
+        fields, events = result
+        for key, value in fields.items():
+            setattr(self, key, value)
+        self.events.extend(events)
+
+    def handshake(self):
+        if self._in_flight:
+            raise RuntimeError("handshake while a request is in flight")
+        status = self._network.handshake()
+        self._adopt(self._snapshot())
+        self.last_trigger = 0.0
+        self.manual_pending = False
+        return status
+
+    def _request(self, now, manual):
+        self._network.manual_pending = manual
+        try:
+            self._network.poll(now, 0.0)
+        except Exception as error:
+            self._network.fails = FAIL_LIMIT
+            self._network.events.append({"kind": "poll_failed", "prev": None,
+                                         "check_id": None, "fails": FAIL_LIMIT,
+                                         "error": str(error)})
+        finally:
+            self._results.put(self._snapshot())
+
+    def poll(self, now, interval):
+        if self._closed:
+            return
+        try:
+            self._adopt(self._results.get_nowait())
+            self._in_flight = False
+        except queue.Empty:
+            pass
+        if self._in_flight or now - self.last_trigger < interval:
+            return
+        self.last_trigger = now
+        manual, self.manual_pending = self.manual_pending, False
+        self._in_flight = True
+        self._thread = threading.Thread(target=self._request, args=(now, manual), daemon=True)
+        self._thread.start()
+
+    def close(self, wait=False):
+        self._closed = True
+        if wait and self._thread is not None:
+            self._thread.join(REQUEST_TIMEOUT * 3 + 1)

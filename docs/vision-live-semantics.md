@@ -47,6 +47,9 @@
 ### 2.3 记录 ↔ 服务产物（W05 实现要求）
 
 - 服务端每轮产物必须可由 **(session_id, check_id) 唯一定位**：capture 原帧、逐目标 ROI、判定依据、结果 JSON（含哈希）；目录布局由 W05 定并写入服务 README（**Q3**）。
+- 2026-10-15 FILE 原型性能策略：自动轮询只保留最新报文，手动携 `trigger_ref` 或
+  `--archive-every-round` 才完整归档；未归档的自动轮次不作为检查快照/追溯证据。
+  此策略仅适用于 `prototype=true`，非原型后端保留上述逐轮 capture 要求；真实 LIVE 后端仍未实现。
 - EXE 记录（`records.jsonl`）引用：记录键 (session_id, check_id)（D9）+ 上下文截图；快照原帧属服务产物，EXE 按引用展示，不复制冒充自采。
   2026-10-14 NC确认Q3以本轮capture原帧为权威证据；真实LIVE快照读取/查看仍未实现，确认原则不代替功能验收。
 

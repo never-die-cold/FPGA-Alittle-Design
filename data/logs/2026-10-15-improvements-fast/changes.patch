@@ -1,0 +1,1549 @@
+diff --git a/.gitignore b/.gitignore
+index 7c4b330..971d36f 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -14,6 +14,8 @@ xsim.dir/
+ *.bit
+ webtalk*
+ clockInfo.txt
++/tight_setup_hold_pins.txt
++/retry_open_fs.log
+ 
+ # 注意：*.hex / *.coe（BRAM 预载、测试向量）需要入库，不要忽略
+ 
+diff --git a/docs/c01-ddr-frame-ownership-v0.md b/docs/c01-ddr-frame-ownership-v0.md
+index f6649d1..7f9048b 100644
+--- a/docs/c01-ddr-frame-ownership-v0.md
++++ b/docs/c01-ddr-frame-ownership-v0.md
+@@ -76,3 +76,16 @@ WC适配必须给出实际IP/驱动依据，证明：目标槽确实完成一整
+ 
+ WC给出实际完成/槽绑定/保护/屏障/cache依据与仓库替身入口，JL确认集成位流/地址/复位兼容，NC才能安排custom N03实测。
+ 随后再做真实工位定标/采集、同帧ROI与软件/硬件对拍。C01整体冻结及正式N03通过仍需这些证据。
++
++### 10/15 连续 Park 候选（仅离板验证）
++
++新增 `src/pynq_host/c01_park_capture.py`，板端脚本显式设置 `C01_CAPTURE_MODE=park` 才选择它；
++上传脚本时也须上传该模块。默认仍为原单帧驱动。候选先在槽 1 暖机，再切槽 0 等待新完成事件，
++随后回到槽 1，在通道运行且目标槽 0 受保护期间 invalidate/复制。它不依赖自动停机授权正常复制。
++只有暖机阶段在 RS=1 且未 Halted 时允许清理精确的历史 `0x4810`；捕获/复制阶段任何错误均拒绝，
++不能全局屏蔽 DMAIntErr，也不能把停机时持续重现的粘滞错误当成干净状态。
++
++`sim/vision/test_c01_park_capture.py` 经 `bash sim/scripts/run_vision_python.sh` 运行，覆盖 IRQ 先于槽变化、
++慢复制、错误/超时/失锁、描述符变化与未确认停止的缓冲隔离。替身只验证软件按假设执行，
++**尚未证明实际 IP 的 IRQ、槽索引、完整帧和写响应完成之间的绑定**。JL/WC 须先审该绑定和保护条件，
++NC 再用动态整帧标识、慢复制及原始寄存器日志验证；候选不得记为 C01/N03 板端验收通过。
+diff --git a/docs/vision-live-semantics.md b/docs/vision-live-semantics.md
+index 57114b2..d8e779c 100644
+--- a/docs/vision-live-semantics.md
++++ b/docs/vision-live-semantics.md
+@@ -47,6 +47,9 @@
+ ### 2.3 记录 ↔ 服务产物（W05 实现要求）
+ 
+ - 服务端每轮产物必须可由 **(session_id, check_id) 唯一定位**：capture 原帧、逐目标 ROI、判定依据、结果 JSON（含哈希）；目录布局由 W05 定并写入服务 README（**Q3**）。
++- 2026-10-15 FILE 原型性能策略：自动轮询只保留最新报文，手动携 `trigger_ref` 或
++  `--archive-every-round` 才完整归档；未归档的自动轮次不作为检查快照/追溯证据。
++  此策略仅适用于 `prototype=true`，非原型后端保留上述逐轮 capture 要求；真实 LIVE 后端仍未实现。
+ - EXE 记录（`records.jsonl`）引用：记录键 (session_id, check_id)（D9）+ 上下文截图；快照原帧属服务产物，EXE 按引用展示，不复制冒充自采。
+   2026-10-14 NC确认Q3以本轮capture原帧为权威证据；真实LIVE快照读取/查看仍未实现，确认原则不代替功能验收。
+ 
+diff --git a/sim/coprocessor/tb_cnn_sequencer.v b/sim/coprocessor/tb_cnn_sequencer.v
+index e02e80f..a4af6ea 100644
+--- a/sim/coprocessor/tb_cnn_sequencer.v
++++ b/sim/coprocessor/tb_cnn_sequencer.v
+@@ -1,6 +1,6 @@
+ `timescale 1ns/1ps
+ module tb_cnn_sequencer;
+-    reg clk=0,rst_n=0,ce=1,start=0;
++    reg clk=0,rst_n=0,ce=1,start=0,force_pause=0;
+     reg [7:0] min_margin;
+     reg [31:0] cycle_limit=2000000;
+     wire ready,busy,done,error,low_conf;
+@@ -24,12 +24,12 @@ module tb_cnn_sequencer;
+     reg [5:0] shifts [0:159];
+     reg [63:0] golden [0:16392];
+     reg visited [0:16392];
+-    integer written=0,reads=0,weight_reads=0,tb_cycles=0,fault=0;
++    integer written=0,reads=0,weight_reads=0,parameter_reads=0,tb_cycles=0,fault=0;
+     integer lane,index,position,fd,fields,cls_expected,margin_expected,score_expected,low_expected,threshold;
+     integer found,faults;
+     reg [4095:0] model_folder,folder,filename;
+     always #5 clk=~clk;
+-    always @(negedge clk) begin tb_cycles=tb_cycles+1; ce=(tb_cycles%7)!=3; end
++    always @(negedge clk) begin tb_cycles=tb_cycles+1; ce=!force_pause && (tb_cycles%7)!=3; end
+     cnn_sequencer dut (.clk(clk),.rst_n(rst_n),.ce(ce),.start(start),.min_margin(min_margin),
+         .cycle_limit(cycle_limit),.ready(ready),.busy(busy),.done(done),.error(error),.error_layer(error_layer),
+         .cycles(cycles),.result_class(classification),.result_margin(margin),.result_score(score),
+@@ -55,6 +55,7 @@ module tb_cnn_sequencer;
+                 if(weight_address>=269) $fatal(1); weight_data<=weights[weight_address]; weight_reads=weight_reads+1;
+             end
+             if(parameter_enable) begin
++                parameter_reads=parameter_reads+1;
+                 if(parameter_address+15>=160) $fatal(1);
+                 for(lane=0;lane<16;lane=lane+1) begin
+                     bias_data[lane*32 +: 32]<=biases[parameter_address+lane];
+@@ -82,7 +83,7 @@ module tb_cnn_sequencer;
+     end
+     task launch;
+         begin
+-            written=0; reads=0; weight_reads=0;
++            written=0; reads=0; weight_reads=0; parameter_reads=0;
+             for(index=0;index<=16392;index=index+1) visited[index]=0;
+             @(negedge clk); #1; while(!ready) begin @(negedge clk); #1; end
+             start=1; @(posedge clk); #1; start=0;
+@@ -94,7 +95,7 @@ module tb_cnn_sequencer;
+             while(busy) begin @(posedge clk); #1; end
+             if(error!==expect_error || done!==!expect_error) $fatal(1);
+             if(!expect_error) begin
+-                if(written!=9225 || reads!=103432 || weight_reads!=101384
++                if(written!=9225 || reads!=103432 || weight_reads!=101384 || parameter_reads!=10
+                     || logits!==golden[16392][23:0] || classification!==cls_expected[1:0]
+                     || margin!==margin_expected[7:0] || score!==score_expected[14:0] || low_conf!==low_expected[0]) begin
+                     $display("FAIL: final network writes=%0d reads=%0d weight_reads=%0d class=%0d margin=%0d logits=%h",
+@@ -103,6 +104,26 @@ module tb_cnn_sequencer;
+             end
+         end
+     endtask
++    task check_watchdog;
++        integer budget, paused, elapsed;
++        begin
++            for(paused=0;paused<2;paused=paused+1)
++            for(budget=0;budget<=40;budget=budget+1) begin
++                cycle_limit=budget; launch; force_pause=paused; cycle_limit=0; elapsed=0;
++                while(busy) begin
++                    if(cycles==budget-1 && (memory_enable || weight_enable || parameter_enable || write_enable)) $fatal(1);
++                    @(posedge clk); #1; elapsed=elapsed+1;
++                end
++                if(error!==1'b1 || done || elapsed!=budget || cycles!==budget || written
++                    || (budget!=0 && error_layer!=7) || (paused && (reads || weight_reads))) begin
++                    $display("FAIL: network watchdog budget=%0d paused=%0d elapsed=%0d cycles=%0d",budget,paused,elapsed,cycles); $fatal(1);
++                end
++                force_pause=0;
++            end
++            cycle_limit=2000000;
++            $display("PASS: cnn_sequencer watchdog 82 exact-cycle cases; CE pause, latched budget and terminal strobes");
++        end
++    endtask
+     initial begin
+         found=$value$plusargs("model=%s",model_folder); if(!found) $fatal(1);
+         found=$value$plusargs("case=%s",folder); if(!found) $fatal(1); faults=$test$plusargs("fault_tests");
+@@ -120,10 +141,13 @@ module tb_cnn_sequencer;
+         $sformat(filename,"%0s/result.txt",folder); fd=$fopen(filename,"r"); if(!fd) $fatal(1);
+         fields=$fscanf(fd,"%d %d %d %d %d\n",cls_expected,margin_expected,score_expected,low_expected,threshold);
+         $fclose(fd); if(fields!=5) $fatal(1); min_margin=threshold;
+-        repeat(3) @(negedge clk); rst_n=1; launch; finish_run(0);
++        repeat(3) @(negedge clk); rst_n=1;
++        if($test$plusargs("watchdog_only")) begin check_watchdog; $finish; end
++        launch; finish_run(0);
+         $display("PASS: cnn_sequencer %0s all 9225 packed words/73795 elements match integer network; logits=%h class=%0d margin=%0d cycles=%0d",
+             folder,logits,classification,margin,cycles);
+         if(faults) begin
++            check_watchdog;
+             fault=1; launch; finish_run(1); if(written || error_layer!=0) $fatal(1);
+             fault=0; cycle_limit=2; launch; finish_run(1); if(written || error_layer!=7) $fatal(1); cycle_limit=2000000;
+             launch; repeat(15) @(negedge clk); rst_n=0; #1;
+diff --git a/sim/coprocessor/tb_conv_engine.v b/sim/coprocessor/tb_conv_engine.v
+index 86286ac..743bfe2 100644
+--- a/sim/coprocessor/tb_conv_engine.v
++++ b/sim/coprocessor/tb_conv_engine.v
+@@ -1,6 +1,6 @@
+ `timescale 1ns/1ps
+ module tb_conv_engine;
+-    reg clk=0, rst_n=0, ce=1, start=0;
++    reg clk=0, rst_n=0, ce=1, start=0, force_pause=0;
+     reg [6:0] cfg_ci, cfg_co, cfg_width, cfg_height;
+     reg [1:0] cfg_kernel, cfg_stride, cfg_padding;
+     reg cfg_relu;
+@@ -19,12 +19,12 @@ module tb_conv_engine;
+     reg [31:0] biases [0:63], multipliers [0:63];
+     reg [5:0] shifts [0:63];
+     reg visited [0:32767];
+-    integer tb_cycles=0, written=0, reads=0, fault=0;
++    integer tb_cycles=0, written=0, reads=0, parameter_reads=0, fault=0;
+     integer ci, co, h, w, k, s, p, r, in_words, weight_words, out_words;
+     integer fd, fields, lane, index, found, faults;
+     reg [4095:0] folder, filename;
+     always #5 clk=~clk;
+-    always @(negedge clk) begin tb_cycles=tb_cycles+1; ce=(tb_cycles%7)!=3; end
++    always @(negedge clk) begin tb_cycles=tb_cycles+1; ce=!force_pause && (tb_cycles%7)!=3; end
+     conv_engine dut (.clk(clk), .rst_n(rst_n), .ce(ce), .start(start), .abort(1'b0),
+         .cfg_ci(cfg_ci), .cfg_co(cfg_co), .cfg_width(cfg_width), .cfg_height(cfg_height),
+         .cfg_kernel(cfg_kernel), .cfg_stride(cfg_stride), .cfg_padding(cfg_padding),
+@@ -45,10 +45,13 @@ module tb_conv_engine;
+                 weight_data<=fault==2 ? {128{8'd127}} : weight_memory[weight_address];
+                 reads=reads+1;
+             end
+-            if (parameter_enable) for (lane=0; lane<16; lane=lane+1) begin
++            if (parameter_enable) begin
++                parameter_reads=parameter_reads+1;
++                for (lane=0; lane<16; lane=lane+1) begin
+                 bias_data[lane*32 +: 32]<=fault==2 ? 32'h7fffffff : biases[output_block*16+lane];
+                 multiplier_data[lane*32 +: 32]<=fault==1 ? 0 : multipliers[output_block*16+lane];
+                 shift_data[lane*6 +: 6]<=shifts[output_block*16+lane];
++                end
+             end
+             if (write_enable) begin
+                 if (fault || write_address>=out_words || visited[write_address]
+@@ -62,7 +65,7 @@ module tb_conv_engine;
+     end
+     task launch;
+         begin
+-            written=0; reads=0;
++            written=0; reads=0; parameter_reads=0;
+             for (index=0; index<out_words; index=index+1) visited[index]=0;
+             @(negedge clk); #1;
+             while (!ready) begin @(negedge clk); #1; end
+@@ -77,9 +80,61 @@ module tb_conv_engine;
+                 $display("FAIL: completion error=%b done=%b expected_error=%b",error,done,expect_error); $fatal(1);
+             end
+             if (!expect_error && written != out_words) $fatal(1);
++            if (!expect_error && parameter_reads != (co+15)/16) $fatal(1);
+             if (expect_error && written != 0) $fatal(1);
+         end
+     endtask
++    task check_geometry;
++        integer size, kernel, stride, padding, span_w, span_h, expected_w, expected_h, checks;
++        reg reject;
++        begin
++            checks=0;
++            for(size=0;size<=65;size=size+1)
++            for(kernel=1;kernel<=3;kernel=kernel+2)
++            for(stride=1;stride<=2;stride=stride+1)
++            for(padding=0;padding<=1;padding=padding+1) begin
++                cfg_width=size; cfg_height=65-size; cfg_kernel=kernel;
++                cfg_stride=stride; cfg_padding=padding;
++                span_w=size+2*padding-kernel; span_h=65-size+2*padding-kernel;
++                expected_w=span_w/stride+1; expected_h=span_h/stride+1;
++                reject=size<1 || size>64 || 65-size<1 || 65-size>64
++                    || span_w<0 || span_h<0 || expected_w>64 || expected_h>64;
++                launch;
++                if(error !== reject || busy !== !reject || done || reads || written) begin
++                    $display("FAIL: geometry w=%0d h=%0d k=%0d s=%0d p=%0d reject=%b",
++                        size,65-size,kernel,stride,padding,reject); $fatal(1);
++                end
++                if(!reject && (dut.ow !== expected_w || dut.oh !== expected_h)) begin
++                    $display("FAIL: output geometry got=%0dx%0d expected=%0dx%0d",
++                        dut.ow,dut.oh,expected_w,expected_h); $fatal(1);
++                end
++                checks=checks+1;
++                @(negedge clk); rst_n=0;
++                @(negedge clk); rst_n=1;
++            end
++            cfg_width=w; cfg_height=h; cfg_kernel=k; cfg_stride=s; cfg_padding=p;
++            $display("PASS: conv_engine geometry %0d launch/size/rejection cases; independent integer oracle",checks);
++        end
++    endtask
++    task check_watchdog;
++        integer budget, paused, elapsed;
++        begin
++            for(paused=0;paused<2;paused=paused+1)
++            for(budget=0;budget<=40;budget=budget+1) begin
++                cfg_cycle_limit=budget; launch; force_pause=paused; cfg_cycle_limit=0; elapsed=0;
++                while(busy) begin
++                    if(cycles==budget-1 && (memory_enable || parameter_enable || write_enable)) $fatal(1);
++                    @(posedge clk); #1; elapsed=elapsed+1;
++                end
++                if(error!==1'b1 || done || elapsed!=budget || cycles!==budget || written || (paused && reads)) begin
++                    $display("FAIL: conv watchdog budget=%0d paused=%0d elapsed=%0d cycles=%0d",budget,paused,elapsed,cycles); $fatal(1);
++                end
++                force_pause=0;
++            end
++            cfg_cycle_limit=1000000;
++            $display("PASS: conv_engine watchdog 82 exact-cycle cases; CE pause, latched budget and terminal strobes");
++        end
++    endtask
+     initial begin
+         found=$value$plusargs("case=%s",folder); if (!found) $fatal(1);
+         faults=$test$plusargs("fault_tests");
+@@ -95,9 +150,12 @@ module tb_conv_engine;
+         $sformat(filename,"%0s/multipliers.hex",folder); $readmemh(filename,multipliers,0,63);
+         $sformat(filename,"%0s/shifts.hex",folder); $readmemh(filename,shifts,0,63);
+         repeat(3) @(negedge clk); rst_n=1;
++        if($test$plusargs("watchdog_only")) begin check_watchdog; $finish; end
+         launch; finish_run(0);
+-        $display("PASS: conv_engine case=%0s words=%0d read_transactions=%0d cycles=%0d; every pixel/lane matches Python",folder,written,reads,cycles);
++        $display("PASS: conv_engine case=%0s words=%0d read_transactions=%0d parameter_reads=%0d cycles=%0d; every pixel/lane matches Python",folder,written,reads,parameter_reads,cycles);
+         if (faults) begin
++            check_geometry;
++            check_watchdog;
+             fault=1; launch; finish_run(1);
+             fault=2; launch; finish_run(1);
+             fault=0; cfg_ci=2; launch; finish_run(1); if (reads) $fatal(1); cfg_ci=ci;
+diff --git a/sim/riscv/tb_id_ex_stage.v b/sim/riscv/tb_id_ex_stage.v
+index 6b9ba56..913f7e0 100644
+--- a/sim/riscv/tb_id_ex_stage.v
++++ b/sim/riscv/tb_id_ex_stage.v
+@@ -11,6 +11,7 @@ module tb_id_ex_stage;
+     wire [1:0] ex_wb_sel, ex_mask_sel;
+     integer checks, offset, pc_case;
+     reg [12:0] b_offset;
++    reg [11:0] i_offset;
+     reg [31:0] expected_target;
+     id_ex_stage dut (
+         .in_valid(in_valid), .in_pc(in_pc), .in_instr(in_instr),
+@@ -80,6 +81,22 @@ module tb_id_ex_stage;
+                       redirect_target === expected_target);
+             end
+         end
++        for(pc_case=0;pc_case<3;pc_case=pc_case+1) begin
++            case(pc_case)
++                0: rs1_value=32'h80000001;
++                1: rs1_value=32'hffffffff;
++                2: rs1_value=32'h00000000;
++            endcase
++            for(offset=-2048;offset<=2047;offset=offset+1) begin
++                i_offset=offset[11:0];
++                in_instr={i_offset,5'd1,3'd0,5'd2,7'b1100111};
++                rs2_value=offset^32'hcafebabe;
++                expected_target=(rs1_value+offset)&32'hfffffffe; #1;
++                check(jump_taken && redirect_target===expected_target);
++                rs2_value=~rs2_value; #1;
++                check(redirect_target===expected_target);
++            end
++        end
+         $display("PASS: ID+EX decode, execute and redirect (%0d cases)", checks);
+         $finish;
+     end
+diff --git a/sim/scripts/c01_ddr_onboard.py b/sim/scripts/c01_ddr_onboard.py
+index 80c59bb..63f22e8 100644
+--- a/sim/scripts/c01_ddr_onboard.py
++++ b/sim/scripts/c01_ddr_onboard.py
+@@ -15,6 +15,9 @@ HWH_SHA = 'eaaf68c3732f1a2bf85756fc0b3a8c6b07bb5cf5b36f32020882860a6aaebf5c'
+ 
+ 
+ def main():
++    capture_mode = os.environ.get('C01_CAPTURE_MODE', 'single')
++    if capture_mode not in ('single', 'park'):
++        raise ValueError('C01_CAPTURE_MODE must be single or park')
+     from pynq import MMIO, Overlay, allocate, PL
+     import cv2
+     sys.path.insert(0, '/home/xilinx/vision_m2')
+@@ -36,6 +39,7 @@ def main():
+     def identity():
+         return (Path('/proc/sys/kernel/random/boot_id').read_text().strip(), PL.bitfile_name, str(PL.timestamp))
+     result = {'boot_before': boot, 'bit_sha256': BIT_SHA, 'hwh_sha256': HWH_SHA,
++              'capture_mode': capture_mode,
+               'driver_sha256': hashlib.sha256((root / 'c01_capture.py').read_bytes()).hexdigest(),
+               'runner_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+               'helper_sha256': hashlib.sha256((root / 'c01_status_onboard.py').read_bytes()).hexdigest(),
+@@ -62,7 +66,12 @@ def main():
+             except SystemExit as exc:
+                 if exc.code != 3 or attempt == 2: raise
+                 print('STAGE: candidate HDMI smoke NOVIDEO; bounded settle retry', flush=True)
+-        owner = SingleFrameCapture(dma, status, allocate, identity)
++        capture_class = SingleFrameCapture
++        if capture_mode == 'park':
++            from c01_park_capture import ParkFrameCapture
++            capture_class = ParkFrameCapture
++            result['park_driver_sha256'] = hashlib.sha256((root / 'c01_park_capture.py').read_bytes()).hexdigest()
++        owner = capture_class(dma, status, allocate, identity)
+         print('STAGE: custom single-frame DMA begins', flush=True)
+         frame = owner.capture()
+         result['capture'] = owner.evidence
+diff --git a/sim/scripts/run_coprocessor_iverilog.sh b/sim/scripts/run_coprocessor_iverilog.sh
+index a244607..8ad2568 100644
+--- a/sim/scripts/run_coprocessor_iverilog.sh
++++ b/sim/scripts/run_coprocessor_iverilog.sh
+@@ -20,6 +20,10 @@ run_convolution() {
+     iverilog -g2001 -Wall -s tb_conv_engine -o "$BUILD/conv_engine.vvp" \
+         "$ROOT/sim/coprocessor/tb_conv_engine.v" "$ROOT"/src/coprocessor/*.v
+     while IFS= read -r name; do
++        if [ "${1:-}" = watchdog ]; then
++            vision_run_checked "$BUILD/watchdog_conv.log" vvp "$BUILD/conv_engine.vvp" "+case=$dir/$name" +watchdog_only
++            break
++        fi
+         if [ "$name" = padding_tail ]; then
+             vision_run_checked "$BUILD/conv_$name.log" vvp "$BUILD/conv_engine.vvp" "+case=$dir/$name" +fault_tests
+         else
+@@ -33,6 +37,10 @@ run_network() {
+     iverilog -g2001 -Wall -s tb_cnn_sequencer -o "$BUILD/cnn_sequencer.vvp" \
+         "$ROOT/sim/coprocessor/tb_cnn_sequencer.v" "$ROOT"/src/coprocessor/*.v
+     while IFS= read -r name; do
++        if [ "${1:-}" = watchdog ]; then
++            vision_run_checked "$BUILD/watchdog_network.log" vvp "$BUILD/cnn_sequencer.vvp" "+model=$dir" "+case=$dir/$name" +watchdog_only
++            break
++        fi
+         if [ "$name" = pattern ]; then
+             vision_run_checked "$BUILD/network_$name.log" vvp "$BUILD/cnn_sequencer.vvp" "+model=$dir" "+case=$dir/$name" +fault_tests
+         else
+@@ -48,7 +56,8 @@ case "${1:-all}" in
+     logits) run_test int8_logits ;;
+     conv) run_convolution ;;
+     network) run_network ;;
++    watchdog) run_convolution watchdog; run_network watchdog ;;
+     pipeline) run_test mac_array_pipeline; run_test int8_requant_pipeline ;;
+     all) run_test int8_mac; run_test mac_array; run_test int8_requant; run_test int8_gap; run_test int8_logits; run_test mac_array_pipeline; run_test int8_requant_pipeline; run_convolution; run_network ;;
+-    *) echo 'usage: run_coprocessor_iverilog.sh [mac|array|requant|gap|logits|pipeline|conv|network|all]'; exit 2 ;;
++    *) echo 'usage: run_coprocessor_iverilog.sh [mac|array|requant|gap|logits|pipeline|conv|network|watchdog|all]'; exit 2 ;;
+ esac
+diff --git a/sim/scripts/run_vision_iverilog.sh b/sim/scripts/run_vision_iverilog.sh
+index 49f804c..74a943d 100644
+--- a/sim/scripts/run_vision_iverilog.sh
++++ b/sim/scripts/run_vision_iverilog.sh
+@@ -72,4 +72,11 @@ for tb in "${TBS[@]}"; do
+     echo "== $name =="
+     iverilog -g2012 -Wall -s "$name" -o "build/vision/$name.vvp" "$tb" "${RTL_FILES[@]}" || exit 1
+     vision_run_checked "build/vision/$name.log" vvp "build/vision/$name.vvp" || exit 1
++    if [ "$name" = tb_cop_buf_stress ]; then
++        for width in 3 7; do
++            iverilog -g2001 -Wall -s "$name" -P "$name.DW=$width" -P "$name.DH=3" \
++                -o "build/vision/${name}_${width}.vvp" "$tb" "${RTL_FILES[@]}" || exit 1
++            vision_run_checked "build/vision/${name}_${width}.log" vvp "build/vision/${name}_${width}.vvp" || exit 1
++        done
++    fi
+ done
+diff --git a/sim/scripts/run_vision_python.sh b/sim/scripts/run_vision_python.sh
+index d786473..3179102 100644
+--- a/sim/scripts/run_vision_python.sh
++++ b/sim/scripts/run_vision_python.sh
+@@ -13,7 +13,7 @@ else
+     exit 1
+ fi
+ mkdir -p sim/build/vision/python
+-for name in vision_regs localize vision_protocol vision_rounds vision_records vision_export vision_live_standin vision_live_service vision_joint arm_localize arm_localize_package pynq_file_receiver c01_status_onboard c01_artifacts c01_build_inputs c01_capture; do
++for name in vision_regs localize vision_protocol vision_rounds vision_records vision_export vision_live_standin vision_live_service vision_joint arm_localize arm_localize_package pynq_file_receiver c01_status_onboard c01_artifacts c01_build_inputs c01_capture c01_capture_ordering c01_ddr_onboard c01_park_capture; do
+     vision_run_checked "sim/build/vision/python/$name.log" \
+         "$PY" "sim/vision/test_$name.py" || exit 1
+ done
+diff --git a/sim/scripts/synth_coprocessor_ooc.tcl b/sim/scripts/synth_coprocessor_ooc.tcl
+index 7c472b8..10f80a4 100644
+--- a/sim/scripts/synth_coprocessor_ooc.tcl
++++ b/sim/scripts/synth_coprocessor_ooc.tcl
+@@ -37,5 +37,5 @@ set hold_slack [get_property SLACK [lindex $hold_paths 0]]
+ set dsp [llength [get_cells -hierarchical -filter {REF_NAME =~ DSP48*}]]
+ set severe [get_drc_violations -filter {SEVERITY == Error || SEVERITY == "Critical Warning"}]
+ puts "CNN_OOC_RESULT WNS=$slack WHS=$hold_slack DSP=$dsp SEVERE_DRC=[llength $severe]"
+-if {$slack < 0 || $hold_slack < 0 || $dsp > 220 || [llength $severe]} { error "CNN OOC timing/resource/DRC gate failed; preserve reports" }
++if {$slack < 0 || $hold_slack < 0 || $dsp > 176 || [llength $severe]} { error "CNN OOC timing/resource/DRC gate failed (DSP budget 176); preserve reports" }
+ puts "PASS: CNN operator OOC setup/hold timing, DSP resource and severe DRC gate"
+diff --git a/sim/vision/localization_opencv.py b/sim/vision/localization_opencv.py
+index de52dd2..eb0e75a 100644
+--- a/sim/vision/localization_opencv.py
++++ b/sim/vision/localization_opencv.py
+@@ -4,6 +4,24 @@ import cv2
+ import numpy as np
+ 
+ 
++def contrast_mask(lab, background, color_threshold):
++    """Exact half-integer median distances, without per-pixel float/sqrt arrays."""
++    delta = lab.astype(np.int16) * 2 - np.rint(background * 2).astype(np.int16)
++    squared = np.einsum("ijk,ijk->ij", delta, delta, dtype=np.int32)
++    threshold = float(color_threshold)
++    if threshold <= 0:
++        return np.full(lab.shape[:2], 255, dtype=np.uint8)
++    if not np.isfinite(threshold) or threshold > 512:
++        return np.zeros(lab.shape[:2], dtype=np.uint8)
++    # Preserve float64 sqrt comparison at thresholds adjacent to exact distances.
++    cutoff = int(4 * threshold * threshold)
++    while np.sqrt(np.float64(cutoff) / 4) < threshold:
++        cutoff += 1
++    while cutoff > 0 and np.sqrt(np.float64(cutoff - 1) / 4) >= threshold:
++        cutoff -= 1
++    return (squared >= cutoff).astype(np.uint8) * 255
++
++
+ def detect_boxes(image, color_threshold=22, min_area_ratio=0.00008):
+     """Find separated objects that contrast with the four image corners."""
+     if image is None or image.ndim != 3 or image.shape[2] != 3:
+@@ -16,8 +34,7 @@ def detect_boxes(image, color_threshold=22, min_area_ratio=0.00008):
+                               lab[-patch:, :patch].reshape(-1, 3),
+                               lab[-patch:, -patch:].reshape(-1, 3)))
+     background = np.median(corners, axis=0)
+-    distance = np.linalg.norm(lab.astype(np.float32) - background, axis=2)
+-    mask = (distance >= color_threshold).astype(np.uint8) * 255
++    mask = contrast_mask(lab, background, color_threshold)
+     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+     mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+     mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+diff --git a/sim/vision/tb_cop_buf_stress.v b/sim/vision/tb_cop_buf_stress.v
+index 535ad15..625c915 100644
+--- a/sim/vision/tb_cop_buf_stress.v
++++ b/sim/vision/tb_cop_buf_stress.v
+@@ -1,5 +1,5 @@
+ `timescale 1ns/1ps
+-module tb_cop_buf_stress;
++module tb_cop_buf_stress #(parameter DW=8, DH=4);
+     reg clk=0, rst_n=0, in_vs=0, in_hs=0, in_de=0, ready=0;
+     reg [7:0] in_y=0;
+     reg [31:0] input_id=0;
+@@ -7,7 +7,7 @@ module tb_cop_buf_stress;
+     wire vs, hs, de, done, full;
+     wire [7:0] y;
+     integer pixels=0, frames=0, index=0, expected=0, base=0;
+-    cop_buf #(.DW(8),.DH(4)) dut (
++    cop_buf #(.DW(DW),.DH(DH)) dut (
+         .clk(clk),.rst_n(rst_n),.in_vs(in_vs),.in_hs(in_hs),.in_de(in_de),.in_y(in_y),
+         .cop_ready(ready),.out_vs(vs),.out_hs(hs),.out_de(de),.out_y(y),
+         .frame_done(done),.buf_full(full),.in_frame_id(input_id),.in_config_id(32'd7),
+@@ -26,7 +26,7 @@ module tb_cop_buf_stress;
+             if (y !== expected[7:0]) $fatal(1,"FAIL: mixed frame index=%0d y=%h expected=%h",index,y,expected);
+             index=index+1; pixels=pixels+1;
+         end
+-        if (hs && index%8!=0) $fatal(1,"FAIL: hs not at complete row");
++        if (hs && index%DW!=0) $fatal(1,"FAIL: hs not at complete row");
+     end
+     task feed;
+         input integer tag;
+@@ -35,13 +35,13 @@ module tb_cop_buf_stress;
+         begin
+             @(negedge clk); in_vs=1;input_id=tag;
+             @(negedge clk); in_vs=0;
+-            for(row=0;row<4;row=row+1) begin
+-                for(col=0;col<8;col=col+1) begin
+-                    in_de=1; in_y=tag+row*8+col; @(negedge clk);
++            for(row=0;row<DH;row=row+1) begin
++                for(col=0;col<DW;col=col+1) begin
++                    in_de=1; in_y=tag+row*DW+col; @(negedge clk);
+                 end
+                 in_de=0; repeat(3) @(negedge clk);
+                 in_hs=1;
+-                if(collide && row==3) ready=1;
++                if(collide && row==DH-1) ready=1;
+                 @(negedge clk); in_hs=0; @(negedge clk);
+             end
+         end
+@@ -52,24 +52,24 @@ module tb_cop_buf_stress;
+         feed(80,1); // 读启动与第二帧提交同拍
+         feed(144,0);
+         repeat(200) @(negedge clk);
+-        if(pixels<64 || index!=32) $fatal(1,"FAIL: stranded frame pixels=%0d last=%0d",pixels,index);
++        if(pixels<2*DW*DH || index!=DW*DH) $fatal(1,"FAIL: stranded frame pixels=%0d last=%0d",pixels,index);
+         // 长期拒收允许丢帧，但恢复后不得回放被写坏或半帧数据。
+         ready=0; feed(32,0); feed(96,0); feed(160,0);
+         ready=1; repeat(200) @(negedge clk);
+-        if(index!=32) $fatal(1,"FAIL: incomplete congested replay");
++        if(index!=DW*DH) $fatal(1,"FAIL: incomplete congested replay");
+         if(drops==0) $fatal(1,"FAIL: dropped snapshots not reported");
+         rst_n=0; repeat(3) @(negedge clk); rst_n=1;
+         pixels=0; frames=0; index=0;
+         // 复位后残余半帧（没有新 vs）不得发布。
+-        repeat(4) begin
+-            in_de=1;repeat(8) @(negedge clk);in_de=0;
++        repeat(DH) begin
++            in_de=1;repeat(DW) @(negedge clk);in_de=0;
+             in_hs=1;@(negedge clk);in_hs=0;
+         end
+         repeat(100) @(negedge clk);
+         if(pixels!=0) $fatal(1,"FAIL: orphan half-frame replayed after reset");
+         feed(48,0); repeat(100) @(negedge clk);
+-        if(pixels!=32 || frames!=1) $fatal(1,"FAIL: reset replay %0d/%0d",pixels,frames);
+-        $display("PASS: cop_buf distinct frames, simultaneous start/commit, congestion, drain and reset");
++        if(pixels!=DW*DH || frames!=1) $fatal(1,"FAIL: reset replay %0d/%0d",pixels,frames);
++        $display("PASS: cop_buf %0dx%0d distinct frames, simultaneous start/commit, congestion, drain and reset",DW,DH);
+         $finish;
+     end
+     initial begin #100000; $fatal(1,"FAIL: timeout"); end
+diff --git a/sim/vision/test_c01_capture.py b/sim/vision/test_c01_capture.py
+index f731122..3e7bda0 100644
+--- a/sim/vision/test_c01_capture.py
++++ b/sim/vision/test_c01_capture.py
+@@ -5,7 +5,11 @@ import unittest
+ import numpy as np
+ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'src/pynq_host'))
+ from c01_capture import (SingleFrameCapture, CaptureError, QUARANTINE, CR, SR, PARK,
+-                         VSIZE, ADDRESS, RUN, SHAPE)
++                         VSIZE, ADDRESS, RUN, ERRORS, IRQ, SHAPE)
++
++# Board record 2026-10-12 (onboard-first.txt): sr=0x14811 at idle masked to exactly these
++# sticky bits; they re-assert until nonzero geometry is configured.
++IDLE_FAULTS = 0x4810
+ 
+ 
+ class Buffer(np.ndarray):
+@@ -31,11 +35,16 @@ class Rig:
+         self.cap = {o: 0 for o in range(0, 0x24, 4)}
+         self.cap.update({0: 0x43415031, 4: 1, 0x14: 1280, 0x18: 720})
+         self.started, self.polls = False, 0
++        self.sticky_idle = mode.startswith('idle_sticky')
++        self.geometry_configured = False
+         class Status:
+             def read(_, o):
+                 return self.cap[o]
+         self.status = Status()
+     def read(self, o):
++        if o == SR and self.sticky_idle and (self.mode == 'idle_sticky_persistent'
++                                             or not self.geometry_configured):
++            return self.reg[SR] | IDLE_FAULTS
+         if o == SR and self.started and self.reg[CR] & 1:
+             self.polls += 1
+             if self.mode == 'dma_error': self.reg[SR] |= 0x20
+@@ -61,6 +70,9 @@ class Rig:
+             return
+         else:
+             self.reg[o] = value
++            if o == VSIZE and value and self.sticky_idle and not self.geometry_configured:
++                self.geometry_configured = True
++                self.reg[SR] |= IDLE_FAULTS  # pending idle faults outlive geometry; WD1C must clear
+             if o == VSIZE and self.reg[CR] & 1:
+                 self.started = True
+                 self.reg[SR] = 0
+@@ -114,6 +126,31 @@ class Tests(unittest.TestCase):
+         clear = next(i for i,e in enumerate(writes) if e[1] == SR)
+         run = writes.index(('write', CR, RUN))
+         self.assertLess(reset, geometry); self.assertLess(geometry, clear); self.assertLess(clear, run)
++    def test_recorded_idle_faults_reach_clean_state_after_geometry(self):
++        # The board-recorded 0x4810 pattern must be visible at configured idle, covered by the
++        # WD1C mask, and gone before RUN — this ordering has never been board-retested.
++        r = Rig('idle_sticky_until_geometry'); c = r.owner()
++        frame = c.capture()
++        self.assertTrue(np.all(frame == 37))
++        self.assertEqual(c.evidence['configured_idle']['sr'] & IDLE_FAULTS, IDLE_FAULTS)
++        self.assertEqual(c.evidence['configured_idle']['sr'] & (ERRORS | IRQ), IDLE_FAULTS)
++        self.assertEqual(c.evidence['cleared_idle']['sr'] & (ERRORS | IRQ), 0)
++        self.assertIn(('write', SR, ERRORS | IRQ | 0x2000), r.events)
++        writes = [e for e in r.events if isinstance(e, tuple)]
++        self.assertLess(writes.index(('write', VSIZE, 720)), next(
++            i for i, e in enumerate(writes) if e[1] == SR))
++    def test_persistent_idle_faults_refuse_run_before_start(self):
++        r = Rig('idle_sticky_persistent'); c = r.owner()
++        with self.assertRaises(CaptureError) as caught:
++            c.capture()
++        self.assertEqual(str(caught.exception), 'DMA configured idle reset/clear not clean')
++        self.assertNotIn(('write', CR, RUN), r.events)
++        self.assertNotIn('invalidate', r.events)
++        self.assertEqual([b.frees for b in r.buffers], [1]*4)
++        self.assertNotIn(c, QUARANTINE); self.assertTrue(c.closed); self.assertFalse(c.may_write)
++        self.assertIn('not clean', c.evidence['main_error'])
++        self.assertEqual(c.evidence['configured_idle']['sr'] & IDLE_FAULTS, IDLE_FAULTS)
++        self.assertEqual(c.evidence['cleared_idle']['sr'] & IDLE_FAULTS, IDLE_FAULTS)
+     def test_source_changes_during_copy_not_published(self):
+         for kind in ('epoch', 'invalidate_failure'):
+             r = Rig(); original = r.allocate
+diff --git a/sim/vision/test_localize.py b/sim/vision/test_localize.py
+index d81ee00..5076eba 100644
+--- a/sim/vision/test_localize.py
++++ b/sim/vision/test_localize.py
+@@ -6,6 +6,17 @@ from reference import locate, crop_resize, prepare_targets
+ 
+ 
+ def main():
++    import numpy as np
++    from localization_opencv import contrast_mask
++    lab = np.random.default_rng(20261015).integers(0, 256, (64, 96, 3), dtype=np.uint8)
++    thresholds = [-1, 0, 22, 22.5, 512, float("inf"), float("nan")]
++    for background in (np.array([.5, 127.5, 254.5]), np.array([0., 255., 127.])):
++        distance = np.linalg.norm(lab.astype(np.float32) - background, axis=2)
++        for value in distance.ravel()[::199]:
++            thresholds.extend((value, np.nextafter(value, -np.inf), np.nextafter(value, np.inf)))
++        for threshold in thresholds:
++            expected = (distance >= threshold).astype(np.uint8) * 255
++            np.testing.assert_array_equal(contrast_mask(lab, background, threshold), expected)
+     image = [[240] * 32 for _ in range(24)]
+     assert locate(image, 7, 3)["targets"] == []
+     for y in range(3, 8):
+@@ -44,7 +55,7 @@ def main():
+         raise AssertionError("malformed image accepted")
+     except ValueError:
+         pass
+-    print("PASS: localization empty/multiple/non-grid/noise/limit/border + per-target crop/resize/frame metadata")
++    print("PASS: localization exact integer distance/threshold parity, empty/multiple/noise/limit/border and ROI metadata")
+ 
+ 
+ if __name__ == "__main__":
+diff --git a/sim/vision/test_service_engine.py b/sim/vision/test_service_engine.py
+index 20cb486..9e57b3e 100644
+--- a/sim/vision/test_service_engine.py
++++ b/sim/vision/test_service_engine.py
+@@ -12,6 +12,7 @@ import sys
+ import threading
+ import urllib.request
+ from pathlib import Path
++from unittest.mock import patch
+ 
+ root = Path(__file__).resolve().parents[2]
+ for dep in ("vision-torch-deps", "vision-client-deps"):
+@@ -38,6 +39,10 @@ def main():
+     server = make_server(port=0, root=out / "service", captures=FileCaptures(captures),
+                          engine=engine, order=dict(ORDER))
+     threading.Thread(target=server.serve_forever, daemon=True).start()
++    import inspection_model
++    model_spy = patch.object(inspection_model, "PrototypeClassifier",
++                             wraps=inspection_model.PrototypeClassifier)
++    loads = model_spy.start()
+     try:
+         request = urllib.request.Request(
+             f"http://127.0.0.1:{server.server_port}/v1/check",
+@@ -69,11 +74,26 @@ def main():
+             assert (run_dir / name).exists(), name
+         assert result["targets"] and all((run_dir / t["roi_path"]).exists()
+                                          for t in result["targets"])
++        # The same loaded model serves automatic memory rounds with identical predictions.
++        for expected_id in (2, 3):
++            request = urllib.request.Request(
++                f"http://127.0.0.1:{server.server_port}/v1/check",
++                b'{}', {"Content-Type": "application/json"})
++            automatic = validate_packet(json.loads(urllib.request.urlopen(request, timeout=60).read()))
++            assert automatic["check_id"] == automatic["frame_id"] == expected_id
++            assert automatic["targets"] == packet["targets"]
++            assert automatic["decision"] == packet["decision"]
++            assert "trigger_ref" not in automatic
++            session_dir = round_dir.parent
++            assert not (session_dir / f"check-{expected_id:06d}").exists()
++            assert json.loads((session_dir / "latest_packet.json").read_text()) == automatic
++        assert loads.call_count == 1, loads.call_count
+         assert not list(out.rglob("*.pending"))
+     finally:
+         server.shutdown()
+         server.server_close()
+-    print("PASS: live service real engine (file_engine -> inspection_run, golden counts, artifacts)")
++        model_spy.stop()
++    print("PASS: live service real engine (golden counts, manual artifacts, memory parity, one model load)")
+ 
+ 
+ if __name__ == "__main__":
+diff --git a/sim/vision/test_vision_live_service.py b/sim/vision/test_vision_live_service.py
+index 88c0d64..82f1a45 100644
+--- a/sim/vision/test_vision_live_service.py
++++ b/sim/vision/test_vision_live_service.py
+@@ -16,7 +16,7 @@ from pathlib import Path
+ 
+ root = Path(__file__).resolve().parents[2]
+ sys.path.insert(0, str(root / "src/pynq_host"))
+-from vision_live_service import FileCaptures, make_server
++from vision_live_service import FileCaptures, State, make_server
+ from vision_protocol import validate_packet
+ 
+ 
+@@ -127,6 +127,38 @@ def main():
+         server.shutdown()
+         server.server_close()
+     print("PASS: live service rounds/artifacts/idempotent-latest/config/over-limit-mapping/400-404")
++    class MemoryCaptures(FileCaptures):
++        def capture_frame(self):
++            self.seq += 1
++            return b"frame-in-memory"
++    counter = [0]
++    engine = stub_engine(counter)
++    def memory(frame):
++        assert frame == b"frame-in-memory"
++        # Reuse the stub's decision generator without any image or capture write.
++        scratch = out / "memory-engine"
++        scratch.mkdir(exist_ok=True)
++        return engine(None, scratch, "memory")
++    engine.inspect_frame = memory
++    state = State(out, MemoryCaptures(captures_dir), engine, {"bolt": 2, "nut": 2, "washer": 2})
++    first = state.check(None)
++    assert not list(state.session_dir.glob("check-*"))
++    assert json.loads((state.session_dir / "latest_packet.json").read_text()) == first
++    manual = state.check("manual-archive")
++    assert manual["trigger_ref"] == "manual-archive"
++    assert (state.session_dir / "check-000002/capture.png").exists()
++    state.check(None)
++    assert len(list(state.session_dir.glob("check-*"))) == 1
++    state = State(out, MemoryCaptures(captures_dir), engine, {"bolt": 2, "nut": 2, "washer": 2}, True)
++    state.check(None)
++    assert (state.session_dir / "check-000001/capture.png").exists()
++    # Future non-prototype backends retain C04 Q3 per-round capture evidence.
++    real_captures = MemoryCaptures(captures_dir)
++    real_captures.prototype = False
++    state = State(out, real_captures, engine, {"bolt": 2, "nut": 2, "washer": 2})
++    state.check(None)
++    assert (state.session_dir / "check-000001/capture.png").exists()
++    print("PASS: prototype memory polling; manual, diagnostic and non-prototype rounds retain archives")
+ 
+ 
+ if __name__ == "__main__":
+diff --git a/sim/vision/test_vision_rounds.py b/sim/vision/test_vision_rounds.py
+index 8150e20..e075cab 100644
+--- a/sim/vision/test_vision_rounds.py
++++ b/sim/vision/test_vision_rounds.py
+@@ -9,12 +9,13 @@ import threading
+ import time
+ import urllib.request
+ from pathlib import Path
++from unittest.mock import patch
+ 
+ root = Path(__file__).resolve().parents[2]
+ sys.path.insert(0, str(root / "src/pynq_host"))
+ sys.path.insert(0, str(root / "src/vision_client"))
+ from vision_mock_service import make_server
+-from rounds import RemoteRounds, WAITING
++from rounds import AsyncRemoteRounds, RemoteRounds, WAITING, http_json
+ 
+ 
+ def start_server(port):
+@@ -90,6 +91,46 @@ def main():
+         server.shutdown()
+         server.server_close()
+     print("PASS: round overlay trigger/throttle/manual/stale/config-change/outage/session-recovery/events")
++    server = start_server(0)
++    release, entered = threading.Event(), threading.Event()
++    remote = AsyncRemoteRounds(f"http://127.0.0.1:{server.server_port}", max_age=1.0)
++    calls = []
++    def delayed(url, body=None):
++        if url.endswith("/v1/check"):
++            calls.append(body)
++            entered.set()
++            assert release.wait(3), "test worker was not released"
++        return http_json(url, body)
++    try:
++        remote.handshake()
++        with patch("rounds.http_json", side_effect=delayed):
++            started = time.perf_counter()
++            remote.poll(time.time(), 60)
++            assert time.perf_counter() - started < .5
++            assert entered.wait(1)
++            assert remote.trigger(time.time())
++            for _ in range(30):
++                remote.poll(time.time(), 60)
++                remote.overlay(time.time())
++            assert len(calls) == 1, "concurrent network checks"
++            release.set()
++            deadline = time.monotonic() + 3
++            while remote.packet is None or remote.packet["check_id"] != 2:
++                remote.poll(time.time(), 60)
++                assert time.monotonic() < deadline
++                time.sleep(.005)
++            assert remote.last_round_manual and len(calls) == 2
++            entered.clear(); release.clear(); remote.last_trigger = 0
++            remote.poll(time.time(), 60)
++            assert entered.wait(1)
++            remote.received_at = time.time() - 2
++            assert remote.overlay(time.time()) == (False, WAITING)
++            release.set()
++            remote.close(wait=True)
++    finally:
++        release.set(); remote.close(wait=True)
++        server.shutdown(); server.server_close()
++    print("PASS: async GUI polling remains responsive, queues manual checks, expires stale overlays and closes")
+ 
+ 
+ if __name__ == "__main__":
+diff --git a/src/coprocessor/README.md b/src/coprocessor/README.md
+index 0daff58..10e0cf8 100644
+--- a/src/coprocessor/README.md
++++ b/src/coprocessor/README.md
+@@ -31,7 +31,13 @@ RISC-V 以 load/store 访问且不启用自定义指令。
+ 
+ `conv_engine.v` 实现一拍同步 BRAM 读接口、分拍地址生成、padding/尾通道、bias 和卷积/FC 调度；`cnn_sequencer.v` 串联四层 Conv→GAP→FC。暂停保持数据和有效位，复位/取消/超时使结果无效。外部 ROI/ping/pong/权重/参数存储须共享复位，busy 期间禁止修改；该模块不包含实体 BRAM、C03 寄存器、DMA 或核接入。
+ 
+-仓库入口：`bash sim/scripts/run_iverilog.sh coprocessor all`，支持 `pipeline`、`conv`、`network` 专项；默认 Verilog-2001 编译。总回归 `bash sim/scripts/run_iverilog.sh all` 已包含这些入口。原始结果和失败记录见[本轮证据](../../data/logs/2026-10-13-cnn-arithmetic/README.md)。
++仓库入口：`bash sim/scripts/run_iverilog.sh coprocessor all`，支持 `pipeline`、`conv`、`network`、`watchdog` 专项；默认 Verilog-2001 编译。总回归 `bash sim/scripts/run_iverilog.sh all` 已包含这些入口。首版原始结果和失败记录见[10/13 证据](../../data/logs/2026-10-13-cnn-arithmetic/README.md)。
++
++10/15 优化：尺寸中间值收窄为无符号 8 位并保留非法几何检查；启动时锁存 watchdog 最后允许周期。
++卷积读地址/同步读与 MAC 返回重叠，参数每个输出通道块只读一次；16 路 requant 改为两路分时处理，整数语义不变。
++两组整网逐元素对拍各为 472,593 周期（含每 7 拍暂停 1 拍），首版为 1,123,109 周期；每网读取 10 组参数。
++100 MHz OOC 为 DSP 136/220、LUT 4540、FF 4037，WNS 0.317 ns、WHS 0.123 ns；DSP 门限为 176，保留至少 20% 器件余量。
++这些数据包含控制器与算术链，尚不包含实体 BRAM/SoC/视频；[命令与原始证据](../../data/logs/2026-10-15-improvements-fast/README.md)。
+ 
+ `int8_reference.py` 实现输入/bias量化、舍入、scale编码与requant；`int8_tensor_reference.py` 实现张量/逐通道权重量化、bias和OIHW卷积累加，溢出拒绝。3组测试由 `bash sim/scripts/run_coprocessor_python.sh all` 复现，需真实 `python3` 与 NumPy；[10/12证据](../../data/logs/2026-10-12-pr-review/README.md)通过。
+ `int8_network_reference.py` 新增完整固定结构整数链、模型形状/类型/范围和通用累加界检查；独立常量网络黄金检查 Conv/GAP/FC。`generate_network_vectors.py` 提供固定种子诊断权重和两组输入的逐层黄金及文件/源码哈希，**不是训练后的正式模型**。Python 回归现在为四组，支持 `COPROCESSOR_PYTHON` 或 `VISION_PYTHON` 指定解释器。
+diff --git a/src/coprocessor/cnn_sequencer.v b/src/coprocessor/cnn_sequencer.v
+index 0a41a36..278efe5 100644
+--- a/src/coprocessor/cnn_sequencer.v
++++ b/src/coprocessor/cnn_sequencer.v
+@@ -30,7 +30,7 @@ module cnn_sequencer (
+ );
+     localparam IDLE=0, LAYER_START=1, LAYER_WAIT=2, GAP_REQ=3, GAP_USE=4, GAP_WRITE=5, RESULT=6;
+     reg [2:0] state, layer;
+-    reg [31:0] limit;
++    reg [31:0] limit, limit_last;
+     reg [7:0] margin_threshold;
+     reg [10:0] gap_index;
+     reg [255:0] gap_sums;
+@@ -52,7 +52,7 @@ module cnn_sequencer (
+     wire [7:0] gap_errors;
+     wire permitted;
+     assign ready=ce && !busy;
+-    assign permitted=rst_n && busy && cycles < limit-1;
++    assign permitted=rst_n && busy && cycles < limit_last;
+     always @* begin
+         ci=1; co=16; h=64; w=64; kernel=3; stride=2; padding=1;
+         in_bank=0; out_bank=2; weight_base=0; param_base=0;
+@@ -94,16 +94,17 @@ module cnn_sequencer (
+     always @(posedge clk or negedge rst_n) begin
+         if(!rst_n) begin
+             state<=IDLE; layer<=0; busy<=0; done<=0; error<=0; cycles<=0; error_layer<=0;
+-            limit<=0; margin_threshold<=0; gap_index<=0; gap_sums<=0; logits<=0;
++            limit<=0; limit_last<=0; margin_threshold<=0; gap_index<=0; gap_sums<=0; logits<=0;
+             result_class<=3; result_margin<=0; result_score<=0; result_low_conf<=1; result_logits<=0;
+         end else begin
+             if(busy) cycles<=cycles+1;
+-            if(busy && cycles>=limit-1) begin busy<=0; done<=0; error<=1; error_layer<=7; state<=IDLE; end
++            if(busy && cycles>=limit_last) begin busy<=0; done<=0; error<=1; error_layer<=7; state<=IDLE; end
+             else if(ce) case(state)
+                 IDLE: if(start) begin
+                     done<=0; error<=0; cycles<=0; layer<=0; error_layer<=0; logits<=0;
+                     result_class<=3; result_margin<=0; result_score<=0; result_low_conf<=1; result_logits<=0;
+                     margin_threshold<=min_margin; limit<=cycle_limit;
++                    limit_last<=cycle_limit-32'd1;
+                     if(cycle_limit==0) error<=1;
+                     else begin busy<=1; state<=LAYER_START; end
+                 end
+diff --git a/src/coprocessor/conv_engine.v b/src/coprocessor/conv_engine.v
+index 3501d5d..4ce1409 100644
+--- a/src/coprocessor/conv_engine.v
++++ b/src/coprocessor/conv_engine.v
+@@ -24,7 +24,7 @@ module conv_engine (
+     output wire [63:0] write_data
+ );
+     localparam IDLE=0, PARAM_REQ=1, PARAM_USE=2, READ_REQ=3, MAC_USE=4,
+-               QUANT=5, WRITE_LOW=6, WRITE_HIGH=7, ADVANCE=8, MAC_REQ=9, QUANT_WAIT=10,
++               QUANT=5, WRITE_LOW=6, WRITE_HIGH=7, ADVANCE=8, QUANT_WAIT=10,
+                GEOMETRY=11, ADDRESS_USE=12, SETUP=13;
+     reg [3:0] state;
+     reg [6:0] ci, co, width, height, ow, oh;
+@@ -33,15 +33,17 @@ module conv_engine (
+     reg [1:0] ky, kx;
+     reg [6:0] oy, ox;
+     reg relu;
+-    reg [31:0] limit;
+-    reg [511:0] accumulators, multipliers;
++    reg [31:0] limit_last;
++    reg [511:0] accumulators, multipliers, bias_latched;
+     reg [95:0] shifts;
+     reg [127:0] quantized;
+-    wire [511:0] next_accumulators;
+-    wire [15:0] mac_overflow, quant_errors, active_outputs;
+-    wire [127:0] quant_results;
++    wire [511:0] next_accumulators, sum_accumulators;
++    wire [15:0] mac_overflow, sum_overflow, active_outputs;
++    wire [15:0] quant_results;
+     wire mac_valid;
+-    wire [15:0] quant_valid;
++    wire [1:0] quant_valid, quant_errors;
++    reg mac_issue;
++    reg [2:0] mac_pending, q_send, q_receive;
+     wire [63:0] activations;
+     reg padding_pixel;
+     reg signed [8:0] iy, ix;
+@@ -49,17 +51,23 @@ module conv_engine (
+     reg [5:0] weight_row;
+     reg [12:0] plane_words;
+     reg [15:0] pixel_row, block_base, output_address_low;
+-    function integer output_size;
+-        input integer size, k, s, p;
+-        begin output_size = s == 2 ? (size+2*p-k)/2+1 : size+2*p-k+1; end
++    function [7:0] output_size;
++        input [6:0] size;
++        input [1:0] k, s, p;
++        reg [7:0] span;
++        begin
++            // Launch validation rejects size+2*p<k; legal spans are unsigned.
++            span = {1'b0,size}+{5'd0,p,1'b0}-{6'd0,k};
++            output_size = s == 2'd2 ? (span >> 1)+8'd1 : span+8'd1;
++        end
+     endfunction
+     assign ready = ce && !busy && !abort;
+     assign output_block = ob;
+     assign active_outputs = co >= ob*16+16 ? 16'hffff : (16'h1 << (co-ob*16))-1;
+     assign activations = padding_pixel ? 64'd0 : ci == 1 ? {56'd0,input_data[7:0]} : input_data;
+-    assign memory_enable = rst_n && ce && busy && state == READ_REQ && cycles < limit-1;
+-    assign parameter_enable = rst_n && ce && busy && state == PARAM_REQ && cycles < limit-1;
+-    assign write_enable = rst_n && ce && busy && cycles < limit-1
++    assign memory_enable = rst_n && ce && busy && state == READ_REQ && cycles < limit_last;
++    assign parameter_enable = rst_n && ce && busy && state == PARAM_REQ && cycles < limit_last;
++    assign write_enable = rst_n && ce && busy && cycles < limit_last
+                        && (state == WRITE_LOW || state == WRITE_HIGH);
+     assign write_address = output_address_low+(state==WRITE_HIGH ? plane_words : 13'd0);
+     assign write_data = state == WRITE_HIGH ? quantized[127:64] : quantized[63:0];
+@@ -67,35 +75,62 @@ module conv_engine (
+         iy = $signed({2'd0,oy})*(stride==2 ? 9'sd2 : 9'sd1)+$signed({7'd0,ky})-$signed({7'd0,padding});
+         ix = $signed({2'd0,ox})*(stride==2 ? 9'sd2 : 9'sd1)+$signed({7'd0,kx})-$signed({7'd0,padding});
+     end
+-    mac_array_pipeline array_mac (.clk(clk),.rst_n(rst_n),.ce(ce),.abort(abort),
+-        .in_valid(busy && state==MAC_REQ),.out_valid(mac_valid),
++    // A read is followed by its MAC launch on the next enabled edge.
++    always @(posedge clk or negedge rst_n) begin
++        if(!rst_n) mac_issue<=0;
++        else if(abort || !busy) mac_issue<=0;
++        else if(ce) mac_issue<=state==READ_REQ;
++    end
++    mac_array_pipeline array_mac (.clk(clk),.rst_n(rst_n),.ce(ce),.abort(abort || !busy),
++        .in_valid(busy && mac_issue),.out_valid(mac_valid),
+         .activation_lanes(activations), .weight_lanes(weight_data),
+-        .accumulator_lanes(accumulators), .result_lanes(next_accumulators), .overflow(mac_overflow));
++        .accumulator_lanes(512'd0), .result_lanes(next_accumulators), .overflow(mac_overflow));
+     genvar lane;
+-    generate for (lane=0; lane<16; lane=lane+1) begin: requant_lanes
++    generate for(lane=0;lane<16;lane=lane+1) begin: accumulate_lanes
++        wire signed [32:0] total = {accumulators[lane*32+31],accumulators[lane*32 +: 32]}
++                                  + {next_accumulators[lane*32+31],next_accumulators[lane*32 +: 32]};
++        assign sum_accumulators[lane*32 +: 32]=total[31:0];
++        assign sum_overflow[lane]=total[32]^total[31];
++    end endgenerate
++    // Two II=1 pipelines process all sixteen channels in eight CE beats.
++    generate for (lane=0; lane<2; lane=lane+1) begin: requant_lanes
+         wire signed [7:0] q;
++        wire [3:0] channel={q_send,1'b0}+lane;
+         int8_requant_pipeline requant (.clk(clk),.rst_n(rst_n),.ce(ce),.abort(abort),
+             .in_valid(busy && state==QUANT),.out_valid(quant_valid[lane]),
+-            .accumulator(accumulators[lane*32 +: 32]),
+-            .multiplier(multipliers[lane*32 +: 32]), .shift(shifts[lane*6 +: 6]),
++            .accumulator(accumulators[channel*32 +: 32]),
++            .multiplier(multipliers[channel*32 +: 32]), .shift(shifts[channel*6 +: 6]),
+             .relu(relu), .result(q), .error(quant_errors[lane]));
+-        assign quant_results[lane*8 +: 8] = active_outputs[lane] ? q : 8'd0;
++        assign quant_results[lane*8 +: 8] = q;
+     end endgenerate
+     always @(posedge clk or negedge rst_n) begin
+         if (!rst_n) begin
+             state<=IDLE; busy<=0; done<=0; error<=0; cycles<=0;
+             ci<=0; co<=0; width<=0; height<=0; ow<=0; oh<=0;
+             kernel<=0; stride<=0; padding<=0; ob<=0; ib<=0; blocks<=0;
+-            ky<=0; kx<=0; oy<=0; ox<=0; relu<=0; limit<=0;
+-            accumulators<=0; multipliers<=0; shifts<=0; quantized<=0;
++            ky<=0; kx<=0; oy<=0; ox<=0; relu<=0; limit_last<=0;
++            accumulators<=0; multipliers<=0; shifts<=0; quantized<=0; bias_latched<=0;
++            mac_pending<=0; q_send<=0; q_receive<=0;
+             padding_pixel<=0; input_row<=0; weight_row<=0; plane_words<=0;
+             pixel_row<=0; block_base<=0; output_address_low<=0; input_address<=0; weight_address<=0;
+         end else begin
+             if (busy) cycles<=cycles+1;
+             if(abort) begin busy<=0; done<=0; error<=0; state<=IDLE; end
+-            else if (busy && cycles >= limit-1) begin
++            else if (busy && cycles >= limit_last) begin
++                busy<=0; done<=0; error<=1; state<=IDLE;
++            end else if (ce && busy && mac_valid && mac_pending!=0
++                         && |((mac_overflow | sum_overflow) & active_outputs)) begin
+                 busy<=0; done<=0; error<=1; state<=IDLE;
+-            end else if (ce) case (state)
++            end else if (ce) begin
++                if(busy) begin
++                    if(mac_valid && mac_pending!=0) accumulators<=sum_accumulators;
++                    case({state==READ_REQ,mac_valid && mac_pending!=0})
++                        2'b10: mac_pending<=mac_pending+1;
++                        2'b01: mac_pending<=mac_pending-1;
++                        default: begin end
++                    endcase
++                end
++                case (state)
+                 IDLE: if (start) begin
+                     done<=0; error<=0; cycles<=0;
+                     if (cfg_ci == 0 || cfg_ci > 64 || (cfg_ci != 1 && cfg_ci[2:0] != 0)
+@@ -114,13 +149,15 @@ module conv_engine (
+                         oh<=output_size(cfg_height,cfg_kernel,cfg_stride,cfg_padding);
+                         blocks<=cfg_ci == 1 ? 1 : cfg_ci >> 3;
+                         ob<=0; ib<=0; ky<=0; kx<=0; oy<=0; ox<=0;
+-                        limit<=cfg_cycle_limit; busy<=1; state<=SETUP;
++                        mac_pending<=0; q_send<=0; q_receive<=0;
++                        limit_last<=cfg_cycle_limit-32'd1; busy<=1; state<=SETUP;
+                     end
+                 end
+                 SETUP: begin plane_words<=ow*oh; state<=PARAM_REQ; end
+                 PARAM_REQ: state<=PARAM_USE;
+                 PARAM_USE: begin
+-                    accumulators<=bias_data; multipliers<=multiplier_data; shifts<=shift_data;
++                    accumulators<=bias_data; bias_latched<=bias_data;
++                    multipliers<=multiplier_data; shifts<=shift_data;
+                     state<=GEOMETRY;
+                 end
+                 GEOMETRY: begin
+@@ -136,13 +173,7 @@ module conv_engine (
+                     output_address_low<=block_base+pixel_row+ox;
+                     state<=READ_REQ;
+                 end
+-                READ_REQ: state<=MAC_REQ;
+-                MAC_REQ: state<=MAC_USE;
+-                MAC_USE: if(mac_valid) begin
+-                if (|(mac_overflow & active_outputs)) begin
+-                    busy<=0; done<=0; error<=1; state<=IDLE;
+-                end else begin
+-                    accumulators<=next_accumulators;
++                READ_REQ: begin
+                     if (ib+1 < blocks) begin ib<=ib+1; state<=GEOMETRY; end
+                     else begin
+                         ib<=0;
+@@ -150,24 +181,37 @@ module conv_engine (
+                         else begin
+                             kx<=0;
+                             if (ky+1 < kernel) begin ky<=ky+1; state<=GEOMETRY; end
+-                            else begin ky<=0; state<=QUANT; end
++                            else begin ky<=0; state<=MAC_USE; end
+                         end
+                     end
+                 end
++                MAC_USE: if(mac_valid && mac_pending==1) begin
++                    q_send<=0; q_receive<=0; state<=QUANT;
++                end
++                QUANT, QUANT_WAIT: begin
++                if(state==QUANT) begin
++                    q_send<=q_send+1;
++                    if(q_send==7) state<=QUANT_WAIT;
+                 end
+-                QUANT: state<=QUANT_WAIT;
+-                QUANT_WAIT: if(&quant_valid) begin
+-                if (|(quant_errors & active_outputs)) begin
++                if(&quant_valid) begin
++                if (|(quant_errors & active_outputs[q_receive*2 +: 2])) begin
+                     busy<=0; done<=0; error<=1; state<=IDLE;
+-                end else begin quantized<=quant_results; state<=WRITE_LOW; end
++                end else begin
++                    quantized[q_receive*16 +: 16] <= {
++                        active_outputs[q_receive*2+1] ? quant_results[15:8] : 8'd0,
++                        active_outputs[q_receive*2] ? quant_results[7:0] : 8'd0};
++                    q_receive<=q_receive+1;
++                    if(q_receive==7) state<=WRITE_LOW;
++                end
++                end
+                 end
+                 WRITE_LOW: state <= co > ob*16+8 ? WRITE_HIGH : ADVANCE;
+                 WRITE_HIGH: state<=ADVANCE;
+                 ADVANCE: begin
+-                    if (ox+1 < ow) begin ox<=ox+1; state<=PARAM_REQ; end
++                    if (ox+1 < ow) begin ox<=ox+1; accumulators<=bias_latched; state<=GEOMETRY; end
+                     else begin
+                         ox<=0;
+-                        if (oy+1 < oh) begin oy<=oy+1; state<=PARAM_REQ; end
++                        if (oy+1 < oh) begin oy<=oy+1; accumulators<=bias_latched; state<=GEOMETRY; end
+                         else begin
+                             oy<=0;
+                             if ((ob+1)*16 < co) begin ob<=ob+1; state<=PARAM_REQ; end
+@@ -177,6 +221,7 @@ module conv_engine (
+                 end
+                 default: begin busy<=0; done<=0; error<=1; state<=IDLE; end
+             endcase
++            end
+         end
+     end
+ endmodule
+diff --git a/src/coprocessor/design_v0.md b/src/coprocessor/design_v0.md
+index 6f6e14b..62861b1 100644
+--- a/src/coprocessor/design_v0.md
++++ b/src/coprocessor/design_v0.md
+@@ -229,8 +229,10 @@ BRAM36 以 4,096 个 8 位有效数据估算；最终数量以综合推断为准
+ 纯 MAC 理想下界为 `ceil(11,944,128/128)=93,314` 拍；调度值因首层输入通道补齐等原因更高。
+ GAP 另需至少约 2,048 个 8-lane 累加拍，输出后处理、BRAM 冲突、流水灌空和 DMA 另计。
+ 101,384 是阵列点积工作组数量预算，100 MHz 下 1.014 ms 仅是每组一拍的理想发射估算。
+-当前首版控制器每组含分拍地址、同步读和运算等待，实际仿真周期明显高于该估算；
+-按[本轮原始日志](../../data/logs/2026-10-13-cnn-arithmetic/README.md)记录，不能把 0.933/1.014 ms 当成现有实现或板端延迟。
++10/13 首版每组串行等待地址、同步读和运算返回，整网为 1,123,109 周期；10/15 将读调度与 MAC 返回重叠，
++缓存每块参数并用两路 requant 分时处理，两组诊断整网逐元素对拍各为 472,593 周期（含每 7 拍暂停 1 拍）。
++这仍包含地址/同步读、尾通道和流水灌空开销；不能把 0.933/1.014 ms 当成现有实现或板端延迟。
++见[首版证据](../../data/logs/2026-10-13-cnn-arithmetic/README.md)与[优化证据](../../data/logs/2026-10-15-improvements-fast/README.md)。
+ 
+ MAC 阵列起步固定为 8×16=128，基线按一 MAC/DSP 预算 128 DSP。x7z020 总量 220，
+ 视觉链既有报告为 0 DSP；RISC-V、requant 和地址逻辑的实际 DSP/LUT 占用仍须集成综合后扣除。
+diff --git a/src/pynq_host/README.md b/src/pynq_host/README.md
+index ef2f88a..fc7f3be 100644
+--- a/src/pynq_host/README.md
++++ b/src/pynq_host/README.md
+@@ -8,7 +8,11 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采
+ `data/golden/vision/localize/reference.py`／`arm_localize.py` 与打包工具提供定位／裁剪黄金参考，不等于实时部署。
+ `vision_mock_service.py` 提供明确标注 MOCK 的服务；D6 字段白名单已随 PR #67 合并。
+ `vision_protocol.py` 已支持严格 MOCK/LIVE v1.2 校验；`vision_mock_service.py --live` 提供合成 LIVE 替身。
+-`vision_live_service.py` 已实现 FILE 后端、每轮捕获副本/引擎调用/报文与产物落盘；FILE 恒 `prototype=true`，前端 PROTOTYPE 徽标已实现。
++`vision_live_service.py` 已实现 FILE 后端、每轮捕获/引擎调用/报文；FILE 恒 `prototype=true`，前端 PROTOTYPE 徽标已实现。
++10/15 起，FILE 原型自动轮询直接在内存中检查，只原子更新 `<root>/<session前8位>/latest_packet.json`；
++手动 `POST /v1/check` 携 `trigger_ref` 时，完整产物保存到同会话的 `check-<check_id六位>/`。
++`--archive-every-round` 启用逐轮完整归档。分类器在会话中复用，修改权重后须重启服务。
++非原型后端仍须逐轮保存 C04 Q3 capture 证据；当前真实硬件后端尚未实现。
+ 它没有真实 HDMI/DDR/MMIO/CNN 后端，`/v1/config` 仅推进软件配置号，不证明 R12 硬件应用；见[整合证据](../../data/logs/2026-10-12-pr-review/README.md)。
+ 工单由服务启动参数提供，HTTP配置仅接收control；在线工单编辑和请求重试幂等尚未实现。
+ 下列 notebook／通用工具仍是规划，不能由 mock 或训练演练推断已实现。
+@@ -25,6 +29,8 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采
+ 见[模块三逐层参考](../../docs/module3-prototype-reference.md)。`src/coprocessor/` 另有完整 INT8 整网参考、算子 RTL 与诊断黄金；正式 INT8 模型和 MMIO/DMA 后端尚未实现，见[计算链现状](../coprocessor/README.md)。
+ 
+ 10/13 新增 `c01_capture.py`：custom DDR 单帧候选所有权驱动，完整转移自动停机后 invalidate 并复制；七组离板异常测试通过，未接入 LIVE 服务。板端入口 `sim/scripts/c01_ddr_onboard.py` 的两次实测均启动前失败并安全恢复，最终驱动修正尚待返板，见[DDR证据](../../data/logs/2026-10-13-ddr-single-frame/README.md)。
++10/15 新增 `c01_park_capture.py` 备选驱动，显式 `C01_CAPTURE_MODE=park` 才启用；仅通过离板替身，
++实际 IRQ/槽/写完成绑定及 N03 仍待验证，见[所有权候选说明](../../docs/c01-ddr-frame-ownership-v0.md)。
+ 
+ 后续新增 `dataset_manifest.py`、`dataset_audit.py` 和仓库 CLI：720p 采集清单、
+ 会话/精确重复像素/实物编号泄漏、覆盖统计和来源声明已用测试夹具验证，理解题及补测已通过。
+diff --git a/src/pynq_host/inspection_run.py b/src/pynq_host/inspection_run.py
+index 45e7a1d..4c1a939 100644
+--- a/src/pynq_host/inspection_run.py
++++ b/src/pynq_host/inspection_run.py
+@@ -15,13 +15,13 @@ from inspection_replay import inspect_frame, annotate
+ from inspection_rules import judge
+ 
+ 
+-def run(source, weights, order, output, request_id, min_score, max_targets=16):
++def run(source, weights, order, output, request_id, min_score, max_targets=16, classifier=None):
+     if not isinstance(request_id, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", request_id):
+         raise ValueError("request ID must contain 1-64 ASCII letters, digits, hyphens or underscores")
+     judge([], order, min_score, max_targets)
+     source, output = Path(source).resolve(), Path(output).resolve()
+     raw = source.read_bytes()
+-    classifier = PrototypeClassifier(weights)
++    classifier = classifier if classifier is not None else PrototypeClassifier(weights)
+     root = Path(__file__).resolve().parents[2]
+     code_paths = ["src/pynq_host/" + name + ".py" for name in
+                   ("inspection_run", "inspection_replay", "inspection_rules", "inspection_model",
+diff --git a/src/pynq_host/vision_live_service.py b/src/pynq_host/vision_live_service.py
+index e3a9470..e42d83d 100644
+--- a/src/pynq_host/vision_live_service.py
++++ b/src/pynq_host/vision_live_service.py
+@@ -1,6 +1,8 @@
+ """W05 正式检查服务骨架：HTTP 轮次/产物/幂等层 + 可插拔检查引擎（C04 §2.3）。
+ 
+-与 vision_mock_service 的区别：真实引擎、每轮新捕获复制落盘、(session_id, check_id) 唯一定位产物。
++与 vision_mock_service 的区别：真实引擎、每轮新捕获、(session_id, check_id) 唯一定位产物。
++FILE 原型自动轮询在内存中检查并更新 latest_packet.json；手动触发保存完整产物。
++--archive-every-round 恢复逐轮归档。分类器复用，权重文件变化后须重启服务。
+ - 引擎契约：engine(capture_path, round_dir, request_id) -> {status, targets, decision, width, height}；
+   默认 file_engine（懒加载 inspection_run——cv2/numpy/torch 仅在真正服务时导入，
+   本文件保持 stdlib 可测，接入 run_vision_python.sh）。
+@@ -52,6 +54,16 @@ class FileCaptures:
+         atomic_write(round_dir / "capture.png", raw)
+         return round_dir / "capture.png"
+ 
++    def capture_frame(self):
++        import cv2
++        import numpy as np
++        raw = self.files[self.seq % len(self.files)].read_bytes()
++        self.seq = (self.seq + 1) & 0xFFFFFFFF
++        frame = cv2.imdecode(np.frombuffer(raw, dtype=np.uint8), cv2.IMREAD_COLOR)
++        if frame is None:
++            raise ValueError("capture is not a decodable color image")
++        return frame
++
+ 
+ def complete_decision(decision, targets):
+     """超限映射：actual/delta/missing/extra 为 None 时按报文内目标重算；verdict/reasons 不动。"""
+@@ -71,13 +83,14 @@ def complete_decision(decision, targets):
+ class State:
+     """会话状态：check_id 单调回绕；每轮 = 新捕获 → 引擎 → 报文校验 → 产物原子落盘。"""
+ 
+-    def __init__(self, root, captures, engine, order):
++    def __init__(self, root, captures, engine, order, archive_every_round=False):
+         self.session_id = str(uuid.uuid4())
+         self.config_id = 0
+         self.check_id = 0
+         self.captures = captures
+         self.engine = engine
+         self.order = dict(order)
++        self.archive_every_round = archive_every_round
+         self.last_packet = None
+         self.lock = threading.Lock()
+         self.session_dir = Path(root) / self.session_id[:8]
+@@ -92,9 +105,16 @@ class State:
+             self.check_id = (self.check_id + 1) & 0xFFFFFFFF
+             check = self.check_id
+             round_dir = self.session_dir / f"check-{check:06d}"
+-            round_dir.mkdir(exist_ok=False)
+-            capture_path = self.captures.capture(round_dir)
+-            fields = self.engine(capture_path, round_dir, f"chk{check:06d}")
++            memory_round = (trigger_ref is None and not self.archive_every_round
++                            and self.captures.prototype is True
++                            and hasattr(self.captures, "capture_frame")
++                            and hasattr(self.engine, "inspect_frame"))
++            if memory_round:
++                fields = self.engine.inspect_frame(self.captures.capture_frame())
++            else:
++                round_dir.mkdir(exist_ok=False)
++                capture_path = self.captures.capture(round_dir)
++                fields = self.engine(capture_path, round_dir, f"chk{check:06d}")
+             packet = validate_packet({
+                 "version": VERSION, "mode": "LIVE", "session_id": self.session_id,
+                 "frame_id": self.captures.seq, "config_id": self.config_id,
+@@ -104,29 +124,49 @@ class State:
+                 "decision": complete_decision(fields["decision"], fields["targets"]),
+                 "prototype": self.captures.prototype,
+                 **({"trigger_ref": trigger_ref} if trigger_ref is not None else {})})
+-            atomic_write(round_dir / "packet.json",
+-                         json.dumps(packet, sort_keys=True).encode())
++            payload = json.dumps(packet, sort_keys=True).encode()
++            if not memory_round:
++                atomic_write(round_dir / "packet.json", payload)
++            atomic_write(self.session_dir / "latest_packet.json", payload)
+             self.last_packet = packet
+             return packet
+ 
+ 
+ def file_engine(weights, order, min_score, max_targets):
+-    """默认引擎：调 inspection_run.run（幂等、产物/哈希齐全）；产物落 round_dir/<request_id>/。"""
+-    def run(capture_path, round_dir, request_id):
+-        from inspection_run import run as inspect  # 重依赖（cv2/torch）仅真正服务时导入
+-        result = inspect(source=capture_path, weights=weights, order=order, output=round_dir,
+-                         request_id=request_id, min_score=min_score, max_targets=max_targets)
++    """Cached model; polling inspects memory, manual/diagnostic rounds archive provenance."""
++    cached = []
++    weight_path = Path(weights)
++    def classifier():
++        signature = (weight_path.stat().st_mtime_ns, weight_path.stat().st_size)
++        if not cached:
++            from inspection_model import PrototypeClassifier
++            cached.extend((PrototypeClassifier(weight_path), signature))
++        if signature != cached[1]:
++            raise ValueError("model file changed; restart service to load a new model")
++        return cached[0]
++    def fields(result):
+         return {"status": result["decision"]["verdict"],
+                 "targets": [{"target_id": t["target_id"], "bbox": t["bbox"],
+                              "class": t.get("class"), "score": t.get("score")}
+                             for t in result["targets"]],
+-                "decision": result["decision"],
+-                "width": result["width"], "height": result["height"]}
++                "decision": result["decision"], "width": result["width"], "height": result["height"]}
++    def run(capture_path, round_dir, request_id):
++        from inspection_run import run as inspect  # 重依赖（cv2/torch）仅真正服务时导入
++        result = inspect(source=capture_path, weights=weights, order=order, output=round_dir,
++                         request_id=request_id, min_score=min_score, max_targets=max_targets,
++                         classifier=classifier())
++        return fields(result)
++    def memory(frame):
++        from inspection_replay import inspect_frame
++        result, _ = inspect_frame(frame, classifier(), order, min_score, max_targets)
++        return fields(result)
++    run.inspect_frame = memory
+     return run
+ 
+ 
+-def make_server(host="127.0.0.1", port=8765, root=None, captures=None, engine=None, order=None):
+-    state = State(root, captures, engine, order)
++def make_server(host="127.0.0.1", port=8765, root=None, captures=None, engine=None, order=None,
++                archive_every_round=False):
++    state = State(root, captures, engine, order, archive_every_round)
+ 
+     class Handler(BaseHTTPRequestHandler):
+         def reply(self, status, body):
+@@ -193,6 +233,7 @@ if __name__ == "__main__":
+     parser.add_argument("--order", type=int, nargs=3, required=True, metavar=("BOLT", "NUT", "WASHER"))
+     parser.add_argument("--min-score", type=float, required=True)
+     parser.add_argument("--max-targets", type=int, default=16)
++    parser.add_argument("--archive-every-round", action="store_true", help="archive automatic rounds as well as manual checks")
+     args = parser.parse_args()
+     order = dict(zip(CLASSES, args.order))
+     captures = FileCaptures(args.capture_dir)
+@@ -200,4 +241,5 @@ if __name__ == "__main__":
+     print(f"LIVE SERVICE (backend={captures.backend}, prototype={captures.prototype}): "
+           f"http://{args.host}:{args.port}/v1/status", flush=True)
+     make_server(host=args.host, port=args.port, root=args.root,
+-                captures=captures, engine=engine, order=order).serve_forever()
++                captures=captures, engine=engine, order=order,
++                archive_every_round=args.archive_every_round).serve_forever()
+diff --git a/src/riscv/id_ex_stage.v b/src/riscv/id_ex_stage.v
+index 02ccd87..fae03ba 100644
+--- a/src/riscv/id_ex_stage.v
++++ b/src/riscv/id_ex_stage.v
+@@ -56,8 +56,10 @@ module id_ex_stage (
+     assign branch_target = in_pc + branch_imm;
+     // Independent PC adder: do not add 4 after branch_target/redirect_target.
+     assign branch_target_next = in_pc + branch_next_imm;
++    wire [31:0] jalr_imm = {{20{instr[31]}},instr[31:20]};
++    wire [31:0] jalr_target = rs1_value + jalr_imm;
+     assign redirect_target = (jump_type == 2'd2) ?
+-                             (alu_y & 32'hffff_fffe) : (in_pc + imm);
++                             {jalr_target[31:1],1'b0} : (in_pc + imm);
+     assign ex_result = (wb_sel == 2'd2) ? (in_pc + 4) :
+                        (wb_sel == 2'd3) ? muldiv_result : alu_y;
+     assign ex_addr = alu_y;
+diff --git a/src/riscv/plan.md b/src/riscv/plan.md
+index f852b2c..48f7c6f 100644
+--- a/src/riscv/plan.md
++++ b/src/riscv/plan.md
+@@ -248,3 +248,4 @@ RTL 可独立自测后交付配置和已知问题，验证线复验并反馈缺
+ | 2026-10-07 | 后续验收已补齐并合入：见[模块一收口报告](../../report/module1-closure.md)；旧待办和失败点保留为历史状态。 |
+ | 2026-10-09 | B06：统一当前 v1 四档、valid 冲刷、tb 统计与 arch 声明子集边界；未改变验收指标、RTL 或历史数据。 |
+ | 2026-10-13 | mem_wb 复位/CE 结构优化：payload 移出异步复位块 else 分支，SoC 40 MHz bht2 WNS 3.618→6.447 ns，复位派生 CE 类最差路径消失，四档 benchmark 周期数逐拍不变；证据见 [data/logs/2026-10-13-soc-reset-ce](../../data/logs/2026-10-13-soc-reset-ce/README.md)。 |
++| 2026-10-15 | JALR 使用 rs1+原始 I 立即数独立加法器；ID+EX 36,880 例通过，SoC 40 MHz bht2 实现 WNS +6.613 ns，默认 Verilog 综合通过。同步 BRAM DMEM 未实现，仍保持 v1 同拍读契约；完整回归状态和原始证据见[本轮记录](../../data/logs/2026-10-15-improvements-fast/README.md)。 |
+diff --git a/src/vision/cop_buf.v b/src/vision/cop_buf.v
+index 52e5900..ba301b0 100644
+--- a/src/vision/cop_buf.v
++++ b/src/vision/cop_buf.v
+@@ -58,6 +58,7 @@ module cop_buf #(
+     reg                   replay;
+     reg                   rd_buf;
+     reg [AWX+AWY-1:0]     raddr;
++    reg [AWX-1:0]         rd_col;
+     reg [2:0]             hgap;
+     reg                   finishing;   // 末像素已发，走完最后一个行尾 hs 再收
+     reg [7:0]             rd0, rd1;    // 两阵列同址读，输出寄存（BRAM 推断要求）
+@@ -83,7 +84,7 @@ module cop_buf #(
+             writing <= 0;
+             bank_frame[0]<=0;bank_frame[1]<=0;bank_config[0]<=0;bank_config[1]<=0;
+             out_frame_id<=0;out_config_id<=0;drop_count<=0;
+-            replay <= 0; rd_buf <= 0; raddr <= 0; hgap <= 0; finishing <= 0;
++            replay <= 0; rd_buf <= 0; raddr <= 0; rd_col <= 0; hgap <= 0; finishing <= 0;
+             vs_int <= 0; de_int <= 0; hs_int <= 0;
+             out_vs <= 0; out_hs <= 0; out_de <= 0; frame_done <= 0;
+         end else begin
+@@ -123,16 +124,17 @@ module cop_buf #(
+                     out_frame_id<=bank_frame[choose_rd];out_config_id<=bank_config[choose_rd];
+                     buf_valid[choose_rd] <= 0;
+                     if (choose_rd == wr_sel) wr_sel <= ~wr_sel;
+-                    raddr <= 0; hgap <= 0;
++                    raddr <= 0; rd_col <= 0; hgap <= 0;
+                     vs_int <= 1;                 // 帧首脉冲，首个 de 晚两拍
+                 end
+             end else if (hgap == 0) begin
+                 de_int <= 1; hs_int <= 0;
+-                if ((raddr % DW) == DW-1) begin
++                if (rd_col == DW-1) begin
++                    rd_col <= 0;
+                     hgap <= 4;                   // 行尾空白：de→hs 3 拍、hs→de 1 拍
+                     if (raddr == FRAME_PX-1)
+                         finishing <= 1;          // 末像素兼行尾：hs 走完再收
+-                end
++                end else rd_col <= rd_col + 1;
+                 raddr <= raddr + 1;
+             end else begin
+                 de_int <= 0;
+diff --git a/src/vision_client/README.md b/src/vision_client/README.md
+index 27b119c..afdb5b2 100644
+--- a/src/vision_client/README.md
++++ b/src/vision_client/README.md
+@@ -72,6 +72,9 @@ RECHECK 琥珀，附 `-washerx1` 式缺多摘要）、TARGETS 格显示「实际
+ （v1.2 LIVE 报文、prototype 恒 true、场景循环 PASS/FAIL/RECHECK；合成数据，不代表板上识别）。
+ 
+ 状态机（`rounds.py`，纯 stdlib）与取帧渲染解耦：preview.py 只负责取帧与画框。
++10/15 起 HTTP 轮询及自动重握手在单个后台线程中执行，GUI 逐帧采纳结果快照；
++网络等待期间可继续预览，结果按原接收时间规则过期撤框。手动轮次携独立 `trigger_ref`，
++FILE 原型服务据此保留该轮完整产物；实际 UVC 帧率与板端联调仍待实测。
+ 离线测试 `py sim/vision/test_vision_rounds.py` 覆盖触发节流、超龄/配置变化/断联撤框、
+ 服务重启（新会话）自动恢复，已接入 `sim/scripts/run_vision_python.sh` 全量。
+ 
+diff --git a/src/vision_client/preview.py b/src/vision_client/preview.py
+index 75afbd3..81df6e7 100644
+--- a/src/vision_client/preview.py
++++ b/src/vision_client/preview.py
+@@ -20,7 +20,7 @@ from pathlib import Path
+ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "pynq_host"))
+ sys.path.insert(0, str(Path(__file__).resolve().parent))
+ from vision_protocol import mock_packet
+-from rounds import RemoteRounds, live_view
++from rounds import AsyncRemoteRounds, live_view
+ from records import AnomalyLog, BatchRecords
+ from hud_text import TextEngine
+ from hud import (AMBER, AMBER_DEEP, BUTTON, CYAN, DIM, GREEN, MAIN, RED, Hud)
+@@ -197,7 +197,7 @@ def main():
+         parser.error("--interval must be < --max-age, otherwise each round expires before the next")
+     if args.headless and args.frames < 1:
+         parser.error("headless requires --frames > 0")
+-    remote = RemoteRounds(args.endpoint, args.max_age) if args.endpoint else None
++    remote = AsyncRemoteRounds(args.endpoint, args.max_age) if args.endpoint else None
+     if remote is not None:
+         try:
+             status = remote.handshake()
+@@ -291,6 +291,8 @@ def main():
+                 if delay > 0:
+                     time.sleep(delay)
+     finally:
++        if remote is not None:
++            remote.close()
+         if capture is not None:
+             capture.release()
+         if not args.headless:
+diff --git a/src/vision_client/rounds.py b/src/vision_client/rounds.py
+index 99f2013..47a81ee 100644
+--- a/src/vision_client/rounds.py
++++ b/src/vision_client/rounds.py
+@@ -17,9 +17,13 @@ preview.py 只负责取帧与渲染；状态机抽离为纯 stdlib 模块（不
+   （板卡/EXE 时钟不同源）；同迭代"先取钟再请求"的负年龄不判超龄（2026-10-08 实机 flap 修复）。
+ """
+ import json
++import copy
++import queue
++import threading
+ import time
+ import urllib.error
+ import urllib.request
++import uuid
+ 
+ from vision_protocol import validate_packet
+ 
+@@ -119,7 +123,8 @@ class RemoteRounds:
+         self.manual_pending = False
+         try:
+             # 传空 JSON 对象：http_json 以"有无 body"区分 GET/POST，/v1/check 仅接受 POST。
+-            packet = validate_packet(http_json(self.endpoint + "/v1/check", {}))
++            body = {"trigger_ref": uuid.uuid4().hex} if manual else {}
++            packet = validate_packet(http_json(self.endpoint + "/v1/check", body))
+         except (urllib.error.URLError, OSError, ValueError) as error:
+             self.fails += 1
+             print(f"WARN: check failed ({self.fails}/{FAIL_LIMIT}): {error}", flush=True)
+@@ -171,3 +176,70 @@ class RemoteRounds:
+     def drain_events(self):
+         events, self.events = self.events, []
+         return events
++
++
++class AsyncRemoteRounds(RemoteRounds):
++    """GUI-owned snapshot; a single worker owns HTTP and its session state."""
++
++    SNAPSHOT_FIELDS = ("session", "mode", "hardware_connected", "expected_config", "fails",
++                       "packet", "received_at", "last_round_manual")
++
++    def __init__(self, endpoint, max_age):
++        super().__init__(endpoint, max_age)
++        self._network = RemoteRounds(endpoint, max_age)
++        self._results = queue.SimpleQueue()
++        self._in_flight = False
++        self._closed = False
++        self._thread = None
++
++    def _snapshot(self):
++        return ({key: copy.deepcopy(getattr(self._network, key)) for key in self.SNAPSHOT_FIELDS},
++                self._network.drain_events())
++
++    def _adopt(self, result):
++        fields, events = result
++        for key, value in fields.items():
++            setattr(self, key, value)
++        self.events.extend(events)
++
++    def handshake(self):
++        if self._in_flight:
++            raise RuntimeError("handshake while a request is in flight")
++        status = self._network.handshake()
++        self._adopt(self._snapshot())
++        self.last_trigger = 0.0
++        self.manual_pending = False
++        return status
++
++    def _request(self, now, manual):
++        self._network.manual_pending = manual
++        try:
++            self._network.poll(now, 0.0)
++        except Exception as error:
++            self._network.fails = FAIL_LIMIT
++            self._network.events.append({"kind": "poll_failed", "prev": None,
++                                         "check_id": None, "fails": FAIL_LIMIT,
++                                         "error": str(error)})
++        finally:
++            self._results.put(self._snapshot())
++
++    def poll(self, now, interval):
++        if self._closed:
++            return
++        try:
++            self._adopt(self._results.get_nowait())
++            self._in_flight = False
++        except queue.Empty:
++            pass
++        if self._in_flight or now - self.last_trigger < interval:
++            return
++        self.last_trigger = now
++        manual, self.manual_pending = self.manual_pending, False
++        self._in_flight = True
++        self._thread = threading.Thread(target=self._request, args=(now, manual), daemon=True)
++        self._thread.start()
++
++    def close(self, wait=False):
++        self._closed = True
++        if wait and self._thread is not None:
++            self._thread.join(REQUEST_TIMEOUT * 3 + 1)
+diff --git a/tight_setup_hold_pins.txt b/tight_setup_hold_pins.txt
+deleted file mode 100644
+index 21d19c8..0000000
+--- a/tight_setup_hold_pins.txt
++++ /dev/null
+@@ -1,28 +0,0 @@
+-+====================+===================+==============================+
+-| Launch Setup Clock | Launch Hold Clock | Pin                          |
+-+====================+===================+==============================+
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[15]/D |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[21]/D |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[28]/D |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[20]/D |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[14]/D |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[8]/D  |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[24]/D |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[31]/D |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[25]/D |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[9]/D  |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[30]/D |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[29]/D |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[12]/D |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[19]/D |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[23]/D |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[4]/D  |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[26]/D |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[1]/D  |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[5]/D  |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[16]/D |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[18]/D |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[6]/D  |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[27]/D |
+-| sys_clk            | sys_clk           | u_if_stage/pc_id_r_reg[22]/D |
+-+--------------------+-------------------+------------------------------+

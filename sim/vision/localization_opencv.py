@@ -4,6 +4,24 @@ import cv2
 import numpy as np
 
 
+def contrast_mask(lab, background, color_threshold):
+    """Exact half-integer median distances, without per-pixel float/sqrt arrays."""
+    delta = lab.astype(np.int16) * 2 - np.rint(background * 2).astype(np.int16)
+    squared = np.einsum("ijk,ijk->ij", delta, delta, dtype=np.int32)
+    threshold = float(color_threshold)
+    if threshold <= 0:
+        return np.full(lab.shape[:2], 255, dtype=np.uint8)
+    if not np.isfinite(threshold) or threshold > 512:
+        return np.zeros(lab.shape[:2], dtype=np.uint8)
+    # Preserve float64 sqrt comparison at thresholds adjacent to exact distances.
+    cutoff = int(4 * threshold * threshold)
+    while np.sqrt(np.float64(cutoff) / 4) < threshold:
+        cutoff += 1
+    while cutoff > 0 and np.sqrt(np.float64(cutoff - 1) / 4) >= threshold:
+        cutoff -= 1
+    return (squared >= cutoff).astype(np.uint8) * 255
+
+
 def detect_boxes(image, color_threshold=22, min_area_ratio=0.00008):
     """Find separated objects that contrast with the four image corners."""
     if image is None or image.ndim != 3 or image.shape[2] != 3:
@@ -16,8 +34,7 @@ def detect_boxes(image, color_threshold=22, min_area_ratio=0.00008):
                               lab[-patch:, :patch].reshape(-1, 3),
                               lab[-patch:, -patch:].reshape(-1, 3)))
     background = np.median(corners, axis=0)
-    distance = np.linalg.norm(lab.astype(np.float32) - background, axis=2)
-    mask = (distance >= color_threshold).astype(np.uint8) * 255
+    mask = contrast_mask(lab, background, color_threshold)
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
     mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
     mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)

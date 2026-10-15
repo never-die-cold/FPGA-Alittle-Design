@@ -1,0 +1,38 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+PASS: int8_mac 65035 vectors; signed product/addition and overflow
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_int8_mac.v:41: $finish called at 65035000 (1ps)
+PASS: mac_array 4272 output vectors; O16/I8 packing, signs, overflow
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_mac_array.v:54: $finish called at 275000 (1ps)
+PASS: int8_requant 8075 Python-golden vectors; rounding, saturation, ReLU, invalid params
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_int8_requant.v:30: $finish called at 8075000 (1ps)
+PASS: int8_gap all 32513 legal sums and invalid sums; Python golden
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_int8_gap.v:23: $finish called at 32515000 (1ps)
+PASS: int8_logits 2814 Python-golden vectors; ties, all margins, low confidence, invalid INT8
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_int8_logits.v:30: $finish called at 2814000 (1ps)
+PASS: MAC pipeline 4272 lane results, streaming, signs, overflow, stalls and abort
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_mac_array_pipeline.v:68: $finish called at 3770000 (1ps)
+PASS: requant pipeline 8075 Python golden vectors, bubbles, CE stalls, abort
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_int8_requant_pipeline.v:53: $finish called at 242370000 (1ps)
+PASS: full-shape C02 convolution/FC diagnostics ['padding_tail', 'conv1', 'conv2', 'conv3', 'conv4', 'fc']
+PASS: conv_engine case=E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/padding_tail words=36 read_transactions=216 parameter_reads=2 cycles=1335; every pixel/lane matches Python
+PASS: conv_engine geometry 528 launch/size/rejection cases; independent integer oracle
+PASS: conv_engine watchdog 82 exact-cycle cases; CE pause, latched budget and terminal strobes
+PASS: conv_engine bad requant/overflow/config/watchdog/reset recovery; ce stalls tested
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_conv_engine.v:168: $finish called at 63446000 (1ps)
+PASS: conv_engine case=E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/conv1 words=2048 read_transactions=9216 parameter_reads=1 cycles=57347; every pixel/lane matches Python
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_conv_engine.v:168: $finish called at 573516000 (1ps)
+PASS: conv_engine case=E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/conv2 words=4096 read_transactions=36864 parameter_reads=2 cycles=179205; every pixel/lane matches Python
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_conv_engine.v:168: $finish called at 1792096000 (1ps)
+PASS: conv_engine case=E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/conv3 words=1024 read_transactions=18432 parameter_reads=2 cycles=77061; every pixel/lane matches Python
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_conv_engine.v:168: $finish called at 770656000 (1ps)
+PASS: conv_engine case=E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/conv4 words=2048 read_transactions=36864 parameter_reads=4 cycles=154122; every pixel/lane matches Python
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_conv_engine.v:168: $finish called at 1541266000 (1ps)
+PASS: conv_engine case=E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/fc words=1 read_transactions=8 parameter_reads=1 cycles=54; every pixel/lane matches Python
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_conv_engine.v:168: $finish called at 586000 (1ps)
+PASS: full diagnostic integer network golden {'pattern': {'class_id': 0, 'margin_q': 0, 'score_q15': 0, 'low_conf': True}, 'zero': {'class_id': 2, 'margin_q': 2, 'score_q15': 258, 'low_conf': True}}
+PASS: cnn_sequencer E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/network-vectors/pattern all 9225 packed words/73795 elements match integer network; logits=01fd01 class=0 margin=0 cycles=472593
+PASS: cnn_sequencer watchdog 82 exact-cycle cases; CE pause, latched budget and terminal strobes
+PASS: cnn_sequencer invalid parameters/watchdog/reset/invalid GAP and successful fresh run; no false DONE
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cnn_sequencer.v:160: $finish called at 14147396000 (1ps)
+PASS: cnn_sequencer E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/network-vectors/zero all 9225 packed words/73795 elements match integer network; logits=04fd02 class=2 margin=2 cycles=472593
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cnn_sequencer.v:160: $finish called at 4725976000 (1ps)
