@@ -37,5 +37,5 @@ set hold_slack [get_property SLACK [lindex $hold_paths 0]]
 set dsp [llength [get_cells -hierarchical -filter {REF_NAME =~ DSP48*}]]
 set severe [get_drc_violations -filter {SEVERITY == Error || SEVERITY == "Critical Warning"}]
 puts "CNN_OOC_RESULT WNS=$slack WHS=$hold_slack DSP=$dsp SEVERE_DRC=[llength $severe]"
-if {$slack < 0 || $hold_slack < 0 || $dsp > 220 || [llength $severe]} { error "CNN OOC timing/resource/DRC gate failed; preserve reports" }
+if {$slack < 0 || $hold_slack < 0 || $dsp > 176 || [llength $severe]} { error "CNN OOC timing/resource/DRC gate failed (DSP budget 176); preserve reports" }
 puts "PASS: CNN operator OOC setup/hold timing, DSP resource and severe DRC gate"

@@ -1,0 +1,630 @@
+{
+  "directory": "sim/build/vision-client/dist/vision_preview",
+  "files": [
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/_asyncio.pyd",
+      "bytes": 74096,
+      "sha256": "c77de90cad749087a0c5dc5e19d78d24f6ef44e7e5ac19b8420cfc0cea62395d"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/_bz2.pyd",
+      "bytes": 86896,
+      "sha256": "65f610646d10d5babea080e060d244b546ec52c54012e5e937dc72dcc2e2e7bc"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/_ctypes.pyd",
+      "bytes": 127480,
+      "sha256": "0e56107a891100535f2da79d85a5ae65ff1227b4765bd108f8593ac1a1110d81"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/_decimal.pyd",
+      "bytes": 262000,
+      "sha256": "aeacfead2befcc0768063a037bb64bd32109ae09cb144e5f571b04dd7965db9d"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/_elementtree.pyd",
+      "bytes": 135160,
+      "sha256": "5009a9a53c03ef8387443b5cf6ce08e5c3a79727466a0b931c5bbca915bf89ca"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/_hashlib.pyd",
+      "bytes": 68976,
+      "sha256": "03d233dbace599168eaffec823de6ed7beec8c2a4ebfe9b8a3d8e042a59af3ba"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/_lzma.pyd",
+      "bytes": 161136,
+      "sha256": "e3deecc1f59a3b811c608861decd84de1e8df8bafd5e2b39188861318c5a38cf"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/_multiprocessing.pyd",
+      "bytes": 37368,
+      "sha256": "2c636df7059cb0dd7e978dd735c7c5c8ddb09cf94754cf9e232296b96c5c545a"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/_overlapped.pyd",
+      "bytes": 57336,
+      "sha256": "662126ff80c3a1b4cedf74074029c12ae4743e6d3b37376e39ac70aacb7d4d3c"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/_queue.pyd",
+      "bytes": 33784,
+      "sha256": "48e76e0ad63f6932b4a77b5819f41c1e7595636ca8d9e824f0943a14b8bb5035"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/_socket.pyd",
+      "bytes": 85496,
+      "sha256": "3efa4636cf9e350856f6927d67a4c2564bf9bd2758a00bbf17d3aece5b60016d"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/_ssl.pyd",
+      "bytes": 179432,
+      "sha256": "0bc527d2dbc50009f43b2ed5d5982c4f63f4b647647ffa9eda612dcda80f6040"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/_uuid.pyd",
+      "bytes": 27128,
+      "sha256": "acce4f281d7ffb2dec0997527faf25b1df62ad7bd3032c568ddcf65c90edc867"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/_wmi.pyd",
+      "bytes": 40304,
+      "sha256": "a980f1e7a29842bd946863fc2693fbeb555a9dc0f9e1630dfed9a2fcdef3ece2"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-console-l1-1-0.dll",
+      "bytes": 22872,
+      "sha256": "015bd08815c7b934a8952c3a7578e9ce59f21136e8a880d42bbd414bec2c6058"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-datetime-l1-1-0.dll",
+      "bytes": 22896,
+      "sha256": "5534812cdbdae94ba45cb216e5eb9af686b853948df54365103555abbbaf9d9a"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-debug-l1-1-0.dll",
+      "bytes": 22872,
+      "sha256": "837d2b1b2cd03e03fc6ccb050698b6b5763af17c201304872342a5eae9e0a2d2"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-errorhandling-l1-1-0.dll",
+      "bytes": 22872,
+      "sha256": "de43b165f568c276c00e95acd454e3092f352a18e95874595f4f4658c06d2ec7"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-fibers-l1-1-0.dll",
+      "bytes": 22872,
+      "sha256": "3cebc45bf479ad74cfabf2c6bfd4994d7ad639ed1221025981d19cedf9ce0416"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-fibers-l1-1-1.dll",
+      "bytes": 22872,
+      "sha256": "5ef70308bcca628ce6b0e2856b15b1c7ae340c3f9bbbc4c1071d8c191a34a5c3"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-file-l1-1-0.dll",
+      "bytes": 27008,
+      "sha256": "250ac829f2617bcac1c6e5b8c4f630462e20765863ba573526a3e11bbfb94a9a"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-file-l1-2-0.dll",
+      "bytes": 22888,
+      "sha256": "ae14079a114733f60ce87b92cba42acd8083c2cd67594e53bc37dc0b97a4b465"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-file-l2-1-0.dll",
+      "bytes": 22912,
+      "sha256": "914bf26a298713119477ea0a8e7bd43171b91344ebe24fb47ad77c49686e3d87"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-handle-l1-1-0.dll",
+      "bytes": 22896,
+      "sha256": "ab5489955e371b15f77906c08ec3c7affe2c7a46a08c514ca628768b4478974b"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-heap-l1-1-0.dll",
+      "bytes": 22872,
+      "sha256": "c70f9644d8377fa39c5b71f2e9734c1400d7598904fdeb772e8502099982dcb7"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-interlocked-l1-1-0.dll",
+      "bytes": 22888,
+      "sha256": "f8129710188e407bb0e6f46d30aeba277d67b947ece5fe09e883fde2323f3ae6"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-kernel32-legacy-l1-1-1.dll",
+      "bytes": 22888,
+      "sha256": "5200b16cb2ddc61cfc07373a9a84aa85a3ab50806ca96c879c883275832944c1"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-libraryloader-l1-1-0.dll",
+      "bytes": 22872,
+      "sha256": "48786fb88b001dcd1f63acea903d3ca9cc0b3060d5a325e3f2f3cbc3bfd53166"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-localization-l1-2-0.dll",
+      "bytes": 22872,
+      "sha256": "9ec3898f7eba91faa28b51616c211a2689e3a13aeef8de6e13cb674e49d689eb"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-memory-l1-1-0.dll",
+      "bytes": 22896,
+      "sha256": "3a6cbc524c99e1cd80d5368f5601402a37ad602528b1ab628093573ef638eb3b"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-namedpipe-l1-1-0.dll",
+      "bytes": 22888,
+      "sha256": "97145ef89c44949fcf0f04ac834a8bc7d687ef49ee73ae9fc32f3c11136b7201"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-processenvironment-l1-1-0.dll",
+      "bytes": 22872,
+      "sha256": "8bc7c10b1851aea644e9c9f381cdb935e091fee6b0be3d3aedc6fffaac96adb7"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-processthreads-l1-1-0.dll",
+      "bytes": 22912,
+      "sha256": "d8030b777617c71f0f94564607699dbf7561487d779db9756aed378c5675213f"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-processthreads-l1-1-1.dll",
+      "bytes": 22872,
+      "sha256": "f5e676713340f73a03a3d41a6ec9883b431da7d16c7f07bd0a920fb80e6c0753"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-profile-l1-1-0.dll",
+      "bytes": 22872,
+      "sha256": "f023d47e44d3eea6b0743580f57e8c6ba81e79d5ebfa7da26250076c647b980e"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-rtlsupport-l1-1-0.dll",
+      "bytes": 22888,
+      "sha256": "9746d8930704153578a628c010638a5f818ffe5a927e25591b108e256dc6afca"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-string-l1-1-0.dll",
+      "bytes": 22896,
+      "sha256": "7c53ae24c982d16ffd1bf7f918d115b11b7f30e57bc7feaa18cb9781e4abb926"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-synch-l1-1-0.dll",
+      "bytes": 22896,
+      "sha256": "56d9d62ca5dba79a6581b8d574a7d8b2a64a5ecb71e47dcf06ed0285708b1859"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-synch-l1-2-0.dll",
+      "bytes": 22888,
+      "sha256": "f6482bbec5612c39ecb4822787a333f2b7570f7a5f922a4059be41ba957bb372"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-sysinfo-l1-1-0.dll",
+      "bytes": 22896,
+      "sha256": "272d02765fdd3582618236c2d309abba069642f9bc1062ede069d0c144e17007"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-sysinfo-l1-2-0.dll",
+      "bytes": 22912,
+      "sha256": "8a0900788859d0eb51c2f48f50cc6ed376a120b518100fa20e11d7702ccde260"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-timezone-l1-1-0.dll",
+      "bytes": 22896,
+      "sha256": "ff35de6c03812b332e140f17dade25c5dd4775156da9eeb1eaae3fddd27236ec"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-core-util-l1-1-0.dll",
+      "bytes": 22896,
+      "sha256": "191ef3e98641a57296f19d572d8eb62489470ff1ef6030d136af170c2f835173"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-crt-conio-l1-1-0.dll",
+      "bytes": 22872,
+      "sha256": "54ee5ec719a051496ff60aa00dbeaa94b9a7d2cdac27fe9b7317f1a666b6a2aa"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-crt-convert-l1-1-0.dll",
+      "bytes": 26992,
+      "sha256": "8b94662429171019fcd63c70bbf2095a075170599704a5e7dcdbe3da13f3a429"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-crt-environment-l1-1-0.dll",
+      "bytes": 22912,
+      "sha256": "39e5929593709e8af3bc9e0a75ec1155778d6f4a247f4cdfc58928ad6db88434"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-crt-filesystem-l1-1-0.dll",
+      "bytes": 22872,
+      "sha256": "5a8ecebac32edf4e1f3c5c6c1c8ea1a1add6cda4f9c9cb26f752fb295bea6865"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-crt-heap-l1-1-0.dll",
+      "bytes": 22872,
+      "sha256": "c71080cbcb43bf1f8f3e391deb12a582eb0abefc80946f340675a2c616e4feb4"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-crt-locale-l1-1-0.dll",
+      "bytes": 22896,
+      "sha256": "6c68648e524187e03c4ad9aaa4a99113c6ee9f29fb39cc0ed93f951975138e63"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-crt-math-l1-1-0.dll",
+      "bytes": 31064,
+      "sha256": "d4fbcccbe29371cbce431e43b2eb4f7ba9a6f04a3d740a071f02457a505e9dc8"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-crt-private-l1-1-0.dll",
+      "bytes": 76120,
+      "sha256": "29bf3d90617d3781d19b332d6ceb9f20ba5ce082ec74bf6c34d5d4aee56e48a1"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-crt-process-l1-1-0.dll",
+      "bytes": 22896,
+      "sha256": "47c1935942e3ac0812e4dcf18c0e265e565f0194a3349111c299712f5565f7ac"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-crt-runtime-l1-1-0.dll",
+      "bytes": 26968,
+      "sha256": "72adc1b3677e0814d9c4ebf0964000e84bb2acf67336c8963061665e44f78029"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-crt-stdio-l1-1-0.dll",
+      "bytes": 26968,
+      "sha256": "900afc3989673c9bb1a687ed38c192f46db9e6ba6d11a668898a539e7fc23798"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-crt-string-l1-1-0.dll",
+      "bytes": 26968,
+      "sha256": "fcf12466cc12fd3b73611fc0763a5a1f9d44e90349513c34a0c83b0f36421793"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-crt-time-l1-1-0.dll",
+      "bytes": 22912,
+      "sha256": "886e57c4a6adb299b38f02945369f590a67da4e79a798359fc60aaa067212d7c"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/api-ms-win-crt-utility-l1-1-0.dll",
+      "bytes": 22912,
+      "sha256": "5f8f26b216ade615b67a41f6fbbb910972fc6153315a65bb8f09912be50215b1"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/assets/fonts/cjk_subset_chars.txt",
+      "bytes": 22389,
+      "sha256": "f5e90ec0dd4144b159986ffaba8e942a7f4a32b0d7162eba41f25408c4fb8cc9"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/assets/fonts/InterVariable.ttf",
+      "bytes": 876576,
+      "sha256": "29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/assets/fonts/make_cjk_subset.py",
+      "bytes": 2312,
+      "sha256": "9cc06911356021bead44dd392fc760d81b603206347f297efed1e79c190c717b"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/assets/fonts/NotoSansSC-Subset.ttf",
+      "bytes": 4083656,
+      "sha256": "6bfa815303433eed810082adc64be50216b3fed656ff604ff59faaf65e8e5922"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/assets/fonts/OFL-NotoSansSC.txt",
+      "bytes": 4388,
+      "sha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/assets/fonts/OFL.txt",
+      "bytes": 4377,
+      "sha256": "5b9321a4298cfeb6b34354164a1c3afc3db114569984c502b9b35d988fd58c57"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/base_library.zip",
+      "bytes": 1333717,
+      "sha256": "235ff475395dc8a8e64e6008cf4785bba879152275c61b801116cb95e03a44cd"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/charset_normalizer/cd.cp312-win_amd64.pyd",
+      "bytes": 117248,
+      "sha256": "71ffb046452b819770538cb59fd25694c0a8e9b08af4b8b71f26dac85dcff062"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/charset_normalizer/md.cp312-win_amd64.pyd",
+      "bytes": 193536,
+      "sha256": "c53a0a481bbcef6a88492bd113b6293997900f4a17a1a5055776d76256d720f9"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/cv2/__init__.py",
+      "bytes": 6793,
+      "sha256": "957a91bfd98ffb07a10cd789b7c5c46806568476b61e34c7ad56a00092b981a5"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/cv2/config-3.py",
+      "bytes": 748,
+      "sha256": "de28c7b5213cca148f09469916584611b3d66c1c8c432880259d6a3a92380213"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/cv2/config.py",
+      "bytes": 123,
+      "sha256": "6c6367abce55995ae4a8d3c199420ec53afab287cb17dfc2f430378af75dd301"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/cv2/cv2.pyd",
+      "bytes": 70967296,
+      "sha256": "213a5b585f8043ce8d840638dc6e6fab0250cb869738deea04da006ab65df8e4"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/cv2/data/__init__.py",
+      "bytes": 73,
+      "sha256": "f4ce16721ed7f623a4dcc443ba600d1856db610cb2c3d53c13a8ca028cc68f6d"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/cv2/gapi/__init__.py",
+      "bytes": 10621,
+      "sha256": "74f5fd2a142a31b0a4707b70c0be3637f0fbf8a940eec4372e7ba87e5a5cedb8"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/cv2/load_config_py3.py",
+      "bytes": 271,
+      "sha256": "ff583a5874be8f848e73c2f61b3a71680995926479c9bc436e6565c5cce7ca07"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/cv2/mat_wrapper/__init__.py",
+      "bytes": 1164,
+      "sha256": "c44707ea1c76f35518ae572b6c1989d76c2ada7e850432e41805dfe112d4e306"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/cv2/misc/__init__.py",
+      "bytes": 38,
+      "sha256": "495bd79594cce174673e372c85c4dd8f4ffdf2b3a73fd4623955b0d55de0d462"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/cv2/misc/version.py",
+      "bytes": 95,
+      "sha256": "c93a418793fcb15b9b4316c0741b8336740e490e94f3b7d1ebe8cd5f6f23815c"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/cv2/opencv_videoio_ffmpeg4120_64.dll",
+      "bytes": 28349440,
+      "sha256": "a0f01e4ee5e97b4a513cd70f01fafadc0dd187ba5d1293cb7fc6b77e7d17c631"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/cv2/typing/__init__.py",
+      "bytes": 5545,
+      "sha256": "475ceb955d23158934f00ada7a8f33af3dad4f1712fd13e32cc79a82c1eb7d4a"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/cv2/utils/__init__.py",
+      "bytes": 344,
+      "sha256": "2b16990b35b569af1ca7239dc10f7b24ec62f27a46626b1e2f1271d2e1aa3554"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/cv2/version.py",
+      "bytes": 97,
+      "sha256": "9e9d5382b1f743f06d6e12ace305d40786432ff52eefa12cf171cf97154bbb4d"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/libcrypto-3.dll",
+      "bytes": 5231472,
+      "sha256": "ccfffddcd3defb8d899026298af9af43bc186130f8483d77e97c93233d5f27d7"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/libffi-8.dll",
+      "bytes": 39696,
+      "sha256": "eff52743773eb550fcc6ce3efc37c85724502233b6b002a35496d828bd7b280a"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/libscipy_openblas64_-13e2df515630b4a41f92893938845698.dll",
+      "bytes": 20390912,
+      "sha256": "6547e9fb966e9773caee2755e91a8bf4d6f3a2f0eebf9646b0158f8675ea4ab5"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/libssl-3.dll",
+      "bytes": 794992,
+      "sha256": "007142039f04d04e0ed607bda53de095e5bc6a8a10d26ecedde94ea7d2d7eefe"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/msvcp140-263139962577ecda4cd9469ca360a746.dll",
+      "bytes": 575056,
+      "sha256": "a4c2229bdc2a2a630acdc095b4d86008e5c3e3bc7773174354f3da4f5beb9cde"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy/_core/_multiarray_tests.cp312-win_amd64.pyd",
+      "bytes": 64000,
+      "sha256": "24adbe4bbf7b2a6208aeb800d11b8b6957c925d3c796552b3a55e1b4e278754e"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy/_core/_multiarray_umath.cp312-win_amd64.pyd",
+      "bytes": 4178432,
+      "sha256": "d98a8f4ce703bf7158f639d24ff4a55ece2753a306a3f7074b4fa670660afee5"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy/fft/_pocketfft_umath.cp312-win_amd64.pyd",
+      "bytes": 279040,
+      "sha256": "25cc37acd3d849c0fde1e0dc0112979dec4ec4279b7826d1a45395fe966068c9"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy/linalg/_umath_linalg.cp312-win_amd64.pyd",
+      "bytes": 108032,
+      "sha256": "88c8d38d7b2f483542442292e149ca335462d1467b8e835b00a71a8b27125cf5"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy/random/_bounded_integers.cp312-win_amd64.pyd",
+      "bytes": 208384,
+      "sha256": "0434a5b271f935deb8623bb8663f33132a70a8f4d1936c14432e16d4f6eb46fc"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy/random/_common.cp312-win_amd64.pyd",
+      "bytes": 152064,
+      "sha256": "9a39d43e0ef73dfb5a8b1abce92ff0063bffcd580d8be275f468961b24b153af"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy/random/_generator.cp312-win_amd64.pyd",
+      "bytes": 714752,
+      "sha256": "6dde7168fc52dcad27779d45dcc6828b91ec0d05bb6094c86d6aff8a1ee8e1b3"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy/random/_mt19937.cp312-win_amd64.pyd",
+      "bytes": 83456,
+      "sha256": "3331809b214fc30e2fc167f742ca3b1a84b567d185d4194fa8893a032010eeb4"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy/random/_pcg64.cp312-win_amd64.pyd",
+      "bytes": 93696,
+      "sha256": "448b71a0b7d9037d9655008fbc3081070fa801f757b83f9a3ee6e0934c095aa8"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy/random/_philox.cp312-win_amd64.pyd",
+      "bytes": 77312,
+      "sha256": "9c989e7b0fc383e2fa5aa15de2f17c5875b690dc64c44891ee1e1d54ce7cac4a"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy/random/_sfc64.cp312-win_amd64.pyd",
+      "bytes": 60416,
+      "sha256": "5732d38725cb5177c9de1e1d4bdb67389283a53986f87a5e52ca9255ec98c733"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy/random/bit_generator.cp312-win_amd64.pyd",
+      "bytes": 163328,
+      "sha256": "eef81bf02fa9f387d6c4a18d52b22af58b737c01608f0d594130586a06022807"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy/random/mtrand.cp312-win_amd64.pyd",
+      "bytes": 603136,
+      "sha256": "339f40f24231643777de36d5ff8121a07ccf2c4a66add63307d25f9d431c9928"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy-2.2.6.dist-info/DELVEWHEEL",
+      "bytes": 446,
+      "sha256": "513b04bcaa783e2cee07d76110f470d50fd5f12599006a93953588607f61c953"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy-2.2.6.dist-info/entry_points.txt",
+      "bytes": 172,
+      "sha256": "e265c336124343d187a8c05e449f01dcf962c531669171aa537455b9a736d2ad"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy-2.2.6.dist-info/INSTALLER",
+      "bytes": 4,
+      "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy-2.2.6.dist-info/LICENSE.txt",
+      "bytes": 47709,
+      "sha256": "14256cc3a2c9d32ac284da96b937feb44f72dd90bee2317ac3020166846ad99d"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy-2.2.6.dist-info/METADATA",
+      "bytes": 60844,
+      "sha256": "229f3544b02805e0f6a12030e155d8a45fd3a4100b3291574175e6a76f20e1e1"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy-2.2.6.dist-info/RECORD",
+      "bytes": 108615,
+      "sha256": "2e0939115ec8440379686f46259b6e1f493a1c3b7e16d21fe2905af376c64a93"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy-2.2.6.dist-info/WHEEL",
+      "bytes": 85,
+      "sha256": "e743de01ba6503a3e4234858398a1e69c07d512d51e8482ec9f3a7b1c707d165"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy.libs/libscipy_openblas64_-13e2df515630b4a41f92893938845698.dll",
+      "bytes": 20390912,
+      "sha256": "6547e9fb966e9773caee2755e91a8bf4d6f3a2f0eebf9646b0158f8675ea4ab5"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/numpy.libs/msvcp140-263139962577ecda4cd9469ca360a746.dll",
+      "bytes": 575056,
+      "sha256": "a4c2229bdc2a2a630acdc095b4d86008e5c3e3bc7773174354f3da4f5beb9cde"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/PIL/_avif.cp312-win_amd64.pyd",
+      "bytes": 7893504,
+      "sha256": "6731dce52baab0b96b0eeb3c664844b5b42c2168ea8668af2430e2fbdd2dfbd8"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/PIL/_imaging.cp312-win_amd64.pyd",
+      "bytes": 2632704,
+      "sha256": "c8c519ec72bf75b2945b4fc4afa854af2fca8b970a403134f9ddda3e164d85e9"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/PIL/_imagingcms.cp312-win_amd64.pyd",
+      "bytes": 272384,
+      "sha256": "c89c633ae1bf3f26a327d14ff688db66628e19c9866ab925479f27dcb60a2d6f"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/PIL/_imagingft.cp312-win_amd64.pyd",
+      "bytes": 2174976,
+      "sha256": "77c6d37de41733df40fb36d9af47644989ac17da036515e759303969edb22c48"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/PIL/_imagingmath.cp312-win_amd64.pyd",
+      "bytes": 21504,
+      "sha256": "82ac45c41a008854d05f67deda298b65a7bed850d0d79a3af861ed583f6e7d62"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/PIL/_imagingtk.cp312-win_amd64.pyd",
+      "bytes": 14848,
+      "sha256": "690cc1cae4a2dc8594a342b9241e691dcc89d81dad4cddcefdf285275365a2b1"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/PIL/_webp.cp312-win_amd64.pyd",
+      "bytes": 416256,
+      "sha256": "9823cebb84f425af3ac1e7437259bc176e7ad7e25d7fa829b0e1a3e55c11be70"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/psutil/_psutil_windows.pyd",
+      "bytes": 70656,
+      "sha256": "0035450801bd7d938e9e146c5ec28e619cb5a5f4a18cdc53ac7e9734c7f94f78"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/pyexpat.pyd",
+      "bytes": 205304,
+      "sha256": "d615e193d1affcdbfe504e90d3621cbdcff94bf72b79d899126534507fd6d27a"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/python3.dll",
+      "bytes": 70376,
+      "sha256": "fb975a606e7fbf74f64260e3f60c3490b4f74a183c0926fd6ed1ac4c52ac7b1c"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/python312.dll",
+      "bytes": 6945272,
+      "sha256": "9a0e3435aaa680d868150f87ab3e388ad2eebc22f87e036155c7b4eda8cd2120"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/select.pyd",
+      "bytes": 33136,
+      "sha256": "d4d7181b11db0bd22a6cd5cda6f8583d1f5c77615fd0a6ca33350619d6e0438a"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/ucrtbase.dll",
+      "bytes": 1362264,
+      "sha256": "3239227d27667ba20d10a880751924e5719de0078f9fce232d149d383f7681f6"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/unicodedata.pyd",
+      "bytes": 1140592,
+      "sha256": "208ee1cd3cbad0828433ca7246b05be2b1ff5569983d27d296c0b38888585488"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/VCRUNTIME140.dll",
+      "bytes": 120400,
+      "sha256": "052ad6a20d375957e82aa6a3c441ea548d89be0981516ca7eb306e063d5027f4"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/VCRUNTIME140_1.dll",
+      "bytes": 49776,
+      "sha256": "6a99bc0128e0c7d6cbbf615fcc26909565e17d4ca3451b97f8987f9c6acbc6c8"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/_internal/yaml/_yaml.cp312-win_amd64.pyd",
+      "bytes": 253952,
+      "sha256": "4fd0e84f50261ed0886cffcdd8008b055af3352546e649c3d741b50eae1f9b5f"
+    },
+    {
+      "path": "sim/build/vision-client/dist/vision_preview/vision_preview.exe",
+      "bytes": 5509248,
+      "sha256": "9784ca2845aaded24e6ce316f9a3cc632dfea382b1354d2494795093392ced68"
+    }
+  ]
+}

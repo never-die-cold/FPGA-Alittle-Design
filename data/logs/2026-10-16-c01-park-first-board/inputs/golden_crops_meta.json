@@ -1,0 +1,52 @@
+{
+  "checkpoint_sha256": "70fe3dc35bb592481f43e2086efe46b4ca5d2788d53a2b318d23a7169f7ecec6",
+  "architecture": "fastener-4conv-bn-v1",
+  "preprocess": "scene-gray-border-padding-v1",
+  "classes": [
+    "bolt",
+    "nut",
+    "washer"
+  ],
+  "results": [
+    {
+      "name": "gradient",
+      "class": "bolt",
+      "score": 0.9999982118606567,
+      "probabilities": [
+        0.9999982118606567,
+        1.4458247505899635e-06,
+        3.1932091815178865e-07
+      ]
+    },
+    {
+      "name": "dark_disk",
+      "class": "washer",
+      "score": 0.8330469727516174,
+      "probabilities": [
+        0.0672551617026329,
+        0.09969784319400787,
+        0.8330469727516174
+      ]
+    },
+    {
+      "name": "bright_hexagon",
+      "class": "washer",
+      "score": 0.9852088689804077,
+      "probabilities": [
+        0.0020015414338558912,
+        0.012789596803486347,
+        0.9852088689804077
+      ]
+    },
+    {
+      "name": "mid_noise",
+      "class": "nut",
+      "score": 0.9877281188964844,
+      "probabilities": [
+        0.012271917425096035,
+        0.9877281188964844,
+        1.7155399555748748e-20
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+[
+  {
+    "path": "src/coprocessor/conv_engine.v",
+    "added": 7,
+    "deleted": 7
+  },
+  {
+    "path": "src/coprocessor/cnn_sequencer.v",
+    "added": 5,
+    "deleted": 4
+  },
+  {
+    "path": "sim/coprocessor/tb_conv_engine.v",
+    "added": 23,
+    "deleted": 2
+  },
+  {
+    "path": "sim/coprocessor/tb_cnn_sequencer.v",
+    "added": 26,
+    "deleted": 3
+  },
+  {
+    "path": "sim/scripts/run_coprocessor_iverilog.sh",
+    "added": 10,
+    "deleted": 1
+  }
+]

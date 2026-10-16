@@ -1,0 +1,31 @@
+HOST_STARTED_UTC=2026-10-15T15:54:09.6571575Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627 && source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u c01_stage_direct.py'
+sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627 && source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u c01_stage_direct.py'; printf '\n__PYNQ_RC_e21af3e228704a07b62142d570459c55=%d\n' $?
+[?2004lPRECHECK: video flowing, +60 frames/1.0 s; state={"cap": {"0x0": 1128353841, "0x4": 3, "0x8": 52949, "0xc": 0, "0x10": 0, "0x14": 1280, "0x18": 720, "0x1c": 0, "0x20": 0}, "cr": 65538, "sr": 83985}
+MAIN-FAIL: CaptureError('DMA configured idle reset/clear not clean')
+ip_dict:
+  pipe @ 0x40000000 range 0x10000
+  ps7 @ 0x00000000 range 0x0
+axi_regs 段: pipe @ 0x40000000
+PASS: load
+STAGE: original vision loaded; bounded settle before smoke
+R11 busy=0 R12 applied=0
+NOVIDEO: commit 未在帧首确认——寄存器通路 OK 但无输入视频（查 HDMI IN 源/线材）
+RECOVERY-RETRY: restore smoke attempt 1 NOVIDEO; settle 5 more seconds
+R11 busy=1 R12 applied=0
+RESULT: {"boot_before": "c291b2c8-0d7b-49e9-9511-4f5c66d2e37b", "driver_sha256": "1f11aefdc11805387b0c345583828fd733e5e38b0b0e043b0510808f648e8430", "bit_sha256": "86d2adb0343de1785270d207eee3c6b8fee2a6444bc64705bc068e3fc781d14f", "kind": "C01_CAPTURE_STAGE_DIRECT_DIAGNOSTIC_NOT_FORMAL_N03", "video_framerate_delta": 60, "state_before": {"cap": {"0x0": 1128353841, "0x4": 3, "0x8": 52949, "0xc": 0, "0x10": 0, "0x14": 1280, "0x18": 720, "0x1c": 0, "0x20": 0}, "cr": 65538, "sr": 83985}, "ok": false, "main_error": "CaptureError('DMA configured idle reset/clear not clean')", "capture": {"identity": ["c291b2c8-0d7b-49e9-9511-4f5c66d2e37b", "/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/capture.bit", "2026/9/22 0:23:37 +126115"], "before": {"cap": {"0x0": 1128353841, "0x4": 3, "0x8": 52961, "0xc": 0, "0x10": 0, "0x14": 1280, "0x18": 720, "0x1c": 0, "0x20": 0}, "cr": 65538, "sr": 83985}, "buffers": [{"address": 361758720, "shape": [720, 1280, 3], "dtype": "uint8", "strides": [3840, 3, 1], "bytes": 2764800, "coherent": false}, {"address": 364904448, "shape": [720, 1280, 3], "dtype": "uint8", "strides": [3840, 3, 1], "bytes": 2764800, "coherent": false}, {"address": 368050176, "shape": [720, 1280, 3], "dtype": "uint8", "strides": [3840, 3, 1], "bytes": 2764800, "coherent": false}, {"address": 371195904, "shape": [720, 1280, 3], "dtype": "uint8", "strides": [3840, 3, 1], "bytes": 2764800, "coherent": false}], "configured_idle": {"cr": 65538, "sr": 83985}, "cleared_idle": {"cr": 65538, "sr": 67601}, "main_error": "CaptureError('DMA configured idle reset/clear not clean')", "cleanup": "halt confirmed; 4 owned buffers freed once"}, "state_after": {"cap": {"0x0": 1128353841, "0x4": 3, "0x8": 53001, "0xc": 0, "0x10": 0, "0x14": 1280, "0x18": 720, "0x1c": 0, "0x20": 0}, "cr": 65538, "sr": 67601}, "restore_error": "RuntimeError('configuration commit is busy')", "boot_after": "c291b2c8-0d7b-49e9-9511-4f5c66d2e37b"}
+Traceback (most recent call last):
+  File "/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_stage_direct.py", line 107, in <module>
+    main()
+  File "/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_stage_direct.py", line 100, in main
+    raise primary
+  File "/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_stage_direct.py", line 59, in main
+    frame = owner.capture()
+  File "/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_capture.py", line 125, in capture
+    raise CaptureError("DMA configured idle reset/clear not clean")
+c01_capture.CaptureError: DMA configured idle reset/clear not clean
+
+__PYNQ_RC_e21af3e228704a07b62142d570459c55=1
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=1

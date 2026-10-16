@@ -1,0 +1,61 @@
+10-  actual/delta/missing/extra，verdict/reasons 保持 RECHECK——不截断放行（检查V0 §3）；
+11-  映射已登记 C04 §2.2 待 NC/JL 追认。
+12:- frame_id = 软件 capture 序号（C04 Q1：非 cop_frame_id）；每轮恰一次新捕获（文件按序轮换）；
+13-  端点与 mock 同形（/v1/status /v1/check /v1/config），EXE 无需改动即可消费。
+14-"""
+--
+44-        if not self.files:
+45-            raise ValueError(f"no PNG captures in {capture_dir}")
+46:        self.seq = 0
+47-
+48-    def capture(self, round_dir):
+49:        path = self.files[self.seq % len(self.files)]
+50:        self.seq = (self.seq + 1) & 0xFFFFFFFF
+51-        raw = path.read_bytes()
+52-        atomic_write(round_dir / "capture.png", raw)
+--
+54-
+55-
+56:def complete_decision(decision, targets):
+57-    """超限映射：actual/delta/missing/extra 为 None 时按报文内目标重算；verdict/reasons 不动。"""
+58-    if all(isinstance(decision.get(name), dict)
+--
+81-        self.last_packet = None
+82-        self.lock = threading.Lock()
+83:        self.session_dir = Path(root) / self.session_id[:8]
+84:        self.session_dir.mkdir(parents=True, exist_ok=False)
+85:        atomic_write(self.session_dir / "session.json", json.dumps(
+86-            {"session_id": self.session_id, "started_at": time.time(),
+87-             "backend": captures.backend, "prototype": captures.prototype,
+--
+92-            self.check_id = (self.check_id + 1) & 0xFFFFFFFF
+93-            check = self.check_id
+94:            round_dir = self.session_dir / f"check-{check:06d}"
+95-            round_dir.mkdir(exist_ok=False)
+96-            capture_path = self.captures.capture(round_dir)
+--
+98-            packet = validate_packet({
+99-                "version": VERSION, "mode": "LIVE", "session_id": self.session_id,
+100:                "frame_id": self.captures.seq, "config_id": self.config_id,
+101-                "check_id": check, "width": fields["width"], "height": fields["height"],
+102-                "created_at": time.time(), "status": fields["status"],
+103-                "targets": fields["targets"],
+104:                "decision": complete_decision(fields["decision"], fields["targets"]),
+105-                "prototype": self.captures.prototype,
+106-                **({"trigger_ref": trigger_ref} if trigger_ref is not None else {})})
+--
+167-                else:
+168-                    request = json.loads(body)
+169:                    if not isinstance(request, dict) or set(request) != {"control"}:
+170:                        raise ValueError("expected control only")
+171:                    control = request["control"]
+172:                    if type(control) is not int or not 0 <= control <= 15:
+173:                        raise ValueError("reserved control bits")
+174-                    with state.lock:
+175-                        state.config_id = (state.config_id + 1) & 0xFFFFFFFF
+--
+193-    parser.add_argument("--order", type=int, nargs=3, required=True, metavar=("BOLT", "NUT", "WASHER"))
+194-    parser.add_argument("--min-score", type=float, required=True)
+195:    parser.add_argument("--max-targets", type=int, default=16)
+196-    args = parser.parse_args()
+197-    order = dict(zip(CLASSES, args.order))

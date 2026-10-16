@@ -74,6 +74,9 @@ RECHECK 琥珀，附 `-washerx1` 式缺多摘要）、TARGETS 格显示「实际
 （v1.2 LIVE 报文、prototype 恒 true、场景循环 PASS/FAIL/RECHECK；合成数据，不代表板上识别）。
 
 状态机（`rounds.py`，纯 stdlib）与取帧渲染解耦：preview.py 只负责取帧与画框。
+10/15 起 HTTP 轮询及自动重握手在单个后台线程中执行，GUI 逐帧采纳结果快照；
+网络等待期间可继续预览，结果按原接收时间规则过期撤框。手动轮次携独立 `trigger_ref`，
+FILE 原型服务据此保留该轮完整产物；实际 UVC 帧率与板端联调仍待实测。
 离线测试 `py sim/vision/test_vision_rounds.py` 覆盖触发节流、超龄/配置变化/断联撤框、
 服务重启（新会话）自动恢复，已接入 `sim/scripts/run_vision_python.sh` 全量。
 

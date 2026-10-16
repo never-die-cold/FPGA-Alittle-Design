@@ -1,0 +1,13 @@
+HOST_STARTED_UTC=2026-10-15T15:51:28.2317286Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'cat /proc/sys/kernel/random/boot_id; source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u -c "import time;from pathlib import Path;from pynq import MMIO,PL;name=PL.bitfile_name or \"\";cap=MMIO(0x42000000,65536) if \"capture\" in name else None;dma=MMIO(0x43000000,65536) if cap else None;c1={hex(o):cap.read(o) for o in range(0,0x24,4)} if cap else None;t8a=cap.read(8) if cap else 0;time.sleep(1.2);t8b=cap.read(8) if cap else 0;print(\"PL\",name,PL.timestamp,flush=True);print(\"CAP\",c1,\"TICK\",t8a,t8b,t8b-t8a,flush=True);print(\"DMA\",{hex(o):dma.read(o) for o in (0x28,0x30,0x34)} if dma else None,flush=True);p=MMIO(0x40000000,65536);print(\"PIPE\",{hex(o):p.read(o) for o in (44,48)},flush=True)"'
+sudo -n bash -c 'cat /proc/sys/kernel/random/boot_id; source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u -c "import time;from pathlib import Path;from pynq import MMIO,PL;name=PL.bitfile_name or \"\";cap=MMIO(0x42000000,65536) if \"capture\" in name else None;dma=MMIO(0x43000000,65536) if cap else None;c1={hex(o):cap.read(o) for o in range(0,0x24,4)} if cap else None;t8a=cap.read(8) if cap else 0;time.sleep(1.2);t8b=cap.read(8) if cap else 0;print(\"PL\",name,PL.timestamp,flush=True);print(\"CAP\",c1,\"TICK\",t8a,t8b,t8b-t8a,flush=True);print(\"DMA\",{hex(o):dma.read(o) for o in (0x28,0x30,0x34)} if dma else None,flush=True);p=MMIO(0x40000000,65536);print(\"PIPE\",{hex(o):p.read(o) for o in (44,48)},flush=True)"'; printf '\n__PYNQ_RC_6f64d1d2e43c4f3db0b3e0a77ee3a31c=%d\n' $?
+[?2004lc291b2c8-0d7b-49e9-9511-4f5c66d2e37b
+PL /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/capture.bit 2026/9/22 0:23:37 +126115
+CAP {'0x0': 1128353841, '0x4': 3, '0x8': 42857, '0xc': 0, '0x10': 0, '0x14': 1280, '0x18': 720, '0x1c': 0, '0x20': 0} TICK 42857 42929 72
+DMA {'0x28': 0, '0x30': 65538, '0x34': 83985}
+PIPE {'0x2c': 0, '0x30': 1}
+
+__PYNQ_RC_6f64d1d2e43c4f3db0b3e0a77ee3a31c=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

@@ -20,7 +20,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "pynq_host"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from vision_protocol import mock_packet
-from rounds import RemoteRounds, live_view
+from rounds import AsyncRemoteRounds, live_view
 from records import AnomalyLog, BatchRecords
 from hud_text import TextEngine
 from hud import (AMBER, AMBER_DEEP, BUTTON, CYAN, DIM, GREEN, MAIN, RED, Hud)
@@ -197,7 +197,7 @@ def main():
         parser.error("--interval must be < --max-age, otherwise each round expires before the next")
     if args.headless and args.frames < 1:
         parser.error("headless requires --frames > 0")
-    remote = RemoteRounds(args.endpoint, args.max_age) if args.endpoint else None
+    remote = AsyncRemoteRounds(args.endpoint, args.max_age) if args.endpoint else None
     if remote is not None:
         try:
             status = remote.handshake()
@@ -291,6 +291,8 @@ def main():
                 if delay > 0:
                     time.sleep(delay)
     finally:
+        if remote is not None:
+            remote.close()
         if capture is not None:
             capture.release()
         if not args.headless:

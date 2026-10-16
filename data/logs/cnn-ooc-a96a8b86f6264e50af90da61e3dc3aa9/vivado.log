@@ -1,0 +1,2149 @@
+INFO: [Common 17-3922] A valid Vivado Design Suite BASIC license has been detected. Your current license is active and will expire on 14-sep-2027.
+#-----------------------------------------------------------
+# Vivado v2026.1 (64-bit)
+# SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+# IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+# SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+# Start of session at: Thu Oct 15 22:41:39 2026
+# Process ID         : 33036
+# Current directory  : E:/Projects/FPGA-Alittle-Design
+# Command line       : vivado.exe -mode batch -source E:\Projects\FPGA-Alittle-Design\data\logs\cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9\inputs\synth_coprocessor_ooc.tcl -log E:\Projects\FPGA-Alittle-Design\data\logs\cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9\vivado.log -journal E:\Projects\FPGA-Alittle-Design\data\logs\cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9\vivado.jou -tclargs E:\Projects\FPGA-Alittle-Design\data\logs\cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9\reports E:\Projects\FPGA-Alittle-Design\data\logs\cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9\inputs E:\Projects\FPGA-Alittle-Design
+# Log file           : E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/vivado.log
+# Journal file       : E:\Projects\FPGA-Alittle-Design\data\logs\cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9\vivado.jou
+# Running On         : never-die-cold
+# Platform           : Windows 11
+# Operating System   : 26200
+# Processor Detail   : Intel(R) Core(TM) Ultra 7 255HX
+# CPU Frequency      : 2880 MHz
+# CPU Physical cores : 20
+# CPU Logical cores  : 20
+# Host memory        : 16496 MB
+# Swap memory        : 23682 MB
+# Total Virtual      : 40179 MB
+# Available Virtual  : 17257 MB
+#-----------------------------------------------------------
+source {E:\Projects\FPGA-Alittle-Design\data\logs\cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9\inputs\synth_coprocessor_ooc.tcl}
+# set root [file normalize [file join [file dirname [info script]] ../..]]
+# if {$argc != 2 && $argc != 3} { error "usage: output-directory source-snapshot-directory ?repository-root?" }
+# if {$argc == 3} { set root [file normalize [lindex $argv 2]] }
+# set out [file normalize [lindex $argv 0]]
+# set sources [file normalize [lindex $argv 1]]
+# foreach path [list $out $sources] {
+#     if {![string match -nocase "$root/*" $path]} { error "path outside repository" }
+# }
+# if {[file exists $out] && [llength [glob -nocomplain -directory $out *]]} {
+#     error "output must be new/empty; preserve previous reports"
+# }
+# file mkdir $out
+# puts "VIVADO=[version -short] SOURCES=$sources"
+VIVADO=2026.1 SOURCES=E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/inputs
+# read_verilog [glob -directory $sources *.v]
+read_verilog: Time (s): cpu = 00:00:13 ; elapsed = 00:00:13 . Memory (MB): peak = 612.703 ; gain = 269.836
+# synth_design -top cnn_sequencer -part xc7z020clg400-1 -mode out_of_context
+Command: synth_design -top cnn_sequencer -part xc7z020clg400-1 -mode out_of_context
+Starting synth_design
+Attempting to get a license for feature 'Vivado_Synthesis' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Vivado_Synthesis' and/or device 'xc7z020'
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 20880
+---------------------------------------------------------------------------------
+Starting Synthesize : Time (s): cpu = 00:00:08 ; elapsed = 00:00:08 . Memory (MB): peak = 1192.965 ; gain = 572.297
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'cnn_sequencer' [E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/inputs/cnn_sequencer.v:5]
+INFO: [Synth 8-6157] synthesizing module 'int8_gap' [E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/inputs/int8_gap.v:3]
+INFO: [Synth 8-6155] done synthesizing module 'int8_gap' (0#1) [E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/inputs/int8_gap.v:3]
+INFO: [Synth 8-6157] synthesizing module 'conv_engine' [E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/inputs/conv_engine.v:5]
+INFO: [Synth 8-6157] synthesizing module 'int8_requant_pipeline' [E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/inputs/int8_requant_pipeline.v:3]
+INFO: [Synth 8-6155] done synthesizing module 'int8_requant_pipeline' (0#1) [E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/inputs/int8_requant_pipeline.v:3]
+INFO: [Synth 8-6157] synthesizing module 'mac_array_pipeline' [E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/inputs/mac_array_pipeline.v:4]
+INFO: [Synth 8-6155] done synthesizing module 'mac_array_pipeline' (0#1) [E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/inputs/mac_array_pipeline.v:4]
+INFO: [Synth 8-6155] done synthesizing module 'conv_engine' (0#1) [E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/inputs/conv_engine.v:5]
+INFO: [Synth 8-6157] synthesizing module 'int8_logits' [E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/inputs/int8_logits.v:2]
+INFO: [Synth 8-6155] done synthesizing module 'int8_logits' (0#1) [E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/inputs/int8_logits.v:2]
+INFO: [Synth 8-6155] done synthesizing module 'cnn_sequencer' (0#1) [E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/inputs/cnn_sequencer.v:5]
+---------------------------------------------------------------------------------
+Finished Synthesize : Time (s): cpu = 00:00:12 ; elapsed = 00:00:12 . Memory (MB): peak = 1346.621 ; gain = 725.953
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1346.621 ; gain = 725.953
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7z020clg400-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1346.621 ; gain = 725.953
+---------------------------------------------------------------------------------
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'cnn_sequencer'
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:19 ; elapsed = 00:00:18 . Memory (MB): peak = 1369.762 ; gain = 749.094
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input   64 Bit       Adders := 4     
+	   2 Input   33 Bit       Adders := 32    
+	   2 Input   32 Bit       Adders := 12    
+	   2 Input   19 Bit       Adders := 16    
+	   2 Input   18 Bit       Adders := 32    
+	   2 Input   16 Bit       Adders := 3     
+	   3 Input   16 Bit       Adders := 1     
+	   2 Input   15 Bit       Adders := 8     
+	   3 Input   15 Bit       Adders := 1     
+	   2 Input   11 Bit       Adders := 1     
+	   4 Input    9 Bit       Adders := 2     
+	   3 Input    9 Bit       Adders := 3     
+	   2 Input    8 Bit       Adders := 2     
+	   4 Input    8 Bit       Adders := 4     
+	   3 Input    8 Bit       Adders := 1     
+	   2 Input    7 Bit       Adders := 2     
+	   2 Input    6 Bit       Adders := 2     
+	   3 Input    6 Bit       Adders := 1     
+	   2 Input    4 Bit       Adders := 1     
+	   3 Input    4 Bit       Adders := 2     
+	   2 Input    3 Bit       Adders := 5     
+	   2 Input    2 Bit       Adders := 3     
++---XORs : 
+	   2 Input      1 Bit         XORs := 32    
++---Registers : 
+	              512 Bit    Registers := 7     
+	              256 Bit    Registers := 1     
+	              128 Bit    Registers := 1     
+	               96 Bit    Registers := 1     
+	               64 Bit    Registers := 6     
+	               33 Bit    Registers := 16    
+	               32 Bit    Registers := 4     
+	               24 Bit    Registers := 2     
+	               19 Bit    Registers := 16    
+	               18 Bit    Registers := 32    
+	               17 Bit    Registers := 64    
+	               16 Bit    Registers := 5     
+	               15 Bit    Registers := 1     
+	               13 Bit    Registers := 1     
+	               11 Bit    Registers := 1     
+	                9 Bit    Registers := 1     
+	                8 Bit    Registers := 4     
+	                7 Bit    Registers := 8     
+	                6 Bit    Registers := 7     
+	                5 Bit    Registers := 1     
+	                4 Bit    Registers := 7     
+	                3 Bit    Registers := 5     
+	                2 Bit    Registers := 7     
+	                1 Bit    Registers := 14    
++---Multipliers : 
+	              32x32  Multipliers := 2     
++---Muxes : 
+	   2 Input  512 Bit        Muxes := 2     
+	   8 Input  256 Bit        Muxes := 1     
+	   5 Input  128 Bit        Muxes := 1     
+	  13 Input  128 Bit        Muxes := 1     
+	   2 Input  128 Bit        Muxes := 2     
+	   2 Input   64 Bit        Muxes := 5     
+	   2 Input   32 Bit        Muxes := 5     
+	   5 Input   32 Bit        Muxes := 1     
+	  13 Input   32 Bit        Muxes := 1     
+	   8 Input   32 Bit        Muxes := 1     
+	   2 Input   24 Bit        Muxes := 1     
+	   8 Input   24 Bit        Muxes := 1     
+	   2 Input   16 Bit        Muxes := 4     
+	   2 Input   15 Bit        Muxes := 1     
+	   8 Input   15 Bit        Muxes := 1     
+	   2 Input   13 Bit        Muxes := 1     
+	   8 Input   11 Bit        Muxes := 1     
+	   5 Input    9 Bit        Muxes := 1     
+	   2 Input    8 Bit        Muxes := 28    
+	   8 Input    8 Bit        Muxes := 1     
+	   5 Input    8 Bit        Muxes := 1     
+	   2 Input    7 Bit        Muxes := 4     
+	  13 Input    7 Bit        Muxes := 2     
+	   5 Input    7 Bit        Muxes := 3     
+	   2 Input    5 Bit        Muxes := 1     
+	   2 Input    4 Bit        Muxes := 11    
+	  13 Input    4 Bit        Muxes := 1     
+	   4 Input    4 Bit        Muxes := 2     
+	  13 Input    3 Bit        Muxes := 3     
+	   2 Input    3 Bit        Muxes := 8     
+	   3 Input    3 Bit        Muxes := 2     
+	   8 Input    3 Bit        Muxes := 3     
+	   2 Input    2 Bit        Muxes := 8     
+	  13 Input    2 Bit        Muxes := 3     
+	   5 Input    2 Bit        Muxes := 3     
+	   8 Input    2 Bit        Muxes := 1     
+	   6 Input    2 Bit        Muxes := 1     
+	   2 Input    1 Bit        Muxes := 40    
+	   3 Input    1 Bit        Muxes := 2     
+	  13 Input    1 Bit        Muxes := 19    
+	   5 Input    1 Bit        Muxes := 2     
+	  14 Input    1 Bit        Muxes := 1     
+	   8 Input    1 Bit        Muxes := 18    
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 220 (col length:60)
+BRAMs: 280 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+DSP Report: Generating DSP product0, operation Mode is: A*B.
+DSP Report: operator product0 is absorbed into DSP product0.
+DSP Report: operator product0 is absorbed into DSP product0.
+DSP Report: Generating DSP product_reg, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: register product_reg is absorbed into DSP product_reg.
+DSP Report: operator product0 is absorbed into DSP product_reg.
+DSP Report: operator product0 is absorbed into DSP product_reg.
+DSP Report: Generating DSP product0, operation Mode is: A*B.
+DSP Report: operator product0 is absorbed into DSP product0.
+DSP Report: operator product0 is absorbed into DSP product0.
+DSP Report: Generating DSP product_reg, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: register product_reg is absorbed into DSP product_reg.
+DSP Report: operator product0 is absorbed into DSP product_reg.
+DSP Report: operator product0 is absorbed into DSP product_reg.
+WARNING: [Synth 8-3936] Found unconnected internal register 'product_reg' and it is trimmed from '48' to '30' bits. [E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/inputs/int8_requant_pipeline.v:29]
+WARNING: [Synth 8-3936] Found unconnected internal register 'product_reg' and it is trimmed from '48' to '17' bits. [E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/inputs/int8_requant_pipeline.v:29]
+WARNING: [Synth 8-3936] Found unconnected internal register 'product_reg' and it is trimmed from '48' to '47' bits. [E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/inputs/int8_requant_pipeline.v:29]
+WARNING: [Synth 8-3936] Found unconnected internal register 'product_reg' and it is trimmed from '48' to '17' bits. [E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/inputs/int8_requant_pipeline.v:29]
+DSP Report: Generating DSP product0, operation Mode is: A*B.
+DSP Report: operator product0 is absorbed into DSP product0.
+DSP Report: operator product0 is absorbed into DSP product0.
+DSP Report: Generating DSP product_reg, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: register product_reg is absorbed into DSP product_reg.
+DSP Report: operator product0 is absorbed into DSP product_reg.
+DSP Report: operator product0 is absorbed into DSP product_reg.
+DSP Report: Generating DSP product0, operation Mode is: A*B.
+DSP Report: operator product0 is absorbed into DSP product0.
+DSP Report: operator product0 is absorbed into DSP product0.
+DSP Report: Generating DSP product_reg, operation Mode is: (PCIN>>17)+A*B.
+DSP Report: register product_reg is absorbed into DSP product_reg.
+DSP Report: operator product0 is absorbed into DSP product_reg.
+DSP Report: operator product0 is absorbed into DSP product_reg.
+DSP Report: Generating DSP lanes[0].multiply[6].products_reg[6], operation Mode is: (A*B)'.
+DSP Report: register lanes[0].multiply[6].products_reg[6] is absorbed into DSP lanes[0].multiply[6].products_reg[6].
+DSP Report: operator p_0_out is absorbed into DSP lanes[0].multiply[6].products_reg[6].
+DSP Report: Generating DSP lanes[0].sum_pairs[3].pairs_reg[3], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[0].sum_pairs[3].pairs_reg[3] is absorbed into DSP lanes[0].sum_pairs[3].pairs_reg[3].
+DSP Report: register lanes[0].multiply[7].products_reg[7] is absorbed into DSP lanes[0].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_180_out is absorbed into DSP lanes[0].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_0_out is absorbed into DSP lanes[0].sum_pairs[3].pairs_reg[3].
+DSP Report: Generating DSP lanes[0].multiply[4].products_reg[4], operation Mode is: (A*B)'.
+DSP Report: register lanes[0].multiply[4].products_reg[4] is absorbed into DSP lanes[0].multiply[4].products_reg[4].
+DSP Report: operator p_0_out is absorbed into DSP lanes[0].multiply[4].products_reg[4].
+DSP Report: Generating DSP lanes[0].sum_pairs[2].pairs_reg[2], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[0].sum_pairs[2].pairs_reg[2] is absorbed into DSP lanes[0].sum_pairs[2].pairs_reg[2].
+DSP Report: register lanes[0].multiply[5].products_reg[5] is absorbed into DSP lanes[0].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_183_out is absorbed into DSP lanes[0].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[0].sum_pairs[2].pairs_reg[2].
+DSP Report: Generating DSP lanes[0].multiply[2].products_reg[2], operation Mode is: (A*B)'.
+DSP Report: register lanes[0].multiply[2].products_reg[2] is absorbed into DSP lanes[0].multiply[2].products_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[0].multiply[2].products_reg[2].
+DSP Report: Generating DSP lanes[0].sum_pairs[1].pairs_reg[1], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[0].sum_pairs[1].pairs_reg[1] is absorbed into DSP lanes[0].sum_pairs[1].pairs_reg[1].
+DSP Report: register lanes[0].multiply[3].products_reg[3] is absorbed into DSP lanes[0].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_186_out is absorbed into DSP lanes[0].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_0_out is absorbed into DSP lanes[0].sum_pairs[1].pairs_reg[1].
+DSP Report: Generating DSP lanes[0].multiply[0].products_reg[0], operation Mode is: (A*B)'.
+DSP Report: register lanes[0].multiply[0].products_reg[0] is absorbed into DSP lanes[0].multiply[0].products_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[0].multiply[0].products_reg[0].
+DSP Report: Generating DSP lanes[0].sum_pairs[0].pairs_reg[0], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[0].sum_pairs[0].pairs_reg[0] is absorbed into DSP lanes[0].sum_pairs[0].pairs_reg[0].
+DSP Report: register lanes[0].multiply[1].products_reg[1] is absorbed into DSP lanes[0].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_189_out is absorbed into DSP lanes[0].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[0].sum_pairs[0].pairs_reg[0].
+DSP Report: Generating DSP lanes[1].multiply[6].products_reg[6], operation Mode is: (A*B)'.
+DSP Report: register lanes[1].multiply[6].products_reg[6] is absorbed into DSP lanes[1].multiply[6].products_reg[6].
+DSP Report: operator p_0_out is absorbed into DSP lanes[1].multiply[6].products_reg[6].
+DSP Report: Generating DSP lanes[1].sum_pairs[3].pairs_reg[3], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[1].sum_pairs[3].pairs_reg[3] is absorbed into DSP lanes[1].sum_pairs[3].pairs_reg[3].
+DSP Report: register lanes[1].multiply[7].products_reg[7] is absorbed into DSP lanes[1].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_168_out is absorbed into DSP lanes[1].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_0_out is absorbed into DSP lanes[1].sum_pairs[3].pairs_reg[3].
+DSP Report: Generating DSP lanes[1].multiply[4].products_reg[4], operation Mode is: (A*B)'.
+DSP Report: register lanes[1].multiply[4].products_reg[4] is absorbed into DSP lanes[1].multiply[4].products_reg[4].
+DSP Report: operator p_0_out is absorbed into DSP lanes[1].multiply[4].products_reg[4].
+DSP Report: Generating DSP lanes[1].sum_pairs[2].pairs_reg[2], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[1].sum_pairs[2].pairs_reg[2] is absorbed into DSP lanes[1].sum_pairs[2].pairs_reg[2].
+DSP Report: register lanes[1].multiply[5].products_reg[5] is absorbed into DSP lanes[1].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_171_out is absorbed into DSP lanes[1].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[1].sum_pairs[2].pairs_reg[2].
+DSP Report: Generating DSP lanes[1].multiply[2].products_reg[2], operation Mode is: (A*B)'.
+DSP Report: register lanes[1].multiply[2].products_reg[2] is absorbed into DSP lanes[1].multiply[2].products_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[1].multiply[2].products_reg[2].
+DSP Report: Generating DSP lanes[1].sum_pairs[1].pairs_reg[1], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[1].sum_pairs[1].pairs_reg[1] is absorbed into DSP lanes[1].sum_pairs[1].pairs_reg[1].
+DSP Report: register lanes[1].multiply[3].products_reg[3] is absorbed into DSP lanes[1].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_174_out is absorbed into DSP lanes[1].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_0_out is absorbed into DSP lanes[1].sum_pairs[1].pairs_reg[1].
+DSP Report: Generating DSP lanes[1].multiply[0].products_reg[0], operation Mode is: (A*B)'.
+DSP Report: register lanes[1].multiply[0].products_reg[0] is absorbed into DSP lanes[1].multiply[0].products_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[1].multiply[0].products_reg[0].
+DSP Report: Generating DSP lanes[1].sum_pairs[0].pairs_reg[0], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[1].sum_pairs[0].pairs_reg[0] is absorbed into DSP lanes[1].sum_pairs[0].pairs_reg[0].
+DSP Report: register lanes[1].multiply[1].products_reg[1] is absorbed into DSP lanes[1].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_177_out is absorbed into DSP lanes[1].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[1].sum_pairs[0].pairs_reg[0].
+DSP Report: Generating DSP lanes[2].multiply[6].products_reg[6], operation Mode is: (A*B)'.
+DSP Report: register lanes[2].multiply[6].products_reg[6] is absorbed into DSP lanes[2].multiply[6].products_reg[6].
+DSP Report: operator p_0_out is absorbed into DSP lanes[2].multiply[6].products_reg[6].
+DSP Report: Generating DSP lanes[2].sum_pairs[3].pairs_reg[3], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[2].sum_pairs[3].pairs_reg[3] is absorbed into DSP lanes[2].sum_pairs[3].pairs_reg[3].
+DSP Report: register lanes[2].multiply[7].products_reg[7] is absorbed into DSP lanes[2].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_156_out is absorbed into DSP lanes[2].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_0_out is absorbed into DSP lanes[2].sum_pairs[3].pairs_reg[3].
+DSP Report: Generating DSP lanes[2].multiply[4].products_reg[4], operation Mode is: (A*B)'.
+DSP Report: register lanes[2].multiply[4].products_reg[4] is absorbed into DSP lanes[2].multiply[4].products_reg[4].
+DSP Report: operator p_0_out is absorbed into DSP lanes[2].multiply[4].products_reg[4].
+DSP Report: Generating DSP lanes[2].sum_pairs[2].pairs_reg[2], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[2].sum_pairs[2].pairs_reg[2] is absorbed into DSP lanes[2].sum_pairs[2].pairs_reg[2].
+DSP Report: register lanes[2].multiply[5].products_reg[5] is absorbed into DSP lanes[2].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_159_out is absorbed into DSP lanes[2].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[2].sum_pairs[2].pairs_reg[2].
+DSP Report: Generating DSP lanes[2].multiply[2].products_reg[2], operation Mode is: (A*B)'.
+DSP Report: register lanes[2].multiply[2].products_reg[2] is absorbed into DSP lanes[2].multiply[2].products_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[2].multiply[2].products_reg[2].
+DSP Report: Generating DSP lanes[2].sum_pairs[1].pairs_reg[1], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[2].sum_pairs[1].pairs_reg[1] is absorbed into DSP lanes[2].sum_pairs[1].pairs_reg[1].
+DSP Report: register lanes[2].multiply[3].products_reg[3] is absorbed into DSP lanes[2].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_162_out is absorbed into DSP lanes[2].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_0_out is absorbed into DSP lanes[2].sum_pairs[1].pairs_reg[1].
+DSP Report: Generating DSP lanes[2].multiply[0].products_reg[0], operation Mode is: (A*B)'.
+DSP Report: register lanes[2].multiply[0].products_reg[0] is absorbed into DSP lanes[2].multiply[0].products_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[2].multiply[0].products_reg[0].
+DSP Report: Generating DSP lanes[2].sum_pairs[0].pairs_reg[0], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[2].sum_pairs[0].pairs_reg[0] is absorbed into DSP lanes[2].sum_pairs[0].pairs_reg[0].
+DSP Report: register lanes[2].multiply[1].products_reg[1] is absorbed into DSP lanes[2].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_165_out is absorbed into DSP lanes[2].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[2].sum_pairs[0].pairs_reg[0].
+DSP Report: Generating DSP lanes[3].multiply[6].products_reg[6], operation Mode is: (A*B)'.
+DSP Report: register lanes[3].multiply[6].products_reg[6] is absorbed into DSP lanes[3].multiply[6].products_reg[6].
+DSP Report: operator p_0_out is absorbed into DSP lanes[3].multiply[6].products_reg[6].
+DSP Report: Generating DSP lanes[3].sum_pairs[3].pairs_reg[3], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[3].sum_pairs[3].pairs_reg[3] is absorbed into DSP lanes[3].sum_pairs[3].pairs_reg[3].
+DSP Report: register lanes[3].multiply[7].products_reg[7] is absorbed into DSP lanes[3].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_144_out is absorbed into DSP lanes[3].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_0_out is absorbed into DSP lanes[3].sum_pairs[3].pairs_reg[3].
+DSP Report: Generating DSP lanes[3].multiply[4].products_reg[4], operation Mode is: (A*B)'.
+DSP Report: register lanes[3].multiply[4].products_reg[4] is absorbed into DSP lanes[3].multiply[4].products_reg[4].
+DSP Report: operator p_0_out is absorbed into DSP lanes[3].multiply[4].products_reg[4].
+DSP Report: Generating DSP lanes[3].sum_pairs[2].pairs_reg[2], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[3].sum_pairs[2].pairs_reg[2] is absorbed into DSP lanes[3].sum_pairs[2].pairs_reg[2].
+DSP Report: register lanes[3].multiply[5].products_reg[5] is absorbed into DSP lanes[3].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_147_out is absorbed into DSP lanes[3].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[3].sum_pairs[2].pairs_reg[2].
+DSP Report: Generating DSP lanes[3].multiply[2].products_reg[2], operation Mode is: (A*B)'.
+DSP Report: register lanes[3].multiply[2].products_reg[2] is absorbed into DSP lanes[3].multiply[2].products_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[3].multiply[2].products_reg[2].
+DSP Report: Generating DSP lanes[3].sum_pairs[1].pairs_reg[1], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[3].sum_pairs[1].pairs_reg[1] is absorbed into DSP lanes[3].sum_pairs[1].pairs_reg[1].
+DSP Report: register lanes[3].multiply[3].products_reg[3] is absorbed into DSP lanes[3].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_150_out is absorbed into DSP lanes[3].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_0_out is absorbed into DSP lanes[3].sum_pairs[1].pairs_reg[1].
+DSP Report: Generating DSP lanes[3].multiply[0].products_reg[0], operation Mode is: (A*B)'.
+DSP Report: register lanes[3].multiply[0].products_reg[0] is absorbed into DSP lanes[3].multiply[0].products_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[3].multiply[0].products_reg[0].
+DSP Report: Generating DSP lanes[3].sum_pairs[0].pairs_reg[0], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[3].sum_pairs[0].pairs_reg[0] is absorbed into DSP lanes[3].sum_pairs[0].pairs_reg[0].
+DSP Report: register lanes[3].multiply[1].products_reg[1] is absorbed into DSP lanes[3].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_153_out is absorbed into DSP lanes[3].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[3].sum_pairs[0].pairs_reg[0].
+DSP Report: Generating DSP lanes[4].multiply[6].products_reg[6], operation Mode is: (A*B)'.
+DSP Report: register lanes[4].multiply[6].products_reg[6] is absorbed into DSP lanes[4].multiply[6].products_reg[6].
+DSP Report: operator p_0_out is absorbed into DSP lanes[4].multiply[6].products_reg[6].
+DSP Report: Generating DSP lanes[4].sum_pairs[3].pairs_reg[3], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[4].sum_pairs[3].pairs_reg[3] is absorbed into DSP lanes[4].sum_pairs[3].pairs_reg[3].
+DSP Report: register lanes[4].multiply[7].products_reg[7] is absorbed into DSP lanes[4].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_132_out is absorbed into DSP lanes[4].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_0_out is absorbed into DSP lanes[4].sum_pairs[3].pairs_reg[3].
+DSP Report: Generating DSP lanes[4].multiply[4].products_reg[4], operation Mode is: (A*B)'.
+DSP Report: register lanes[4].multiply[4].products_reg[4] is absorbed into DSP lanes[4].multiply[4].products_reg[4].
+DSP Report: operator p_0_out is absorbed into DSP lanes[4].multiply[4].products_reg[4].
+DSP Report: Generating DSP lanes[4].sum_pairs[2].pairs_reg[2], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[4].sum_pairs[2].pairs_reg[2] is absorbed into DSP lanes[4].sum_pairs[2].pairs_reg[2].
+DSP Report: register lanes[4].multiply[5].products_reg[5] is absorbed into DSP lanes[4].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_135_out is absorbed into DSP lanes[4].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[4].sum_pairs[2].pairs_reg[2].
+DSP Report: Generating DSP lanes[4].multiply[2].products_reg[2], operation Mode is: (A*B)'.
+DSP Report: register lanes[4].multiply[2].products_reg[2] is absorbed into DSP lanes[4].multiply[2].products_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[4].multiply[2].products_reg[2].
+DSP Report: Generating DSP lanes[4].sum_pairs[1].pairs_reg[1], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[4].sum_pairs[1].pairs_reg[1] is absorbed into DSP lanes[4].sum_pairs[1].pairs_reg[1].
+DSP Report: register lanes[4].multiply[3].products_reg[3] is absorbed into DSP lanes[4].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_138_out is absorbed into DSP lanes[4].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_0_out is absorbed into DSP lanes[4].sum_pairs[1].pairs_reg[1].
+DSP Report: Generating DSP lanes[4].multiply[0].products_reg[0], operation Mode is: (A*B)'.
+DSP Report: register lanes[4].multiply[0].products_reg[0] is absorbed into DSP lanes[4].multiply[0].products_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[4].multiply[0].products_reg[0].
+DSP Report: Generating DSP lanes[4].sum_pairs[0].pairs_reg[0], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[4].sum_pairs[0].pairs_reg[0] is absorbed into DSP lanes[4].sum_pairs[0].pairs_reg[0].
+DSP Report: register lanes[4].multiply[1].products_reg[1] is absorbed into DSP lanes[4].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_141_out is absorbed into DSP lanes[4].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[4].sum_pairs[0].pairs_reg[0].
+DSP Report: Generating DSP lanes[5].multiply[6].products_reg[6], operation Mode is: (A*B)'.
+DSP Report: register lanes[5].multiply[6].products_reg[6] is absorbed into DSP lanes[5].multiply[6].products_reg[6].
+DSP Report: operator p_0_out is absorbed into DSP lanes[5].multiply[6].products_reg[6].
+DSP Report: Generating DSP lanes[5].sum_pairs[3].pairs_reg[3], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[5].sum_pairs[3].pairs_reg[3] is absorbed into DSP lanes[5].sum_pairs[3].pairs_reg[3].
+DSP Report: register lanes[5].multiply[7].products_reg[7] is absorbed into DSP lanes[5].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_120_out is absorbed into DSP lanes[5].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_0_out is absorbed into DSP lanes[5].sum_pairs[3].pairs_reg[3].
+DSP Report: Generating DSP lanes[5].multiply[4].products_reg[4], operation Mode is: (A*B)'.
+DSP Report: register lanes[5].multiply[4].products_reg[4] is absorbed into DSP lanes[5].multiply[4].products_reg[4].
+DSP Report: operator p_0_out is absorbed into DSP lanes[5].multiply[4].products_reg[4].
+DSP Report: Generating DSP lanes[5].sum_pairs[2].pairs_reg[2], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[5].sum_pairs[2].pairs_reg[2] is absorbed into DSP lanes[5].sum_pairs[2].pairs_reg[2].
+DSP Report: register lanes[5].multiply[5].products_reg[5] is absorbed into DSP lanes[5].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_123_out is absorbed into DSP lanes[5].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[5].sum_pairs[2].pairs_reg[2].
+DSP Report: Generating DSP lanes[5].multiply[2].products_reg[2], operation Mode is: (A*B)'.
+DSP Report: register lanes[5].multiply[2].products_reg[2] is absorbed into DSP lanes[5].multiply[2].products_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[5].multiply[2].products_reg[2].
+DSP Report: Generating DSP lanes[5].sum_pairs[1].pairs_reg[1], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[5].sum_pairs[1].pairs_reg[1] is absorbed into DSP lanes[5].sum_pairs[1].pairs_reg[1].
+DSP Report: register lanes[5].multiply[3].products_reg[3] is absorbed into DSP lanes[5].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_126_out is absorbed into DSP lanes[5].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_0_out is absorbed into DSP lanes[5].sum_pairs[1].pairs_reg[1].
+DSP Report: Generating DSP lanes[5].multiply[0].products_reg[0], operation Mode is: (A*B)'.
+DSP Report: register lanes[5].multiply[0].products_reg[0] is absorbed into DSP lanes[5].multiply[0].products_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[5].multiply[0].products_reg[0].
+DSP Report: Generating DSP lanes[5].sum_pairs[0].pairs_reg[0], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[5].sum_pairs[0].pairs_reg[0] is absorbed into DSP lanes[5].sum_pairs[0].pairs_reg[0].
+DSP Report: register lanes[5].multiply[1].products_reg[1] is absorbed into DSP lanes[5].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_129_out is absorbed into DSP lanes[5].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[5].sum_pairs[0].pairs_reg[0].
+DSP Report: Generating DSP lanes[6].multiply[6].products_reg[6], operation Mode is: (A*B)'.
+DSP Report: register lanes[6].multiply[6].products_reg[6] is absorbed into DSP lanes[6].multiply[6].products_reg[6].
+DSP Report: operator p_0_out is absorbed into DSP lanes[6].multiply[6].products_reg[6].
+DSP Report: Generating DSP lanes[6].sum_pairs[3].pairs_reg[3], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[6].sum_pairs[3].pairs_reg[3] is absorbed into DSP lanes[6].sum_pairs[3].pairs_reg[3].
+DSP Report: register lanes[6].multiply[7].products_reg[7] is absorbed into DSP lanes[6].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_108_out is absorbed into DSP lanes[6].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_0_out is absorbed into DSP lanes[6].sum_pairs[3].pairs_reg[3].
+DSP Report: Generating DSP lanes[6].multiply[4].products_reg[4], operation Mode is: (A*B)'.
+DSP Report: register lanes[6].multiply[4].products_reg[4] is absorbed into DSP lanes[6].multiply[4].products_reg[4].
+DSP Report: operator p_0_out is absorbed into DSP lanes[6].multiply[4].products_reg[4].
+DSP Report: Generating DSP lanes[6].sum_pairs[2].pairs_reg[2], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[6].sum_pairs[2].pairs_reg[2] is absorbed into DSP lanes[6].sum_pairs[2].pairs_reg[2].
+DSP Report: register lanes[6].multiply[5].products_reg[5] is absorbed into DSP lanes[6].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_111_out is absorbed into DSP lanes[6].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[6].sum_pairs[2].pairs_reg[2].
+DSP Report: Generating DSP lanes[6].multiply[2].products_reg[2], operation Mode is: (A*B)'.
+DSP Report: register lanes[6].multiply[2].products_reg[2] is absorbed into DSP lanes[6].multiply[2].products_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[6].multiply[2].products_reg[2].
+DSP Report: Generating DSP lanes[6].sum_pairs[1].pairs_reg[1], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[6].sum_pairs[1].pairs_reg[1] is absorbed into DSP lanes[6].sum_pairs[1].pairs_reg[1].
+DSP Report: register lanes[6].multiply[3].products_reg[3] is absorbed into DSP lanes[6].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_114_out is absorbed into DSP lanes[6].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_0_out is absorbed into DSP lanes[6].sum_pairs[1].pairs_reg[1].
+DSP Report: Generating DSP lanes[6].multiply[0].products_reg[0], operation Mode is: (A*B)'.
+DSP Report: register lanes[6].multiply[0].products_reg[0] is absorbed into DSP lanes[6].multiply[0].products_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[6].multiply[0].products_reg[0].
+DSP Report: Generating DSP lanes[6].sum_pairs[0].pairs_reg[0], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[6].sum_pairs[0].pairs_reg[0] is absorbed into DSP lanes[6].sum_pairs[0].pairs_reg[0].
+DSP Report: register lanes[6].multiply[1].products_reg[1] is absorbed into DSP lanes[6].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_117_out is absorbed into DSP lanes[6].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[6].sum_pairs[0].pairs_reg[0].
+DSP Report: Generating DSP lanes[7].multiply[6].products_reg[6], operation Mode is: (A*B)'.
+DSP Report: register lanes[7].multiply[6].products_reg[6] is absorbed into DSP lanes[7].multiply[6].products_reg[6].
+DSP Report: operator p_0_out is absorbed into DSP lanes[7].multiply[6].products_reg[6].
+DSP Report: Generating DSP lanes[7].sum_pairs[3].pairs_reg[3], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[7].sum_pairs[3].pairs_reg[3] is absorbed into DSP lanes[7].sum_pairs[3].pairs_reg[3].
+DSP Report: register lanes[7].multiply[7].products_reg[7] is absorbed into DSP lanes[7].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_96_out is absorbed into DSP lanes[7].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_0_out is absorbed into DSP lanes[7].sum_pairs[3].pairs_reg[3].
+DSP Report: Generating DSP lanes[7].multiply[4].products_reg[4], operation Mode is: (A*B)'.
+DSP Report: register lanes[7].multiply[4].products_reg[4] is absorbed into DSP lanes[7].multiply[4].products_reg[4].
+DSP Report: operator p_0_out is absorbed into DSP lanes[7].multiply[4].products_reg[4].
+DSP Report: Generating DSP lanes[7].sum_pairs[2].pairs_reg[2], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[7].sum_pairs[2].pairs_reg[2] is absorbed into DSP lanes[7].sum_pairs[2].pairs_reg[2].
+DSP Report: register lanes[7].multiply[5].products_reg[5] is absorbed into DSP lanes[7].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_99_out is absorbed into DSP lanes[7].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[7].sum_pairs[2].pairs_reg[2].
+DSP Report: Generating DSP lanes[7].multiply[2].products_reg[2], operation Mode is: (A*B)'.
+DSP Report: register lanes[7].multiply[2].products_reg[2] is absorbed into DSP lanes[7].multiply[2].products_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[7].multiply[2].products_reg[2].
+DSP Report: Generating DSP lanes[7].sum_pairs[1].pairs_reg[1], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[7].sum_pairs[1].pairs_reg[1] is absorbed into DSP lanes[7].sum_pairs[1].pairs_reg[1].
+DSP Report: register lanes[7].multiply[3].products_reg[3] is absorbed into DSP lanes[7].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_102_out is absorbed into DSP lanes[7].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_0_out is absorbed into DSP lanes[7].sum_pairs[1].pairs_reg[1].
+DSP Report: Generating DSP lanes[7].multiply[0].products_reg[0], operation Mode is: (A*B)'.
+DSP Report: register lanes[7].multiply[0].products_reg[0] is absorbed into DSP lanes[7].multiply[0].products_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[7].multiply[0].products_reg[0].
+DSP Report: Generating DSP lanes[7].sum_pairs[0].pairs_reg[0], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[7].sum_pairs[0].pairs_reg[0] is absorbed into DSP lanes[7].sum_pairs[0].pairs_reg[0].
+DSP Report: register lanes[7].multiply[1].products_reg[1] is absorbed into DSP lanes[7].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_105_out is absorbed into DSP lanes[7].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[7].sum_pairs[0].pairs_reg[0].
+DSP Report: Generating DSP lanes[8].multiply[6].products_reg[6], operation Mode is: (A*B)'.
+DSP Report: register lanes[8].multiply[6].products_reg[6] is absorbed into DSP lanes[8].multiply[6].products_reg[6].
+DSP Report: operator p_0_out is absorbed into DSP lanes[8].multiply[6].products_reg[6].
+DSP Report: Generating DSP lanes[8].sum_pairs[3].pairs_reg[3], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[8].sum_pairs[3].pairs_reg[3] is absorbed into DSP lanes[8].sum_pairs[3].pairs_reg[3].
+DSP Report: register lanes[8].multiply[7].products_reg[7] is absorbed into DSP lanes[8].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_84_out is absorbed into DSP lanes[8].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_0_out is absorbed into DSP lanes[8].sum_pairs[3].pairs_reg[3].
+DSP Report: Generating DSP lanes[8].multiply[4].products_reg[4], operation Mode is: (A*B)'.
+DSP Report: register lanes[8].multiply[4].products_reg[4] is absorbed into DSP lanes[8].multiply[4].products_reg[4].
+DSP Report: operator p_0_out is absorbed into DSP lanes[8].multiply[4].products_reg[4].
+DSP Report: Generating DSP lanes[8].sum_pairs[2].pairs_reg[2], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[8].sum_pairs[2].pairs_reg[2] is absorbed into DSP lanes[8].sum_pairs[2].pairs_reg[2].
+DSP Report: register lanes[8].multiply[5].products_reg[5] is absorbed into DSP lanes[8].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_87_out is absorbed into DSP lanes[8].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[8].sum_pairs[2].pairs_reg[2].
+DSP Report: Generating DSP lanes[8].multiply[2].products_reg[2], operation Mode is: (A*B)'.
+DSP Report: register lanes[8].multiply[2].products_reg[2] is absorbed into DSP lanes[8].multiply[2].products_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[8].multiply[2].products_reg[2].
+DSP Report: Generating DSP lanes[8].sum_pairs[1].pairs_reg[1], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[8].sum_pairs[1].pairs_reg[1] is absorbed into DSP lanes[8].sum_pairs[1].pairs_reg[1].
+DSP Report: register lanes[8].multiply[3].products_reg[3] is absorbed into DSP lanes[8].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_90_out is absorbed into DSP lanes[8].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_0_out is absorbed into DSP lanes[8].sum_pairs[1].pairs_reg[1].
+DSP Report: Generating DSP lanes[8].multiply[0].products_reg[0], operation Mode is: (A*B)'.
+DSP Report: register lanes[8].multiply[0].products_reg[0] is absorbed into DSP lanes[8].multiply[0].products_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[8].multiply[0].products_reg[0].
+DSP Report: Generating DSP lanes[8].sum_pairs[0].pairs_reg[0], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[8].sum_pairs[0].pairs_reg[0] is absorbed into DSP lanes[8].sum_pairs[0].pairs_reg[0].
+DSP Report: register lanes[8].multiply[1].products_reg[1] is absorbed into DSP lanes[8].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_93_out is absorbed into DSP lanes[8].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[8].sum_pairs[0].pairs_reg[0].
+DSP Report: Generating DSP lanes[9].multiply[6].products_reg[6], operation Mode is: (A*B)'.
+DSP Report: register lanes[9].multiply[6].products_reg[6] is absorbed into DSP lanes[9].multiply[6].products_reg[6].
+DSP Report: operator p_0_out is absorbed into DSP lanes[9].multiply[6].products_reg[6].
+DSP Report: Generating DSP lanes[9].sum_pairs[3].pairs_reg[3], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[9].sum_pairs[3].pairs_reg[3] is absorbed into DSP lanes[9].sum_pairs[3].pairs_reg[3].
+DSP Report: register lanes[9].multiply[7].products_reg[7] is absorbed into DSP lanes[9].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_72_out is absorbed into DSP lanes[9].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_0_out is absorbed into DSP lanes[9].sum_pairs[3].pairs_reg[3].
+DSP Report: Generating DSP lanes[9].multiply[4].products_reg[4], operation Mode is: (A*B)'.
+DSP Report: register lanes[9].multiply[4].products_reg[4] is absorbed into DSP lanes[9].multiply[4].products_reg[4].
+DSP Report: operator p_0_out is absorbed into DSP lanes[9].multiply[4].products_reg[4].
+DSP Report: Generating DSP lanes[9].sum_pairs[2].pairs_reg[2], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[9].sum_pairs[2].pairs_reg[2] is absorbed into DSP lanes[9].sum_pairs[2].pairs_reg[2].
+DSP Report: register lanes[9].multiply[5].products_reg[5] is absorbed into DSP lanes[9].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_75_out is absorbed into DSP lanes[9].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[9].sum_pairs[2].pairs_reg[2].
+DSP Report: Generating DSP lanes[9].multiply[2].products_reg[2], operation Mode is: (A*B)'.
+DSP Report: register lanes[9].multiply[2].products_reg[2] is absorbed into DSP lanes[9].multiply[2].products_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[9].multiply[2].products_reg[2].
+DSP Report: Generating DSP lanes[9].sum_pairs[1].pairs_reg[1], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[9].sum_pairs[1].pairs_reg[1] is absorbed into DSP lanes[9].sum_pairs[1].pairs_reg[1].
+DSP Report: register lanes[9].multiply[3].products_reg[3] is absorbed into DSP lanes[9].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_78_out is absorbed into DSP lanes[9].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_0_out is absorbed into DSP lanes[9].sum_pairs[1].pairs_reg[1].
+DSP Report: Generating DSP lanes[9].multiply[0].products_reg[0], operation Mode is: (A*B)'.
+DSP Report: register lanes[9].multiply[0].products_reg[0] is absorbed into DSP lanes[9].multiply[0].products_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[9].multiply[0].products_reg[0].
+DSP Report: Generating DSP lanes[9].sum_pairs[0].pairs_reg[0], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[9].sum_pairs[0].pairs_reg[0] is absorbed into DSP lanes[9].sum_pairs[0].pairs_reg[0].
+DSP Report: register lanes[9].multiply[1].products_reg[1] is absorbed into DSP lanes[9].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_81_out is absorbed into DSP lanes[9].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[9].sum_pairs[0].pairs_reg[0].
+DSP Report: Generating DSP lanes[10].multiply[6].products_reg[6], operation Mode is: (A*B)'.
+DSP Report: register lanes[10].multiply[6].products_reg[6] is absorbed into DSP lanes[10].multiply[6].products_reg[6].
+DSP Report: operator p_0_out is absorbed into DSP lanes[10].multiply[6].products_reg[6].
+DSP Report: Generating DSP lanes[10].sum_pairs[3].pairs_reg[3], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[10].sum_pairs[3].pairs_reg[3] is absorbed into DSP lanes[10].sum_pairs[3].pairs_reg[3].
+DSP Report: register lanes[10].multiply[7].products_reg[7] is absorbed into DSP lanes[10].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_60_out is absorbed into DSP lanes[10].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_0_out is absorbed into DSP lanes[10].sum_pairs[3].pairs_reg[3].
+DSP Report: Generating DSP lanes[10].multiply[4].products_reg[4], operation Mode is: (A*B)'.
+DSP Report: register lanes[10].multiply[4].products_reg[4] is absorbed into DSP lanes[10].multiply[4].products_reg[4].
+DSP Report: operator p_0_out is absorbed into DSP lanes[10].multiply[4].products_reg[4].
+DSP Report: Generating DSP lanes[10].sum_pairs[2].pairs_reg[2], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[10].sum_pairs[2].pairs_reg[2] is absorbed into DSP lanes[10].sum_pairs[2].pairs_reg[2].
+DSP Report: register lanes[10].multiply[5].products_reg[5] is absorbed into DSP lanes[10].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_63_out is absorbed into DSP lanes[10].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[10].sum_pairs[2].pairs_reg[2].
+DSP Report: Generating DSP lanes[10].multiply[2].products_reg[2], operation Mode is: (A*B)'.
+DSP Report: register lanes[10].multiply[2].products_reg[2] is absorbed into DSP lanes[10].multiply[2].products_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[10].multiply[2].products_reg[2].
+DSP Report: Generating DSP lanes[10].sum_pairs[1].pairs_reg[1], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[10].sum_pairs[1].pairs_reg[1] is absorbed into DSP lanes[10].sum_pairs[1].pairs_reg[1].
+DSP Report: register lanes[10].multiply[3].products_reg[3] is absorbed into DSP lanes[10].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_66_out is absorbed into DSP lanes[10].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_0_out is absorbed into DSP lanes[10].sum_pairs[1].pairs_reg[1].
+DSP Report: Generating DSP lanes[10].multiply[0].products_reg[0], operation Mode is: (A*B)'.
+DSP Report: register lanes[10].multiply[0].products_reg[0] is absorbed into DSP lanes[10].multiply[0].products_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[10].multiply[0].products_reg[0].
+DSP Report: Generating DSP lanes[10].sum_pairs[0].pairs_reg[0], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[10].sum_pairs[0].pairs_reg[0] is absorbed into DSP lanes[10].sum_pairs[0].pairs_reg[0].
+DSP Report: register lanes[10].multiply[1].products_reg[1] is absorbed into DSP lanes[10].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_69_out is absorbed into DSP lanes[10].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[10].sum_pairs[0].pairs_reg[0].
+DSP Report: Generating DSP lanes[11].multiply[6].products_reg[6], operation Mode is: (A*B)'.
+DSP Report: register lanes[11].multiply[6].products_reg[6] is absorbed into DSP lanes[11].multiply[6].products_reg[6].
+DSP Report: operator p_0_out is absorbed into DSP lanes[11].multiply[6].products_reg[6].
+DSP Report: Generating DSP lanes[11].sum_pairs[3].pairs_reg[3], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[11].sum_pairs[3].pairs_reg[3] is absorbed into DSP lanes[11].sum_pairs[3].pairs_reg[3].
+DSP Report: register lanes[11].multiply[7].products_reg[7] is absorbed into DSP lanes[11].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_48_out is absorbed into DSP lanes[11].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_0_out is absorbed into DSP lanes[11].sum_pairs[3].pairs_reg[3].
+DSP Report: Generating DSP lanes[11].multiply[4].products_reg[4], operation Mode is: (A*B)'.
+DSP Report: register lanes[11].multiply[4].products_reg[4] is absorbed into DSP lanes[11].multiply[4].products_reg[4].
+DSP Report: operator p_0_out is absorbed into DSP lanes[11].multiply[4].products_reg[4].
+DSP Report: Generating DSP lanes[11].sum_pairs[2].pairs_reg[2], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[11].sum_pairs[2].pairs_reg[2] is absorbed into DSP lanes[11].sum_pairs[2].pairs_reg[2].
+DSP Report: register lanes[11].multiply[5].products_reg[5] is absorbed into DSP lanes[11].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_51_out is absorbed into DSP lanes[11].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[11].sum_pairs[2].pairs_reg[2].
+DSP Report: Generating DSP lanes[11].multiply[2].products_reg[2], operation Mode is: (A*B)'.
+DSP Report: register lanes[11].multiply[2].products_reg[2] is absorbed into DSP lanes[11].multiply[2].products_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[11].multiply[2].products_reg[2].
+DSP Report: Generating DSP lanes[11].sum_pairs[1].pairs_reg[1], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[11].sum_pairs[1].pairs_reg[1] is absorbed into DSP lanes[11].sum_pairs[1].pairs_reg[1].
+DSP Report: register lanes[11].multiply[3].products_reg[3] is absorbed into DSP lanes[11].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_54_out is absorbed into DSP lanes[11].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_0_out is absorbed into DSP lanes[11].sum_pairs[1].pairs_reg[1].
+DSP Report: Generating DSP lanes[11].multiply[0].products_reg[0], operation Mode is: (A*B)'.
+DSP Report: register lanes[11].multiply[0].products_reg[0] is absorbed into DSP lanes[11].multiply[0].products_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[11].multiply[0].products_reg[0].
+DSP Report: Generating DSP lanes[11].sum_pairs[0].pairs_reg[0], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[11].sum_pairs[0].pairs_reg[0] is absorbed into DSP lanes[11].sum_pairs[0].pairs_reg[0].
+DSP Report: register lanes[11].multiply[1].products_reg[1] is absorbed into DSP lanes[11].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_57_out is absorbed into DSP lanes[11].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[11].sum_pairs[0].pairs_reg[0].
+DSP Report: Generating DSP lanes[12].multiply[6].products_reg[6], operation Mode is: (A*B)'.
+DSP Report: register lanes[12].multiply[6].products_reg[6] is absorbed into DSP lanes[12].multiply[6].products_reg[6].
+DSP Report: operator p_0_out is absorbed into DSP lanes[12].multiply[6].products_reg[6].
+DSP Report: Generating DSP lanes[12].sum_pairs[3].pairs_reg[3], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[12].sum_pairs[3].pairs_reg[3] is absorbed into DSP lanes[12].sum_pairs[3].pairs_reg[3].
+DSP Report: register lanes[12].multiply[7].products_reg[7] is absorbed into DSP lanes[12].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_36_out is absorbed into DSP lanes[12].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_0_out is absorbed into DSP lanes[12].sum_pairs[3].pairs_reg[3].
+DSP Report: Generating DSP lanes[12].multiply[4].products_reg[4], operation Mode is: (A*B)'.
+DSP Report: register lanes[12].multiply[4].products_reg[4] is absorbed into DSP lanes[12].multiply[4].products_reg[4].
+DSP Report: operator p_0_out is absorbed into DSP lanes[12].multiply[4].products_reg[4].
+DSP Report: Generating DSP lanes[12].sum_pairs[2].pairs_reg[2], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[12].sum_pairs[2].pairs_reg[2] is absorbed into DSP lanes[12].sum_pairs[2].pairs_reg[2].
+DSP Report: register lanes[12].multiply[5].products_reg[5] is absorbed into DSP lanes[12].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_39_out is absorbed into DSP lanes[12].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[12].sum_pairs[2].pairs_reg[2].
+DSP Report: Generating DSP lanes[12].multiply[2].products_reg[2], operation Mode is: (A*B)'.
+DSP Report: register lanes[12].multiply[2].products_reg[2] is absorbed into DSP lanes[12].multiply[2].products_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[12].multiply[2].products_reg[2].
+DSP Report: Generating DSP lanes[12].sum_pairs[1].pairs_reg[1], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[12].sum_pairs[1].pairs_reg[1] is absorbed into DSP lanes[12].sum_pairs[1].pairs_reg[1].
+DSP Report: register lanes[12].multiply[3].products_reg[3] is absorbed into DSP lanes[12].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_42_out is absorbed into DSP lanes[12].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_0_out is absorbed into DSP lanes[12].sum_pairs[1].pairs_reg[1].
+DSP Report: Generating DSP lanes[12].multiply[0].products_reg[0], operation Mode is: (A*B)'.
+DSP Report: register lanes[12].multiply[0].products_reg[0] is absorbed into DSP lanes[12].multiply[0].products_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[12].multiply[0].products_reg[0].
+DSP Report: Generating DSP lanes[12].sum_pairs[0].pairs_reg[0], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[12].sum_pairs[0].pairs_reg[0] is absorbed into DSP lanes[12].sum_pairs[0].pairs_reg[0].
+DSP Report: register lanes[12].multiply[1].products_reg[1] is absorbed into DSP lanes[12].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_45_out is absorbed into DSP lanes[12].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[12].sum_pairs[0].pairs_reg[0].
+DSP Report: Generating DSP lanes[13].multiply[6].products_reg[6], operation Mode is: (A*B)'.
+DSP Report: register lanes[13].multiply[6].products_reg[6] is absorbed into DSP lanes[13].multiply[6].products_reg[6].
+DSP Report: operator p_0_out is absorbed into DSP lanes[13].multiply[6].products_reg[6].
+DSP Report: Generating DSP lanes[13].sum_pairs[3].pairs_reg[3], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[13].sum_pairs[3].pairs_reg[3] is absorbed into DSP lanes[13].sum_pairs[3].pairs_reg[3].
+DSP Report: register lanes[13].multiply[7].products_reg[7] is absorbed into DSP lanes[13].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_24_out is absorbed into DSP lanes[13].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_0_out is absorbed into DSP lanes[13].sum_pairs[3].pairs_reg[3].
+DSP Report: Generating DSP lanes[13].multiply[4].products_reg[4], operation Mode is: (A*B)'.
+DSP Report: register lanes[13].multiply[4].products_reg[4] is absorbed into DSP lanes[13].multiply[4].products_reg[4].
+DSP Report: operator p_0_out is absorbed into DSP lanes[13].multiply[4].products_reg[4].
+DSP Report: Generating DSP lanes[13].sum_pairs[2].pairs_reg[2], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[13].sum_pairs[2].pairs_reg[2] is absorbed into DSP lanes[13].sum_pairs[2].pairs_reg[2].
+DSP Report: register lanes[13].multiply[5].products_reg[5] is absorbed into DSP lanes[13].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_27_out is absorbed into DSP lanes[13].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[13].sum_pairs[2].pairs_reg[2].
+DSP Report: Generating DSP lanes[13].multiply[2].products_reg[2], operation Mode is: (A*B)'.
+DSP Report: register lanes[13].multiply[2].products_reg[2] is absorbed into DSP lanes[13].multiply[2].products_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[13].multiply[2].products_reg[2].
+DSP Report: Generating DSP lanes[13].sum_pairs[1].pairs_reg[1], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[13].sum_pairs[1].pairs_reg[1] is absorbed into DSP lanes[13].sum_pairs[1].pairs_reg[1].
+DSP Report: register lanes[13].multiply[3].products_reg[3] is absorbed into DSP lanes[13].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_30_out is absorbed into DSP lanes[13].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_0_out is absorbed into DSP lanes[13].sum_pairs[1].pairs_reg[1].
+DSP Report: Generating DSP lanes[13].multiply[0].products_reg[0], operation Mode is: (A*B)'.
+DSP Report: register lanes[13].multiply[0].products_reg[0] is absorbed into DSP lanes[13].multiply[0].products_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[13].multiply[0].products_reg[0].
+DSP Report: Generating DSP lanes[13].sum_pairs[0].pairs_reg[0], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[13].sum_pairs[0].pairs_reg[0] is absorbed into DSP lanes[13].sum_pairs[0].pairs_reg[0].
+DSP Report: register lanes[13].multiply[1].products_reg[1] is absorbed into DSP lanes[13].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_33_out is absorbed into DSP lanes[13].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[13].sum_pairs[0].pairs_reg[0].
+DSP Report: Generating DSP lanes[14].multiply[6].products_reg[6], operation Mode is: (A*B)'.
+DSP Report: register lanes[14].multiply[6].products_reg[6] is absorbed into DSP lanes[14].multiply[6].products_reg[6].
+DSP Report: operator p_0_out is absorbed into DSP lanes[14].multiply[6].products_reg[6].
+DSP Report: Generating DSP lanes[14].sum_pairs[3].pairs_reg[3], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[14].sum_pairs[3].pairs_reg[3] is absorbed into DSP lanes[14].sum_pairs[3].pairs_reg[3].
+DSP Report: register lanes[14].multiply[7].products_reg[7] is absorbed into DSP lanes[14].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_12_out is absorbed into DSP lanes[14].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_0_out is absorbed into DSP lanes[14].sum_pairs[3].pairs_reg[3].
+DSP Report: Generating DSP lanes[14].multiply[4].products_reg[4], operation Mode is: (A*B)'.
+DSP Report: register lanes[14].multiply[4].products_reg[4] is absorbed into DSP lanes[14].multiply[4].products_reg[4].
+DSP Report: operator p_0_out is absorbed into DSP lanes[14].multiply[4].products_reg[4].
+DSP Report: Generating DSP lanes[14].sum_pairs[2].pairs_reg[2], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[14].sum_pairs[2].pairs_reg[2] is absorbed into DSP lanes[14].sum_pairs[2].pairs_reg[2].
+DSP Report: register lanes[14].multiply[5].products_reg[5] is absorbed into DSP lanes[14].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_15_out is absorbed into DSP lanes[14].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[14].sum_pairs[2].pairs_reg[2].
+DSP Report: Generating DSP lanes[14].multiply[2].products_reg[2], operation Mode is: (A*B)'.
+DSP Report: register lanes[14].multiply[2].products_reg[2] is absorbed into DSP lanes[14].multiply[2].products_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[14].multiply[2].products_reg[2].
+DSP Report: Generating DSP lanes[14].sum_pairs[1].pairs_reg[1], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[14].sum_pairs[1].pairs_reg[1] is absorbed into DSP lanes[14].sum_pairs[1].pairs_reg[1].
+DSP Report: register lanes[14].multiply[3].products_reg[3] is absorbed into DSP lanes[14].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_18_out is absorbed into DSP lanes[14].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_0_out is absorbed into DSP lanes[14].sum_pairs[1].pairs_reg[1].
+DSP Report: Generating DSP lanes[14].multiply[0].products_reg[0], operation Mode is: (A*B)'.
+DSP Report: register lanes[14].multiply[0].products_reg[0] is absorbed into DSP lanes[14].multiply[0].products_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[14].multiply[0].products_reg[0].
+DSP Report: Generating DSP lanes[14].sum_pairs[0].pairs_reg[0], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[14].sum_pairs[0].pairs_reg[0] is absorbed into DSP lanes[14].sum_pairs[0].pairs_reg[0].
+DSP Report: register lanes[14].multiply[1].products_reg[1] is absorbed into DSP lanes[14].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_21_out is absorbed into DSP lanes[14].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[14].sum_pairs[0].pairs_reg[0].
+DSP Report: Generating DSP lanes[15].multiply[6].products_reg[6], operation Mode is: (A*B)'.
+DSP Report: register lanes[15].multiply[6].products_reg[6] is absorbed into DSP lanes[15].multiply[6].products_reg[6].
+DSP Report: operator p_0_out is absorbed into DSP lanes[15].multiply[6].products_reg[6].
+DSP Report: Generating DSP lanes[15].sum_pairs[3].pairs_reg[3], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[15].sum_pairs[3].pairs_reg[3] is absorbed into DSP lanes[15].sum_pairs[3].pairs_reg[3].
+DSP Report: register lanes[15].multiply[7].products_reg[7] is absorbed into DSP lanes[15].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_0_out is absorbed into DSP lanes[15].sum_pairs[3].pairs_reg[3].
+DSP Report: operator p_0_out is absorbed into DSP lanes[15].sum_pairs[3].pairs_reg[3].
+DSP Report: Generating DSP lanes[15].multiply[4].products_reg[4], operation Mode is: (A*B)'.
+DSP Report: register lanes[15].multiply[4].products_reg[4] is absorbed into DSP lanes[15].multiply[4].products_reg[4].
+DSP Report: operator p_0_out is absorbed into DSP lanes[15].multiply[4].products_reg[4].
+DSP Report: Generating DSP lanes[15].sum_pairs[2].pairs_reg[2], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[15].sum_pairs[2].pairs_reg[2] is absorbed into DSP lanes[15].sum_pairs[2].pairs_reg[2].
+DSP Report: register lanes[15].multiply[5].products_reg[5] is absorbed into DSP lanes[15].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_3_out is absorbed into DSP lanes[15].sum_pairs[2].pairs_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[15].sum_pairs[2].pairs_reg[2].
+DSP Report: Generating DSP lanes[15].multiply[2].products_reg[2], operation Mode is: (A*B)'.
+DSP Report: register lanes[15].multiply[2].products_reg[2] is absorbed into DSP lanes[15].multiply[2].products_reg[2].
+DSP Report: operator p_0_out is absorbed into DSP lanes[15].multiply[2].products_reg[2].
+DSP Report: Generating DSP lanes[15].sum_pairs[1].pairs_reg[1], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[15].sum_pairs[1].pairs_reg[1] is absorbed into DSP lanes[15].sum_pairs[1].pairs_reg[1].
+DSP Report: register lanes[15].multiply[3].products_reg[3] is absorbed into DSP lanes[15].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_6_out is absorbed into DSP lanes[15].sum_pairs[1].pairs_reg[1].
+DSP Report: operator p_0_out is absorbed into DSP lanes[15].sum_pairs[1].pairs_reg[1].
+DSP Report: Generating DSP lanes[15].multiply[0].products_reg[0], operation Mode is: (A*B)'.
+DSP Report: register lanes[15].multiply[0].products_reg[0] is absorbed into DSP lanes[15].multiply[0].products_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[15].multiply[0].products_reg[0].
+DSP Report: Generating DSP lanes[15].sum_pairs[0].pairs_reg[0], operation Mode is: (C+(A*B)')'.
+DSP Report: register lanes[15].sum_pairs[0].pairs_reg[0] is absorbed into DSP lanes[15].sum_pairs[0].pairs_reg[0].
+DSP Report: register lanes[15].multiply[1].products_reg[1] is absorbed into DSP lanes[15].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_9_out is absorbed into DSP lanes[15].sum_pairs[0].pairs_reg[0].
+DSP Report: operator p_0_out is absorbed into DSP lanes[15].sum_pairs[0].pairs_reg[0].
+WARNING: [Synth 8-3917] design cnn_sequencer has port parameter_address[3] driven by constant 0
+WARNING: [Synth 8-3917] design cnn_sequencer has port parameter_address[2] driven by constant 0
+WARNING: [Synth 8-3917] design cnn_sequencer has port parameter_address[1] driven by constant 0
+WARNING: [Synth 8-3917] design cnn_sequencer has port parameter_address[0] driven by constant 0
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:01:39 ; elapsed = 00:01:41 . Memory (MB): peak = 1768.926 ; gain = 1148.258
+---------------------------------------------------------------------------------
+ Sort Area is  lanes[0].sum_pairs[0].pairs_reg[0]_c : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[0].sum_pairs[1].pairs_reg[1]_f : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[0].sum_pairs[2].pairs_reg[2]_11 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[0].sum_pairs[3].pairs_reg[3]_13 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[10].sum_pairs[0].pairs_reg[0]_5d : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[10].sum_pairs[1].pairs_reg[1]_5f : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[10].sum_pairs[2].pairs_reg[2]_61 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[10].sum_pairs[3].pairs_reg[3]_63 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[11].sum_pairs[0].pairs_reg[0]_65 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[11].sum_pairs[1].pairs_reg[1]_67 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[11].sum_pairs[2].pairs_reg[2]_69 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[11].sum_pairs[3].pairs_reg[3]_6b : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[12].sum_pairs[0].pairs_reg[0]_6d : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[12].sum_pairs[1].pairs_reg[1]_6f : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[12].sum_pairs[2].pairs_reg[2]_71 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[12].sum_pairs[3].pairs_reg[3]_73 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[13].sum_pairs[0].pairs_reg[0]_75 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[13].sum_pairs[1].pairs_reg[1]_77 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[13].sum_pairs[2].pairs_reg[2]_79 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[13].sum_pairs[3].pairs_reg[3]_7b : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[14].sum_pairs[0].pairs_reg[0]_7d : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[14].sum_pairs[1].pairs_reg[1]_7f : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[14].sum_pairs[2].pairs_reg[2]_81 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[14].sum_pairs[3].pairs_reg[3]_83 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[15].sum_pairs[0].pairs_reg[0]_85 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[15].sum_pairs[1].pairs_reg[1]_87 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[15].sum_pairs[2].pairs_reg[2]_89 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[15].sum_pairs[3].pairs_reg[3]_8b : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[1].sum_pairs[0].pairs_reg[0]_15 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[1].sum_pairs[1].pairs_reg[1]_17 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[1].sum_pairs[2].pairs_reg[2]_19 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[1].sum_pairs[3].pairs_reg[3]_1b : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[2].sum_pairs[0].pairs_reg[0]_1d : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[2].sum_pairs[1].pairs_reg[1]_1f : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[2].sum_pairs[2].pairs_reg[2]_21 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[2].sum_pairs[3].pairs_reg[3]_23 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[3].sum_pairs[0].pairs_reg[0]_25 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[3].sum_pairs[1].pairs_reg[1]_27 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[3].sum_pairs[2].pairs_reg[2]_29 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[3].sum_pairs[3].pairs_reg[3]_2b : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[4].sum_pairs[0].pairs_reg[0]_2d : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[4].sum_pairs[1].pairs_reg[1]_2f : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[4].sum_pairs[2].pairs_reg[2]_31 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[4].sum_pairs[3].pairs_reg[3]_33 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[5].sum_pairs[0].pairs_reg[0]_35 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[5].sum_pairs[1].pairs_reg[1]_37 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[5].sum_pairs[2].pairs_reg[2]_39 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[5].sum_pairs[3].pairs_reg[3]_3b : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[6].sum_pairs[0].pairs_reg[0]_3d : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[6].sum_pairs[1].pairs_reg[1]_3f : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[6].sum_pairs[2].pairs_reg[2]_41 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[6].sum_pairs[3].pairs_reg[3]_43 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[7].sum_pairs[0].pairs_reg[0]_45 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[7].sum_pairs[1].pairs_reg[1]_47 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[7].sum_pairs[2].pairs_reg[2]_49 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[7].sum_pairs[3].pairs_reg[3]_4b : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[8].sum_pairs[0].pairs_reg[0]_4d : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[8].sum_pairs[1].pairs_reg[1]_4f : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[8].sum_pairs[2].pairs_reg[2]_51 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[8].sum_pairs[3].pairs_reg[3]_53 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[9].sum_pairs[0].pairs_reg[0]_55 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[9].sum_pairs[1].pairs_reg[1]_57 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[9].sum_pairs[2].pairs_reg[2]_59 : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[9].sum_pairs[3].pairs_reg[3]_5b : 0 0 : 539 539 : Used 1 time 100
+ Sort Area is  lanes[0].multiply[0].products_reg[0]_a : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[0].multiply[2].products_reg[2]_e : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[0].multiply[4].products_reg[4]_10 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[0].multiply[6].products_reg[6]_12 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[10].multiply[0].products_reg[0]_5c : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[10].multiply[2].products_reg[2]_5e : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[10].multiply[4].products_reg[4]_60 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[10].multiply[6].products_reg[6]_62 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[11].multiply[0].products_reg[0]_64 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[11].multiply[2].products_reg[2]_66 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[11].multiply[4].products_reg[4]_68 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[11].multiply[6].products_reg[6]_6a : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[12].multiply[0].products_reg[0]_6c : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[12].multiply[2].products_reg[2]_6e : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[12].multiply[4].products_reg[4]_70 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[12].multiply[6].products_reg[6]_72 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[13].multiply[0].products_reg[0]_74 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[13].multiply[2].products_reg[2]_76 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[13].multiply[4].products_reg[4]_78 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[13].multiply[6].products_reg[6]_7a : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[14].multiply[0].products_reg[0]_7c : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[14].multiply[2].products_reg[2]_7e : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[14].multiply[4].products_reg[4]_80 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[14].multiply[6].products_reg[6]_82 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[15].multiply[0].products_reg[0]_84 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[15].multiply[2].products_reg[2]_86 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[15].multiply[4].products_reg[4]_88 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[15].multiply[6].products_reg[6]_8a : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[1].multiply[0].products_reg[0]_14 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[1].multiply[2].products_reg[2]_16 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[1].multiply[4].products_reg[4]_18 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[1].multiply[6].products_reg[6]_1a : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[2].multiply[0].products_reg[0]_1c : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[2].multiply[2].products_reg[2]_1e : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[2].multiply[4].products_reg[4]_20 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[2].multiply[6].products_reg[6]_22 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[3].multiply[0].products_reg[0]_24 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[3].multiply[2].products_reg[2]_26 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[3].multiply[4].products_reg[4]_28 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[3].multiply[6].products_reg[6]_2a : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[4].multiply[0].products_reg[0]_2c : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[4].multiply[2].products_reg[2]_2e : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[4].multiply[4].products_reg[4]_30 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[4].multiply[6].products_reg[6]_32 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[5].multiply[0].products_reg[0]_34 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[5].multiply[2].products_reg[2]_36 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[5].multiply[4].products_reg[4]_38 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[5].multiply[6].products_reg[6]_3a : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[6].multiply[0].products_reg[0]_3c : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[6].multiply[2].products_reg[2]_3e : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[6].multiply[4].products_reg[4]_40 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[6].multiply[6].products_reg[6]_42 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[7].multiply[0].products_reg[0]_44 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[7].multiply[2].products_reg[2]_46 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[7].multiply[4].products_reg[4]_48 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[7].multiply[6].products_reg[6]_4a : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[8].multiply[0].products_reg[0]_4c : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[8].multiply[2].products_reg[2]_4e : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[8].multiply[4].products_reg[4]_50 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[8].multiply[6].products_reg[6]_52 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[9].multiply[0].products_reg[0]_54 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[9].multiply[2].products_reg[2]_56 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[9].multiply[4].products_reg[4]_58 : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  lanes[9].multiply[6].products_reg[6]_5a : 0 0 : 470 470 : Used 1 time 100
+ Sort Area is  product0_0 : 0 0 : 2701 4912 : Used 1 time 0
+ Sort Area is  product0_0 : 0 1 : 2211 4912 : Used 1 time 0
+ Sort Area is  product0_6 : 0 0 : 2701 4908 : Used 1 time 0
+ Sort Area is  product0_6 : 0 1 : 2207 4908 : Used 1 time 0
+ Sort Area is  product0_3 : 0 0 : 2158 4062 : Used 1 time 0
+ Sort Area is  product0_3 : 0 1 : 1904 4062 : Used 1 time 0
+ Sort Area is  product0_8 : 0 0 : 2158 3988 : Used 1 time 0
+ Sort Area is  product0_8 : 0 1 : 1830 3988 : Used 1 time 0
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+DSP: Preliminary Mapping Report (see note below. The ' indicates corresponding REG is set)
++----------------------+----------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Module Name           | DSP Mapping    | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
++----------------------+----------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|int8_requant_pipeline | A*B            | 18     | 15     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|int8_requant_pipeline | (PCIN>>17)+A*B | 15     | 15     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|int8_requant_pipeline | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|int8_requant_pipeline | (PCIN>>17)+A*B | 18     | 15     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|int8_requant_pipeline | A*B            | 18     | 15     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|int8_requant_pipeline | (PCIN>>17)+A*B | 15     | 15     | -      | -      | 30     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|int8_requant_pipeline | A*B            | 18     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|int8_requant_pipeline | (PCIN>>17)+A*B | 18     | 15     | -      | -      | 47     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'         | 8      | 8      | -      | -      | 16     | 0    | 0    | -    | -    | -     | 1    | 0    | 
+|mac_array_pipeline    | (C+(A*B)')'    | 8      | 8      | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
++----------------------+----------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+
+Note: The table above is a preliminary report that shows the DSPs inferred at the current stage of the synthesis flow. Some DSP may be reimplemented as non DSP primitives later in the synthesis flow. Multiple instantiated DSPs are reported only once.
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:01:43 ; elapsed = 00:01:45 . Memory (MB): peak = 1768.926 ; gain = 1148.258
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:01:47 ; elapsed = 00:01:49 . Memory (MB): peak = 1768.926 ; gain = 1148.258
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:01:53 ; elapsed = 00:01:56 . Memory (MB): peak = 1888.516 ; gain = 1267.848
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:01:53 ; elapsed = 00:01:56 . Memory (MB): peak = 1888.516 ; gain = 1267.848
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:53 ; elapsed = 00:01:56 . Memory (MB): peak = 1888.516 ; gain = 1267.848
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:01:53 ; elapsed = 00:01:56 . Memory (MB): peak = 1888.516 ; gain = 1267.848
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:01:54 ; elapsed = 00:01:57 . Memory (MB): peak = 1888.516 ; gain = 1267.848
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:01:54 ; elapsed = 00:01:57 . Memory (MB): peak = 1888.516 ; gain = 1267.848
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+DSP Final Report (the ' indicates corresponding REG is set)
++----------------------+-----------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Module Name           | DSP Mapping     | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
++----------------------+-----------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|mac_array_pipeline    | (A*B)'          | 30     | 18     | -      | -      | 16     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|mac_array_pipeline    | (C+(A*B)')'     | 30     | 18     | 17     | -      | 17     | 0    | 0    | 0    | -    | -     | 1    | 1    | 
+|int8_requant_pipeline | A*B             | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|int8_requant_pipeline | (PCIN>>17+A*B)' | 30     | 18     | -      | -      | 30     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|int8_requant_pipeline | A*B             | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|int8_requant_pipeline | (PCIN>>17+A*B)' | 0      | 18     | -      | -      | 47     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|int8_requant_pipeline | A*B             | 17     | 18     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|int8_requant_pipeline | (PCIN>>17+A*B)' | 30     | 18     | -      | -      | 30     | 0    | 0    | -    | -    | -     | 0    | 1    | 
+|int8_requant_pipeline | A*B             | 17     | 17     | -      | -      | 48     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|int8_requant_pipeline | (PCIN>>17+A*B)' | 0      | 18     | -      | -      | 47     | 0    | 0    | -    | -    | -     | 0    | 1    | 
++----------------------+-----------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+--------+------+
+|      |Cell    |Count |
++------+--------+------+
+|1     |CARRY4  |   732|
+|2     |DSP48E1 |   136|
+|3     |LUT1    |   143|
+|4     |LUT2    |  1936|
+|5     |LUT3    |   584|
+|6     |LUT4    |   396|
+|7     |LUT5    |   792|
+|8     |LUT6    |  1286|
+|9     |MUXF7   |    78|
+|10    |FDCE    |  2470|
+|11    |FDPE    |     3|
+|12    |FDRE    |  1564|
++------+--------+------+
+
+Report Instance Areas: 
++------+-------------------------------+------------------------+------+
+|      |Instance                       |Module                  |Cells |
++------+-------------------------------+------------------------+------+
+|1     |top                            |                        | 10120|
+|2     |  classify                     |int8_logits             |   107|
+|3     |  engine                       |conv_engine             |  8998|
+|4     |    array_mac                  |mac_array_pipeline      |  4059|
+|5     |    \requant_lanes[0].requant  |int8_requant_pipeline   |   957|
+|6     |    \requant_lanes[1].requant  |int8_requant_pipeline_7 |   897|
+|7     |  \gap_lanes[0].average        |int8_gap                |     4|
+|8     |  \gap_lanes[1].average        |int8_gap_0              |     4|
+|9     |  \gap_lanes[2].average        |int8_gap_1              |     4|
+|10    |  \gap_lanes[3].average        |int8_gap_2              |     4|
+|11    |  \gap_lanes[4].average        |int8_gap_3              |     4|
+|12    |  \gap_lanes[5].average        |int8_gap_4              |     4|
+|13    |  \gap_lanes[6].average        |int8_gap_5              |     4|
+|14    |  \gap_lanes[7].average        |int8_gap_6              |     4|
++------+-------------------------------+------------------------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:01:54 ; elapsed = 00:01:57 . Memory (MB): peak = 1888.516 ; gain = 1267.848
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 8 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:01:54 ; elapsed = 00:01:57 . Memory (MB): peak = 1888.516 ; gain = 1267.848
+Synthesis Optimization Complete : Time (s): cpu = 00:01:54 ; elapsed = 00:01:57 . Memory (MB): peak = 1896.270 ; gain = 1267.848
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.155 . Memory (MB): peak = 1908.328 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 946 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 2033.121 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Synth Design complete | Checksum: 21a6bf4c
+INFO: [Common 17-83] Releasing license: Vivado_Synthesis
+25 Infos, 8 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:02:00 ; elapsed = 00:02:05 . Memory (MB): peak = 2034.117 ; gain = 1421.414
+# create_clock -name cnn_clk -period 10.000 [get_ports clk]
+# set_input_delay -clock cnn_clk 1.000 [get_ports -filter {DIRECTION == IN && NAME != clk && NAME != rst_n}]
+# set_output_delay -clock cnn_clk 1.000 [all_outputs]
+# set_false_path -from [get_ports rst_n]
+# opt_design
+Command: opt_design
+Attempting to get a license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+Running DRC as a precondition to command opt_design
+
+Starting DRC Task
+INFO: [DRC 23-27] Running DRC with 2 threads
+WARNING: [DRC 23-814] Not all possible (connectivity based) DRCs may have been run because this design is seen as Out of Context.
+INFO: [Project 1-461] DRC finished with 0 Errors
+INFO: [Project 1-462] Please refer to the DRC report (report_drc) for more information.
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.837 . Memory (MB): peak = 2034.117 ; gain = 0.000
+
+Starting Cache Timing Information Task
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Ending Cache Timing Information Task | Checksum: 8d126b55
+
+Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 2034.117 ; gain = 0.000
+
+Starting Logic Optimization Task
+
+Phase 1 Initialization
+
+Phase 1.1 Core Generation And Design Setup
+Phase 1.1 Core Generation And Design Setup | Checksum: 8d126b55
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.013 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 1.2 Setup Constraints And Sort Netlist
+Phase 1.2 Setup Constraints And Sort Netlist | Checksum: 8d126b55
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.024 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Phase 1 Initialization | Checksum: 8d126b55
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.027 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 2 Timer Update And Timing Data Collection
+
+Phase 2.1 Detect if minReqCache needed
+Phase 2.1 Detect if minReqCache needed | Checksum: 8d126b55
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.063 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 2.2 Timer Update
+Phase 2.2 Timer Update | Checksum: 8d126b55
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.087 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Phase 2 Timer Update And Timing Data Collection | Checksum: 8d126b55
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.090 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 3 Retarget
+INFO: [Opt 31-1851] Number of loadless carry chains removed were: 0
+INFO: [Opt 31-1834] Total Chains To Be Transformed Were: 0 AND Number of Transformed insts Created are: 0
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+INFO: [Opt 31-49] Retargeted 0 cell(s).
+Phase 3 Retarget | Checksum: 1136a95ce
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.379 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Retarget | Checksum: 1136a95ce
+INFO: [Opt 31-389] Phase Retarget created 0 cells and removed 2 cells
+
+Phase 4 Constant propagation
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Phase 4 Constant propagation | Checksum: 1b66bb591
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.541 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Constant propagation | Checksum: 1b66bb591
+INFO: [Opt 31-389] Phase Constant propagation created 0 cells and removed 0 cells
+
+Phase 5 Sweep
+INFO: [Constraints 18-11670] Building netlist checker database with flags, 0x8
+Done building netlist checker database: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Phase 5 Sweep | Checksum: 14192e2c7
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.796 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Sweep | Checksum: 14192e2c7
+INFO: [Opt 31-389] Phase Sweep created 0 cells and removed 0 cells
+
+Phase 6 BUFG optimization
+Phase 6 BUFG optimization | Checksum: 14192e2c7
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.862 . Memory (MB): peak = 2193.348 ; gain = 0.000
+BUFG optimization | Checksum: 14192e2c7
+INFO: [Opt 31-662] Phase BUFG optimization created 0 cells of which 0 are BUFGs and removed 0 cells.
+
+Phase 7 Shift Register Optimization
+INFO: [Opt 31-1064] SRL Remap converted 0 SRLs to 0 registers and converted 0 registers of register chains to 0 SRLs
+Phase 7 Shift Register Optimization | Checksum: 14192e2c7
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.881 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Shift Register Optimization | Checksum: 14192e2c7
+INFO: [Opt 31-389] Phase Shift Register Optimization created 0 cells and removed 0 cells
+
+Phase 8 Post Processing Netlist
+Phase 8 Post Processing Netlist | Checksum: 14192e2c7
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.925 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Post Processing Netlist | Checksum: 14192e2c7
+INFO: [Opt 31-389] Phase Post Processing Netlist created 0 cells and removed 0 cells
+
+Phase 9 Finalization
+
+Phase 9.1 Finalizing Design Cores and Updating Shapes
+Phase 9.1 Finalizing Design Cores and Updating Shapes | Checksum: 19c76eae8
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 9.2 Verifying Netlist Connectivity
+
+Starting Connectivity Check Task
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.045 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Phase 9.2 Verifying Netlist Connectivity | Checksum: 19c76eae8
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Phase 9 Finalization | Checksum: 19c76eae8
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Opt_design Change Summary
+=========================
+
+
+-------------------------------------------------------------------------------------------------------------------------
+|  Phase                        |  #Cells created  |  #Cells Removed  |  #Constrained objects preventing optimizations  |
+-------------------------------------------------------------------------------------------------------------------------
+|  Retarget                     |               0  |               2  |                                              0  |
+|  Constant propagation         |               0  |               0  |                                              0  |
+|  Sweep                        |               0  |               0  |                                              0  |
+|  BUFG optimization            |               0  |               0  |                                              0  |
+|  Shift Register Optimization  |               0  |               0  |                                              0  |
+|  Post Processing Netlist      |               0  |               0  |                                              0  |
+-------------------------------------------------------------------------------------------------------------------------
+
+
+Ending Logic Optimization Task | Checksum: 19c76eae8
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Starting Power Optimization Task
+INFO: [Pwropt 34-132] Skipping clock gating for clocks with a period < 2.00 ns.
+Ending Power Optimization Task | Checksum: 19c76eae8
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.021 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Starting Final Cleanup Task
+Ending Final Cleanup Task | Checksum: 19c76eae8
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.004 . Memory (MB): peak = 2193.348 ; gain = 0.000
+INFO: [Common 17-83] Releasing license: Vivado_Implementation
+20 Infos, 1 Warnings, 0 Critical Warnings and 0 Errors encountered.
+opt_design completed successfully
+opt_design: Time (s): cpu = 00:00:17 ; elapsed = 00:00:17 . Memory (MB): peak = 2193.348 ; gain = 159.230
+# place_design
+Command: place_design
+Attempting to get a license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+INFO: [Common 17-83] Releasing license: Vivado_Implementation
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Running DRC as a precondition to command place_design
+INFO: [DRC 23-27] Running DRC with 2 threads
+WARNING: [DRC 23-814] Not all possible (connectivity based) DRCs may have been run because this design is seen as Out of Context.
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+INFO: [Place 30-611] Multithreading enabled for place_design using a maximum of 2 CPUs
+
+Starting Placer Task
+
+Phase 1 Placer Initialization
+
+Phase 1.1 Placer Initialization Netlist Sorting
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.016 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Phase 1.1 Placer Initialization Netlist Sorting | Checksum: fc7636a7
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.020 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.003 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device | Checksum: f4d77eb8
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.614 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 1.3 Build Placer Netlist Model
+Phase 1.3 Build Placer Netlist Model | Checksum: 1511ab1e9
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:04 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 1.4 Constrain Clocks/Macros
+Phase 1.4 Constrain Clocks/Macros | Checksum: 1511ab1e9
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:04 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Phase 1 Placer Initialization | Checksum: 1511ab1e9
+
+Time (s): cpu = 00:00:06 ; elapsed = 00:00:04 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 2 Global Placement
+
+Phase 2.1 Floorplanning
+Phase 2.1 Floorplanning | Checksum: 118102ebd
+
+Time (s): cpu = 00:00:09 ; elapsed = 00:00:06 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 2.2 Update Timing before SLR Path Opt
+Phase 2.2 Update Timing before SLR Path Opt | Checksum: 114f99b45
+
+Time (s): cpu = 00:00:13 ; elapsed = 00:00:08 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 2.3 Post-Processing in Floorplanning
+Phase 2.3 Post-Processing in Floorplanning | Checksum: 114f99b45
+
+Time (s): cpu = 00:00:13 ; elapsed = 00:00:08 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 2.4 Global Place Phase1
+Phase 2.4 Global Place Phase1 | Checksum: 2642ecdae
+
+Time (s): cpu = 00:00:28 ; elapsed = 00:00:17 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 2.5 Global Place Phase2
+
+Phase 2.5.1 UpdateTiming Before Physical Synthesis
+Phase 2.5.1 UpdateTiming Before Physical Synthesis | Checksum: 2a3df36b1
+
+Time (s): cpu = 00:00:30 ; elapsed = 00:00:18 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 2.5.2 Physical Synthesis In Placer
+INFO: [Physopt 32-1035] Found 1 LUTNM shape to break, 126 LUT instances to create LUTNM shape
+INFO: [Physopt 32-1044] Break lutnm for timing: one critical 1, two critical 0, total 1, new lutff created 0
+INFO: [Physopt 32-1138] End 1 Pass. Optimized 28 nets or LUTs. Breaked 1 LUT, combined 27 existing LUTs and moved 0 existing LUT
+INFO: [Physopt 32-65] No nets found for high-fanout optimization.
+INFO: [Physopt 32-232] Optimized 0 net. Created 0 new instance.
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-670] No setup violation found.  DSP Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  Shift Register to Pipeline Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  Shift Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  BRAM Register Optimization was not performed.
+INFO: [Physopt 32-670] No setup violation found.  URAM Register Optimization was not performed.
+INFO: [Physopt 32-949] No candidate nets found for dynamic/static region interface net replication
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.004 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Summary of Physical Synthesis Optimizations
+============================================
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+|  Optimization                                     |  Added Cells  |  Removed Cells  |  Optimized Cells/Nets  |  Dont Touch  |  Iterations  |  Elapsed   |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+|  LUT Combining                                    |            1  |             27  |                    28  |           0  |           1  |  00:00:00  |
+|  Retime                                           |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Very High Fanout                                 |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  DSP Register                                     |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Shift Register to Pipeline                       |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Shift Register                                   |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  BRAM Register                                    |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  URAM Register                                    |            0  |              0  |                     0  |           0  |           0  |  00:00:00  |
+|  Dynamic/Static Region Interface Net Replication  |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Total                                            |            1  |             27  |                    28  |           0  |           4  |  00:00:00  |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Phase 2.5.2 Physical Synthesis In Placer | Checksum: 1e0c7b000
+
+Time (s): cpu = 00:00:31 ; elapsed = 00:00:19 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Phase 2.5 Global Place Phase2 | Checksum: 1646ad28f
+
+Time (s): cpu = 00:00:32 ; elapsed = 00:00:20 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Phase 2 Global Placement | Checksum: 1646ad28f
+
+Time (s): cpu = 00:00:32 ; elapsed = 00:00:20 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 3 Detail Placement
+
+Phase 3.1 Commit Multi Column Macros
+Phase 3.1 Commit Multi Column Macros | Checksum: 16593cbf5
+
+Time (s): cpu = 00:00:33 ; elapsed = 00:00:20 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 3.2 Commit Most Macros & LUTRAMs
+Phase 3.2 Commit Most Macros & LUTRAMs | Checksum: 225f861af
+
+Time (s): cpu = 00:00:36 ; elapsed = 00:00:22 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 3.3 Area Swap Optimization
+Phase 3.3 Area Swap Optimization | Checksum: 2018ae40f
+
+Time (s): cpu = 00:00:36 ; elapsed = 00:00:22 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 3.4 Pipeline Register Optimization
+Phase 3.4 Pipeline Register Optimization | Checksum: 1e9649018
+
+Time (s): cpu = 00:00:36 ; elapsed = 00:00:22 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 3.5 Small Shape Detail Placement
+Phase 3.5 Small Shape Detail Placement | Checksum: 18d3d1425
+
+Time (s): cpu = 00:00:40 ; elapsed = 00:00:26 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 3.6 Re-assign LUT pins
+Phase 3.6 Re-assign LUT pins | Checksum: 2329998f2
+
+Time (s): cpu = 00:00:40 ; elapsed = 00:00:26 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 3.7 Pipeline Register Optimization
+Phase 3.7 Pipeline Register Optimization | Checksum: 20ac3c439
+
+Time (s): cpu = 00:00:40 ; elapsed = 00:00:26 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Phase 3 Detail Placement | Checksum: 20ac3c439
+
+Time (s): cpu = 00:00:40 ; elapsed = 00:00:26 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 4 Post Placement Optimization and Clean-Up
+
+Phase 4.1 Post Commit Optimization
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+
+Phase 4.1.1 Post Placement Optimization
+Post Placement Optimization Initialization | Checksum: 21f64be42
+
+Phase 4.1.1.1 BUFG Insertion
+
+Starting Physical Synthesis Task
+
+Phase 1 Physical Synthesis Initialization
+INFO: [Physopt 32-721] Multithreading enabled for phys_opt_design using a maximum of 2 CPUs
+INFO: [Physopt 32-619] Estimated Timing Summary | WNS=-0.332 | TNS=-23.087 |
+Phase 1 Physical Synthesis Initialization | Checksum: 1ed670f6d
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.211 . Memory (MB): peak = 2193.348 ; gain = 0.000
+INFO: [Place 46-33] Processed net engine/requant_lanes[0].requant/rst_n_0, BUFG insertion was skipped due to placement/routing conflicts.
+INFO: [Place 46-56] BUFG insertion identified 1 candidate nets. Inserted BUFG: 0, Replicated BUFG Driver: 0, Skipped due to Placement/Routing Conflicts: 1, Skipped due to Timing Degradation: 0, Skipped due to netlist editing failed: 0.
+Ending Physical Synthesis Task | Checksum: 208a124ca
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.474 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Phase 4.1.1.1 BUFG Insertion | Checksum: 21f64be42
+
+Time (s): cpu = 00:00:46 ; elapsed = 00:00:30 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 4.1.1.2 Post Placement Timing Optimization
+INFO: [Place 30-746] Post Placement Timing Summary WNS=0.528. For the most accurate timing information please run report_timing.
+Phase 4.1.1.2 Post Placement Timing Optimization | Checksum: e9bab47c
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:36 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:36 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Phase 4.1 Post Commit Optimization | Checksum: e9bab47c
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:36 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 4.2 Post Placement Cleanup
+Phase 4.2 Post Placement Cleanup | Checksum: e9bab47c
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:36 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 4.3 Placer Reporting
+
+Phase 4.3.1 Print Estimated Congestion
+INFO: [Place 30-612] Post-Placement Estimated Congestion 
+ ____________________________________________________
+|           | Global Congestion | Short Congestion  |
+| Direction | Region Size       | Region Size       |
+|___________|___________________|___________________|
+|      North|                1x1|                2x2|
+|___________|___________________|___________________|
+|      South|                1x1|                2x2|
+|___________|___________________|___________________|
+|       East|                1x1|                1x1|
+|___________|___________________|___________________|
+|       West|                1x1|                1x1|
+|___________|___________________|___________________|
+
+Phase 4.3.1 Print Estimated Congestion | Checksum: e9bab47c
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:36 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Phase 4.3 Placer Reporting | Checksum: e9bab47c
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:36 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 4.4 Final Placement Cleanup
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.006 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:36 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Phase 4 Post Placement Optimization and Clean-Up | Checksum: 13674d71d
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:36 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Ending Placer Task | Checksum: 11b7853ab
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:36 . Memory (MB): peak = 2193.348 ; gain = 0.000
+27 Infos, 1 Warnings, 0 Critical Warnings and 0 Errors encountered.
+place_design completed successfully
+place_design: Time (s): cpu = 00:00:54 ; elapsed = 00:00:39 . Memory (MB): peak = 2193.348 ; gain = 0.000
+# phys_opt_design
+Command: phys_opt_design
+Attempting to get a license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+
+Starting Initial Update Timing Task
+WARNING: [Timing 38-242] The property HD.CLK_SRC of clock port "clk" is not set. In out-of-context mode, this prevents timing estimation for clock delay/skew
+Resolution: Set the HD.CLK_SRC property of the out-of-context port to the location of the clock buffer instance in the top-level design
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:02 . Memory (MB): peak = 2193.348 ; gain = 0.000
+INFO: [Vivado_Tcl 4-2279] Estimated Timing Summary | WNS= 0.394 | TNS= 0.000 | 
+INFO: [Vivado_Tcl 4-383] Design worst setup slack (WNS) is greater than or equal to 0.000 ns. All physical synthesis setup optimizations will be skipped.
+INFO: [Vivado_Tcl 4-232] No setup violation found. The netlist was not modified.
+INFO: [Common 17-83] Releasing license: Vivado_Implementation
+5 Infos, 1 Warnings, 0 Critical Warnings and 0 Errors encountered.
+phys_opt_design completed successfully
+# route_design
+Command: route_design
+Attempting to get a license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+
+
+Starting Routing Task
+INFO: [Route 35-254] Multithreading enabled for route_design using a maximum of 2 CPUs
+
+Phase 1 Build RT Design
+Checksum: PlaceDB: 2222b0a7 ConstDB: 0 ShapeSum: e35c3014 RouteDB: 15f972f0
+WARNING: [Route 35-198] Port "weight_data[1015]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1015]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1014]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1014]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1013]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1013]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1012]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1012]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1011]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1011]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1010]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1010]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1009]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1009]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1008]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1008]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "ce" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "ce". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-197] Clock port "clk" does not have an associated HD.CLK_SRC. Without this constraint, timing analysis may not be accurate and upstream checks cannot be done to ensure correct clock placement.
+WARNING: [Route 35-198] Port "weight_data[1023]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1023]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1022]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1022]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1021]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1021]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1020]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1020]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1019]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1019]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1018]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1018]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1017]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1017]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1016]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1016]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "input_data[63]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "input_data[63]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "input_data[55]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "input_data[55]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[639]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[639]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[638]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[638]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[637]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[637]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[636]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[636]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[635]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[635]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[634]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[634]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[633]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[633]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[632]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[632]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[631]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[631]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[630]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[630]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[629]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[629]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[628]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[628]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[627]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[627]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[626]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[626]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[625]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[625]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[624]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[624]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[759]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[759]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[758]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[758]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[757]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[757]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[756]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[756]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[755]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[755]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[754]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[754]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[753]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[753]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[752]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[752]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[767]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[767]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[766]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[766]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[765]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[765]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[764]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[764]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[763]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[763]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[762]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[762]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[761]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[761]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[760]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[760]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "input_data[47]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "input_data[47]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "input_data[39]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "input_data[39]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1007]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1007]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1006]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1006]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1005]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1005]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1004]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1004]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1003]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1003]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1002]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1002]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1001]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1001]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[1000]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[1000]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[999]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[999]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[998]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[998]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[997]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[997]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[996]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[996]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[995]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[995]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[994]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[994]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[993]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[993]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[992]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[992]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[751]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[751]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[750]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[750]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[749]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[749]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[748]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[748]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[747]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[747]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[746]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[746]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[745]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[745]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[744]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[744]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[743]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[743]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[742]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[742]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[741]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[741]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[740]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[740]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[739]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[739]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[738]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[738]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[737]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[737]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[736]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[736]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[871]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[871]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[870]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[870]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[869]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[869]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[868]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[868]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[867]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[867]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[866]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[866]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[865]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[865]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[864]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[864]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[879]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[879]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[878]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[878]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[877]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[877]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[876]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[876]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[875]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[875]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[874]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[874]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+WARNING: [Route 35-198] Port "weight_data[873]" does not have an associated HD.PARTPIN_LOCS, which will prevent the partial routing of the signal "weight_data[873]". Without this partial route, timing analysis to/from this port will not be accurate, and no routing information for this port can be exported.
+INFO: [Common 17-14] Message 'Route 35-198' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+WARNING: [Constraints 18-8777] Unable to split tiles. All required files are not available.
+Post Restoration Checksum: NetGraph: 2c5d951 | NumContArr: 2a79e62e | Constraints: c2a8fa9d | Timing: c2a8fa9d
+Phase 1 Build RT Design | Checksum: 1b291b4b9
+
+Time (s): cpu = 00:00:32 ; elapsed = 00:00:28 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 2 Router Initialization
+
+Phase 2.1 Fix Topology Constraints
+Phase 2.1 Fix Topology Constraints | Checksum: 1b291b4b9
+
+Time (s): cpu = 00:00:32 ; elapsed = 00:00:28 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 2.2 Pre Route Cleanup
+Phase 2.2 Pre Route Cleanup | Checksum: 1b291b4b9
+
+Time (s): cpu = 00:00:32 ; elapsed = 00:00:28 . Memory (MB): peak = 2193.348 ; gain = 0.000
+ Number of Nodes with overlaps = 0
+
+Phase 2.3 Update Timing
+Phase 2.3 Update Timing | Checksum: 1d7d0a82f
+
+Time (s): cpu = 00:00:36 ; elapsed = 00:00:30 . Memory (MB): peak = 2193.348 ; gain = 0.000
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.502  | TNS=0.000  | WHS=0.103  | THS=0.000  |
+
+
+Phase 2.4 Soft Constraint Pins - Fast Budgeting
+Phase 2.4 Soft Constraint Pins - Fast Budgeting | Checksum: 272044124
+
+Time (s): cpu = 00:00:38 ; elapsed = 00:00:31 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Router Utilization Summary
+  Global Vertical Routing Utilization    = 0 %
+  Global Horizontal Routing Utilization  = 0 %
+  Routable Net Status*
+  *Does not include unroutable nets such as driverless and loadless.
+  Run report_route_status for detailed report.
+  Number of Failed Nets               = 9859
+    (Failed Nets is the sum of unrouted and partially routed nets)
+  Number of Unrouted Nets             = 9859
+  Number of Partially Routed Nets     = 0
+  Number of Node Overlaps             = 0
+
+Phase 2 Router Initialization | Checksum: 272044124
+
+Time (s): cpu = 00:00:38 ; elapsed = 00:00:31 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 3 Global Routing
+Phase 3 Global Routing | Checksum: 272044124
+
+Time (s): cpu = 00:00:38 ; elapsed = 00:00:31 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 4 Initial Routing
+
+Phase 4.1 Initial Net Routing Pass
+Phase 4.1 Initial Net Routing Pass | Checksum: 23d4117cc
+
+Time (s): cpu = 00:00:41 ; elapsed = 00:00:33 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Phase 4 Initial Routing | Checksum: 23d4117cc
+
+Time (s): cpu = 00:00:41 ; elapsed = 00:00:33 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 5 Rip-up And Reroute
+
+Phase 5.1 Global Iteration 0
+ Number of Nodes with overlaps = 1160
+ Number of Nodes with overlaps = 321
+ Number of Nodes with overlaps = 162
+ Number of Nodes with overlaps = 74
+ Number of Nodes with overlaps = 39
+ Number of Nodes with overlaps = 13
+ Number of Nodes with overlaps = 2
+ Number of Nodes with overlaps = 0
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.316  | TNS=0.000  | WHS=N/A    | THS=N/A    |
+
+Phase 5.1 Global Iteration 0 | Checksum: 22ec3a7b8
+
+Time (s): cpu = 00:00:54 ; elapsed = 00:00:44 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Phase 5 Rip-up And Reroute | Checksum: 22ec3a7b8
+
+Time (s): cpu = 00:00:54 ; elapsed = 00:00:44 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 6 Delay and Skew Optimization
+
+Phase 6.1 Delay CleanUp
+Phase 6.1 Delay CleanUp | Checksum: 22ec3a7b8
+
+Time (s): cpu = 00:00:54 ; elapsed = 00:00:44 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 6.2 Clock Skew Optimization
+Phase 6.2 Clock Skew Optimization | Checksum: 22ec3a7b8
+
+Time (s): cpu = 00:00:54 ; elapsed = 00:00:44 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Phase 6 Delay and Skew Optimization | Checksum: 22ec3a7b8
+
+Time (s): cpu = 00:00:54 ; elapsed = 00:00:44 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 7 Post Hold Fix
+
+Phase 7.1 Hold Fix Iter
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=0.316  | TNS=0.000  | WHS=0.122  | THS=0.000  |
+
+Phase 7.1 Hold Fix Iter | Checksum: 220a9f66a
+
+Time (s): cpu = 00:00:55 ; elapsed = 00:00:45 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Phase 7 Post Hold Fix | Checksum: 220a9f66a
+
+Time (s): cpu = 00:00:55 ; elapsed = 00:00:45 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 8 Route finalize
+
+Router Utilization Summary
+  Global Vertical Routing Utilization    = 2.73506 %
+  Global Horizontal Routing Utilization  = 3.31677 %
+  Routable Net Status*
+  *Does not include unroutable nets such as driverless and loadless.
+  Run report_route_status for detailed report.
+  Number of Failed Nets               = 0
+    (Failed Nets is the sum of unrouted and partially routed nets)
+  Number of Unrouted Nets             = 0
+  Number of Partially Routed Nets     = 0
+  Number of Node Overlaps             = 0
+
+Phase 8 Route finalize | Checksum: 220a9f66a
+
+Time (s): cpu = 00:00:55 ; elapsed = 00:00:45 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 9 Verifying routed nets
+
+ Verification completed successfully
+Phase 9 Verifying routed nets | Checksum: 220a9f66a
+
+Time (s): cpu = 00:00:55 ; elapsed = 00:00:45 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 10 Depositing Routes
+Phase 10 Depositing Routes | Checksum: 2d3dce8f0
+
+Time (s): cpu = 00:00:56 ; elapsed = 00:00:46 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 11 Post Process Routing
+Phase 11 Post Process Routing | Checksum: 2d3dce8f0
+
+Time (s): cpu = 00:00:56 ; elapsed = 00:00:46 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Phase 12 Post Router Timing
+INFO: [Route 35-57] Estimated Timing Summary | WNS=0.316  | TNS=0.000  | WHS=0.122  | THS=0.000  |
+
+INFO: [Route 35-327] The final timing numbers are based on the router estimated timing analysis. For a complete and accurate timing signoff, please run report_timing_summary.
+Phase 12 Post Router Timing | Checksum: 2d3dce8f0
+
+Time (s): cpu = 00:00:56 ; elapsed = 00:00:46 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Total Elapsed time in route_design: 45.964 secs
+
+Phase 13 Post-Route Event Processing
+Phase 13 Post-Route Event Processing | Checksum: 19ab50c9f
+
+Time (s): cpu = 00:00:57 ; elapsed = 00:00:46 . Memory (MB): peak = 2193.348 ; gain = 0.000
+INFO: [Route 35-16] Router Completed Successfully
+Ending Routing Task | Checksum: 19ab50c9f
+
+Time (s): cpu = 00:00:57 ; elapsed = 00:00:46 . Memory (MB): peak = 2193.348 ; gain = 0.000
+
+Routing Is Done.
+INFO: [Common 17-83] Releasing license: Vivado_Implementation
+10 Infos, 102 Warnings, 0 Critical Warnings and 0 Errors encountered.
+route_design completed successfully
+route_design: Time (s): cpu = 00:00:57 ; elapsed = 00:00:46 . Memory (MB): peak = 2193.348 ; gain = 0.000
+# report_utilization -file [file join $out utilization.rpt]
+# report_timing_summary -warn_on_violation -file [file join $out timing.rpt]
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+WARNING: [Timing 38-242] The property HD.CLK_SRC of clock port "clk" is not set. In out-of-context mode, this prevents timing estimation for clock delay/skew
+Resolution: Set the HD.CLK_SRC property of the out-of-context port to the location of the clock buffer instance in the top-level design
+# report_timing -max_paths 10 -file [file join $out worst_paths.rpt]
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+INFO: [Timing 38-78] ReportTimingParams: -max_paths 10 -nworst 1 -delay_type max -sort_by slack.
+# report_drc -file [file join $out drc.rpt]
+Command: report_drc -file E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/reports/drc.rpt
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'D:/Vivado_downloads/2026.1/Vivado/data/ip'.
+INFO: [DRC 23-27] Running DRC with 2 threads
+WARNING: [DRC 23-814] Not all possible (connectivity based) DRCs may have been run because this design is seen as Out of Context.
+INFO: [Vivado_Tcl 2-168] The results of DRC are in file E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/reports/drc.rpt.
+report_drc completed successfully
+# check_timing -verbose
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Thu Oct 15 22:45:55 2026
+| Host         : never-die-cold running 64-bit major release  (build 9200)
+| Command      : check_timing -verbose
+| Design       : cnn_sequencer
+| Device       : 7z020-clg400
+| Speed File   : -1  PRODUCTION 1.12 2019-11-22
+| Design State : Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+
+check_timing report
+
+Table of Contents
+-----------------
+1. checking no_clock (0)
+2. checking constant_clock (0)
+3. checking pulse_width_clock (0)
+4. checking unconstrained_internal_endpoints (0)
+5. checking no_input_delay (1)
+6. checking no_output_delay (0)
+7. checking multiple_clock (0)
+8. checking generated_clocks (0)
+9. checking loops (0)
+10. checking partial_input_delay (0)
+11. checking partial_output_delay (0)
+12. checking latch_loops (0)
+
+1. checking no_clock (0)
+------------------------
+ There are 0 register/latch pins with no clock.
+
+
+2. checking constant_clock (0)
+------------------------------
+ There are 0 register/latch pins with constant_clock.
+
+
+3. checking pulse_width_clock (0)
+---------------------------------
+ There are 0 register/latch pins which need pulse_width check
+
+
+4. checking unconstrained_internal_endpoints (0)
+------------------------------------------------
+ There are 0 pins that are not constrained for maximum delay.
+
+ There are 0 pins that are not constrained for maximum delay due to constant clock.
+
+
+5. checking no_input_delay (1)
+------------------------------
+ There are 0 input ports with no input delay specified.
+
+ There is 1 input port with no input delay but user has a false path constraint. (MEDIUM)
+
+rst_n
+
+
+6. checking no_output_delay (0)
+-------------------------------
+ There are 0 ports with no output delay specified.
+
+ There are 0 ports with no output delay but user has a false path constraint
+
+ There are 0 ports with no output delay but with a timing clock defined on it or propagating through it
+
+
+7. checking multiple_clock (0)
+------------------------------
+ There are 0 register/latch pins with multiple clocks.
+
+
+8. checking generated_clocks (0)
+--------------------------------
+ There are 0 generated clocks that are not connected to a clock source.
+
+
+9. checking loops (0)
+---------------------
+ There are 0 combinational loops in the design.
+
+
+10. checking partial_input_delay (0)
+------------------------------------
+ There are 0 input ports with partial input delay specified.
+
+
+11. checking partial_output_delay (0)
+-------------------------------------
+ There are 0 ports with partial output delay specified.
+
+
+12. checking latch_loops (0)
+----------------------------
+ There are 0 combinational latch loops in the design through latch input
+
+
+# write_checkpoint [file join $out cnn_ooc.dcp]
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Wrote PlaceDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Wrote PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Writing XDEF routing.
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.026 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Wrote RouteStorage: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.234 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Wrote PlaceStorage: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.345 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Wrote Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.023 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Wrote Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.014 . Memory (MB): peak = 2193.348 ; gain = 0.000
+Write Physdb Complete: Time (s): cpu = 00:00:02 ; elapsed = 00:00:00.647 . Memory (MB): peak = 2193.348 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/reports/cnn_ooc.dcp' has been generated.
+# set paths [get_timing_paths -delay_type max -max_paths 1]
+# if {![llength $paths]} { error "no setup timing path" }
+# set slack [get_property SLACK [lindex $paths 0]]
+# set hold_paths [get_timing_paths -delay_type min -max_paths 1]
+# if {![llength $hold_paths]} { error "no hold timing path" }
+# set hold_slack [get_property SLACK [lindex $hold_paths 0]]
+# set dsp [llength [get_cells -hierarchical -filter {REF_NAME =~ DSP48*}]]
+WARNING: [Vivado_Tcl 4-49] No violations matched 'SEVERITY == Error || SEVERITY == "Critical Warning"'.
+# set severe [get_drc_violations -filter {SEVERITY == Error || SEVERITY == "Critical Warning"}]
+# puts "CNN_OOC_RESULT WNS=$slack WHS=$hold_slack DSP=$dsp SEVERE_DRC=[llength $severe]"
+CNN_OOC_RESULT WNS=0.317 WHS=0.123 DSP=136 SEVERE_DRC=0
+# if {$slack < 0 || $hold_slack < 0 || $dsp > 176 || [llength $severe]} { error "CNN OOC timing/resource/DRC gate failed (DSP budget 176); preserve reports" }
+# puts "PASS: CNN operator OOC setup/hold timing, DSP resource and severe DRC gate"
+PASS: CNN operator OOC setup/hold timing, DSP resource and severe DRC gate
+INFO: [Common 17-206] Exiting Vivado at Thu Oct 15 22:45:56 2026...

@@ -31,7 +31,13 @@ RISC-V 以 load/store 访问且不启用自定义指令。
 
 `conv_engine.v` 实现一拍同步 BRAM 读接口、分拍地址生成、padding/尾通道、bias 和卷积/FC 调度；`cnn_sequencer.v` 串联四层 Conv→GAP→FC。暂停保持数据和有效位，复位/取消/超时使结果无效。外部 ROI/ping/pong/权重/参数存储须共享复位，busy 期间禁止修改；该模块不包含实体 BRAM、C03 寄存器、DMA 或核接入。
 
-仓库入口：`bash sim/scripts/run_iverilog.sh coprocessor all`，支持 `pipeline`、`conv`、`network` 专项；默认 Verilog-2001 编译。总回归 `bash sim/scripts/run_iverilog.sh all` 已包含这些入口。原始结果和失败记录见[本轮证据](../../data/logs/2026-10-13-cnn-arithmetic/README.md)。
+仓库入口：`bash sim/scripts/run_iverilog.sh coprocessor all`，支持 `pipeline`、`conv`、`network`、`watchdog` 专项；默认 Verilog-2001 编译。总回归 `bash sim/scripts/run_iverilog.sh all` 已包含这些入口。首版原始结果和失败记录见[10/13 证据](../../data/logs/2026-10-13-cnn-arithmetic/README.md)。
+
+10/15 优化：尺寸中间值收窄为无符号 8 位并保留非法几何检查；启动时锁存 watchdog 最后允许周期。
+卷积读地址/同步读与 MAC 返回重叠，参数每个输出通道块只读一次；16 路 requant 改为两路分时处理，整数语义不变。
+两组整网逐元素对拍各为 472,593 周期（含每 7 拍暂停 1 拍），首版为 1,123,109 周期；每网读取 10 组参数。
+100 MHz OOC 为 DSP 136/220、LUT 4540、FF 4037，WNS 0.317 ns、WHS 0.123 ns；DSP 门限为 176，保留至少 20% 器件余量。
+这些数据包含控制器与算术链，尚不包含实体 BRAM/SoC/视频；[命令与原始证据](../../data/logs/2026-10-15-improvements-fast/README.md)。
 
 `int8_reference.py` 实现输入/bias量化、舍入、scale编码与requant；`int8_tensor_reference.py` 实现张量/逐通道权重量化、bias和OIHW卷积累加，溢出拒绝。3组测试由 `bash sim/scripts/run_coprocessor_python.sh all` 复现，需真实 `python3` 与 NumPy；[10/12证据](../../data/logs/2026-10-12-pr-review/README.md)通过。
 `int8_network_reference.py` 新增完整固定结构整数链、模型形状/类型/范围和通用累加界检查；独立常量网络黄金检查 Conv/GAP/FC。`generate_network_vectors.py` 提供固定种子诊断权重和两组输入的逐层黄金及文件/源码哈希，**不是训练后的正式模型**。Python 回归现在为四组，支持 `COPROCESSOR_PYTHON` 或 `VISION_PYTHON` 指定解释器。

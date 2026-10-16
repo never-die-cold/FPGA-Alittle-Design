@@ -1,0 +1,42 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Thu Oct 15 22:37:55 2026
+| Host         : never-die-cold running 64-bit major release  (build 9200)
+| Command      : report_high_fanout_nets -load_types -max_nets 20 -file E:/Projects/FPGA-Alittle-Design/data/logs/2026-10-13-soc-reset-ce/vivado/fast_jalr_20261015/soc_high_fanout_synth.rpt
+| Design       : pynq_z2_top
+| Device       : xc7z020
+| Design State : Synthesized
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+High Fan-out Nets Information
+
+1. Fanout Summary
+-----------------
+
++----------------------------------------------------+--------+-------------+--------------+-----------+--------------+-------+
+| Net Name                                           | Fanout | Driver Type | Clock Enable | Set/Reset | Data & Other | Clock |
++----------------------------------------------------+--------+-------------+--------------+-----------+--------------+-------+
+| u_soc/u_core/u_mem_wb/Q[3]                         |   4097 | FDRE        |            0 |         0 |         4097 |     0 |
+| reset_pipe[1]                                      |    566 | FDPE        |            0 |       566 |            0 |     0 |
+| u_soc/u_core/u_if_stage/muldiv_pending_reg         |    298 | LUT5        |            0 |         0 |          298 |     0 |
+| u_soc/u_core/u_muldiv/multiplier_reg_n_0_[1]       |    255 | FDCE        |            0 |         0 |          255 |     0 |
+| u_soc/u_core/u_muldiv/multiplier_reg_n_0_[0]       |    255 | FDCE        |            0 |         0 |          255 |     0 |
+| u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__15_0[4] |    246 | FDRE        |            0 |         0 |          246 |     0 |
+| u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__4_0[5]  |    246 | FDRE        |            0 |         0 |          246 |     0 |
+| u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep_0[4]     |    246 | FDRE        |            0 |         0 |          246 |     0 |
+| u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__9_0[4]  |    246 | FDRE        |            0 |         0 |          246 |     0 |
+| u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__3_0[4]  |    246 | FDRE        |            0 |         0 |          246 |     0 |
+| u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__11_0[4] |    246 | FDRE        |            0 |         0 |          246 |     0 |
+| u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__2_0[4]  |    246 | FDRE        |            0 |         0 |          246 |     0 |
+| u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__20_0[4] |    246 | FDRE        |            0 |         0 |          246 |     0 |
+| u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__1_0[5]  |    246 | FDRE        |            0 |         0 |          246 |     0 |
+| u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__17_0[4] |    246 | FDRE        |            0 |         0 |          246 |     0 |
+| u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__8_0[5]  |    246 | FDRE        |            0 |         0 |          246 |     0 |
+| u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__21_0[4] |    246 | FDRE        |            0 |         0 |          246 |     0 |
+| u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__14_0[4] |    246 | FDRE        |            0 |         0 |          246 |     0 |
+| u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__7_0[4]  |    246 | FDRE        |            0 |         0 |          246 |     0 |
+| u_soc/u_core/u_mem_wb/mem_addr_reg[9]_rep__10_0[5] |    246 | FDRE        |            0 |         0 |          246 |     0 |
++----------------------------------------------------+--------+-------------+--------------+-----------+--------------+-------+
+
+

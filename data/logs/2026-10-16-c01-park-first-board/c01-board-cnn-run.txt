@@ -1,0 +1,20 @@
+HOST_STARTED_UTC=2026-10-15T16:54:39.7391683Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && source /etc/profile.d/pynq_venv.sh && python3 -u c01_board_cnn.py'
+sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && source /etc/profile.d/pynq_venv.sh && python3 -u c01_board_cnn.py'; printf '\n__PYNQ_RC_42ac34e4506149c091473dbf3854fd4b=%d\n' $?
+[?2004lTraceback (most recent call last):
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_board_cnn.py", line 94, in <module>
+    main()
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_board_cnn.py", line 77, in main
+    outcome = predict_trace(crop, layers)
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_board_cnn.py", line 44, in predict_trace
+    value = value.mean(axis=(2, 3), keepdims=True)
+  File "/usr/lib/python3/dist-packages/numpy/core/_methods.py", line 167, in _mean
+    rcount = _count_reduce_items(arr, axis, keepdims=keepdims, where=where)
+  File "/usr/lib/python3/dist-packages/numpy/core/_methods.py", line 76, in _count_reduce_items
+    items *= arr.shape[mu.normalize_axis_index(ax, arr.ndim)]
+numpy.AxisError: axis 3 is out of bounds for array of dimension 3
+
+__PYNQ_RC_42ac34e4506149c091473dbf3854fd4b=1
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=1

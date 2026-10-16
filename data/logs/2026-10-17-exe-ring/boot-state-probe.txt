@@ -1,0 +1,23 @@
+HOST_STARTED_UTC=2026-10-16T10:26:46.5933135Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=echo AUTH; sudo -n true && echo SUDO_OK || echo SUDO_NEED_PW; echo LINK; ip -br link; ip -br addr; echo PL; (source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -c "from pynq import PL; print(PL.bitfile_name, PL.timestamp)"; cat /etc/cron.d/pynq-linklocal) 2>&1 | tail -5
+echo AUTH; sudo -n true && echo SUDO_OK || echo SUDO_NEED_PW; echo LINK; ip -br link; ip -br addr; echo PL; (source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -c "from pynq import PL; print(PL.bitfile_name, PL.timestamp)"; cat /etc/cron.d/pynq-linklocal) 2>&1 | tail -5; printf '\n__PYNQ_RC_d5cbb2c03e28469482503c0131cd298f=%d\n' $?
+[?2004lAUTH
+sudo: a password is required
+SUDO_NEED_PW
+LINK
+lo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP> 
+dummy0           DOWN           46:1d:4c:95:e2:21 <BROADCAST,NOARP> 
+eth0             UP             ae:61:8f:77:63:27 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+sit0@NONE        DOWN           0.0.0.0 <NOARP> 
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+dummy0           DOWN           
+eth0             UP             169.254.87.99/16 192.168.2.99/24 fe80::ac61:8fff:fe77:6327/64 
+sit0@NONE        DOWN           
+PL
+None None
+@reboot root ip addr add 169.254.87.99/16 dev eth0
+
+__PYNQ_RC_d5cbb2c03e28469482503c0131cd298f=0
+
+HOST_EXIT_CODE=0

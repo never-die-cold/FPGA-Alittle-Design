@@ -1,0 +1,39 @@
+HOST_STARTED_UTC=2026-10-15T15:31:37.6993439Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=find /home/xilinx/vision_m2 -maxdepth 2 -type f \( -name "*capture*" -o -name "*onboard*" -o -name "*result*.json" \) -printf "%p\n"; test ! -f /home/xilinx/vision_m2/onboard_smoke.py || sha256sum /home/xilinx/vision_m2/onboard_smoke.py; ls -lh /home/xilinx/vision_m2/c01-*/*.bit /home/xilinx/vision_m2/c01-*/*.hwh 2>/dev/null
+find /home/xilinx/vision_m2 -maxdepth 2 -type f \( -name "*capture*" -o -name "*onboard*" -o -name "*result*.json" \) -printf "%p\n"; test ! -f /home/xilinx/vision_m2/onboard_smoke.py || sha256sum /home/xilinx/vision_m2/onboard_smoke.py; ls -lh /home/xilinx/vision_m2/c01-*/*.bit /home/xilinx/vision_m2/c01-*/*.hwh 2>/dev/null; printf '\n__PYNQ_RC_770e0b7c31034dee98a7d694b3a00e4e=%d\n' $?
+[?2004l/home/xilinx/vision_m2/c01-a2a0452a39f94cfdbb0da5bcb750e5ca/capture.bit
+/home/xilinx/vision_m2/c01-a2a0452a39f94cfdbb0da5bcb750e5ca/capture.hwh
+/home/xilinx/vision_m2/c01-a2a0452a39f94cfdbb0da5bcb750e5ca/c01_status_onboard.py
+/home/xilinx/vision_m2/c01-capture.lock
+/home/xilinx/vision_m2/c01-c88a93dd814b4f4bb2e86172aecbcf61/ddr-result.json
+/home/xilinx/vision_m2/c01-c88a93dd814b4f4bb2e86172aecbcf61/c01_ddr_onboard.py
+/home/xilinx/vision_m2/c01-c88a93dd814b4f4bb2e86172aecbcf61/c01_status_onboard.py
+/home/xilinx/vision_m2/c01-c88a93dd814b4f4bb2e86172aecbcf61/c01_capture.py
+/home/xilinx/vision_m2/m2_onboard.py
+/home/xilinx/vision_m2/c01-ab75f5d26f8747418c4b6b0fd83995cd/capture.bit
+/home/xilinx/vision_m2/c01-ab75f5d26f8747418c4b6b0fd83995cd/capture.hwh
+/home/xilinx/vision_m2/c01-ab75f5d26f8747418c4b6b0fd83995cd/c01_status_onboard.py
+/home/xilinx/vision_m2/__pycache__/m2_onboard.cpython-310.pyc
+/home/xilinx/vision_m2/c01-cefc3ffab83448b1ae9e41b345276c4e/capture.bit
+/home/xilinx/vision_m2/c01-cefc3ffab83448b1ae9e41b345276c4e/capture.hwh
+/home/xilinx/vision_m2/c01-cefc3ffab83448b1ae9e41b345276c4e/c01_status_onboard.py
+/home/xilinx/vision_m2/c01-8b4d42b3653c4c31a70626bf9a971abf/capture.bit
+/home/xilinx/vision_m2/c01-8b4d42b3653c4c31a70626bf9a971abf/capture.hwh
+/home/xilinx/vision_m2/c01-8b4d42b3653c4c31a70626bf9a971abf/c01_status_onboard.py
+/home/xilinx/vision_m2/c01-38950ebeddc24b89ae0b76aeffd4369e/ddr-result.json
+/home/xilinx/vision_m2/c01-38950ebeddc24b89ae0b76aeffd4369e/c01_ddr_onboard.py
+/home/xilinx/vision_m2/c01-38950ebeddc24b89ae0b76aeffd4369e/c01_status_onboard.py
+/home/xilinx/vision_m2/c01-38950ebeddc24b89ae0b76aeffd4369e/c01_capture.py
+-rw-rw-r-- 1 xilinx xilinx 3.9M Sep 21 18:31 /home/xilinx/vision_m2/c01-8b4d42b3653c4c31a70626bf9a971abf/capture.bit
+-rw-rw-r-- 1 xilinx xilinx 545K Sep 21 18:31 /home/xilinx/vision_m2/c01-8b4d42b3653c4c31a70626bf9a971abf/capture.hwh
+-rw-rw-r-- 1 xilinx xilinx 3.9M Sep 21 18:28 /home/xilinx/vision_m2/c01-a2a0452a39f94cfdbb0da5bcb750e5ca/capture.bit
+-rw-rw-r-- 1 xilinx xilinx    0 Sep 21 18:29 /home/xilinx/vision_m2/c01-a2a0452a39f94cfdbb0da5bcb750e5ca/capture.hwh
+-rw-rw-r-- 1 xilinx xilinx 3.9M Sep 21 19:08 /home/xilinx/vision_m2/c01-ab75f5d26f8747418c4b6b0fd83995cd/capture.bit
+-rw-rw-r-- 1 xilinx xilinx 545K Sep 21 19:08 /home/xilinx/vision_m2/c01-ab75f5d26f8747418c4b6b0fd83995cd/capture.hwh
+-rw-rw-r-- 1 xilinx xilinx 3.9M Sep 21 18:25 /home/xilinx/vision_m2/c01-cefc3ffab83448b1ae9e41b345276c4e/capture.bit
+-rw-rw-r-- 1 xilinx xilinx 545K Sep 21 18:25 /home/xilinx/vision_m2/c01-cefc3ffab83448b1ae9e41b345276c4e/capture.hwh
+
+__PYNQ_RC_770e0b7c31034dee98a7d694b3a00e4e=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

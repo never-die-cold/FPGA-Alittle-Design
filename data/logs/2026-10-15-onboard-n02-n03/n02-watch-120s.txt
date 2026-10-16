@@ -1,0 +1,11 @@
+HOST_STARTED_UTC=2026-10-15T15:33:17.2218383Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && cd /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627 && export PYTHONPATH=/home/xilinx/vision_m2:$PYTHONPATH && timeout -k 5s 145s python3 -u onboard_smoke.py watch 120'
+sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && cd /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627 && export PYTHONPATH=/home/xilinx/vision_m2:$PYTHONPATH && timeout -k 5s 145s python3 -u onboard_smoke.py watch 120'; printf '\n__PYNQ_RC_c31183b78f734e49a5a85abef9efed84=%d\n' $?
+[?2004lEVENT(0.0s): STREAM
+WATCH-SUMMARY: saw_stream=True saw_stall=False saw_busy=False end_stream=STREAM
+PASS(W): 观测 120s 完成（持续在流）
+
+__PYNQ_RC_c31183b78f734e49a5a85abef9efed84=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

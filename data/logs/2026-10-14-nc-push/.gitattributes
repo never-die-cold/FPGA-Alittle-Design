@@ -1,0 +1,4 @@
+# Original command outputs and fingerprints are retained byte for byte.
+*.txt -text -whitespace
+*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+*.md text eol=lf

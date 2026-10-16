@@ -1,0 +1,19 @@
+HOST_STARTED_UTC=2026-10-15T15:39:15.2113756Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && cd /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627 && python3 -u -c '"'"'import time; from pathlib import Path; from pynq import Overlay,MMIO,PL; from c01_status_onboard import load_candidate,verify; assert PL.bitfile_name=="/home/xilinx/vision_m2/vision.bit"; bit=Path("/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/capture.bit"); verify(bit,"86d2adb0343de1785270d207eee3c6b8fee2a6444bc64705bc068e3fc781d14f"); verify(bit.with_suffix(".hwh"),"eaaf68c3732f1a2bf85756fc0b3a8c6b07bb5cf5b36f32020882860a6aaebf5c"); load_candidate(bit,Overlay); s=MMIO(0x42000000,65536); d=MMIO(0x43000000,65536); p=MMIO(0x40000000,65536); print("CAP_BEGIN",{hex(o):s.read(o) for o in range(0,0x24,4)},flush=True); print("DMA_BEGIN",{hex(o):d.read(o) for o in (0x28,0x30,0x34)},flush=True); print("PIPE_BEGIN",p.read(44),p.read(48),flush=True); time.sleep(8); print("CAP_END",{hex(o):s.read(o) for o in range(0,0x24,4)},flush=True); print("DMA_END",{hex(o):d.read(o) for o in (0x28,0x30,0x34)},flush=True); print("PIPE_END",p.read(44),p.read(48),flush=True); print("PL",PL.bitfile_name,flush=True); print("DIAGNOSTIC: no DMA allocation/start; candidate remains loaded for UVC",flush=True)'"'"''
+sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && cd /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627 && python3 -u -c '"'"'import time; from pathlib import Path; from pynq import Overlay,MMIO,PL; from c01_status_onboard import load_candidate,verify; assert PL.bitfile_name=="/home/xilinx/vision_m2/vision.bit"; bit=Path("/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/capture.bit"); verify(bit,"86d2adb0343de1785270d207eee3c6b8fee2a6444bc64705bc068e3fc781d14f"); verify(bit.with_suffix(".hwh"),"eaaf68c3732f1a2bf85756fc0b3a8c6b07bb5cf5b36f32020882860a6aaebf5c"); load_candidate(bit,Overlay); s=MMIO(0x42000000,65536); d=MMIO(0x43000000,65536); p=MMIO(0x40000000,65536); print("CAP_BEGIN",{hex(o):s.read(o) for o in range(0,0x24,4)},flush=True); print("DMA_BEGIN",{hex(o):d.read(o) for o in (0x28,0x30,0x34)},flush=True); print("PIPE_BEGIN",p.read(44),p.read(48),flush=True); time.sleep(8); print("CAP_END",{hex(o):s.read(o) for o in range(0,0x24,4)},flush=True); print("DMA_END",{hex(o):d.read(o) for o in (0x28,0x30,0x34)},flush=True); print("PIPE_END",p.read(44),p.read(48),flush=True); print("PL",PL.bitfile_name,flush=True); print("DIAGNOSTIC: no DMA allocation/start; candidate remains loaded for UVC",flush=True)'"'"''; printf '\n__PYNQ_RC_713c43a6cb5344d1982996da37eecaeb=%d\n' $?
+[?2004lSTAGE: HWH metadata parse before programming
+STAGE: HWH layout accepted; candidate download begins
+STAGE: candidate download returned
+CAP_BEGIN {'0x0': 1128353841, '0x4': 1, '0x8': 0, '0xc': 0, '0x10': 0, '0x14': 1280, '0x18': 720, '0x1c': 0, '0x20': 0}
+DMA_BEGIN {'0x28': 0, '0x30': 65538, '0x34': 65537}
+PIPE_BEGIN 0 0
+CAP_END {'0x0': 1128353841, '0x4': 1, '0x8': 0, '0xc': 0, '0x10': 0, '0x14': 1280, '0x18': 720, '0x1c': 0, '0x20': 0}
+DMA_END {'0x28': 0, '0x30': 65538, '0x34': 65537}
+PIPE_END 0 0
+PL /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/capture.bit
+DIAGNOSTIC: no DMA allocation/start; candidate remains loaded for UVC
+
+__PYNQ_RC_713c43a6cb5344d1982996da37eecaeb=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

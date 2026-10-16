@@ -72,4 +72,11 @@ for tb in "${TBS[@]}"; do
     echo "== $name =="
     iverilog -g2012 -Wall -s "$name" -o "build/vision/$name.vvp" "$tb" "${RTL_FILES[@]}" || exit 1
     vision_run_checked "build/vision/$name.log" vvp "build/vision/$name.vvp" || exit 1
+    if [ "$name" = tb_cop_buf_stress ]; then
+        for width in 3 7; do
+            iverilog -g2001 -Wall -s "$name" -P "$name.DW=$width" -P "$name.DH=3" \
+                -o "build/vision/${name}_${width}.vvp" "$tb" "${RTL_FILES[@]}" || exit 1
+            vision_run_checked "build/vision/${name}_${width}.log" vvp "build/vision/${name}_${width}.vvp" || exit 1
+        done
+    fi
 done

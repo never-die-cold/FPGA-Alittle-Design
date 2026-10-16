@@ -248,3 +248,4 @@ RTL 可独立自测后交付配置和已知问题，验证线复验并反馈缺�
 | 2026-10-07 | 后续验收已补齐并合入：见[模块一收口报告](../../report/module1-closure.md)；旧待办和失败点保留为历史状态。 |
 | 2026-10-09 | B06：统一当前 v1 四档、valid 冲刷、tb 统计与 arch 声明子集边界；未改变验收指标、RTL 或历史数据。 |
 | 2026-10-13 | mem_wb 复位/CE 结构优化：payload 移出异步复位块 else 分支，SoC 40 MHz bht2 WNS 3.618→6.447 ns，复位派生 CE 类最差路径消失，四档 benchmark 周期数逐拍不变；证据见 [data/logs/2026-10-13-soc-reset-ce](../../data/logs/2026-10-13-soc-reset-ce/README.md)。 |
+| 2026-10-15 | JALR 使用 rs1+原始 I 立即数独立加法器；ID+EX 36,880 例通过，SoC 40 MHz bht2 实现 WNS +6.613 ns，默认 Verilog 综合通过。同步 BRAM DMEM 未实现，仍保持 v1 同拍读契约；完整回归状态和原始证据见[本轮记录](../../data/logs/2026-10-15-improvements-fast/README.md)。 |

@@ -1,0 +1,20 @@
+perf: 降低 CNN 资源与周期并解耦软件轮询
+
+CNN 改用两路 requant、块参数缓存和重叠读/MAC 调度，
+将 DSP 从 192 降至 136，诊断整网从 1123109 降至 472593 周期。
+启动时锁存 watchdog 边界并收窄尺寸计算，保留整数与错误语义。
+
+JALR 使用独立加法器，cop_buf 用读列计数代替取模。
+定位保留半整数中值精度；FILE 原型自动检查在内存运行并复用模型，
+手动及非原型轮次保留归档；EXE 网络轮询移入单工作线程。
+增加显式 opt-in 的 C01 Park 离板候选及共享回归所需 C01 测试。
+
+验证：run_iverilog.sh all 退出 0，四档 CoreMark 周期不变；
+CNN 100 MHz OOC 136 DSP、WNS +0.317 ns，DSP 门限 176；
+SoC 40 MHz WNS +6.613 ns；19 组视觉与 14 组检查 Python 通过；
+Windows EXE 打包/联调通过，git diff --check 通过。
+完整输入快照、哈希和原始证据随提交归档。
+
+C01 Park 未板验；同步 BRAM DMEM、CDC 重构和整机 MMIO/DMA 未实现。
+
+AI-assisted: Codex；用户提示“根据改进建议开工”，随后启用快速模式。

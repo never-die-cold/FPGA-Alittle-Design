@@ -1,0 +1,26 @@
+HOST_STARTED_UTC=2026-10-15T16:46:34.5135866Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u c01_park_locate_rounds.py'
+sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u c01_park_locate_rounds.py'; printf '\n__PYNQ_RC_c1b7e5af6e3a45f88ab890a80ea43e94=%d\n' $?
+[?2004lSTAGE: HWH metadata parse before programming
+STAGE: HWH layout accepted; candidate download begins
+STAGE: candidate download returned
+ROUND-1-PACKET: {"frame_id": 26, "config_id": 0, "width": 1280, "height": 720, "status": "RECHECK_BORDER", "targets": [{"target_id": 0, "frame_id": 26, "config_id": 0, "bbox": [326, 0, 349, 9], "area": 125, "touches_border": true}, {"target_id": 1, "frame_id": 26, "config_id": 0, "bbox": [577, 0, 592, 189], "area": 1740, "touches_border": true}, {"target_id": 2, "frame_id": 26, "config_id": 0, "bbox": [1194, 0, 1279, 72], "area": 2140, "touches_border": true}, {"target_id": 3, "frame_id": 26, "config_id": 0, "bbox": [1183, 25, 1279, 107], "area": 1436, "touches_border": true}, {"target_id": 4, "frame_id": 26, "config_id": 0, "bbox": [0, 503, 1279, 719], "area": 234796, "touches_border": true}], "mode": "LIVE", "prototype": true, "round": 1, "locate_seconds": 12.371442356999978}
+ROUND-2-PACKET: {"frame_id": 30, "config_id": 0, "width": 1280, "height": 720, "status": "RECHECK_BORDER", "targets": [{"target_id": 0, "frame_id": 30, "config_id": 0, "bbox": [326, 0, 349, 9], "area": 122, "touches_border": true}, {"target_id": 1, "frame_id": 30, "config_id": 0, "bbox": [577, 0, 592, 189], "area": 1754, "touches_border": true}, {"target_id": 2, "frame_id": 30, "config_id": 0, "bbox": [1194, 0, 1279, 71], "area": 2100, "touches_border": true}, {"target_id": 3, "frame_id": 30, "config_id": 0, "bbox": [1186, 26, 1279, 106], "area": 1251, "touches_border": true}, {"target_id": 4, "frame_id": 30, "config_id": 0, "bbox": [0, 503, 1279, 719], "area": 234654, "touches_border": true}], "mode": "LIVE", "prototype": true, "round": 2, "locate_seconds": 12.101040867999473}
+ROUNDS-SUMMARY: identical=False targets=5
+PASS: capture loop rounds stable
+ip_dict:
+  pipe @ 0x40000000 range 0x10000
+  ps7 @ 0x00000000 range 0x0
+axi_regs 段: pipe @ 0x40000000
+PASS: load
+R11 busy=0 R12 applied=0
+commit 配置号=1 status={'busy': False, 'applied_config_id': 1}
+PASS: smoke（视频在位，帧首整组应用已确认）
+RESTORE: {"restore_error": null, "smoke": "PASS"}
+RESULT: {"boot_before": "c291b2c8-0d7b-49e9-9511-4f5c66d2e37b", "park_sha256": "953dec241be0f4c76d254cdca6efc4da2f334b978338eded49c694dd2f1001b5", "bit_sha256": "86d2adb0343de1785270d207eee3c6b8fee2a6444bc64705bc068e3fc781d14f", "rounds": 2, "kind": "C01_PARK_LOCATE_ROUNDS_NOT_FORMAL", "packets": [{"frame_id": 26, "config_id": 0, "width": 1280, "height": 720, "status": "RECHECK_BORDER", "targets": [{"target_id": 0, "frame_id": 26, "config_id": 0, "bbox": [326, 0, 349, 9], "area": 125, "touches_border": true}, {"target_id": 1, "frame_id": 26, "config_id": 0, "bbox": [577, 0, 592, 189], "area": 1740, "touches_border": true}, {"target_id": 2, "frame_id": 26, "config_id": 0, "bbox": [1194, 0, 1279, 72], "area": 2140, "touches_border": true}, {"target_id": 3, "frame_id": 26, "config_id": 0, "bbox": [1183, 25, 1279, 107], "area": 1436, "touches_border": true}, {"target_id": 4, "frame_id": 26, "config_id": 0, "bbox": [0, 503, 1279, 719], "area": 234796, "touches_border": true}], "mode": "LIVE", "prototype": true, "round": 1, "locate_seconds": 12.371442356999978}, {"frame_id": 30, "config_id": 0, "width": 1280, "height": 720, "status": "RECHECK_BORDER", "targets": [{"target_id": 0, "frame_id": 30, "config_id": 0, "bbox": [326, 0, 349, 9], "area": 122, "touches_border": true}, {"target_id": 1, "frame_id": 30, "config_id": 0, "bbox": [577, 0, 592, 189], "area": 1754, "touches_border": true}, {"target_id": 2, "frame_id": 30, "config_id": 0, "bbox": [1194, 0, 1279, 71], "area": 2100, "touches_border": true}, {"target_id": 3, "frame_id": 30, "config_id": 0, "bbox": [1186, 26, 1279, 106], "area": 1251, "touches_border": true}, {"target_id": 4, "frame_id": 30, "config_id": 0, "bbox": [0, 503, 1279, 719], "area": 234654, "touches_border": true}], "mode": "LIVE", "prototype": true, "round": 2, "locate_seconds": 12.101040867999473}], "rounds_identical": false, "config_id": 0, "ok": true, "restore": {"restore_error": null, "smoke": "PASS"}, "boot_after": "c291b2c8-0d7b-49e9-9511-4f5c66d2e37b"}
+PASS: original vision restored; locate rounds complete
+
+__PYNQ_RC_c1b7e5af6e3a45f88ab890a80ea43e94=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

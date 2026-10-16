@@ -1,0 +1,2 @@
+PASS: live service rounds/artifacts/idempotent-latest/config/over-limit-mapping/400-404
+PASS: memory polling writes only latest packet; manual and diagnostic rounds retain archives

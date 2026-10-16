@@ -1,0 +1,697 @@
+[
+  {
+    "path": "docs\\nc-collection-preflight.md",
+    "bytes": 3097,
+    "sha256": "418CF6C0C220CED6F330A0CF5E85E0F9FD305B51908EF94AE796E618243AFFA3"
+  },
+  {
+    "path": "docs\\nc-industrial-acceptance-v0.md",
+    "bytes": 5338,
+    "sha256": "CB8E5DABCE1227E391EC759BD6B7D701602AAA6F4A9253E94FA7241AA71C7C03"
+  },
+  {
+    "path": "docs\\nc-release-demo-preflight.md",
+    "bytes": 4499,
+    "sha256": "09CD2D8CCCD3ED4C0EB04EBF392446D047772CC3CBE0E3F8694677877FD953C0"
+  },
+  {
+    "path": "README.txt",
+    "bytes": 850,
+    "sha256": "6C765CECB8D4BE4926C6F37E4B7AC96B593DEAACEA33AD64166160EAC7EC373A"
+  },
+  {
+    "path": "replay-example\\annotated.png",
+    "bytes": 25340,
+    "sha256": "C169671442BBC06B49C5DB768B476CCB4CBDA24F0652016F9194F44357AF75B7"
+  },
+  {
+    "path": "replay-example\\frame.png",
+    "bytes": 8171,
+    "sha256": "BB9E05F3893353DE880D310ECDBFBF603B529407A1C503C17E2213358FF0D73B"
+  },
+  {
+    "path": "replay-example\\result.json",
+    "bytes": 5568,
+    "sha256": "C4B1CC3FC05B700447F5996CC535713E98771B5D58DC8A5ED62AB57ACFFBEAA7"
+  },
+  {
+    "path": "replay-example\\result.sha256",
+    "bytes": 65,
+    "sha256": "0EA9F2A2D309D13CB06D4642DD37F4C8ABBB161A7CE438A7C6D5210342557305"
+  },
+  {
+    "path": "replay-example\\roi_000.hex",
+    "bytes": 12288,
+    "sha256": "77633D6EB9CC542F625D919A77C12D9AD12635688729C7ABAEEB7F6D9DC30E49"
+  },
+  {
+    "path": "replay-example\\roi_000.png",
+    "bytes": 183,
+    "sha256": "4E8F8E17A6519468E608EA6EE878672CA98CF6AD6165544C2AF7A9B9FC78A70F"
+  },
+  {
+    "path": "replay-example\\roi_001.hex",
+    "bytes": 12288,
+    "sha256": "ED2E419BD7466FD0312613AD41B1D21F3471CD8FA47D000F565CDF5EB9DC00D6"
+  },
+  {
+    "path": "replay-example\\roi_001.png",
+    "bytes": 739,
+    "sha256": "99475406CEB353DCC2A4654C18F9B3C3D1845D20F06310BB0936CBE4E2318D6B"
+  },
+  {
+    "path": "replay-example\\roi_002.hex",
+    "bytes": 12288,
+    "sha256": "F5B25F19E1E442FE042198247CF9F880FF1539BF2FBC521074C6E254212998D0"
+  },
+  {
+    "path": "replay-example\\roi_002.png",
+    "bytes": 183,
+    "sha256": "20EE1F8553C5BF4CE7D4C99B2AEA7E887CA9171E0262E7FF788AD8D9713DF3D4"
+  },
+  {
+    "path": "replay-example\\source.bin",
+    "bytes": 8171,
+    "sha256": "BB9E05F3893353DE880D310ECDBFBF603B529407A1C503C17E2213358FF0D73B"
+  },
+  {
+    "path": "vision_preview\\_internal\\_asyncio.pyd",
+    "bytes": 74096,
+    "sha256": "C77DE90CAD749087A0C5DC5E19D78D24F6EF44E7E5AC19B8420CFC0CEA62395D"
+  },
+  {
+    "path": "vision_preview\\_internal\\_bz2.pyd",
+    "bytes": 86896,
+    "sha256": "65F610646D10D5BABEA080E060D244B546EC52C54012E5E937DC72DCC2E2E7BC"
+  },
+  {
+    "path": "vision_preview\\_internal\\_ctypes.pyd",
+    "bytes": 127480,
+    "sha256": "0E56107A891100535F2DA79D85A5AE65FF1227B4765BD108F8593AC1A1110D81"
+  },
+  {
+    "path": "vision_preview\\_internal\\_decimal.pyd",
+    "bytes": 262000,
+    "sha256": "AEACFEAD2BEFCC0768063A037BB64BD32109AE09CB144E5F571B04DD7965DB9D"
+  },
+  {
+    "path": "vision_preview\\_internal\\_elementtree.pyd",
+    "bytes": 135160,
+    "sha256": "5009A9A53C03EF8387443B5CF6CE08E5C3A79727466A0B931C5BBCA915BF89CA"
+  },
+  {
+    "path": "vision_preview\\_internal\\_hashlib.pyd",
+    "bytes": 68976,
+    "sha256": "03D233DBACE599168EAFFEC823DE6ED7BEEC8C2A4EBFE9B8A3D8E042A59AF3BA"
+  },
+  {
+    "path": "vision_preview\\_internal\\_lzma.pyd",
+    "bytes": 161136,
+    "sha256": "E3DEECC1F59A3B811C608861DECD84DE1E8DF8BAFD5E2B39188861318C5A38CF"
+  },
+  {
+    "path": "vision_preview\\_internal\\_multiprocessing.pyd",
+    "bytes": 37368,
+    "sha256": "2C636DF7059CB0DD7E978DD735C7C5C8DDB09CF94754CF9E232296B96C5C545A"
+  },
+  {
+    "path": "vision_preview\\_internal\\_overlapped.pyd",
+    "bytes": 57336,
+    "sha256": "662126FF80C3A1B4CEDF74074029C12AE4743E6D3B37376E39AC70AACB7D4D3C"
+  },
+  {
+    "path": "vision_preview\\_internal\\_queue.pyd",
+    "bytes": 33784,
+    "sha256": "48E76E0AD63F6932B4A77B5819F41C1E7595636CA8D9E824F0943A14B8BB5035"
+  },
+  {
+    "path": "vision_preview\\_internal\\_socket.pyd",
+    "bytes": 85496,
+    "sha256": "3EFA4636CF9E350856F6927D67A4C2564BF9BD2758A00BBF17D3AECE5B60016D"
+  },
+  {
+    "path": "vision_preview\\_internal\\_ssl.pyd",
+    "bytes": 179432,
+    "sha256": "0BC527D2DBC50009F43B2ED5D5982C4F63F4B647647FFA9EDA612DCDA80F6040"
+  },
+  {
+    "path": "vision_preview\\_internal\\_wmi.pyd",
+    "bytes": 40304,
+    "sha256": "A980F1E7A29842BD946863FC2693FBEB555A9DC0F9E1630DFED9A2FCDEF3ECE2"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-console-l1-1-0.dll",
+    "bytes": 22872,
+    "sha256": "015BD08815C7B934A8952C3A7578E9CE59F21136E8A880D42BBD414BEC2C6058"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-datetime-l1-1-0.dll",
+    "bytes": 22896,
+    "sha256": "5534812CDBDAE94BA45CB216E5EB9AF686B853948DF54365103555ABBBAF9D9A"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-debug-l1-1-0.dll",
+    "bytes": 22872,
+    "sha256": "837D2B1B2CD03E03FC6CCB050698B6B5763AF17C201304872342A5EAE9E0A2D2"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-errorhandling-l1-1-0.dll",
+    "bytes": 22872,
+    "sha256": "DE43B165F568C276C00E95ACD454E3092F352A18E95874595F4F4658C06D2EC7"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-fibers-l1-1-0.dll",
+    "bytes": 22872,
+    "sha256": "3CEBC45BF479AD74CFABF2C6BFD4994D7AD639ED1221025981D19CEDF9CE0416"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-fibers-l1-1-1.dll",
+    "bytes": 22872,
+    "sha256": "5EF70308BCCA628CE6B0E2856B15B1C7AE340C3F9BBBC4C1071D8C191A34A5C3"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-file-l1-1-0.dll",
+    "bytes": 27008,
+    "sha256": "250AC829F2617BCAC1C6E5B8C4F630462E20765863BA573526A3E11BBFB94A9A"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-file-l1-2-0.dll",
+    "bytes": 22888,
+    "sha256": "AE14079A114733F60CE87B92CBA42ACD8083C2CD67594E53BC37DC0B97A4B465"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-file-l2-1-0.dll",
+    "bytes": 22912,
+    "sha256": "914BF26A298713119477EA0A8E7BD43171B91344EBE24FB47AD77C49686E3D87"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-handle-l1-1-0.dll",
+    "bytes": 22896,
+    "sha256": "AB5489955E371B15F77906C08EC3C7AFFE2C7A46A08C514CA628768B4478974B"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-heap-l1-1-0.dll",
+    "bytes": 22872,
+    "sha256": "C70F9644D8377FA39C5B71F2E9734C1400D7598904FDEB772E8502099982DCB7"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-interlocked-l1-1-0.dll",
+    "bytes": 22888,
+    "sha256": "F8129710188E407BB0E6F46D30AEBA277D67B947ECE5FE09E883FDE2323F3AE6"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-kernel32-legacy-l1-1-1.dll",
+    "bytes": 22888,
+    "sha256": "5200B16CB2DDC61CFC07373A9A84AA85A3AB50806CA96C879C883275832944C1"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-libraryloader-l1-1-0.dll",
+    "bytes": 22872,
+    "sha256": "48786FB88B001DCD1F63ACEA903D3CA9CC0B3060D5A325E3F2F3CBC3BFD53166"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-localization-l1-2-0.dll",
+    "bytes": 22872,
+    "sha256": "9EC3898F7EBA91FAA28B51616C211A2689E3A13AEEF8DE6E13CB674E49D689EB"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-memory-l1-1-0.dll",
+    "bytes": 22896,
+    "sha256": "3A6CBC524C99E1CD80D5368F5601402A37AD602528B1AB628093573EF638EB3B"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-namedpipe-l1-1-0.dll",
+    "bytes": 22888,
+    "sha256": "97145EF89C44949FCF0F04AC834A8BC7D687EF49EE73AE9FC32F3C11136B7201"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-processenvironment-l1-1-0.dll",
+    "bytes": 22872,
+    "sha256": "8BC7C10B1851AEA644E9C9F381CDB935E091FEE6B0BE3D3AEDC6FFFAAC96ADB7"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-processthreads-l1-1-0.dll",
+    "bytes": 22912,
+    "sha256": "D8030B777617C71F0F94564607699DBF7561487D779DB9756AED378C5675213F"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-processthreads-l1-1-1.dll",
+    "bytes": 22872,
+    "sha256": "F5E676713340F73A03A3D41A6EC9883B431DA7D16C7F07BD0A920FB80E6C0753"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-profile-l1-1-0.dll",
+    "bytes": 22872,
+    "sha256": "F023D47E44D3EEA6B0743580F57E8C6BA81E79D5EBFA7DA26250076C647B980E"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-rtlsupport-l1-1-0.dll",
+    "bytes": 22888,
+    "sha256": "9746D8930704153578A628C010638A5F818FFE5A927E25591B108E256DC6AFCA"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-string-l1-1-0.dll",
+    "bytes": 22896,
+    "sha256": "7C53AE24C982D16FFD1BF7F918D115B11B7F30E57BC7FEAA18CB9781E4ABB926"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-synch-l1-1-0.dll",
+    "bytes": 22896,
+    "sha256": "56D9D62CA5DBA79A6581B8D574A7D8B2A64A5ECB71E47DCF06ED0285708B1859"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-synch-l1-2-0.dll",
+    "bytes": 22888,
+    "sha256": "F6482BBEC5612C39ECB4822787A333F2B7570F7A5F922A4059BE41BA957BB372"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-sysinfo-l1-1-0.dll",
+    "bytes": 22896,
+    "sha256": "272D02765FDD3582618236C2D309ABBA069642F9BC1062EDE069D0C144E17007"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-sysinfo-l1-2-0.dll",
+    "bytes": 22912,
+    "sha256": "8A0900788859D0EB51C2F48F50CC6ED376A120B518100FA20E11D7702CCDE260"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-timezone-l1-1-0.dll",
+    "bytes": 22896,
+    "sha256": "FF35DE6C03812B332E140F17DADE25C5DD4775156DA9EEB1EAAE3FDDD27236EC"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-core-util-l1-1-0.dll",
+    "bytes": 22896,
+    "sha256": "191EF3E98641A57296F19D572D8EB62489470FF1EF6030D136AF170C2F835173"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-crt-conio-l1-1-0.dll",
+    "bytes": 22872,
+    "sha256": "54EE5EC719A051496FF60AA00DBEAA94B9A7D2CDAC27FE9B7317F1A666B6A2AA"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-crt-convert-l1-1-0.dll",
+    "bytes": 26992,
+    "sha256": "8B94662429171019FCD63C70BBF2095A075170599704A5E7DCDBE3DA13F3A429"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-crt-environment-l1-1-0.dll",
+    "bytes": 22912,
+    "sha256": "39E5929593709E8AF3BC9E0A75EC1155778D6F4A247F4CDFC58928AD6DB88434"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-crt-filesystem-l1-1-0.dll",
+    "bytes": 22872,
+    "sha256": "5A8ECEBAC32EDF4E1F3C5C6C1C8EA1A1ADD6CDA4F9C9CB26F752FB295BEA6865"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-crt-heap-l1-1-0.dll",
+    "bytes": 22872,
+    "sha256": "C71080CBCB43BF1F8F3E391DEB12A582EB0ABEFC80946F340675A2C616E4FEB4"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-crt-locale-l1-1-0.dll",
+    "bytes": 22896,
+    "sha256": "6C68648E524187E03C4AD9AAA4A99113C6EE9F29FB39CC0ED93F951975138E63"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-crt-math-l1-1-0.dll",
+    "bytes": 31064,
+    "sha256": "D4FBCCCBE29371CBCE431E43B2EB4F7BA9A6F04A3D740A071F02457A505E9DC8"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-crt-private-l1-1-0.dll",
+    "bytes": 76120,
+    "sha256": "29BF3D90617D3781D19B332D6CEB9F20BA5CE082EC74BF6C34D5D4AEE56E48A1"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-crt-process-l1-1-0.dll",
+    "bytes": 22896,
+    "sha256": "47C1935942E3AC0812E4DCF18C0E265E565F0194A3349111C299712F5565F7AC"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-crt-runtime-l1-1-0.dll",
+    "bytes": 26968,
+    "sha256": "72ADC1B3677E0814D9C4EBF0964000E84BB2ACF67336C8963061665E44F78029"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-crt-stdio-l1-1-0.dll",
+    "bytes": 26968,
+    "sha256": "900AFC3989673C9BB1A687ED38C192F46DB9E6BA6D11A668898A539E7FC23798"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-crt-string-l1-1-0.dll",
+    "bytes": 26968,
+    "sha256": "FCF12466CC12FD3B73611FC0763A5A1F9D44E90349513C34A0C83B0F36421793"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-crt-time-l1-1-0.dll",
+    "bytes": 22912,
+    "sha256": "886E57C4A6ADB299B38F02945369F590A67DA4E79A798359FC60AAA067212D7C"
+  },
+  {
+    "path": "vision_preview\\_internal\\api-ms-win-crt-utility-l1-1-0.dll",
+    "bytes": 22912,
+    "sha256": "5F8F26B216ADE615B67A41F6FBBB910972FC6153315A65BB8F09912BE50215B1"
+  },
+  {
+    "path": "vision_preview\\_internal\\assets\\fonts\\cjk_subset_chars.txt",
+    "bytes": 22389,
+    "sha256": "F5E90EC0DD4144B159986FFABA8E942A7F4A32B0D7162EBA41F25408C4FB8CC9"
+  },
+  {
+    "path": "vision_preview\\_internal\\assets\\fonts\\InterVariable.ttf",
+    "bytes": 876576,
+    "sha256": "29160A80FF49DDCAB2C97711247E08B1FAB27A484A329CE8B813D820DC559031"
+  },
+  {
+    "path": "vision_preview\\_internal\\assets\\fonts\\make_cjk_subset.py",
+    "bytes": 2312,
+    "sha256": "9CC06911356021BEAD44DD392FC760D81B603206347F297EFED1E79C190C717B"
+  },
+  {
+    "path": "vision_preview\\_internal\\assets\\fonts\\NotoSansSC-Subset.ttf",
+    "bytes": 4083656,
+    "sha256": "6BFA815303433EED810082ADC64BE50216B3FED656FF604FF59FAAF65E8E5922"
+  },
+  {
+    "path": "vision_preview\\_internal\\assets\\fonts\\OFL-NotoSansSC.txt",
+    "bytes": 4388,
+    "sha256": "1C05C68C34F9708415AADA51F17E1B0092D2CEA709BF4A94CD38114F9E73D7D9"
+  },
+  {
+    "path": "vision_preview\\_internal\\assets\\fonts\\OFL.txt",
+    "bytes": 4377,
+    "sha256": "5B9321A4298CFEB6B34354164A1C3AFC3DB114569984C502B9B35D988FD58C57"
+  },
+  {
+    "path": "vision_preview\\_internal\\base_library.zip",
+    "bytes": 1333717,
+    "sha256": "D7DF65804CD6C3C2D560FF6C5A8475B3AA26D3FE50EB5FF6BEA7A5869814EE7B"
+  },
+  {
+    "path": "vision_preview\\_internal\\charset_normalizer\\cd.cp312-win_amd64.pyd",
+    "bytes": 117248,
+    "sha256": "71FFB046452B819770538CB59FD25694C0A8E9B08AF4B8B71F26DAC85DCFF062"
+  },
+  {
+    "path": "vision_preview\\_internal\\charset_normalizer\\md.cp312-win_amd64.pyd",
+    "bytes": 193536,
+    "sha256": "C53A0A481BBCEF6A88492BD113B6293997900F4A17A1A5055776D76256D720F9"
+  },
+  {
+    "path": "vision_preview\\_internal\\cv2\\__init__.py",
+    "bytes": 6793,
+    "sha256": "957A91BFD98FFB07A10CD789B7C5C46806568476B61E34C7AD56A00092B981A5"
+  },
+  {
+    "path": "vision_preview\\_internal\\cv2\\config-3.py",
+    "bytes": 748,
+    "sha256": "DE28C7B5213CCA148F09469916584611B3D66C1C8C432880259D6A3A92380213"
+  },
+  {
+    "path": "vision_preview\\_internal\\cv2\\config.py",
+    "bytes": 123,
+    "sha256": "6C6367ABCE55995AE4A8D3C199420EC53AFAB287CB17DFC2F430378AF75DD301"
+  },
+  {
+    "path": "vision_preview\\_internal\\cv2\\cv2.pyd",
+    "bytes": 70967296,
+    "sha256": "213A5B585F8043CE8D840638DC6E6FAB0250CB869738DEEA04DA006AB65DF8E4"
+  },
+  {
+    "path": "vision_preview\\_internal\\cv2\\data\\__init__.py",
+    "bytes": 73,
+    "sha256": "F4CE16721ED7F623A4DCC443BA600D1856DB610CB2C3D53C13A8CA028CC68F6D"
+  },
+  {
+    "path": "vision_preview\\_internal\\cv2\\gapi\\__init__.py",
+    "bytes": 10621,
+    "sha256": "74F5FD2A142A31B0A4707B70C0BE3637F0FBF8A940EEC4372E7BA87E5A5CEDB8"
+  },
+  {
+    "path": "vision_preview\\_internal\\cv2\\load_config_py3.py",
+    "bytes": 271,
+    "sha256": "FF583A5874BE8F848E73C2F61B3A71680995926479C9BC436E6565C5CCE7CA07"
+  },
+  {
+    "path": "vision_preview\\_internal\\cv2\\mat_wrapper\\__init__.py",
+    "bytes": 1164,
+    "sha256": "C44707EA1C76F35518AE572B6C1989D76C2ADA7E850432E41805DFE112D4E306"
+  },
+  {
+    "path": "vision_preview\\_internal\\cv2\\misc\\__init__.py",
+    "bytes": 38,
+    "sha256": "495BD79594CCE174673E372C85C4DD8F4FFDF2B3A73FD4623955B0D55DE0D462"
+  },
+  {
+    "path": "vision_preview\\_internal\\cv2\\misc\\version.py",
+    "bytes": 95,
+    "sha256": "C93A418793FCB15B9B4316C0741B8336740E490E94F3B7D1EBE8CD5F6F23815C"
+  },
+  {
+    "path": "vision_preview\\_internal\\cv2\\opencv_videoio_ffmpeg4120_64.dll",
+    "bytes": 28349440,
+    "sha256": "A0F01E4EE5E97B4A513CD70F01FAFADC0DD187BA5D1293CB7FC6B77E7D17C631"
+  },
+  {
+    "path": "vision_preview\\_internal\\cv2\\typing\\__init__.py",
+    "bytes": 5545,
+    "sha256": "475CEB955D23158934F00ADA7A8F33AF3DAD4F1712FD13E32CC79A82C1EB7D4A"
+  },
+  {
+    "path": "vision_preview\\_internal\\cv2\\utils\\__init__.py",
+    "bytes": 344,
+    "sha256": "2B16990B35B569AF1CA7239DC10F7B24EC62F27A46626B1E2F1271D2E1AA3554"
+  },
+  {
+    "path": "vision_preview\\_internal\\cv2\\version.py",
+    "bytes": 97,
+    "sha256": "9E9D5382B1F743F06D6E12ACE305D40786432FF52EEFA12CF171CF97154BBB4D"
+  },
+  {
+    "path": "vision_preview\\_internal\\libcrypto-3.dll",
+    "bytes": 5231472,
+    "sha256": "CCFFFDDCD3DEFB8D899026298AF9AF43BC186130F8483D77E97C93233D5F27D7"
+  },
+  {
+    "path": "vision_preview\\_internal\\libffi-8.dll",
+    "bytes": 39696,
+    "sha256": "EFF52743773EB550FCC6CE3EFC37C85724502233B6B002A35496D828BD7B280A"
+  },
+  {
+    "path": "vision_preview\\_internal\\libscipy_openblas64_-13e2df515630b4a41f92893938845698.dll",
+    "bytes": 20390912,
+    "sha256": "6547E9FB966E9773CAEE2755E91A8BF4D6F3A2F0EEBF9646B0158F8675EA4AB5"
+  },
+  {
+    "path": "vision_preview\\_internal\\libssl-3.dll",
+    "bytes": 794992,
+    "sha256": "007142039F04D04E0ED607BDA53DE095E5BC6A8A10D26ECEDDE94EA7D2D7EEFE"
+  },
+  {
+    "path": "vision_preview\\_internal\\msvcp140-263139962577ecda4cd9469ca360a746.dll",
+    "bytes": 575056,
+    "sha256": "A4C2229BDC2A2A630ACDC095B4D86008E5C3E3BC7773174354F3DA4F5BEB9CDE"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy-2.2.6.dist-info\\DELVEWHEEL",
+    "bytes": 446,
+    "sha256": "513B04BCAA783E2CEE07D76110F470D50FD5F12599006A93953588607F61C953"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy-2.2.6.dist-info\\entry_points.txt",
+    "bytes": 172,
+    "sha256": "E265C336124343D187A8C05E449F01DCF962C531669171AA537455B9A736D2AD"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy-2.2.6.dist-info\\INSTALLER",
+    "bytes": 4,
+    "sha256": "CEEBAE7B8927A3227E5303CF5E0F1F7B34BB542AD7250AC03FBCDE36EC2F1508"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy-2.2.6.dist-info\\LICENSE.txt",
+    "bytes": 47709,
+    "sha256": "14256CC3A2C9D32AC284DA96B937FEB44F72DD90BEE2317AC3020166846AD99D"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy-2.2.6.dist-info\\METADATA",
+    "bytes": 60844,
+    "sha256": "229F3544B02805E0F6A12030E155D8A45FD3A4100B3291574175E6A76F20E1E1"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy-2.2.6.dist-info\\RECORD",
+    "bytes": 108615,
+    "sha256": "2E0939115EC8440379686F46259B6E1F493A1C3B7E16D21FE2905AF376C64A93"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy-2.2.6.dist-info\\WHEEL",
+    "bytes": 85,
+    "sha256": "E743DE01BA6503A3E4234858398A1E69C07D512D51E8482EC9F3A7B1C707D165"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy.libs\\libscipy_openblas64_-13e2df515630b4a41f92893938845698.dll",
+    "bytes": 20390912,
+    "sha256": "6547E9FB966E9773CAEE2755E91A8BF4D6F3A2F0EEBF9646B0158F8675EA4AB5"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy.libs\\msvcp140-263139962577ecda4cd9469ca360a746.dll",
+    "bytes": 575056,
+    "sha256": "A4C2229BDC2A2A630ACDC095B4D86008E5C3E3BC7773174354F3DA4F5BEB9CDE"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy\\_core\\_multiarray_tests.cp312-win_amd64.pyd",
+    "bytes": 64000,
+    "sha256": "24ADBE4BBF7B2A6208AEB800D11B8B6957C925D3C796552B3A55E1B4E278754E"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy\\_core\\_multiarray_umath.cp312-win_amd64.pyd",
+    "bytes": 4178432,
+    "sha256": "D98A8F4CE703BF7158F639D24FF4A55ECE2753A306A3F7074B4FA670660AFEE5"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy\\fft\\_pocketfft_umath.cp312-win_amd64.pyd",
+    "bytes": 279040,
+    "sha256": "25CC37ACD3D849C0FDE1E0DC0112979DEC4EC4279B7826D1A45395FE966068C9"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy\\linalg\\_umath_linalg.cp312-win_amd64.pyd",
+    "bytes": 108032,
+    "sha256": "88C8D38D7B2F483542442292E149CA335462D1467B8E835B00A71A8B27125CF5"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy\\random\\_bounded_integers.cp312-win_amd64.pyd",
+    "bytes": 208384,
+    "sha256": "0434A5B271F935DEB8623BB8663F33132A70A8F4D1936C14432E16D4F6EB46FC"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy\\random\\_common.cp312-win_amd64.pyd",
+    "bytes": 152064,
+    "sha256": "9A39D43E0EF73DFB5A8B1ABCE92FF0063BFFCD580D8BE275F468961B24B153AF"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy\\random\\_generator.cp312-win_amd64.pyd",
+    "bytes": 714752,
+    "sha256": "6DDE7168FC52DCAD27779D45DCC6828B91EC0D05BB6094C86D6AFF8A1EE8E1B3"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy\\random\\_mt19937.cp312-win_amd64.pyd",
+    "bytes": 83456,
+    "sha256": "3331809B214FC30E2FC167F742CA3B1A84B567D185D4194FA8893A032010EEB4"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy\\random\\_pcg64.cp312-win_amd64.pyd",
+    "bytes": 93696,
+    "sha256": "448B71A0B7D9037D9655008FBC3081070FA801F757B83F9A3EE6E0934C095AA8"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy\\random\\_philox.cp312-win_amd64.pyd",
+    "bytes": 77312,
+    "sha256": "9C989E7B0FC383E2FA5AA15DE2F17C5875B690DC64C44891EE1E1D54CE7CAC4A"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy\\random\\_sfc64.cp312-win_amd64.pyd",
+    "bytes": 60416,
+    "sha256": "5732D38725CB5177C9DE1E1D4BDB67389283A53986F87A5E52CA9255EC98C733"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy\\random\\bit_generator.cp312-win_amd64.pyd",
+    "bytes": 163328,
+    "sha256": "EEF81BF02FA9F387D6C4A18D52B22AF58B737C01608F0D594130586A06022807"
+  },
+  {
+    "path": "vision_preview\\_internal\\numpy\\random\\mtrand.cp312-win_amd64.pyd",
+    "bytes": 603136,
+    "sha256": "339F40F24231643777DE36D5FF8121A07CCF2C4A66ADD63307D25F9D431C9928"
+  },
+  {
+    "path": "vision_preview\\_internal\\PIL\\_avif.cp312-win_amd64.pyd",
+    "bytes": 7893504,
+    "sha256": "6731DCE52BAAB0B96B0EEB3C664844B5B42C2168EA8668AF2430E2FBDD2DFBD8"
+  },
+  {
+    "path": "vision_preview\\_internal\\PIL\\_imaging.cp312-win_amd64.pyd",
+    "bytes": 2632704,
+    "sha256": "C8C519EC72BF75B2945B4FC4AFA854AF2FCA8B970A403134F9DDDA3E164D85E9"
+  },
+  {
+    "path": "vision_preview\\_internal\\PIL\\_imagingcms.cp312-win_amd64.pyd",
+    "bytes": 272384,
+    "sha256": "C89C633AE1BF3F26A327D14FF688DB66628E19C9866AB925479F27DCB60A2D6F"
+  },
+  {
+    "path": "vision_preview\\_internal\\PIL\\_imagingft.cp312-win_amd64.pyd",
+    "bytes": 2174976,
+    "sha256": "77C6D37DE41733DF40FB36D9AF47644989AC17DA036515E759303969EDB22C48"
+  },
+  {
+    "path": "vision_preview\\_internal\\PIL\\_imagingmath.cp312-win_amd64.pyd",
+    "bytes": 21504,
+    "sha256": "82AC45C41A008854D05F67DEDA298B65A7BED850D0D79A3AF861ED583F6E7D62"
+  },
+  {
+    "path": "vision_preview\\_internal\\PIL\\_imagingtk.cp312-win_amd64.pyd",
+    "bytes": 14848,
+    "sha256": "690CC1CAE4A2DC8594A342B9241E691DCC89D81DAD4CDDCEFDF285275365A2B1"
+  },
+  {
+    "path": "vision_preview\\_internal\\PIL\\_webp.cp312-win_amd64.pyd",
+    "bytes": 416256,
+    "sha256": "9823CEBB84F425AF3AC1E7437259BC176E7AD7E25D7FA829B0E1A3E55C11BE70"
+  },
+  {
+    "path": "vision_preview\\_internal\\psutil\\_psutil_windows.pyd",
+    "bytes": 70656,
+    "sha256": "0035450801BD7D938E9E146C5EC28E619CB5A5F4A18CDC53AC7E9734C7F94F78"
+  },
+  {
+    "path": "vision_preview\\_internal\\pyexpat.pyd",
+    "bytes": 205304,
+    "sha256": "D615E193D1AFFCDBFE504E90D3621CBDCFF94BF72B79D899126534507FD6D27A"
+  },
+  {
+    "path": "vision_preview\\_internal\\python3.dll",
+    "bytes": 70376,
+    "sha256": "FB975A606E7FBF74F64260E3F60C3490B4F74A183C0926FD6ED1AC4C52AC7B1C"
+  },
+  {
+    "path": "vision_preview\\_internal\\python312.dll",
+    "bytes": 6945272,
+    "sha256": "9A0E3435AAA680D868150F87AB3E388AD2EEBC22F87E036155C7B4EDA8CD2120"
+  },
+  {
+    "path": "vision_preview\\_internal\\select.pyd",
+    "bytes": 33136,
+    "sha256": "D4D7181B11DB0BD22A6CD5CDA6F8583D1F5C77615FD0A6CA33350619D6E0438A"
+  },
+  {
+    "path": "vision_preview\\_internal\\ucrtbase.dll",
+    "bytes": 1362264,
+    "sha256": "3239227D27667BA20D10A880751924E5719DE0078F9FCE232D149D383F7681F6"
+  },
+  {
+    "path": "vision_preview\\_internal\\unicodedata.pyd",
+    "bytes": 1140592,
+    "sha256": "208EE1CD3CBAD0828433CA7246B05BE2B1FF5569983D27D296C0B38888585488"
+  },
+  {
+    "path": "vision_preview\\_internal\\VCRUNTIME140_1.dll",
+    "bytes": 49776,
+    "sha256": "6A99BC0128E0C7D6CBBF615FCC26909565E17D4CA3451B97F8987F9C6ACBC6C8"
+  },
+  {
+    "path": "vision_preview\\_internal\\VCRUNTIME140.dll",
+    "bytes": 120400,
+    "sha256": "052AD6A20D375957E82AA6A3C441EA548D89BE0981516CA7EB306E063D5027F4"
+  },
+  {
+    "path": "vision_preview\\_internal\\yaml\\_yaml.cp312-win_amd64.pyd",
+    "bytes": 253952,
+    "sha256": "4FD0E84F50261ED0886CFFCDD8008B055AF3352546E649C3D741B50EAE1F9B5F"
+  },
+  {
+    "path": "vision_preview\\vision_preview.exe",
+    "bytes": 5492803,
+    "sha256": "D6BCEDBFFEBAA9DEFC82143B41DC6CC38231809D0944AD63CDC1EB3CD590B32F"
+  }
+]

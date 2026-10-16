@@ -5,7 +5,11 @@ import unittest
 import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'src/pynq_host'))
 from c01_capture import (SingleFrameCapture, CaptureError, QUARANTINE, CR, SR, PARK,
-                         VSIZE, ADDRESS, RUN, SHAPE)
+                         VSIZE, ADDRESS, RUN, ERRORS, IRQ, SHAPE)
+
+# Board record 2026-10-12 (onboard-first.txt): sr=0x14811 at idle masked to exactly these
+# sticky bits; they re-assert until nonzero geometry is configured.
+IDLE_FAULTS = 0x4810
 
 
 class Buffer(np.ndarray):
@@ -31,11 +35,16 @@ class Rig:
         self.cap = {o: 0 for o in range(0, 0x24, 4)}
         self.cap.update({0: 0x43415031, 4: 1, 0x14: 1280, 0x18: 720})
         self.started, self.polls = False, 0
+        self.sticky_idle = mode.startswith('idle_sticky')
+        self.geometry_configured = False
         class Status:
             def read(_, o):
                 return self.cap[o]
         self.status = Status()
     def read(self, o):
+        if o == SR and self.sticky_idle and (self.mode == 'idle_sticky_persistent'
+                                             or not self.geometry_configured):
+            return self.reg[SR] | IDLE_FAULTS
         if o == SR and self.started and self.reg[CR] & 1:
             self.polls += 1
             if self.mode == 'dma_error': self.reg[SR] |= 0x20
@@ -61,6 +70,9 @@ class Rig:
             return
         else:
             self.reg[o] = value
+            if o == VSIZE and value and self.sticky_idle and not self.geometry_configured:
+                self.geometry_configured = True
+                self.reg[SR] |= IDLE_FAULTS  # pending idle faults outlive geometry; WD1C must clear
             if o == VSIZE and self.reg[CR] & 1:
                 self.started = True
                 self.reg[SR] = 0
@@ -114,6 +126,31 @@ class Tests(unittest.TestCase):
         clear = next(i for i,e in enumerate(writes) if e[1] == SR)
         run = writes.index(('write', CR, RUN))
         self.assertLess(reset, geometry); self.assertLess(geometry, clear); self.assertLess(clear, run)
+    def test_recorded_idle_faults_reach_clean_state_after_geometry(self):
+        # The board-recorded 0x4810 pattern must be visible at configured idle, covered by the
+        # WD1C mask, and gone before RUN — this ordering has never been board-retested.
+        r = Rig('idle_sticky_until_geometry'); c = r.owner()
+        frame = c.capture()
+        self.assertTrue(np.all(frame == 37))
+        self.assertEqual(c.evidence['configured_idle']['sr'] & IDLE_FAULTS, IDLE_FAULTS)
+        self.assertEqual(c.evidence['configured_idle']['sr'] & (ERRORS | IRQ), IDLE_FAULTS)
+        self.assertEqual(c.evidence['cleared_idle']['sr'] & (ERRORS | IRQ), 0)
+        self.assertIn(('write', SR, ERRORS | IRQ | 0x2000), r.events)
+        writes = [e for e in r.events if isinstance(e, tuple)]
+        self.assertLess(writes.index(('write', VSIZE, 720)), next(
+            i for i, e in enumerate(writes) if e[1] == SR))
+    def test_persistent_idle_faults_refuse_run_before_start(self):
+        r = Rig('idle_sticky_persistent'); c = r.owner()
+        with self.assertRaises(CaptureError) as caught:
+            c.capture()
+        self.assertEqual(str(caught.exception), 'DMA configured idle reset/clear not clean')
+        self.assertNotIn(('write', CR, RUN), r.events)
+        self.assertNotIn('invalidate', r.events)
+        self.assertEqual([b.frees for b in r.buffers], [1]*4)
+        self.assertNotIn(c, QUARANTINE); self.assertTrue(c.closed); self.assertFalse(c.may_write)
+        self.assertIn('not clean', c.evidence['main_error'])
+        self.assertEqual(c.evidence['configured_idle']['sr'] & IDLE_FAULTS, IDLE_FAULTS)
+        self.assertEqual(c.evidence['cleared_idle']['sr'] & IDLE_FAULTS, IDLE_FAULTS)
     def test_source_changes_during_copy_not_published(self):
         for kind in ('epoch', 'invalidate_failure'):
             r = Rig(); original = r.allocate

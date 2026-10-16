@@ -58,6 +58,7 @@ module cop_buf #(
     reg                   replay;
     reg                   rd_buf;
     reg [AWX+AWY-1:0]     raddr;
+    reg [AWX-1:0]         rd_col;
     reg [2:0]             hgap;
     reg                   finishing;   // 末像素已发，走完最后一个行尾 hs 再收
     reg [7:0]             rd0, rd1;    // 两阵列同址读，输出寄存（BRAM 推断要求）
@@ -83,7 +84,7 @@ module cop_buf #(
             writing <= 0;
             bank_frame[0]<=0;bank_frame[1]<=0;bank_config[0]<=0;bank_config[1]<=0;
             out_frame_id<=0;out_config_id<=0;drop_count<=0;
-            replay <= 0; rd_buf <= 0; raddr <= 0; hgap <= 0; finishing <= 0;
+            replay <= 0; rd_buf <= 0; raddr <= 0; rd_col <= 0; hgap <= 0; finishing <= 0;
             vs_int <= 0; de_int <= 0; hs_int <= 0;
             out_vs <= 0; out_hs <= 0; out_de <= 0; frame_done <= 0;
         end else begin
@@ -123,16 +124,17 @@ module cop_buf #(
                     out_frame_id<=bank_frame[choose_rd];out_config_id<=bank_config[choose_rd];
                     buf_valid[choose_rd] <= 0;
                     if (choose_rd == wr_sel) wr_sel <= ~wr_sel;
-                    raddr <= 0; hgap <= 0;
+                    raddr <= 0; rd_col <= 0; hgap <= 0;
                     vs_int <= 1;                 // 帧首脉冲，首个 de 晚两拍
                 end
             end else if (hgap == 0) begin
                 de_int <= 1; hs_int <= 0;
-                if ((raddr % DW) == DW-1) begin
+                if (rd_col == DW-1) begin
+                    rd_col <= 0;
                     hgap <= 4;                   // 行尾空白：de→hs 3 拍、hs→de 1 拍
                     if (raddr == FRAME_PX-1)
                         finishing <= 1;          // 末像素兼行尾：hs 走完再收
-                end
+                end else rd_col <= rd_col + 1;
                 raddr <= raddr + 1;
             end else begin
                 de_int <= 0;

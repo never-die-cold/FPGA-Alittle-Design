@@ -1,0 +1,17 @@
+HOST_STARTED_UTC=2026-10-15T16:51:00.7903775Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=ip -br link; ip -br addr; echo PC_ROUTE_CHECK
+ip -br link; ip -br addr; echo PC_ROUTE_CHECK; printf '\n__PYNQ_RC_d53d0ccb6fff428bb7b792fe610c3cc7=%d\n' $?
+[?2004llo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP> 
+dummy0           DOWN           76:81:e4:31:57:7c <BROADCAST,NOARP> 
+eth0             DOWN           76:96:fd:e8:c3:c5 <NO-CARRIER,BROADCAST,MULTICAST,UP> 
+sit0@NONE        DOWN           0.0.0.0 <NOARP> 
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+dummy0           DOWN           
+eth0             DOWN           169.254.87.99/16 192.168.2.99/24 
+sit0@NONE        DOWN           
+PC_ROUTE_CHECK
+
+__PYNQ_RC_d53d0ccb6fff428bb7b792fe610c3cc7=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

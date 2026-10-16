@@ -1,0 +1,9 @@
+ffb7ab2 docs(c03): 增 WC(PS 侧)对接注记——接入形状与 J08 交付要求（不改变冻结项）
+ea5b5f3 feat(w04/n06): base overlay 捕获后端——诊断包接线补全（三类后端 prototype 结构性齐备）
+797bcba docs(llm_log): 补录 10-12/10-13 协作记录四条（W08+W05-2、NC 响应、W04、W02）
+0a92e1b feat(w02): 数据集审计扩展——GT×manifest 交叉核对 + 朝向覆盖统计（工具链预备）
+1e0eb3f feat(w04): C01 捕获后端适配 + 服务级离板替身（所有权租约/独立副本/失败隔离）
+b2ac678 docs(c04): Q5 边界补 C03 冻结口径（16 能力/10 策略不互替）
+0e374e7 feat(exe): CSV 增 reasons 列（C04 Q5 部分计数标识）
+5717206 feat(w05): 快照读取与哈希核对（C04 2.3）+ 请求重试语义草案（2.4）
+a006b23 fix(exe): 批次记录重启去重——从 records.jsonl 重建键与计数（NC 返场执行单点名）

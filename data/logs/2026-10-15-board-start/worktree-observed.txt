@@ -1,0 +1,53 @@
+ M .gitignore
+ M docs/c01-ddr-frame-ownership-v0.md
+ M docs/vision-live-semantics.md
+ M sim/coprocessor/tb_cnn_sequencer.v
+ M sim/coprocessor/tb_conv_engine.v
+ M sim/riscv/tb_id_ex_stage.v
+ M sim/scripts/c01_ddr_onboard.py
+ M sim/scripts/run_coprocessor_iverilog.sh
+ M sim/scripts/run_vision_iverilog.sh
+ M sim/scripts/run_vision_python.sh
+ M sim/scripts/synth_coprocessor_ooc.tcl
+ M sim/vision/localization_opencv.py
+ M sim/vision/tb_cop_buf_stress.v
+ M sim/vision/test_c01_capture.py
+ M sim/vision/test_localize.py
+ M sim/vision/test_service_engine.py
+ M sim/vision/test_vision_live_service.py
+ M sim/vision/test_vision_rounds.py
+ M src/coprocessor/README.md
+ M src/coprocessor/cnn_sequencer.v
+ M src/coprocessor/conv_engine.v
+ M src/coprocessor/design_v0.md
+ M src/pynq_host/README.md
+ M src/pynq_host/inspection_run.py
+ M src/pynq_host/vision_live_service.py
+ M src/riscv/id_ex_stage.v
+ M src/riscv/plan.md
+ M src/vision/cop_buf.v
+ M src/vision_client/README.md
+ M src/vision_client/preview.py
+ M src/vision_client/rounds.py
+ D tight_setup_hold_pins.txt
+?? data/logs/2026-10-13-soc-reset-ce/vivado/fast_jalr_20261015/
+?? data/logs/2026-10-15-board-start/
+?? data/logs/2026-10-15-c01-entry-surrogate-step2/
+?? data/logs/2026-10-15-c01-idle-sticky-step1/
+?? data/logs/2026-10-15-cnn-fast-batch-independent-verify/
+?? data/logs/2026-10-15-cnn-geometry-independent-review/
+?? data/logs/2026-10-15-cnn-geometry-step1/
+?? data/logs/2026-10-15-cnn-watchdog-step2/
+?? data/logs/2026-10-15-improvements-fast/
+?? data/logs/2026-10-15-n03-package-independent-verify/
+?? data/logs/cnn-ooc-106904d01e0045089b9d1688ddce6e85/
+?? data/logs/cnn-ooc-1cefffc05185438195b8803d87fc11df/
+?? data/logs/cnn-ooc-4065cdcc415b43fbbc713dbeeceddbfb/
+?? data/logs/cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9/
+?? data/logs/cnn-ooc-da63cadcd3db4a9e9f826cf2e4949e68/
+?? report/llm_log/2026-10-15-cnn-geometry-step1.md
+?? report/llm_log/2026-10-15-improvements-fast.md
+?? sim/vision/test_c01_capture_ordering.py
+?? sim/vision/test_c01_ddr_onboard.py
+?? sim/vision/test_c01_park_capture.py
+?? src/pynq_host/c01_park_capture.py

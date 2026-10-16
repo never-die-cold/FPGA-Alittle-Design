@@ -56,8 +56,10 @@ module id_ex_stage (
     assign branch_target = in_pc + branch_imm;
     // Independent PC adder: do not add 4 after branch_target/redirect_target.
     assign branch_target_next = in_pc + branch_next_imm;
+    wire [31:0] jalr_imm = {{20{instr[31]}},instr[31:20]};
+    wire [31:0] jalr_target = rs1_value + jalr_imm;
     assign redirect_target = (jump_type == 2'd2) ?
-                             (alu_y & 32'hffff_fffe) : (in_pc + imm);
+                             {jalr_target[31:1],1'b0} : (in_pc + imm);
     assign ex_result = (wb_sel == 2'd2) ? (in_pc + 4) :
                        (wb_sel == 2'd3) ? muldiv_result : alu_y;
     assign ex_addr = alu_y;
