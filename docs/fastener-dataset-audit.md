@@ -41,17 +41,23 @@ session 为 `sess-` 起头的小写字母/数字/连字符名称，禁止路径�
 frame_id,session,split,light,bg,spacing,obj_id,class,x0,y0,x1,y1
 ```
 
-可选列：`notes`、`specimen_id`；重复列、未知列、缺失单元格拒绝。支持 UTF-8 和 UTF-8 BOM。
+可选列：`notes`、`specimen_id`、`orientation`；重复列、未知列、缺失单元格拒绝。支持 UTF-8 和 UTF-8 BOM。
 split 为 train/val/test；light 为 L0–L3；bg 为 dark/gray/wood。
 spacing 是必须填写的条件标签，例如 1D、empty；工具不换算毫米或校验其测量真实性。
 class 为 bolt/nut/washer；obj_id 是帧内唯一目标编号，不能代替全局实物编号。
+`orientation` 是可选朝向 token（受控词表：bolt=axial/tilted/head_up，nut/washer=face_up/face_tilted）；
+留空＝未标注（计入 missing_orientation_labels），未知 token 或与类别不匹配拒绝。
 坐标为十进制非负整数字符串，遵循 `[x0,x1)×[y0,y1)`，须在 1280×720 范围内且面积非零。
 同一帧的条件信息须一致，目标编号与非空实物编号不能重复；按采集草案拒绝正面积相交的框，边界相接可接受。
 每帧上限默认 10，可明确传入 1–16；这是候选采集参数，不替代正式契约冻结。
 
-空场景仍须登记一行：class、obj_id、四个坐标及 specimen_id 全空，条件信息保留。
+空场景仍须登记一行：class、obj_id、四个坐标及 specimen_id/orientation 全空，条件信息保留。
 按现有采集规程只允许空帧进入 test；同帧不能同时有空标记和目标行，也不能重复空标记。
 “空标记”是标注声明，工具不会从像素证明没有工件。
+
+若数据根存在 `gt/` 目录（`gt/<session>/<frame_id>.csv`，表头恰为 `obj_id,class,x0,y0,x1,y1`），逐帧与 manifest 交叉核对：
+目标集合（obj_id/class/半开框，排序比较）必须完全一致，空场景为仅表头的 CSV；不一致、缺失或多余 GT 文件拒绝。
+`gt/` 不存在时报告 `gt_checked=false`——格式变体不拒绝，但不得据此宣称逐帧标注已核对。
 
 ## 泄漏与覆盖
 
@@ -64,8 +70,8 @@ class 为 bolt/nut/washer；obj_id 是帧内唯一目标编号，不能代替全
 省略该列或留空可以做结构审计，但报告会计入 `missing_specimen_ids`，不能宣称实物隔离已确认。
 `all_specimen_ids_present` 为 true 只表示所有目标填写了编号，并不能证明编号与实物一一对应。
 
-报告按 split 统计帧数、目标数、空帧数、三类目标数、光照/背景/spacing 帧数和每帧目标数直方图。
-光照等条件每帧计一次，类别按目标计数；缺少的类别写入 `missing_classes`。
+报告按 split 统计帧数、目标数、空帧数、三类目标数、光照/背景/spacing 帧数、每帧目标数直方图与朝向计数（orientations/class_orientations/orientation_lights）。
+光照等条件每帧计一次，类别按目标计数；缺少的类别与类别×朝向组合写入 `missing_classes`/`missing_orientation_combos`。
 本工具不冻结数据量、划分比例或精度门槛，不因缺少某类而伪造其数量。
 
 ## 仓库复现与测试证据
@@ -74,9 +80,10 @@ class 为 bolt/nut/washer；obj_id 是帧内唯一目标编号，不能代替全
 bash sim/scripts/run_inspection_python.sh
 ```
 
-当前为十三组：原十一组离板检查/参考 + dataset_manifest、dataset_audit 两组。
+当前为十四组：原十一组离板检查/参考 + dataset_manifest、dataset_audit 两组 + service_engine（服务真引擎，2026-10-13）。
 新增测试涵盖非法行/框、缺帧、灰度/16 位/错误尺寸、遗漏帧、重复编号、重叠/相接、
-超限、会话/文件/像素/实物泄漏、缺少实物编号、覆盖缺口、来源必填与报告中断/覆盖拒绝。
+超限、会话/文件/像素/实物泄漏、缺少实物编号、覆盖缺口、GT 交叉核对（篡改/缺失/多余）、
+非法朝向与朝向缺口、来源必填与报告中断/覆盖拒绝。
 独立子进程调用 CLI，不加载模型或 PyTorch。
 
 已有[测试夹具和报告](../data/evidence/2026-10-10-dataset-audit/README.md)可直接复算到新输出：
@@ -97,8 +104,14 @@ python sim/vision/generate_dataset_audit_fixture.py sim/build/vision/inspection/
 
 ## 未实现与人工核查
 
-未实现：感知相似/相邻帧检测、GT CSV 与 manifest 交叉核对、朝向覆盖自动统计、
-未知件/遮挡压力样本格式、真实标签完整性/清晰度/曝光审查及来源认证。
+未实现：感知相似/相邻帧检测、未知件/遮挡压力样本格式、真实标签完整性/清晰度/曝光审查及来源认证。
+GT 交叉核对与朝向覆盖统计已于 2026-10-13 实现（见上）；逐格数量与真实支持条件仍须人工复核。
 同一会话不能证明所有帧真正独立重摆；实物编号也依赖人工如实维护。
 真实相机数据仍未收到，不能据此复验 FP32 精度、可信 PTQ 或正式 INT8。
 CNN RTL、核握手、原分辨率板端取图与 LIVE 闭环仍未实现/未接入。
+
+## 变更记录
+
+| 日期 | 变更 | 作者 |
+|:---|:---|:---|
+| 2026-10-13 | 清单增可选 `orientation`（受控词表）与逐帧 GT 交叉核对（存在 gt/ 即严格一致）；报告 schema v2 增朝向计数/缺口与 gt_checked；逐格覆盖仍须人工复核 | watercopper（离板应用链） |

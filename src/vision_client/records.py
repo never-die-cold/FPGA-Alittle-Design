@@ -12,6 +12,9 @@
   prototype（来源标识）、protocol_version（报文契约版本）；替代 v1 的 verdict
   预留字段（该字段误读顶层 verdict，对 v1.2 报文恒为 None）。
   result_age_s 按 EXE 接收时基传入（age_s），created_at 保留原始服务端时间戳供诊断。
+- 重启安全（2026-10-13，NC 点名）：BatchRecords 启动时从既有 records.jsonl 重建去重键与计数；
+  AnomalyLog 按既有行数续编截图序号（防 anomaly_*.png 覆盖）；损坏记录行大声失败——
+  静默跳过会让去重失效、重复证据被写入。
 
 截图写入通过注入的 save_image(path, frame) 回调完成；缺省惰性导入 cv2（EXE 内可用），
 离线测试传桩函数以保持纯 stdlib。
@@ -32,7 +35,7 @@ def source_prefix(mode, prototype=False):
 
 
 class BatchRecords:
-    """记录目录内的追加式批次存储；进程内按键去重。"""
+    """记录目录内的追加式批次存储；去重键跨进程有效（启动时从 records.jsonl 重建）。"""
 
     def __init__(self, directory, save_image=None):
         if save_image is None:
@@ -44,6 +47,22 @@ class BatchRecords:
         self.save_image = save_image
         self.keys = set()
         self.count = 0
+        self._rebuild()
+
+    def _rebuild(self):
+        """重启恢复：从既有 records.jsonl 重建去重键与计数（D9 键跨进程仍有效）。"""
+        path = self.dir / "records.jsonl"
+        if not path.exists():
+            return
+        for lineno, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            if not line.strip():
+                continue
+            try:
+                row = json.loads(line)
+                self.keys.add((row["session_id"], row["check_id"]))
+            except (ValueError, KeyError, TypeError) as error:
+                raise ValueError(f"corrupt records line {lineno}: {error}") from error
+            self.count += 1
 
     def accept(self, packet):
         return (packet["session_id"], packet["check_id"]) not in self.keys
@@ -102,6 +121,10 @@ class AnomalyLog:
         self.shots.mkdir(parents=True, exist_ok=True)
         self.save_image = save_image
         self.count = 0
+        path = self.dir / "anomalies.jsonl"
+        if path.exists():
+            self.count = sum(1 for line in path.read_text(encoding="utf-8").splitlines()
+                             if line.strip())
 
     def log(self, mode, event, frame, prototype=False):
         prefix = source_prefix(mode, prototype)

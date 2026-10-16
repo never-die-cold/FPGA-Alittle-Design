@@ -3,8 +3,10 @@
 纯 stdlib：FILE 捕获后端（字节即 PNG，本层不解码）+ 注入桩引擎；
 落盘在仓库内 sim/build/vision/service-test/。覆盖：LIVE 报文校验、每轮新捕获（序号推进、
 文件轮换、字节一致）、产物唯一目录与原子落盘、/v1/latest 幂等复用、config 递增、
-超限映射（decision 计数 None → 按报文内目标重算）、trigger_ref 回显与 400/404。
+超限映射（decision 计数 None → 按报文内目标重算）、快照读取器校验（绑定/哈希/篡改负例）、
+trigger_ref 回显与 400/404。
 """
+import hashlib
 import json
 import shutil
 import sys
@@ -105,6 +107,26 @@ def main():
             assert (round_dir / "engine.json").exists()
             assert json.loads((round_dir / "packet.json").read_text(encoding="utf-8")) == packets[i]
         assert not list(out.rglob("*.pending")), "atomic writes must not leave .pending files"
+        # 快照读取与哈希核对（C04 §2.3 方案，待 NC 确认）：绑定/哈希校验；篡改与缺轮大声失败
+        from round_artifacts import SnapshotError, load_snapshot
+        snap = load_snapshot(out, packets[0]["session_id"], packets[0]["check_id"])
+        assert snap["packet"] == packets[0] and snap["engine_result"] is None
+        assert snap["sha256"] == hashlib.sha256(raw_a).hexdigest()
+        capture = snap["capture"]
+        capture.write_bytes(raw_a[:-1] + b"X")
+        try:
+            load_snapshot(out, packets[0]["session_id"], packets[0]["check_id"])
+            raise AssertionError("tampered capture accepted")
+        except SnapshotError:
+            pass
+        capture.write_bytes(raw_a)
+        assert load_snapshot(out, packets[0]["session_id"], packets[0]["check_id"])["sha256"] \
+            == snap["sha256"]
+        try:
+            load_snapshot(out, packets[0]["session_id"], 99)
+            raise AssertionError("missing round accepted")
+        except SnapshotError:
+            pass
         # /v1/latest 幂等复用：不触发引擎（rounds 计数不动）、报文与最后一线相同
         latest = get(base, "/v1/latest")
         assert latest == packets[2] and rounds[0] == 3

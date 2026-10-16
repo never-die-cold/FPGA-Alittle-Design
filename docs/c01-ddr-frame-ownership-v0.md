@@ -77,6 +77,31 @@ WC适配必须给出实际IP/驱动依据，证明：目标槽确实完成一整
 WC给出实际完成/槽绑定/保护/屏障/cache依据与仓库替身入口，JL确认集成位流/地址/复位兼容，NC才能安排custom N03实测。
 随后再做真实工位定标/采集、同帧ROI与软件/硬件对拍。C01整体冻结及正式N03通过仍需这些证据。
 
+## 7. WC 适配与离板评审注记（2026-10-13）
+
+**适配件**：`src/pynq_host/c01_backend.py`（`C01Captures`）把 `SingleFrameCapture` 接进
+`vision_live_service`——一轮 = 一个单次租约（factory 现场构造 owner，`capture()` 返回独立完整副本），
+适配器立即编码 PNG 原子落盘，服务统一写 `capture.sha256`；捕获/引擎失败由服务转 **503**
+（`do_POST` 捕获 RuntimeError），失败轮不写 `packet.json`。`prototype` 由后端结构性决定：
+C01 = 真实硬件捕获 → **False**（FILE 后端恒 True，[C04 §3.2](vision-live-semantics.md)）。
+
+**仓库替身入口**：`sim/vision/test_c01_backend.py`（接入 `run_vision_python.sh`）——最小
+VDMA/CAP1/分配器/代次 fake 驱动真实驱动（`src/pynq_host/c01_capture.py`），服务级覆盖 §5 矩阵
+离板行：正常帧与独立副本（缓冲换帧后上轮产物不变）、等待期 DMA 错误/完成超时 → 503 且无产物、
+缓冲恰一次归还、采集期代次变化 → 拒绝发布且原生缓冲隔离（不归还）、新代次恢复、无 `.pending` 残留。
+
+**§3 八步操作序 → 实现位置**：1 实例/版本 = identity + evidence；2 四缓冲分配/不重叠/几何 =
+`capture()` 分配段；3 复位/清错/读回 + 重新等锁 = reset/clear 段；4 有界启动/等完成 = CR RUN +
+VSIZE 最后写 + `completed()`；5 写保护窗口 = auto-stop（PG020：完整转移后硬件清 RS）+ PARK/描述符
+复核 + invalidate + `np.array(copy=True)`；6 复制前后复核 = `_protected()` before/after，变化即丢弃；
+7 副本几何复核 + 落盘哈希（适配层 + 服务）；8 归还/幂等 = `close()` 恰一次释放 + `QUARANTINE`
+隔离未确认停止。
+
+**尚未由离板验证、实机确认前不得宣称的硬件断言**：① "停止后写事务已完成"依赖 VDMA auto-stop 语义
+与 invalidate 调用——需 NC 用动态标识逐行/整帧一致实测（§5 行 1/2）；② park slot 位域复核替代
+"完成槽号绑定"（CAP1 无槽号，§1）属候选序列，**实机确认前不冻结**（§6 交接门）；③ 唯一在途租约由
+"单次对象 + 单轮构造"结构性保证；板上进程存活与禁止析构释放按 §5 尾注执行。JL 需确认集成位流/地址/
+复位兼容后，NC 方可安排 custom N03 实测（§6）。
 ### 10/15 连续 Park 候选（仅离板验证）
 
 新增 `src/pynq_host/c01_park_capture.py`，板端脚本显式设置 `C01_CAPTURE_MODE=park` 才选择它；

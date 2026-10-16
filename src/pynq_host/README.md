@@ -43,6 +43,23 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
 - 真实硬件识别后端未实现；FILE/LIVE 骨架已有，不把软件会话/配置号当硬件状态。NC 的实机服务责任与 WC 的适配/服务实现工作见[三人清单](../../docs/project-closeout-three-person-checklist.md)。
 - EXE 在 `src/vision_client/`，已有 LIVE 类别/工单展示、批次、CSV 和 FILE_REPLAY；真实硬件联调、检查快照查看和目标机发布仍待完成。
 
+## LIVE 服务捕获后端（W04/N06 诊断包，2026-10-13）
+
+`vision_live_service.py` 的捕获后端三类，`prototype` 由后端**结构性**决定（C04 §3.2，无开关）：
+- `FileCaptures`（FILE，离线夹具）：恒 `prototype=true`；
+- `C01Captures`（`c01_backend.py`，custom DDR 单帧所有权）：`prototype=false`，板上驱动与
+  未验证断言清单见 [c01-ddr-frame-ownership-v0.md](../../docs/c01-ddr-frame-ownership-v0.md) §7；
+- `BaseOverlayCaptures`（`base_captures.py`，base overlay 实时取帧）：`prototype=false`。
+
+N06 诊断包接线（NC 执行；板端脚本提供 overlay 与 read，取帧样板见 `sim/scripts/n03_board_capture.py`）：
+`captures = BaseOverlayCaptures(<同步包装的 hdmi_in.readframe>)` →
+`make_server(root=…, captures=captures, engine=file_engine(models/cnn-border-fill-best.pt, order, 0.8, 10), order=order)`；
+EXE `--source 0 --endpoint http://<板IP>:8765` 联调。板端需 pynq-venv 的 python3 + OpenCV + torch；
+FP32 软件推理来源记录在产物 `result.json` 的 provenance，不当作 CNN 硬件验收。
+服务失败（无视频/超时/所有权错误）转 HTTP 503 且不产 `packet.json`；离板替身测试
+`test_base_captures.py`、`test_c01_backend.py`（视觉栈现 18 组；检查链 14 组）；
+快照核对器 `round_artifacts.py`（C04 §2.3，待 NC 确认）。
+
 ## 板卡访问
 
 - 校园网内 SSH：`ssh xilinx@<板卡内网IP>`（2026-09-20 建立，SD 卡已烧录 PYNQ 镜像）；notebook 在板卡 Jupyter（默认端口 9090）上运行

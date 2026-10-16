@@ -9,13 +9,15 @@ def generate(output):
     if output.exists():
         raise ValueError("fixture output already exists; choose a new directory")
     base = sample()
+    tokens = {"bolt": "axial", "nut": "face_up", "washer": "face_tilted"}
     rows = [{**base, "session": "sess-20261010-" + split, "split": split,
-             "class": label, "specimen_id": label + "-fixture", "light": "L" + str(index)}
+             "class": label, "specimen_id": label + "-fixture", "light": "L" + str(index),
+             "orientation": tokens[label]}
             for index, (split, label) in enumerate(zip(("train", "val", "test"), ("bolt", "nut", "washer")))]
     rows.append({**rows[-1], "frame_id": "frame_00002", "class": "", "obj_id": "", "specimen_id": "",
-                 "spacing": "empty", **dict.fromkeys(("x0", "y0", "x1", "y1"), "")})
+                 "orientation": "", "spacing": "empty", **dict.fromkeys(("x0", "y0", "x1", "y1"), "")})
     fixture(output, rows)
-    print("PASS: TEST_FIXTURE generated: four synthetic frames, three fictional targets")
+    print("PASS: TEST_FIXTURE generated: four synthetic frames, three fictional targets, GT cross-check")
 
 
 if __name__ == "__main__":

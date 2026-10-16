@@ -2,7 +2,8 @@
 
 纯 stdlib：截图写入用桩回调替代 cv2；落盘在仓库内 sim/build/vision/records-test/。
 覆盖：手动轮次落记录、键 (session,check_id) 去重、来源前缀（mock_/proto_/无）、
-字段完整性（v2：status/decision/prototype/protocol_version）、LIVE 无前缀。
+字段完整性（v2：status/decision/prototype/protocol_version）、LIVE 无前缀、
+重启恢复（重建去重键与计数、异常序号续编、损坏行大声失败）。
 """
 import json
 import shutil
@@ -77,7 +78,28 @@ def main():
     assert arow["check_id"] == 4 and arow["fails"] == 3 and arow["mode"] == "MOCK"
     assert arow["screenshot"] == "screenshots/mock_anomaly_0001.png"
     assert json.loads(a_lines[2])["prototype"] is True
-    print("PASS: batch records v2 (decision/status/prototype/prefixes) + anomaly events (D8-D11)")
+    # 重启恢复（NC 2026-10-12 点名）：新实例从 records.jsonl 重建键与计数，
+    # 旧键跨进程仍被拒；异常截图序号续编不覆盖既有文件
+    again = BatchRecords(out, save_image=lambda path, frame: True)
+    assert again.count == 5, again.count
+    assert not again.accept(packet)
+    assert again.write(packet, None) is None
+    assert again.write(mock_packet("sess-abcd-1234", 10, 2, 10), None) is not None
+    assert again.count == 6
+    anom2 = AnomalyLog(out, save_image=lambda path, frame: True)
+    assert anom2.count == 3
+    shot4 = anom2.log("LIVE", {"kind": "overlay_ok", "prev": "stale", "check_id": 4, "fails": 0}, None)
+    assert shot4.name == "anomaly_0004.png" and anom2.count == 4
+    # 损坏行：大声失败（静默跳过会让去重失效、重复证据被写入）
+    with (out / "records.jsonl").open("a", encoding="utf-8") as handle:
+        handle.write('{"broken"\n')
+    try:
+        BatchRecords(out, save_image=lambda path, frame: True)
+        raise AssertionError("corrupt records line accepted")
+    except ValueError:
+        pass
+    print("PASS: batch records v2 (decision/status/prototype/prefixes) + anomaly events (D8-D11) "
+          "+ restart rebuild/corrupt-line")
 
 
 if __name__ == "__main__":

@@ -82,10 +82,10 @@ data/datasets/fastener-v1/
 
 - 会话名小写连字符，禁空格；目录光照编码用 `l0..l3`，清单 `light` 列保持 `L0..L3`（现有审计器要求）；`<bg>` ∈ {dark, gray, wood}；class ∈ {bolt, nut, washer}。
 - 裁剪图存原始分辨率（S×S 缩放发生在训练/推理管线内）；未来尺寸变更是否补采须按新细节门限实测决定。
-- manifest 列：`frame_id, session, split, light, bg, spacing, obj_id, class, x0, y0, x1, y1, notes`。
+- manifest 列：`frame_id, session, split, light, bg, spacing, obj_id, class, x0, y0, x1, y1, notes`（可选 `specimen_id`、`orientation`；朝向受控词表与逐帧 GT 交叉核对见[审计入口](fastener-dataset-audit.md)）。
 - 2026-10-10 已增加[清单审计入口](fastener-dataset-audit.md)：frame_id 使用 `frame_00001` 一类五位文件主名，
   bbox 明确为 XYXY 半开区间；可选 `specimen_id` 用于全局实物个体隔离，不能用帧内 obj_id 替代。
-  空场景保留一行条件信息，类别/目标编号/坐标/实物编号全空，仅进 test；完整格式与检查边界见入口说明。
+  空场景保留一行条件信息，类别/目标编号/坐标/实物编号/朝向全空，仅进 test；完整格式与检查边界见入口说明。
 
 ## 5. 阴影/反光专项用例（M3 验收素材，plan.md §1.4）
 

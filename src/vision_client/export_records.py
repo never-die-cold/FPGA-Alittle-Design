@@ -14,18 +14,23 @@ import csv
 import json
 from pathlib import Path
 
-FIELDS = ["recorded_at", "mode", "prototype", "status", "missing", "extra",
+FIELDS = ["recorded_at", "mode", "prototype", "status", "missing", "extra", "reasons",
           "session_id", "check_id", "config_id", "frame_id",
           "result_age_s", "target_count", "screenshot", "targets", "verdict"]
 
 
 def _derive(row):
-    """v2 行取 status/decision；v1 行（verdict 预留、无 decision）退化为 LOCATION_ONLY。"""
+    """v2 行取 status/decision；v1 行（verdict 预留、无 decision）退化为 LOCATION_ONLY。
+
+    reasons 列承载判定原因（如 target_limit——超限轮次的"部分计数"标识，C04 Q5）：
+    没有该列时，超限重算计数与完整计数在导出件里无法区分。
+    """
     decision = row.get("decision") or {}
     status = decision.get("verdict") or row.get("status") or row.get("verdict") or "LOCATION_ONLY"
     missing = ";".join(f"{name}:{n}" for name, n in decision.get("missing", {}).items() if n)
     extra = ";".join(f"{name}:{n}" for name, n in decision.get("extra", {}).items() if n)
-    return status, missing, extra
+    reasons = ";".join(decision.get("reasons", []) or [])
+    return status, missing, extra, reasons
 
 
 def load_records(records_dir):
@@ -50,10 +55,11 @@ def export_records(records_dir, out_path=None):
         writer.writeheader()
         for row in rows:
             row = dict(row)
-            status, missing, extra = _derive(row)
+            status, missing, extra, reasons = _derive(row)
             row["status"] = status
             row["missing"] = missing
             row["extra"] = extra
+            row["reasons"] = reasons
             row["prototype"] = int(bool(row.get("prototype")))
             row["targets"] = json.dumps(row.get("targets", []), ensure_ascii=False)
             writer.writerow(row)

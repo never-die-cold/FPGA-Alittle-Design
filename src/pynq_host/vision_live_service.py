@@ -1,6 +1,7 @@
 """W05 正式检查服务骨架：HTTP 轮次/产物/幂等层 + 可插拔检查引擎（C04 §2.3）。
 
-与 vision_mock_service 的区别：真实引擎、每轮新捕获、(session_id, check_id) 唯一定位产物。
+与 vision_mock_service 的区别：真实引擎、每轮新捕获、(session_id, check_id) 唯一定位
+产物（capture.png + capture.sha256 + packet.json，读取与哈希核对入口 src/pynq_host/round_artifacts.py）。
 FILE 原型自动轮询在内存中检查并更新 latest_packet.json；手动触发保存完整产物。
 --archive-every-round 恢复逐轮归档。分类器复用，权重文件变化后须重启服务。
 - 引擎契约：engine(capture_path, round_dir, request_id) -> {status, targets, decision, width, height}；
@@ -15,6 +16,7 @@ FILE 原型自动轮询在内存中检查并更新 latest_packet.json；手动�
   端点与 mock 同形（/v1/status /v1/check /v1/config），EXE 无需改动即可消费。
 """
 import argparse
+import hashlib
 import json
 import threading
 import time
@@ -67,6 +69,8 @@ class FileCaptures:
 
 def complete_decision(decision, targets):
     """超限映射：actual/delta/missing/extra 为 None 时按报文内目标重算；verdict/reasons 不动。"""
+    if not isinstance(decision, dict):
+        return decision  # LOCATION_ONLY 等无判定场景原样透传
     if all(isinstance(decision.get(name), dict)
            for name in ("actual", "delta", "missing", "extra")):
         return decision
@@ -114,6 +118,9 @@ class State:
             else:
                 round_dir.mkdir(exist_ok=False)
                 capture_path = self.captures.capture(round_dir)
+                # 快照哈希侧车（C04 §2.3）：供读取方核对 capture 字节未被替换/篡改
+                atomic_write(round_dir / "capture.sha256",
+                             (hashlib.sha256(capture_path.read_bytes()).hexdigest() + "\n").encode())
                 fields = self.engine(capture_path, round_dir, f"chk{check:06d}")
             packet = validate_packet({
                 "version": VERSION, "mode": "LIVE", "session_id": self.session_id,
@@ -217,6 +224,9 @@ def make_server(host="127.0.0.1", port=8765, root=None, captures=None, engine=No
                     self.reply(200, {"mode": "LIVE", "applied_config_id": applied})
             except (ValueError, TypeError) as error:
                 self.reply(400, {"error": str(error)})
+            except RuntimeError as error:
+                # 捕获（C01 所有权/超时/错误）或引擎运行失败：服务侧故障，不产生正常结果
+                self.reply(503, {"error": f"capture/engine failed: {error}"})
 
         def log_message(self, *args):
             pass

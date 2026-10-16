@@ -50,10 +50,10 @@ def main():
     proto_row = rows[2]
     assert proto_row["mode"] == "LIVE" and proto_row["prototype"] == "1"
     assert proto_row["status"] == "RECHECK" and proto_row["missing"] == "washer:1"
-    assert proto_row["extra"] == ""
+    assert proto_row["extra"] == "" and proto_row["reasons"] == "low score T5"
     v1_csv = rows[3]
     assert v1_csv["status"] == "LOCATION_ONLY" and v1_csv["prototype"] == "0"
-    assert v1_csv["verdict"] == "" and v1_csv["missing"] == ""
+    assert v1_csv["verdict"] == "" and v1_csv["missing"] == "" and v1_csv["reasons"] == ""
     try:
         export_records(out / "missing")
         raise AssertionError("missing records file accepted")
