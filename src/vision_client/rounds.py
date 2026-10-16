@@ -27,7 +27,10 @@ import uuid
 
 from vision_protocol import validate_packet
 
-REQUEST_TIMEOUT = 2.0
+# BOARD-PARK 2026-10-17: the park LIVE backend's numpy engine needs ~2 min per
+# round on the Zynq CPU (locate + 16-crop CNN); the FILE backend stays instant.
+# Owner-authorized stopgap until the C03 hardware CNN replaces it.
+REQUEST_TIMEOUT = 300.0
 FAIL_LIMIT = 3
 WAITING = "WAITING FOR RESULT"
 CLASSES = ("bolt", "nut", "washer")
