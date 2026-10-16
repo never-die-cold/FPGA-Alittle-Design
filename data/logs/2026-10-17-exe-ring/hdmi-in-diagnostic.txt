@@ -1,0 +1,12 @@
+HOST_STARTED_UTC=2026-10-16T15:02:15.0668755Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u -c "from pynq import MMIO,PL,Overlay;from pathlib import Path;from c01_status_onboard import verify,load_candidate;bit=Path(\"capture.bit\");verify(bit,\"86d2adb0343de1785270d207eee3c6b8fee2a6444bc64705bc068e3fc781d14f\");verify(bit.with_suffix(\".hwh\"),\"eaaf68c3732f1a2bf85756fc0b3a8c6b07bb5cf5b36f32020882860a6aaebf5c\");load_candidate(bit.resolve(),Overlay);import time;s=MMIO(0x42000000,65536);a=(s.read(4),s.read(8));time.sleep(3);b=(s.read(4),s.read(8));print(\"LOCK_TICK\",a,b)"'
+sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u -c "from pynq import MMIO,PL,Overlay;from pathlib import Path;from c01_status_onboard import verify,load_candidate;bit=Path(\"capture.bit\");verify(bit,\"86d2adb0343de1785270d207eee3c6b8fee2a6444bc64705bc068e3fc781d14f\");verify(bit.with_suffix(\".hwh\"),\"eaaf68c3732f1a2bf85756fc0b3a8c6b07bb5cf5b36f32020882860a6aaebf5c\");load_candidate(bit.resolve(),Overlay);import time;s=MMIO(0x42000000,65536);a=(s.read(4),s.read(8));time.sleep(3);b=(s.read(4),s.read(8));print(\"LOCK_TICK\",a,b)"'; printf '\n__PYNQ_RC_df25562c14d34dd89814560f93d031f6=%d\n' $?
+[?2004lSTAGE: HWH metadata parse before programming
+STAGE: HWH layout accepted; candidate download begins
+STAGE: candidate download returned
+LOCK_TICK (0, 0) (0, 0)
+
+__PYNQ_RC_df25562c14d34dd89814560f93d031f6=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

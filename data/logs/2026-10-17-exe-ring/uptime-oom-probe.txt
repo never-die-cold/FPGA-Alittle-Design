@@ -1,0 +1,11 @@
+HOST_STARTED_UTC=2026-10-16T14:50:36.5811525Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=uptime -s; sudo -n true 2>/dev/null && echo SUDO_OK || echo SUDO_NEED_PW; sudo -n dmesg 2>/dev/null | grep -ci "out of memory\|oom" ; sudo -n dmesg 2>/dev/null | tail -3
+uptime -s; sudo -n true 2>/dev/null && echo SUDO_OK || echo SUDO_NEED_PW; sudo -n dmesg 2>/dev/null | grep -ci "out of memory\|oom" ; sudo -n dmesg 2>/dev/null | tail -3; printf '\n__PYNQ_RC_17edd945a9804fb3a4253d713d3cd98f=%d\n' $?
+[?2004l2026-09-22 03:16:14
+SUDO_NEED_PW
+0
+
+__PYNQ_RC_17edd945a9804fb3a4253d713d3cd98f=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

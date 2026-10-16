@@ -1,0 +1,14 @@
+### 本步改动/新增
+f2804d9861d37a9d190c1b81aad85b03134d50c6d90bebb46aa0072f42f58142 *sim/vision/test_c01_capture.py
+1dc20be372b0c5c992106365c9b63a1bd04efcc71eb52756e7cd2043a880d9ea *sim/vision/test_c01_capture_ordering.py
+79ec17ccdc9d0a56fa4623cdd6d2efc5412ddde0e31ace4327e7405b4eb110ee *sim/scripts/run_vision_python.sh
+
+### 冻结三件套（本步必须逐字节未变，与 runner-inputs.json 比对）
+1f11aefdc11805387b0c345583828fd733e5e38b0b0e043b0510808f648e8430 *src/pynq_host/c01_capture.py
+e822a70800a923ccdb3ce45496e71342b032035389dba935d6fac6f09edd5646 *sim/scripts/c01_ddr_onboard.py
+894bf7dc01ba9260c48cde7ab0b1aecdd6bfa157f7fa43252170cea1752e1810 *sim/scripts/c01_status_onboard.py
+
+### 记录值（2026-10-14 runner-inputs.json）
+1f11aefdc11805387b0c345583828fd733e5e38b0b0e043b0510808f648e8430 src/pynq_host/c01_capture.py
+e822a70800a923ccdb3ce45496e71342b032035389dba935d6fac6f09edd5646 sim/scripts/c01_ddr_onboard.py
+894bf7dc01ba9260c48cde7ab0b1aecdd6bfa157f7fa43252170cea1752e1810 sim/scripts/c01_status_onboard.py

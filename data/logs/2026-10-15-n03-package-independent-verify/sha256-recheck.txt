@@ -1,0 +1,26 @@
+### runner-inputs.json: repo source vs retained copy
+OK       repo     c01_capture.py bytes=9515 
+OK       retained c01_capture.py bytes=9515 
+OK       repo     c01_ddr_onboard.py bytes=5446 
+OK       retained c01_ddr_onboard.py bytes=5446 
+OK       repo     c01_status_onboard.py bytes=6667 
+OK       retained c01_status_onboard.py bytes=6667 
+
+### review-input-sha256.json (12 records)
+OK                c01_capture.py bytes=9515 
+OK                c01_ddr_onboard.py bytes=5446 
+OK                c01_status_onboard.py bytes=6667 
+OK                test_c01_capture.py bytes=7673 
+OK                test_c01_status_onboard.py bytes=4654 
+OK                test_c01_artifacts.py bytes=2087 
+OK                check_c01_artifacts.py bytes=3701 
+OK                audit_c01_build_inputs.py bytes=3850 
+OK                m2_onboard.py bytes=3103 
+OK                vision_regs.py bytes=5626 
+OK                pynq_serial_command.ps1 bytes=2843 
+OK                run_c01_status.ps1 bytes=1119 
+
+### candidate-artifacts.json
+OK       .bit capture-1791713720540454.bit bytes=4045769 
+OK       .hwh capture-1791713720540454.hwh bytes=557643 
+OK       .xsa capture-1791713720540454.xsa bytes=609696 

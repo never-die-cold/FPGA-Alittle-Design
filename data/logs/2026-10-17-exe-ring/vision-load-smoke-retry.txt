@@ -1,0 +1,61 @@
+HOST_STARTED_UTC=2026-10-16T14:59:44.2253652Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u /home/xilinx/vision_m2/m2_onboard.py load; sleep 8; ok=0; for i in 1 2 3 4 5 6; do python3 -u /home/xilinx/vision_m2/m2_onboard.py smoke && ok=1 && break; sleep 5; done; echo SMOKE_OK=$ok'
+sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u /home/xilinx/vision_m2/m2_onboard.py load; sleep 8; ok=0; for i in 1 2 3 4 5 6; do python3 -u /home/xilinx/vision_m2/m2_onboard.py smoke && ok=1 && break; sleep 5; done; echo SMOKE_OK=$ok'; printf '\n__PYNQ_RC_c373b969ada14125b5a32a0227ca2e5e=%d\n' $?
+[?2004lip_dict:
+  pipe @ 0x40000000 range 0x10000
+  ps7 @ 0x00000000 range 0x0
+axi_regs 段: pipe @ 0x40000000
+PASS: load
+R11 busy=0 R12 applied=0
+NOVIDEO: commit 未在帧首确认——寄存器通路 OK 但无输入视频（查 HDMI IN 源/线材）
+R11 busy=1 R12 applied=0
+Traceback (most recent call last):
+  File "/home/xilinx/vision_m2/m2_onboard.py", line 86, in <module>
+    cmds[sys.argv[1]]()
+  File "/home/xilinx/vision_m2/m2_onboard.py", line 62, in cmd_smoke
+    cfg = v.commit(timeout=1.0)
+  File "/home/xilinx/vision_m2/vision_regs.py", line 101, in commit
+    raise RuntimeError("configuration commit is busy")
+RuntimeError: configuration commit is busy
+R11 busy=1 R12 applied=0
+Traceback (most recent call last):
+  File "/home/xilinx/vision_m2/m2_onboard.py", line 86, in <module>
+    cmds[sys.argv[1]]()
+  File "/home/xilinx/vision_m2/m2_onboard.py", line 62, in cmd_smoke
+    cfg = v.commit(timeout=1.0)
+  File "/home/xilinx/vision_m2/vision_regs.py", line 101, in commit
+    raise RuntimeError("configuration commit is busy")
+RuntimeError: configuration commit is busy
+R11 busy=1 R12 applied=0
+Traceback (most recent call last):
+  File "/home/xilinx/vision_m2/m2_onboard.py", line 86, in <module>
+    cmds[sys.argv[1]]()
+  File "/home/xilinx/vision_m2/m2_onboard.py", line 62, in cmd_smoke
+    cfg = v.commit(timeout=1.0)
+  File "/home/xilinx/vision_m2/vision_regs.py", line 101, in commit
+    raise RuntimeError("configuration commit is busy")
+RuntimeError: configuration commit is busy
+R11 busy=1 R12 applied=0
+Traceback (most recent call last):
+  File "/home/xilinx/vision_m2/m2_onboard.py", line 86, in <module>
+    cmds[sys.argv[1]]()
+  File "/home/xilinx/vision_m2/m2_onboard.py", line 62, in cmd_smoke
+    cfg = v.commit(timeout=1.0)
+  File "/home/xilinx/vision_m2/vision_regs.py", line 101, in commit
+    raise RuntimeError("configuration commit is busy")
+RuntimeError: configuration commit is busy
+R11 busy=1 R12 applied=0
+Traceback (most recent call last):
+  File "/home/xilinx/vision_m2/m2_onboard.py", line 86, in <module>
+    cmds[sys.argv[1]]()
+  File "/home/xilinx/vision_m2/m2_onboard.py", line 62, in cmd_smoke
+    cfg = v.commit(timeout=1.0)
+  File "/home/xilinx/vision_m2/vision_regs.py", line 101, in commit
+    raise RuntimeError("configuration commit is busy")
+RuntimeError: configuration commit is busy
+SMOKE_OK=0
+
+__PYNQ_RC_c373b969ada14125b5a32a0227ca2e5e=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

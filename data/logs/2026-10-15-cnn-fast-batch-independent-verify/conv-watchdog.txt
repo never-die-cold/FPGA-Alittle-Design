@@ -1,0 +1,2 @@
+PASS: conv_engine watchdog 82 exact-cycle cases; CE pause, latched budget and terminal strobes
+sim/coprocessor/tb_conv_engine.v:153: $finish called at 17266000 (1ps)
