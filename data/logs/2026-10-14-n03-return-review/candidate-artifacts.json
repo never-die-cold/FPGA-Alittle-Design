@@ -1,0 +1,33 @@
+{
+  "acceptance": "offline_candidate_only",
+  "addresses": {
+    "pipe": "0x40000000",
+    "capture_status": "0x42000000",
+    "capture_dma": "0x43000000"
+  },
+  "vdma": {
+    "C_INCLUDE_MM2S": "0",
+    "C_INCLUDE_S2MM": "1",
+    "C_NUM_FSTORES": "4",
+    "C_S_AXIS_S2MM_TDATA_WIDTH": "24",
+    "C_M_AXI_S2MM_DATA_WIDTH": "64",
+    "C_USE_S2MM_FSYNC": "2"
+  },
+  "files": {
+    ".bit": {
+      "path": "sim\\build\\c01-hdmi-1791713720540454\\capture-1791713720540454.bit",
+      "bytes": 4045769,
+      "sha256": "86d2adb0343de1785270d207eee3c6b8fee2a6444bc64705bc068e3fc781d14f"
+    },
+    ".hwh": {
+      "path": "sim\\build\\c01-hdmi-1791713720540454\\capture-1791713720540454.hwh",
+      "bytes": 557643,
+      "sha256": "eaaf68c3732f1a2bf85756fc0b3a8c6b07bb5cf5b36f32020882860a6aaebf5c"
+    },
+    ".xsa": {
+      "path": "sim\\build\\c01-hdmi-1791713720540454\\capture-1791713720540454.xsa",
+      "bytes": 609696,
+      "sha256": "421c52355dedc1185499ef794d981ddd7315dbc68f89688288fdadc3a04cc4a7"
+    }
+  }
+}

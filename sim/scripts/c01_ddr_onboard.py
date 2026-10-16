@@ -15,6 +15,9 @@ HWH_SHA = 'eaaf68c3732f1a2bf85756fc0b3a8c6b07bb5cf5b36f32020882860a6aaebf5c'
 
 
 def main():
+    capture_mode = os.environ.get('C01_CAPTURE_MODE', 'single')
+    if capture_mode not in ('single', 'park'):
+        raise ValueError('C01_CAPTURE_MODE must be single or park')
     from pynq import MMIO, Overlay, allocate, PL
     import cv2
     sys.path.insert(0, '/home/xilinx/vision_m2')
@@ -36,6 +39,7 @@ def main():
     def identity():
         return (Path('/proc/sys/kernel/random/boot_id').read_text().strip(), PL.bitfile_name, str(PL.timestamp))
     result = {'boot_before': boot, 'bit_sha256': BIT_SHA, 'hwh_sha256': HWH_SHA,
+              'capture_mode': capture_mode,
               'driver_sha256': hashlib.sha256((root / 'c01_capture.py').read_bytes()).hexdigest(),
               'runner_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               'helper_sha256': hashlib.sha256((root / 'c01_status_onboard.py').read_bytes()).hexdigest(),
@@ -62,7 +66,12 @@ def main():
             except SystemExit as exc:
                 if exc.code != 3 or attempt == 2: raise
                 print('STAGE: candidate HDMI smoke NOVIDEO; bounded settle retry', flush=True)
-        owner = SingleFrameCapture(dma, status, allocate, identity)
+        capture_class = SingleFrameCapture
+        if capture_mode == 'park':
+            from c01_park_capture import ParkFrameCapture
+            capture_class = ParkFrameCapture
+            result['park_driver_sha256'] = hashlib.sha256((root / 'c01_park_capture.py').read_bytes()).hexdigest()
+        owner = capture_class(dma, status, allocate, identity)
         print('STAGE: custom single-frame DMA begins', flush=True)
         frame = owner.capture()
         result['capture'] = owner.evidence

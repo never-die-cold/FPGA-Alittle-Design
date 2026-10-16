@@ -1,0 +1,38 @@
+{
+  "issue": {
+    "url": "https://github.com/never-die-cold/FPGA-Alittle-Design/issues/75",
+    "title": "[C04/Q5] 对齐10件复检策略与未完整计数语义，修复后验收",
+    "issue_number": 75,
+    "body": "NC 已于 2026-10-14 本人确认：Q1 使用软件采集序号，不承诺与 UVC 同帧；Q3 以本轮 capture 原帧为权威证据；Q5 超过 10 个目标统一复检，未完整计数明确标注，映射零值不计为实测数量。NC 要求继续与 JL 对齐，相关实现修复后再验收。\n\n请 @LibJiang（JL，C02/C03 契约作者）确认 Q5 在 PS 诊断、RISC-V 工单固件和应用报文之间的统一口径，并说明任何异议或兼容影响。C03 §8 已规定协议/硬件能力 16、业务策略 10，定位 11–16 目标直接 RECHECK，不截断、不启动部分 CNN。\n\n基线：5654eb5。当前实现缺口：\n- vision_live_service.py / inspection_run.py 默认 max_targets=16，尚未统一落实检查 V0 的 10 件策略。\n- inspection_replay.inspect_frame 超限返回 targets=[] 和未完整计数；complete_decision 将其映射为零计数和缺件差额，rounds.live_view 直接显示这些数字。RECHECK 仍保留，但这些映射值不能作为实测数量。\n- 核工业固件、真实硬件 LIVE 后端尚未实现；当前测试为 FILE/合成诊断。\n\n对齐与验收要求：\n- [ ] JL 确认能力 16 / 业务 10 分层及超限不做部分 CNN，与 C03 和 NC 口径一致。\n- [ ] 统一未完整计数的报文/显示/记录/CSV 语义；保留 RECHECK 和 target_limit，映射零值不进入实测统计。新增协议字段另走 C04 §6 版本评审。\n- [ ] 相关实现修复后，仓库回归覆盖工单 10/11、定位 10/11/16/17、空场景及未完整计数显示/导出；软件规则与后续核判定同输入对拍。\n- [ ] NC 在修复包交付后另做实机验收；不得以当前专项 PASS 代签 C04/M2/M3。\n\n已有专项入口：python sim/vision/test_vision_live_service.py、test_service_engine.py、test_vision_joint.py、test_inspection_rules.py（均在 sim/vision/），本轮全部退出 0；现有用例不覆盖全部新门禁。\n源码依据：docs/coprocessor-integration-v0.md §8、src/pynq_host/vision_live_service.py、inspection_replay.py、inspection_rules.py、src/vision_client/rounds.py。\nNC 确认记录已写入本地 docs/vision-live-semantics.md 和 docs/c04-nc-review-2026-10-14.md，当前尚未提交。本 issue 内容自包含，不依赖未推送文件。\n",
+    "state": "open",
+    "user": {
+      "login": "never-die-cold",
+      "name": "never-die-cold",
+      "email": null,
+      "avatar_url": "https://avatars.githubusercontent.com/u/270969795?v=4",
+      "id": 270969795
+    },
+    "assignees": [
+      {
+        "login": "LibJiang",
+        "name": "LibJiang",
+        "email": null,
+        "avatar_url": "https://avatars.githubusercontent.com/u/324701421?v=4",
+        "id": 324701421
+      }
+    ],
+    "labels": null,
+    "milestone": null,
+    "state_reason": null,
+    "comments": 0,
+    "created_at": "2026-10-14T07:28:54Z",
+    "updated_at": "2026-10-14T07:28:54Z",
+    "closed_at": null,
+    "display_url": "https://github.com/never-die-cold/FPGA-Alittle-Design/issues/75",
+    "display_title": "[C04/Q5] 对齐10件复检策略与未完整计数语义，修复后验收"
+  },
+  "url": "https://github.com/never-die-cold/FPGA-Alittle-Design/issues/75",
+  "title": "[C04/Q5] 对齐10件复检策略与未完整计数语义，修复后验收",
+  "display_url": "https://github.com/never-die-cold/FPGA-Alittle-Design/issues/75",
+  "display_title": "[C04/Q5] 对齐10件复检策略与未完整计数语义，修复后验收"
+}

@@ -1,0 +1,15 @@
+SOURCE=E:\Projects\FPGA-Alittle-Design\src\pynq_host\c01_park_capture.py
+TARGET=/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_park_capture.py
+SHA256=953dec241be0f4c76d254cdca6efc4da2f334b978338eded49c694dd2f1001b5
+BASE64_SENT=3712
+saved=$(stty -g); (trap 'stty "$saved"' EXIT; stty raw -echo; timeout --foreground -k 3s 180s python3 -c 'import base64,gzip;exec(gzip.decompress(base64.b64decode("H4sIAAAAAAAEAI1US4/TMBC+91cMPiUQvA92eyjbQyVW4gSr7YKEEKqcetKYJnZkO213fz1+5LWoQuSQZN4zn78xIeQRtygOCEoi7F5Ec5Ezg/MbKETllAfUwECzI3xbPT59BIle49VHLSw6W66Y5sGbEkJmom6UthCT9JLP2/+XzJSVyHvRPJtZoVUNDbNeD53+wYmz2YxjATp2mKDcKo58Y8QLZr6n7s+U7Pp2ngFHY4VkViiZgVV7dB9jNbJ6+cVNly5m4B5RgFQWLuEOpgnhbglXc3gLV5fXN/1H6d53OdQ75xgz+0czYRC+s6rFe62VTojVTJrCgRaCVWtBuZGY3CFJQ1hsEZYeCmosF5LmbeEjXKudURjwIwBWLnvUhdhGC2mTMCu8A7J5vF99+kEyKKrWlMsn3WKssS1buTeuxs9fQdZYMyGF3DnVFIVgPJb+6AeXcbiQxTcaGqDuxZNayGR+e/vB4T9EpOkQ0qEdIsdE55EypT94zzNHhudKMU7S17UNZU2DkidBGo3jOO+XUKGc2rvxXNs5IfS3Ep3VRDNnljmbZyjluFV1o9GYJPKX5vMbr+QD+TI4sEq4IIzopj2nfFWfK4U3E644AnV8p5Gl0YeWeOJi5/iaBP9o+xeLwja6GjtbXqw/r5w31MLUzG7LDiTL9A6tG8VvTjLZhamZNkyjtLTec6GTKJgwSQZ4EsZu1H5Cm6OwZR+pHPAJOeUkBWY8j5vWLqbnHFU03AsjFAMu507/6/rV0YchQzwZcP0Lvq4ZT71N/mzRJOl/ojnWYgeMFxacRzIuFXlYrdeLSEfv7LYqFs/Gmca7Z7pwfwCBCLq5VQUAAA==")));receive(3712,8033,"953dec241be0f4c76d254cdca6efc4da2f334b978338eded49c694dd2f1001b5","/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_park_capture.py","__UART_183bcb2cb4774cf3a6c8db39a09bcec4")'); printf '\n__UART_183bcb2cb4774cf3a6c8db39a09bcec4_EXIT=%d\n' $?
+[?2004l__UART_183bcb2cb4774cf3a6c8db39a09bcec4_READY
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "<string>", line 28, in receive
+  File "/usr/lib/python3.10/pathlib.py", line 1117, in open
+    return self._accessor.open(self, mode, buffering, encoding, errors,
+FileExistsError: [Errno 17] File exists: '/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_park_capture.py'
+
+__UART_183bcb2cb4774cf3a6c8db39a09bcec4_EXIT=1
+[?2004hxilinx@pynq:~$ 

@@ -15,13 +15,13 @@ from inspection_replay import inspect_frame, annotate
 from inspection_rules import judge
 
 
-def run(source, weights, order, output, request_id, min_score, max_targets=16):
+def run(source, weights, order, output, request_id, min_score, max_targets=16, classifier=None):
     if not isinstance(request_id, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", request_id):
         raise ValueError("request ID must contain 1-64 ASCII letters, digits, hyphens or underscores")
     judge([], order, min_score, max_targets)
     source, output = Path(source).resolve(), Path(output).resolve()
     raw = source.read_bytes()
-    classifier = PrototypeClassifier(weights)
+    classifier = classifier if classifier is not None else PrototypeClassifier(weights)
     root = Path(__file__).resolve().parents[2]
     code_paths = ["src/pynq_host/" + name + ".py" for name in
                   ("inspection_run", "inspection_replay", "inspection_rules", "inspection_model",

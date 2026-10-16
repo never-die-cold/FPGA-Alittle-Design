@@ -1,0 +1,78 @@
+[
+  {
+    "path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\alu.v",
+    "sha256": "95b963f6de03deac8efb965b44ba3662b09b5ae54d6052d660d42bcba888db9f"
+  },
+  {
+    "path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\branch_predict.v",
+    "sha256": "27d40ad9c80f011c0e846818d4668ad0dcbb2dd1ad51d50aadf013f237b1d408"
+  },
+  {
+    "path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\core_top.v",
+    "sha256": "e33859f33988ed765f075d12aab5986a503cd232cb6b1eded8b29c2c18c2b8e6"
+  },
+  {
+    "path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\decode.v",
+    "sha256": "c502e5ccb977d754d0bd3eb5225b9b273597b9558907582b1f81ed8d7de445bb"
+  },
+  {
+    "path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\dmem.v",
+    "sha256": "9c8cf5ffa5609661783af170f05a17fb2c9c2ba35a2811f3c4c44e562bfa91a2"
+  },
+  {
+    "path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\forwarding.v",
+    "sha256": "0542d9899909b3d51f48e4482dfdb18488c298b314ee65d3ab3331cdc78e8a04"
+  },
+  {
+    "path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\hazard.v",
+    "sha256": "305a84a0a00c0be6dec7f3a624596b7d648b21fdeb4c3fa78b4c75da123d4761"
+  },
+  {
+    "path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\id_ex_stage.v",
+    "sha256": "9476305648d1b3c0daa27a6d64ec4fb068ab7a7e42f9d3a4aacabb96e3903391"
+  },
+  {
+    "path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\if_stage.v",
+    "sha256": "1cf0591bd01937aa98977b708fff06bf636e4dc1b1f3b1215fccc06127fa2c68"
+  },
+  {
+    "path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\imem.v",
+    "sha256": "12fdd837ff7a9c4832638ae55ae3129a672eddc1dfa294a949337fdd350fbb16"
+  },
+  {
+    "path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\mem_wb_stage.v",
+    "sha256": "2e5767f476f7e010f84ac9f7a114e2175481e62bfc3d11ef1f71e288d72c8e18"
+  },
+  {
+    "path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\muldiv.v",
+    "sha256": "0e0842e4f529e1604db1a17e083c23b2f4ce13e6bbb1ed07cc3f745473e95530"
+  },
+  {
+    "path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\pc.v",
+    "sha256": "b513d34a0ad21e2b58084e4b827bd53cce7a875c728c8dcf9292d3e05767cd50"
+  },
+  {
+    "path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\pynq_z2_top.v",
+    "sha256": "02dbf4fd2be92833fce83295d7f1529518b3161ec758dc025a100fad1d6b0421"
+  },
+  {
+    "path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\regfile.v",
+    "sha256": "5a03842e3d86bdf3d86f63f9249197d236c64f9670b49466f879bd7b25ee5ec9"
+  },
+  {
+    "path": "E:\\Projects\\FPGA-Alittle-Design\\src\\riscv\\soc_top.v",
+    "sha256": "453c8d14186f7203fc03c6187d7c5a14917a21a1dba158692c24b5ccdee2ae17"
+  },
+  {
+    "path": "build/constraints/pynq_z2_soc.xdc",
+    "sha256": "dd59a027777580bc5d36ddcba62917ca23234b6c917844e1edac30cc1b790f3b"
+  },
+  {
+    "path": "sim/scripts/build_soc_ab.tcl",
+    "sha256": "e12be541b7d32c0678a8266d6a45798934364d8fe1e00f12dd1d1786a765339d"
+  },
+  {
+    "path": "src/riscv_fw/hello_v0.hex",
+    "sha256": "9c4b2f18e8f073ee939147e8d88137c46ff7c3babef8718f67984e47ac571da4"
+  }
+]

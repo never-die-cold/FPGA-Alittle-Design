@@ -8,7 +8,11 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
 `data/golden/vision/localize/reference.py`／`arm_localize.py` 与打包工具提供定位／裁剪黄金参考，不等于实时部署。
 `vision_mock_service.py` 提供明确标注 MOCK 的服务；D6 字段白名单已随 PR #67 合并。
 `vision_protocol.py` 已支持严格 MOCK/LIVE v1.2 校验；`vision_mock_service.py --live` 提供合成 LIVE 替身。
-`vision_live_service.py` 已实现 FILE 后端、每轮捕获副本/引擎调用/报文与产物落盘；FILE 恒 `prototype=true`，前端 PROTOTYPE 徽标已实现。
+`vision_live_service.py` 已实现 FILE 后端、每轮捕获/引擎调用/报文；FILE 恒 `prototype=true`，前端 PROTOTYPE 徽标已实现。
+10/15 起，FILE 原型自动轮询直接在内存中检查，只原子更新 `<root>/<session前8位>/latest_packet.json`；
+手动 `POST /v1/check` 携 `trigger_ref` 时，完整产物保存到同会话的 `check-<check_id六位>/`。
+`--archive-every-round` 启用逐轮完整归档。分类器在会话中复用，修改权重后须重启服务。
+非原型后端仍须逐轮保存 C04 Q3 capture 证据；当前真实硬件后端尚未实现。
 它没有真实 HDMI/DDR/MMIO/CNN 后端，`/v1/config` 仅推进软件配置号，不证明 R12 硬件应用；见[整合证据](../../data/logs/2026-10-12-pr-review/README.md)。
 工单由服务启动参数提供，HTTP配置仅接收control；在线工单编辑和请求重试幂等尚未实现。
 下列 notebook／通用工具仍是规划，不能由 mock 或训练演练推断已实现。
@@ -25,6 +29,8 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
 见[模块三逐层参考](../../docs/module3-prototype-reference.md)。`src/coprocessor/` 另有完整 INT8 整网参考、算子 RTL 与诊断黄金；正式 INT8 模型和 MMIO/DMA 后端尚未实现，见[计算链现状](../coprocessor/README.md)。
 
 10/13 新增 `c01_capture.py`：custom DDR 单帧候选所有权驱动，完整转移自动停机后 invalidate 并复制；七组离板异常测试通过，未接入 LIVE 服务。板端入口 `sim/scripts/c01_ddr_onboard.py` 的两次实测均启动前失败并安全恢复，最终驱动修正尚待返板，见[DDR证据](../../data/logs/2026-10-13-ddr-single-frame/README.md)。
+10/15 新增 `c01_park_capture.py` 备选驱动，显式 `C01_CAPTURE_MODE=park` 才启用；仅通过离板替身，
+实际 IRQ/槽/写完成绑定及 N03 仍待验证，见[所有权候选说明](../../docs/c01-ddr-frame-ownership-v0.md)。
 
 后续新增 `dataset_manifest.py`、`dataset_audit.py` 和仓库 CLI：720p 采集清单、
 会话/精确重复像素/实物编号泄漏、覆盖统计和来源声明已用测试夹具验证，理解题及补测已通过。

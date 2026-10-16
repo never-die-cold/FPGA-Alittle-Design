@@ -1,0 +1,22 @@
+HOST_STARTED_UTC=2026-10-16T10:53:57.7698024Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=tail -12 /home/xilinx/vision_m2/live-server.log; ls /home/xilinx/vision_m2/live-artifacts/*/ 2>/dev/null | head
+tail -12 /home/xilinx/vision_m2/live-server.log; ls /home/xilinx/vision_m2/live-artifacts/*/ 2>/dev/null | head; printf '\n__PYNQ_RC_0e9a620c30f645a787e800f5e51caf0f=%d\n' $?
+[?2004lLIVE SERVICE (backend=PARK, prototype=True): http://0.0.0.0:8765/v1/status
+STAGE: HWH metadata parse before programming
+STAGE: HWH layout accepted; candidate download begins
+STAGE: candidate download returned
+ip_dict:
+  pipe @ 0x40000000 range 0x10000
+  ps7 @ 0x00000000 range 0x0
+axi_regs 段: pipe @ 0x40000000
+PASS: load
+R11 busy=0 R12 applied=0
+commit 配置号=1 status={'busy': False, 'applied_config_id': 1}
+PASS: smoke（视频在位，帧首整组应用已确认）
+check-000001
+session.json
+
+__PYNQ_RC_0e9a620c30f645a787e800f5e51caf0f=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

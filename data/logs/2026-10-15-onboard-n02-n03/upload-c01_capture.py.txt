@@ -1,0 +1,10 @@
+SOURCE=data/logs/2026-10-15-onboard-n02-n03/single-inputs/c01_capture.py
+TARGET=/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_capture.py
+SHA256=1f11aefdc11805387b0c345583828fd733e5e38b0b0e043b0510808f648e8430
+BASE64_SENT=3792
+saved=$(stty -g); (trap 'stty "$saved"' EXIT; stty raw -echo; timeout --foreground -k 3s 180s python3 -c 'import base64,gzip;exec(gzip.decompress(base64.b64decode("H4sIAAAAAAAACo1UTY/TMBC991cMPqUQsh+0PSybQyVW4gSr7YKEEKom9aQZmtiR7ba7++uR7aTJogrRSzOfnvf8xkKIB9oQHwi0Iti+cHtRoKXFDEquCfSBDCAYPMK35cPjR1DkPd59NOwIEAqNRobsTAgx4abVxkFs0lu+b/9doa1qLnrTPttJaXQDLTrvh85/j66aTCaSSjBxwoTURkuSa8svlPqZui9b4fV8kYIk61ihY61ScHpHKgXrDGGTf9GKpjcTAAAuQWkHl3AL44Zwm8PVAt7C1eX1rP/Tps/NT+edS4yd/c8gW4LvWO/pzhhtEuEMKluSgVCs9w50CQbVlsQ0lMURIfdUZNZJVlmxL30Fl32QLXgIQLWlzhdqW8PKJQErvAOxfrhbfvohUijrva3yR7OneMam2qudhRx+/gq2oQZZsdpC/oqFEDxW/upPKQO40MUPGgbIDKFMGlbJYj7/sEiHimk8dMR2qBwanWfKVv7ivc6gxedao+wYGhBk2LakZBKsITjAeZ9DTWoc7+BBDoUQ2W/NXdTGsESHkAeFZpI2umkNWZtE/WbFYuad8iS+FA5Ys0RHkd3YhMtwqu81hTcjrWjT6z2LKo05WUVPkrdkXRLyY+xfKgrbWJPauupi9Xl5PV9Aw7ZBt6k6khyaLTnIw+Yko10Yh7MWDSmXNTvJJomGDUhSoCe2bq13I9kc2VV9pW5JJeKpEFNA63Xc7t0wMZedKwvvwkDFiZdzt/919erqA8hQ32Hi8m/6umG89NbFsyObTP+TzeEsPFB8sOA8k3GpxP1ytbqJcvTJIu2YSAdMw9szXrg/gQi6uVUFAAA=")));receive(3792,9515,"1f11aefdc11805387b0c345583828fd733e5e38b0b0e043b0510808f648e8430","/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_capture.py","__UART_c1c36dfd4a9b498694c509e1c5795d06")'); printf '\n__UART_c1c36dfd4a9b498694c509e1c5795d06_EXIT=%d\n' $?
+[?2004l__UART_c1c36dfd4a9b498694c509e1c5795d06_READY
+PASS: UART file /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_capture.py 9515 1f11aefdc11805387b0c345583828fd733e5e38b0b0e043b0510808f648e8430
+
+__UART_c1c36dfd4a9b498694c509e1c5795d06_EXIT=0
+[?2004hxilinx@pynq:~$ 

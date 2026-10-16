@@ -1,0 +1,21 @@
+EVIDENCE_DIR=E:\Projects\FPGA-Alittle-Design\data\logs\cnn-ooc-1cefffc05185438195b8803d87fc11df
+Wrote PlaceStorage: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.217 . Memory (MB): peak = 2183.387 ; gain = 0.000
+Wrote Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.011 . Memory (MB): peak = 2183.387 ; gain = 0.000
+Wrote Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.006 . Memory (MB): peak = 2183.387 ; gain = 0.000
+Write Physdb Complete: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.434 . Memory (MB): peak = 2183.387 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'E:/Projects/FPGA-Alittle-Design/data/logs/cnn-ooc-1cefffc05185438195b8803d87fc11df/reports/cnn_ooc.dcp' has been generated.
+# set paths [get_timing_paths -delay_type max -max_paths 1]
+# if {![llength $paths]} { error "no setup timing path" }
+# set slack [get_property SLACK [lindex $paths 0]]
+# set hold_paths [get_timing_paths -delay_type min -max_paths 1]
+# if {![llength $hold_paths]} { error "no hold timing path" }
+# set hold_slack [get_property SLACK [lindex $hold_paths 0]]
+# set dsp [llength [get_cells -hierarchical -filter {REF_NAME =~ DSP48*}]]
+WARNING: [Vivado_Tcl 4-49] No violations matched 'SEVERITY == Error || SEVERITY == "Critical Warning"'.
+# set severe [get_drc_violations -filter {SEVERITY == Error || SEVERITY == "Critical Warning"}]
+# puts "CNN_OOC_RESULT WNS=$slack WHS=$hold_slack DSP=$dsp SEVERE_DRC=[llength $severe]"
+CNN_OOC_RESULT WNS=0.317 WHS=0.123 DSP=136 SEVERE_DRC=0
+# if {$slack < 0 || $hold_slack < 0 || $dsp > 220 || [llength $severe]} { error "CNN OOC timing/resource/DRC gate failed; preserve reports" }
+# puts "PASS: CNN operator OOC setup/hold timing, DSP resource and severe DRC gate"
+PASS: CNN operator OOC setup/hold timing, DSP resource and severe DRC gate
+INFO: [Common 17-206] Exiting Vivado at Thu Oct 15 22:31:55 2026...

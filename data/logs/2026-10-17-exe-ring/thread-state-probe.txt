@@ -1,0 +1,16 @@
+HOST_STARTED_UTC=2026-10-16T10:55:02.1062779Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=top -b -n1 | grep -E "python|PID" | head -5; ls -la /home/xilinx/vision_m2/live-artifacts/*/check-000001/ 2>/dev/null
+top -b -n1 | grep -E "python|PID" | head -5; ls -la /home/xilinx/vision_m2/live-artifacts/*/check-000001/ 2>/dev/null; printf '\n__PYNQ_RC_d1070239de894885a10e836afe62ee97=%d\n' $?
+[?2004l  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+  749 root      20   0   23876  16384   7680 S   0.0   3.3   0:01.44 python3
+ 4109 root      20   0  385088 142948  77696 S   0.0  28.4   3:24.91 python3
+total 1260
+drwxr-xr-x 2 root root    4096 Sep 22 01:54 .
+drwxr-xr-x 3 root root    4096 Sep 22 01:54 ..
+-rw-r--r-- 1 root root 1274342 Sep 22 01:54 capture.png
+-rw-r--r-- 1 root root      65 Sep 22 01:54 capture.sha256
+
+__PYNQ_RC_d1070239de894885a10e836afe62ee97=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

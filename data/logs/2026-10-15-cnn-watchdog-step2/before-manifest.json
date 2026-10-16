@@ -1,0 +1,30 @@
+{
+  "git_base": "891cba26bc294f157227e7dcd158d8ec81830f2e",
+  "includes_uncommitted_step1": true,
+  "files": [
+    {
+      "path": "src/coprocessor/conv_engine.v",
+      "sha256": "f7fb387872613ca9df56ab63d23475d22de6b1b9a75403ab1adc1fbac12b9ac7"
+    },
+    {
+      "path": "src/coprocessor/cnn_sequencer.v",
+      "sha256": "8765e582907eb2061d8f665a1126473172ee154e70b9c3fd8e5144d1fb608b12"
+    },
+    {
+      "path": "sim/coprocessor/tb_conv_engine.v",
+      "sha256": "6146c7c2ade2814e3d10cdc295d23ab733522aaa050f77eb6e7803268334ab0a"
+    },
+    {
+      "path": "sim/coprocessor/tb_cnn_sequencer.v",
+      "sha256": "537a41989f2cd439fdcef968ef9c440480920b382b085d3c0d7f6e4e7d8adec0"
+    },
+    {
+      "path": "sim/scripts/run_coprocessor_iverilog.sh",
+      "sha256": "bae236a4f997cb138f49499785edfc0c93e62cbaf8ce7a4302622c4576d1c5ce"
+    },
+    {
+      "path": "sim/scripts/run_iverilog.sh",
+      "sha256": "2b6071ad44c26827e17f89992be2b3a3c02dcc3f18c0291dac8d1c515ac9d387"
+    }
+  ]
+}

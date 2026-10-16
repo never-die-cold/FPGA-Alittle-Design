@@ -9,12 +9,13 @@ import threading
 import time
 import urllib.request
 from pathlib import Path
+from unittest.mock import patch
 
 root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(root / "src/pynq_host"))
 sys.path.insert(0, str(root / "src/vision_client"))
 from vision_mock_service import make_server
-from rounds import RemoteRounds, WAITING
+from rounds import AsyncRemoteRounds, RemoteRounds, WAITING, http_json
 
 
 def start_server(port):
@@ -90,6 +91,46 @@ def main():
         server.shutdown()
         server.server_close()
     print("PASS: round overlay trigger/throttle/manual/stale/config-change/outage/session-recovery/events")
+    server = start_server(0)
+    release, entered = threading.Event(), threading.Event()
+    remote = AsyncRemoteRounds(f"http://127.0.0.1:{server.server_port}", max_age=1.0)
+    calls = []
+    def delayed(url, body=None):
+        if url.endswith("/v1/check"):
+            calls.append(body)
+            entered.set()
+            assert release.wait(3), "test worker was not released"
+        return http_json(url, body)
+    try:
+        remote.handshake()
+        with patch("rounds.http_json", side_effect=delayed):
+            started = time.perf_counter()
+            remote.poll(time.time(), 60)
+            assert time.perf_counter() - started < .5
+            assert entered.wait(1)
+            assert remote.trigger(time.time())
+            for _ in range(30):
+                remote.poll(time.time(), 60)
+                remote.overlay(time.time())
+            assert len(calls) == 1, "concurrent network checks"
+            release.set()
+            deadline = time.monotonic() + 3
+            while remote.packet is None or remote.packet["check_id"] != 2:
+                remote.poll(time.time(), 60)
+                assert time.monotonic() < deadline
+                time.sleep(.005)
+            assert remote.last_round_manual and len(calls) == 2
+            entered.clear(); release.clear(); remote.last_trigger = 0
+            remote.poll(time.time(), 60)
+            assert entered.wait(1)
+            remote.received_at = time.time() - 2
+            assert remote.overlay(time.time()) == (False, WAITING)
+            release.set()
+            remote.close(wait=True)
+    finally:
+        release.set(); remote.close(wait=True)
+        server.shutdown(); server.server_close()
+    print("PASS: async GUI polling remains responsive, queues manual checks, expires stale overlays and closes")
 
 
 if __name__ == "__main__":

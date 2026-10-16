@@ -1,0 +1,22 @@
+[
+  {
+    "path": "models/cnn-border-fill-best.pt",
+    "sha256": "70fe3dc35bb592481f43e2086efe46b4ca5d2788d53a2b318d23a7169f7ecec6",
+    "bytes": 139822
+  },
+  {
+    "path": "data/evidence/2026-10-10-offline-inspection/fixtures/synthetic.png",
+    "sha256": "bb9e05f3893353de880d310ecdbfbf603b529407a1c503c17e2213358ff0d73b",
+    "bytes": 8171
+  },
+  {
+    "path": "src/riscv_fw/coremark.hex",
+    "sha256": "ed229725ad95d0038af83b745704504c53b6176f6e927d9a147a34a39c762b11",
+    "bytes": 36846
+  },
+  {
+    "path": "src/riscv_fw/bench_v0_1.hex",
+    "sha256": "d4d5390c045e199953cc398f538f581fb0bfcbd993e4ad857dec04a794ef156f",
+    "bytes": 36846
+  }
+]

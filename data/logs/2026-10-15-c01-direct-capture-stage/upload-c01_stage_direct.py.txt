@@ -1,0 +1,9 @@
+SOURCE=E:\Projects\FPGA-Alittle-Design\data\logs\2026-10-15-c01-direct-capture-stage\inputs\c01_stage_direct.py
+TARGET=/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_stage_direct.py
+SHA256=ea9b7d5ada4dd21deaa9d459d2d8f0bd5ddb1593cea32e976211230ae4de6457
+BASE64_SENT=2868
+saved=$(stty -g); (trap 'stty "$saved"' EXIT; stty raw -echo; timeout --foreground -k 3s 180s python3 -c 'import base64,gzip;exec(gzip.decompress(base64.b64decode("H4sIAAAAAAAEAI1US4/TMBC+91cMPiUQvA92eyjbQyVW4gSr7YKEEKqcetKYJnZkO213fz1+5LWoQuSQZN4zn78xIeQRtygOCEoi7F5Ec5Ezg/MbKETllAfUwECzI3xbPT59BIle49VHLSw6W66Y5sGbEkJmom6UthCT9JLP2/+XzJSVyHvRPJtZoVUNDbNeD53+wYmz2YxjATp2mKDcKo58Y8QLZr6n7s+U7Pp2ngFHY4VkViiZgVV7dB9jNbJ6+cVNly5m4B5RgFQWLuEOpgnhbglXc3gLV5fXN/1H6d53OdQ75xgz+0czYRC+s6rFe62VTojVTJrCgRaCVWtBuZGY3CFJQ1hsEZYeCmosF5LmbeEjXKudURjwIwBWLnvUhdhGC2mTMCu8A7J5vF99+kEyKKrWlMsn3WKssS1buTeuxs9fQdZYMyGF3DnVFIVgPJb+6AeXcbiQxTcaGqDuxZNayGR+e/vB4T9EpOkQ0qEdIsdE55EypT94zzNHhudKMU7S17UNZU2DkidBGo3jOO+XUKGc2rvxXNs5IfS3Ep3VRDNnljmbZyjluFV1o9GYJPKX5vMbr+QD+TI4sEq4IIzopj2nfFWfK4U3E644AnV8p5Gl0YeWeOJi5/iaBP9o+xeLwja6GjtbXqw/r5w31MLUzG7LDiTL9A6tG8VvTjLZhamZNkyjtLTec6GTKJgwSQZ4EsZu1H5Cm6OwZR+pHPAJOeUkBWY8j5vWLqbnHFU03AsjFAMu507/6/rV0YchQzwZcP0Lvq4ZT71N/mzRJOl/ojnWYgeMFxacRzIuFXlYrdeLSEfv7LYqFs/Gmca7Z7pwfwCBCLq5VQUAAA==")));receive(2868,5132,"ea9b7d5ada4dd21deaa9d459d2d8f0bd5ddb1593cea32e976211230ae4de6457","/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_stage_direct.py","__UART_f69222bd7b314e8cb5210cce352c2057")'); printf '\n__UART_f69222bd7b314e8cb5210cce352c2057_EXIT=%d\n' $?
+[?2004l__UART_f69222bd7b314e8cb5210cce352c2057_READY
+PASS: UART file /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_stage_direct.py 5132 ea9b7d5ada4dd21deaa9d459d2d8f0bd5ddb1593cea32e976211230ae4de6457
+
+__UART_f69222bd7b314e8cb5210cce352c2057_EXIT=0

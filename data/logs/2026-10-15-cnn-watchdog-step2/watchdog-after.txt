@@ -1,0 +1,7 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+PASS: full-shape C02 convolution/FC diagnostics ['padding_tail', 'conv1', 'conv2', 'conv3', 'conv4', 'fc']
+PASS: conv_engine watchdog 18 exact-cycle cases; CE pause, latched budget and terminal strobes
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_conv_engine.v:149: $finish called at 946000 (1ps)
+PASS: full diagnostic integer network golden {'pattern': {'class_id': 0, 'margin_q': 0, 'score_q15': 0, 'low_conf': True}, 'zero': {'class_id': 2, 'margin_q': 2, 'score_q15': 258, 'low_conf': True}}
+PASS: cnn_sequencer watchdog 18 exact-cycle cases; CE pause, latched budget and terminal strobes
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cnn_sequencer.v:144: $finish called at 946000 (1ps)

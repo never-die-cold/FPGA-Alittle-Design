@@ -1,0 +1,71 @@
+{
+  "git_base": "891cba26bc294f157227e7dcd158d8ec81830f2e",
+  "uncommitted": true,
+  "exit_codes": {
+    "cnn-all": 0,
+    "cnn-ooc": 0,
+    "cnn-ooc-gate176": 0,
+    "rtl-focused": 0,
+    "rtl-all": 0,
+    "soc-build": 0,
+    "inspection-all": 0,
+    "vision-python-final": 0,
+    "service-engine-final": 0,
+    "client-build": 0,
+    "git-diff-check": 0,
+    "source-stability-check": 0
+  },
+  "coremark_cycles": [
+    19057438,
+    17114141,
+    16335562,
+    16232079
+  ],
+  "benchmark_cycles": [
+    2850,
+    2423,
+    2380,
+    2351
+  ],
+  "raw_pass_lines": 133,
+  "cnn": {
+    "clock_mhz": 100,
+    "kind": "CONTROLLER_ONLY_OOC",
+    "dsp": 136,
+    "lut": 4540,
+    "ff": 4037,
+    "bram": 0,
+    "wns_ns": 0.317,
+    "whs_ns": 0.123,
+    "severe_drc": 0,
+    "cycle_count_per_diagnostic_network": 472593,
+    "golden_elements_per_network": 73795,
+    "parameter_reads_per_network": 10
+  },
+  "soc": {
+    "clock_mhz": 40,
+    "profile": "bht2",
+    "wns_ns": 6.613,
+    "whs_ns": 0.058,
+    "lut": 6846,
+    "ff": 859,
+    "bram36_tiles": 8,
+    "dsp": 0
+  },
+  "vision_python_groups": 19,
+  "inspection_python_groups": 14,
+  "verified_input_files": 44,
+  "board_verified": false,
+  "unimplemented": [
+    "synchronous BRAM DMEM",
+    "CDC/reset rewrite",
+    "CNN physical memories/MMIO/DMA/cop_top/system integration"
+  ],
+  "not_board_verified": [
+    "C01 park candidate",
+    "N03",
+    "real UVC frame rate",
+    "integrated system timing/throughput"
+  ],
+  "input_hash_checks": 89
+}

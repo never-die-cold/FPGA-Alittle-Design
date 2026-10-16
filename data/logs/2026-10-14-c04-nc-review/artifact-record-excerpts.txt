@@ -1,0 +1,49 @@
+src/pynq_host/inspection_run.py-28-                   "inspection_artifacts", "roi_preprocess")]
+src/pynq_host/inspection_run.py-29-    code_paths += ["sim/vision/localization_opencv.py", "sim/vision/train_fastener_classifier.py"]
+src/pynq_host/inspection_run.py:30:    provenance = {"source_sha256": digest(raw), "model": classifier.metadata,
+src/pynq_host/inspection_run.py-31-                  "order": order, "min_score": min_score, "max_targets": max_targets,
+src/pynq_host/inspection_run.py-32-                  "code_sha256": {name: digest((root / name).read_bytes()) for name in code_paths},
+--
+src/pynq_host/inspection_run.py-52-        artifacts.append(save_png(folder, name + ".png", crop))
+src/pynq_host/inspection_run.py-53-        artifacts.append(save_bytes(folder, name + ".hex", "".join(f"{p:02x}\n" for p in crop.flat).encode()))
+src/pynq_host/inspection_run.py:54:        target.update(roi_path=name + ".png", roi_pixels_sha256=digest(crop.tobytes()))
+src/pynq_host/inspection_run.py-55-    result["artifacts"] = artifacts
+src/pynq_host/inspection_run.py-56-    payload = (json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False) + "\n").encode("utf-8")
+src/pynq_host/inspection_run.py-57-    (folder / "result.pending").write_bytes(payload)
+src/pynq_host/inspection_run.py:58:    (folder / "result.sha256").write_text(digest(payload) + "\n", encoding="ascii")
+src/pynq_host/inspection_run.py-59-    (folder / "result.pending").replace(folder / "result.json")
+src/pynq_host/inspection_run.py-60-    return result
+--
+src/pynq_host/inspection_run.py-78-        return 1
+src/pynq_host/inspection_run.py-79-    decision = result["decision"]
+src/pynq_host/inspection_run.py:80:    print(f"FILE_REPLAY: {decision['verdict']} targets={result['target_count']} actual={decision['actual']}")
+src/pynq_host/inspection_run.py-81-    print(f"result={args['output'] / args['request_id'] / 'result.json'}")
+src/pynq_host/inspection_run.py-82-    return 0
+--
+src/vision_client/rounds.py-47-    extra = [f"+{name}x{n}" for name, n in decision["extra"].items() if n]
+src/vision_client/rounds.py-48-    return {"verdict": packet["status"], "delta": " ".join(missing + extra),
+src/vision_client/rounds.py:49:            "targets": f"{sum(decision['actual'].values())}/{sum(decision['expected'].values())}",
+src/vision_client/rounds.py-50-            "labels": labels}
+src/vision_client/rounds.py-51-
+--
+src/vision_client/records.py-43-        self.shots.mkdir(parents=True, exist_ok=True)
+src/vision_client/records.py-44-        self.save_image = save_image
+src/vision_client/records.py:45:        self.keys = set()
+src/vision_client/records.py-46-        self.count = 0
+src/vision_client/records.py-47-
+src/vision_client/records.py-48-    def accept(self, packet):
+src/vision_client/records.py:49:        return (packet["session_id"], packet["check_id"]) not in self.keys
+src/vision_client/records.py-50-
+src/vision_client/records.py-51-    def write(self, packet, frame, age_s=None):
+--
+src/vision_client/records.py-55-        """
+src/vision_client/records.py-56-        key = (packet["session_id"], packet["check_id"])
+src/vision_client/records.py:57:        if key in self.keys:
+src/vision_client/records.py-58-            return None
+src/vision_client/records.py-59-        prefix = source_prefix(packet["mode"], bool(packet.get("prototype", False)))
+--
+src/vision_client/records.py-82-        with (self.dir / "records.jsonl").open("a", encoding="utf-8") as handle:
+src/vision_client/records.py-83-            handle.write(json.dumps(row, ensure_ascii=False) + "\n")
+src/vision_client/records.py:84:        self.keys.add(key)
+src/vision_client/records.py-85-        self.count += 1
+src/vision_client/records.py-86-        return shot

@@ -1,0 +1,26 @@
+$packageRoot = [IO.Path]::GetFullPath((Join-Path (Get-Location) 'sim/build/nc-offboard-release-20261014'))
+$zipPath = [IO.Path]::GetFullPath((Join-Path (Get-Location) 'sim/build/nc-offboard-release-20261014.zip'))
+$manifest = Get-Content -Raw -LiteralPath (Join-Path $packageRoot 'manifest.json') | ConvertFrom-Json
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+$archive = [IO.Compression.ZipFile]::OpenRead($zipPath)
+try {
+    $prefix = 'nc-offboard-release-20261014/'
+    $expectedNames = @($manifest | ForEach-Object { $prefix + $_.path.Replace('\','/') })
+    $expectedNames += $prefix + 'manifest.json'
+    $actualNames = @($archive.Entries | Where-Object { -not $_.FullName.EndsWith('/') } | ForEach-Object { $_.FullName })
+    if (@(Compare-Object $expectedNames $actualNames).Count -ne 0) { throw 'ZIP file inventory differs from manifest' }
+    foreach ($row in $manifest) {
+        $entry = $archive.GetEntry($prefix + $row.path.Replace('\','/'))
+        if ($entry.Length -ne $row.bytes) { throw ('ZIP length mismatch: ' + $row.path) }
+        $stream = $entry.Open()
+        $hasher = [Security.Cryptography.SHA256]::Create()
+        try { $digest = [Convert]::ToHexString($hasher.ComputeHash($stream)) } finally { $stream.Dispose(); $hasher.Dispose() }
+        if ($digest -ne $row.sha256) { throw ('ZIP digest mismatch: ' + $row.path) }
+    }
+    $entry = $archive.GetEntry($prefix + 'manifest.json')
+    $stream = $entry.Open()
+    $hasher = [Security.Cryptography.SHA256]::Create()
+    try { $digest = [Convert]::ToHexString($hasher.ComputeHash($stream)) } finally { $stream.Dispose(); $hasher.Dispose() }
+    if ($digest -ne (Get-FileHash -LiteralPath (Join-Path $packageRoot 'manifest.json') -Algorithm SHA256).Hash) { throw 'ZIP manifest mismatch' }
+    Write-Output ('PASS: ZIP inventory and SHA256; ' + @($manifest).Count + ' payload files plus manifest')
+} finally { $archive.Dispose() }

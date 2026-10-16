@@ -1,0 +1,29 @@
+HOST_STARTED_UTC=2026-10-15T16:12:50.5276642Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627 && source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u c01_warmup_observer.py'
+sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627 && source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u c01_warmup_observer.py'; printf '\n__PYNQ_RC_1163f30910c1457eb9b49e265318c704=%d\n' $?
+[?2004lSTAGE: HWH metadata parse before programming
+STAGE: HWH layout accepted; candidate download begins
+STAGE: candidate download returned
+PRECHECK: video locked and ticking
+HALTED_BASELINE: {"cap4": "0x3", "seq": 31, "rej": 0, "epoch": 0, "ovf": 0, "loss": 0, "cr": "0x10002", "sr": "0x14811", "park": "0x0", "r11": 0, "r12": 0}
+JUST_STARTED: {"cap4": "0x3", "seq": 31, "rej": 0, "epoch": 0, "ovf": 0, "loss": 0, "cr": "0x11001", "sr": "0x14810", "park": "0x100", "r11": 0, "r12": 0}
+OBSERVER-OUTCOME: cap_lock_fault_at_0.0s clears=0
+AFTER_STOP: {"cap4": "0x9", "seq": 31, "rej": 1, "epoch": 1, "ovf": 1, "loss": 0, "cr": "0x11000", "sr": "0x10001", "park": "0x100", "r11": 0, "r12": 0}
+ip_dict:
+  pipe @ 0x40000000 range 0x10000
+  ps7 @ 0x00000000 range 0x0
+axi_regs 段: pipe @ 0x40000000
+PASS: load
+R11 busy=0 R12 applied=0
+NOVIDEO: commit 未在帧首确认——寄存器通路 OK 但无输入视频（查 HDMI IN 源/线材）
+R11 busy=1 R12 applied=0
+R11 busy=1 R12 applied=0
+R11 busy=0 R12 applied=1
+commit 配置号=2 status={'busy': False, 'applied_config_id': 2}
+PASS: smoke（视频在位，帧首整组应用已确认）
+RESULT: {"kind": "C01_WARMUP_RUNSTATE_OBSERVER_NOT_FORMAL_N03", "boot": "c291b2c8-0d7b-49e9-9511-4f5c66d2e37b", "samples_head": [{"t": 0.0, "sr": 65536, "cap4": 9, "seq": 31, "rej": 1, "epoch": 1, "ovf": 1, "loss": 0, "park": 256, "cr": 69633, "r11": 0}], "samples_tail": [{"t": 0.0, "sr": 65536, "cap4": 9, "seq": 31, "rej": 1, "epoch": 1, "ovf": 1, "loss": 0, "park": 256, "cr": 69633, "r11": 0}], "warmup_clears": 0, "outcome": "cap_lock_fault_at_0.0s", "stopped": true, "restore": {"restore_error": null, "smoke": "PASS"}}
+
+__PYNQ_RC_1163f30910c1457eb9b49e265318c704=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

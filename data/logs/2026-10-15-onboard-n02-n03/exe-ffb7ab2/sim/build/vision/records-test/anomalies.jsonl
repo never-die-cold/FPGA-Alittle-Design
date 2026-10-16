@@ -1,0 +1,4 @@
+{"schema_version": 2, "mode": "MOCK", "prototype": false, "recorded_at": "2026-10-15T23:33:23", "kind": "overlay_outage", "prev": "ok", "check_id": 4, "fails": 3, "screenshot": "screenshots/mock_anomaly_0001.png"}
+{"schema_version": 2, "mode": "LIVE", "prototype": false, "recorded_at": "2026-10-15T23:33:23", "kind": "overlay_ok", "prev": "outage", "check_id": 4, "fails": 0, "screenshot": "screenshots/anomaly_0002.png"}
+{"schema_version": 2, "mode": "LIVE", "prototype": true, "recorded_at": "2026-10-15T23:33:23", "kind": "overlay_stale", "prev": "ok", "check_id": 4, "fails": 0, "screenshot": "screenshots/proto_anomaly_0003.png"}
+{"schema_version": 2, "mode": "LIVE", "prototype": false, "recorded_at": "2026-10-15T23:33:23", "kind": "overlay_ok", "prev": "stale", "check_id": 4, "fails": 0, "screenshot": "screenshots/anomaly_0004.png"}

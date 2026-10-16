@@ -1,0 +1,38 @@
+[
+  {
+    "file": "cnn_sequencer.v",
+    "matches_old_ooc": true
+  },
+  {
+    "file": "conv_engine.v",
+    "matches_old_ooc": true
+  },
+  {
+    "file": "int8_gap.v",
+    "matches_old_ooc": true
+  },
+  {
+    "file": "int8_logits.v",
+    "matches_old_ooc": true
+  },
+  {
+    "file": "int8_mac.v",
+    "matches_old_ooc": true
+  },
+  {
+    "file": "int8_requant_pipeline.v",
+    "matches_old_ooc": true
+  },
+  {
+    "file": "int8_requant.v",
+    "matches_old_ooc": true
+  },
+  {
+    "file": "mac_array_pipeline.v",
+    "matches_old_ooc": true
+  },
+  {
+    "file": "mac_array.v",
+    "matches_old_ooc": true
+  }
+]

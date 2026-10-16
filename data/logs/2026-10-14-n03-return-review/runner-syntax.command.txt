@@ -1,0 +1,1 @@
+from pathlib import Path; files = ["src/pynq_host/c01_capture.py", "sim/scripts/c01_ddr_onboard.py", "sim/scripts/c01_status_onboard.py"]; [(compile(Path(p).read_bytes(), p, "exec"), print("PASS: syntax only; not executed", p)) for p in files]

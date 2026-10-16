@@ -1,0 +1,20 @@
+[
+  {
+    "path": "src/pynq_host/c01_capture.py",
+    "retained": "c01_capture.py",
+    "bytes": 9515,
+    "sha256": "1F11AEFDC11805387B0C345583828FD733E5E38B0B0E043B0510808F648E8430"
+  },
+  {
+    "path": "sim/scripts/c01_ddr_onboard.py",
+    "retained": "c01_ddr_onboard.py",
+    "bytes": 5446,
+    "sha256": "E822A70800A923CCDB3CE45496E71342B032035389DBA935D6FAC6F09EDD5646"
+  },
+  {
+    "path": "sim/scripts/c01_status_onboard.py",
+    "retained": "c01_status_onboard.py",
+    "bytes": 6667,
+    "sha256": "894BF7DC01BA9260C48CDE7AB0B1AECDD6BFA157F7FA43252170CEA1752E1810"
+  }
+]

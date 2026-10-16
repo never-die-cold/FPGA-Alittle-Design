@@ -1,0 +1,61 @@
+# --- Vivado / XSim 生成物 ---
+.Xil/
+xsim.dir/
+*.jou
+*.log
+!report/**/*.log
+!data/logs/**/*.log
+*.wdb
+*.wcfg
+*.vcd
+*.pb
+*.str
+*.dcp
+*.bit
+webtalk*
+clockInfo.txt
+/tight_setup_hold_pins.txt
+/retry_open_fs.log
+
+# 注意：*.hex / *.coe（BRAM 预载、测试向量）需要入库，不要忽略
+
+# --- RISC-V 固件编译产物（hex 与 dis 作为测试证据入库，见上） ---
+src/riscv_fw/*.elf
+src/riscv_fw/*.bin
+src/riscv_fw/*.o
+
+# --- 转发专项测试程序编译产物（sim/riscv/fwd/，hex 与 dis 入库） ---
+sim/riscv/fwd/*.elf
+sim/riscv/fwd/*.bin
+
+# --- iverilog 仿真产物 ---
+sim/build/
+
+# --- riscv-arch-test 第三方套件（用 sim/scripts/fetch_arch_test.sh 下载，不入库） ---
+sim/arch_test/suite/
+
+# --- Python ---
+__pycache__/
+*.pyc
+.venv/
+
+# --- 编辑器 / 系统 / 本地工具 ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+.zcode/
+.zcodeignore
+
+# --- 模块二 OOC 综合输出（生成物，正式归档在 data/logs/2026-09-29-vision-m2-kickoff/vivado-ooc/） ---
+build/reports/vision_ooc/
+
+# --- 协作记录精简稿（本地工作稿，不入库） ---
+report/llm_log/digest.md
+
+# --- Vivado 附带产物（PS 配置摘要等，不入库） ---
+NA/
+
+# --- 核对比 Fmax 跑分产物（正式证据归档 data/logs/2026-10-03-picorv32-compare/） ---
+build/run/
+build/reports/fmax/

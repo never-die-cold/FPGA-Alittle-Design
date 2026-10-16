@@ -1,0 +1,3 @@
+# Keep raw logs and snapshots byte-for-byte; Markdown remains normal text.
+* -text -whitespace
+*.md text eol=lf whitespace

@@ -1,0 +1,42 @@
+src/pynq_host/inspection_rules.py-5-
+src/pynq_host/inspection_rules.py-6-
+src/pynq_host/inspection_rules.py:7:def judge(targets, order, min_score, max_targets=16):
+src/pynq_host/inspection_rules.py-8-    """Class counts and signed deltas; uncertainty always requests reinspection."""
+src/pynq_host/inspection_rules.py:9:    if (type(max_targets) is not int or not 1 <= max_targets <= 16
+src/pynq_host/inspection_rules.py-10-            or not isinstance(order, dict) or set(order) != set(CLASSES)
+src/pynq_host/inspection_rules.py-11-            or any(type(value) is not int or value < 0 for value in order.values())
+src/pynq_host/inspection_rules.py:12:            or not 1 <= sum(order.values()) <= max_targets):
+src/pynq_host/inspection_rules.py-13-        raise ValueError("invalid work order or target limit")
+src/pynq_host/inspection_rules.py-14-    if type(min_score) not in (int, float) or not math.isfinite(min_score) or not 0 <= min_score <= 1:
+--
+src/pynq_host/inspection_rules.py-18-    actual = dict.fromkeys(CLASSES, 0)
+src/pynq_host/inspection_rules.py-19-    reasons = set()
+src/pynq_host/inspection_rules.py:20:    if len(targets) > max_targets:
+src/pynq_host/inspection_rules.py:21:        reasons.add("target_limit")
+src/pynq_host/inspection_rules.py-22-    for target in targets:
+src/pynq_host/inspection_rules.py-23-        if not isinstance(target, dict):
+--
+src/pynq_host/inspection_replay.py-11-
+src/pynq_host/inspection_replay.py-12-
+src/pynq_host/inspection_replay.py:13:def inspect_frame(frame, classifier, order, min_score, max_targets=16):
+src/pynq_host/inspection_replay.py:14:    empty = judge([], order, min_score, max_targets)
+src/pynq_host/inspection_replay.py-15-    if (not isinstance(frame, np.ndarray) or frame.dtype != np.uint8
+src/pynq_host/inspection_replay.py-16-            or frame.ndim != 3 or frame.shape[2] != 3 or min(frame.shape[:2]) < 1):
+--
+src/pynq_host/inspection_replay.py-21-              "width": width, "height": height, "bbox_format": "XYXY_HALF_OPEN",
+src/pynq_host/inspection_replay.py-22-              "preprocess": PREPROCESS_VERSION, "model": classifier.metadata,
+src/pynq_host/inspection_replay.py:23:              "parameters": {"min_score": min_score, "max_targets": max_targets,
+src/pynq_host/inspection_replay.py-24-                             "color_threshold": 22, "min_area_ratio": 0.00008},
+src/pynq_host/inspection_replay.py:25:              "target_count": len(boxes), "targets": []}
+src/pynq_host/inspection_replay.py:26:    if len(boxes) > max_targets:
+src/pynq_host/inspection_replay.py:27:        result["decision"] = {**empty, "verdict": "RECHECK", "actual": None,
+src/pynq_host/inspection_replay.py-28-                              "delta": None, "missing": None, "extra": None,
+src/pynq_host/inspection_replay.py:29:                              "reasons": ["target_limit"]}
+src/pynq_host/inspection_replay.py-30-        return result, []
+src/pynq_host/inspection_replay.py-31-    crops = [preprocess(frame, box)[0] for box in boxes]
+--
+src/pynq_host/inspection_replay.py-37-        result["targets"].append({**prediction, "target_id": identity, "bbox": list(box),
+src/pynq_host/inspection_replay.py-38-                                  "touches_border": x0 == 0 or y0 == 0 or x1 == width or y1 == height})
+src/pynq_host/inspection_replay.py:39:    result["decision"] = judge(result["targets"], order, min_score, max_targets)
+src/pynq_host/inspection_replay.py-40-    return result, crops
+src/pynq_host/inspection_replay.py-41-

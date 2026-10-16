@@ -1,0 +1,13 @@
+HOST_STARTED_UTC=2026-10-15T15:40:40.8513779Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u -c '"'"'import sys; sys.path.insert(0,"/home/xilinx/vision_m2"); from pynq import MMIO,PL; import m2_onboard; assert PL.bitfile_name=="/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/capture.bit"; s=MMIO(0x42000000,65536); d=MMIO(0x43000000,65536); print("CAP_LATE",{hex(o):s.read(o) for o in range(0,0x24,4)},flush=True); print("DMA_LATE",{hex(o):d.read(o) for o in (0x28,0x30,0x34)},flush=True); m2_onboard.cmd_smoke()'"'"''
+sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u -c '"'"'import sys; sys.path.insert(0,"/home/xilinx/vision_m2"); from pynq import MMIO,PL; import m2_onboard; assert PL.bitfile_name=="/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/capture.bit"; s=MMIO(0x42000000,65536); d=MMIO(0x43000000,65536); print("CAP_LATE",{hex(o):s.read(o) for o in range(0,0x24,4)},flush=True); print("DMA_LATE",{hex(o):d.read(o) for o in (0x28,0x30,0x34)},flush=True); m2_onboard.cmd_smoke()'"'"''; printf '\n__PYNQ_RC_667ce60947d74ff7818c1539fe52ceeb=%d\n' $?
+[?2004lCAP_LATE {'0x0': 1128353841, '0x4': 1, '0x8': 4038, '0xc': 0, '0x10': 0, '0x14': 1280, '0x18': 720, '0x1c': 0, '0x20': 0}
+DMA_LATE {'0x28': 0, '0x30': 65538, '0x34': 83985}
+R11 busy=0 R12 applied=0
+commit 配置号=1 status={'busy': False, 'applied_config_id': 1}
+PASS: smoke（视频在位，帧首整组应用已确认）
+
+__PYNQ_RC_667ce60947d74ff7818c1539fe52ceeb=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

@@ -12,6 +12,7 @@ import sys
 import threading
 import urllib.request
 from pathlib import Path
+from unittest.mock import patch
 
 root = Path(__file__).resolve().parents[2]
 for dep in ("vision-torch-deps", "vision-client-deps"):
@@ -38,6 +39,10 @@ def main():
     server = make_server(port=0, root=out / "service", captures=FileCaptures(captures),
                          engine=engine, order=dict(ORDER))
     threading.Thread(target=server.serve_forever, daemon=True).start()
+    import inspection_model
+    model_spy = patch.object(inspection_model, "PrototypeClassifier",
+                             wraps=inspection_model.PrototypeClassifier)
+    loads = model_spy.start()
     try:
         request = urllib.request.Request(
             f"http://127.0.0.1:{server.server_port}/v1/check",
@@ -69,11 +74,26 @@ def main():
             assert (run_dir / name).exists(), name
         assert result["targets"] and all((run_dir / t["roi_path"]).exists()
                                          for t in result["targets"])
+        # The same loaded model serves automatic memory rounds with identical predictions.
+        for expected_id in (2, 3):
+            request = urllib.request.Request(
+                f"http://127.0.0.1:{server.server_port}/v1/check",
+                b'{}', {"Content-Type": "application/json"})
+            automatic = validate_packet(json.loads(urllib.request.urlopen(request, timeout=60).read()))
+            assert automatic["check_id"] == automatic["frame_id"] == expected_id
+            assert automatic["targets"] == packet["targets"]
+            assert automatic["decision"] == packet["decision"]
+            assert "trigger_ref" not in automatic
+            session_dir = round_dir.parent
+            assert not (session_dir / f"check-{expected_id:06d}").exists()
+            assert json.loads((session_dir / "latest_packet.json").read_text()) == automatic
+        assert loads.call_count == 1, loads.call_count
         assert not list(out.rglob("*.pending"))
     finally:
         server.shutdown()
         server.server_close()
-    print("PASS: live service real engine (file_engine -> inspection_run, golden counts, artifacts)")
+        model_spy.stop()
+    print("PASS: live service real engine (golden counts, manual artifacts, memory parity, one model load)")
 
 
 if __name__ == "__main__":

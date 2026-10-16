@@ -1,0 +1,12 @@
+HOST_STARTED_UTC=2026-10-15T15:19:06.6694838Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=cat /proc/sys/kernel/random/boot_id; sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && timeout -k 5s 15s python3 -u -c "from pynq import PL; print(PL.bitfile_name); print(PL.timestamp); print(list(PL.ip_dict))"'
+cat /proc/sys/kernel/random/boot_id; sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && timeout -k 5s 15s python3 -u -c "from pynq import PL; print(PL.bitfile_name); print(PL.timestamp); print(list(PL.ip_dict))"'; printf '\n__PYNQ_RC_a25bd6946f574147892124aadd2dac6f=%d\n' $?
+[?2004lc291b2c8-0d7b-49e9-9511-4f5c66d2e37b
+/home/xilinx/vision_m2/vision.bit
+2026/9/22 0:2:32 +263418
+['pipe', 'ps7']
+
+__PYNQ_RC_a25bd6946f574147892124aadd2dac6f=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

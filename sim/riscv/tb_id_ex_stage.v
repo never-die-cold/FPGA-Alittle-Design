@@ -11,6 +11,7 @@ module tb_id_ex_stage;
     wire [1:0] ex_wb_sel, ex_mask_sel;
     integer checks, offset, pc_case;
     reg [12:0] b_offset;
+    reg [11:0] i_offset;
     reg [31:0] expected_target;
     id_ex_stage dut (
         .in_valid(in_valid), .in_pc(in_pc), .in_instr(in_instr),
@@ -78,6 +79,22 @@ module tb_id_ex_stage;
                 check(branch_target === expected_target &&
                       branch_target_next === (expected_target+32'd4) &&
                       redirect_target === expected_target);
+            end
+        end
+        for(pc_case=0;pc_case<3;pc_case=pc_case+1) begin
+            case(pc_case)
+                0: rs1_value=32'h80000001;
+                1: rs1_value=32'hffffffff;
+                2: rs1_value=32'h00000000;
+            endcase
+            for(offset=-2048;offset<=2047;offset=offset+1) begin
+                i_offset=offset[11:0];
+                in_instr={i_offset,5'd1,3'd0,5'd2,7'b1100111};
+                rs2_value=offset^32'hcafebabe;
+                expected_target=(rs1_value+offset)&32'hfffffffe; #1;
+                check(jump_taken && redirect_target===expected_target);
+                rs2_value=~rs2_value; #1;
+                check(redirect_target===expected_target);
             end
         end
         $display("PASS: ID+EX decode, execute and redirect (%0d cases)", checks);
