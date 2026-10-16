@@ -3,6 +3,16 @@
 Warm up in slot 1, visit slot 0, park back in slot 1, copy slot 0 while running.
 Halt-time 0x4810 never authorizes a frame and is never masked in the copy window.
 The caller must provide exclusive ownership, as for SingleFrameCapture.
+
+2026-10-16 board records the run contract this class now encodes
+(data/logs/2026-10-16-c01-park-first-board/): arming the S2MM overflows the
+capture bridge for exactly one interval that self-recovers while cap bit3
+("had error") latches for the overlay instance, so health is judged by
+lock + pending(bit2) clear + epoch-delta, not the old 0xC mask; halt-time
+0x4810 bits re-assert until W1C, and under RS=1 a W1C covering them holds
+clean -- the warmup rule therefore repeats W1C while `errors & HALT_STICKY`
+(bit12 IRQ sets from the first frame and may not be part of the match) and
+re-baselines the event counters at the first granted slot-1 watermark.
 """
 import numpy as np
 from c01_capture import (SingleFrameCapture, CaptureError, CR, SR, PARK, VSIZE,
@@ -10,6 +20,7 @@ from c01_capture import (SingleFrameCapture, CaptureError, CR, SR, PARK, VSIZE,
 
 PARK_RUN = RUN & ~0x10  # FrameCntEn=0; Circular_Park=0; threshold/IRQ remain enabled.
 HALT_STICKY = 0x4810
+W1C_PARK = HALT_STICKY | IRQ | 0x2000
 CONTROL_MASK = 0xFF0000 | 0x101F
 
 
@@ -19,32 +30,60 @@ class ParkFrameCapture(SingleFrameCapture):
         self.park_reference = slot
         self.dma.write(PARK, (self.dma.read(PARK) & ~0x1F00) | (slot << 8))
 
+    def _check_source(self, pending_ok=False):
+        # Overrides the frozen pre-run gate: cap bit3 latches once any epoch event
+        # happened and stays set for the overlay instance, so it may not judge
+        # health; overflow pending (bit2) still refuses unless the caller is in
+        # the warm-up window where the arm-time transient is absorbed.
+        cap = self._cap()
+        if self.identity() != self.token:
+            raise CaptureError("overlay/boot generation changed")
+        if (cap['0x0'], cap['0x14'], cap['0x18']) != (0x43415031, 1280, 720):
+            raise CaptureError("CAP1 identity/geometry changed")
+        if not cap['0x4'] & 1 or (cap['0x4'] & 0x4 and not pending_ok):
+            raise CaptureError("capture lock lost or overflow pending")
+        return cap
+
+    def _refuses_new_events(self, cap):
+        if self.cap_before is None:
+            return
+        for o in ('0x10', '0x1c', '0x20'):
+            if cap[o] != self.cap_before[o]:
+                raise CaptureError("capture source error event: " + o)
+
     def _running(self, warmup=False):
-        self._check_source()
+        cap = self._check_source(warmup)
         cr, sr, park = self.dma.read(CR), self.dma.read(SR), self.dma.read(PARK)
         if cr & CONTROL_MASK != PARK_RUN or sr & 1:
             raise CaptureError("park capture channel halted or control changed")
         errors = sr & ERRORS
         if errors:
-            if warmup and errors == HALT_STICKY:
-                self.dma.write(SR, HALT_STICKY | IRQ | 0x2000)
+            if warmup and errors & HALT_STICKY:
+                self.dma.write(SR, W1C_PARK)
                 return None
             raise CaptureError("park capture DMA error: 0x%08x" % sr)
+        if not warmup:
+            self._refuses_new_events(cap)
         if (park >> 8) & 0x1F != self.park_reference or (park >> 24) & 0x1F > 1:
             raise CaptureError("park capture slot/reference changed")
         expected = {HSIZE: 3840, STRIDE: 3840, VSIZE: 720}
         expected.update({ADDRESS+i*4: int(b.physical_address) for i,b in enumerate(self.buffers)})
         if any(self.dma.read(o) != value for o,value in expected.items()):
             raise CaptureError("park capture descriptor changed")
-        return {"cr": cr, "sr": sr, "park": park, "cap": self._cap()}
+        return {"cr": cr, "sr": sr, "park": park, "cap": cap}
 
     def _wait_park(self, slot, warmup=False):
         def completed():
             evidence = self._running(warmup)
             if evidence is None:
                 return False
-            if (evidence['park'] >> 24) & 0x1F == slot and evidence['sr'] & IRQ:
+            if (evidence['park'] >> 24) & 0x1F == slot and evidence['sr'] & IRQ \
+                    and not evidence['cap']['0x4'] & 0x4:
                 self.evidence[('warmup_' if warmup else 'park_') + str(slot)] = evidence
+                if warmup:
+                    # Arming overflowed the capture bridge once; that one transient
+                    # is absorbed here and becomes the new event baseline.
+                    self.cap_before = evidence['cap']
                 return True
             return False
         self._wait(completed, "park capture frame/slot timeout")
