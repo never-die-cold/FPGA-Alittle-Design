@@ -44,7 +44,8 @@ MUTANT.mkdir(parents=True)
     "sys.modules['c01_capture'] = module\n"
     "spec.loader.exec_module(module)\n", encoding='utf-8')
 
-result = run(TEST, dict(os.environ, PYTHONPATH=str(MUTANT)))
+result = run(TEST, dict(os.environ, PYTHONPATH=os.pathsep.join(
+    filter(None, (str(MUTANT), os.environ.get('PYTHONPATH', ''))))))
 output = result.stdout + result.stderr
 assert result.returncode != 0, 'pre-fix ordering was not caught by the suite'
 assert 'DMA configured idle reset/clear not clean' in output, 'board failure signature missing'
