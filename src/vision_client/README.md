@@ -58,13 +58,14 @@ targets 列保留 JSON）。离线测试：
 WAITING；连续 3 次 HTTP 失败自动重新握手（D5）。界面为 **HUD v4「EdgeSight 应用外壳」**
 （定稿与说明 [data/logs/2026-10-09-exe-hud-v4/](../../data/logs/2026-10-09-exe-hud-v4/README.md)）：
 1600×900 画布 = 顶栏（运行状态徽标 / 状态 / 分辨率·FPS·session / 时钟）+ 视频圆角视口
-（比例 0.9875）+ 右上**识别范围表「INSPECTION SCOPE」**（2026-10-17 交互改版：每行
-类别 + 勾选框 + 计数，行悬停高亮；`FRESHNESS` 条与 `RUN INSPECTION` 按钮并入表内，
-点击 / 按 `c` 等效触发）+ 右列 `DETECTED OBJECTS` 列表（缩略图 / T 序号 / XYWH 坐标）。
+（比例 0.9875，**无面板遮挡画面**）+ 右列顶部**识别范围表「INSPECTION SCOPE」**（2026-10-17
+交互改版并从视频右上移入侧栏：每行类别 + 勾选框 + 计数，行悬停高亮；`FRESHNESS` 条与
+`RUN INSPECTION` 按钮并入表内，点击 / 按 `c` 等效触发）+ 其下 `DETECTED OBJECTS` 列表
+（3 张紧凑卡片 + `+N more`，缩略图 / T 序号 / XYWH 坐标）。
 勾选 = 显示/跟踪该类别（未勾选不画框、不进列表；**T 序号保留目标原始编号，不重排**）；
 计数列 = 该类别已分类目标数（`LOCATION_ONLY` / 无有效结果显示 `--`）；`--scope bolt,nut`
-可预设初始勾选；按钮随请求状态反馈（青色 IDLE → 琥珀 QUEUED · WAITING SLOT →
-暗底 RUNNING INSPECTION...）。**UVC-only 模式隐藏面板**；REC 常驻计数
+可预设初始勾选；按钮随请求状态反馈（青色 IDLE → 琥珀 QUEUED · WAITING →
+暗底 RUNNING）。**UVC-only 模式隐藏面板**；REC 常驻计数
 （`--records-dir`，手动触发成功记录一条即 +1 并保持）。文本由 Pillow 真实字体（Inter，OFL）
 渲染，随 EXE 打包（含中文：Noto Sans SC 子集，GB2312 全集，OFL——类别名/判定文案可直接用）；
 启动时声明 DPI 感知并按屏幕工作区等比缩放（200% 缩放屏实测 1.8×），

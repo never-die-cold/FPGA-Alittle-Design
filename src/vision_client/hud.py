@@ -26,9 +26,9 @@ from hud_text import TextEngine
 W, H = 1600, 900
 VIEW = (24, 88, 1264, 711)
 VIEW_SCALE = VIEW[2] / 1280.0
-SCOPE = (932, 104, 340, 250)  # 识别范围面板：类别/勾选/数目 + FRESHNESS + RUN 按钮
+SCOPE = (1312, 88, 264, 246)  # 识别范围面板：侧栏顶部（类别/勾选/数目 + FRESHNESS + RUN 按钮）
 SCOPE_ROW_H = 34
-LPANEL = (1312, 88, 1576, 799)
+LPANEL = (1312, 342, 1576, 799)  # 检测对象列表：识别范围面板之下
 BRAND = (24, 823, 252, 53)
 CLASSES = ("bolt", "nut", "washer")
 
@@ -98,16 +98,13 @@ class Hud:
         self.base = self._build_base()
         self.view_frame = self._build_view_frame()
         sx, sy, sw, sh = SCOPE
-        pad = 16
-        panel = rounded_rgba((sw, sh), 14, fill=PANEL3, outline=BORDER)
-        panel[:, :, 3] = (panel[:, :, 3].astype(np.uint16) * 236 // 255).astype(np.uint8)  # 轻透明，减少遮挡
-        self.scope_panel = panel
+        pad = 14
+        self.scope_panel = rounded_rgba((sw, sh), 14, fill=PANEL, outline=BORDER)
         self.scope_hover = rounded_rgba((sw - 20, SCOPE_ROW_H - 4), 8, fill=PANEL2)
-        self.scope_hover[:, :, 3] = (self.scope_hover[:, :, 3].astype(np.uint16) * 176 // 255).astype(np.uint8)
         self.scope_check = {"on": self._scope_check_sprite(True),
                             "off": self._scope_check_sprite(False)}
         self.scope_rects = {}
-        first_row = sy + 48
+        first_row = sy + 52
         for index, name in enumerate(CLASSES):
             self.scope_rects[name] = (sx + 10, first_row + index * SCOPE_ROW_H, sw - 20, SCOPE_ROW_H)
         run = (sx + pad, sy + sh - pad - 42, sw - 2 * pad, 42)
@@ -115,18 +112,18 @@ class Hud:
         self.scope_button = {
             "idle": self._scope_button_sprite(run[2], run[3], "RUN INSPECTION",
                                               DARK_TXT, CYAN, (0, 166, 230)),
-            "queued": self._scope_button_sprite(run[2], run[3], "QUEUED · WAITING SLOT",
+            "queued": self._scope_button_sprite(run[2], run[3], "QUEUED · WAITING",
                                                 DARK_TXT, AMBER, None),
-            "running": self._scope_button_sprite(run[2], run[3], "RUNNING INSPECTION...",
+            "running": self._scope_button_sprite(run[2], run[3], "RUNNING",
                                                  CYAN, PANEL2, None)}
-        self._scope_bar_x0 = int(sx + pad + engine.advance("FRESHNESS", 12) + 14)
+        self._scope_bar_x0 = int(sx + pad + engine.advance("FRESHNESS", 12) + 12)
         self._scope_bar_x1 = sx + sw - pad
         self.scope_track = rounded_rgba((self._scope_bar_x1 - self._scope_bar_x0, 7), 3,
                                         fill=(30, 38, 52))
         lw, lh = LPANEL[2] - LPANEL[0], LPANEL[3] - LPANEL[1]
         self.lpanel_img, self.lpanel_keep = self._shape((lw, lh), 14, fill=PANEL, outline=BORDER)
         self._lpanel_bg = self.base[LPANEL[1]:LPANEL[3], LPANEL[0]:LPANEL[2]].copy()
-        self.card_img, self.card_keep = self._shape((lw - 32, 134), 10, fill=PANEL2, outline=BORDER)
+        self.card_img, self.card_keep = self._shape((lw - 32, 116), 10, fill=PANEL2, outline=BORDER)
         self.panel_bgr = bgr(PANEL)
         # 视频圆角只在四角有非 1 掩码：中间直拷、四角小块混合（避免全视口浮点运算）
         vw, vh = VIEW[2], VIEW[3]
@@ -294,15 +291,14 @@ class Hud:
         self.engine.draw_cy(canvas, state["clock"], 1348, cy, 16, (205, 212, 222))
 
     def _scope_panel(self, canvas, scope, fresh):
-        """识别范围表：类别 / 勾选框 / 计数（行悬停高亮）+ FRESHNESS + RUN 按钮。"""
+        """识别范围表（侧栏顶部）：类别 / 勾选框 / 计数（行悬停高亮）+ FRESHNESS + RUN 按钮。"""
         sx, sy, sw, sh = SCOPE
-        pad = 16
+        pad = 14
         _paste(canvas, self.scope_panel, sx, sy)
-        self.engine.draw(canvas, "INSPECTION SCOPE", sx + pad, sy + 15, 15, MAIN, "SemiBold")
+        self.engine.draw(canvas, "INSPECTION SCOPE", sx + pad, sy + 12, 15, MAIN, "SemiBold")
         note = scope.get("note")
         if note:
-            nw, _ = self.engine.size(note, 13)
-            self.engine.draw(canvas, note, sx + sw - pad - nw, sy + 17, 13, DIM)
+            self.engine.draw(canvas, note, sx + pad, sy + 33, 12, DIM)
         readonly = scope.get("readonly")
         for name in CLASSES:
             rx, ry, rw, rh = self.scope_rects[name]
@@ -350,7 +346,10 @@ class Hud:
         return self._thumbs
 
     def _list_panel(self, canvas, video, entries):
-        """entries=[(chip, bbox, (类别, 分数)|None)...]；chip 用目标原始序号，过滤后不重编号。"""
+        """entries=[(chip, bbox, (类别, 分数)|None)...]；chip 用目标原始序号，过滤后不重编号。
+
+        识别范围面板占侧栏上部后，列表为 3 张紧凑卡片 + “+N more”一行。
+        """
         rx0, ry0, rx1, ry1 = LPANEL
         _blit(canvas, self.lpanel_img, self.lpanel_keep, rx0, ry0,
               outside_patches=self._lpanel_bg)
@@ -359,18 +358,17 @@ class Hud:
         bw = self.engine.size(code, 14, "SemiBold")[0] + 24
         self._chip(canvas, code, rx1 - 22 - bw, ry0 + 16, GREEN if entries else PANEL3, size=14,
                    fg=DARK_TXT if entries else DIM)
-        boxes = [bbox for _, bbox, _ in entries]
-        shown = self._thumbs_for(video, boxes, (tuple(map(tuple, boxes[:4])), len(boxes)))
-        for i, (chip, (x0, y0, x1, y1), label) in enumerate(entries[:4]):
-            cy0 = ry0 + 62 + i * 148
+        boxes = [bbox for _, bbox, _ in entries[:3]]
+        shown = self._thumbs_for(video, boxes, (tuple(map(tuple, boxes)), len(boxes)))
+        for i, (chip, (x0, y0, x1, y1), label) in enumerate(entries[:3]):
+            cy0 = ry0 + 56 + i * 126
             _blit(canvas, self.card_img, self.card_keep, rx0 + 16, cy0, outside_bgr=self.panel_bgr)
-            _paste(canvas, shown[i], rx0 + 30, cy0 + 14)
+            _paste(canvas, shown[i], rx0 + 30, cy0 + 12)
             tx = rx0 + 30 + 88 + 20
-            self._chip(canvas, chip, tx, cy0 + 12, GREEN, size=15)
+            self._chip(canvas, chip, tx, cy0 + 10, GREEN, size=15)
             if label:
-                self.engine.draw(canvas, f"{label[0]}  {label[1]}", tx + 52, cy0 + 16, 15, MAIN)
-            self.engine.draw(canvas, f"X: {x0}    Y: {y0}", tx, cy0 + 56, 15, DIM)
-            self.engine.draw(canvas, f"W: {x1 - x0}    H: {y1 - y0}", tx, cy0 + 84, 15, DIM)
-        if len(entries) > 4:
-            # 面板底部（RUN 按钮下方）：原 y 位置(ry0+62+4*148+6≈754)落在按钮(715-775)后面被遮挡
-            self.engine.draw(canvas, f"+{len(entries) - 4} more", rx0 + 22, ry1 - 21, 14, DIM)
+                self.engine.draw(canvas, f"{label[0]}  {label[1]}", tx + 52, cy0 + 14, 15, MAIN)
+            self.engine.draw(canvas, f"X: {x0}    Y: {y0}", tx, cy0 + 44, 15, DIM)
+            self.engine.draw(canvas, f"W: {x1 - x0}    H: {y1 - y0}", tx, cy0 + 68, 15, DIM)
+        if len(entries) > 3:
+            self.engine.draw(canvas, f"+{len(entries) - 3} more", rx0 + 22, ry1 - 26, 14, DIM)
