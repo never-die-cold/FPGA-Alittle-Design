@@ -1,0 +1,10 @@
+HOST_STARTED_UTC=2026-10-15T15:09:14.9941240Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=cat /proc/sys/kernel/random/boot_id; ps -eo pid,comm,args | grep -E "[p]ython.*(c01|n03|vision|m2_onboard)|[m]player|[f]fmpeg" || true; sudo -n true
+cat /proc/sys/kernel/random/boot_id; ps -eo pid,comm,args | grep -E "[p]ython.*(c01|n03|vision|m2_onboard)|[m]player|[f]fmpeg" || true; sudo -n true; printf '\n__PYNQ_RC_294c20d100194782ad6c9fa6d04180d8=%d\n' $?
+[?2004lc291b2c8-0d7b-49e9-9511-4f5c66d2e37b
+sudo: a password is required
+
+__PYNQ_RC_294c20d100194782ad6c9fa6d04180d8=1
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=1

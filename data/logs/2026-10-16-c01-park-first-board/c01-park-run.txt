@@ -1,0 +1,17 @@
+HOST_STARTED_UTC=2026-10-15T16:06:37.1472802Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627 && source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u c01_park_onboard_diag.py'
+sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627 && source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u c01_park_onboard_diag.py'; printf '\n__PYNQ_RC_427a5c7dfedf4902a523655b2f18f3cc=%d\n' $?
+[?2004lSTAGE: HWH metadata parse before programming
+STAGE: HWH layout accepted; candidate download begins
+STAGE: candidate download returned
+Traceback (most recent call last):
+  File "/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_park_onboard_diag.py", line 128, in <module>
+    main()
+  File "/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_park_onboard_diag.py", line 79, in main
+    raise RuntimeError('frame counter not ticking; video absent: %d->%d' % (tick_a, tick_b))
+RuntimeError: frame counter not ticking; video absent: 0->0
+
+__PYNQ_RC_427a5c7dfedf4902a523655b2f18f3cc=1
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=1

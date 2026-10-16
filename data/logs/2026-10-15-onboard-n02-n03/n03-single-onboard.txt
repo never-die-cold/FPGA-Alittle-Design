@@ -1,0 +1,38 @@
+HOST_STARTED_UTC=2026-10-15T15:36:34.6433696Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && cd /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627 && C01_BIT=/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/capture.bit python3 -u c01_ddr_onboard.py'
+sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && cd /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627 && C01_BIT=/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/capture.bit python3 -u c01_ddr_onboard.py'; printf '\n__PYNQ_RC_5dcbdd176eb3495db2bebe52b77b0069=%d\n' $?
+[?2004lSTAGE: HWH metadata parse before programming
+STAGE: HWH layout accepted; candidate download begins
+STAGE: candidate download returned
+R11 busy=0 R12 applied=0
+NOVIDEO: commit 未在帧首确认——寄存器通路 OK 但无输入视频（查 HDMI IN 源/线材）
+STAGE: candidate HDMI smoke NOVIDEO; bounded settle retry
+R11 busy=1 R12 applied=0
+MAIN-FAIL: RuntimeError('configuration commit is busy')
+ip_dict:
+  pipe @ 0x40000000 range 0x10000
+  ps7 @ 0x00000000 range 0x0
+axi_regs 段: pipe @ 0x40000000
+PASS: load
+STAGE: original vision loaded; bounded settle before smoke
+R11 busy=0 R12 applied=0
+commit 配置号=1 status={'busy': False, 'applied_config_id': 1}
+PASS: smoke（视频在位，帧首整组应用已确认）
+RESULT: {"boot_before": "c291b2c8-0d7b-49e9-9511-4f5c66d2e37b", "bit_sha256": "86d2adb0343de1785270d207eee3c6b8fee2a6444bc64705bc068e3fc781d14f", "hwh_sha256": "eaaf68c3732f1a2bf85756fc0b3a8c6b07bb5cf5b36f32020882860a6aaebf5c", "driver_sha256": "1f11aefdc11805387b0c345583828fd733e5e38b0b0e043b0510808f648e8430", "runner_sha256": "e822a70800a923ccdb3ce45496e71342b032035389dba935d6fac6f09edd5646", "helper_sha256": "894bf7dc01ba9260c48cde7ab0b1aecdd6bfa157f7fa43252170cea1752e1810", "kind": "CUSTOM_DDR_SINGLE_FRAME_EXPERIMENT_NOT_FORMAL_N03", "ok": false, "main_error": "RuntimeError('configuration commit is busy')", "restored": true, "boot_after": "c291b2c8-0d7b-49e9-9511-4f5c66d2e37b"}
+Traceback (most recent call last):
+  File "/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_ddr_onboard.py", line 108, in <module>
+    if __name__ == '__main__': main()
+  File "/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_ddr_onboard.py", line 103, in main
+    if primary is not None: raise primary
+  File "/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_ddr_onboard.py", line 60, in main
+    m2_onboard.cmd_smoke()
+  File "/home/xilinx/vision_m2/m2_onboard.py", line 62, in cmd_smoke
+    cfg = v.commit(timeout=1.0)
+  File "/home/xilinx/vision_m2/vision_regs.py", line 101, in commit
+    raise RuntimeError("configuration commit is busy")
+RuntimeError: configuration commit is busy
+
+__PYNQ_RC_5dcbdd176eb3495db2bebe52b77b0069=1
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=1

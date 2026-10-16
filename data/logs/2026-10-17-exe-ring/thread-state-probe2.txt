@@ -1,0 +1,16 @@
+HOST_STARTED_UTC=2026-10-16T10:59:32.8514953Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=top -b -n1 | grep "python3" | head -3; ls /home/xilinx/vision_m2/live-artifacts/*/check-000001/; tail -5 /home/xilinx/vision_m2/live-server.log
+top -b -n1 | grep "python3" | head -3; ls /home/xilinx/vision_m2/live-artifacts/*/check-000001/; tail -5 /home/xilinx/vision_m2/live-server.log; printf '\n__PYNQ_RC_c9800303440f434d8e5d64aa17a51f09=%d\n' $?
+[?2004l  749 root      20   0   23876  16384   7680 S   0.0   3.3   0:01.44 python3
+ 4109 root      20   0  385088 142948  77696 S   0.0  28.4   3:24.96 python3
+capture.png  capture.sha256
+axi_regs 段: pipe @ 0x40000000
+PASS: load
+R11 busy=0 R12 applied=0
+commit 配置号=1 status={'busy': False, 'applied_config_id': 1}
+PASS: smoke（视频在位，帧首整组应用已确认）
+
+__PYNQ_RC_c9800303440f434d8e5d64aa17a51f09=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

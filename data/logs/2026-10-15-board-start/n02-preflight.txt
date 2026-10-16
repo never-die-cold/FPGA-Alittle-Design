@@ -1,0 +1,9 @@
+HOST_STARTED_UTC=2026-10-15T15:30:29.6218984Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=cat /proc/sys/kernel/random/boot_id; sudo -n true
+cat /proc/sys/kernel/random/boot_id; sudo -n true; printf '\n__PYNQ_RC_092dabd723774c25a07ff65331c99d2f=%d\n' $?
+[?2004lc291b2c8-0d7b-49e9-9511-4f5c66d2e37b
+
+__PYNQ_RC_092dabd723774c25a07ff65331c99d2f=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

@@ -1,0 +1,34 @@
+HOST_STARTED_UTC=2026-10-15T16:37:46.4911518Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u c01_park_entry2.py'
+sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u c01_park_entry2.py'; printf '\n__PYNQ_RC_911863165e8647f1977955a126849970=%d\n' $?
+[?2004lSTAGE: HWH metadata parse before programming
+STAGE: HWH layout accepted; candidate download begins
+STAGE: candidate download returned
+PRECHECK: video locked, +32 frames; settle 1.0 s
+PASS: park warmup clear held; slot-0 protected copy complete
+ip_dict:
+  pipe @ 0x40000000 range 0x10000
+  ps7 @ 0x00000000 range 0x0
+axi_regs 段: pipe @ 0x40000000
+PASS: load
+RESTORE-SMOKE: trying
+R11 busy=0 R12 applied=0
+NOVIDEO: commit 未在帧首确认——寄存器通路 OK 但无输入视频（查 HDMI IN 源/线材）
+RESTORE-SMOKE: trying
+R11 busy=1 R12 applied=0
+RESTORE-RETRY: commit busy; frame-gated pending
+RESTORE-SMOKE: trying
+R11 busy=1 R12 applied=0
+RESTORE-RETRY: commit busy; frame-gated pending
+RESTORE-SMOKE: trying
+R11 busy=0 R12 applied=1
+commit 配置号=2 status={'busy': False, 'applied_config_id': 2}
+PASS: smoke（视频在位，帧首整组应用已确认）
+RESTORE: {"restore_error": null, "smoke": "PASS"}
+RESULT: {"boot_before": "c291b2c8-0d7b-49e9-9511-4f5c66d2e37b", "driver_sha256": "1f11aefdc11805387b0c345583828fd733e5e38b0b0e043b0510808f648e8430", "park_sha256": "953dec241be0f4c76d254cdca6efc4da2f334b978338eded49c694dd2f1001b5", "bit_sha256": "86d2adb0343de1785270d207eee3c6b8fee2a6444bc64705bc068e3fc781d14f", "video_framerate_delta": 32, "kind": "C01_PARK_CANDIDATE_FIRST_BOARD_RUN_NOT_FORMAL_N03", "capture": {"identity": ["c291b2c8-0d7b-49e9-9511-4f5c66d2e37b", "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/capture.bit", "2026/9/22 1:22:14 +947794"], "mode": "PARK_CANDIDATE_NOT_BOARD_VERIFIED", "buffers": [{"address": 361758720, "shape": [720, 1280, 3], "dtype": "uint8", "strides": [3840, 3, 1], "bytes": 2764800, "coherent": false}, {"address": 364904448, "shape": [720, 1280, 3], "dtype": "uint8", "strides": [3840, 3, 1], "bytes": 2764800, "coherent": false}, {"address": 368050176, "shape": [720, 1280, 3], "dtype": "uint8", "strides": [3840, 3, 1], "bytes": 2764800, "coherent": false}, {"address": 371195904, "shape": [720, 1280, 3], "dtype": "uint8", "strides": [3840, 3, 1], "bytes": 2764800, "coherent": false}], "warmup_1": {"cr": 69633, "sr": 69632, "park": 16777472, "cap": {"0x0": 1128353841, "0x4": 11, "0x8": 35, "0xc": 1, "0x10": 1, "0x14": 1280, "0x18": 720, "0x1c": 1, "0x20": 0}}, "park_0": {"cr": 69633, "sr": 69632, "park": 0, "cap": {"0x0": 1128353841, "0x4": 11, "0x8": 35, "0xc": 1, "0x10": 1, "0x14": 1280, "0x18": 720, "0x1c": 1, "0x20": 0}}, "park_1": {"cr": 69633, "sr": 69632, "park": 16777472, "cap": {"0x0": 1128353841, "0x4": 9, "0x8": 37, "0xc": 1, "0x10": 1, "0x14": 1280, "0x18": 720, "0x1c": 1, "0x20": 0}}, "protected_before": {"cr": 69633, "sr": 69632, "park": 16777472, "cap": {"0x0": 1128353841, "0x4": 11, "0x8": 37, "0xc": 1, "0x10": 1, "0x14": 1280, "0x18": 720, "0x1c": 1, "0x20": 0}}, "protected_after": {"cr": 69633, "sr": 69632, "park": 16777472, "cap": {"0x0": 1128353841, "0x4": 11, "0x8": 38, "0xc": 1, "0x10": 1, "0x14": 1280, "0x18": 720, "0x1c": 1, "0x20": 0}}, "seconds": {"capture": 0.09885078800016345, "invalidate": 0.0003253599998060963, "copy": 0.020235877000231994}, "cleanup": "halt confirmed; 4 owned buffers freed once"}, "shape": [720, 1280, 3], "strides": [3840, 3, 1], "pixel_sha256": "6c1507e69c076d327be8fef5215694c831c3076798b4e0f53de43464c6a5dfd4", "channel_mean_bgr": [111.34727105034722, 122.13056532118055, 121.50714301215278], "pixel_min": 2, "pixel_max": 255, "png_sha256": "e195c1beb007a81a4d7fe5e20427685c1da432c5da38221d98f800012edf5fc1", "ok": true, "restore": {"restore_error": null, "smoke": "PASS"}, "boot_after": "c291b2c8-0d7b-49e9-9511-4f5c66d2e37b"}
+PASS: original vision restored; park candidate board run complete
+
+__PYNQ_RC_911863165e8647f1977955a126849970=0
+
+HOST_EXIT_CODE=0

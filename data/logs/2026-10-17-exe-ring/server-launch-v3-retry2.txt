@@ -1,0 +1,11 @@
+HOST_STARTED_UTC=2026-10-16T10:44:41.1142924Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'pkill -f "park_live_serve[r]_v2"; sleep 2; cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && rm -rf /home/xilinx/vision_m2/live-artifacts && nohup python3 -u park_live_server_v3.py --host 0.0.0.0 --port 8765 --root /home/xilinx/vision_m2/live-artifacts --order 2 2 2 --min-score 0.8 > /home/xilinx/vision_m2/live-server.log 2>&1 & sleep 6; echo RESTARTED; tail -3 /home/xilinx/vision_m2/live-server.log; netstat -tln | grep 8765'
+sudo -n bash -c 'pkill -f "park_live_serve[r]_v2"; sleep 2; cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && rm -rf /home/xilinx/vision_m2/live-artifacts && nohup python3 -u park_live_server_v3.py --host 0.0.0.0 --port 8765 --root /home/xilinx/vision_m2/live-artifacts --order 2 2 2 --min-score 0.8 > /home/xilinx/vision_m2/live-server.log 2>&1 & sleep 6; echo RESTARTED; tail -3 /home/xilinx/vision_m2/live-server.log; netstat -tln | grep 8765'; printf '\n__PYNQ_RC_f6164e68b75b4382bf49ee088a620a0b=%d\n' $?
+[?2004lRESTARTED
+LIVE SERVICE (backend=PARK, prototype=True): http://0.0.0.0:8765/v1/status
+tcp        0      0 0.0.0.0:8765            0.0.0.0:*               LISTEN     
+
+__PYNQ_RC_f6164e68b75b4382bf49ee088a620a0b=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

@@ -1,0 +1,11 @@
+HOST_STARTED_UTC=2026-10-15T16:35:17.2511632Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sha256sum /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_park_capture.py /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_park_onboard_diag.py; ps -ef | grep "[p]ython3 -c" | head -5; stty -a /dev/ttyPS0 2>/dev/null | head -3 || true; echo PORT_STATE_CHECKED
+sha256sum /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_park_capture.py /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_park_onboard_diag.py; ps -ef | grep "[p]ython3 -c" | head -5; stty -a /dev/ttyPS0 2>/dev/null | head -3 || true; echo PORT_STATE_CHECKED; printf '\n__PYNQ_RC_bc98d28573a04399b7d4b6a7d4c0d697=%d\n' $?
+[?2004lee424fc537941b75daf42c801841f25805b29a8f62184d180c6a5d12f6337be6  /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_park_capture.py
+c8cc6a80fa3ff9db95f2db8c0cc46783364a738c9c6d05db1a2accba87d03584  /home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/c01_park_onboard_diag.py
+PORT_STATE_CHECKED
+
+__PYNQ_RC_bc98d28573a04399b7d4b6a7d4c0d697=0
+
+HOST_EXIT_CODE=0

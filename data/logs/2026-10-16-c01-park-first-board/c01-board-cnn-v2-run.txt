@@ -1,0 +1,28 @@
+HOST_STARTED_UTC=2026-10-15T16:55:22.5945353Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && source /etc/profile.d/pynq_venv.sh && python3 -u c01_board_cnn_v2.py'
+sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && source /etc/profile.d/pynq_venv.sh && python3 -u c01_board_cnn_v2.py'; printf '\n__PYNQ_RC_aaa3616a3fcc436aacac502505113e33=%d\n' $?
+[?2004lTraceback (most recent call last):
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_board_cnn_v2.py", line 87, in <module>
+    main()
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_board_cnn_v2.py", line 70, in main
+    outcome = predict_trace(crop, layers)
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_board_cnn_v2.py", line 36, in predict_trace
+    value = np.maximum(conv2d_ref(value, layer['weight'], layer['bias'],
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_board_cnn_v2.py", line 23, in conv2d_ref
+    padded = np.pad(image, ((0, 0), (padding[0], padding[0]), (padding[1], padding[1])))
+  File "<__array_function__ internals>", line 5, in pad
+  File "/usr/lib/python3/dist-packages/numpy/lib/arraypad.py", line 743, in pad
+    pad_width = _as_pairs(pad_width, array.ndim, as_index=True)
+  File "/usr/lib/python3/dist-packages/numpy/lib/arraypad.py", line 518, in _as_pairs
+    return np.broadcast_to(x, (ndim, 2)).tolist()
+  File "<__array_function__ internals>", line 5, in broadcast_to
+  File "/usr/lib/python3/dist-packages/numpy/lib/stride_tricks.py", line 411, in broadcast_to
+    return _broadcast_to(array, shape, subok=subok, readonly=True)
+  File "/usr/lib/python3/dist-packages/numpy/lib/stride_tricks.py", line 348, in _broadcast_to
+    it = np.nditer(
+ValueError: operands could not be broadcast together with remapped shapes [original->remapped]: (3,2)  and requested shape (2,2)
+
+__PYNQ_RC_aaa3616a3fcc436aacac502505113e33=1
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=1

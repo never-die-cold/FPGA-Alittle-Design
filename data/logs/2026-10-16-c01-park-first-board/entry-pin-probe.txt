@@ -1,0 +1,14 @@
+HOST_STARTED_UTC=2026-10-15T16:37:14.9064416Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=grep -n "DRIVER_SHA\|PARK_SHA" /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_park_onboard_diag.py | head -4; sha256sum /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_park_capture.py /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_capture.py
+grep -n "DRIVER_SHA\|PARK_SHA" /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_park_onboard_diag.py | head -4; sha256sum /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_park_capture.py /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_capture.py; printf '\n__PYNQ_RC_d7cb00893c5841deb9fde6d7830604a8=%d\n' $?
+[?2004l19:DRIVER_SHA = '1f11aefdc11805387b0c345583828fd733e5e38b0b0e043b0510808f648e8430'
+20:PARK_SHA = '953dec241be0f4c76d254cdca6efc4da2f334b978338eded49c694dd2f1001b5'
+62:    for name, sha in (('c01_capture.py', DRIVER_SHA), ('c01_park_capture.py', PARK_SHA)):
+94:    result = {'boot_before': boot, 'driver_sha256': DRIVER_SHA, 'park_sha256': PARK_SHA,
+953dec241be0f4c76d254cdca6efc4da2f334b978338eded49c694dd2f1001b5  /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_park_capture.py
+1f11aefdc11805387b0c345583828fd733e5e38b0b0e043b0510808f648e8430  /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_capture.py
+
+__PYNQ_RC_d7cb00893c5841deb9fde6d7830604a8=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

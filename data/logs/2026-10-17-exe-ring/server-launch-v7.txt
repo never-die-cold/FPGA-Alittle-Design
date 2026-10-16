@@ -1,0 +1,9 @@
+HOST_STARTED_UTC=2026-10-16T11:04:55.8971986Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'pkill -f "park_live_serve[r]_v6"; sleep 2; cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && rm -rf /home/xilinx/vision_m2/live-artifacts && nohup python3 -u park_live_server_v7.py --host 0.0.0.0 --port 8765 --root /home/xilinx/vision_m2/live-artifacts --order 2 2 2 --min-score 0.8 > /home/xilinx/vision_m2/live-server.log 2>&1 & sleep 6; echo RESTARTED'
+sudo -n bash -c 'pkill -f "park_live_serve[r]_v6"; sleep 2; cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && rm -rf /home/xilinx/vision_m2/live-artifacts && nohup python3 -u park_live_server_v7.py --host 0.0.0.0 --port 8765 --root /home/xilinx/vision_m2/live-artifacts --order 2 2 2 --min-score 0.8 > /home/xilinx/vision_m2/live-server.log 2>&1 & sleep 6; echo RESTARTED'; printf '\n__PYNQ_RC_30e4191cbb09456d986ec1821de66d69=%d\n' $?
+[?2004lRESTARTED
+
+__PYNQ_RC_30e4191cbb09456d986ec1821de66d69=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

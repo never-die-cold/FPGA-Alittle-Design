@@ -1,0 +1,9 @@
+HOST_STARTED_UTC=2026-10-16T10:39:36.1828835Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n true 2>/dev/null && echo SUDO_OK || echo WAITING_FOR_USER_AUTH
+sudo -n true 2>/dev/null && echo SUDO_OK || echo WAITING_FOR_USER_AUTH; printf '\n__PYNQ_RC_11cceb2243b9402f9462bd560587bba8=%d\n' $?
+[?2004lSUDO_OK
+
+__PYNQ_RC_11cceb2243b9402f9462bd560587bba8=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

@@ -1,0 +1,14 @@
+HOST_STARTED_UTC=2026-10-15T16:36:32.7734823Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u c01_park_onboard_diag.py'
+sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u c01_park_onboard_diag.py'; printf '\n__PYNQ_RC_c7c98198364946eaa94adf6c16e2c5ff=%d\n' $?
+[?2004lTraceback (most recent call last):
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_park_onboard_diag.py", line 138, in <module>
+    main()
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_park_onboard_diag.py", line 64, in main
+    raise RuntimeError('trial module is not the reviewed bytes: ' + name)
+RuntimeError: trial module is not the reviewed bytes: c01_park_capture.py
+
+__PYNQ_RC_c7c98198364946eaa94adf6c16e2c5ff=1
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=1

@@ -1,0 +1,10 @@
+HOST_STARTED_UTC=2026-10-15T15:56:13.8868490Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u -c "from pynq import MMIO,PL;name=PL.bitfile_name or \"\";print(\"PL\",name,PL.timestamp);p=MMIO(0x40000000,65536);print(\"PIPE\",{hex(o):p.read(o) for o in (44,48)})"'
+sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u -c "from pynq import MMIO,PL;name=PL.bitfile_name or \"\";print(\"PL\",name,PL.timestamp);p=MMIO(0x40000000,65536);print(\"PIPE\",{hex(o):p.read(o) for o in (44,48)})"'; printf '\n__PYNQ_RC_165f98c9b8204392889bee72b5bcf3a6=%d\n' $?
+[?2004lPL /home/xilinx/vision_m2/vision.bit 2026/9/22 0:38:37 +651605
+PIPE {'0x2c': 0, '0x30': 1}
+
+__PYNQ_RC_165f98c9b8204392889bee72b5bcf3a6=0
+
+HOST_EXIT_CODE=0

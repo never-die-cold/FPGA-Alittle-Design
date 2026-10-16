@@ -1,0 +1,22 @@
+HOST_STARTED_UTC=2026-10-15T16:56:59.4812658Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && source /etc/profile.d/pynq_venv.sh && python3 -u c01_board_cnn_v5.py'
+sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && source /etc/profile.d/pynq_venv.sh && python3 -u c01_board_cnn_v5.py'; printf '\n__PYNQ_RC_43bd89ac23b8459d880f166f9dcce4a2=%d\n' $?
+[?2004lCROP-RESULT: {"class": "bolt", "score": 0.9999982118606567, "probabilities": [0.9999982118606567, 1.4458205441769678e-06, 3.1932333399709023e-07], "logits": [9.29389476776123, -4.152936935424805, -5.663165092468262], "name": "gradient"}
+CROP-RESULT: {"class": "washer", "score": 0.8330474495887756, "probabilities": [0.06725509464740753, 0.09969744831323624, 0.8330474495887756], "logits": [-1.039665699005127, -0.6460187435150146, 1.4769319295883179], "name": "dark_disk"}
+CROP-RESULT: {"class": "washer", "score": 0.9852088689804077, "probabilities": [0.002001548418775201, 0.012789584696292877, 0.9852088689804077], "logits": [-2.7916157245635986, -0.9369057416915894, 3.4073169231414795], "name": "bright_hexagon"}
+CROP-RESULT: {"class": "nut", "score": 0.9877281188964844, "probabilities": [0.01227189414203167, 0.9877281188964844, 1.7155399555748748e-20], "logits": [10.278681755065918, 14.666777610778809, -30.832849502563477], "name": "mid_noise"}
+Traceback (most recent call last):
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_board_cnn_v5.py", line 93, in <module>
+    main()
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_board_cnn_v5.py", line 81, in main
+    matched = all(
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_board_cnn_v5.py", line 82, in <genexpr>
+    all(abs(s['probabilities'][i] - e[i]) <= 2e-5 for i in range(3))
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/c01_board_cnn_v5.py", line 82, in <genexpr>
+    all(abs(s['probabilities'][i] - e[i]) <= 2e-5 for i in range(3))
+KeyError: 0
+
+__PYNQ_RC_43bd89ac23b8459d880f166f9dcce4a2=1
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=1

@@ -1,0 +1,24 @@
+HOST_STARTED_UTC=2026-10-15T16:43:46.7729875Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u c01_park_locate.py'
+sudo -n bash -c 'cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u c01_park_locate.py'; printf '\n__PYNQ_RC_5c3da63ffa654ec8b0c775af33ad8aad=%d\n' $?
+[?2004lSTAGE: HWH metadata parse before programming
+STAGE: HWH layout accepted; candidate download begins
+STAGE: candidate download returned
+LOCATE-PACKET: {"frame_id": 35, "config_id": 0, "width": 1280, "height": 720, "status": "RECHECK_BORDER", "targets": [{"target_id": 0, "frame_id": 35, "config_id": 0, "bbox": [324, 0, 352, 10], "area": 168, "touches_border": true}, {"target_id": 1, "frame_id": 35, "config_id": 0, "bbox": [576, 0, 592, 190], "area": 1835, "touches_border": true}, {"target_id": 2, "frame_id": 35, "config_id": 0, "bbox": [1191, 0, 1279, 73], "area": 2172, "touches_border": true}, {"target_id": 3, "frame_id": 35, "config_id": 0, "bbox": [1182, 26, 1279, 108], "area": 1324, "touches_border": true}, {"target_id": 4, "frame_id": 35, "config_id": 0, "bbox": [0, 504, 1279, 719], "area": 233425, "touches_border": true}], "mode": "LIVE", "prototype": true}
+PASS: real camera frame located
+ip_dict:
+  pipe @ 0x40000000 range 0x10000
+  ps7 @ 0x00000000 range 0x0
+axi_regs 段: pipe @ 0x40000000
+PASS: load
+R11 busy=0 R12 applied=0
+commit 配置号=1 status={'busy': False, 'applied_config_id': 1}
+PASS: smoke（视频在位，帧首整组应用已确认）
+RESTORE: {"restore_error": null, "smoke": "PASS"}
+RESULT: {"boot_before": "c291b2c8-0d7b-49e9-9511-4f5c66d2e37b", "park_sha256": "953dec241be0f4c76d254cdca6efc4da2f334b978338eded49c694dd2f1001b5", "bit_sha256": "86d2adb0343de1785270d207eee3c6b8fee2a6444bc64705bc068e3fc781d14f", "config_id": 0, "kind": "C01_PARK_LOCATE_LIVE_CHAIN_STEP1_NOT_FORMAL", "capture": {"identity": ["c291b2c8-0d7b-49e9-9511-4f5c66d2e37b", "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/capture.bit", "2026/9/22 1:28:14 +748157"], "mode": "PARK_CANDIDATE_NOT_BOARD_VERIFIED", "buffers": [{"address": 361758720, "shape": [720, 1280, 3], "dtype": "uint8", "strides": [3840, 3, 1], "bytes": 2764800, "coherent": false}, {"address": 364904448, "shape": [720, 1280, 3], "dtype": "uint8", "strides": [3840, 3, 1], "bytes": 2764800, "coherent": false}, {"address": 368050176, "shape": [720, 1280, 3], "dtype": "uint8", "strides": [3840, 3, 1], "bytes": 2764800, "coherent": false}, {"address": 371195904, "shape": [720, 1280, 3], "dtype": "uint8", "strides": [3840, 3, 1], "bytes": 2764800, "coherent": false}], "warmup_1": {"cr": 69633, "sr": 69632, "park": 16777472, "cap": {"0x0": 1128353841, "0x4": 3, "0x8": 33, "0xc": 0, "0x10": 0, "0x14": 1280, "0x18": 720, "0x1c": 0, "0x20": 0}}, "park_0": {"cr": 69633, "sr": 69632, "park": 0, "cap": {"0x0": 1128353841, "0x4": 3, "0x8": 34, "0xc": 0, "0x10": 0, "0x14": 1280, "0x18": 720, "0x1c": 0, "0x20": 0}}, "park_1": {"cr": 69633, "sr": 69632, "park": 16777472, "cap": {"0x0": 1128353841, "0x4": 3, "0x8": 35, "0xc": 0, "0x10": 0, "0x14": 1280, "0x18": 720, "0x1c": 0, "0x20": 0}}, "protected_before": {"cr": 69633, "sr": 69632, "park": 16777472, "cap": {"0x0": 1128353841, "0x4": 3, "0x8": 35, "0xc": 0, "0x10": 0, "0x14": 1280, "0x18": 720, "0x1c": 0, "0x20": 0}}, "protected_after": {"cr": 69633, "sr": 69632, "park": 16777472, "cap": {"0x0": 1128353841, "0x4": 3, "0x8": 36, "0xc": 0, "0x10": 0, "0x14": 1280, "0x18": 720, "0x1c": 0, "0x20": 0}}, "seconds": {"capture": 0.0933552550004606, "invalidate": 0.00029233900022518355, "copy": 0.02091227699929732}, "cleanup": "halt confirmed; 4 owned buffers freed once"}, "frame_id": 35, "locate_seconds": 11.948750468000071, "packet": {"frame_id": 35, "config_id": 0, "width": 1280, "height": 720, "status": "RECHECK_BORDER", "targets": [{"target_id": 0, "frame_id": 35, "config_id": 0, "bbox": [324, 0, 352, 10], "area": 168, "touches_border": true}, {"target_id": 1, "frame_id": 35, "config_id": 0, "bbox": [576, 0, 592, 190], "area": 1835, "touches_border": true}, {"target_id": 2, "frame_id": 35, "config_id": 0, "bbox": [1191, 0, 1279, 73], "area": 2172, "touches_border": true}, {"target_id": 3, "frame_id": 35, "config_id": 0, "bbox": [1182, 26, 1279, 108], "area": 1324, "touches_border": true}, {"target_id": 4, "frame_id": 35, "config_id": 0, "bbox": [0, 504, 1279, 719], "area": 233425, "touches_border": true}], "mode": "LIVE", "prototype": true}, "ok": true, "restore": {"restore_error": null, "smoke": "PASS"}, "boot_after": "c291b2c8-0d7b-49e9-9511-4f5c66d2e37b"}
+PASS: original vision restored; locate chain step complete
+
+__PYNQ_RC_5c3da63ffa654ec8b0c775af33ad8aad=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0
