@@ -23,7 +23,7 @@ from vision_protocol import mock_packet
 from rounds import AsyncRemoteRounds, live_view
 from records import AnomalyLog, BatchRecords
 from hud_text import TextEngine
-from hud import (AMBER, AMBER_DEEP, BUTTON, CYAN, DIM, GREEN, MAIN, RED, Hud)
+from hud import (AMBER, AMBER_DEEP, CYAN, DIM, GREEN, MAIN, RED, Hud)
 import cv2
 import numpy as np
 
@@ -96,61 +96,59 @@ class FpsMeter:
         return round((len(self.times) - 1) / span) if span > 0 else 0
 
 
-def demo_state(packet, fps):
-    targets = [tuple(t["bbox"]) for t in packet["targets"]]
+def demo_state(packet, fps, selected, hover=None):
+    entries = [(f"T{i}", tuple(t["bbox"]), None) for i, t in enumerate(packet["targets"])]
     return {"badge": ("MOCK ONLY", AMBER),
             "status": ("LOCAL DEMO", MAIN, "SemiBold"),
             "detail": f"{packet['width']} x {packet['height']} | {fps} FPS",
             "clock": clock_text(),
-            "cells": [("ROUND", str(packet["check_id"]), MAIN),
-                      ("TARGETS", str(len(targets)), MAIN),
-                      ("REC", "--", DIM)],
-            "fresh": None, "boxes": targets, "list": targets, "button": False}
+            "scope": {"selected": selected, "counts": dict.fromkeys(("bolt", "nut", "washer")),
+                      "hover": hover, "note": f"ROUND {packet['check_id']} · REC --",
+                      "button": "idle"},
+            "fresh": None, "boxes": [entry[:2] for entry in entries], "list": entries}
 
 
 def uvc_state(shape, fps):
     return {"badge": ("VIDEO ONLY", DIM),
             "status": ("UNASSOCIATED | no board recognition", DIM, "Regular"),
             "detail": f"{shape[1]} x {shape[0]} | {fps} FPS",
-            "clock": clock_text(), "cells": None, "fresh": None,
-            "boxes": None, "list": None, "button": False}
+            "clock": clock_text(), "fresh": None, "boxes": None, "list": None}
 
 
 VERDICT_COLOR = {"CHECK_PASS": GREEN, "CHECK_FAIL": RED, "RECHECK": AMBER_DEEP}
 
 
-def endpoint_state(remote, rec_count, current, age, fps, shape):
+def endpoint_state(remote, rec_count, current, age, fps, shape, selected, hover):
     rec_val = str(rec_count) if rec_count is not None else "--"
-    rec_color = MAIN if rec_count is not None else DIM
     packet = remote.packet
+    scope = {"selected": selected, "hover": hover,
+             "counts": dict.fromkeys(("bolt", "nut", "washer")),
+             "note": None,
+             "button": ("running" if remote.manual_in_flight
+                        else "queued" if remote.manual_pending else "idle")}
     state = {"badge": ("LIVE", GREEN) if remote.mode == "LIVE" else ("MOCK ONLY", AMBER),
              "clock": clock_text(),
              "detail": f"{shape[1]} x {shape[0]} | {fps} FPS | session {remote.session[:8]}",
-             "button": True}
+             "scope": scope}
     if packet is not None and packet.get("prototype"):
         state["badge2"] = ("PROTOTYPE", RED)  # C04 §3.2：离线产物代实时结果，恒显不可关闭
     if current:
-        targets = [tuple(t["bbox"]) for t in packet["targets"]]
-        if remote.mode == "LIVE":
-            view = live_view(packet)
-            status = (f"{view['verdict']} {view['delta']}".rstrip(),
-                      VERDICT_COLOR.get(view["verdict"], MAIN))
-            cells = [("ROUND", str(packet["check_id"]), MAIN),
-                     ("TARGETS", view["targets"], MAIN), ("REC", rec_val, rec_color)]
-            labels = view["labels"]
-        else:
-            status, labels = ("STREAMING", MAIN), None
-            cells = [("ROUND", str(packet["check_id"]), MAIN),
-                     ("TARGETS", str(len(targets)), MAIN), ("REC", rec_val, rec_color)]
-        state.update(status=(*status, "SemiBold"), cells=cells,
+        view = live_view(packet)
+        status = (f"{view['verdict']} {view['delta']}".rstrip(),
+                  VERDICT_COLOR.get(view["verdict"], MAIN))
+        if view["counts"]:
+            scope["counts"] = view["counts"]
+        scope["note"] = f"ROUND {packet['check_id']} · REC {rec_val}"
+        # 识别范围过滤：未勾选类别不画框/不进列表；T 序号保留目标原始编号，不重排
+        entries = [(f"T{i}", tuple(t["bbox"]), view["labels"][i])
+                   for i, t in enumerate(packet["targets"])
+                   if t.get("class") is None or selected.get(t.get("class"), True)]
+        state.update(status=(*status, "SemiBold"),
                      fresh=(max(0.0, 1.0 - age / remote.max_age), CYAN),
-                     boxes=targets, list=targets)
-        if labels is not None:
-            state["labels"] = labels
+                     boxes=[entry[:2] for entry in entries], list=entries)
     else:
+        scope["note"] = f"ROUND -- · REC {rec_val}"
         state.update(status=("WAITING FOR RESULT", AMBER_DEEP, "SemiBold"),
-                     cells=[("ROUND", "--", AMBER_DEEP), ("TARGETS", "--", AMBER_DEEP),
-                            ("REC", rec_val, rec_color)],
                      fresh=(1.0, RED), boxes=None, list=[])
     return state
 
@@ -172,8 +170,14 @@ def main():
                         help="batch record dir (D8-D10): manual-triggered current rounds only")
     parser.add_argument("--trigger-frame", type=int, default=0,
                         help="self-check hook: simulate one manual trigger (c) at frame N")
+    parser.add_argument("--scope", default="bolt,nut,washer",
+                        help="initial inspection scope: comma list of bolt/nut/washer")
     args = parser.parse_args()
     _set_dpi_awareness()
+    scope_names = [name.strip() for name in args.scope.split(",") if name.strip()]
+    if any(name not in ("bolt", "nut", "washer") for name in scope_names):
+        parser.error("--scope must be a comma list of bolt/nut/washer")
+    selected = {name: name in scope_names for name in ("bolt", "nut", "washer")}
     if args.replay:
         if args.mock or args.endpoint or args.records_dir or args.selftest or args.trigger_frame:
             parser.error("--replay cannot combine with mock, endpoint, records, selftest or trigger")
@@ -182,8 +186,9 @@ def main():
         return
     if args.selftest:
         engine = TextEngine()
+        hud = Hud(engine)
         p = mock_packet("selftest", 1, 0, 1)
-        canvas = Hud(engine).render(mock_frame(p), demo_state(p, 30))
+        canvas = hud.render(mock_frame(p), demo_state(p, 30, dict.fromkeys(("bolt", "nut", "washer"), True)))
         assert canvas.shape == (900, 1600, 3)
         vx, vy, vw, vh = VIEW_RECT
         assert green_pixels(canvas[vy:vy + vh, vx:vx + vw]) > 500, "target boxes missing in viewport"
@@ -191,6 +196,11 @@ def main():
         probe = np.zeros((44, 260, 3), np.uint8)
         w, h = engine.draw(probe, "螺栓 螺母 垫圈", 6, 8, 24, (230, 237, 246), "SemiBold")
         assert w > 60 and h > 12 and probe.sum() > 0, "CJK text render failed"
+        bolt = hud.scope_rects["bolt"]
+        run = hud.scope_rects["run"]
+        assert hud.hit_test(bolt[0] + bolt[2] // 2, bolt[1] + bolt[3] // 2) == ("toggle", "bolt")
+        assert hud.hit_test(run[0] + 5, run[1] + 5) == ("run", None)
+        assert hud.hit_test(5, 5) is None
         print("PASS: preview mock renderer packaged runtime")
         return
     if args.interval >= args.max_age:
@@ -210,6 +220,7 @@ def main():
     hud = Hud(TextEngine())
     fps = FpsMeter()
     click_pending = [False]
+    hover = [None]
     disp = (1600, 900)
     scale = 1.0
     if not args.headless:
@@ -219,11 +230,17 @@ def main():
         print(f"display {disp[0]}x{disp[1]} (scale {scale:.2f}, work area {aw}x{ah})", flush=True)
 
         def on_mouse(event, x, y, flags, param):
-            if event == cv2.EVENT_LBUTTONDOWN:
-                bx, by, bw, bh = BUTTON
-                mx, my = x / scale, y / scale  # 窗口像素 → 画布坐标
-                if bx <= mx <= bx + bw and by <= my <= by + bh:
+            mx, my = x / scale, y / scale  # 窗口像素 → 画布坐标
+            hit = hud.hit_test(mx, my)
+            if event == cv2.EVENT_MOUSEMOVE:
+                hover[0] = hit[1] if hit and hit[0] == "toggle" else None
+            elif event == cv2.EVENT_LBUTTONDOWN and hit is not None:
+                if hit[0] == "toggle":
+                    selected[hit[1]] = not selected[hit[1]]
+                elif remote is not None:
                     click_pending[0] = True
+                else:
+                    print("WARN: RUN needs --endpoint (local demo has no service)", flush=True)
     else:
         def on_mouse(event, x, y, flags, param):
             pass
@@ -251,7 +268,8 @@ def main():
             fresh = now
             if remote is None:
                 if capture is None:
-                    state = demo_state(mock_packet("local-preview", i, 0, i), fps.value())
+                    state = demo_state(mock_packet("local-preview", i, 0, i), fps.value(),
+                                       selected, hover[0])
                 else:
                     state = uvc_state(frame.shape, fps.value())
             else:
@@ -265,7 +283,8 @@ def main():
                                and remote.last_round_manual and recorder.accept(remote.packet))
                 rec_count = (recorder.count + (1 if will_record else 0)
                              if recorder is not None else None)
-                state = endpoint_state(remote, rec_count, current, age, fps.value(), frame.shape)
+                state = endpoint_state(remote, rec_count, current, age, fps.value(), frame.shape,
+                                       selected, hover[0])
             canvas = hud.render(frame, state)
             if will_record:
                 recorder.write(remote.packet, canvas, fresh - remote.received_at)

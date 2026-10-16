@@ -37,11 +37,12 @@ CLASSES = ("bolt", "nut", "washer")
 
 
 def live_view(packet):
-    """LIVE 报文 → 显示摘要（endpoint_state 消费；纯函数，离板可测）。
+    """LIVE 报文 → 显示摘要（endpoint_state / 识别范围表消费；纯函数，离板可测）。
 
     返回 verdict（报文 status 原文，判定横幅文本）、delta（缺/多摘要，如 "-washerx1"）、
     targets（"实际/工单" 总数；无 decision 时退化为目标数）、labels（与 targets 对齐的
-    (类别显示名, 分数文本)；class=null → unclassified，缺分数 → "--"）。
+    (类别显示名, 分数文本)；class=null → unclassified，缺分数 → "--"）、
+    counts（逐类别已分类目标数；LOCATION_ONLY＝无分类语义 → None，显示"--"）。
     """
     labels = [(t.get("class") if t.get("class") in CLASSES else "unclassified",
                f"{t['score']:.2f}" if isinstance(t.get("score"), (int, float)) else "--")
@@ -49,12 +50,16 @@ def live_view(packet):
     decision = packet.get("decision")
     if packet["status"] == "LOCATION_ONLY" or not isinstance(decision, dict):
         return {"verdict": "LOCATION_ONLY", "delta": "",
-                "targets": str(len(labels)), "labels": labels}
+                "targets": str(len(labels)), "labels": labels, "counts": None}
+    counts = dict.fromkeys(CLASSES, 0)
+    for label, _ in labels:
+        if label in counts:
+            counts[label] += 1
     missing = [f"-{name}x{n}" for name, n in decision["missing"].items() if n]
     extra = [f"+{name}x{n}" for name, n in decision["extra"].items() if n]
     return {"verdict": packet["status"], "delta": " ".join(missing + extra),
             "targets": f"{sum(decision['actual'].values())}/{sum(decision['expected'].values())}",
-            "labels": labels}
+            "labels": labels, "counts": counts}
 
 
 def http_json(url, body=None):
@@ -192,6 +197,7 @@ class AsyncRemoteRounds(RemoteRounds):
         self._network = RemoteRounds(endpoint, max_age)
         self._results = queue.SimpleQueue()
         self._in_flight = False
+        self.manual_in_flight = False  # 按钮反馈：在飞请求是否为手动轮（GUI 侧可读）
         self._closed = False
         self._thread = None
 
@@ -232,6 +238,7 @@ class AsyncRemoteRounds(RemoteRounds):
         try:
             self._adopt(self._results.get_nowait())
             self._in_flight = False
+            self.manual_in_flight = False
         except queue.Empty:
             pass
         if self._in_flight or now - self.last_trigger < interval:
@@ -239,6 +246,7 @@ class AsyncRemoteRounds(RemoteRounds):
         self.last_trigger = now
         manual, self.manual_pending = self.manual_pending, False
         self._in_flight = True
+        self.manual_in_flight = manual
         self._thread = threading.Thread(target=self._request, args=(now, manual), daemon=True)
         self._thread.start()
 

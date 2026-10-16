@@ -20,14 +20,17 @@ def render_manifest(path):
         raise ValueError("invalid replay frame dimensions")
     actual = result["decision"]["actual"]
     expected = result["decision"]["expected"]
-    counts = [(label.upper(), f"{actual[label] if actual is not None else '--'}/{expected[label]}", MAIN)
-              for label in ("bolt", "nut", "washer")]
+    counts = {label: f"{actual[label] if actual is not None else '--'}/{expected[label]}"
+              for label in ("bolt", "nut", "washer")}
     state = {"badge": ("FILE REPLAY", AMBER), "clock": "OFFLINE SNAPSHOT",
              "status": ("PROTOTYPE / " + result["decision"]["verdict"], MAIN, "SemiBold"),
-             "detail": result["request_id"], "cells": counts, "fresh": None,
-             "counts_note": "ACTUAL / WORK ORDER",
-             "boxes": None, "list": [tuple(target["bbox"]) for target in result["targets"]],
-             "button": False}
+             "detail": result["request_id"],
+             "scope": {"selected": dict.fromkeys(("bolt", "nut", "washer"), True),
+                       "readonly": True, "counts": counts, "hover": None,
+                       "note": "ACTUAL / ORDER", "button": None},
+             "fresh": None, "boxes": None,
+             "list": [(f"T{index}", tuple(target["bbox"]), None)
+                      for index, target in enumerate(result["targets"])]}
     return Hud(TextEngine(), system=("OFFLINE FILE", AMBER)).render(frame, state)
 
 
