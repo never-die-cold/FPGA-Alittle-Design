@@ -1,0 +1,2 @@
+PASS: cnn_sequencer watchdog 82 exact-cycle cases; CE pause, latched budget and terminal strobes
+sim/coprocessor/tb_cnn_sequencer.v:145: $finish called at 17266000 (1ps)

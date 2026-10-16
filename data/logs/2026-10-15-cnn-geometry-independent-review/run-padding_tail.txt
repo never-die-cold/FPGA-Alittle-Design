@@ -1,0 +1,4 @@
+PASS: conv_engine case=E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/padding_tail words=36 read_transactions=216 cycles=2535; every pixel/lane matches Python
+PASS: conv_engine geometry 528 launch/size/rejection cases; independent integer oracle
+PASS: conv_engine bad requant/overflow/config/watchdog/reset recovery; ce stalls tested
+sim/coprocessor/tb_conv_engine.v:143: $finish called at 71006000 (1ps)

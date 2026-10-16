@@ -1,0 +1,13 @@
+### 本步新增/修改
+c37c613ee77e39f2730d3b4d9c96f6e780643c27857fc11c7dcab2abb8a5e615 *sim/vision/test_c01_ddr_onboard.py
+27cf6a79a099b3e3fb63f33ce683082531e02040fe9a15b296a0fddcc214dcd1 *sim/scripts/run_vision_python.sh
+
+### N03 三件套现状
+1f11aefdc11805387b0c345583828fd733e5e38b0b0e043b0510808f648e8430 *src/pynq_host/c01_capture.py
+54dd5d64cb251bccfeb1176681a50ef7994852238e7d3917dfc72b6477fa0e82 *sim/scripts/c01_ddr_onboard.py
+894bf7dc01ba9260c48cde7ab0b1aecdd6bfa157f7fa43252170cea1752e1810 *sim/scripts/c01_status_onboard.py
+
+### 10-14 runner-inputs.json 记录值
+1f11aefdc11805387b0c345583828fd733e5e38b0b0e043b0510808f648e8430 src/pynq_host/c01_capture.py
+e822a70800a923ccdb3ce45496e71342b032035389dba935d6fac6f09edd5646 sim/scripts/c01_ddr_onboard.py
+894bf7dc01ba9260c48cde7ab0b1aecdd6bfa157f7fa43252170cea1752e1810 sim/scripts/c01_status_onboard.py

@@ -1,0 +1,2 @@
+PASS: cnn_sequencer E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/network-vectors/zero all 9225 packed words/73795 elements match integer network; logits=04fd02 class=2 margin=2 cycles=1123109
+sim/coprocessor/tb_cnn_sequencer.v:136: $finish called at 11231136000 (1ps)
