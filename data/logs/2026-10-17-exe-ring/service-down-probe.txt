@@ -1,0 +1,7 @@
+HOST_STARTED_UTC=2026-10-16T14:48:12.9472925Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=echo AUTH; sudo -n true 2>/dev/null && echo SUDO_OK || echo SUDO_NEED_PW; echo ADDR; ip -br addr show eth0; echo SERVER; pgrep -af "park_live_serve[r]" && echo UP || echo DOWN; tail -3 /home/xilinx/vision_m2/live-server.log 2>/dev/null; echo BOOT; cat /proc/sys/kernel/random/boot_id
+
+ERROR: 使用“0”个参数调用“Open”时发生异常:“端口“COM12”不存在。”
+
+HOST_EXIT_CODE=1

@@ -1,0 +1,32 @@
+HOST_STARTED_UTC=2026-10-16T14:49:57.0185780Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=pgrep -af "park_live_serve[r]" && echo UP || echo SERVER_DOWN; echo LOG_TAIL; tail -20 /home/xilinx/vision_m2/live-server.log; echo BOOT; cat /proc/sys/kernel/random/boot_id
+pgrep -af "park_live_serve[r]" && echo UP || echo SERVER_DOWN; echo LOG_TAIL; tail -20 /home/xilinx/vision_m2/live-server.log; echo BOOT; cat /proc/sys/kernel/random/boot_id; printf '\n__PYNQ_RC_35b1282219c54ead8ee972ceedbeb93e=%d\n' $?
+[?2004lSERVER_DOWN
+LOG_TAIL
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 216 in main
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 220 in <module>
+Timeout (0:02:30)!
+Thread 0xb6f33020 (most recent call first):
+  File "/usr/lib/python3.10/selectors.py", line 416 in select
+  File "/usr/lib/python3.10/socketserver.py", line 232 in serve_forever
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 216 in main
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 220 in <module>
+Timeout (0:02:30)!
+Thread 0xb6f33020 (most recent call first):
+  File "/usr/lib/python3.10/selectors.py", line 416 in select
+  File "/usr/lib/python3.10/socketserver.py", line 232 in serve_forever
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 216 in main
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 220 in <module>
+Timeout (0:02:30)!
+Thread 0xb6f33020 (most recent call first):
+  File "/usr/lib/python3.10/selectors.py", line 416 in select
+  File "/usr/lib/python3.10/socketserver.py", line 232 in serve_forever
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 216 in main
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 220 in <module>
+BOOT
+7c8bc915-36a5-4f0b-9353-4319f994c12e
+
+__PYNQ_RC_35b1282219c54ead8ee972ceedbeb93e=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0
