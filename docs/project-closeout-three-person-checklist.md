@@ -29,6 +29,9 @@ JL 可以在电脑上生成 bit/hwh；下载到板卡、在线 ILA、实机网�
 - ✅ W05 FILE 服务骨架、网络 LIVE 替身、PROTOTYPE 标识、类别/分数/工单横幅、记录 schema v2 与 CSV 已离板验证；真实硬件后端、检查快照查看和完整工业验收尚未完成。
 - ✅ 10/13 新增离板计算链：MAC、卷积地址调度、bias/ReLU/requant/GAP/FC 与整网控制器、诊断整数黄金、参数拒绝门；控制器 OOC 100 MHz setup/hold/资源/严重DRC门通过（192 DSP，外部存储未计入）。[当前证据](../data/logs/2026-10-13-cnn-arithmetic/README.md)。
 - 🟡 custom DDR 单帧驱动与七组离板异常测试已有，完整帧尚未取得；两次实测启动前失败，释放/恢复已确认，用户转离板后未复测。[DDR证据](../data/logs/2026-10-13-ddr-single-frame/README.md)。
+- ✅ 10/15 离板独立复核五组：C01 入口替身 step2-3（main 不接板真实执行 11 条路径）、停机期粘滞错误位含桩覆盖（0x4810 判据缺口）、CNN 快批次声明独立复跑逐项一致、CNN 几何位宽优化独立交叉复核、N03 包离板 SHA256/配对复算 6/6 OK。[证据](../data/logs/2026-10-15-c01-entry-surrogate-step2/README.md)。
+- ✅ 10/17 EXE 环 LIVE 两轮 PASS：板端 park 采集后端 + numpy CNN 引擎 + W05 服务骨架，PC 经 192.168.50.99:8765 消费 v1.2 包（94–122 s/轮，RECHECK 属实）；板端服务挂掉→OOM 探查→cron 自愈安装全程留档；三层亚克力工位容器概念稿 v1 入库。[证据](../data/logs/2026-10-17-exe-ring/README.md)、[工位概念稿](enclosure/acrylic-three-tier-concept-v1.md)。
+- 🟡 M3（10/20）卡点报备：prototype 全链只作阶段成果；C03 硬件 CNN（J02）、正式工位 N04/N05（等拍摄环境）、N10–N12 实测预计顺延，口径见主计划 §3.1，降级范围由 owner 定。
 - ⬜ 正式 INT8模型/生产黄金、实体缓存与 CNN MMIO/DMA接入、首网板端输出、核工业固件、custom DDR完整帧实测、真实硬件 LIVE 与工业闭环未完成。相似帧、GT 对照、朝向统计未实现；仓库当前无正式 `data/datasets/` 采集目录。
 
 ### 2.1 NC 离板推进入口（2026-10-12）
@@ -122,6 +125,7 @@ C03 已冻结协议/硬件能力16与检查V0业务策略10；C04的超限计数
 
 以上日期继承主计划，是收口目标，不代表任务自动完成。
 截至2026-10-13，CNN算子/整网控制器及诊断黄金已有，实体缓存/MMIO/DMA和首网板端输出仍缺，M2尚未通过；先交诊断计算链，再完成集成与正式参数。
+2026-10-17 M3 报备：prototype 六环两轮 PASS（PS numpy CNN 过渡，prototype=true）；J02 硬件 CNN 与正式工位未到，N10–N12 无法按期实测，缺口已在主计划 §3.1 报备，等待 owner 裁决降级范围。
 若未达到硬件首网条件，明确记M2未通过及缺口，PS软件演示只能作为阶段成果，不能替代验收。
 
 关键依赖：NC原帧→WC标注/ROI→JL正式量化→JL整网RTL/集成→NC硬件对拍→WC完整LIVE→NC工业验收。
