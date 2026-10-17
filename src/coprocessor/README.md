@@ -9,6 +9,7 @@ RISC-V 以 load/store 访问且不启用自定义指令。
 - [C03 集成接口契约](../../docs/coprocessor-integration-v0.md)：MMIO、DMA、状态、结果、固件与 PS 分工。
 
 两份文件均已由 JL 于 2026-10-11 冻结；它们不是 RTL、正式 INT8 模型或 M2 验收证据。
+模块 J01–J10 状态与进入 J04 的门槛见 [`plan.md`](plan.md)。
 
 ## 规划内容
 
@@ -26,6 +27,9 @@ RISC-V 以 load/store 访问且不启用自定义指令。
 - C03 已给出寄存器映射；实际接入时须同步核/SoC 契约与驱动，当前 MMIO/DMA 均未接入
 
 ## 已实现的离板计算链（2026-10-13）
+
+现役计算通路使用 `mac_array_pipeline.v` 内部的 128 路乘法/加法树；`mac_lane.v` 与
+`dot8.v` 仅是独立诊断模块，未被现役阵列实例化，二者 PASS 不能替代现役流水线对拍。
 
 `int8_mac.v` 和 `mac_array.v` 提供组合乘加与 O16/I8 阵列；`mac_array_pipeline.v` 提供 128 路乘法和分拍加法树。`int8_requant.v` / `int8_requant_pipeline.v` 按 C02 实现 ReLU、远离零舍入与对称饱和；`int8_gap.v`、`int8_logits.v` 实现 GAP、稳定 argmax、margin/score 和低置信判定。INT32 溢出导致失败，不回绕或饱和后继续。
 
