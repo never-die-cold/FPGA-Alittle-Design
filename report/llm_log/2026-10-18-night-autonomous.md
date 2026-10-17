@@ -66,11 +66,37 @@ J04 RTL、综合/实现/位流和上板。需要新决策时只记问题并跳�
 
 ## 2. 完成记录
 
-待续。
+### J03-R1 runner 接入复验：设计说明
+
+- 起点提交 `cb352f8` 已完成脚本接入；本夜不重复改 RTL/runner，只验证其可复现性。
+- 目标：证明 `mac_lane`、`dot8` 均有独立入口，且进入协处理器 `all` 和全仓 `all`。
+- 本步预估改动：夜间日志约 15 行；RTL/脚本 0 行。
+- 验证命令：`run_iverilog.sh cop_mac_lane`、`cop_dot8`、
+  `run_coprocessor_iverilog.sh all`、`run_iverilog.sh all`、`git diff --check`。
+
+复验结果（原始退出码）：
+
+- `run_iverilog.sh cop_mac_lane`：0；`PASS: mac_lane signed INT8 products (7 vectors)`。
+- `run_iverilog.sh cop_dot8`：0；`PASS: dot8 balanced signed reduction (5 vectors)`。
+- `run_coprocessor_iverilog.sh all`：0；算术、流水线、Conv1–4、FC、两组
+  sequencer 逐元素黄金全 PASS；两组整网均为 472,593 cycles。
+- 首次 `run_iverilog.sh all`：1；默认 Python 缺 `cv2`，最小复现为
+  `python3 -c "import cv2"`，实际 `ModuleNotFoundError`。
+- 第二次全仓：1；`--target` 依赖能通过 OpenCV 用例，但 ordering 负例会替换
+  `PYTHONPATH`，子进程因缺 NumPy 提前退出，因而找不到预期板端失败签名。
+- 仓库内 `virtualenv==20.35.3` 创建 `sim/build/vision-venv-full`，安装冻结的
+  OpenCV 4.12.0.88、NumPy 2.2.6、Pillow 12.3.0；构建目录不纳入提交。
+- 单独复现 `test_c01_capture_ordering.py`：0；预期 0x4810 失败签名出现。
+- 第三次 `run_iverilog.sh all`：0；使用上述 venv；四档真实 CoreMark 分别
+  19,057,438 / 17,114,141 / 16,335,562 / 16,232,079 cycles，协处理器、
+  核、视觉 RTL 与 Python 收尾全部 PASS。
+- 本步源码/RTL/runner 改动：0 行；仅补充本日志。起点 runner 实现提交仍为
+  `cb352f8`，夜间复验不制造重复功能提交。
 
 ## 3. 失败、跳过与待确认问题
 
-待续。
+- 全仓前两次失败均已保留在上节；根因是解释器依赖可见性，不是通过删测试或
+  注释断言处理。最终使用仓库内完整 venv 原入口退出 0。
 
 ## 4. 续工点
 
