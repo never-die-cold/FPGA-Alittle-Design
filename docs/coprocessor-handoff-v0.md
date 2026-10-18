@@ -49,6 +49,8 @@
 ## 复现入口
 
 ```text
+bash sim/scripts/run_coprocessor_python.sh manifests
+bash sim/scripts/run_coprocessor_python.sh all
 bash sim/scripts/run_iverilog.sh cop_mac_lane
 bash sim/scripts/run_iverilog.sh cop_dot8
 bash sim/scripts/run_coprocessor_iverilog.sh all
