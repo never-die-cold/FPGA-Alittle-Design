@@ -161,6 +161,21 @@ Python 缺 NumPy 退出 1；保留失败后，用仓库内既有冻结依赖 ven
 结果：runner 注释改 1 行；两份脚本 `bash -n` 均退出 0，静态核对命中完整模式列表，
 `git diff --check` 退出 0。纯注释变更未重跑已完成的全仓回归。
 
+### 低风险补测：诊断 golden manifest 完整性设计说明
+
+- 三个 golden 生成器会记录 SHA256，但现有测试没有重新读取 manifest 校验落盘字节。
+- 新增一个 Python 测试，在 `sim/build/coprocessor` 内生成算术、算子和整网诊断数据，
+  核对固定 kind/case/必需文件集合，并独立重算所有文件与来源 SHA256。
+- 对一个生成文件临时追加字节，断言哈希不再匹配后立即恢复，证明负例具备检错能力。
+- 预计测试、runner 与日志合计不超过 100 行；不改算法、RTL、冻结契约或正式模型状态。
+- 验证：独立 `manifests`、Python `all`、全仓 `all`、`git diff --check`。
+
+结果：新增测试 69 行，runner 改 5 行，日志增 15 行；共新增 87、删除 2，
+总改动 89 行，满足单步上限。独立 `manifests` 和 Python `all` 均退出 0；全仓 `all`
+退出 0，并实际打印 manifest 完整性 PASS。四档真实 CoreMark 为 19,057,438 /
+17,114,141 / 16,335,562 / 16,232,079 cycles，核、协处理器、视觉 RTL 与 Python
+收尾均 PASS。`git diff --check` 退出 0；生成物只在被忽略的 `sim/build` 内。
+
 ### 本夜完成的本地提交
 
 - `7553803`：第零阶段全量阅读、三类清单、范围与约束落盘；
