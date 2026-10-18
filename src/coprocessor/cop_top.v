@@ -22,14 +22,17 @@ module cop_top #(
     output wire [31:0] store_addr_o,
     output wire [63:0] store_data_o,
     output wire [7:0] store_strb_o,
-    input wire engine_ready_i, engine_done_i, engine_error_i, engine_timeout_i,
     input wire [15:0] target_id_i,
-    input wire [1:0] engine_class_i,
-    input wire [7:0] engine_margin_i,
-    input wire [14:0] engine_score_i,
-    input wire engine_low_conf_i,
-    input wire [23:0] engine_logits_i,
-    input wire [31:0] engine_cycles_i,
+    input wire [63:0] memory_data_i,
+    input wire [1023:0] weight_data_i,
+    input wire [511:0] bias_data_i, multiplier_data_i,
+    input wire [95:0] shift_data_i,
+    output wire memory_enable_o, weight_enable_o, parameter_enable_o,
+    output wire [1:0] read_bank_o, write_bank_o,
+    output wire [15:0] read_address_o, weight_address_o, write_address_o,
+    output wire [7:0] parameter_address_o,
+    output wire memory_write_o,
+    output wire [63:0] memory_write_data_o,
     input wire irq_pending_i,
     output wire engine_start_o, result_write_o,
     output wire [3:0] task_result_index_o,
@@ -43,6 +46,10 @@ module cop_top #(
     wire done_status,error_status,timeout_status,result_valid_status;
     wire cfg_valid,loader_done,loader_error,loader_short,dma_busy;
     wire start_command,task_ready,task_busy,task_done,task_error,task_timeout;
+    wire engine_ready,engine_busy,engine_done,engine_error,engine_start;
+    wire [2:0] engine_error_layer; wire [31:0] engine_cycles;
+    wire [1:0] engine_class; wire [7:0] engine_margin;
+    wire [14:0] engine_score; wire engine_low_conf; wire [23:0] engine_logits;
     wire [31:0] cfg_applied,model_id,timeout_cycles,weight_bytes,dma_bytes;
     wire [4:0] roi_count; wire [7:0] min_margin; reg model_valid,roi_valid,load_kind;
     cop_core_mmio_gate #(.COP_BASE(COP_BASE)) gate(
@@ -78,14 +85,25 @@ module cop_top #(
         .bytes_received_o(dma_bytes));
     cop_task_ctrl u_task(.clk(cop_clk),.rst_n(rst_n),.start_i(start_command),.cfg_valid_i(cfg_valid),
         .model_valid_i(model_valid),.roi_valid_i(roi_valid),.roi_count_i(roi_count),
-        .engine_ready_i(engine_ready_i),.engine_done_i(engine_done_i),.engine_error_i(engine_error_i),
-        .engine_timeout_i(engine_timeout_i),.target_id_i(target_id_i),.result_class_i(engine_class_i),
-        .result_margin_i(engine_margin_i),.result_score_i(engine_score_i),
-        .result_low_conf_i(engine_low_conf_i),.result_logits_i(engine_logits_i),
-        .result_cycles_i(engine_cycles_i),.ready_o(task_ready),.busy_o(task_busy),
+        .engine_ready_i(engine_ready),.engine_done_i(engine_done),.engine_error_i(engine_error),
+        .engine_timeout_i(engine_error && engine_error_layer==7),.target_id_i(target_id_i),
+        .result_class_i(engine_class),.result_margin_i(engine_margin),.result_score_i(engine_score),
+        .result_low_conf_i(engine_low_conf),.result_logits_i(engine_logits),
+        .result_cycles_i(engine_cycles),.ready_o(task_ready),.busy_o(task_busy),
         .done_pulse_o(task_done),.error_pulse_o(task_error),.timeout_pulse_o(task_timeout),
-        .engine_start_o(engine_start_o),.result_write_o(result_write_o),
+        .engine_start_o(engine_start),.result_write_o(result_write_o),
         .result_index_o(task_result_index_o),.result_seq_o(result_seq_o),.result_data_o(result_data_o));
+    assign engine_start_o=engine_start;
+    cnn_sequencer engine(.clk(cop_clk),.rst_n(rst_n),.ce(1'b1),.start(engine_start),
+        .min_margin(min_margin),.cycle_limit(timeout_cycles),.ready(engine_ready),.busy(engine_busy),
+        .done(engine_done),.error(engine_error),.error_layer(engine_error_layer),.cycles(engine_cycles),
+        .result_class(engine_class),.result_margin(engine_margin),.result_score(engine_score),
+        .result_low_conf(engine_low_conf),.result_logits(engine_logits),.memory_enable(memory_enable_o),
+        .weight_enable(weight_enable_o),.parameter_enable(parameter_enable_o),.read_bank(read_bank_o),
+        .read_address(read_address_o),.weight_address(weight_address_o),.parameter_address(parameter_address_o),
+        .input_data(memory_data_i),.weight_data(weight_data_i),.bias_data(bias_data_i),
+        .multiplier_data(multiplier_data_i),.shift_data(shift_data_i),.write_enable(memory_write_o),
+        .write_bank(write_bank_o),.write_address(write_address_o),.write_data(memory_write_data_o));
     always @(posedge cop_clk or negedge rst_n) begin
         if(!rst_n) begin model_valid<=0; roi_valid<=0; load_kind<=0; end
         else begin
