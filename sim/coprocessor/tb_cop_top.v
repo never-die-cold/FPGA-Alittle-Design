@@ -83,9 +83,15 @@ module tb_cop_top;
         if(result_data[15:0]!==16'h1234 || result_data[23:16]!==8'd2 || !result_data[25] ||
            result_data[55:32]!==24'h04fd02 || result_data[63:56]!==8'd2 ||
            result_data[78:64]!==15'd258) $fatal(1);
+        repeat(3) @(posedge core_clk); addr=32'h80010070; #1;
+        if(rdata[15:0]!==16'h1234 || rdata[23:16]!==8'd2 || !rdata[25]) $fatal(1);
+        addr=32'h80010074; #1; if(rdata!==32'h0004fd02) $fatal(1);
+        addr=32'h80010078; #1; if(rdata!==32'h00020102) $fatal(1);
+        @(negedge core_clk); addr=32'h8001000c; wdata=8; we=1;
+        @(negedge core_clk); we=0; wait(!dut.mailbox_pending); repeat(2) @(posedge cop_clk);
         addr=32'h80010010; #1;
-        if(!hit || starts!=1 || rdata[10] || !rdata[0]) $fatal(1);
-        $display("PASS: cop_top config/load/CDC active CNN matches J02 zero result golden"); $finish;
+        if(!hit || starts!=1 || rdata[10] || !rdata[0] || rdata[2] || rdata[7]) $fatal(1);
+        $display("PASS: cop_top J02 zero golden, atomic result window and DONE W1C smoke"); $finish;
     end
     initial begin #15000000; $display("TRACE starts=%0d pending=%b cfg=%b model=%b roi=%b busy=%b state=%0d",
         starts,dut.mailbox_pending,dut.cfg_valid,dut.model_valid,dut.roi_valid,dut.task_busy,dut.u_task.state);

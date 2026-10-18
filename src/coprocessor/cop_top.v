@@ -50,12 +50,16 @@ module cop_top #(
     wire [2:0] engine_error_layer; wire [31:0] engine_cycles;
     wire [1:0] engine_class; wire [7:0] engine_margin;
     wire [14:0] engine_score; wire engine_low_conf; wire [23:0] engine_logits;
+    reg [127:0] result_mem [0:15]; reg [127:0] result_sample1,result_sample2;
+    reg [31:0] result_seq_sync1,result_seq_sync2; integer result_slot;
     wire [31:0] cfg_applied,model_id,timeout_cycles,weight_bytes,dma_bytes;
     wire [4:0] roi_count; wire [7:0] min_margin; reg model_valid,roi_valid,load_kind;
     cop_core_mmio_gate #(.COP_BASE(COP_BASE)) gate(
         .addr_i(core_addr_i),.wdata_i(core_wdata_i),.status_i(status_o),.be_i(core_be_i),
         .we_i(core_we_i),.busy_i(task_busy),.mailbox_pending_i(mailbox_pending),
         .fw_counts_i(fw_counts_o),.fw_decision_i(fw_decision_o),.result_index_i(result_index_o),
+        .result_data_i(result_sample2),.result_seq_i(result_seq_sync2),
+        .cfg_applied_i(cfg_applied),.dma_bytes_i(dma_bytes),
         .cop_hit_o(core_hit_o),.write_request_o(core_request),.write_offset_o(core_offset),
         .write_data_o(core_data),.rdata_o(core_rdata_o));
     cop_cdc_mailbox mailbox(.src_clk(core_clk),.dst_clk(cop_clk),.rst_n(rst_n),
@@ -105,11 +109,22 @@ module cop_top #(
         .multiplier_data(multiplier_data_i),.shift_data(shift_data_i),.write_enable(memory_write_o),
         .write_bank(write_bank_o),.write_address(write_address_o),.write_data(memory_write_data_o));
     always @(posedge cop_clk or negedge rst_n) begin
-        if(!rst_n) begin model_valid<=0; roi_valid<=0; load_kind<=0; end
+        if(!rst_n) begin
+            model_valid<=0; roi_valid<=0; load_kind<=0;
+            for(result_slot=0;result_slot<16;result_slot=result_slot+1) result_mem[result_slot]<=0;
+        end
         else begin
             if(dma_start_i && !dma_busy) load_kind<=dma_kind_i;
             if(loader_done && !load_kind) model_valid<=1;
             if(loader_done && load_kind) roi_valid<=1;
+            if(result_write_o) result_mem[task_result_index_o]<=result_data_o;
+        end
+    end
+    always @(posedge core_clk or negedge rst_n) begin
+        if(!rst_n) begin result_sample1<=0; result_sample2<=0; result_seq_sync1<=0; result_seq_sync2<=0; end
+        else begin
+            result_sample1<=result_mem[result_index_o]; result_sample2<=result_sample1;
+            result_seq_sync1<=result_seq_o; result_seq_sync2<=result_seq_sync1;
         end
     end
 endmodule

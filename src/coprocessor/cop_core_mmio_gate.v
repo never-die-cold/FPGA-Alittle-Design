@@ -6,6 +6,8 @@ module cop_core_mmio_gate #(
     input wire [31:0] addr_i, wdata_i, status_i,
     input wire [31:0] fw_counts_i, fw_decision_i,
     input wire [3:0] result_index_i,
+    input wire [127:0] result_data_i,
+    input wire [31:0] result_seq_i, cfg_applied_i, dma_bytes_i,
     input wire [3:0] be_i,
     input wire we_i, busy_i, mailbox_pending_i,
     output wire cop_hit_o, write_request_o,
@@ -39,7 +41,16 @@ module cop_core_mmio_gate #(
             rdata_o[10] = mailbox_pending_i;
         end else if(cop_hit_o && aligned && !we_i) begin
             case(addr_i[11:0])
+                12'h000: rdata_o = 32'h434f5030;
+                12'h004: rdata_o = 32'h0000_0000;
+                12'h020: rdata_o = cfg_applied_i;
                 12'h06c: rdata_o = {28'd0,result_index_i};
+                12'h070: rdata_o = result_data_i[31:0];
+                12'h074: rdata_o = {8'd0,result_data_i[55:32]};
+                12'h078: rdata_o = {8'd0,result_data_i[63:56],1'b0,result_data_i[78:64]};
+                12'h07c: rdata_o = result_seq_i;
+                12'h080: rdata_o = result_data_i[127:96];
+                12'h084: rdata_o = dma_bytes_i;
                 12'h088: rdata_o = fw_counts_i;
                 12'h08c: rdata_o = fw_decision_i;
                 default: rdata_o = 32'd0;
