@@ -56,6 +56,7 @@ case "${1:-all}" in
     mailbox) run_test cop_cdc_mailbox ;;
     config_regs) run_test cop_config_regs ;;
     dma_loader) run_test cop_dma_loader ;;
+    task_ctrl) run_test cop_task_ctrl ;;
     mac) run_test int8_mac ;;
     array) run_test mac_array ;;
     requant) run_test int8_requant ;;
@@ -65,6 +66,6 @@ case "${1:-all}" in
     network) run_network ;;
     watchdog) run_convolution watchdog; run_network watchdog ;;
     pipeline) run_test mac_array_pipeline; run_test int8_requant_pipeline ;;
-    all) run_test cop_core_mmio_gate; run_test cop_ctrl_regs; run_test cop_cdc_mailbox; run_test cop_config_regs; run_test cop_dma_loader; run_test mac_lane; run_test dot8; run_test int8_mac; run_test mac_array; run_test int8_requant; run_test int8_gap; run_test int8_logits; run_test mac_array_pipeline; run_test int8_requant_pipeline; run_convolution; run_network ;;
-    *) echo 'usage: run_coprocessor_iverilog.sh [mmio_gate|ctrl_regs|mailbox|config_regs|dma_loader|mac_lane|dot8|mac|array|requant|gap|logits|pipeline|conv|network|watchdog|all]'; exit 2 ;;
+    all) run_test cop_core_mmio_gate; run_test cop_ctrl_regs; run_test cop_cdc_mailbox; run_test cop_config_regs; run_test cop_dma_loader; run_test cop_task_ctrl; run_test mac_lane; run_test dot8; run_test int8_mac; run_test mac_array; run_test int8_requant; run_test int8_gap; run_test int8_logits; run_test mac_array_pipeline; run_test int8_requant_pipeline; run_convolution; run_network ;;
+    *) echo 'usage: run_coprocessor_iverilog.sh [mmio_gate|ctrl_regs|mailbox|config_regs|dma_loader|task_ctrl|mac_lane|dot8|mac|array|requant|gap|logits|pipeline|conv|network|watchdog|all]'; exit 2 ;;
 esac
