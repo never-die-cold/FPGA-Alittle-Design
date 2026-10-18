@@ -248,7 +248,7 @@ python docs/img/make_project_diagrams.py      # 旧图生成器；重绘须另�
 bash sim/scripts/run_iverilog.sh all          # 全量回归（核四档 + 视觉 25 tb）
 bash sim/scripts/run_vision_xsim.sh all       # XSim 同判据复跑
 bash sim/scripts/run_vision_python.sh        # 14组；VISION_PYTHON可指定真实解释器
-bash sim/scripts/run_coprocessor_python.sh all # 3组INT8参考，需python3与NumPy
+bash sim/scripts/run_coprocessor_python.sh all # INT8参考、整网trace与manifest完整性
 ```
 
 ## 自测题（理解门槛演练）

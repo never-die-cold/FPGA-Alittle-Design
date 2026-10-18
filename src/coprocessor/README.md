@@ -49,6 +49,14 @@ WC/NC 交接只从[协处理器 v0 交接索引](../../docs/coprocessor-handoff-
 `bash sim/scripts/run_coprocessor_python.sh all`，支持 `COPROCESSOR_PYTHON` 或 `VISION_PYTHON` 指定解释器。
 `int8_network_reference.py` 实现固定结构整数链、模型形状/类型/范围和通用累加界检查；固定种子诊断权重与两组输入提供逐层黄金，但**不是训练后的正式模型**。`manifests` 独立模式会重新生成算术、算子和整网诊断数据，核对必需文件、来源与落盘 SHA256，并执行篡改负例。
 
+Linux 隔离环境从仓库根目录复现：
+```bash
+python3 -m venv sim/build/coprocessor-venv
+sim/build/coprocessor-venv/bin/python -m pip install -r src/coprocessor/requirements.txt
+COPROCESSOR_PYTHON=sim/build/coprocessor-venv/bin/python bash sim/scripts/run_coprocessor_python.sh all
+```
+venv 位于已忽略的 `sim/build`，不作为交付文件；PASS 证据仍来自仓库内测试与 runner。
+
 综合入口：`powershell.exe -NoProfile -File sim/scripts/run_cnn_ooc.ps1`，自动存档源码/脚本，运行 100 MHz 控制器 OOC 综合与布局布线，保存时序/资源/DRC和退出码。外部存储、SoC与视频未计入，OOC报告不代替整机时序或板端实测。
 
 ## 设计参考
