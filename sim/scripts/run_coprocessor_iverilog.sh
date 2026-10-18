@@ -55,6 +55,11 @@ run_top() {
         "$ROOT/sim/coprocessor/tb_cop_top.v" "$ROOT"/src/coprocessor/*.v
     vision_run_checked "$BUILD/cop_top.log" vvp "$BUILD/cop_top.vvp" "+model=$dir" "+case=$dir/zero"
 }
+run_firmware() {
+    gcc -std=c99 -Wall -Wextra -Werror -I"$ROOT/src/riscv_fw" \
+        "$ROOT/sim/coprocessor/test_cop_work_order.c" -o "$BUILD/test_cop_work_order"
+    vision_run_checked "$BUILD/cop_work_order.log" "$BUILD/test_cop_work_order"
+}
 case "${1:-all}" in
     mac_lane) run_test mac_lane ;;
     dot8) run_test dot8 ;;
@@ -66,6 +71,7 @@ case "${1:-all}" in
     task_ctrl) run_test cop_task_ctrl ;;
     cop_top) run_top ;;
     axi_lite) run_test cop_axi_lite_frontend ;;
+    firmware) run_firmware ;;
     mac) run_test int8_mac ;;
     array) run_test mac_array ;;
     requant) run_test int8_requant ;;
@@ -75,6 +81,6 @@ case "${1:-all}" in
     network) run_network ;;
     watchdog) run_convolution watchdog; run_network watchdog ;;
     pipeline) run_test mac_array_pipeline; run_test int8_requant_pipeline ;;
-    all) run_test cop_core_mmio_gate; run_test cop_ctrl_regs; run_test cop_cdc_mailbox; run_test cop_config_regs; run_test cop_dma_loader; run_test cop_task_ctrl; run_test cop_axi_lite_frontend; run_top; run_test mac_lane; run_test dot8; run_test int8_mac; run_test mac_array; run_test int8_requant; run_test int8_gap; run_test int8_logits; run_test mac_array_pipeline; run_test int8_requant_pipeline; run_convolution; run_network ;;
-    *) echo 'usage: run_coprocessor_iverilog.sh [mmio_gate|ctrl_regs|mailbox|config_regs|dma_loader|task_ctrl|axi_lite|cop_top|mac_lane|dot8|mac|array|requant|gap|logits|pipeline|conv|network|watchdog|all]'; exit 2 ;;
+    all) run_test cop_core_mmio_gate; run_test cop_ctrl_regs; run_test cop_cdc_mailbox; run_test cop_config_regs; run_test cop_dma_loader; run_test cop_task_ctrl; run_test cop_axi_lite_frontend; run_firmware; run_top; run_test mac_lane; run_test dot8; run_test int8_mac; run_test mac_array; run_test int8_requant; run_test int8_gap; run_test int8_logits; run_test mac_array_pipeline; run_test int8_requant_pipeline; run_convolution; run_network ;;
+    *) echo 'usage: run_coprocessor_iverilog.sh [mmio_gate|ctrl_regs|mailbox|config_regs|dma_loader|task_ctrl|axi_lite|firmware|cop_top|mac_lane|dot8|mac|array|requant|gap|logits|pipeline|conv|network|watchdog|all]'; exit 2 ;;
 esac
