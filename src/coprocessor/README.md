@@ -10,6 +10,7 @@ RISC-V 以 load/store 访问且不启用自定义指令。
 
 两份文件均已由 JL 于 2026-10-11 冻结；它们不是 RTL、正式 INT8 模型或 M2 验收证据。
 模块 J01–J10 状态与进入 J04 的门槛见 [`plan.md`](plan.md)。
+WC/NC 交接只从[协处理器 v0 交接索引](../../docs/coprocessor-handoff-v0.md)进入，避免复制契约表。
 
 ## 规划内容
 

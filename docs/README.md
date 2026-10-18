@@ -14,7 +14,7 @@
 |:---|:---|
 | 模块一 | 核＋最小 SoC 已完成收口。[核收口报告](../report/module1-closure.md) |
 | 模块二 | HDMI 视觉预处理 RTL＋已验证视频链路已完成（RTL／链路级）。[RTL 与视频记录](../data/logs/2026-10-03-vision-onboard/README.md)、[真实相机链路记录](../data/logs/2026-10-07-pi-pynq/README.md) |
-| 模块三 | CNN算子/整网控制器、诊断整数黄金与控制器OOC已有；实体缓存/MMIO/DMA、正式模型与板端输出仍缺。[CNN/DDR离板交接](cnn-ddr-offline-handoff-2026-10-13.md) |
+| 模块三 | CNN算子/整网控制器、诊断整数黄金与控制器OOC已有；实体缓存/MMIO/DMA、正式模型与板端输出仍缺。[协处理器交接索引](coprocessor-handoff-v0.md) |
 | 全项目 M2 | 全项目 M2 验收未完成；CNN、网络硬件输出和工业闭环不得宣称完成。验收范围见[主计划](../plan.md) §1.4；前两层收口不替代全项目验收。 |
 
 ## 目录地图（每个目录一句话）
@@ -46,6 +46,7 @@
 | RISC-V 核专项计划与看板 | `src/riscv/plan.md`、`src/riscv/plan_calendar.md` |
 | Part B 验证与验收执行清单 | `docs/partB-verify-plan.md` |
 | 模块三训练与量化前期 | `docs/module3-model-training.md` |
+| CNN 协处理器契约、状态与 WC/NC 交接 | [协处理器交接索引](coprocessor-handoff-v0.md) |
 | 外包视觉交接包、接收差异与复现缺口 | [交接索引](outsource/fastener-handoff.md) |
 | 视频/结果同步协议决策单 | `docs/vision-sync-protocol-decisions.md` |
 | RISC-V v0 接口（基线唯一权威） | [src/riscv/design_v0.md](../src/riscv/design_v0.md) |
@@ -107,4 +108,5 @@
 | 日期 | 变更 |
 |:---|:---|
 | 2026-10-12 | 导航同步整数参考、FILE/LIVE软件与C01；Q01标明已修复，旧索引/配图仍保留历史性质 |
+| 2026-10-18 | 新增 CNN 协处理器 v0 薄交接索引；原 10/13 CNN/DDR 文档保留为历史证据。 |
 | 2026-10-09 | B01：区分三层收口状态并链接证据；补齐对应版本接口导航；纠正提交纪律。 |
