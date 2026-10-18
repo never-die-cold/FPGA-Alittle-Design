@@ -1,0 +1,36 @@
+`timescale 1ns/1ps
+// Cop-domain task status and RISC-V command subset; CDC is external.
+module cop_ctrl_regs (
+    input wire clk, rst_n,
+    input wire write_valid_i,
+    input wire [11:0] write_offset_i,
+    input wire [31:0] write_data_i,
+    input wire task_busy_i, task_done_i, task_error_i, task_timeout_i,
+    input wire ready_i, cfg_valid_i, model_valid_i, dma_busy_i, irq_pending_i,
+    output reg start_pulse_o, write_done_o,
+    output reg done_o, error_o, timeout_o, result_valid_o,
+    output wire [31:0] status_o
+);
+    assign status_o = {21'd0,1'b0,irq_pending_i,dma_busy_i,result_valid_o,
+        model_valid_i,cfg_valid_i,timeout_o,error_o,done_o,task_busy_i,
+        ready_i && !task_busy_i};
+    always @(posedge clk or negedge rst_n) begin
+        if(!rst_n) begin
+            start_pulse_o<=0; write_done_o<=0; done_o<=0;
+            error_o<=0; timeout_o<=0; result_valid_o<=0;
+        end else begin
+            start_pulse_o<=0; write_done_o<=0;
+            if(write_valid_i) begin
+                write_done_o<=1;
+                if(write_offset_i==12'h00c) begin
+                    if(write_data_i[0]) start_pulse_o<=1;
+                    if(write_data_i[3]) begin done_o<=0; result_valid_o<=0; end
+                    if(write_data_i[4]) begin error_o<=0; timeout_o<=0; end
+                end
+            end
+            if(task_done_i) begin done_o<=1; result_valid_o<=1; end
+            if(task_error_i) error_o<=1;
+            if(task_timeout_i) begin timeout_o<=1; error_o<=1; end
+        end
+    end
+endmodule
