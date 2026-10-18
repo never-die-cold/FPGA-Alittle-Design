@@ -8,7 +8,7 @@
 | 命令 | 结果 |
 | --- | --- |
 | `bash sim/scripts/run_iverilog.sh cop_mac_lane` | 退出 0，7 vectors PASS |
-| `bash sim/scripts/run_iverilog.sh cop_dot8` | 退出 0，5 vectors PASS |
+| `bash sim/scripts/run_iverilog.sh cop_dot8` | 收口时退出 0，5 vectors PASS；`4cb5b1d` 后当前为 6（新增原始负边界） |
 | `bash sim/scripts/run_coprocessor_iverilog.sh all` | 退出 0，算子、Conv/FC、两组整网逐元素 PASS |
 | `bash sim/scripts/run_iverilog.sh all` | 退出 0，核、CNN、视觉 RTL/Python 全量 PASS |
 | `git diff --check` | 退出 0 |
