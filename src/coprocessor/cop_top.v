@@ -9,11 +9,15 @@ module cop_top #(
     input wire core_we_i,
     output wire core_hit_o,
     output wire [31:0] core_rdata_o,
-    input wire ps_write_valid_i,
-    input wire [11:0] ps_write_offset_i,
-    input wire [31:0] ps_write_data_i,
-    input wire [3:0] ps_write_strb_i,
-    output wire ps_write_done_o, ps_slverr_o,
+    input wire [11:0] s_axi_awaddr_i, input wire s_axi_awvalid_i,
+    output wire s_axi_awready_o,
+    input wire [31:0] s_axi_wdata_i, input wire [3:0] s_axi_wstrb_i,
+    input wire s_axi_wvalid_i, output wire s_axi_wready_o,
+    output wire [1:0] s_axi_bresp_o, output wire s_axi_bvalid_o, input wire s_axi_bready_i,
+    input wire [11:0] s_axi_araddr_i, input wire s_axi_arvalid_i,
+    output wire s_axi_arready_o,
+    output wire [31:0] s_axi_rdata_o, output wire [1:0] s_axi_rresp_o,
+    output wire s_axi_rvalid_o, input wire s_axi_rready_i,
     input wire dma_start_i, dma_kind_i,
     input wire [63:0] dma_data_i,
     input wire [7:0] dma_keep_i,
@@ -54,6 +58,8 @@ module cop_top #(
     reg [31:0] result_seq_sync1,result_seq_sync2; integer result_slot;
     wire [31:0] cfg_applied,model_id,weight_crc32,timeout_cycles,weight_bytes,dma_bytes;
     wire [31:0] loader_crc32;
+    wire ps_write_valid,ps_write_done,ps_write_error; wire [11:0] ps_write_offset,ps_read_offset;
+    wire [31:0] ps_write_data; wire [3:0] ps_write_strb; reg [31:0] ps_read_data; reg ps_read_error;
     wire [4:0] roi_count; wire [7:0] min_margin; reg model_valid,roi_valid,load_kind;
     cop_core_mmio_gate #(.COP_BASE(COP_BASE)) gate(
         .addr_i(core_addr_i),.wdata_i(core_wdata_i),.status_i(status_o),.be_i(core_be_i),
@@ -75,13 +81,39 @@ module cop_top #(
         .write_done_o(command_done),.done_o(done_status),.error_o(error_status),
         .timeout_o(timeout_status),.result_valid_o(result_valid_status),.result_index_o(result_index_o),
         .fw_counts_o(fw_counts_o),.fw_decision_o(fw_decision_o),.status_o(status_o));
-    cop_config_regs u_config(.clk(cop_clk),.rst_n(rst_n),.write_valid_i(ps_write_valid_i),
-        .busy_i(task_busy),.write_offset_i(ps_write_offset_i),.write_data_i(ps_write_data_i),
-        .write_strb_i(ps_write_strb_i),.write_done_o(ps_write_done_o),.slverr_o(ps_slverr_o),
+    cop_axi_lite_frontend axi(.clk(cop_clk),.rst_n(rst_n),.s_awaddr_i(s_axi_awaddr_i),
+        .s_awvalid_i(s_axi_awvalid_i),.s_awready_o(s_axi_awready_o),.s_wdata_i(s_axi_wdata_i),
+        .s_wstrb_i(s_axi_wstrb_i),.s_wvalid_i(s_axi_wvalid_i),.s_wready_o(s_axi_wready_o),
+        .s_bresp_o(s_axi_bresp_o),.s_bvalid_o(s_axi_bvalid_o),.s_bready_i(s_axi_bready_i),
+        .s_araddr_i(s_axi_araddr_i),.s_arvalid_i(s_axi_arvalid_i),.s_arready_o(s_axi_arready_o),
+        .s_rdata_o(s_axi_rdata_o),.s_rresp_o(s_axi_rresp_o),.s_rvalid_o(s_axi_rvalid_o),
+        .s_rready_i(s_axi_rready_i),.write_valid_o(ps_write_valid),.write_offset_o(ps_write_offset),
+        .write_data_o(ps_write_data),.write_strb_o(ps_write_strb),.write_done_i(ps_write_done),
+        .write_slverr_i(ps_write_error),.read_offset_o(ps_read_offset),.read_data_i(ps_read_data),
+        .read_slverr_i(ps_read_error));
+    cop_config_regs u_config(.clk(cop_clk),.rst_n(rst_n),.write_valid_i(ps_write_valid),
+        .busy_i(task_busy),.write_offset_i(ps_write_offset),.write_data_i(ps_write_data),
+        .write_strb_i(ps_write_strb),.write_done_o(ps_write_done),.slverr_o(ps_write_error),
         .cfg_valid_o(cfg_valid),.cfg_applied_o(cfg_applied),.model_id_o(model_id),
         .weight_crc32_o(weight_crc32),
         .timeout_cycles_o(timeout_cycles),.weight_bytes_o(weight_bytes),.roi_count_o(roi_count),
         .min_margin_o(min_margin));
+    always @* begin
+        ps_read_error=0; ps_read_data=0;
+        case(ps_read_offset)
+            12'h000: ps_read_data=32'h434f5030; 12'h004: ps_read_data=0;
+            12'h010: ps_read_data=status_o; 12'h020: ps_read_data=cfg_applied;
+            12'h024: ps_read_data=model_id; 12'h02c: ps_read_data={27'd0,roi_count};
+            12'h030: ps_read_data=timeout_cycles; 12'h04c: ps_read_data=weight_bytes;
+            12'h064: ps_read_data={24'd0,min_margin}; 12'h06c: ps_read_data={28'd0,result_index_o};
+            12'h070: ps_read_data=result_mem[result_index_o][31:0];
+            12'h074: ps_read_data={8'd0,result_mem[result_index_o][55:32]};
+            12'h078: ps_read_data={8'd0,result_mem[result_index_o][63:56],
+                1'b0,result_mem[result_index_o][78:64]};
+            12'h07c: ps_read_data=result_seq_o; 12'h080: ps_read_data=result_mem[result_index_o][127:96];
+            12'h084: ps_read_data=dma_bytes; default: ps_read_error=1;
+        endcase
+    end
     cop_dma_loader loader(.clk(cop_clk),.rst_n(rst_n),.start_i(dma_start_i),
         .expected_bytes_i(dma_kind_i ? {roi_count,12'd0} : weight_bytes),.stream_data_i(dma_data_i),
         .stream_keep_i(dma_keep_i),.stream_valid_i(dma_valid_i),.stream_last_i(dma_last_i),
