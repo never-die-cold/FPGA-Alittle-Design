@@ -38,7 +38,7 @@
 #   bash sim/scripts/run_iverilog.sh cop_mac_lane # CNN INT8 单路有符号乘法诊断
 #   bash sim/scripts/run_iverilog.sh cop_dot8 # CNN INT8 8-lane 加法树诊断
 #   bash sim/scripts/run_iverilog.sh cop_mac # CNN INT8 乘加原语；Verilog-2001
-#   bash sim/scripts/run_iverilog.sh coprocessor [all|pipeline|conv|network] # CNN 算子/全网逐元素对拍
+#   bash sim/scripts/run_iverilog.sh coprocessor [mac_lane|dot8|mac|array|requant|gap|logits|pipeline|conv|network|watchdog|all]
 # 前置：PATH 中含 iverilog / vvp；原验收 13.0，本轮 Linux 11.0 结果另记
 set -u
 
