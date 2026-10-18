@@ -44,8 +44,10 @@ WC/NC 交接只从[协处理器 v0 交接索引](../../docs/coprocessor-handoff-
 100 MHz OOC 为 DSP 136/220、LUT 4540、FF 4037，WNS 0.317 ns、WHS 0.123 ns；DSP 门限为 176，保留至少 20% 器件余量。
 这些数据包含控制器与算术链，尚不包含实体 BRAM/SoC/视频；[命令与原始证据](../../data/logs/2026-10-15-improvements-fast/README.md)。
 
-`int8_reference.py` 实现输入/bias量化、舍入、scale编码与requant；`int8_tensor_reference.py` 实现张量/逐通道权重量化、bias和OIHW卷积累加，溢出拒绝。3组测试由 `bash sim/scripts/run_coprocessor_python.sh all` 复现，需真实 `python3` 与 NumPy；[10/12证据](../../data/logs/2026-10-12-pr-review/README.md)通过。
-`int8_network_reference.py` 新增完整固定结构整数链、模型形状/类型/范围和通用累加界检查；独立常量网络黄金检查 Conv/GAP/FC。`generate_network_vectors.py` 提供固定种子诊断权重和两组输入的逐层黄金及文件/源码哈希，**不是训练后的正式模型**。Python 回归现在为四组，支持 `COPROCESSOR_PYTHON` 或 `VISION_PYTHON` 指定解释器。
+`int8_reference.py` 实现输入/bias 量化、舍入、scale 编码与 requant；`int8_tensor_reference.py`
+实现张量/逐通道权重量化、bias 和 OIHW 卷积累加，溢出拒绝。Python 全量入口为
+`bash sim/scripts/run_coprocessor_python.sh all`，支持 `COPROCESSOR_PYTHON` 或 `VISION_PYTHON` 指定解释器。
+`int8_network_reference.py` 实现固定结构整数链、模型形状/类型/范围和通用累加界检查；固定种子诊断权重与两组输入提供逐层黄金，但**不是训练后的正式模型**。`manifests` 独立模式会重新生成算术、算子和整网诊断数据，核对必需文件、来源与落盘 SHA256，并执行篡改负例。
 
 综合入口：`powershell.exe -NoProfile -File sim/scripts/run_cnn_ooc.ps1`，自动存档源码/脚本，运行 100 MHz 控制器 OOC 综合与布局布线，保存时序/资源/DRC和退出码。外部存储、SoC与视频未计入，OOC报告不代替整机时序或板端实测。
 
