@@ -10,6 +10,7 @@ module tb_cop_core_mmio_gate;
     cop_core_mmio_gate dut (.addr_i(addr),.wdata_i(wdata),.status_i(status),.be_i(be),
         .fw_counts_i(32'h00030201),.fw_decision_i(32'ha5000002),.result_index_i(4'd7),
         .result_data_i(128'd0),.result_seq_i(32'd0),.cfg_applied_i(32'd0),.dma_bytes_i(32'd0),
+        .work_order_i(32'h0a010101),.roi_count_i(5'd3),
         .we_i(we),.busy_i(busy),.mailbox_pending_i(pending),.cop_hit_o(hit),
         .write_request_o(request),.write_offset_o(offset),.write_data_o(request_data),.rdata_o(rdata));
     task expect;
@@ -35,6 +36,9 @@ module tb_cop_core_mmio_gate;
         we=0; addr=32'h80010010; expect(1,0,32'h00000402);
         addr=32'h8001000c; expect(1,0,0);
         pending=0; we=1; wdata=32'h00000002; expect(1,0,0);
+        we=0; addr=32'h8001002c; expect(1,0,3);
+        addr=32'h80010034; expect(1,0,32'h0a010101);
+        we=1; addr=32'h8001000c;
         wdata=32'h00000008; busy=1; expect(1,1,0);
         if(offset!==12'h00c || request_data!==32'h00000008) $fatal(1);
         $display("PASS: cop_core_mmio_gate %0d window/alignment/permission/busy/pending checks",checks);

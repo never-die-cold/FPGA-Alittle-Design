@@ -10,6 +10,7 @@ module tb_cop_ctrl_regs;
     cop_core_mmio_gate gate(.addr_i(addr),.wdata_i(wdata),.status_i(status),.be_i(be),.we_i(we),
         .fw_counts_i(fw_counts),.fw_decision_i(fw_decision),.result_index_i(result_index),
         .result_data_i(128'd0),.result_seq_i(32'd0),.cfg_applied_i(32'd0),.dma_bytes_i(32'd0),
+        .work_order_i(32'h0a010101),.roi_count_i(5'd3),
         .busy_i(busy),.mailbox_pending_i(pending),.cop_hit_o(hit),.write_request_o(request),
         .write_offset_o(offset),.write_data_o(request_data),.rdata_o(rdata));
     cop_ctrl_regs regs(.clk(clk),.rst_n(rst_n),.write_valid_i(request),.write_offset_i(offset),

@@ -7,7 +7,8 @@ module cop_core_mmio_gate #(
     input wire [31:0] fw_counts_i, fw_decision_i,
     input wire [3:0] result_index_i,
     input wire [127:0] result_data_i,
-    input wire [31:0] result_seq_i, cfg_applied_i, dma_bytes_i,
+    input wire [31:0] result_seq_i, cfg_applied_i, dma_bytes_i, work_order_i,
+    input wire [4:0] roi_count_i,
     input wire [3:0] be_i,
     input wire we_i, busy_i, mailbox_pending_i,
     output wire cop_hit_o, write_request_o,
@@ -44,6 +45,8 @@ module cop_core_mmio_gate #(
                 12'h000: rdata_o = 32'h434f5030;
                 12'h004: rdata_o = 32'h0000_0000;
                 12'h020: rdata_o = cfg_applied_i;
+                12'h02c: rdata_o = {27'd0,roi_count_i};
+                12'h034: rdata_o = work_order_i;
                 12'h06c: rdata_o = {28'd0,result_index_i};
                 12'h070: rdata_o = result_data_i[31:0];
                 12'h074: rdata_o = {8'd0,result_data_i[55:32]};

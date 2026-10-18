@@ -56,7 +56,7 @@ module cop_top #(
     wire [14:0] engine_score; wire engine_low_conf; wire [23:0] engine_logits;
     reg [127:0] result_mem [0:15]; reg [127:0] result_sample1,result_sample2;
     reg [31:0] result_seq_sync1,result_seq_sync2; integer result_slot;
-    wire [31:0] cfg_applied,model_id,weight_crc32,timeout_cycles,weight_bytes,dma_bytes;
+    wire [31:0] cfg_applied,model_id,weight_crc32,timeout_cycles,weight_bytes,dma_bytes,work_order;
     wire [31:0] loader_crc32;
     wire ps_write_valid,ps_write_done,ps_write_error; wire [11:0] ps_write_offset,ps_read_offset;
     wire [31:0] ps_write_data; wire [3:0] ps_write_strb; reg [31:0] ps_read_data; reg ps_read_error;
@@ -66,7 +66,8 @@ module cop_top #(
         .we_i(core_we_i),.busy_i(task_busy),.mailbox_pending_i(mailbox_pending),
         .fw_counts_i(fw_counts_o),.fw_decision_i(fw_decision_o),.result_index_i(result_index_o),
         .result_data_i(result_sample2),.result_seq_i(result_seq_sync2),
-        .cfg_applied_i(cfg_applied),.dma_bytes_i(dma_bytes),
+        .cfg_applied_i(cfg_applied),.dma_bytes_i(dma_bytes),.work_order_i(work_order),
+        .roi_count_i(roi_count),
         .cop_hit_o(core_hit_o),.write_request_o(core_request),.write_offset_o(core_offset),
         .write_data_o(core_data),.rdata_o(core_rdata_o));
     cop_cdc_mailbox mailbox(.src_clk(core_clk),.dst_clk(cop_clk),.rst_n(rst_n),
@@ -95,7 +96,7 @@ module cop_top #(
         .busy_i(task_busy),.write_offset_i(ps_write_offset),.write_data_i(ps_write_data),
         .write_strb_i(ps_write_strb),.write_done_o(ps_write_done),.slverr_o(ps_write_error),
         .cfg_valid_o(cfg_valid),.cfg_applied_o(cfg_applied),.model_id_o(model_id),
-        .weight_crc32_o(weight_crc32),
+        .weight_crc32_o(weight_crc32),.work_order_o(work_order),
         .timeout_cycles_o(timeout_cycles),.weight_bytes_o(weight_bytes),.roi_count_o(roi_count),
         .min_margin_o(min_margin));
     always @* begin
