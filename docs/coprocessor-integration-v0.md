@@ -57,6 +57,19 @@ RISC-V 固件              │       cop_top（计算域）
 3. **CDC**：配置、命令和结果均使用“稳定 payload + toggle/ack”或异步 FIFO；多位总线禁止
    逐位双触发器同步。RISC-V 只有在 `CFG_APPLIED`/`RESULT_SEQ` 改变后读取对应快照。
 
+### 3.1.1 J04 核侧访问细则（2026-10-18 冻结）
+
+- 核侧写仅在 `we=1 && be=4'b1111` 时具备接受资格；其它 `be` 组合整笔拒绝，固件只用
+  32 位 word store，需要改字段时先读—改—写。拒绝不得修改寄存器或发出命令。
+- 核侧 CDC 使用单请求邮箱，任意时刻最多一笔未确认写。请求期间稳定保持 offset/data，
+  目标域消费并完成该请求本身的接收动作后才返回 ACK；ACK 不表示 CNN 任务完成。
+- `STATUS.MBOX_PENDING=1` 表示请求尚未 ACK。pending 期间的第二笔写静默拒绝：不得覆盖
+  第一笔、不得排队、不得产生部分副作用；ACK 返回且 pending 清零后才可接受下一笔。
+- 未对齐、非法 `be`、未映射/越界、写只读以及 busy 时重复 START 均采用非驻留拒绝：
+  不置 `STATUS.ERROR`，不写 `ERROR_CODE`，不终止当前任务，也不跨任务传播错误。
+- 对协处理器前端的非法读、只写寄存器读均返回 0；非法访问不得触发存储器访问。
+  未命中协处理器且命中既有 DMEM/计时器的访问仍保持原 SoC 语义。
+
 v0 固定 `COP_BASE=0x8001_0000`、窗口 4 KiB。它避开现有 32 KiB DMEM
 `0x8000_0000–0x8000_7FFF` 和计时器 `0x8000_8000`。PS 物理 AXI 基址由 Vivado Address
 Editor 分配，但寄存器 offset 必须相同。
@@ -71,8 +84,8 @@ Editor 分配，但寄存器 offset 必须相同。
 
 ## 4. 寄存器映射
 
-所有 offset 4 字节对齐。保留位读 0、写忽略；未定义 offset 返回 `SLVERR`（PS）或 0
-并置 `BAD_ADDR`（RISC-V 邮箱诊断）。
+所有 offset 4 字节对齐。保留位读 0、写忽略；未定义 offset 返回 `SLVERR`（PS）或
+RISC-V 读 0/写零副作用拒绝。核侧拒绝不驻留到全局错误状态。
 
 | Offset | 名称 | 方向/写者 | 语义 |
 |---:|:---|:---|:---|
@@ -125,7 +138,7 @@ Editor 分配，但寄存器 offset 必须相同。
 | 4 | `CLEAR_ERROR` | W1C error/timeout/error_code |
 | 5 | `IRQ_ACK` | W1C PS IRQ pending；不代替清源状态 |
 
-命令位读回均为 0。`START` 在 busy 时被拒并置 `BAD_STATE`，但不得中断原任务。
+命令位读回均为 0。`START` 在 busy 时以零副作用拒绝，不置全局错误且不得中断原任务。
 
 ### 4.2 `STATUS` 位与状态机
 
@@ -141,6 +154,7 @@ Editor 分配，但寄存器 offset 必须相同。
 | 7 | `RESULT_VALID` | RESULT_SEQ 对应完整、原子可读结果 |
 | 8 | `DMA_BUSY` | DataMover/AXI DMA 正在搬运 |
 | 9 | `IRQ_PENDING` | 给 PS 中断控制器的电平状态 |
+| 10 | `MBOX_PENDING` | 核侧单请求邮箱尚未收到目标域 ACK；核侧读本地精确镜像 |
 
 法定状态：IDLE=`BUSY=0,DONE=ERROR=TIMEOUT=0`；RUN=`BUSY=1`；DONE=`DONE=1`；
 ERROR=`ERROR=1`；TIMEOUT=`ERROR=TIMEOUT=1`。终止状态下 BUSY 必须为 0。
@@ -232,6 +246,9 @@ v0 错误码：`BAD_STATE、BAD_ADDR、BAD_ALIGN、BAD_LENGTH、BAD_CONFIG、BAD
 DMA_READ、DMA_WRITE、DMA_SHORT、RESULT_MISMATCH、ACC_OVERFLOW_GUARD、ABORTED、WATCHDOG`。
 错误码只保留本轮首错，detail 可记录目标/层号；后续错误不得覆盖首因。
 
+上述全局错误码只用于已接受任务/配置的执行或校验错误。§3.2.1 的核侧访问拒绝不写入
+`ERROR_CODE`；测试可按 `BAD_ALIGN/BAD_ADDR/BAD_STATE` 分类打印原因，但 RTL 不驻留它。
+
 - timeout 从 START 接受拍开始，以 cop 计算时钟计数；达到上限即停止发新 DMA、丢弃部分结果、
   BUSY 清零并置 ERROR+TIMEOUT+WATCHDOG；
 - DataMover 或结果消费者施加背压时必须保持 `valid/data/last`，不得丢字节或重复计数；
@@ -258,6 +275,9 @@ major 变化表示不兼容的寄存器/二进制布局变化；minor 只允许�
 ### 11.1 算子/寄存器级
 
 - reset 默认值、WSTRB、未对齐/越界、权限和 AXI 背压；
+- 核邮箱 pending 中再次写：第一笔保持、pending 可见、第二笔零副作用；
+- ACK 仅在目标域消费请求后返回，ACK 后下一笔才可接受，且 ACK 不冒充任务完成；
+- 非法 `be`、未对齐、越界、写只读、busy 中 START 前后逐寄存器比较无变化；
 - config 原子提交、busy 时拒绝、START 快照、不重复 start；
 - DMA 正常/短包/错误/背压、ROI/权重边界和 target_id 保持；
 - done/error/timeout sticky、W1C、abort/soft reset 及 IRQ 电平；
