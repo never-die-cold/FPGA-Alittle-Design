@@ -6,7 +6,7 @@ module cop_config_regs (
     input wire [31:0] write_data_i,
     input wire [3:0] write_strb_i,
     output reg write_done_o, slverr_o, cfg_valid_o,
-    output reg [31:0] cfg_applied_o, model_id_o, timeout_cycles_o, weight_bytes_o,
+    output reg [31:0] cfg_applied_o, model_id_o, weight_crc32_o, timeout_cycles_o, weight_bytes_o,
     output reg [4:0] roi_count_o,
     output reg [7:0] min_margin_o
 );
@@ -30,7 +30,7 @@ module cop_config_regs (
     always @(posedge clk or negedge rst_n) begin
         if(!rst_n) begin
             write_done_o<=0; slverr_o<=0; cfg_valid_o<=0; cfg_applied_o<=0;
-            model_id_o<=0; roi_count_o<=0; timeout_cycles_o<=0;
+            model_id_o<=0; weight_crc32_o<=0; roi_count_o<=0; timeout_cycles_o<=0;
             weight_bytes_o<=0; min_margin_o<=0;
             for(i=0;i<20;i=i+1) shadow[i]<=0;
         end else begin
@@ -41,7 +41,8 @@ module cop_config_regs (
                     merged=merge32(shadow[(write_offset_i-12'h018)>>2],write_data_i,write_strb_i);
                     shadow[(write_offset_i-12'h018)>>2]<=merged;
                 end else if(write_offset_i==12'h068 && write_data_i==1 && !busy_i && fields_valid) begin
-                    cfg_applied_o<=shadow[1]; model_id_o<=shadow[3]; roi_count_o<=shadow[5][4:0];
+                    cfg_applied_o<=shadow[1]; model_id_o<=shadow[3]; weight_crc32_o<=shadow[4];
+                    roi_count_o<=shadow[5][4:0];
                     timeout_cycles_o<=shadow[6]; weight_bytes_o<=shadow[13];
                     min_margin_o<=shadow[19][7:0]; cfg_valid_o<=1;
                 end else slverr_o<=1;

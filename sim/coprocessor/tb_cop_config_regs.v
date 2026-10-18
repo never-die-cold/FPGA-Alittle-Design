@@ -3,10 +3,12 @@ module tb_cop_config_regs;
     reg clk=0,rst_n=0,valid=0,busy=0; reg [11:0] offset; reg [31:0] data; reg [3:0] strb=4'hf;
     wire done,slverr,cfg_valid; wire [31:0] applied,model_id,timeout_cycles,weight_bytes;
     wire [4:0] roi_count; wire [7:0] min_margin;
+    wire [31:0] weight_crc32;
     always #5 clk=~clk;
     cop_config_regs dut(.clk(clk),.rst_n(rst_n),.write_valid_i(valid),.busy_i(busy),
         .write_offset_i(offset),.write_data_i(data),.write_strb_i(strb),.write_done_o(done),
         .slverr_o(slverr),.cfg_valid_o(cfg_valid),.cfg_applied_o(applied),.model_id_o(model_id),
+        .weight_crc32_o(weight_crc32),
         .timeout_cycles_o(timeout_cycles),.weight_bytes_o(weight_bytes),.roi_count_o(roi_count),
         .min_margin_o(min_margin));
     task wr; input [11:0] a; input [31:0] d;

@@ -52,7 +52,8 @@ module cop_top #(
     wire [14:0] engine_score; wire engine_low_conf; wire [23:0] engine_logits;
     reg [127:0] result_mem [0:15]; reg [127:0] result_sample1,result_sample2;
     reg [31:0] result_seq_sync1,result_seq_sync2; integer result_slot;
-    wire [31:0] cfg_applied,model_id,timeout_cycles,weight_bytes,dma_bytes;
+    wire [31:0] cfg_applied,model_id,weight_crc32,timeout_cycles,weight_bytes,dma_bytes;
+    wire [31:0] loader_crc32;
     wire [4:0] roi_count; wire [7:0] min_margin; reg model_valid,roi_valid,load_kind;
     cop_core_mmio_gate #(.COP_BASE(COP_BASE)) gate(
         .addr_i(core_addr_i),.wdata_i(core_wdata_i),.status_i(status_o),.be_i(core_be_i),
@@ -78,6 +79,7 @@ module cop_top #(
         .busy_i(task_busy),.write_offset_i(ps_write_offset_i),.write_data_i(ps_write_data_i),
         .write_strb_i(ps_write_strb_i),.write_done_o(ps_write_done_o),.slverr_o(ps_slverr_o),
         .cfg_valid_o(cfg_valid),.cfg_applied_o(cfg_applied),.model_id_o(model_id),
+        .weight_crc32_o(weight_crc32),
         .timeout_cycles_o(timeout_cycles),.weight_bytes_o(weight_bytes),.roi_count_o(roi_count),
         .min_margin_o(min_margin));
     cop_dma_loader loader(.clk(cop_clk),.rst_n(rst_n),.start_i(dma_start_i),
@@ -86,7 +88,7 @@ module cop_top #(
         .store_ready_i(store_ready_i),.stream_ready_o(dma_ready_o),.store_write_o(store_write_o),
         .store_addr_o(store_addr_o),.store_data_o(store_data_o),.store_strb_o(store_strb_o),
         .busy_o(dma_busy),.done_o(loader_done),.error_o(loader_error),.short_o(loader_short),
-        .bytes_received_o(dma_bytes));
+        .bytes_received_o(dma_bytes),.crc32_o(loader_crc32));
     cop_task_ctrl u_task(.clk(cop_clk),.rst_n(rst_n),.start_i(start_command),.cfg_valid_i(cfg_valid),
         .model_valid_i(model_valid),.roi_valid_i(roi_valid),.roi_count_i(roi_count),
         .engine_ready_i(engine_ready),.engine_done_i(engine_done),.engine_error_i(engine_error),
@@ -115,7 +117,7 @@ module cop_top #(
         end
         else begin
             if(dma_start_i && !dma_busy) load_kind<=dma_kind_i;
-            if(loader_done && !load_kind) model_valid<=1;
+            if(loader_done && !load_kind) model_valid<=loader_crc32==weight_crc32;
             if(loader_done && load_kind) roi_valid<=1;
             if(result_write_o) result_mem[task_result_index_o]<=result_data_o;
         end
