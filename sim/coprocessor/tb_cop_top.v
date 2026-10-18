@@ -5,7 +5,14 @@ module tb_cop_top;
     wire [3:0] index,task_index; wire [127:0] result_data;
     reg ps_valid=0,dma_start=0,dma_valid=0,dma_last=0,dma_kind=0;
     reg [11:0] ps_offset; reg [31:0] ps_data; wire ps_done,ps_error,dma_ready,store_write;
-    integer starts=0,beat;
+    reg [63:0] memory_data; reg [1023:0] weight_data;
+    reg [511:0] bias_data,multiplier_data; reg [95:0] shift_data;
+    reg [7:0] roi [0:4095]; reg [63:0] ping [0:4095],pong [0:2047],gap [0:7];
+    reg [1023:0] weights [0:268]; reg [31:0] biases [0:159],multipliers [0:159];
+    reg [5:0] shifts [0:159]; reg [4095:0] model_folder,folder,filename;
+    wire mem_en,weight_en,param_en,mem_write; wire [1:0] read_bank,write_bank;
+    wire [15:0] read_address,weight_address,write_address; wire [7:0] parameter_address;
+    wire [63:0] memory_write_data; integer starts=0,beat,lane,found;
     always #5 core_clk=~core_clk; always #7 cop_clk=~cop_clk;
     always @(posedge cop_clk) if(start) starts=starts+1;
     cop_top dut(.core_clk(core_clk),.cop_clk(cop_clk),.rst_n(rst_n),.core_addr_i(addr),
@@ -14,23 +21,53 @@ module tb_cop_top;
         .ps_write_strb_i(4'hf),.ps_write_done_o(ps_done),.ps_slverr_o(ps_error),
         .dma_start_i(dma_start),.dma_kind_i(dma_kind),.dma_data_i(64'd0),.dma_keep_i(8'hff),
         .dma_valid_i(dma_valid),.dma_last_i(dma_last),.store_ready_i(1'b1),.dma_ready_o(dma_ready),
-        .store_write_o(store_write),.target_id_i(16'h1234),.memory_data_i(64'd0),
-        .weight_data_i(1024'd0),.bias_data_i(512'd0),.multiplier_data_i({16{32'd1}}),
-        .shift_data_i(96'd0),
+        .store_write_o(store_write),.target_id_i(16'h1234),.memory_data_i(memory_data),
+        .weight_data_i(weight_data),.bias_data_i(bias_data),.multiplier_data_i(multiplier_data),
+        .shift_data_i(shift_data),.memory_enable_o(mem_en),.weight_enable_o(weight_en),
+        .parameter_enable_o(param_en),.read_bank_o(read_bank),.write_bank_o(write_bank),
+        .read_address_o(read_address),.weight_address_o(weight_address),.write_address_o(write_address),
+        .parameter_address_o(parameter_address),.memory_write_o(mem_write),.memory_write_data_o(memory_write_data),
         .irq_pending_i(1'b0),.engine_start_o(start),.result_write_o(result_write),
         .task_result_index_o(task_index),.result_seq_o(result_seq),.result_data_o(result_data),
         .status_o(status),.fw_counts_o(counts),
         .fw_decision_o(decision),.result_index_o(index));
+    always @(posedge cop_clk) begin
+        if(mem_en) case(read_bank)
+            0: memory_data<={56'd0,roi[read_address]};
+            1: memory_data<=ping[read_address];
+            2: memory_data<=pong[read_address];
+            3: memory_data<=gap[read_address];
+        endcase
+        if(weight_en) weight_data<=weights[weight_address];
+        if(param_en) for(lane=0;lane<16;lane=lane+1) begin
+            bias_data[lane*32 +: 32]<=biases[parameter_address+lane];
+            multiplier_data[lane*32 +: 32]<=multipliers[parameter_address+lane];
+            shift_data[lane*6 +: 6]<=shifts[parameter_address+lane];
+        end
+        if(mem_write) case(write_bank)
+            1: ping[write_address]<=memory_write_data;
+            2: pong[write_address]<=memory_write_data;
+            3: gap[write_address]<=memory_write_data;
+        endcase
+    end
     task ps_wr; input [11:0] a; input [31:0] d;
         begin @(negedge cop_clk); ps_offset=a; ps_data=d; ps_valid=1; @(posedge cop_clk); #1;
             if(!ps_done || ps_error) $fatal(1); @(negedge cop_clk); ps_valid=0; end
     endtask
     initial begin
+        found=$value$plusargs("model=%s",model_folder); if(!found) $fatal(1);
+        found=$value$plusargs("case=%s",folder); if(!found) $fatal(1);
+        $sformat(filename,"%0s/weights.hex",model_folder); $readmemh(filename,weights);
+        $sformat(filename,"%0s/bias.hex",model_folder); $readmemh(filename,biases);
+        $sformat(filename,"%0s/multipliers.hex",model_folder); $readmemh(filename,multipliers);
+        $sformat(filename,"%0s/shifts.hex",model_folder); $readmemh(filename,shifts);
+        $sformat(filename,"%0s/input.hex",folder); $readmemh(filename,roi);
+        memory_data=0; weight_data=0; bias_data=0; multiplier_data=0; shift_data=0;
         repeat(3) @(negedge core_clk); rst_n=1;
         ps_wr(12'h01c,1); ps_wr(12'h024,32'h1234); ps_wr(12'h02c,1); ps_wr(12'h030,2000000);
         ps_wr(12'h048,32'h1000); ps_wr(12'h04c,8); ps_wr(12'h050,32'h2000);
         ps_wr(12'h054,32'h3000); ps_wr(12'h058,4096); ps_wr(12'h05c,32'h4000);
-        ps_wr(12'h060,16); ps_wr(12'h064,0); ps_wr(12'h068,1);
+        ps_wr(12'h060,16); ps_wr(12'h064,5); ps_wr(12'h068,1);
         @(negedge cop_clk); dma_start=1; @(negedge cop_clk); dma_start=0; dma_valid=1; dma_last=1;
         @(posedge cop_clk); #1; dma_valid=0; dma_last=0;
         @(posedge cop_clk); #1;
@@ -43,11 +80,12 @@ module tb_cop_top;
         @(negedge core_clk); we=0; wait(starts==1); wait(!dut.mailbox_pending);
         wait(result_seq==1); repeat(2) @(posedge cop_clk); #1;
         if(!result_write && result_seq!=1) $fatal(1);
-        if(result_data[15:0]!==16'h1234 || result_data[23:16]!==8'd0 ||
-           result_data[55:32]!==24'h000000 || result_data[63:56]!==8'd0) $fatal(1);
+        if(result_data[15:0]!==16'h1234 || result_data[23:16]!==8'd2 || !result_data[25] ||
+           result_data[55:32]!==24'h04fd02 || result_data[63:56]!==8'd2 ||
+           result_data[78:64]!==15'd258) $fatal(1);
         addr=32'h80010010; #1;
         if(!hit || starts!=1 || rdata[10] || !rdata[0]) $fatal(1);
-        $display("PASS: cop_top config/load/CDC through active cnn_sequencer to result commit"); $finish;
+        $display("PASS: cop_top config/load/CDC active CNN matches J02 zero result golden"); $finish;
     end
     initial begin #15000000; $display("TRACE starts=%0d pending=%b cfg=%b model=%b roi=%b busy=%b state=%0d",
         starts,dut.mailbox_pending,dut.cfg_valid,dut.model_valid,dut.roi_valid,dut.task_busy,dut.u_task.state);
