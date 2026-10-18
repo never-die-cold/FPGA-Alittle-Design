@@ -8,6 +8,7 @@ module tb_cop_core_mmio_gate;
     wire [31:0] request_data,rdata;
     integer checks;
     cop_core_mmio_gate dut (.addr_i(addr),.wdata_i(wdata),.status_i(status),.be_i(be),
+        .fw_counts_i(32'h00030201),.fw_decision_i(32'ha5000002),.result_index_i(4'd7),
         .we_i(we),.busy_i(busy),.mailbox_pending_i(pending),.cop_hit_o(hit),
         .write_request_o(request),.write_offset_o(offset),.write_data_o(request_data),.rdata_o(rdata));
     task expect;
