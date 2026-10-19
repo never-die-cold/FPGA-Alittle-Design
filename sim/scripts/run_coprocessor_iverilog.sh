@@ -56,6 +56,7 @@ run_top() {
     vision_run_checked "$BUILD/cop_top.log" vvp "$BUILD/cop_top.vvp" "+model=$dir" "+case=$dir/zero"
 }
 run_firmware() {
+    make -C "$ROOT/src/riscv_fw" CROSS=riscv64-unknown-elf- cop_job.elf
     gcc -std=c99 -Wall -Wextra -Werror -I"$ROOT/src/riscv_fw" \
         "$ROOT/sim/coprocessor/test_cop_work_order.c" -o "$BUILD/test_cop_work_order"
     vision_run_checked "$BUILD/cop_work_order.log" "$BUILD/test_cop_work_order"
