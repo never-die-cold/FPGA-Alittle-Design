@@ -20,18 +20,20 @@
 
 ## A. 本轮可做（离板，不需要板卡/数据）
 
-- [ ] **A01 本表落库并挂到导航**：`docs/README.md` 与 `docs/runbooks/README.md` 能点进来。
-- [ ] **A02 全仓离板回归**：`bash sim/scripts/run_iverilog.sh all`、`bash sim/scripts/run_coprocessor_iverilog.sh all`、
-      `bash sim/scripts/run_vision_python.sh all`（或现行 Python 入口）各自退出 0；日志进 `data/logs/`。
+- [x] **A01 本表落库并挂到导航**：`docs/README.md` 与 `docs/runbooks/README.md` 能点进来。
+- [x] **A02 离板回归（分段）**：核 20 个 TB + 协处理器 `all`、`run_coprocessor_python.sh all`、
+      `run_vision_iverilog.sh all`、`run_vision_python.sh` 各自退出 0，证据在
+      `data/logs/2026-10-19-j04-closeout/`。**未单次跑完** `run_iverilog.sh all`：它在 CoreMark
+      四档基准处长仿真，本轮主动中止（核 RTL 未改动）。
 - [x] **A03 J04 审查修复**：状态口径拆 J04a/J04b、交接单迁移并重算指纹、Windows 可移植性、
       `CFG_VALID` 撤销、固件 READY/RESULT_SEQ/超时门禁、连续两笔任务的 stale-`done` 竞态。
 - [x] **A04 证据重建**：`data/logs/2026-10-19-j04-closeout/` 的 Windows 全量/单项日志与
       `cop_job.hex/dis` 指纹按修复后代码重算。
-- [ ] **A05 文档一致性扫尾**：`docs/`、`src/*/README.md`、`report/` 里不得再有"J04 已完成"
+- [x] **A05 文档一致性扫尾**：`docs/`、`src/*/README.md`、`report/` 里不得再有"J04 已完成"
       或指向 `9fdd035` 等失效锚点的表述；`git grep` 一遍关键词收口。
-- [ ] **A06 仓库卫生**：生成物不入库、`*.hex/*.dis` 只留证据类、日志 README 六要素齐全，
+- [ ] **A06 仓库卫生**（部分完成：`git diff --check` 干净、生成物不入库；日志索引仍需按 `repo-hygiene.md` 再扫一遍）：生成物不入库、`*.hex/*.dis` 只留证据类、日志 README 六要素齐全，
       按 [仓库卫生](repo-hygiene.md) 自查。
-- [ ] **A07 PR 与基线**：`dev/riscv` → `main` 开 PR（不 force push），审完合并；合并后在
+- [ ] **A07 PR 与基线**（PR 已开，待评审合并后打 tag）：`dev/riscv` → `main` 开 PR（不 force push），审完合并；合并后在
       `main` 打基线 tag，并把 tag 写进交接单 §2 锚点行。
 
 ## B. 需要板卡（到货后按顺序做，不能跳）
