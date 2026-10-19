@@ -49,6 +49,7 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 31 20ae79bc4a37e902e8995ea12d3740deac28d356301d0e2583ef2078d11baa1b sim/coprocessor/tb_cop_task_ctrl.v
 130 be290730d5dca5dc1bb833f928f857bcd5edc74583f3f2c0306818d7a7008b6d sim/coprocessor/tb_cop_top.v
 163 a66ca4bbad1336f4ab7f2984fb634b92a7b62faec99b11d60a9d641f3c0623e5 sim/coprocessor/tb_cnn_sequencer.v
+19 cbd5a4cb478b01a8668e625602e3e327f2eba4b3c7ae1dcd45cc489f50786e9e sim/coprocessor/test_cop_work_order.c
 87 aed7264e972652da38b0815f37a47c48b12e7daaf2a7953e93e71ab749f5489c sim/scripts/run_coprocessor_iverilog.sh
 ```
 
@@ -74,3 +75,59 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 | 协处理器集合 | `run_coprocessor_iverilog.sh all`，退出码 0 | PASS |
 | 默认关闭核回归 | `run_iverilog.sh soc`，first=13/1101，second=65/0001 | PASS |
 | RV32I 工单固件 | `firmware` 构建 ELF/hex/dis + 主机规则测试 | PASS |
+
+## 5. 未验证矩阵与接手方法
+
+| 未验证项 | 接手人 | 手段 / PASS 判据 |
+|---|---|---|
+| 完整 CDC 相位、复位、连续任务扫描 | RTL 验证队友 | 扩展 mailbox/top TB；无丢单、撕裂、误 ACK，全部断言 PASS |
+| AXI AW/W 相位、B/R 背压、非法响应矩阵 | RTL 验证队友 | 扩展 `tb_cop_axi_lite_frontend.v`；协议 checker 零错误 |
+| payload 各 bank 物理地址适配与结果 DMA | SoC 集成队友 | 接真实 BRAM/DataMover；逐字节与 C02 payload/result 黄金一致 |
+| 全仓回归、四档 CoreMark、arch-test | 核验证队友 | `run_iverilog.sh all` 与规定矩阵退出 0，无历史回归退化 |
+| XSim、综合、实现、资源、WNS/Fmax、DRC、bitstream | NC/FPGA 队友 | Vivado 原始报告达冻结门槛，无 critical warning 漏审 |
+| PYNQ、网口/串口、实机上板 | NC | 按 J08 包运行并返回日志、版本、位流/模型 SHA256 |
+| 正式 PTQ/QAT、真实精度与真实黄金 | JL 后续 J05/J06 | 真实留出集报告和正式 manifest；本 J04 包不替代 |
+
+## 6. 队友待办（按优先级）
+
+- **P0-1 第一条**：在干净 worktree 先运行第 1 节一键冒烟命令；以退出码 0、所有既有
+  `PASS:` 行和 zero 黄金 `logits=04fd02 class=2 margin=2` 为接手基线。
+- **P0-2 数据面落地**：在 `cop_top` 的 loader store 接口后接 C02 物理 bank/地址适配，并接结果
+  DataMover；增加真实 payload build→load→逐 bank/结果逐字节比对，完全一致才 PASS。
+- **P0-3 CDC/AXI 深测**：在 mailbox/top/AXI TB 增加异步相位、复位、pending 第二写、AW/W
+  排列和 B/R 背压；第一笔不变、第二笔零副作用、无协议错误才 PASS。
+- **P0-4 配置失效规则**：扩展 config/top TB，验证模型地址/长度/CRC 改动后的 MODEL_VALID
+  撤销策略和 ROI 配置更新；先冻结 OPEN-3 再实现。
+- **P1**：跑全仓 `run_iverilog.sh all`、CoreMark/arch-test 矩阵；保存原始日志和退出码。
+- **P2**：跑 XSim/Vivado/时序/资源/DRC/bitstream，最后由 NC 上板；必须记录源码、位流、
+  固件和模型 SHA256，不能用本交接单代签。
+
+## 7. OPEN（保守默认与影响面）
+
+- **OPEN-1 payload bank 适配**：当前 loader 导出 word/address/keep，顶层 TB 用 J02 memory model；
+  默认不宣称已写入实体 BRAM。影响模型装载、综合资源和实际推理。
+- **OPEN-2 结果外搬**：当前结果在本地 16×16-byte 窗口读回，尚未写 `RESULT_ADDR`；默认固件
+  轮询窗口，不宣称结果 DMA 完成。影响 PS 大批量结果读取。
+- **OPEN-3 配置改变后的 VALID 撤销**：C03 未逐字段冻结撤销时点；默认 busy 时拒绝 START，
+  队友冻结前不得依赖旧 VALID 启动新配置。影响跨模型/ROI 重配置。
+- **OPEN-4 返回路径 CDC**：命令邮箱按稳定 payload+toggle；状态/多位返回仅冒烟，未完成全相位
+  证明。默认固件轮询稳定两次并以 RESULT_SEQ 变化为提交点。影响极端相位可靠性。
+- **OPEN-5 IRQ/IRQ_ACK**：本轮未生成可签收的 PS IRQ 链；默认轮询 STATUS，不宣称中断可用。
+  影响 PS 驱动方式，不影响已测轮询流程。
+- **OPEN-6 FW_DECISION 布局**：固件暂用 `[31:16] seq/[15:8] reasons/[7:0] verdict`；默认仅由
+  共用头文件读写，WC 冻结前禁止外部硬编码。影响 WC 协议解析。
+- **OPEN-7 AXI/CDC/综合深度**：只做正常一笔与关键拒绝冒烟；默认所有未覆盖情形均标
+  UNVERIFIED，不能外推 Vivado、100 MHz 或板端结论。
+- **OPEN-8 组合 RAM 读告警**：Icarus 对 shadow/result memory 报敏感列表告警；默认保留行为，
+  不据此宣称 BRAM 推断。影响综合资源/时序，交给 Vivado 报告判定。
+
+每个 OPEN 的补测位置和 PASS 判据均在第 5/6 节给出；不得用“仿真冒烟 PASS”覆盖其状态。
+
+## 8. 本次流程例外与责任边界
+
+用户明确覆盖仓库逐题理解门槛：本次一次性收口不逐题等待；仍保持每提交不超过 100 行、
+每步独立 TB + `all`、只做本地 commit、不 push。未执行 merge、tag 或破坏性 git 操作。
+
+**J04 实现完成 ≠ 完整验证通过 ≠ 板级验收。** 本轮未做完整回归矩阵、穷举负例、CDC
+全场景扫描、XSim/Vivado、综合实现、bitstream 或上板；JL 只对本单列出的离板冒烟证据负责，
+不代 WC/NC/验证队友签字。
