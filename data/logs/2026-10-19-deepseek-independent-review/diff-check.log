@@ -1,0 +1,4 @@
+git diff --check 7d6355b..HEAD exit=0
+git diff --check exit=0
+new_markdown=report/llm_log/2026-10-19-deepseek-independent-review.md raw_exit=1 diagnostics=0 (no-index returns 1 for new-file differences)
+new_markdown=data/logs/2026-10-19-deepseek-independent-review/README.md raw_exit=1 diagnostics=0 (no-index returns 1 for new-file differences)
