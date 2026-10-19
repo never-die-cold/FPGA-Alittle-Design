@@ -224,7 +224,7 @@
 
 | 日期 | 变更 |
 |:---|:---|
-| 2026-10-19 | 仓库整理 P0–P6：新增 data 日志/证据索引与 `docs/project-map.md`/`repo-hygiene.md`，补 30 个证据目录 README，退役 20 个 file-guide 生成物与 9 个 `.vvp`；回收 4 个额外 worktree、`sim/build` 与 arch-test 缓存；日志输入快照去重 588 个文件并加 manifest/恢复脚本；docs 分为 contracts/runbooks/research/archive。工作区 3.9 GB→约 481 MB；未改 RTL/接口，未改写历史 |
+| 2026-10-19 | 仓库整理 P0–P7：新增 data 日志/证据索引与 `docs/project-map.md`/`repo-hygiene.md`，补 30 个证据目录 README，退役 20 个 file-guide 生成物与 9 个 `.vvp`；回收 4 个额外 worktree、`sim/build` 与 arch-test 缓存；日志输入快照去重 588 个文件并加 manifest/恢复脚本；docs 分为 contracts/runbooks/research/archive。工作区 3.9 GB→约 469 MB；跟踪文件 5,638→5,124；提交 `2f5475b`/`ebf739e`，tag `post-cleanup-2026-10-19`；未改 RTL/接口，未改写历史 |
 | 2026-10-17 | 归档 10-15 五组离板独立复核与 10-17 EXE 环 LIVE 接通/服务自愈证据、工位概念稿；按 §3.4 报备 M3 卡点（拍摄环境与硬件 CNN 缺口，prototype 链不入验收） |
 | 2026-10-12 | 按合并源码、C02/C03 与三人执行清单校正测试数量、软件实现、接口/ROI方案、责任分工及原 vision/C01 证据边界；保持 M2 未通过 |
 | 2026-10-10 | 接收外包视觉包并保留原文，补充受控工位、单张稳定检查、PS 定位/ROI 评审和 FP32→PTQ→必要时 QAT 路线；不视为板端验收 |

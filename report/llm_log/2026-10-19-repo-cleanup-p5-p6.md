@@ -1,7 +1,7 @@
 # 仓库整理 P5–P6：快照去重与文档分层（2026-10-19）
 
 > 前置：P0–P4 已完成；P4 记录见 [`2026-10-19-repo-cleanup-p4.md`](2026-10-19-repo-cleanup-p4.md)。
-> 本次未改 RTL/软件行为，未 commit。
+> 本次未改 RTL/软件行为；P7 已提交，见 [P7 记录](2026-10-19-repo-cleanup-p7.md)。
 
 ## P5 日志输入快照去重
 
@@ -62,15 +62,15 @@
 | 试点 `--restore` 后 sha256 | 11/11 匹配 |
 | `python docs/file-guide/tools/generate.py --scope source --date 2026-10-19` + `verify.py` | 729 文件，PASS |
 | `git diff --check` / `git diff --cached --check` | 无输出 |
-| 仓库工作区 | 约 **474 MB**（P4 后 481 MB） |
+| 仓库工作区 | 约 **469 MB**（P4 后 481 MB；P5/P6 后 469 MB） |
 | `docs/` 根 | 16 个文件（15 md + 1 csv） |
-| 提交后跟踪文件估算 | **5,122**（5,609 − 599 删除 + 112 新增；未达到原计划 4,800，见下） |
+| 最终跟踪文件 | **5,124**（已提交；未达到原计划 4,800，见下） |
 
 > 未达到 4,800 的原因：P5 只删“可恢复/重复”的快照，保留了 236 个唯一文件和 89 个 canonical 副本；剩余大部分是 `data/logs`/`data/evidence` 的原始证据。继续压到 4,800 需要归档证据目录，可能影响可读性和 48/48 校验，本次不做。
 
 ## 未做
 
-- 没有 commit：按 AGENTS，等用户确认理解。
+- P7 已 commit + tag：`2f5475b`（整理）、`ebf739e`（索引刷新）；tag `post-cleanup-2026-10-19`，见 [P7 记录](2026-10-19-repo-cleanup-p7.md)。
 - 没有跑 RTL 全量回归：未改 RTL/软件。
 - 没有删除证据区的剩余重复（12 条告警），原因见上。
 - 没有把 `docs/archive/` 再按月份细分；当前 17 篇已能按 README 索引找到。
