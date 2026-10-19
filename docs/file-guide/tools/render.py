@@ -6,7 +6,7 @@ import os
 from collections import Counter
 from urllib.parse import quote
 
-from scan import OUT, ROOT
+from scan import OUT, ROOT, TOOLS
 
 
 def md_link(path):
@@ -14,8 +14,8 @@ def md_link(path):
 
 
 def write_outputs(records, metadata):
-    OUT.mkdir(exist_ok=True)
-    (OUT / "sections").mkdir(exist_ok=True)
+    OUT.mkdir(parents=True, exist_ok=True)
+    (OUT / "sections").mkdir(parents=True, exist_ok=True)
     for group in sorted({r["group"] for r in records}):
         rows = [r for r in records if r["group"] == group]
         lines = [f"# {group}：逐文件说明", "", f"{len(rows)}个文件；返回[主页](../README.md)，完整关系见[搜索页](../index.html)或[JSON](../files.json)。", "",
@@ -38,15 +38,16 @@ def write_outputs(records, metadata):
         for r in records:
             writer.writerow([r["path"], r["group"], r["kind"], r["state"], r["description"], r["basis"], len(r["relations"]),
                              "\n".join(x["type"] + "：" + x["path"] for x in r["relations"][:20])])
-    template = (OUT / "tools/page.html").read_text(encoding="utf-8")
+    template = (TOOLS / "page.html").read_text(encoding="utf-8")
     data = json.dumps(records, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
     for key, value in {"__COUNT__": str(len(records)), "__DATE__": metadata["date"], "__REV__": metadata["revision"][:7], "__DATA__": data}.items():
         template = template.replace(key, value)
     (OUT / "index.html").write_text(template, encoding="utf-8")
-    intro = (OUT / "tools/README-template.md").read_text(encoding="utf-8")
+    intro = (TOOLS / "README-template.md").read_text(encoding="utf-8")
     directory = "\n".join(f"| [{g}](sections/{g}.md) | {n} |" for g, n in sorted(Counter(r["group"] for r in records).items()))
     replacements = {"__COUNT__": str(len(records)), "__PROJECT_COUNT__": str(metadata["project_count"]),
-                    "__REV__": metadata["revision"][:7], "__DATE__": metadata["date"], "__DIRECTORY__": directory}
+                    "__REV__": metadata["revision"][:7], "__DATE__": metadata["date"],
+                    "__SCOPE__": metadata.get("scope", "source"), "__DIRECTORY__": directory}
     for key, value in replacements.items():
         intro = intro.replace(key, value)
     (OUT / "README.md").write_text(intro, encoding="utf-8")
@@ -62,7 +63,7 @@ def validate(records, paths, metadata):
               "missing": 0, "duplicates": 0, "broken_relations": 0,
               "relations": sum(len(r["relations"]) for r in records),
               "description_basis": dict(Counter(r["basis"] for r in records)),
-              "boundary": "Git tracked + nonignored untracked; .git and ignored dependencies/build outputs excluded",
+              "boundary": "Git tracked + nonignored untracked, scope=" + metadata.get("scope", "all") + "; .git and ignored dependencies/build outputs excluded",
               "paths_sha256": hashlib.sha256("\n".join(paths).encode()).hexdigest()}
     (OUT / "validation.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return report

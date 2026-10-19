@@ -1,0 +1,513 @@
+{
+  "run": "2026-10-15-improvements-fast",
+  "generated_at": "2026-10-19T02:47:00.703349+00:00",
+  "policy": "restore=git blob; drop=canonical copy; keep/unique=stay",
+  "roots": [
+    "inputs/"
+  ],
+  "summary": {
+    "total": 62,
+    "restore": 51,
+    "keep": 0,
+    "drop": 0,
+    "unique": 11
+  },
+  "files": [
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/.gitignore",
+      "size": 1323,
+      "sha256": "cc462a3f84c1152a7d0a7ff8c61c3480a8d389fa5f8b2b9a1db1c77489cb9eba",
+      "git_blob": "971d36f7ddeceb8040d5c31adef468fbad350b8b",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/build_soc_ab.tcl",
+      "size": 5616,
+      "sha256": "e12be541b7d32c0678a8266d6a45798934364d8fe1e00f12dd1d1786a765339d",
+      "git_blob": "ea8820d4a39245670754a3aada91fb36cdd42f0c",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/docs/c01-ddr-frame-ownership-v0.md",
+      "size": 8430,
+      "sha256": "9bbfefd2dc22cfd8c4c8f490c348cef07f7f0113f94393c1a7e28309c1336ea8",
+      "git_blob": "7f9048b385051a960054f39b8ed17fb54036cc0f",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/docs/vision-live-semantics.md",
+      "size": 13584,
+      "sha256": "661d36430643ea85a13dd38b0e32a502300e5140772dd62cb96a0de14dff6e25",
+      "git_blob": "d8e779cc4235a826cca36be44b7341c2773635a7",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/pynq_z2_soc.xdc",
+      "size": 1366,
+      "sha256": "dd59a027777580bc5d36ddcba62917ca23234b6c917844e1edac30cc1b790f3b",
+      "git_blob": "29186d669914ad2406b41657cca20718a1e4ee70",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/riscv/alu.v",
+      "size": 1308,
+      "sha256": "95b963f6de03deac8efb965b44ba3662b09b5ae54d6052d660d42bcba888db9f",
+      "git_blob": "74631c1fadefc3ad371d70a16b7ca4703a33418a",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/riscv/branch_predict.v",
+      "size": 1939,
+      "sha256": "27d40ad9c80f011c0e846818d4668ad0dcbb2dd1ad51d50aadf013f237b1d408",
+      "git_blob": "c07c33113dd9d4f008f1a50e67754e8fa6ec2f3b",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/riscv/core_top.v",
+      "size": 10150,
+      "sha256": "e33859f33988ed765f075d12aab5986a503cd232cb6b1eded8b29c2c18c2b8e6",
+      "git_blob": "0d4f32a1a59b53180e21efbe46341f5514224a0e",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/riscv/decode.v",
+      "size": 7251,
+      "sha256": "c502e5ccb977d754d0bd3eb5225b9b273597b9558907582b1f81ed8d7de445bb",
+      "git_blob": "80a98597f62fc3303148c22bf58b35ba29b29046",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/riscv/dmem.v",
+      "size": 1063,
+      "sha256": "9c8cf5ffa5609661783af170f05a17fb2c9c2ba35a2811f3c4c44e562bfa91a2",
+      "git_blob": "065a18dadb6a84f2fc95de020bac578966013328",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/riscv/forwarding.v",
+      "size": 1955,
+      "sha256": "0542d9899909b3d51f48e4482dfdb18488c298b314ee65d3ab3331cdc78e8a04",
+      "git_blob": "98d31ccb7809da1c13df462072bc2629cfa23614",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/riscv/hazard.v",
+      "size": 975,
+      "sha256": "305a84a0a00c0be6dec7f3a624596b7d648b21fdeb4c3fa78b4c75da123d4761",
+      "git_blob": "87e96e8fb594313ecf52a9f2a721407cb16c4be1",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/riscv/id_ex_stage.v",
+      "size": 3538,
+      "sha256": "9476305648d1b3c0daa27a6d64ec4fb068ab7a7e42f9d3a4aacabb96e3903391",
+      "git_blob": "fae03bafdcfac77bfb0be5d23af60eb993905fd2",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/riscv/if_stage.v",
+      "size": 1579,
+      "sha256": "1cf0591bd01937aa98977b708fff06bf636e4dc1b1f3b1215fccc06127fa2c68",
+      "git_blob": "3af49239cc1196ea97e8fe99ce06f52907bcc0ab",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/riscv/imem.v",
+      "size": 613,
+      "sha256": "12fdd837ff7a9c4832638ae55ae3129a672eddc1dfa294a949337fdd350fbb16",
+      "git_blob": "2083c07c996c94ded75e759ae8ce2bac752ebd19",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/riscv/mem_wb_stage.v",
+      "size": 1533,
+      "sha256": "2e5767f476f7e010f84ac9f7a114e2175481e62bfc3d11ef1f71e288d72c8e18",
+      "git_blob": "b3b9d4342d67c26c87535f7acfe3ed845c6f22d4",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/riscv/muldiv.v",
+      "size": 4666,
+      "sha256": "0e0842e4f529e1604db1a17e083c23b2f4ce13e6bbb1ed07cc3f745473e95530",
+      "git_blob": "d17843806a7a69ee17edd1f00a91f13edc893cf7",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/riscv/pc.v",
+      "size": 688,
+      "sha256": "b513d34a0ad21e2b58084e4b827bd53cce7a875c728c8dcf9292d3e05767cd50",
+      "git_blob": "8dc337d44b37f7ec5dde97632c584e979e9f96c2",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/riscv/pynq_z2_top.v",
+      "size": 1983,
+      "sha256": "02dbf4fd2be92833fce83295d7f1529518b3161ec758dc025a100fad1d6b0421",
+      "git_blob": "6ce16084c238268223f9b91e8a1c3703aaf127f3",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/riscv/regfile.v",
+      "size": 669,
+      "sha256": "5a03842e3d86bdf3d86f63f9249197d236c64f9670b49466f879bd7b25ee5ec9",
+      "git_blob": "b5033083e119ea2f3c724032ca3617a2f7219b3e",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/riscv/soc_top.v",
+      "size": 2177,
+      "sha256": "453c8d14186f7203fc03c6187d7c5a14917a21a1dba158692c24b5ccdee2ae17",
+      "git_blob": "a53ff300e91a7e4b83fec5ea857a8701a5b112e1",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/coprocessor/tb_cnn_sequencer.v",
+      "size": 9541,
+      "sha256": "133ff0aa009449a409983d33af5afdfb17ec42f0daf112b51b1f708d808f28cc",
+      "git_blob": "a4af6ea54fdc7dad3ae0794b38370aea8475d9c6",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/coprocessor/tb_conv_engine.v",
+      "size": 9447,
+      "sha256": "9dc20300655bd256004dc4eb094bd0bf226301f129992a8948152cb890bc9749",
+      "git_blob": "743bfe2d6238492deaa2dc2223a40b704dfd6bd9",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/riscv/tb_id_ex_stage.v",
+      "size": 5219,
+      "sha256": "d7156c0b477c547806aa6c6dc841687e8139ffd538968efc0d07d3c5081fd0eb",
+      "git_blob": "913f7e04ff3fb21dac6e3e7bb5361710f5f274fd",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/scripts/build_vision_client.ps1",
+      "size": 1887,
+      "sha256": "0d5c980cd5de2d3b7efa353d8f9eb49d30d6609d74c0e7401290cdb088f790f9",
+      "git_blob": "2f5ef7b39251c1c14f1d58215232027aa3b9acf4",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/scripts/c01_ddr_onboard.py",
+      "size": 5960,
+      "sha256": "54dd5d64cb251bccfeb1176681a50ef7994852238e7d3917dfc72b6477fa0e82",
+      "git_blob": "63f22e8f735d074a116e2bca103007a0c6b70d6b",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/scripts/run_cnn_ooc.ps1",
+      "size": 1700,
+      "sha256": "5c43748de24ade3f8bd9d16acaed7b350d9690d1a0def62ef2e1103c9a6a38ca",
+      "git_blob": "e2082cd8b5b9ecdefdb634f26eba2f14f88b324f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/scripts/run_coprocessor_iverilog.sh",
+      "size": 3096,
+      "sha256": "936c52d5e455dd0be06a351cc7ebcc72ab1e515cbc28ee644941606d6b97f0de",
+      "git_blob": "8ad2568fef3f9eed8278308c048fc92a043e28aa",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/scripts/run_inspection_python.sh",
+      "size": 617,
+      "sha256": "a8f7becc2aabcc5b244cf12bcef3b8c77266b811e04016edd6b140a16a945ece",
+      "git_blob": "f4745598f31465062e7ed3e8f908fb8a59e0e5b5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/scripts/run_iverilog.sh",
+      "size": 10528,
+      "sha256": "2b6071ad44c26827e17f89992be2b3a3c02dcc3f18c0291dac8d1c515ac9d387",
+      "git_blob": "98250b2eeb3951656d86d9a7c6364771182b693a",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/scripts/run_vision_iverilog.sh",
+      "size": 4084,
+      "sha256": "beeb93c52e4486999093418e50960e09c338ef60fe8b8a00ff8d1c794e7fd9fc",
+      "git_blob": "74a943d05b477b2043baad81104fedb63341c707",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/scripts/run_vision_python.sh",
+      "size": 877,
+      "sha256": "27cf6a79a099b3e3fb63f33ce683082531e02040fe9a15b296a0fddcc214dcd1",
+      "git_blob": "432467bdfb3148120462781571f400b02c238831",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/scripts/synth_coprocessor_ooc.tcl",
+      "size": 2312,
+      "sha256": "e458602d3c29d3e6c3f16b217cdd287ddc170f20a94144d6814df119cac6df61",
+      "git_blob": "10f80a4f60a348cea833cdcf08cc68e9ebf57127",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/vision/localization_opencv.py",
+      "size": 3525,
+      "sha256": "b40a46178f5c7b8c2ee0ef4916e840e02c263fef89310b576aeb34a0acdc2965",
+      "git_blob": "eb0e75a4ac494a8125a0e1b8d049b6f46589d030",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/vision/tb_cop_buf_stress.v",
+      "size": 3426,
+      "sha256": "9901e951c0b40285a143dc10ba120582fd6407a944a8bc41023f75bcba2cc8e8",
+      "git_blob": "625c915113823eadfb9da1e20aeaaadb1eddfbde",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/vision/test_c01_capture.py",
+      "size": 10123,
+      "sha256": "f2804d9861d37a9d190c1b81aad85b03134d50c6d90bebb46aa0072f42f58142",
+      "git_blob": "3e7bda0a12a046dffe4504fde8e3604b1679dfe8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/vision/test_c01_capture_ordering.py",
+      "size": 2445,
+      "sha256": "1dc20be372b0c5c992106365c9b63a1bd04efcc71eb52756e7cd2043a880d9ea",
+      "git_blob": "f6a5ef3599f0127bc5b7701e89ffceb79ddba333",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/vision/test_c01_ddr_onboard.py",
+      "size": 12445,
+      "sha256": "c37c613ee77e39f2730d3b4d9c96f6e780643c27857fc11c7dcab2abb8a5e615",
+      "git_blob": "c6a61e504442188ade24b4e388a93bea94149332",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/vision/test_c01_park_capture.py",
+      "size": 5249,
+      "sha256": "440f16a2c161bc0b3d0e50ce5b37df7c420d8cc4c248bc28bfab28e24165e853",
+      "git_blob": "a971eb5ab1758b07095cc530bce43116b6b7a0dc",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/vision/test_inspection_viewer.py",
+      "size": 3080,
+      "sha256": "3de7221ddfcbc7ed60d3cc582cbb07fa389289cf209ea9e4d458da96199e8986",
+      "git_blob": "b0a399d6cb3aba6e6399bf1765dba71ea723ec85",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/vision/test_localize.py",
+      "size": 3189,
+      "sha256": "cd4616319af5e07be40be2c556f1503d664f684ae20f81b7e708fdcff1e5d022",
+      "git_blob": "5076ebad1d5df2130e04e32c4ff7285a96a981f0",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/vision/test_service_engine.py",
+      "size": 5367,
+      "sha256": "4714370334da607b95ce43946dce066f690c5a36f38e0d02cbea50a5d34e04cc",
+      "git_blob": "9e57b3ee59a820ecbfed8ba94a54f4e892ef93f8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/vision/test_vision_client.py",
+      "size": 3710,
+      "sha256": "8570a34fc9046aa41e7d8d1ecca309c445762ca52423ba5e32bee1c5ac7bacf3",
+      "git_blob": "835ba04caaab9487a42c5ef9e87c2d7e636306c8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/vision/test_vision_live_service.py",
+      "size": 8573,
+      "sha256": "121766f1cde2990822be3fff772d72d5a621e849cced7d0cc5dc3a6498beb6e1",
+      "git_blob": "82f1a450a72469d2e91e30835ee42e8d3addaca1",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/vision/test_vision_rounds.py",
+      "size": 6558,
+      "sha256": "de9b795b1edea86bda2a8830076b98adabbb2330aca9ec56e685a50f8ba379e8",
+      "git_blob": "e075cab4be695ba9db580cdee2014dbb1b3145d5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/sim/vision/test_vision_service_e2e.py",
+      "size": 4380,
+      "sha256": "0b88e6e064d2d5a58fb2751e731aa60963f597557007ea89c07951ce983160a5",
+      "git_blob": "d1fafcecfef1dff470c6718bc2f3242648d864e7",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/src/coprocessor/cnn_sequencer.v",
+      "size": 7904,
+      "sha256": "6d33b0a139d07a14af6e8d613c3ab758da818aba0915166c8b472e2c14f58c3e",
+      "git_blob": "278efe5c109ad635e701dc3fb5a48317e6255a40",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/src/coprocessor/conv_engine.v",
+      "size": 11394,
+      "sha256": "dde0c5c41a6b9335dc8eb1b3fa3eaf6a703ad79e2c44d535d36ee55a0b71b6f9",
+      "git_blob": "4ce14096ce643b98ab3459acf59631a7bb511be2",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/src/coprocessor/design_v0.md",
+      "size": 16533,
+      "sha256": "f5ae39de8a46b038c84658bc2ad0768a2e4ac26abcf0eb9bd2a54338a85c9d86",
+      "git_blob": "62861b15ae0cdc1b038fc817e8ae6249dba35278",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/src/coprocessor/README.md",
+      "size": 5038,
+      "sha256": "07455b5b4089921ad5689191bcb76205db3eaaebee78197d658b8744ec60c5dd",
+      "git_blob": "10e0cf8ee8087ccc8a3eb4c41b388194dc489085",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/src/pynq_host/c01_capture.py",
+      "size": 9515,
+      "sha256": "1f11aefdc11805387b0c345583828fd733e5e38b0b0e043b0510808f648e8430",
+      "git_blob": "d866c0ecc66a75b4934f52136e30f407c9f09624",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/src/pynq_host/c01_park_capture.py",
+      "size": 5933,
+      "sha256": "ee424fc537941b75daf42c801841f25805b29a8f62184d180c6a5d12f6337be6",
+      "git_blob": "5ef185c60844e0fef7aaea22c052d89aca3ee541",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/src/pynq_host/inspection_run.py",
+      "size": 4686,
+      "sha256": "a7cc77692e05b147be3c8250e113dd30f6820d3264e0ceeba62677568b7d3901",
+      "git_blob": "4c1a9397989dad992d39c2b48e8c8853a4380855",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/src/pynq_host/README.md",
+      "size": 6336,
+      "sha256": "e9c90c029700612ee33a78df30083c949b32c02db2804e26553d4b8ce78554c0",
+      "git_blob": "fc7f3be8a013d79077f714c736fa92a42fb7b21a",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/src/pynq_host/vision_live_service.py",
+      "size": 12228,
+      "sha256": "8c163ccab3fcd73310615c37c637658904111b05bca2cd424fde8e9fc19fc8d1",
+      "git_blob": "e42d83de3cd503d3f92ff7889bd997d8403be25d",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/src/riscv/id_ex_stage.v",
+      "size": 3538,
+      "sha256": "9476305648d1b3c0daa27a6d64ec4fb068ab7a7e42f9d3a4aacabb96e3903391",
+      "git_blob": "fae03bafdcfac77bfb0be5d23af60eb993905fd2",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/src/riscv/plan.md",
+      "size": 17172,
+      "sha256": "b48720587e1d80fce403556afbf81107a9d6adad77a8b41e4a6976a15999820d",
+      "git_blob": "48f7c6f46bb3b89fb03ca6bd65cc6b7dc7bec388",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/src/vision/cop_buf.v",
+      "size": 7458,
+      "sha256": "6fedcb1313638d63722c72eb2aab862b704dd0ab34b6311a86f9741c511e67d0",
+      "git_blob": "ba301b0c38c67fe4eef0063c30051c01ed2e0ebe",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/src/vision_client/preview.py",
+      "size": 13975,
+      "sha256": "0c90b0e9ea91e3e6e3581a1b01bd386cc36246d84ed9175605e42393ca535872",
+      "git_blob": "81df6e74ce70ecc6af27ba5eb14caec74fe317b6",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/src/vision_client/README.md",
+      "size": 8785,
+      "sha256": "4e9e026dafa1ff3f14b0cbce08d8ea74c74ebf41d0afa5083b174fc7d245d326",
+      "git_blob": "afdb5b21c9ba20c51c609c94f681046cdf2e2f47",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/src/vision_client/requirements.txt",
+      "size": 198,
+      "sha256": "39d14f7e4bdef282edb7231606a26a86d69730af12f5d93ee23baea14e28878e",
+      "git_blob": "280a06affd3815f0efe1732b1fbc1f373581d575",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-improvements-fast/inputs/src/vision_client/rounds.py",
+      "size": 10660,
+      "sha256": "6563679a04b4b65f5f83a3308fd1746d961ba1e8ec2344f4ca77bedf846829f4",
+      "git_blob": "47a81ee681ee7d121ae221faabb4a47fc228d417",
+      "action": "unique",
+      "canonical": null
+    }
+  ]
+}

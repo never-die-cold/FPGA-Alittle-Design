@@ -3,7 +3,7 @@
 preview.py 只负责取帧与渲染；状态机抽离为纯 stdlib 模块（不依赖 cv2），
 离板可测：sim/vision/test_vision_rounds.py。
 
-语义要点（决策单 docs/vision-sync-protocol-decisions.md）：
+语义要点（决策单 docs/contracts/vision-sync-protocol-decisions.md）：
 - poll 的 last_trigger 记"最近一次尝试"而非"最近一次成功"——失败重试也被节流；
 - 连续失败达 FAIL_LIMIT 重握手，重握手自身失败不许外泄异常（服务重启窗口期）；
 - 服务重启 = 新会话：poll 检测到 session 变化立即重握手，本轮不采纳报文（D5）；

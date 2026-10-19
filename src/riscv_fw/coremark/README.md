@@ -1,7 +1,7 @@
 # src/riscv_fw/coremark —— CoreMark 移植与构建
 
-> 契约：`docs/coremark.md`（§1–§7 契约主体）
-> 计划与进度：`docs/coremark.md` 附录 A
+> 契约：`docs/contracts/coremark.md`（§1–§7 契约主体）
+> 计划与进度：`docs/contracts/coremark.md` 附录 A
 
 ## 目录
 
@@ -23,4 +23,4 @@
 - 上游 commit / 逐文件 SHA-256 / 规则：`data/evidence/2026-09-23-coremark-source.md`
 - 观测块字段表与结束协议：契约 §4.3 / §4.4；判据：契约 §5
 - 回归入口：`bash sim/scripts/run_iverilog.sh coremark`；完整运行条件与 PASS 证据：`data/logs/2026-09-23-coremark/`
-- SoC 板上计数器及 DMEM 镜像预载仍未实现；当前跑分为 iverilog 仿真外推口径。
+- SoC 计数器已实现（`soc_top.v`，`0x8000_8000`）；DMEM 板上镜像预载/等效加载未验收；当前跑分为 iverilog 仿真外推口径。

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # fetch_picorv32.sh —— 取第三方 PicoRV32 源码到 sim/build/picorv32（.gitignore 区，不入库）
-# 固定上游 commit 保证复现；跑分口径见 docs/core_comparison.md §2/§3。
+# 固定上游 commit 保证复现；跑分口径见 docs/research/core_comparison.md §2/§3。
 set -e
 cd "$(dirname "$0")/../.."
 PINNED=ef203c2b0a3fb793280f5114941416c425c5b461   # 2026-10-03 master tip

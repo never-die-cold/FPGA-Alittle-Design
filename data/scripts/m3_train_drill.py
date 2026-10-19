@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""模块三训练侧全链演练（docs/module3-model-training.md §3 结论项，2026-09-30）
+"""模块三训练侧全链演练（docs/runbooks/module3-model-training.md §3 结论项，2026-09-30）
 
 目的：证明"训练 → INT8 量化 → 权重 hex 导出"链路可行，暴露接口问题。
 非正式交付物；正式网络/数据集待 10/5 拍板后重做。

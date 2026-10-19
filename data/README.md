@@ -5,11 +5,12 @@
 ## 内容
 
 - `metrics.csv`：指标汇总表（指标名称 / 类别 / 数值 / 单位 / 测量条件 / 测试次数 / 证据文件）
-- `logs/`：原始日志（延迟分位数、任务闭环成功率等）
+- `logs/`：原始日志（一次运行一个目录；索引见 [`logs/README.md`](logs/README.md)）
 - `scripts/`：可重跑的测试脚本（须可在提交环境中重跑）
-- `evidence/`：波形、示波器或逻辑分析仪截图
+- `evidence/`：源码/构建输入快照、bit 溯源、黄金参考（索引见 [`evidence/README.md`](evidence/README.md)）
 - 测试图样：随 `golden/` 和相应 `evidence/` 归档；独立 `data/images/` 未建立
 - 模型资料：见根目录 `models/` 及训练证据；独立 `data/models/` 未建立，演练不代表正式模型或网络硬件输出
+- 结构例外：根目录 `models/`、`results/` 是外包交付拆分入口，并被 `evidence/2026-10-10-fastener-handoff/installed.csv` 的完整性校验引用；不要移动。
 - `golden/`：已有核／视觉／定位软件黄金参考与生成入口
 
 ## 约定

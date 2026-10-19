@@ -1,4 +1,4 @@
-"""M2/M3 result packet contract (schema v1.2) — docs/vision-sync-protocol-decisions.md D6.
+"""M2/M3 result packet contract (schema v1.2) — docs/contracts/vision-sync-protocol-decisions.md D6.
 
 v1.1：check_id / trigger_ref / bbox 半开区间（D1–D3）。
 v1.2（2026-10-10 WC+NC 确认，LIVE 轮廓冻结）：

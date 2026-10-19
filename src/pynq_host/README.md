@@ -1,4 +1,4 @@
-﻿# src/pynq_host —— PYNQ 上位机
+# src/pynq_host —— PYNQ 上位机
 
 PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采集；Jupyter 保留为板端调试与复现入口。最终工业操作界面为 Windows EXE，由 `watercopper` 负责：采集卡视频和网口识别结果统一展示，见根目录 [项目主计划](../../plan.md) §1.3。
 
@@ -21,20 +21,20 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
 `inspection_replay.py`、`inspection_artifacts.py`、`inspection_run.py`：共享 ROI、
 交付 FP32 权重加载、工单候选判定、文件回放与完整性检查已离板验证并随 PR #67 合并。
 这是本机 FILE_REPLAY，不是板端服务；原始数据集缺失，阈值和正式精度未验收。
-复现、证据与尚未实现项见[离板检查说明](../../docs/offline-inspection.md)。
+复现、证据与尚未实现项见[离板检查说明](../../docs/runbooks/offline-inspection.md)。
 
 后续新增 `model_reference.py`、`numpy_reference.py`、`model_audit.py`、
 `reference_tensors.py`、`reference_package.py`：交付原型的 BN 折叠、独立逐层对拍、
 预算审计及可移交的 FP32 软件参考包已离板验证并随 PR #67 合并；
-见[模块三逐层参考](../../docs/module3-prototype-reference.md)。`src/coprocessor/` 另有完整 INT8 整网参考、算子 RTL 与诊断黄金；正式 INT8 模型和 MMIO/DMA 后端尚未实现，见[计算链现状](../coprocessor/README.md)。
+见[模块三逐层参考](../../docs/runbooks/module3-prototype-reference.md)。`src/coprocessor/` 另有完整 INT8 整网参考、算子 RTL 与诊断黄金；正式 INT8 模型和 MMIO/DMA 后端尚未实现，见[计算链现状](../coprocessor/README.md)。
 
 10/13 新增 `c01_capture.py`：custom DDR 单帧候选所有权驱动，完整转移自动停机后 invalidate 并复制；七组离板异常测试通过，未接入 LIVE 服务。板端入口 `sim/scripts/c01_ddr_onboard.py` 的两次实测均启动前失败并安全恢复，最终驱动修正尚待返板，见[DDR证据](../../data/logs/2026-10-13-ddr-single-frame/README.md)。
 10/15 新增 `c01_park_capture.py` 备选驱动，显式 `C01_CAPTURE_MODE=park` 才启用；仅通过离板替身，
-实际 IRQ/槽/写完成绑定及 N03 仍待验证，见[所有权候选说明](../../docs/c01-ddr-frame-ownership-v0.md)。
+实际 IRQ/槽/写完成绑定及 N03 仍待验证，见[所有权候选说明](../../docs/contracts/c01-ddr-frame-ownership-v0.md)。
 
 后续新增 `dataset_manifest.py`、`dataset_audit.py` 和仓库 CLI：720p 采集清单、
 会话/精确重复像素/实物编号泄漏、覆盖统计和来源声明已用测试夹具验证，理解题及补测已通过。
-这些工具的测试夹具证据见[数据集审计](../../docs/fastener-dataset-audit.md)，不验收真实标签或模型精度。10/12统一视觉Python为14组，含尚未提交的构建输入审计；[离板证据](../../data/logs/2026-10-12-nc-offline/README.md)退出0。10/13加入DDR单帧异常组后总入口为15组，见本轮总回归记录。
+这些工具的测试夹具证据见[数据集审计](../../docs/research/fastener-dataset-audit.md)，不验收真实标签或模型精度。10/12 离板证据记录为 14 组（含当时尚未提交的构建输入审计）并退出 0；10/13 记录为 15 组。当前 `run_vision_python.sh` 入口为 **21 组**，`run_inspection_python.sh` 为 **14 组**；新增组以脚本和各自证据为准，不把历史 15 组当当前全量。
 
 - `demo.ipynb`：板端调试与复现 notebook
 - `benchmark.ipynb`：基线对比与指标采集（CPI、延迟、帧率、加速比）
@@ -48,7 +48,7 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
 `vision_live_service.py` 的捕获后端三类，`prototype` 由后端**结构性**决定（C04 §3.2，无开关）：
 - `FileCaptures`（FILE，离线夹具）：恒 `prototype=true`；
 - `C01Captures`（`c01_backend.py`，custom DDR 单帧所有权）：`prototype=false`，板上驱动与
-  未验证断言清单见 [c01-ddr-frame-ownership-v0.md](../../docs/c01-ddr-frame-ownership-v0.md) §7；
+  未验证断言清单见 [c01-ddr-frame-ownership-v0.md](../../docs/contracts/c01-ddr-frame-ownership-v0.md) §7；
 - `BaseOverlayCaptures`（`base_captures.py`，base overlay 实时取帧）：`prototype=false`。
 
 N06 诊断包接线（NC 执行；板端脚本提供 overlay 与 read，取帧样板见 `sim/scripts/n03_board_capture.py`）：
@@ -57,7 +57,7 @@ N06 诊断包接线（NC 执行；板端脚本提供 overlay 与 read，取帧�
 EXE `--source 0 --endpoint http://<板IP>:8765` 联调。板端需 pynq-venv 的 python3 + OpenCV + torch；
 FP32 软件推理来源记录在产物 `result.json` 的 provenance，不当作 CNN 硬件验收。
 服务失败（无视频/超时/所有权错误）转 HTTP 503 且不产 `packet.json`；离板替身测试
-`test_base_captures.py`、`test_c01_backend.py`（视觉栈现 18 组；检查链 14 组）；
+`test_base_captures.py`、`test_c01_backend.py`（视觉栈现 **21 组**；检查链 **14 组**）；
 快照核对器 `round_artifacts.py`（C04 §2.3，待 NC 确认）。
 
 ## 板卡访问

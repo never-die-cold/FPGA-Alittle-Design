@@ -29,14 +29,14 @@ Digilent 并行视频字节顺序是 R,B,G，`vision_axi.v` 双向转换为内�
 - `video_pipeline` 内部 post-route：WNS +0.330 ns / WHS +0.027 ns，像素周期13.468ns、
   AXI周期10ns；1985 LUT、1515 寄存器、38 BRAM tile、0 DSP。
 - PS 配置绑定、定位/逐目标裁剪黄金参考；MOCK 与 FILE/LIVE HTTP 骨架、Windows LIVE 展示和记录已离板验证，替身/FILE 恒标来源。
-- C01 增加原彩色捕获支路与状态监测，候选 bit/hwh/XSA、显示/状态实机诊断已有；DDR BGR 完整副本与帧槽所有权尚未实现/验收，见[C01 基线](../../docs/c01-capture-implementation-baseline.md)。
+- C01 增加原彩色捕获支路与状态监测，候选 bit/hwh/XSA、显示/状态实机诊断已有；DDR BGR 完整副本与帧槽所有权尚未实现/验收，见[C01 基线](../../docs/contracts/c01-capture-implementation-baseline.md)。
 
 ## 一键入口
 
 在仓库根目录、MSYS2 UCRT64 shell 中运行：
 
 ```bash
-bash sim/scripts/run_iverilog.sh all          # 核、CoreMark、门禁、视觉、stdlib Python
+bash sim/scripts/run_iverilog.sh all          # 核、CoreMark、门禁、视觉、Python 检查
 bash sim/scripts/run_iverilog.sh vision all   # 当前25个视觉tb
 bash sim/scripts/run_iverilog.sh vision_python
 bash sim/scripts/run_vision_xsim.sh all
@@ -70,7 +70,7 @@ PS 总线挂死（串口/网口同死）。修复为双复位拓扑（axi_rst_n 
 版本边界：10/06–10/07 记录的位流差异是历史事实；10/10 已把原板端 bit/hwh 与归档 XSA 配对，但未锚定构建源码，见[追溯记录](../../data/evidence/2026-10-10-onboard-bit-provenance/README.md)。C01 候选是另一套产物，不能混用验收结果。
 
 灰度 `out_*` 的 OSD 是诊断能力；HDMI 主显示保留彩色原图。EXE 模拟框不是物体检测；
-单独 UVC 预览标为 `UNASSOCIATED`；[轮次协议](../../docs/vision-sync-protocol-decisions.md) v1.2 支持 MOCK/LIVE，FILE/LIVE 原型恒标 PROTOTYPE，按年龄窗叠加不代表逐帧精确关联或硬件分类。
+单独 UVC 预览标为 `UNASSOCIATED`；[轮次协议](../../docs/contracts/vision-sync-protocol-decisions.md) v1.2 支持 MOCK/LIVE，FILE/LIVE 原型恒标 PROTOTYPE，按年龄窗叠加不代表逐帧精确关联或硬件分类。
 
-未实现 / 未接入：CNN RTL/正式INT8模型、实际定位/硬件后端、核工业固件、真实识别结果与
+未实现 / 未接入：CNN 协处理器顶层/核接入/正式 INT8 模型、实际定位/硬件后端、核工业固件、真实识别结果与
 采集卡画面关联。它们属于模块三应用交接，整帧快照不代表逐目标硬件裁剪已经完成。

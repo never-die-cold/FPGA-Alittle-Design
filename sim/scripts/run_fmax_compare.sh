@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# run_fmax_compare.sh —— 核对比 Fmax 实测驱动（docs/core_comparison.md §3 约束递减收敛法）
+# run_fmax_compare.sh —— 核对比 Fmax 实测驱动（docs/research/core_comparison.md §3 约束递减收敛法）
 # 跑 PicoRV32 regular/large（上游 README 面积表同参数集，经 synth_area_top.v 包装层）
 # 与自研 v0 核，同器件 xc7z020clg400-1、同 Vivado 2026.1、同 OOC post-route。
 # 逐轮日志 build/run/fmax/<label>.log，报告 build/reports/fmax/<label>/；

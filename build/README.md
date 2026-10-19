@@ -13,6 +13,7 @@ Vivado 构建脚本与综合/实现报告，保证工程可由他人从零复现
 - `build_soc.tcl`：板级 40／125 MHz 与四配置构建；默认 40 MHz、fwd、BHT 关
 - `reports/`：综合与实现报告归档（资源占用、Fmax/WNS、最差路径）——指标证据，入库
 - `run/`：临时产物（checkpoint / 日志，不入库）
+- `artifacts/`：本地发布物（如 `nc-offboard-release-20261014.zip`），不入库；`git status` 不应看到它
 
 ## 用法（Vivado 2026.1）
 

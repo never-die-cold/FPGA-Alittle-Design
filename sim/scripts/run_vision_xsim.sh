@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 模块二 XSim 对拍：iverilog 全 PASS 后 XSim 复跑同判据（design_v0.md §6 / docs/partB-verify-plan.md §6）
+# 模块二 XSim 对拍：iverilog 全 PASS 后 XSim 复跑同判据（design_v0.md §6 / docs/archive/partB-verify-plan.md §6）
 # 用法：bash sim/scripts/run_vision_xsim.sh [rgb2gray|linebuf|gaussian|scaler|sobel|chain|fullchain|osd|axi|align|top|all]
 # 前置：Vivado 2026.1（xvlog/xelab/xsim 于 PATH 或默认安装路径）；golden 路径相对 sim/ 解析，勿改 CWD
 # 注意：tb_top 首跑约 2-3 分钟（XSim 编译+仿真），全套约 5-8 分钟

@@ -5,7 +5,8 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
-OUT = ROOT / "docs/file-guide"
+TOOLS = ROOT / "docs/file-guide/tools"
+OUT = ROOT / "build/file-guide"
 TEXT = {".md", ".py", ".v", ".vhd", ".c", ".h", ".s", ".sh", ".ps1", ".tcl", ".xdc",
         ".json", ".jsonl", ".txt", ".log", ".rpt", ".xml", ".yml", ".yaml", ".csv",
         ".dat", ".data", ".output", ".patch", ".service", ".ld", ".include", ".bat"}
@@ -49,15 +50,26 @@ def logical(path):
     return path
 
 
-def collect():
+GENERATED = {
+    "docs/file-guide/index.html",
+    "docs/file-guide/files.csv",
+    "docs/file-guide/files.json",
+    "docs/file-guide/validation.json",
+}
+EVIDENCE_PREFIXES = ("data/logs/", "data/evidence/", "data/golden/")
+
+
+def collect(scope="source"):
     tracked = git_paths("--cached")
     paths = tracked | git_paths("--others", "--exclude-standard")
-    paths = {p for p in paths if not p.startswith("docs/file-guide/")}
-    guide_inputs = {p.relative_to(ROOT).as_posix() for p in (OUT / "tools").glob("*") if p.is_file()}
+    paths = {p for p in paths if p not in GENERATED
+             and not p.startswith("docs/file-guide/sections/")
+             and not p.startswith("build/file-guide/")}
+    if scope == "source":
+        paths = {p for p in paths if not p.startswith(EVIDENCE_PREFIXES)}
+    guide_inputs = {p.relative_to(ROOT).as_posix() for p in TOOLS.glob("*") if p.is_file()}
     groups = {group(p) for p in paths} | {"docs"}
-    outputs = {"docs/file-guide/" + p for p in ("README.md", "index.html", "files.csv", "files.json", "validation.json")}
-    outputs |= {f"docs/file-guide/sections/{g}.md" for g in groups}
-    all_paths = sorted(paths | guide_inputs | outputs)
+    all_paths = sorted(paths | guide_inputs)
     texts = {p: text_of(ROOT / p) for p in all_paths if (ROOT / p).is_file()}
     return all_paths, tracked, texts, groups, len(paths)
 
@@ -68,7 +80,7 @@ def clean_title(text):
 
 
 def load_roles():
-    exact = json.loads((OUT / "tools/roles.json").read_text(encoding="utf-8"))
-    exact.update(json.loads((OUT / "tools/roles-extra.json").read_text(encoding="utf-8")))
-    names = json.loads((OUT / "tools/script-roles.json").read_text(encoding="utf-8"))
+    exact = json.loads((TOOLS / "roles.json").read_text(encoding="utf-8"))
+    exact.update(json.loads((TOOLS / "roles-extra.json").read_text(encoding="utf-8")))
+    names = json.loads((TOOLS / "script-roles.json").read_text(encoding="utf-8"))
     return exact, names

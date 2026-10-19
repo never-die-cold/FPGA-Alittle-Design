@@ -1,0 +1,165 @@
+﻿diff --cc docs/c01-ddr-frame-ownership-v0.md
+index f0b80e6,7f9048b..0000000
+--- a/docs/c01-ddr-frame-ownership-v0.md
++++ b/docs/c01-ddr-frame-ownership-v0.md
+@@@ -77,28 -77,15 +77,43 @@@ WC适配必须给出实际IP/驱动依�
+  WC给出实际完成/槽绑定/保护/屏障/cache依据与仓库替身入口，JL确认集成位流/地址/复位兼容，NC才能安排custom N03实测。
+  随后再做真实工位定标/采集、同帧ROI与软件/硬件对拍。C01整体冻结及正式N03通过仍需这些证据。
+  
+++<<<<<<< HEAD
+ +## 7. WC 适配与离板评审注记（2026-10-13）
+ +
+ +**适配件**：`src/pynq_host/c01_backend.py`（`C01Captures`）把 `SingleFrameCapture` 接进
+ +`vision_live_service`——一轮 = 一个单次租约（factory 现场构造 owner，`capture()` 返回独立完整副本），
+ +适配器立即编码 PNG 原子落盘，服务统一写 `capture.sha256`；捕获/引擎失败由服务转 **503**
+ +（`do_POST` 捕获 RuntimeError），失败轮不写 `packet.json`。`prototype` 由后端结构性决定：
+ +C01 = 真实硬件捕获 → **False**（FILE 后端恒 True，[C04 §3.2](vision-live-semantics.md)）。
+ +
+ +**仓库替身入口**：`sim/vision/test_c01_backend.py`（接入 `run_vision_python.sh`）——最小
+ +VDMA/CAP1/分配器/代次 fake 驱动真实驱动（`src/pynq_host/c01_capture.py`），服务级覆盖 §5 矩阵
+ +离板行：正常帧与独立副本（缓冲换帧后上轮产物不变）、等待期 DMA 错误/完成超时 → 503 且无产物、
+ +缓冲恰一次归还、采集期代次变化 → 拒绝发布且原生缓冲隔离（不归还）、新代次恢复、无 `.pending` 残留。
+ +
+ +**§3 八步操作序 → 实现位置**：1 实例/版本 = identity + evidence；2 四缓冲分配/不重叠/几何 =
+ +`capture()` 分配段；3 复位/清错/读回 + 重新等锁 = reset/clear 段；4 有界启动/等完成 = CR RUN +
+ +VSIZE 最后写 + `completed()`；5 写保护窗口 = auto-stop（PG020：完整转移后硬件清 RS）+ PARK/描述符
+ +复核 + invalidate + `np.array(copy=True)`；6 复制前后复核 = `_protected()` before/after，变化即丢弃；
+ +7 副本几何复核 + 落盘哈希（适配层 + 服务）；8 归还/幂等 = `close()` 恰一次释放 + `QUARANTINE`
+ +隔离未确认停止。
+ +
+ +**尚未由离板验证、实机确认前不得宣称的硬件断言**：① "停止后写事务已完成"依赖 VDMA auto-stop 语义
+ +与 invalidate 调用——需 NC 用动态标识逐行/整帧一致实测（§5 行 1/2）；② park slot 位域复核替代
+ +"完成槽号绑定"（CAP1 无槽号，§1）属候选序列，**实机确认前不冻结**（§6 交接门）；③ 唯一在途租约由
+ +"单次对象 + 单轮构造"结构性保证；板上进程存活与禁止析构释放按 §5 尾注执行。JL 需确认集成位流/地址/
+ +复位兼容后，NC 方可安排 custom N03 实测（§6）。
+++=======
++ ### 10/15 连续 Park 候选（仅离板验证）
++ 
++ 新增 `src/pynq_host/c01_park_capture.py`，板端脚本显式设置 `C01_CAPTURE_MODE=park` 才选择它；
++ 上传脚本时也须上传该模块。默认仍为原单帧驱动。候选先在槽 1 暖机，再切槽 0 等待新完成事件，
++ 随后回到槽 1，在通道运行且目标槽 0 受保护期间 invalidate/复制。它不依赖自动停机授权正常复制。
++ 只有暖机阶段在 RS=1 且未 Halted 时允许清理精确的历史 `0x4810`；捕获/复制阶段任何错误均拒绝，
++ 不能全局屏蔽 DMAIntErr，也不能把停机时持续重现的粘滞错误当成干净状态。
++ 
++ `sim/vision/test_c01_park_capture.py` 经 `bash sim/scripts/run_vision_python.sh` 运行，覆盖 IRQ 先于槽变化、
++ 慢复制、错误/超时/失锁、描述符变化与未确认停止的缓冲隔离。替身只验证软件按假设执行，
++ **尚未证明实际 IP 的 IRQ、槽索引、完整帧和写响应完成之间的绑定**。JL/WC 须先审该绑定和保护条件，
++ NC 再用动态整帧标识、慢复制及原始寄存器日志验证；候选不得记为 C01/N03 板端验收通过。
+++>>>>>>> dev/model
+diff --cc docs/vision-live-semantics.md
+index 07ac47d,d8e779c..0000000
+--- a/docs/vision-live-semantics.md
++++ b/docs/vision-live-semantics.md
+@@@ -36,7 -37,7 +37,11 @@@
+  - 工单与参数由 EXE 提交，服务端返回 applied_config_id；EXE 以确认生效的 config_id 为准（沿用现有 `/v1/config` 流程）。
+  - 每轮结果锁定：session_id + check_id + config_id + **当轮工单内容（expected 计数）**。记录必须保存当轮 expected 与 config_id——只存 config_id 无法复现判定依据（W07）。
+  - 配置不符即撤框（D3，`rounds._state` config 分支已实现）；换工单后旧轮结果不得显示。
+++<<<<<<< HEAD
+ +- **工单 ≤10 件（V0 候选）与协议 16 目标上限互不替换**：结果最多 16 个目标；超工单上限不截断放行——按[检查V0 §3](inspection-v0-contract.md) 转 RECHECK（**Q5** 确认表述）。C03 已冻结口径：16 为目标检测能力、10 件为检查 V0 业务策略候选（[三人清单](project-closeout-three-person-checklist.md)）；**能力上限不自动成为业务放行条件**。Q5 剩余项 = WC/JL 对齐超限 RECHECK 与部分计数标识（CSV 已加 `reasons` 列暴露 `target_limit`；界面口径待 NC 验收）。
+++=======
++ - **C03检查V0的10件策略与协议16目标能力互不替换**：定位得到11–16目标直接RECHECK，不截断、不启动部分CNN；C04界面/记录/服务对齐仍待**Q5**确认和实现。
+++>>>>>>> dev/model
+  - 超限映射注记（2026-10-10，W05 骨架实现，**待 NC/JL 追认**）：检查链候选超限时 decision 计数为
+    `null`（"未完整计数"语义），而报文契约要求五计数 dict 必填；服务端（`vision_live_service.complete_decision`）
+    映射为按报文内已列目标重算 actual/delta/missing/extra，verdict/reasons 保持 RECHECK——
+@@@ -44,21 -46,12 +50,30 @@@
+  
+  ### 2.3 记录 ↔ 服务产物（W05 实现要求）
+  
+++<<<<<<< HEAD
+ +- 服务端每轮产物必须可由 **(session_id, check_id) 唯一定位**：capture 原帧、capture 字节哈希（`capture.sha256` 侧车）、逐目标 ROI、判定依据、结果 JSON；目录布局由 W05 定并写入服务 README（**Q3**）。
+ +- EXE 记录（`records.jsonl`）引用：记录键 (session_id, check_id)（D9）+ 上下文截图；快照原帧属服务产物，EXE 按引用展示，不复制冒充自采。
+ +- **快照读取与哈希核对（2026-10-13 实现，待 NC 确认）**：读取方按 (session_id, check_id) 定位轮次目录，依次核对 packet 白名单与绑定（session/check 与请求一致）、`capture.png` 字节哈希 == `capture.sha256`、引擎存在时 `result.json` 的 `provenance.source_sha256` 与 capture 哈希一致；任一不符大声失败。实现 `src/pynq_host/round_artifacts.py`（含 CLI：`py src/pynq_host/round_artifacts.py <root> <session_id> <check_id>`，供 NC 板端核对）。2026-10-13 之前的旧轮次无 `capture.sha256`，核对器按缺件拒绝。
+ +- **记录重启去重（2026-10-13 实现，NC 点名项）**：`BatchRecords` 启动时从既有 `records.jsonl` 重建去重键与计数（键跨进程有效）；异常事件截图序号同样续编；损坏记录行大声失败。
+ +
+ +### 2.4 请求重试语义（草案，待 NC/JL 确认，2026-10-13）
+ +
+ +- 现状：每次 `POST /v1/check` 递增 check_id 并新取一帧；`/v1/latest` 复用只是调试口，**不等于 POST 幂等**（NC 评审登记项）。
+ +- 草案（不新增协议字段，`trigger_ref` 已存在）：
+ +  - **重试键 = `trigger_ref`**：EXE 每次"触发意图"生成唯一值，网络失败重试沿用同一值。
+ +  - 服务对已完成轮次的 trigger_ref 在**本会话内存**保留窗口（候选 16 条）：命中返回原轮报文，不新取帧、不递增 check_id——重试不产生第二次检查。
+ +  - **服务重启后保留表丢失**：同 ref 重试按新轮处理（session 已更换，EXE 本就不跨会话复用结果）。
+ +  - **冲突**：trigger_ref 仅作关联、不携带参数，无参数冲突；重复 ref 且原轮未完成时，按"等待完成回原结果"或"回 409"二选一，由服务实现择一并写入 README。
+ +  - **失败重试**：POST 超时/连接断时服务可能已执行——重试同 ref；已执行回原结果、未执行新轮，两种情况对 EXE 都是"一次采纳"（记录键 (session, check_id) 兜底不重复）。
+ +- 实现前需 NC/JL 确认窗口大小与"重启后按新轮"的接受度；沿用现有字段，不动报文结构。
+++=======
++ - 服务端每轮产物必须可由 **(session_id, check_id) 唯一定位**：capture 原帧、逐目标 ROI、判定依据、结果 JSON（含哈希）；目录布局由 W05 定并写入服务 README（**Q3**）。
++ - 2026-10-15 FILE 原型性能策略：自动轮询只保留最新报文，手动携 `trigger_ref` 或
++   `--archive-every-round` 才完整归档；未归档的自动轮次不作为检查快照/追溯证据。
++   此策略仅适用于 `prototype=true`，非原型后端保留上述逐轮 capture 要求；真实 LIVE 后端仍未实现。
++ - EXE 记录（`records.jsonl`）引用：记录键 (session_id, check_id)（D9）+ 上下文截图；快照原帧属服务产物，EXE 按引用展示，不复制冒充自采。
++   2026-10-14 NC确认Q3以本轮capture原帧为权威证据；真实LIVE快照读取/查看仍未实现，确认原则不代替功能验收。
+++>>>>>>> dev/model
+  
+  ## 3. 显示语义：连续视频与检查快照的边界
+  
+@@@ -146,4 -141,5 +163,9 @@@
+  | 2026-10-10 | 首版设计稿：关联模型、快照/视频边界、来源四态、统计约束、记录扩展、版本评审条款；Q1–Q6 待 NC/JL 确认 | watercopper（EXE 前端） |
+  | 2026-10-10 | W06/W07 落码：EXE LIVE 显示（PROTOTYPE/判定横幅/类别分数/实际工单）、记录 schema v2（decision/prototype/proto_ 前缀）；W05 骨架开工，登记超限映射注记待追认 | watercopper（离板应用链） |
+  | 2026-10-12 | 按PR整合与实际回归更新W06/W07状态，记录已有NC来源/有效轮次确认；不新增协议字段，不代签C04整体冻结或实机验收 | NC离板续工 |
+++<<<<<<< HEAD
+ +| 2026-10-13 | 服务落 `capture.sha256` 侧车 + `round_artifacts.py` 快照核对器（§2.3，待 NC 确认）；新增 §2.4 请求重试语义草案（待 NC/JL 确认）；记录重启去重落地（§2.3，NC 返场执行单点名项） | watercopper（离板应用链） |
+++=======
++ | 2026-10-14 | 补充Q1/Q3/Q5源码复核与专项证据；同步C03已冻结10/16分层，登记超限零计数缺口；C04仍待确认 | NC离板续工 |
++ | 2026-10-14 | NC本人确认Q1/Q3与Q5原则；Q5继续交JL对齐并在实现修复后验收，未代签完整C04或硬件通过 | NC本人 / Codex记录 |
+++>>>>>>> dev/model
+diff --cc sim/scripts/run_vision_python.sh
+index eb65e09,3179102..0000000
+--- a/sim/scripts/run_vision_python.sh
++++ b/sim/scripts/run_vision_python.sh
+@@@ -13,7 -13,7 +13,11 @@@ els
+      exit 1
+  fi
+  mkdir -p sim/build/vision/python
+++<<<<<<< HEAD
+ +for name in vision_regs localize vision_protocol vision_rounds vision_records vision_export vision_live_standin vision_live_service vision_joint arm_localize arm_localize_package pynq_file_receiver c01_status_onboard c01_artifacts c01_build_inputs c01_capture c01_backend base_captures; do
+++=======
++ for name in vision_regs localize vision_protocol vision_rounds vision_records vision_export vision_live_standin vision_live_service vision_joint arm_localize arm_localize_package pynq_file_receiver c01_status_onboard c01_artifacts c01_build_inputs c01_capture c01_capture_ordering c01_ddr_onboard c01_park_capture; do
+++>>>>>>> dev/model
+      vision_run_checked "sim/build/vision/python/$name.log" \
+          "$PY" "sim/vision/test_$name.py" || exit 1
+  done
+diff --cc src/pynq_host/vision_live_service.py
+index 66f0cb1,e42d83d..0000000
+--- a/src/pynq_host/vision_live_service.py
++++ b/src/pynq_host/vision_live_service.py
+@@@ -1,7 -1,8 +1,13 @@@
+  """W05 正式检查服务骨架：HTTP 轮次/产物/幂等层 + 可插拔检查引擎（C04 §2.3）。
+  
+++<<<<<<< HEAD
+ +与 vision_mock_service 的区别：真实引擎、每轮新捕获复制落盘、(session_id, check_id) 唯一定位
+ +产物（capture.png + capture.sha256 + packet.json，读取与哈希核对入口 src/pynq_host/round_artifacts.py）。
+++=======
++ 与 vision_mock_service 的区别：真实引擎、每轮新捕获、(session_id, check_id) 唯一定位产物。
++ FILE 原型自动轮询在内存中检查并更新 latest_packet.json；手动触发保存完整产物。
++ --archive-every-round 恢复逐轮归档。分类器复用，权重文件变化后须重启服务。
+++>>>>>>> dev/model
+  - 引擎契约：engine(capture_path, round_dir, request_id) -> {status, targets, decision, width, height}；
+    默认 file_engine（懒加载 inspection_run——cv2/numpy/torch 仅在真正服务时导入，
+    本文件保持 stdlib 可测，接入 run_vision_python.sh）。
+@@@ -96,12 -105,16 +113,25 @@@ class State
+              self.check_id = (self.check_id + 1) & 0xFFFFFFFF
+              check = self.check_id
+              round_dir = self.session_dir / f"check-{check:06d}"
+++<<<<<<< HEAD
+ +            round_dir.mkdir(exist_ok=False)
+ +            capture_path = self.captures.capture(round_dir)
+ +            # 快照哈希侧车（C04 §2.3）：供读取方核对 capture 字节未被替换/篡改
+ +            atomic_write(round_dir / "capture.sha256",
+ +                         (hashlib.sha256(capture_path.read_bytes()).hexdigest() + "\n").encode())
+ +            fields = self.engine(capture_path, round_dir, f"chk{check:06d}")
+++=======
++             memory_round = (trigger_ref is None and not self.archive_every_round
++                             and self.captures.prototype is True
++                             and hasattr(self.captures, "capture_frame")
++                             and hasattr(self.engine, "inspect_frame"))
++             if memory_round:
++                 fields = self.engine.inspect_frame(self.captures.capture_frame())
++             else:
++                 round_dir.mkdir(exist_ok=False)
++                 capture_path = self.captures.capture(round_dir)
++                 fields = self.engine(capture_path, round_dir, f"chk{check:06d}")
+++>>>>>>> dev/model
+              packet = validate_packet({
+                  "version": VERSION, "mode": "LIVE", "session_id": self.session_id,
+                  "frame_id": self.captures.seq, "config_id": self.config_id,

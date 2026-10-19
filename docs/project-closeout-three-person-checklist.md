@@ -21,10 +21,10 @@ JL 可以在电脑上生成 bit/hwh；下载到板卡、在线 ILA、实机网�
 
 - ✅ 核与最小 SoC 收口已有证据；HDMI 视频链 RTL 和真实相机链路已有证据。
 - ✅ FP32 原型、ROI 对拍、离板工单/回放、逐层 NumPy 参考包、清单与精确泄漏审计已验证。
-- ✅ EXE MOCK/FILE_REPLAY、轮次/记录/导出，以及 v1.2 报文字段校验已验证；整合后八组视觉、十三组离板回归通过。
+- ✅ EXE MOCK/FILE_REPLAY、轮次/记录/导出，以及 v1.2 报文字段校验已验证；10/12 记录为八组视觉、十三组离板回归通过（历史口径，不当作当前全量）。
 - 🟡 位流指纹与当前硬件配置闭环、长时间/冷启动/断连恢复仍待实测；现有 FP32 权重真实精度未验收。
 - 🟡 10/10 N01/N02现场更新：已记录板端bit/hwh哈希并加载验证 `pipe @ 0x40000000`、帧首提交、60秒在流、Overlay重载及USB原始帧；[本轮原始日志](../data/logs/2026-10-10-onboard-n01/README.md)。板端 bit/hwh 与[10/03 修复后归档 XSA](../data/evidence/2026-10-10-onboard-bit-provenance/README.md)逐字节同哈希，但构建时源码快照尚未锚定。HDMI IN物理拔插且采集卡连接时出现板卡异常重启，人工重载同一bit后恢复；采集卡 HDMI 断开、Pi 软件重启时则完成输入断源/恢复且 PYNQ boot_id 未变。完整 N02 和采集卡共存仍未通过。
-- ✅ 10/12 离板整合：25 个视觉 RTL tb、13 组视觉 Python 与3组协处理器 Python 通过；[审查证据](../data/logs/2026-10-12-pr-review/README.md)。C02/C03 已由 JL 于10/11冻结；INT8标量/张量/卷积参考已有，整网黄金尚未实现。
+- ✅ 10/12 离板整合记录：25 个视觉 RTL tb、13 组视觉 Python 与 3 组协处理器 Python 通过；[审查证据](../data/logs/2026-10-12-pr-review/README.md)。C02/C03 已由 JL 于 10/11 冻结；当前脚本入口为 **21 组视觉 Python + 14 组检查链 + 9 组 INT8**（以 `sim/scripts` 为准），新增组不在上述 10/12 证据内。
 - ✅ C01 原彩色捕获候选 RTL/BD/bit/hwh/XSA 已有，显示/状态诊断实机 PASS；停止期 stream_seq 增长疑点已闭环，[原始证据](../data/logs/2026-10-11-c01-probe-evidence/README.md)。该结果不证明 DDR 写完成或帧槽所有权。
 - ✅ W05 FILE 服务骨架、网络 LIVE 替身、PROTOTYPE 标识、类别/分数/工单横幅、记录 schema v2 与 CSV 已离板验证；真实硬件后端、检查快照查看和完整工业验收尚未完成。
 - ✅ 10/13 新增离板计算链：MAC、卷积地址调度、bias/ReLU/requant/GAP/FC 与整网控制器、诊断整数黄金、参数拒绝门；控制器 OOC 100 MHz setup/hold/资源/严重DRC门通过（192 DSP，外部存储未计入）。[当前证据](../data/logs/2026-10-13-cnn-arithmetic/README.md)。
@@ -37,8 +37,8 @@ JL 可以在电脑上生成 bit/hwh；下载到板卡、在线 ILA、实机网�
 ### 2.1 NC 离板推进入口（2026-10-12）
 
 当前不具备实机执行条件；NC先做 C01遗留检查、证据/版本盘点、N02/N03/N04/N05返板准备与C04评审。
-执行表、返板顺序和填写模板见[NC离板准备](nc-offline-readiness-2026-10-12.md)；custom DDR写完成/槽交接交给WC实现前先核对[所有权候选交接](c01-ddr-frame-ownership-v0.md)。文档准备完成不勾选N02–N05实机通过。
-2026-10-14扩展：当前源码Windows便携候选已离板验收，N04/N05采集组织、N10–N12场景/指标、N13/N14发布/演示/提交准备见[NC工作板](nc-offboard-workboard-2026-10-14.md)及[原始证据](../data/logs/2026-10-14-nc-offboard-closeout/README.md)。Q1/Q3及Q5的NC口径已确认，Q5交[#75](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/75)与JL对齐、修复后再验收。
+执行表、返板顺序和填写模板见[NC离板准备](runbooks/nc-offline-readiness-2026-10-12.md)；custom DDR写完成/槽交接交给WC实现前先核对[所有权候选交接](contracts/c01-ddr-frame-ownership-v0.md)。文档准备完成不勾选N02–N05实机通过。
+2026-10-14扩展：当前源码Windows便携候选已离板验收，N04/N05采集组织、N10–N12场景/指标、N13/N14发布/演示/提交准备见[NC工作板](runbooks/nc-offboard-workboard-2026-10-14.md)及[原始证据](../data/logs/2026-10-14-nc-offboard-closeout/README.md)。Q1/Q3及Q5的NC口径已确认，Q5交[#75](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/75)与JL对齐、修复后再验收。
 
 ## 3. 首先冻结的交接（G0）
 
@@ -150,6 +150,6 @@ JL无需等待正式模型才写算子；WC无需等待板端服务才写EXE与�
 
 首版以外：连续运动/跟踪、逐帧精确叠加、缺陷/尺寸检测、更多类别、多种复杂背景及非必要性能优化，完成主线后按余量处理。
 
-参考：[主计划](../plan.md)、[训练准备](module3-model-training.md)、[取图/ROI建议](inspection-v0-contract.md)、
-[协议](vision-sync-protocol-decisions.md)、[采集规程](fastener-data-collection-protocol.md)、
-[数据审计](fastener-dataset-audit.md)、[当前整合验证](../data/logs/2026-10-10-dataset-integration/README.md)。
+参考：[主计划](../plan.md)、[训练准备](runbooks/module3-model-training.md)、[取图/ROI建议](contracts/inspection-v0-contract.md)、
+[协议](contracts/vision-sync-protocol-decisions.md)、[采集规程](runbooks/fastener-data-collection-protocol.md)、
+[数据审计](research/fastener-dataset-audit.md)、[当前整合验证](../data/logs/2026-10-10-dataset-integration/README.md)。

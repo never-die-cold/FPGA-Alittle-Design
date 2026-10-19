@@ -1,0 +1,675 @@
+INFO: [Common 17-3922] A valid Vivado Design Suite BASIC license has been detected. Your current license is active and will expire on 14-sep-2027.
+#-----------------------------------------------------------
+# Vivado v2026.1 (64-bit)
+# SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+# IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+# SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+# Start of session at: Thu Oct  1 23:35:37 2026
+# Process ID         : 29404
+# Current directory  : E:/Projects/FPGA-Alittle-Design-vision
+# Command line       : vivado.exe -mode batch -source sim/scripts/synth_vision_ooc.tcl -tclargs vision_top real75
+# Log file           : E:/Projects/FPGA-Alittle-Design-vision/vivado.log
+# Journal file       : E:/Projects/FPGA-Alittle-Design-vision\vivado.jou
+# Running On         : never-die-cold
+# Platform           : Windows 11
+# Operating System   : 26200
+# Processor Detail   : Intel(R) Core(TM) Ultra 7 255HX
+# CPU Frequency      : 2880 MHz
+# CPU Physical cores : 20
+# CPU Logical cores  : 20
+# Host memory        : 16496 MB
+# Swap memory        : 23622 MB
+# Total Virtual      : 40119 MB
+# Available Virtual  : 23197 MB
+#-----------------------------------------------------------
+source sim/scripts/synth_vision_ooc.tcl
+# if {$argc < 1} { puts "ERROR: éœ€è¦? -tclargs <module> [variant]"; exit 1 }
+# set mod     [lindex $argv 0]
+# set variant [expr {$argc >= 2 ? [lindex $argv 1] : "unit"}]
+# set part xc7z020clg400-1
+# set rep  build/reports/vision_ooc
+# file mkdir $rep
+# set suffix [expr {$variant eq "unit" ? "" : "_$variant"}]
+# set period [expr {$variant eq "real75" ? 13.468 : 10.0}]
+# if {$mod eq "vision_top"} {
+#     set files [list src/vision/rgb2gray.v src/vision/line_buffer.v src/vision/gaussian_3x3.v \
+#                     src/vision/sobel.v src/vision/scaler.v src/vision/osd_overlay.v \
+#                     src/vision/axi_regs.v src/vision/in_align.v src/vision/cop_buf.v \
+#                     src/vision/vision_top.v]
+# } else {
+#     set files [list src/vision/${mod}.v]
+#     if {$mod eq "gaussian_3x3" || $mod eq "sobel" || $mod eq "scaler"} {
+#         lappend files src/vision/line_buffer.v
+#     }
+# }
+# foreach f $files { read_verilog $f }
+read_verilog: Time (s): cpu = 00:00:08 ; elapsed = 00:00:08 . Memory (MB): peak = 611.141 ; gain = 268.238
+# set synth_args [list synth_design -top $mod -part $part -mode out_of_context]
+# if {$variant eq "real" || $variant eq "real75"} {
+#     switch $mod {
+#         gaussian_3x3 { foreach g {WIDTH=1280 HEIGHT=720} { lappend synth_args -generic $g } }
+#         sobel        { foreach g {WIDTH=1280 HEIGHT=720} { lappend synth_args -generic $g } }
+#         scaler       { foreach g {SW=1280 SH=720 DW=224 DH=224 NLINES=8} { lappend synth_args -generic $g } }
+#         line_buffer  { foreach g {WIDTH=1280} { lappend synth_args -generic $g } }
+#         vision_top   { foreach g {SW=1280 SH=720 DW=224 DH=224 NLINES=8} { lappend synth_args -generic $g } }
+#     }
+# }
+# eval $synth_args
+Command: synth_design -top vision_top -part xc7z020clg400-1 -mode out_of_context -generic SW=1280 -generic SH=720 -generic DW=224 -generic DH=224 -generic NLINES=8
+Starting synth_design
+Attempting to get a license for feature 'Vivado_Synthesis' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Vivado_Synthesis' and/or device 'xc7z020'
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 25436
+---------------------------------------------------------------------------------
+Starting Synthesize : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 1193.977 ; gain = 576.871
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'vision_top' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/vision_top.v:13]
+	Parameter SW bound to: 1280 - type: integer 
+	Parameter SH bound to: 720 - type: integer 
+	Parameter DW bound to: 224 - type: integer 
+	Parameter DH bound to: 224 - type: integer 
+	Parameter NLINES bound to: 8 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'axi_regs' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:16]
+	Parameter NREG bound to: 16 - type: integer 
+	Parameter AW bound to: 7 - type: integer 
+	Parameter RESV_BASE bound to: 11 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'axi_regs' (0#1) [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:16]
+INFO: [Synth 8-6157] synthesizing module 'rgb2gray' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/rgb2gray.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'rgb2gray' (0#1) [E:/Projects/FPGA-Alittle-Design-vision/src/vision/rgb2gray.v:6]
+INFO: [Synth 8-6157] synthesizing module 'gaussian_3x3' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/gaussian_3x3.v:12]
+	Parameter WIDTH bound to: 1280 - type: integer 
+	Parameter HEIGHT bound to: 720 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'line_buffer' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/line_buffer.v:6]
+	Parameter WIDTH bound to: 1280 - type: integer 
+	Parameter DW bound to: 8 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'line_buffer' (0#1) [E:/Projects/FPGA-Alittle-Design-vision/src/vision/line_buffer.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'gaussian_3x3' (0#1) [E:/Projects/FPGA-Alittle-Design-vision/src/vision/gaussian_3x3.v:12]
+INFO: [Synth 8-6157] synthesizing module 'sobel' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/sobel.v:7]
+	Parameter WIDTH bound to: 1280 - type: integer 
+	Parameter HEIGHT bound to: 720 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'sobel' (0#1) [E:/Projects/FPGA-Alittle-Design-vision/src/vision/sobel.v:7]
+INFO: [Synth 8-6157] synthesizing module 'scaler' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/scaler.v:15]
+	Parameter SW bound to: 1280 - type: integer 
+	Parameter SH bound to: 720 - type: integer 
+	Parameter DW bound to: 224 - type: integer 
+	Parameter DH bound to: 224 - type: integer 
+	Parameter NLINES bound to: 8 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'scaler' (0#1) [E:/Projects/FPGA-Alittle-Design-vision/src/vision/scaler.v:15]
+INFO: [Synth 8-6157] synthesizing module 'cop_buf' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/cop_buf.v:16]
+	Parameter DW bound to: 224 - type: integer 
+	Parameter DH bound to: 224 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'cop_buf' (0#1) [E:/Projects/FPGA-Alittle-Design-vision/src/vision/cop_buf.v:16]
+INFO: [Synth 8-6157] synthesizing module 'osd_overlay' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/osd_overlay.v:8]
+INFO: [Synth 8-6155] done synthesizing module 'osd_overlay' (0#1) [E:/Projects/FPGA-Alittle-Design-vision/src/vision/osd_overlay.v:8]
+INFO: [Synth 8-6155] done synthesizing module 'vision_top' (0#1) [E:/Projects/FPGA-Alittle-Design-vision/src/vision/vision_top.v:13]
+WARNING: [Synth 8-6014] Unused sequential element ridx_q_reg was removed.  [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:86]
+WARNING: [Synth 8-7137] Register out_y_reg in module cop_buf has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [E:/Projects/FPGA-Alittle-Design-vision/src/vision/cop_buf.v:107]
+WARNING: [Synth 8-7129] Port awaddr[1] in module axi_regs is either unconnected or has no load
+WARNING: [Synth 8-7129] Port awaddr[0] in module axi_regs is either unconnected or has no load
+WARNING: [Synth 8-7129] Port araddr[1] in module axi_regs is either unconnected or has no load
+WARNING: [Synth 8-7129] Port araddr[0] in module axi_regs is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished Synthesize : Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 1337.781 ; gain = 720.676
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:08 ; elapsed = 00:00:09 . Memory (MB): peak = 1337.781 ; gain = 720.676
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7z020clg400-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:08 ; elapsed = 00:00:09 . Memory (MB): peak = 1337.781 ; gain = 720.676
+---------------------------------------------------------------------------------
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 1337.781 ; gain = 720.676
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input   32 Bit       Adders := 3     
+	   2 Input   16 Bit       Adders := 1     
+	   2 Input   12 Bit       Adders := 1     
+	   3 Input   11 Bit       Adders := 2     
+	   2 Input   11 Bit       Adders := 2     
+	   2 Input   10 Bit       Adders := 5     
+	   2 Input    9 Bit       Adders := 2     
+	   2 Input    8 Bit       Adders := 2     
+	   2 Input    3 Bit       Adders := 1     
++---Registers : 
+	               32 Bit    Registers := 3     
+	               16 Bit    Registers := 8     
+	               12 Bit    Registers := 4     
+	               11 Bit    Registers := 1     
+	               10 Bit    Registers := 4     
+	                8 Bit    Registers := 45    
+	                4 Bit    Registers := 2     
+	                3 Bit    Registers := 5     
+	                2 Bit    Registers := 1     
+	                1 Bit    Registers := 55    
++---RAMs : 
+	             392K Bit	(50176 X 8 bit)          RAMs := 2     
+	              10K Bit	(1280 X 8 bit)          RAMs := 12    
++---Muxes : 
+	   2 Input   32 Bit        Muxes := 42    
+	   2 Input   16 Bit        Muxes := 1     
+	   2 Input   11 Bit        Muxes := 10    
+	   2 Input   10 Bit        Muxes := 6     
+	   2 Input    8 Bit        Muxes := 93    
+	   2 Input    3 Bit        Muxes := 6     
+	   2 Input    2 Bit        Muxes := 6     
+	   2 Input    1 Bit        Muxes := 57    
+	   3 Input    1 Bit        Muxes := 1     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 220 (col length:60)
+BRAMs: 280 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-7129] Port awaddr[1] in module axi_regs is either unconnected or has no load
+WARNING: [Synth 8-7129] Port awaddr[0] in module axi_regs is either unconnected or has no load
+WARNING: [Synth 8-7129] Port araddr[1] in module axi_regs is either unconnected or has no load
+WARNING: [Synth 8-7129] Port araddr[0] in module axi_regs is either unconnected or has no load
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][31]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][30]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][29]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][28]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][27]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][26]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][25]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][24]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][23]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][22]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][21]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][20]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][19]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][18]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][17]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][16]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][15]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][14]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][13]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][12]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][11]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][10]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][9]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][8]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][7]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][6]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][5]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][4]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][3]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][2]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][1]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[0][0]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[1][31]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[1][30]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[1][29]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[1][28]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[1][27]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[1][26]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[1][25]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[1][24]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[1][23]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[1][22]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[1][21]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[1][20]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[1][19]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[1][18]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[1][17]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[1][16]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[1][15]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_regs/mem_reg[1][14]__0/Q' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+INFO: [Common 17-14] Message 'Synth 8-6859' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:67]
+INFO: [Common 17-14] Message 'Synth 8-6858' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+WARNING: [Synth 8-13373] Removed Macro Instance : u_gauss/i_0/\lb0/mem_reg , of type : RAMB18E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : u_gauss/i_1/\lb1/mem_reg , of type : RAMB18E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : u_sobel/i_0/\lb0/mem_reg , of type : RAMB18E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : u_sobel/i_1/\lb1/mem_reg , of type : RAMB18E1 in constant propagation
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:17 ; elapsed = 00:00:21 . Memory (MB): peak = 1628.262 ; gain = 1011.156
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+Block RAM: Preliminary Mapping Report (see note below)
++------------+------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|Module Name | RTL Object             | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | 
++------------+------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|u_scaler    | gen_slot[0].lb/mem_reg | 1 K x 8(READ_FIRST)    | W |   | 1 K x 8(WRITE_FIRST)   |   | R | Port A and B     | 1      | 0      | 
+|u_scaler    | gen_slot[1].lb/mem_reg | 1 K x 8(READ_FIRST)    | W |   | 1 K x 8(WRITE_FIRST)   |   | R | Port A and B     | 1      | 0      | 
+|u_scaler    | gen_slot[2].lb/mem_reg | 1 K x 8(READ_FIRST)    | W |   | 1 K x 8(WRITE_FIRST)   |   | R | Port A and B     | 1      | 0      | 
+|u_scaler    | gen_slot[3].lb/mem_reg | 1 K x 8(READ_FIRST)    | W |   | 1 K x 8(WRITE_FIRST)   |   | R | Port A and B     | 1      | 0      | 
+|u_scaler    | gen_slot[4].lb/mem_reg | 1 K x 8(READ_FIRST)    | W |   | 1 K x 8(WRITE_FIRST)   |   | R | Port A and B     | 1      | 0      | 
+|u_scaler    | gen_slot[5].lb/mem_reg | 1 K x 8(READ_FIRST)    | W |   | 1 K x 8(WRITE_FIRST)   |   | R | Port A and B     | 1      | 0      | 
+|u_scaler    | gen_slot[6].lb/mem_reg | 1 K x 8(READ_FIRST)    | W |   | 1 K x 8(WRITE_FIRST)   |   | R | Port A and B     | 1      | 0      | 
+|u_scaler    | gen_slot[7].lb/mem_reg | 1 K x 8(READ_FIRST)    | W |   | 1 K x 8(WRITE_FIRST)   |   | R | Port A and B     | 1      | 0      | 
+|u_copbuf    | mem0_reg               | 49 K x 8(READ_FIRST)   | W |   | 49 K x 8(WRITE_FIRST)  |   | R | Port A and B     | 0      | 16     | 
+|u_copbuf    | mem1_reg               | 49 K x 8(READ_FIRST)   | W |   | 49 K x 8(WRITE_FIRST)  |   | R | Port A and B     | 0      | 16     | 
++------------+------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+
+Note: The table above is a preliminary report that shows the Block RAMs at the current stage of the synthesis flow. Some Block RAMs may be reimplemented as non Block RAM primitives later in the synthesis flow. Multiple instantiated Block RAMs are reported only once. 
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:18 ; elapsed = 00:00:21 . Memory (MB): peak = 1628.262 ; gain = 1011.156
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+Block RAM: Final Mapping Report
++------------+------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|Module Name | RTL Object             | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | 
++------------+------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|u_scaler    | gen_slot[0].lb/mem_reg | 1 K x 8(READ_FIRST)    | W |   | 1 K x 8(WRITE_FIRST)   |   | R | Port A and B     | 1      | 0      | 
+|u_scaler    | gen_slot[1].lb/mem_reg | 1 K x 8(READ_FIRST)    | W |   | 1 K x 8(WRITE_FIRST)   |   | R | Port A and B     | 1      | 0      | 
+|u_scaler    | gen_slot[2].lb/mem_reg | 1 K x 8(READ_FIRST)    | W |   | 1 K x 8(WRITE_FIRST)   |   | R | Port A and B     | 1      | 0      | 
+|u_scaler    | gen_slot[3].lb/mem_reg | 1 K x 8(READ_FIRST)    | W |   | 1 K x 8(WRITE_FIRST)   |   | R | Port A and B     | 1      | 0      | 
+|u_scaler    | gen_slot[4].lb/mem_reg | 1 K x 8(READ_FIRST)    | W |   | 1 K x 8(WRITE_FIRST)   |   | R | Port A and B     | 1      | 0      | 
+|u_scaler    | gen_slot[5].lb/mem_reg | 1 K x 8(READ_FIRST)    | W |   | 1 K x 8(WRITE_FIRST)   |   | R | Port A and B     | 1      | 0      | 
+|u_scaler    | gen_slot[6].lb/mem_reg | 1 K x 8(READ_FIRST)    | W |   | 1 K x 8(WRITE_FIRST)   |   | R | Port A and B     | 1      | 0      | 
+|u_scaler    | gen_slot[7].lb/mem_reg | 1 K x 8(READ_FIRST)    | W |   | 1 K x 8(WRITE_FIRST)   |   | R | Port A and B     | 1      | 0      | 
+|u_copbuf    | mem0_reg               | 49 K x 8(READ_FIRST)   | W |   | 49 K x 8(WRITE_FIRST)  |   | R | Port A and B     | 0      | 16     | 
+|u_copbuf    | mem1_reg               | 49 K x 8(READ_FIRST)   | W |   | 49 K x 8(WRITE_FIRST)  |   | R | Port A and B     | 0      | 16     | 
++------------+------------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_0_0 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_0_0 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_1_0 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_1_0 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_0_1 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_0_1 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_1_1 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_1_1 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_0_2 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_0_2 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_1_2 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_1_2 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_0_3 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_0_3 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_1_3 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_1_3 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_0_4 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_0_4 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_1_4 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_1_4 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_0_5 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_0_5 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_1_5 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_1_5 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_0_6 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_0_6 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_1_6 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_1_6 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_0_7 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_0_7 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_1_7 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem1_reg_1_7 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_0_0 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_0_0 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_1_0 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_1_0 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_0_1 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_0_1 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_1_1 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_1_1 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_0_2 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_0_2 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_1_2 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_1_2 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_0_3 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_0_3 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_1_3 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_1_3 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_0_4 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_0_4 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_1_4 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_1_4 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_0_5 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_0_5 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_1_5 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_1_5 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_0_6 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_0_6 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_1_6 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_1_6 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_0_7 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_0_7 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_1_7 , of type : RAMB36E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_copbuf/mem0_reg_1_7 , of type : RAMB36E1 in constant propagation
+INFO: [Synth 8-7052] The timing for the instance u_scaler/gen_slot[0].lb/mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_scaler/gen_slot[1].lb/mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_scaler/gen_slot[2].lb/mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_scaler/gen_slot[3].lb/mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_scaler/gen_slot[4].lb/mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_scaler/gen_slot[5].lb/mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_scaler/gen_slot[6].lb/mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance u_scaler/gen_slot[7].lb/mem_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_scaler/gen_slot[0].lb/mem_reg , of type : RAMB18E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_scaler/gen_slot[0].lb/mem_reg , of type : RAMB18E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_scaler/gen_slot[1].lb/mem_reg , of type : RAMB18E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_scaler/gen_slot[1].lb/mem_reg , of type : RAMB18E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_scaler/gen_slot[2].lb/mem_reg , of type : RAMB18E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_scaler/gen_slot[2].lb/mem_reg , of type : RAMB18E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_scaler/gen_slot[3].lb/mem_reg , of type : RAMB18E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_scaler/gen_slot[3].lb/mem_reg , of type : RAMB18E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_scaler/gen_slot[4].lb/mem_reg , of type : RAMB18E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_scaler/gen_slot[4].lb/mem_reg , of type : RAMB18E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_scaler/gen_slot[5].lb/mem_reg , of type : RAMB18E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_scaler/gen_slot[5].lb/mem_reg , of type : RAMB18E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_scaler/gen_slot[6].lb/mem_reg , of type : RAMB18E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_scaler/gen_slot[6].lb/mem_reg , of type : RAMB18E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_scaler/gen_slot[7].lb/mem_reg , of type : RAMB18E1 in constant propagation
+WARNING: [Synth 8-13373] Removed Macro Instance : \u_scaler/gen_slot[7].lb/mem_reg , of type : RAMB18E1 in constant propagation
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:18 ; elapsed = 00:00:21 . Memory (MB): peak = 1628.262 ; gain = 1011.156
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:21 ; elapsed = 00:00:25 . Memory (MB): peak = 1835.816 ; gain = 1218.711
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:21 ; elapsed = 00:00:25 . Memory (MB): peak = 1835.816 ; gain = 1218.711
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:21 ; elapsed = 00:00:25 . Memory (MB): peak = 1835.816 ; gain = 1218.711
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:21 ; elapsed = 00:00:25 . Memory (MB): peak = 1835.816 ; gain = 1218.711
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:21 ; elapsed = 00:00:25 . Memory (MB): peak = 1835.816 ; gain = 1218.711
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:21 ; elapsed = 00:00:25 . Memory (MB): peak = 1835.816 ; gain = 1218.711
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+-------+------+
+|      |Cell   |Count |
++------+-------+------+
+|1     |CARRY4 |    28|
+|2     |LUT1   |     4|
+|3     |LUT2   |    60|
+|4     |LUT3   |    21|
+|5     |LUT4   |    11|
+|6     |LUT5   |     3|
+|7     |LUT6   |     5|
+|8     |FDCE   |     2|
+|9     |FDRE   |    11|
++------+-------+------+
+
+Report Instance Areas: 
++------+---------+---------+------+
+|      |Instance |Module   |Cells |
++------+---------+---------+------+
+|1     |top      |         |   145|
+|2     |  u_gray |rgb2gray |   138|
+|3     |  u_regs |axi_regs |     7|
++------+---------+---------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:21 ; elapsed = 00:00:25 . Memory (MB): peak = 1835.816 ; gain = 1218.711
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 1536 critical warnings and 94 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:21 ; elapsed = 00:00:25 . Memory (MB): peak = 1835.816 ; gain = 1218.711
+Synthesis Optimization Complete : Time (s): cpu = 00:00:21 ; elapsed = 00:00:25 . Memory (MB): peak = 1835.816 ; gain = 1218.711
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1849.875 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 28 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1963.977 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Synth Design complete | Checksum: b763c8ba
+INFO: [Common 17-83] Releasing license: Vivado_Synthesis
+40 Infos, 94 Warnings, 200 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:24 ; elapsed = 00:00:29 . Memory (MB): peak = 1964.973 ; gain = 1353.832
+# if {$mod eq "vision_top"} {
+#     create_clock -name pclk      -period $period [get_ports clk]
+#     create_clock -name s_axi_aclk -period 10.0   [get_ports s_axi_aclk]
+#     set_clock_groups -asynchronous -group [get_clocks pclk] -group [get_clocks s_axi_aclk]
+#     report_cdc -file $rep/${mod}${suffix}_cdc.rpt
+# } else {
+#     create_clock -name clk -period $period [get_ports clk]
+# }
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+WARNING: [Timing 38-242] The property HD.CLK_SRC of clock port "clk" is not set. In out-of-context mode, this prevents timing estimation for clock delay/skew
+Resolution: Set the HD.CLK_SRC property of the out-of-context port to the location of the clock buffer instance in the top-level design
+WARNING: [Timing 38-242] The property HD.CLK_SRC of clock port "s_axi_aclk" is not set. In out-of-context mode, this prevents timing estimation for clock delay/skew
+Resolution: Set the HD.CLK_SRC property of the out-of-context port to the location of the clock buffer instance in the top-level design
+INFO: [Timing 38-314] The report_cdc command only analyzes and reports clock domain crossing paths where clocks have been defined on both source and destination sides. Ports with no input delay constraint are skipped. Please run check_timing to verify there are no missing clock definitions in your design, nor any unconstrained input port.
+report_cdc: Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 1964.973 ; gain = 0.000
+# report_utilization    -file $rep/${mod}${suffix}_utilization.rpt
+# report_timing_summary -file $rep/${mod}${suffix}_timing.rpt
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+# set wns [get_property SLACK [lindex [get_timing_paths] 0]]
+# set fp [open $rep/${mod}${suffix}_ooc_result.txt w]
+# puts $fp "module=$mod variant=$variant period=${period}ns wns=$wns"
+# close $fp
+# puts "OOC_RESULT module=$mod variant=$variant period=${period}ns wns=$wns"
+OOC_RESULT module=vision_top variant=real75 period=13.468ns wns=8.404
+INFO: [Common 17-206] Exiting Vivado at Thu Oct  1 23:36:27 2026...
