@@ -10,8 +10,11 @@
 | 分支 | `chore/repo-cleanup` |
 | 整理提交 | `2f5475b` `chore(repo): tidy generated artifacts, evidence indexes and docs taxonomy` |
 | 索引刷新提交 | `ebf739e` `chore(repo): refresh evidence indexes after cleanup` |
+| 验收记录提交 | `cf19e53` `docs(repo): record final cleanup metrics and verification` |
+| 计数修正提交 | `b6f767b` `docs(repo): correct final tracked file count` |
+| 文档一致性提交 | `2d18dda` `docs: align counts and implementation status with code` |
 | 整理前 tag | `pre-cleanup-2026-10-19` → `d87c9cc` |
-| 整理后 tag | `post-cleanup-2026-10-19` → `ebf739e` |
+| 整理后 tag | `post-cleanup-2026-10-19` → `b6f767b`（文档一致性提交在其后，未移动 tag） |
 | 工作区 | clean |
 
 ## 2. 最终数字
