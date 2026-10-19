@@ -1,0 +1,13 @@
+HOST_STARTED_UTC=2026-10-16T14:51:05.2634162Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=stat -c "log_mtime=%y" /home/xilinx/vision_m2/live-server.log; date; ip -br addr show eth0; grep -c "Timeout (0:02:30)" /home/xilinx/vision_m2/live-server.log; sudo -n true 2>/dev/null && echo SUDO_OK || echo SUDO_NEED_PW
+stat -c "log_mtime=%y" /home/xilinx/vision_m2/live-server.log; date; ip -br addr show eth0; grep -c "Timeout (0:02:30)" /home/xilinx/vision_m2/live-server.log; sudo -n true 2>/dev/null && echo SUDO_OK || echo SUDO_NEED_PW; printf '\n__PYNQ_RC_c1fba6483c17405bba9846489ea44f2d=%d\n' $?
+[?2004llog_mtime=2026-09-22 04:08:34.959984662 +0000
+Tue Sep 22 03:32:34 AM UTC 2026
+eth0             UP             169.254.87.99/16 192.168.2.99/24 fe80::a049:a7ff:fe76:2888/64 
+48
+SUDO_NEED_PW
+
+__PYNQ_RC_c1fba6483c17405bba9846489ea44f2d=0
+
+HOST_EXIT_CODE=0

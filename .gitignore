@@ -59,3 +59,25 @@ NA/
 # --- 核对比 Fmax 跑分产物（正式证据归档 data/logs/2026-10-03-picorv32-compare/） ---
 build/run/
 build/reports/fmax/
+
+# --- 仓库文档索引生成物（按需生成到 build/file-guide/，不入库） ---
+build/file-guide/
+docs/file-guide/index.html
+docs/file-guide/files.csv
+docs/file-guide/files.json
+docs/file-guide/sections/
+docs/file-guide/validation.json
+
+# --- 本地发布物（不提交；发布包/构建产物放这里） ---
+build/artifacts/
+
+# --- Icarus 编译产物（.vvp 可重建；源码与日志证据仍入库） ---
+*.vvp
+
+# --- 本地缓存 / 临时文件 ---
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.tmp
+*.bak
+*~

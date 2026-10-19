@@ -46,13 +46,13 @@
 - 分工：板卡完成预处理、定位与分类；RISC-V 调度检查、汇总数量、按工单判定；PS 提供结果与配置通信；EXE 负责叠加、交互、统计展示和记录。
 - 首版功能：按类别计数、工单要求与实际结果比较（缺件/多余件/错料）、一次检查一条批次记录、异常截图和记录导出、设备连接与推理状态诊断。
 - 显示路径保留相机画面，分析路径按模型需要灰度化/缩放；物体坐标须映射回显示画面。视频/分析分流已在 RTL 落地（彩色原图恒延迟直通 display_*，分析路径独立），板上显示保留彩色原图；灰度 out_* 口的框 OSD 只作诊断，不代表物体定位。
-- 视频与结果按[已冻结轮次协议](docs/vision-sync-protocol-decisions.md)关联；过期、断联或无法确认的画面不得显示为当前检查通过。逐帧精确关联未实现。
+- 视频与结果按[已冻结轮次协议](docs/contracts/vision-sync-protocol-decisions.md)关联；过期、断联或无法确认的画面不得显示为当前检查通过。逐帧精确关联未实现。
 
 **已确定负责人**：Windows EXE 由 `watercopper` 负责。
 
 外包视觉材料已按文档、模型、脚本和结果拆分并入项目目录，来源、接收核对和复现缺口见 [交接索引](docs/outsource/fastener-handoff.md)。采用 OpenCV 定位 + 逐目标64×64灰度小CNN；C03已选PS定位/ROI，后续下沉PL另评审。首版按单张稳定图检查推进；连续运动的触发、关联和去重未实现，需另定节拍与线速。正式参数与真实部署仍待完成，不能把冻结方案记作已接入。
 
-**已冻结部分**：轮次协议 v1.2 最多 16 目标、前端目录 `src/vision_client/`、板端服务责任人 NC；[C02](src/coprocessor/design_v0.md)固定首网及整数/张量语义，[C03](docs/coprocessor-integration-v0.md)固定 MMIO/AXI4-Lite + DMA、PS 定位/ROI 和核判定分工，并区分 16 目标能力与检查 V0 的 10 件策略。**待冻结/验收**：实际工位支持条件、正式模型参数/阈值及 C04 应用语义完整评审；任意接触、堆叠和遮挡不在首版范围。冻结契约不代表接口已接入。
+**已冻结部分**：轮次协议 v1.2 最多 16 目标、前端目录 `src/vision_client/`、板端服务责任人 NC；[C02](src/coprocessor/design_v0.md)固定首网及整数/张量语义，[C03](docs/contracts/coprocessor-integration-v0.md)固定 MMIO/AXI4-Lite + DMA、PS 定位/ROI 和核判定分工，并区分 16 目标能力与检查 V0 的 10 件策略。**待冻结/验收**：实际工位支持条件、正式模型参数/阈值及 C04 应用语义完整评审；任意接触、堆叠和遮挡不在首版范围。冻结契约不代表接口已接入。
 
 分类模型负责类别，自动框还需要定位算法。裂纹、尺寸超差等质量缺陷检测，以及跨帧跟踪，属于额外能力；当前首版只承诺上述工单与数量检查目标。
 
@@ -124,10 +124,12 @@
 
 ### 3.1 当前状态
 
-- 已实现并验证：核与最小 SoC 收口见[核报告](report/module1-closure.md)；25 个视觉 RTL tb、13 组视觉 Python 与 3 组 INT8 参考测试见[PR 整合证据](data/logs/2026-10-12-pr-review/README.md)。FILE/LIVE 原型、前端类别/工单展示、PROTOTYPE、记录 v2 与 CSV 已离板验证。当前未提交的构建输入审计将视觉 Python 扩至 14 组，见[离板证据](data/logs/2026-10-12-nc-offline/README.md)。
+- 已实现并验证（历史证据口径）：核与最小 SoC 收口见[核报告](report/module1-closure.md)；25 个视觉 RTL tb、13 组视觉 Python 与 3 组 INT8 参考测试见[PR 整合证据](data/logs/2026-10-12-pr-review/README.md)。FILE/LIVE 原型、前端类别/工单展示、PROTOTYPE、记录 v2 与 CSV 已离板验证。当前脚本入口为 **21 组视觉 Python、14 组检查链、10 组 INT8**（以 `sim/scripts` 为准）；10/12 的 14 组离板记录见[离板证据](data/logs/2026-10-12-nc-offline/README.md)，不覆盖后来新增组。
 - 已实现但验收缺口未闭环：原 vision 的 bit/hwh 与归档 XSA 配对，仍缺构建源码锚定；C01 候选有独立输入清单、构建日志和实机显示/状态诊断，DDR 取帧及完整长测/断源恢复未验收。原 8.14%／25% FAIL、组合 28.30% 均保留在历史记录。
 - 10/13 新增：CNN MAC/卷积寻址/bias/ReLU/requant/GAP/FC 与整网控制器、诊断整数黄金和参数校验；控制器 100 MHz OOC WNS=+0.058 ns、WHS=+0.049 ns、192 DSP，外部存储/SoC 未计入。DDR 单帧所有权适配通过七组离板异常测试，实测两次均在启动 DMA 前失败并恢复。[CNN证据](data/logs/2026-10-13-cnn-arithmetic/README.md)、[DDR证据](data/logs/2026-10-13-ddr-single-frame/README.md)。
-- 未实现／未接入：正式 INT8 模型/生产黄金、实体缓存与 CNN MMIO/DMA、首网板端输出、custom DDR 完整取帧实测、核工业固件、真实硬件 LIVE 后端及整机发布验收。10/12[文档核对清单](docs/implementation-document-audit-2026-10-12.md)是历史盘点，新实现以上述10/13证据为准。
+- 10/15–10/17 新增：五组离板独立复核（C01 入口替身 11 条路径、停机期粘滞错误位含桩覆盖、CNN 快批次与几何优化独立复跑一致、N03 包离板 SHA256/配对复算 6/6 OK）；EXE 环在真实网络接通——板端 park 采集后端 + numpy CNN 引擎装入 W05 LIVE 服务骨架，PC 经 192.168.50.99:8765 消费 v1.2 包，/v1/check 两轮 PASS（94–122 s，RECHECK 属实：场景未构图+触边+超限）；板端服务挂掉→OOM 探查→cron 自愈安装全程留档。[10-15证据](data/logs/2026-10-15-c01-entry-surrogate-step2/README.md)、[10-17证据](data/logs/2026-10-17-exe-ring/README.md)。
+- **M3（10/20）卡点报备（10/17，按 §3.4 提前说明）**：已通的是 prototype 六环（真实相机→park 采集→定位→板上 numpy CNN→判定→EXE，PS 过渡路径，一轮 2 分钟级，prototype=true）；**未实现**：C03 硬件 CNN（J02）接入、正式 INT8 模型/生产黄金、正式工位建成与定标采集（N04/N05 等拍摄环境，亚克力工位尚在概念稿阶段）、工业场景矩阵 N10–N12 实测。M3 的硬件闭环与实测项预计顺延；prototype 链按既有口径只作阶段成果，不入验收。裁决与降级范围由 owner 定。
+- 未实现／未接入：正式 INT8 模型/生产黄金、实体缓存与 CNN MMIO/DMA、首网板端输出、custom DDR 完整取帧实测、核工业固件、真实硬件 LIVE 后端及整机发布验收。10/12[文档核对清单](docs/archive/implementation-document-audit-2026-10-12.md)是历史盘点，新实现以上述10/13证据为准。
 
 ### 3.2 交付看板
 
@@ -184,8 +186,8 @@
 |:---|:---|:---|
 | RISC-V | [核计划](src/riscv/plan.md)、[核交付看板](src/riscv/plan_calendar.md) | Part A/B/C 技术范围、核验收、指标和专项卡点 |
 | 视觉链路 | [视觉说明](src/vision/README.md)、[视觉设计草案](src/vision/design_v0.md) | 预处理、视频接口、定位与裁剪衔接 |
-| CNN | [协处理器说明](src/coprocessor/README.md)、[模型训练准备](docs/module3-model-training.md) | 算子/缓存接口、训练量化与黄金参考 |
-| 外包视觉方案 | [交接索引](docs/outsource/fastener-handoff.md)、[受控流水线方案](docs/修订方案-受控流水线.md) | 原始包、实验原型、复现条件与未验收项 |
+| CNN | [协处理器说明](src/coprocessor/README.md)、[模型训练准备](docs/runbooks/module3-model-training.md) | 算子/缓存接口、训练量化与黄金参考 |
+| 外包视觉方案 | [交接索引](docs/outsource/fastener-handoff.md)、[受控流水线方案](docs/%E4%BF%AE%E8%AE%A2%E6%96%B9%E6%A1%88-%E5%8F%97%E6%8E%A7%E6%B5%81%E6%B0%B4%E7%BA%BF.md) | 原始包、实验原型、复现条件与未验收项 |
 | 板端与 EXE | [板端/前端说明](src/pynq_host/README.md) | 通信、同步、Windows 展示与工业操作；EXE 由 watercopper 负责 |
 
 **维护原则**：根目录 `plan.md` 管全项目；各目录内的 plan 只写该模块的任务、依赖和验收，引用主计划的收口节点，不复制全项目排期。
@@ -209,7 +211,7 @@
 
 - **模块二**：已有 HDMI RTL/链路收口；后续 `never-die-cold` 执行上板、取帧/恢复验收与机位采集，`watercopper` 提供驱动适配、数据审计与黄金参考，见[三人执行清单](docs/project-closeout-three-person-checklist.md)。
 - **模块三**：`jianglibo` 完成 INT8 MAC 阵列、缓冲与地址生成、顶层集成和算子级测试，目标是 M2 跑通首个网络。`never-die-cold` 在 M2/M3 验收时抽查端到端结果。
-- **训练与定位**：按现行三人清单，JL 负责训练/量化/整数黄金并与 RTL 闭环，WC 负责数据/标注与 PS 定位/ROI，NC 负责采集和实测。训练计划见[模块三训练文档](docs/module3-model-training.md)。
+- **训练与定位**：按现行三人清单，JL 负责训练/量化/整数黄金并与 RTL 闭环，WC 负责数据/标注与 PS 定位/ROI，NC 负责采集和实测。训练计划见[模块三训练文档](docs/runbooks/module3-model-training.md)。
 - **EXE 与板端服务**：WC 负责 EXE 和 W04/W05 软件适配/服务包；D7 的板端真实服务责任人仍为 NC，由 NC 执行实机联调和验收。FILE/LIVE 原型已验证，完整硬件闭环和发布包仍待验收，样例结果不计为板上识别。
 - **系统集成与材料**：M3 全员联调，由 `never-die-cold` 主持实测；M4 由 `watercopper` 主笔，全员提供证据和演示素材。
 - **PicoRV32 对比**：M4 材料收口前完成，要求见 [核计划 §4.4](src/riscv/plan.md)，不占用 M1 验收时间。
@@ -222,6 +224,8 @@
 
 | 日期 | 变更 |
 |:---|:---|
+| 2026-10-19 | 仓库整理 P0–P7：新增 data 日志/证据索引与 `docs/project-map.md`/`repo-hygiene.md`，补 30 个证据目录 README，退役 20 个 file-guide 生成物与 9 个 `.vvp`；回收 4 个额外 worktree、`sim/build` 与 arch-test 缓存；日志输入快照去重 588 个文件并加 manifest/恢复脚本；docs 分为 contracts/runbooks/research/archive。工作区 3.9 GB→约 469 MB；跟踪文件 5,638→5,125；提交 `2f5475b`/`ebf739e`，tag `post-cleanup-2026-10-19`；未改 RTL/接口，未改写历史 |
+| 2026-10-17 | 归档 10-15 五组离板独立复核与 10-17 EXE 环 LIVE 接通/服务自愈证据、工位概念稿；按 §3.4 报备 M3 卡点（拍摄环境与硬件 CNN 缺口，prototype 链不入验收） |
 | 2026-10-12 | 按合并源码、C02/C03 与三人执行清单校正测试数量、软件实现、接口/ROI方案、责任分工及原 vision/C01 证据边界；保持 M2 未通过 |
 | 2026-10-10 | 接收外包视觉包并保留原文，补充受控工位、单张稳定检查、PS 定位/ROI 评审和 FP32→PTQ→必要时 QAT 路线；不视为板端验收 |
 | 2026-09-10 | 从早期计划草稿整理出执行计划 |
@@ -236,5 +240,5 @@
 | 2026-09-30 | 主计划移到根目录 plan.md；RISC-V 目录只保留核专项计划与看板，更新当前引用，历史记录保留原路径 |
 | 2026-10-05 | 记录 v1 双档 CoreMark 实测 8.14% 与原 25% 门禁 FAIL；将仅转发硬门禁拆为功能正确性和 ≥8.0% 性能回归门禁，25% 保留为组合优化尽力目标 |
 | 2026-10-05 | Radix-4 乘法通过回归与双档 CoreMark：当前转发收益 10.20%、乘法器独立收益 21.95%、相对原始无转发组合收益 28.30%；XSim/Vivado/上板仍待验证 |
-| 2026-10-06 | 视频/结果同步协议 D1–D7 落定（轮次级起步，[决策单](docs/vision-sync-protocol-decisions.md)）；板端服务主责定 never-die-cold（NC 本人确认） |
+| 2026-10-06 | 视频/结果同步协议 D1–D7 落定（轮次级起步，[决策单](docs/contracts/vision-sync-protocol-decisions.md)）；板端服务主责定 never-die-cold（NC 本人确认） |
 | 2026-10-09 | B09：三层状态、真实视频／EXE 原型与后续部署边界同步；保留历史失败，不改变 M2/M3 验收；D6 未知字段缺口另批裁决。 |

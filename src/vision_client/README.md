@@ -42,7 +42,7 @@ decision.expected）/**prototype**/protocol_version/截图名）+ `screenshots/`
 targets 列保留 JSON）。离线测试：
 `py sim/vision/test_vision_records.py`、`py sim/vision/test_vision_export.py`。
 
-去重集合启动时从既有 records.jsonl 重建（**2026-10-13 起跨进程生效**，损坏行大声失败）。服务 HTTP 重试每次新建 check_id——重试语义草案见 [C04 §2.4](../../docs/vision-live-semantics.md)（待 NC/JL 确认）；记录键去重不用于证明请求重试幂等。
+去重集合启动时从既有 records.jsonl 重建（**2026-10-13 起跨进程生效**，损坏行大声失败）。服务 HTTP 重试每次新建 check_id——重试语义草案见 [C04 §2.4](../../docs/contracts/vision-live-semantics.md)（待 NC/JL 确认）；记录键去重不用于证明请求重试幂等。
 快照读取与哈希核对：`py src/pynq_host/round_artifacts.py <root> <session_id> <check_id>`（packet 绑定 + capture 字节哈希 + 引擎源哈希；不符大声失败；旧轮次无 `capture.sha256` 按缺件拒绝）。
 
 异常事件日志（D11）：状态迁移（断联/超期/配置变化/恢复 ok）与会话变化、重握手失败写入
@@ -50,7 +50,7 @@ targets 列保留 JSON）。离线测试：
 `--trigger-frame N` 为联调自检入口：在第 N 帧模拟一次手动触发（等效按 `c`），
 供打包测试覆盖"手动触发→落批次记录"全路径。
 
-轮次叠加模式（契约见 [docs/vision-sync-protocol-decisions.md](../../docs/vision-sync-protocol-decisions.md)）：
+轮次叠加模式（契约见 [docs/vision-sync-protocol-decisions.md](../../docs/contracts/vision-sync-protocol-decisions.md)）：
 `--source 0 --endpoint http://<host>:8765` —— 采集卡视频 + 结果服务轮次叠加。启动握手失败立即
 退出；每 `--interval`（默认 0.5s，启动校验必须小于 `--max-age`，否则每轮结果在下轮触发前过期、
 画面周期性空窗）触发一轮 `POST /v1/check`；结果按 D3 判据（会话 + 配置号 + 年龄窗 `--max-age`
@@ -92,7 +92,7 @@ python src/vision_client/preview.py --replay data/evidence/2026-10-10-offline-in
 # 打包后也可使用 --replay；--headless --save <PNG> 可导出检查画面。
 ```
 
-完整生成步骤和限制见[离板检查说明](../../docs/offline-inspection.md)。
+完整生成步骤和限制见[离板检查说明](../../docs/runbooks/offline-inspection.md)。
 
 ## 模拟接口 v1
 

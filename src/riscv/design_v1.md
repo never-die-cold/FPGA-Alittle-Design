@@ -918,7 +918,7 @@ BHT2 核 OOC 在 11.520 ns 实跑 WNS>=0，10 ns 为继续提升目标。SoC 单
 > 本节把已冻结的 C03 集成方案映射到核/SoC 边界；JL 已于 2026-10-18 确认三项细则，
 > 允许按古法编程进入 J04。现役 SoC 尚未实现本节，完成前不得把契约写成已接入。
 > 完整寄存器 offset 与字段只见
-> [`docs/coprocessor-integration-v0.md`](../../docs/coprocessor-integration-v0.md)，本节不复制第二份表。
+> [`docs/coprocessor-integration-v0.md`](../../docs/contracts/coprocessor-integration-v0.md)，本节不复制第二份表。
 
 ### 17.1 不改变的核语义
 

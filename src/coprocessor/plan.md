@@ -5,7 +5,8 @@
 ## 权威入口
 
 - C02：[`design_v0.md`](design_v0.md)；整数、形状、排布、payload 与资源边界。
-- C03：[`docs/coprocessor-integration-v0.md`](../../docs/coprocessor-integration-v0.md)；MMIO、DMA、状态与分工。
+- C03：[`docs/contracts/coprocessor-integration-v0.md`](../../docs/contracts/coprocessor-integration-v0.md)；MMIO、DMA、状态与分工。
+- 交接索引：[`docs/contracts/coprocessor-handoff-v0.md`](../../docs/contracts/coprocessor-handoff-v0.md)。
 - 总验收：[`plan.md`](../../plan.md) 与[三人收口清单](../../docs/project-closeout-three-person-checklist.md)。
 - J03 本轮证据：[`data/logs/2026-10-18-j03-closeout/README.md`](../../data/logs/2026-10-18-j03-closeout/README.md)。
 
@@ -16,7 +17,7 @@
 | J01 | 🟡 | C02/C03、预算与交接索引已有；不代替 WC/NC 签收 |
 | J02 | ✅ | 诊断整数参考、逐层黄金、文件/来源 SHA256 与篡改负例可复现；不是 J06 正式模型 |
 | J03 | ✅ | 活跃 Conv→GAP→FC 链逐元素对拍；独立、协处理器 all、全仓 all 退出 0 |
-| J04 | ⬜ | `cop_top`、实体存储、MMIO/CDC、DMA、核接入和固件均未实现 |
+| J04 | 🟡 | `cop_top`、MMIO/CDC、DMA loader、AXI4-Lite、核接入门和工单固件已离板验证；实体 BRAM 生产地址适配、SoC/视频/板端未验收。证据见 [J04 记录](../../report/llm_log/2026-10-18-j04-closeout.md) |
 | J05 | ⬜ | 等真实审计 ROI；训练/PTQ/QAT、混淆矩阵与阈值未完成 |
 | J06 | ⬜ | 正式模型、真实参数/黄金、版本/哈希发布未完成 |
 | J07 | ⬜ | 视频原帧通路+核+CNN 的综合实现和整机回归未完成 |
@@ -31,9 +32,9 @@
 - J03 PASS 证明软件黄金与 RTL 算子/整网离板一致，不证明 J04 接口、完整 SoC 时序或板端输出。
 - OOC 报告不含实体 BRAM、DMA、SoC 和视频链，不能外推整机 100 MHz。
 
-## J04 进入门槛
+## J04 收口边界与后续门槛
 
-1. 将 C03 的 `0x8001_0000` 本地 MMIO 窗口和 SoC 行为回写核契约草案。
-2. 由 JL 确认草案；确认前不写 J04 RTL，不改变核数据口无等待语义。
-3. 确认后按“寄存器/CDC → 存储/搬运 → `cop_top` → 固件 → 集成”逐步建 TB 和 runner。
+1. C03 的 `0x8001_0000` 本地 MMIO 窗口和 SoC 行为已回写 `design_v1.md` §17 草案；核数据口无等待语义未改。
+2. J04 已按“寄存器/CDC → 存储/搬运 → `cop_top` → 固件”完成离板验证；OPEN：DataMover payload 到各物理 bank 的生产地址适配、CRC 负例、实体 BRAM/SoC/视频/板端集成。
+3. 后续进入 J07 整机集成前，先按 J05/J06 完成真实数据、正式 INT8 模型/黄金；不得用诊断权重冒充正式模型。
 

@@ -8,14 +8,14 @@
 
 | 工作包 | 状态 | 依赖 | 版本与证据 |
 |---|---|---|---|
-| HDMI显示/捕获候选 | 显示链路已验证；C01捕获RTL/BD/候选位流与显示/状态诊断已有 | 原vision源码追溯、custom DDR完整副本和完整N02/N03验收 | [C01基线](c01-capture-implementation-baseline.md)；UVC正常不证明取帧安全 |
+| HDMI显示/捕获候选 | 显示链路已验证；C01捕获RTL/BD/候选位流与显示/状态诊断已有 | 原vision源码追溯、custom DDR完整副本和完整N02/N03验收 | [C01基线](contracts/c01-capture-implementation-baseline.md)；UVC正常不证明取帧安全 |
 | 树莓派相机预览 | 开机预览有历史证据；完整HDMI恢复仍未验收 | 当前源/接收时序与EDID | `sim/scripts/pi-camera-preview.service`；[真实相机记录](../data/logs/2026-10-07-pi-pynq/README.md) |
 | PYNQ 开机加载 | ⬜ 未实现 | 已验证 bit、XRT/PYNQ 环境、systemd 启动顺序 | 尚无“重启后未手动加载且出图”的证据 |
 | HDMI启动/恢复 | 特定配置手动恢复有证据；完整冷启动/长测/物理拔插仍未验收 | Pi CEA720p60、采集卡共存与实际位流 | [N01现场记录](../data/logs/2026-10-10-onboard-n01/README.md)；不能用另一位流代签 |
 | RISC-V核验收 | 核与最小SoC已收口 | 后续协处理器接入不退化 | [核收口报告](../report/module1-closure.md)；MMIO/工业固件仍未接入 |
-| 板端控制/结果接口 | v1.2 MOCK/LIVE与FILE服务骨架已实现 | 真实取帧/MMIO/CNN、R12应用回执、HTTP请求级幂等 | [协议](vision-sync-protocol-decisions.md)；软件config_id不代表硬件生效 |
+| 板端控制/结果接口 | v1.2 MOCK/LIVE与FILE服务骨架已实现 | 真实取帧/MMIO/CNN、R12应用回执、HTTP请求级幂等 | [协议](contracts/vision-sync-protocol-decisions.md)；软件config_id不代表硬件生效 |
 | Windows EXE | 视频/轮次、重连撤框、LIVE类别/分数/工单横幅、PROTOTYPE已离板验证 | 检查快照查看、真实硬件/目标机复验 | [客户端说明](../src/vision_client/README.md)；轮次叠加不是逐帧同步 |
-| 工单/记录/发布 | 文件候选规则、手动有效轮幂等记录、v2/CSV/异常截图已有 | 核侧工单判定、真实闭环与最终发布 | [离板检查](offline-inspection.md)；记录去重不等于网络重试幂等 |
+| 工单/记录/发布 | 文件候选规则、手动有效轮幂等记录、v2/CSV/异常截图已有 | 核侧工单判定、真实闭环与最终发布 | [离板检查](runbooks/offline-inspection.md)；记录去重不等于网络重试幂等 |
 
 ## 实施门槛
 

@@ -1,0 +1,105 @@
+{
+  "run": "cnn-ooc-1cefffc05185438195b8803d87fc11df",
+  "generated_at": "2026-10-19T02:47:01.300061+00:00",
+  "policy": "restore=git blob; drop=canonical copy; keep/unique=stay",
+  "roots": [
+    "inputs/"
+  ],
+  "summary": {
+    "total": 11,
+    "restore": 10,
+    "keep": 0,
+    "drop": 0,
+    "unique": 1
+  },
+  "files": [
+    {
+      "path": "data/logs/cnn-ooc-1cefffc05185438195b8803d87fc11df/inputs/cnn_sequencer.v",
+      "size": 7904,
+      "sha256": "6d33b0a139d07a14af6e8d613c3ab758da818aba0915166c8b472e2c14f58c3e",
+      "git_blob": "278efe5c109ad635e701dc3fb5a48317e6255a40",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/cnn-ooc-1cefffc05185438195b8803d87fc11df/inputs/conv_engine.v",
+      "size": 11394,
+      "sha256": "dde0c5c41a6b9335dc8eb1b3fa3eaf6a703ad79e2c44d535d36ee55a0b71b6f9",
+      "git_blob": "4ce14096ce643b98ab3459acf59631a7bb511be2",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/cnn-ooc-1cefffc05185438195b8803d87fc11df/inputs/int8_gap.v",
+      "size": 376,
+      "sha256": "0de05f7c755c6be7b3a69fd4fb75b70ee83e379edfc096f6c3bd336759125dee",
+      "git_blob": "424a15c7626e0b2fb5ad2519c9e4b09f3cbc1cfb",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/cnn-ooc-1cefffc05185438195b8803d87fc11df/inputs/int8_logits.v",
+      "size": 1201,
+      "sha256": "3d8d167abd054a58c3871aec29dd14fd939668f9986bbeb2d896411965b93ad3",
+      "git_blob": "dd8a40131cac0d69b57343a5ca701d45c5296f75",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/cnn-ooc-1cefffc05185438195b8803d87fc11df/inputs/int8_mac.v",
+      "size": 649,
+      "sha256": "081f0e9451fbdacc2c11d4d4b3d2eccbcdd584631d5cb00cdc481f9f1863de92",
+      "git_blob": "9d8025b474260d791c26346000c0b7364a934fb5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/cnn-ooc-1cefffc05185438195b8803d87fc11df/inputs/int8_requant.v",
+      "size": 979,
+      "sha256": "09636bf08811eb048abb1136d43b757fa41a3dd7787b303979d6144c4b7a5069",
+      "git_blob": "3fa857afffd108dea12161cb2a097e257405d328",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/cnn-ooc-1cefffc05185438195b8803d87fc11df/inputs/int8_requant_pipeline.v",
+      "size": 1456,
+      "sha256": "4c3831f63fb96e49fbaa4dda74ef8bed69a13a8de179feaaffcff9dbd338a2e3",
+      "git_blob": "48e9c3fbcf44721e8ce6ef4d163cf41f083687ae",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/cnn-ooc-1cefffc05185438195b8803d87fc11df/inputs/mac_array.v",
+      "size": 1420,
+      "sha256": "8d51f13f6935a7564e81f45362277bab7425dba93ba632ca4d3b8c496544da8e",
+      "git_blob": "e306781ad8009a1877900bd3920aa764070efede",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/cnn-ooc-1cefffc05185438195b8803d87fc11df/inputs/mac_array_pipeline.v",
+      "size": 2012,
+      "sha256": "8cef4170d4100c8b56f5aa35d9b8d383e1e5d87d2036c14e19b5b21846c5c393",
+      "git_blob": "7885d2218bedccfe0527ae72e142a7719dc1d039",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/cnn-ooc-1cefffc05185438195b8803d87fc11df/inputs/run_cnn_ooc.ps1",
+      "size": 1700,
+      "sha256": "5c43748de24ade3f8bd9d16acaed7b350d9690d1a0def62ef2e1103c9a6a38ca",
+      "git_blob": "e2082cd8b5b9ecdefdb634f26eba2f14f88b324f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/cnn-ooc-1cefffc05185438195b8803d87fc11df/inputs/synth_coprocessor_ooc.tcl",
+      "size": 2295,
+      "sha256": "c821b34629164223f7cdf292b934937247593dad4f499695308805fd26048a7e",
+      "git_blob": "7c472b84dc4221bc4a7826000afcb4d3b5b0652d",
+      "action": "unique",
+      "canonical": null
+    }
+  ]
+}

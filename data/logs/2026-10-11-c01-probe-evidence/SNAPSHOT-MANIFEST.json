@@ -1,0 +1,25 @@
+{
+  "run": "2026-10-11-c01-probe-evidence",
+  "generated_at": "2026-10-19T02:47:00.632301+00:00",
+  "policy": "restore=git blob; drop=canonical copy; keep/unique=stay",
+  "roots": [
+    "settled-script-archive/"
+  ],
+  "summary": {
+    "total": 1,
+    "restore": 0,
+    "keep": 0,
+    "drop": 0,
+    "unique": 1
+  },
+  "files": [
+    {
+      "path": "data/logs/2026-10-11-c01-probe-evidence/settled-script-archive/README.md",
+      "size": 656,
+      "sha256": "f83d6129d3f297126a1eea1571a405e99d8136ade1b35bcb1430d5ae60f3e00f",
+      "git_blob": "f22649e2dae4ec9522dadfae4bebac51f0c37daa",
+      "action": "unique",
+      "canonical": null
+    }
+  ]
+}

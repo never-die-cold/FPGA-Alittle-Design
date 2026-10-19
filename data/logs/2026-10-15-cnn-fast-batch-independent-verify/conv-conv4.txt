@@ -1,0 +1,2 @@
+PASS: conv_engine case=E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/conv4 words=2048 read_transactions=36864 parameter_reads=4 cycles=154122; every pixel/lane matches Python
+sim/coprocessor/tb_conv_engine.v:168: $finish called at 1541266000 (1ps)

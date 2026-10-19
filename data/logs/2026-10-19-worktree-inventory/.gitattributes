@@ -1,0 +1,14 @@
+# Preserve raw worktree-rescue logs byte-for-byte; do not apply LF/whitespace normalization.
+# Rescue copies of conflict-marked files are intentionally kept as-is; -diff avoids
+# treating them as reviewable source (they are snapshots, not merge results).
+preserved/** -text -diff -whitespace
+
+# Manifests and hash lists stay normal LF text.
+SNAPSHOT-MANIFEST.json text eol=lf
+SNAPSHOT.md text eol=lf
+README.md text eol=lf
+local-only-sha256.txt text eol=lf
+preserved-sha256.txt text eol=lf
+release-artifact-sha256.txt text eol=lf
+sim-build-top.txt text eol=lf
+sim-build-files.txt text eol=lf

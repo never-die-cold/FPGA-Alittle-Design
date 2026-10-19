@@ -1,0 +1,49 @@
+{
+  "run": "2026-10-14-n03-return-review",
+  "generated_at": "2026-10-19T02:47:00.661861+00:00",
+  "policy": "restore=git blob; drop=canonical copy; keep/unique=stay",
+  "roots": [
+    "inputs/"
+  ],
+  "summary": {
+    "total": 4,
+    "restore": 2,
+    "keep": 0,
+    "drop": 0,
+    "unique": 2
+  },
+  "files": [
+    {
+      "path": "data/logs/2026-10-14-n03-return-review/inputs/.gitattributes",
+      "size": 133,
+      "sha256": "f6e4ca6c640bacaf2693852a45df5a9f6bc8d6aedad03b20f2fa69726ba09e19",
+      "git_blob": "d1755c31fc2b2f91087351d825a3b6771fcffdaa",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-14-n03-return-review/inputs/c01_capture.py",
+      "size": 9515,
+      "sha256": "1f11aefdc11805387b0c345583828fd733e5e38b0b0e043b0510808f648e8430",
+      "git_blob": "d866c0ecc66a75b4934f52136e30f407c9f09624",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-14-n03-return-review/inputs/c01_ddr_onboard.py",
+      "size": 5446,
+      "sha256": "e822a70800a923ccdb3ce45496e71342b032035389dba935d6fac6f09edd5646",
+      "git_blob": "80c59bb20b19f4c69762ec480700a4f0d1ad2f39",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-14-n03-return-review/inputs/c01_status_onboard.py",
+      "size": 6667,
+      "sha256": "894bf7dc01ba9260c48cde7ab0b1aecdd6bfa157f7fa43252170cea1752e1810",
+      "git_blob": "701c4fe42edbb56cb52b72b7ff17443cf229cc96",
+      "action": "restore",
+      "canonical": null
+    }
+  ]
+}

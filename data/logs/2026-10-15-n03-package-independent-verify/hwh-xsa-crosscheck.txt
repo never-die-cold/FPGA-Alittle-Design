@@ -1,0 +1,37 @@
+### XSA 内嵌 bit/hwh vs 独立文件（sha256）
+86d2adb0343de1785270d207eee3c6b8fee2a6444bc64705bc068e3fc781d14f */tmp/xsa/capture-1791713720540454.bit
+86d2adb0343de1785270d207eee3c6b8fee2a6444bc64705bc068e3fc781d14f *sim/build/c01-hdmi-1791713720540454/capture-1791713720540454.bit
+eaaf68c3732f1a2bf85756fc0b3a8c6b07bb5cf5b36f32020882860a6aaebf5c */tmp/xsa/vision.hwh
+eaaf68c3732f1a2bf85756fc0b3a8c6b07bb5cf5b36f32020882860a6aaebf5c *sim/build/c01-hdmi-1791713720540454/capture-1791713720540454.hwh
+
+### HWH MEMRANGE（逐标签解析，属性顺序无关）
+tags=4
+MEMRANGE instance=ps7              base=0x00000000   high=0x1FFFFFFF   block=HP0_DDR_LOWOCM
+MEMRANGE instance=pipe             base=0x40000000   high=0x4000FFFF   block=reg0
+MEMRANGE instance=capture_status   base=0x42000000   high=0x4200FFFF   block=reg0
+MEMRANGE instance=capture_dma      base=0x43000000   high=0x4300FFFF   block=Reg
+
+### VDMA 关键参数
+PARAM c_include_mm2s                = 0
+PARAM c_include_s2mm                = 1
+PARAM c_num_fstores                 = 4
+PARAM c_s_axis_s2mm_tdata_width     = 24
+PARAM c_m_axi_s2mm_data_width       = 64
+PARAM c_use_s2mm_fsync              = 2
+
+### 记录值 candidate-artifacts.json
+{
+  "addresses": {
+    "pipe": "0x40000000",
+    "capture_status": "0x42000000",
+    "capture_dma": "0x43000000"
+  },
+  "vdma": {
+    "C_INCLUDE_MM2S": "0",
+    "C_INCLUDE_S2MM": "1",
+    "C_NUM_FSTORES": "4",
+    "C_S_AXIS_S2MM_TDATA_WIDTH": "24",
+    "C_M_AXI_S2MM_DATA_WIDTH": "64",
+    "C_USE_S2MM_FSYNC": "2"
+  }
+}

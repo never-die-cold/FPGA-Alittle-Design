@@ -74,4 +74,4 @@ hdmi_in.tie(hdmi_out)   # 直通：采集窗口应立即看到笔记本画面
 - 接线方案：📌 已定（2026-09-20 笔记本源 + 采集卡显示；2026-09-21 修订为真实 HDMI 相机源；**2026-10-03 定案：树莓派 4B + Camera Module 3**，micro-HDMI(HDMI0)→HDMI IN；笔记本 HDMI 输出降级为开发调试源）
 - 采购与实际接线：Camera Module 3／Pi／PYNQ／采集卡已用于[10/07 真实相机恢复](../data/logs/2026-10-07-pi-pynq/README.md)；不再标“到货待收”。负责人：never-die-cold
 - 视频链路已完成已验证部分（RTL／链路级），见[10/03 视频](../data/logs/2026-10-03-vision-onboard/README.md)、[10/07 相机](../data/logs/2026-10-07-pi-pynq/README.md)；现用位流版本追溯、冷启动／长时间／断连复验仍待补。
-- 开发期角色：Pi 兼任回放源 / arm_localize 交叉基准 / EXE mock 服务宿主（R1–R3，runbook 见 [docs/pi-dev-roles.md](../docs/pi-dev-roles.md)）；Pi 不进产品分析路径、不产生数据集像素。系统用项目专用 microSD（另配，Raspberry Pi OS Lite 32-bit），输出锁 720p60
+- 开发期角色：Pi 兼任回放源 / arm_localize 交叉基准 / EXE mock 服务宿主（R1–R3，runbook 见 [docs/pi-dev-roles.md](../docs/runbooks/pi-dev-roles.md)）；Pi 不进产品分析路径、不产生数据集像素。系统用项目专用 microSD（另配，Raspberry Pi OS Lite 32-bit），输出锁 720p60

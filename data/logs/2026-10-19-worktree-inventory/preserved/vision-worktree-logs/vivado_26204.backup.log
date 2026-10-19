@@ -1,0 +1,127 @@
+INFO: [Common 17-3922] A valid Vivado Design Suite BASIC license has been detected. Your current license is active and will expire on 14-sep-2027.
+#-----------------------------------------------------------
+# Vivado v2026.1 (64-bit)
+# SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+# IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+# SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+# Start of session at: Thu Oct  1 23:32:18 2026
+# Process ID         : 26204
+# Current directory  : E:/Projects/FPGA-Alittle-Design-vision
+# Command line       : vivado.exe -mode batch -source sim/scripts/synth_vision_ooc.tcl -tclargs vision_top real75 -log build/reports/vision_ooc/vision_top_real75_vivado.log -journal build/reports/vision_ooc/vision_top_real75_vivado.jou
+# Log file           : E:/Projects/FPGA-Alittle-Design-vision/vivado.log
+# Journal file       : E:/Projects/FPGA-Alittle-Design-vision\vivado.jou
+# Running On         : never-die-cold
+# Platform           : Windows 11
+# Operating System   : 26200
+# Processor Detail   : Intel(R) Core(TM) Ultra 7 255HX
+# CPU Frequency      : 2880 MHz
+# CPU Physical cores : 20
+# CPU Logical cores  : 20
+# Host memory        : 16496 MB
+# Swap memory        : 23622 MB
+# Total Virtual      : 40119 MB
+# Available Virtual  : 7099 MB
+#-----------------------------------------------------------
+source sim/scripts/synth_vision_ooc.tcl
+# if {$argc < 1} { puts "ERROR: éœ€è¦? -tclargs <module> [variant]"; exit 1 }
+# set mod     [lindex $argv 0]
+# set variant [expr {$argc >= 2 ? [lindex $argv 1] : "unit"}]
+# set part xc7z020clg400-1
+# set rep  build/reports/vision_ooc
+# file mkdir $rep
+# set suffix [expr {$variant eq "unit" ? "" : "_$variant"}]
+# set period [expr {$variant eq "real75" ? 13.468 : 10.0}]
+# if {$mod eq "vision_top"} {
+#     set files [list src/vision/rgb2gray.v src/vision/line_buffer.v src/vision/gaussian_3x3.v \
+#                     src/vision/sobel.v src/vision/scaler.v src/vision/osd_overlay.v \
+#                     src/vision/axi_regs.v src/vision/in_align.v src/vision/cop_buf.v \
+#                     src/vision/vision_top.v]
+# } else {
+#     set files [list src/vision/${mod}.v]
+#     if {$mod eq "gaussian_3x3" || $mod eq "sobel" || $mod eq "scaler"} {
+#         lappend files src/vision/line_buffer.v
+#     }
+# }
+# foreach f $files { read_verilog $f }
+read_verilog: Time (s): cpu = 00:00:10 ; elapsed = 00:00:09 . Memory (MB): peak = 611.535 ; gain = 266.715
+# set synth_args [list synth_design -top $mod -part $part -mode out_of_context]
+# if {$variant eq "real" || $variant eq "real75"} {
+#     switch $mod {
+#         gaussian_3x3 { foreach g {WIDTH=1280 HEIGHT=720} { lappend synth_args -generic $g } }
+#         sobel        { foreach g {WIDTH=1280 HEIGHT=720} { lappend synth_args -generic $g } }
+#         scaler       { foreach g {SW=1280 SH=720 DW=224 DH=224 NLINES=8} { lappend synth_args -generic $g } }
+#         line_buffer  { foreach g {WIDTH=1280} { lappend synth_args -generic $g } }
+#         vision_top   { foreach g {SW=1280 SH=720 DW=224 DH=224 NLINES=8} { lappend synth_args -generic $g } }
+#     }
+# }
+# eval $synth_args
+Command: synth_design -top vision_top -part xc7z020clg400-1 -mode out_of_context -generic SW=1280 -generic SH=720 -generic DW=224 -generic DH=224 -generic NLINES=8
+Starting synth_design
+Attempting to get a license for feature 'Vivado_Synthesis' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Vivado_Synthesis' and/or device 'xc7z020'
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 18252
+---------------------------------------------------------------------------------
+Starting Synthesize : Time (s): cpu = 00:00:05 ; elapsed = 00:00:07 . Memory (MB): peak = 1192.004 ; gain = 572.293
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'vision_top' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/vision_top.v:13]
+	Parameter SW bound to: 1280 - type: integer 
+	Parameter SH bound to: 720 - type: integer 
+	Parameter DW bound to: 224 - type: integer 
+	Parameter DH bound to: 224 - type: integer 
+	Parameter NLINES bound to: 8 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'axi_regs' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:16]
+	Parameter NREG bound to: 16 - type: integer 
+	Parameter AW bound to: 7 - type: integer 
+	Parameter RESV_BASE bound to: 11 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'axi_regs' (0#1) [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:16]
+INFO: [Synth 8-6157] synthesizing module 'rgb2gray' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/rgb2gray.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'rgb2gray' (0#1) [E:/Projects/FPGA-Alittle-Design-vision/src/vision/rgb2gray.v:6]
+INFO: [Synth 8-6157] synthesizing module 'gaussian_3x3' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/gaussian_3x3.v:12]
+	Parameter WIDTH bound to: 1280 - type: integer 
+	Parameter HEIGHT bound to: 720 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'line_buffer' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/line_buffer.v:6]
+	Parameter WIDTH bound to: 1280 - type: integer 
+	Parameter DW bound to: 8 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'line_buffer' (0#1) [E:/Projects/FPGA-Alittle-Design-vision/src/vision/line_buffer.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'gaussian_3x3' (0#1) [E:/Projects/FPGA-Alittle-Design-vision/src/vision/gaussian_3x3.v:12]
+INFO: [Synth 8-6157] synthesizing module 'sobel' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/sobel.v:7]
+	Parameter WIDTH bound to: 1280 - type: integer 
+	Parameter HEIGHT bound to: 720 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'sobel' (0#1) [E:/Projects/FPGA-Alittle-Design-vision/src/vision/sobel.v:7]
+INFO: [Synth 8-6157] synthesizing module 'scaler' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/scaler.v:15]
+	Parameter SW bound to: 1280 - type: integer 
+	Parameter SH bound to: 720 - type: integer 
+	Parameter DW bound to: 224 - type: integer 
+	Parameter DH bound to: 224 - type: integer 
+	Parameter NLINES bound to: 8 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'scaler' (0#1) [E:/Projects/FPGA-Alittle-Design-vision/src/vision/scaler.v:15]
+INFO: [Synth 8-6157] synthesizing module 'cop_buf' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/cop_buf.v:13]
+	Parameter DW bound to: 224 - type: integer 
+	Parameter DH bound to: 224 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'cop_buf' (0#1) [E:/Projects/FPGA-Alittle-Design-vision/src/vision/cop_buf.v:13]
+INFO: [Synth 8-6157] synthesizing module 'osd_overlay' [E:/Projects/FPGA-Alittle-Design-vision/src/vision/osd_overlay.v:8]
+INFO: [Synth 8-6155] done synthesizing module 'osd_overlay' (0#1) [E:/Projects/FPGA-Alittle-Design-vision/src/vision/osd_overlay.v:8]
+INFO: [Synth 8-6155] done synthesizing module 'vision_top' (0#1) [E:/Projects/FPGA-Alittle-Design-vision/src/vision/vision_top.v:13]
+WARNING: [Synth 8-6014] Unused sequential element ridx_q_reg was removed.  [E:/Projects/FPGA-Alittle-Design-vision/src/vision/axi_regs.v:86]
+WARNING: [Synth 8-7137] Register mem1_reg in module cop_buf has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code 
+WARNING: [Synth 8-7137] Register mem0_reg in module cop_buf has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code 
+WARNING: [Synth 8-4767] Trying to implement RAM 'mem1_reg' in registers. Block RAM or DRAM implementation is not possible; see log for reasons. [E:/Projects/FPGA-Alittle-Design-vision/src/vision/cop_buf.v:93]
+Reason is one or more of the following :
+	1: RAM is sensitive to asynchronous reset signal. this RTL style is not supported. 
+ERROR: [Synth 8-3391] Unable to infer a block/distributed RAM for 'mem1_reg' because the memory pattern used is not supported. Failed to dissolve the memory into bits because the number of bits (401408) is too large. Use 'set_param synth.elaboration.rodinMoreOptions {rt::set_parameter dissolveMemorySizeLimit 401408}' to allow the memory to be dissolved into individual bits
+WARNING: [Synth 8-4767] Trying to implement RAM 'mem0_reg' in registers. Block RAM or DRAM implementation is not possible; see log for reasons. [E:/Projects/FPGA-Alittle-Design-vision/src/vision/cop_buf.v:93]
+Reason is one or more of the following :
+	1: RAM is sensitive to asynchronous reset signal. this RTL style is not supported. 
+ERROR: [Synth 8-3391] Unable to infer a block/distributed RAM for 'mem0_reg' because the memory pattern used is not supported. Failed to dissolve the memory into bits because the number of bits (401408) is too large. Use 'set_param synth.elaboration.rodinMoreOptions {rt::set_parameter dissolveMemorySizeLimit 401408}' to allow the memory to be dissolved into individual bits
+---------------------------------------------------------------------------------
+Finished Synthesize : Time (s): cpu = 00:00:07 ; elapsed = 00:00:09 . Memory (MB): peak = 1337.199 ; gain = 717.488
+---------------------------------------------------------------------------------
+synthesize failed
+INFO: [Common 17-83] Releasing license: Vivado_Synthesis
+23 Infos, 5 Warnings, 0 Critical Warnings and 3 Errors encountered.
+synth_design failed
+synth_design: Time (s): cpu = 00:00:07 ; elapsed = 00:00:10 . Memory (MB): peak = 1337.199 ; gain = 725.664
+ERROR: [Common 17-69] Command failed: Vivado Synthesis failed
+INFO: [Common 17-206] Exiting Vivado at Thu Oct  1 23:32:46 2026...

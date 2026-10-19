@@ -26,6 +26,13 @@ def main():
     assert all(1 <= r["description"].count("。") <= 2 for r in records)
     assert all(r["description"] and "\ufffd" not in r["description"] for r in records)
     current = git_paths("--cached") | git_paths("--others", "--exclude-standard")
+    generated = {"docs/file-guide/index.html", "docs/file-guide/files.csv",
+                 "docs/file-guide/files.json", "docs/file-guide/validation.json"}
+    current = {p for p in current if p not in generated
+               and not p.startswith("docs/file-guide/sections/")
+               and not p.startswith("build/file-guide/")}
+    if document["metadata"].get("scope", "source") == "source":
+        current = {p for p in current if not p.startswith(("data/logs/", "data/evidence/", "data/golden/"))}
     assert not current - paths, sorted(current - paths)
     assert all((ROOT / p).is_file() for p in paths)
     assert all(x["path"] in paths for r in records for x in r["relations"])

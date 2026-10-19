@@ -1,9 +1,9 @@
-# vision design_v0 —— HDMI 图像预处理流水线接口设计（前期草案）
+# vision design_v0 —— HDMI 图像预处理流水线接口设计（已冻结，寄存器映射 v1.1）
 
 > 是什么：模块二（HDMI 直通 + 预处理流水线）的模块划分、接口与验证策略。
 > 给谁看：never-die-cold（模块二 RTL，本文维护者）、watercopper（黄金参考与测试数据，第 6 节需求单）、jianglibo（第 7 节模块三衔接）。
-> 什么时候读：接口对接与上板联调时；10/5 评审按 §3.3/§4 现行口径升格冻结契约（对齐 design_v1.md 的流程）。
-> 状态：**离板实现已收口（2026-10-02），接口待 10/5 评审冻结**。§3.1/§3.3/§4 为已实现口径，§5 未决项仅剩上板类。上游依据：`src/vision/README.md` 模块清单、`docs/proposal_upgrade.md` A 档任务、`docs/track_research.md` §1.4 Ultra-Vision 参考。
+> 什么时候读：接口对接与上板联调时；接口已按 §3.3/§4 冻结，变更须另立版本并回写契约。
+> 状态：**离板实现已收口（2026-10-02），接口已冻结（2026-10-05 评审）**。§3.1/§3.3/§4 为已实现口径，§5 未决项仅剩上板类。上游依据：`src/vision/README.md` 模块清单、`docs/research/proposal_upgrade.md` A 档任务、`docs/research/track_research.md` §1.4 Ultra-Vision 参考。
 
 ## 1. 目标与范围
 
@@ -159,14 +159,14 @@ R13–R15 仍保留。独立 axi_regs 默认旧模式，保留区行为兼容；
   - ✅ 逐像素延迟：tb_top 断言实测（窗口级 1 行结构滞后模型，metrics.csv 已填）
   - ⬜ 端到端帧延迟：需上板（OSD 帧计数/GPIO 打点，board/hardware.md §3.4 口径）
   - ✅ 资源：OOC utilization rpt 两批（unit/real/real75）
-- XSim 对拍口径沿用 Part B（`docs/partB-verify-plan.md` §6）：iverilog 全 PASS 后 XSim 复跑同判据。**✅ 已执行（2026-10-01 12/12；2026-10-02 全部 22 tb）**：一键入口 `bash sim/scripts/run_vision_xsim.sh all`，证据 `data/logs/2026-10-02-vision-offboard/xsim-recheck.log`。
+- XSim 对拍口径沿用 Part B（`docs/archive/partB-verify-plan.md` §6）：iverilog 全 PASS 后 XSim 复跑同判据。**✅ 已执行（2026-10-01 12/12；2026-10-02 全部 22 tb）**：一键入口 `bash sim/scripts/run_vision_xsim.sh all`，证据 `data/logs/2026-10-02-vision-offboard/xsim-recheck.log`。
 
 ## 7. 与模块三的衔接（给 jianglibo 的对齐点）
 
-- `scaler` 输出尺寸 = CNN 输入尺寸；输出侧先落**乒乓行组缓冲**（BRAM）再喂 `cop_top`，接口形态（简单 valid/de vs AXI-Stream）等 `src/coprocessor/` 契约定稿后回写本文。
+- `scaler` 输出尺寸 = CNN 输入尺寸；输出侧先落**乒乓行组缓冲**（BRAM）再喂 `cop_top`。C02/C03 已冻结，接口见 [docs/contracts/coprocessor-integration-v0.md](../../docs/contracts/coprocessor-integration-v0.md)；`cop_top` 尚未实现。
   **2026-10-01 预实现**：`cop_buf.v`（乒乓帧缓冲 + cop_ready 反压）已落地并通过双口径 tb——契约冻结时若接口形态不同，仅需改 cop_buf 读侧封装（存储与写侧不动）；M3 可参照 tb_cop_buf 的 vs/hs/de 消费时序设计。
 - A3 软/硬推理切换：PS 软件版与协处理器版同屏对比，依赖模块三暴露"推理完成"信号到 OSD 显示延迟数值。
-- 权重加载：训练侧产出 hex 的位宽/排布必须与 `cop_top` 权重存储一致——见 `docs/module3-model-training.md`，训练侧在拿到协处理器契约前先按"INT8、权重排布可参数化"准备。
+- 权重加载：训练侧产出 hex 的位宽/排布必须与 `cop_top` 权重存储一致——见 `docs/runbooks/module3-model-training.md`，训练侧在拿到协处理器契约前先按"INT8、权重排布可参数化"准备。
 
 ## 8. 变更记录
 
@@ -182,4 +182,4 @@ R13–R15 仍保留。独立 axi_regs 默认旧模式，保留区行为兼容；
 
 当前原 vision 位流仍沿用本文 pipe ABI。新候选在显示旁路增加原彩色 AXIS/VDMA S2MM 捕获及只读状态，不修改 R0–R12 参数语义；新增 capture_status@0x42000000/64KiB、capture_dma@0x43000000/64KiB，pipe@0x40000000/64KiB 保留。
 
-详细 CSR、错误/复位/跨域及 `stream_seq` 的边界见[捕获状态候选契约](../../docs/c01-capture-status-contract.md)。该序号仅证明像素握手几何完整，不能证明 DDR 帧写完成或帧槽所有权。PS 帧所有权、原帧颜色/动态图像验收和核/CNN 集成未完成；最终资源、时序及保留的 CDC 缺口见[实现基线](../../docs/c01-capture-implementation-baseline.md)。现有冻结接口和历史验收均不因候选生成而自动升级。
+详细 CSR、错误/复位/跨域及 `stream_seq` 的边界见[捕获状态候选契约](../../docs/contracts/c01-capture-status-contract.md)。该序号仅证明像素握手几何完整，不能证明 DDR 帧写完成或帧槽所有权。PS 帧所有权、原帧颜色/动态图像验收和核/CNN 集成未完成；最终资源、时序及保留的 CDC 缺口见[实现基线](../../docs/contracts/c01-capture-implementation-baseline.md)。现有冻结接口和历史验收均不因候选生成而自动升级。

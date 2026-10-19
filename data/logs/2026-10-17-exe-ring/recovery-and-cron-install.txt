@@ -1,0 +1,14 @@
+HOST_STARTED_UTC=2026-10-16T14:55:14.7018528Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'ip addr add 192.168.50.99/24 dev eth0 2>/dev/null; install -m 644 /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/pynq-live-cron /etc/cron.d/pynq-live && echo CRON_INSTALLED && cat /etc/cron.d/pynq-live; ip -br addr show eth0; source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u /home/xilinx/vision_m2/m2_onboard.py load && sleep 5 && python3 -u /home/xilinx/vision_m2/m2_onboard.py smoke && cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && nohup python3 -u park_live_server_v7.py --host 0.0.0.0 --port 8765 --root /home/xilinx/vision_m2/live-artifacts --order 2 2 2 --min-score 0.8 >> /home/xilinx/vision_m2/live-server.log 2>&1 & sleep 8; echo SERVER_RELAUNCHED; netstat -tln | grep 8765'
+sudo -n bash -c 'ip addr add 192.168.50.99/24 dev eth0 2>/dev/null; install -m 644 /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/pynq-live-cron /etc/cron.d/pynq-live && echo CRON_INSTALLED && cat /etc/cron.d/pynq-live; ip -br addr show eth0; source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u /home/xilinx/vision_m2/m2_onboard.py load && sleep 5 && python3 -u /home/xilinx/vision_m2/m2_onboard.py smoke && cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && nohup python3 -u park_live_server_v7.py --host 0.0.0.0 --port 8765 --root /home/xilinx/vision_m2/live-artifacts --order 2 2 2 --min-score 0.8 >> /home/xilinx/vision_m2/live-server.log 2>&1 & sleep 8; echo SERVER_RELAUNCHED; netstat -tln | grep 8765'; printf '\n__PYNQ_RC_9db8f5719abd449884e0f84fc0970523=%d\n' $?
+[?2004lCRON_INSTALLED
+@reboot root ip addr add 192.168.50.99/24 dev eth0
+@reboot root bash -c 'sleep 15; source /etc/profile.d/xrt_setup.sh; source /etc/profile.d/pynq_venv.sh; python3 -u /home/xilinx/vision_m2/m2_onboard.py load; sleep 3; python3 -u /home/xilinx/vision_m2/m2_onboard.py smoke || true'
+@reboot root bash -c 'sleep 25; source /etc/profile.d/xrt_setup.sh; source /etc/profile.d/pynq_venv.sh; cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && nohup python3 -u park_live_server_v7.py --host 0.0.0.0 --port 8765 --root /home/xilinx/vision_m2/live-artifacts --order 2 2 2 --min-score 0.8 >> /home/xilinx/vision_m2/live-server.log 2>&1 &'
+eth0             UP             169.254.87.99/16 192.168.2.99/24 192.168.50.99/24 fe80::a049:a7ff:fe76:2888/64 
+SERVER_RELAUNCHED
+
+__PYNQ_RC_9db8f5719abd449884e0f84fc0970523=1
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=1

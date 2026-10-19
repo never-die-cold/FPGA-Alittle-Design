@@ -1,0 +1,49 @@
+{
+  "run": "2026-10-17-exe-ring",
+  "generated_at": "2026-10-19T02:47:01.163136+00:00",
+  "policy": "restore=git blob; drop=canonical copy; keep/unique=stay",
+  "roots": [
+    "inputs/"
+  ],
+  "summary": {
+    "total": 4,
+    "restore": 0,
+    "keep": 0,
+    "drop": 0,
+    "unique": 4
+  },
+  "files": [
+    {
+      "path": "data/logs/2026-10-17-exe-ring/inputs/park_live_server.py",
+      "size": 10311,
+      "sha256": "fde5cb41cef82ae33168996cb19603b1f280ac88352ca651bac944304720d101",
+      "git_blob": "37103867e05f049c6fe2f467bc65f218019d25da",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-17-exe-ring/inputs/poll_latest.ps1",
+      "size": 325,
+      "sha256": "4bc8c918e6d98bedbf1cda9c13250bd2b8993431767670b93d23cb5928e2934a",
+      "git_blob": "bcd77736f1da07aba1c632cc334cec2be9ac954e",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-17-exe-ring/inputs/pynq-live-cron",
+      "size": 643,
+      "sha256": "9756af7fc968882a2792796203340345bcf307014ed89be47d0abc39866bcde0",
+      "git_blob": "3b06c952189545e26835fc2e9ab57b2bc2e908d7",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-17-exe-ring/inputs/test_park_live.ps1",
+      "size": 1032,
+      "sha256": "00939db4dbbd1b60854634bc98fd89c465057615900f7483c3b5439aaef9baf4",
+      "git_blob": "5af2784bffbea906f3bfed8a0479613e8444cedf",
+      "action": "unique",
+      "canonical": null
+    }
+  ]
+}

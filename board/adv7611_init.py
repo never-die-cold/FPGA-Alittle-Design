@@ -4,7 +4,7 @@
 """adv7611_init —— PYNQ-Z2 HDMI IN（ADV7611）I2C 初始化 + EDID（上板验线用，M2）
 
 状态：**骨架，上板验线时启用**。寄存器值表须对照 ADI 官方推荐脚本逐条核对后
-置 RUN=True（Ultra-Vision 同芯片先例：docs/track_research.md §1.4）。目标格式
+置 RUN=True（Ultra-Vision 同芯片先例：docs/research/track_research.md §1.4）。目标格式
 （决策单 D3 已拍板）：720p60 输入，RGB 444 24bit SDR 输出，DVI 模式（无 HDCP）。
 
 I2C 布局（8bit 写地址 -> 7bit）：

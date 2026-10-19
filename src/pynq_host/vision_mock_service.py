@@ -2,7 +2,7 @@
 
 默认绑定 127.0.0.1；--host 0.0.0.0 供 EXE 远程联调（服务托管在他机，如 Pi）时使用。
 mock 结果仅供界面联调，不代表板上识别（plan.md §3.4）。
-schema v1.1（docs/vision-sync-protocol-decisions.md）：POST /v1/check 触发一轮检查，
+schema v1.1（docs/contracts/vision-sync-protocol-decisions.md）：POST /v1/check 触发一轮检查，
 check_id 单调回绕；/v1/latest 保留为调试拉取口（帧号随轮询推进，携带当前 check_id）。
 
 --live 网络替身（W06，C04 §3.2）：模拟"服务正常 + 硬件已连接"的 LIVE 服务，

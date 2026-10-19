@@ -1,0 +1,16 @@
+HOST_STARTED_UTC=2026-10-16T15:03:03.7446887Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u /home/xilinx/vision_m2/m2_onboard.py load && (python3 -u /home/xilinx/vision_m2/m2_onboard.py smoke || echo SMOKE_SKIPPED_NOVIDEO)'
+sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u /home/xilinx/vision_m2/m2_onboard.py load && (python3 -u /home/xilinx/vision_m2/m2_onboard.py smoke || echo SMOKE_SKIPPED_NOVIDEO)'; printf '\n__PYNQ_RC_6935396c0c324d4b9dda011abb9dd96e=%d\n' $?
+[?2004lip_dict:
+  pipe @ 0x40000000 range 0x10000
+  ps7 @ 0x00000000 range 0x0
+axi_regs 段: pipe @ 0x40000000
+PASS: load
+R11 busy=0 R12 applied=0
+NOVIDEO: commit 未在帧首确认——寄存器通路 OK 但无输入视频（查 HDMI IN 源/线材）
+SMOKE_SKIPPED_NOVIDEO
+
+__PYNQ_RC_6935396c0c324d4b9dda011abb9dd96e=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

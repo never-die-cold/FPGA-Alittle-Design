@@ -1,0 +1,33 @@
+{
+  "run": "2026-10-15-c01-direct-capture-stage",
+  "generated_at": "2026-10-19T02:47:00.674303+00:00",
+  "policy": "restore=git blob; drop=canonical copy; keep/unique=stay",
+  "roots": [
+    "inputs/"
+  ],
+  "summary": {
+    "total": 2,
+    "restore": 0,
+    "keep": 0,
+    "drop": 0,
+    "unique": 2
+  },
+  "files": [
+    {
+      "path": "data/logs/2026-10-15-c01-direct-capture-stage/inputs/c01_sr_persistence.py",
+      "size": 3809,
+      "sha256": "b5c54e62f76a60852c0ca000fc121637d1fdf6bc9e98a5f6a6cc157fabf8f28e",
+      "git_blob": "cde77fce06a6a6e7fa9db20860e8e97ec0d8c0f3",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-c01-direct-capture-stage/inputs/c01_stage_direct.py",
+      "size": 5132,
+      "sha256": "ea9b7d5ada4dd21deaa9d459d2d8f0bd5ddb1593cea32e976211230ae4de6457",
+      "git_blob": "163eb1ba9a8b4374a20c1735dedfdcbc1e2f0b74",
+      "action": "unique",
+      "canonical": null
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+HOST_STARTED_UTC=2026-10-16T14:58:56.1581712Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=pgrep -af "park_live_serve[r]" && echo UP || echo DOWN; netstat -tln | grep 8765; tail -4 /home/xilinx/vision_m2/live-server.log
+pgrep -af "park_live_serve[r]" && echo UP || echo DOWN; netstat -tln | grep 8765; tail -4 /home/xilinx/vision_m2/live-server.log; printf '\n__PYNQ_RC_773be0001d96416d992ca94abaeb3bb1=%d\n' $?
+[?2004lDOWN
+  File "/usr/lib/python3.10/selectors.py", line 416 in select
+  File "/usr/lib/python3.10/socketserver.py", line 232 in serve_forever
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 216 in main
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 220 in <module>
+
+__PYNQ_RC_773be0001d96416d992ca94abaeb3bb1=0
+
+HOST_EXIT_CODE=0

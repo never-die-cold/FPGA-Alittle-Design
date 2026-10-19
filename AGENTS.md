@@ -46,6 +46,7 @@
 ## 三、参考入口
 
 - 详细清单：`docs/workflow.md`
+- 仓库卫生（生成物/日志/README/预算）：`docs/repo-hygiene.md`
 - 主计划与全局验收：根目录 `plan.md`
 - RISC-V 专项与核验收：`src/riscv/plan.md` §3.2 / §4.1
 - 接口契约：`src/riscv/design_v0.md`
