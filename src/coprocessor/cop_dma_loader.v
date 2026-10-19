@@ -41,7 +41,7 @@ module cop_dma_loader (
             expected_bytes<=0; busy_o<=0; done_o<=0; error_o<=0;
             short_o<=0; bytes_received_o<=0; crc_state<=32'hffff_ffff; crc32_o<=0;
         end else begin
-            done_o<=0;
+            done_o<=0; error_o<=0;
             if(start_i && !busy_o) begin
                 expected_bytes<=expected_bytes_i; bytes_received_o<=0;
                 busy_o<=expected_bytes_i!=0; error_o<=expected_bytes_i==0; short_o<=0;

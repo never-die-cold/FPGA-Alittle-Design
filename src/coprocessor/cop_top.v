@@ -49,6 +49,7 @@ module cop_top #(
     wire [11:0] core_offset,command_offset; wire [31:0] core_data,command_data;
     wire done_status,error_status,timeout_status,result_valid_status;
     wire cfg_valid,loader_done,loader_error,loader_short,dma_busy;
+    wire model_crc_error=loader_done && !load_kind && loader_crc32!=weight_crc32;
     wire start_command,task_ready,task_busy,task_done,task_error,task_timeout;
     wire engine_ready,engine_busy,engine_done,engine_error,engine_start;
     wire [2:0] engine_error_layer; wire [31:0] engine_cycles;
@@ -76,7 +77,8 @@ module cop_top #(
         .dst_data_o(command_data),.dst_done_i(command_done));
     cop_ctrl_regs regs(.clk(cop_clk),.rst_n(rst_n),.write_valid_i(command_valid),
         .write_offset_i(command_offset),.write_data_i(command_data),.task_busy_i(task_busy),
-        .task_done_i(task_done),.task_error_i(task_error),.task_timeout_i(task_timeout),
+        .task_done_i(task_done),.task_error_i(task_error || loader_error || model_crc_error),
+        .task_timeout_i(task_timeout),
         .ready_i(task_ready),.cfg_valid_i(cfg_valid),.model_valid_i(model_valid),
         .dma_busy_i(dma_busy),.irq_pending_i(irq_pending_i),.start_pulse_o(start_command),
         .write_done_o(command_done),.done_o(done_status),.error_o(error_status),

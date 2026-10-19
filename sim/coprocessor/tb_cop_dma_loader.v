@@ -19,7 +19,11 @@ module tb_cop_dma_loader;
         data=64'h0f0e0d0c0b0a0908; last=1; @(posedge clk); #1;
         valid=0; last=0; if(!done || busy || error || short || bytes!=16 || writes!=2 ||
             crc32!==32'hcecee288) $fatal(1);
-        $display("PASS: cop_dma_loader loads 16 bytes with backpressure and CRC32=cecee288"); $finish;
+        @(negedge clk); start=1; @(negedge clk); start=0; data=0; valid=1; last=1;
+        @(posedge clk); #1; valid=0; last=0;
+        if(!error || !short || busy || bytes!=8) $fatal(1);
+        @(posedge clk); #1; if(error) $fatal(1);
+        $display("PASS: cop_dma_loader normal/backpressure/CRC32 and short-packet error pulse"); $finish;
     end
     initial begin #2000; $fatal(1,"loader timeout"); end
 endmodule

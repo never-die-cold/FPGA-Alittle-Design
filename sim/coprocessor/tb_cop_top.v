@@ -104,7 +104,13 @@ module tb_cop_top;
         @(negedge core_clk); we=0; wait(!dut.mailbox_pending); repeat(2) @(posedge cop_clk);
         addr=32'h80010010; #1;
         if(!hit || starts!=1 || rdata[10] || !rdata[0] || rdata[2] || rdata[7]) $fatal(1);
-        $display("PASS: cop_top AXI config/read, J02 zero result window and DONE W1C smoke"); $finish;
+        @(negedge cop_clk); dma_kind=1; dma_start=1; @(negedge cop_clk); dma_start=0;
+        dma_valid=1; dma_last=1; @(posedge cop_clk); #1; dma_valid=0; dma_last=0;
+        @(posedge cop_clk); #1; if(!status[3]) $fatal(1);
+        @(negedge core_clk); addr=32'h8001000c; wdata=16; we=1;
+        @(negedge core_clk); we=0; wait(!dut.mailbox_pending); repeat(2) @(posedge cop_clk);
+        if(status[3]) $fatal(1);
+        $display("PASS: cop_top AXI/J02 result/W1C and DMA error smoke"); $finish;
     end
     initial begin #15000000; $display("TRACE starts=%0d pending=%b cfg=%b model=%b roi=%b busy=%b state=%0d",
         starts,dut.mailbox_pending,dut.cfg_valid,dut.model_valid,dut.roi_valid,dut.task_busy,dut.u_task.state);
