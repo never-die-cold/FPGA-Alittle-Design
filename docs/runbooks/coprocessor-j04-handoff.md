@@ -81,6 +81,8 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 | 各新增模块正常一笔 | 上述独立入口、退出码 0 | 冒烟 PASS |
 | 最小端到端 | `cop_top`：配置→载入→START→busy→DONE→结果→W1C | PASS |
 | 连续两笔任务不误完成 | `cop_top` 第二次 START 后 20 拍仍 `busy`/`WAIT_ENGINE`；去掉保护拍负向对照立即 FAIL | PASS |
+| AXI4-Lite 深测 | `axi_lite`：AW/W 同拍与 W 先到、B/R 背压不丢响应、写读 SLVERR、未完成时拒收第二笔、复位清 B/R | PASS |
+| 固件构建链自检 | `test_firmware_rules.sh`：`OBJDUMP=false` 必须让 make 非零退出且不改写 `.dis` | PASS |
 | J02 zero 黄金 | 9225 packed words/73795 elements；logits `04fd02` | 逐元素 PASS |
 | 协处理器集合 | `run_coprocessor_iverilog.sh all`，退出码 0 | PASS |
 | 默认关闭核回归 | `run_iverilog.sh soc`，first=13/1101，second=65/0001 | PASS |
@@ -93,7 +95,7 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 | 未验证项 | 接手人 | 手段 / PASS 判据 |
 |---|---|---|
 | 完整 CDC 相位、复位、连续任务扫描 | RTL 验证队友 | 扩展 mailbox/top TB；无丢单、撕裂、误 ACK，全部断言 PASS |
-| AXI AW/W 相位、B/R 背压、非法响应矩阵 | RTL 验证队友 | 扩展 `tb_cop_axi_lite_frontend.v`；协议 checker 零错误 |
+| AXI 多 outstanding、burst、跨 AXI 时钟域复位序列 | RTL 验证队友 | 现命名“单笔、无 burst”是有意约束；若要支持需先冻结契约再扩 TB |
 | payload 各 bank 物理地址适配与结果 DMA | SoC 集成队友 | 接真实 BRAM/DataMover；逐字节与 C02 payload/result 黄金一致 |
 | 全仓回归、四档 CoreMark、arch-test | 核验证队友 | `run_iverilog.sh all` 与规定矩阵退出 0，无历史回归退化 |
 | XSim、综合、实现、资源、WNS/Fmax、DRC、bitstream | NC/FPGA 队友 | Vivado 原始报告达冻结门槛，无 critical warning 漏审 |
@@ -132,8 +134,9 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
   影响 PS 驱动方式，不影响已测轮询流程。
 - **OPEN-6 FW_DECISION 布局**：固件暂用 `[31:16] seq/[15:8] reasons/[7:0] verdict`；默认仅由
   共用头文件读写，WC 冻结前禁止外部硬编码。影响 WC 协议解析。
-- **OPEN-7 AXI/CDC/综合深度**：只做正常一笔与关键拒绝冒烟；默认所有未覆盖情形均标
-  UNVERIFIED，不能外推 Vivado、100 MHz 或板端结论。
+- **OPEN-7 AXI/CDC/综合深度**：AXI 面已补 AW/W 乱序、B/R 背压、SLVERR 与复位用例；CDC 仍只有
+  单一相位与 pending 拒绝，综合/时序完全未做。未覆盖情形一律 UNVERIFIED，不能外推 Vivado、
+  100 MHz 或板端结论。
 - **OPEN-8 组合 RAM 读告警**：Icarus 对 shadow/result memory 报敏感列表告警；默认保留行为，
   不据此宣称 BRAM 推断。影响综合资源/时序，交给 Vivado 报告判定。
 - **OPEN-9 只读常量未实现**：`VERSION(0x004)`、`CAPABILITY(0x008)`、`ERROR_CODE(0x014)` 当前

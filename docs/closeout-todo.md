@@ -47,8 +47,8 @@
 - [ ] **B03 结果外搬**（OPEN-2）：`RESULT_ADDR` 结果 DMA，16×16 B 窗口与 DMA 内容互校。
 - [ ] **B04 SoC + 固件端到端**：`soc_top` 打开 `ENABLE_COP`，RISC-V 固件门禁（READY/CFG/MODEL/
       RESULT_SEQ）在真实总线上跑通；这是目前唯一没被行为验证过的固件路径。
-- [ ] **B05 CDC/AXI 深测**（OPEN-4/7）：异步相位、复位、pending 第二写、AW/W 排列、B/R 背压矩阵。
-      **可离板**，纯仿真。
+- [ ] **B05 CDC/AXI 深测**（OPEN-4/7）：AXI 面已补 AW/W 乱序、B/R 背压、SLVERR、单笔未完成与复位；
+      仍欠 **CDC 异步相位扫描、复位中途、payload 稳定性**。**可离板**，纯仿真。
 - [ ] **B06 综合/实现/时序/DRC/bitstream**：XSim 与 Vivado 原始报告入库，100 MHz 结论只认报告。
       **可离板**（Vivado 2026.1 本机已装），只有 bitstream 之后的板端环节需要板卡。
 - [ ] **B07 上板复验**：位流/固件/模型 SHA256 与源码锚定，NC 执行、JL 不代签。
