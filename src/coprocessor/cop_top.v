@@ -60,8 +60,17 @@ module cop_top #(
     reg [31:0] result_seq_sync1,result_seq_sync2; integer result_slot;
     wire [31:0] cfg_applied,model_id,weight_crc32,timeout_cycles,weight_bytes,dma_bytes,work_order;
     wire [31:0] loader_crc32;
-    wire ps_write_valid,ps_write_done,ps_write_error; wire [11:0] ps_write_offset,ps_read_offset;
+    wire ps_write_valid,ps_write_done,ps_write_error,config_write_done,config_write_error;
+    wire [11:0] ps_write_offset,ps_read_offset;
     wire [31:0] ps_write_data; wire [3:0] ps_write_strb; reg [31:0] ps_read_data; reg ps_read_error;
+    wire [31:0] config_read_data;
+    wire ps_ctrl_access=ps_write_offset==12'h00c || ps_write_offset==12'h06c;
+    wire ps_ctrl_allowed=(ps_write_offset==12'h00c && ps_write_strb[0] &&
+        |ps_write_data[2:1] && !(ps_write_data[0] || |ps_write_data[7:3])) ||
+        (ps_write_offset==12'h06c && ps_write_strb[0] && ps_write_data[7:4]==0);
+    wire ps_ctrl_valid=ps_write_valid && ps_ctrl_access && ps_ctrl_allowed && !command_valid;
+    assign ps_write_done=ps_ctrl_access ? ps_write_valid : config_write_done;
+    assign ps_write_error=ps_ctrl_access ? (!ps_ctrl_allowed || command_valid) : config_write_error;
     wire [4:0] roi_count; wire [7:0] min_margin; reg model_valid,roi_valid,load_kind;
     cop_core_mmio_gate #(.COP_BASE(COP_BASE)) gate(
         .addr_i(core_addr_i),.wdata_i(core_wdata_i),.status_i(status_o),.be_i(core_be_i),
@@ -76,8 +85,9 @@ module cop_top #(
         .src_valid_i(core_request),.src_offset_i(core_offset),.src_data_i(core_data),
         .src_pending_o(mailbox_pending),.dst_valid_o(command_valid),.dst_offset_o(command_offset),
         .dst_data_o(command_data),.dst_done_i(command_done));
-    cop_ctrl_regs regs(.clk(cop_clk),.rst_n(rst_n),.write_valid_i(command_valid),
-        .write_offset_i(command_offset),.write_data_i(command_data),.task_busy_i(task_busy),
+    cop_ctrl_regs regs(.clk(cop_clk),.rst_n(rst_n),.write_valid_i(command_valid || ps_ctrl_valid),
+        .write_offset_i(command_valid ? command_offset : ps_write_offset),
+        .write_data_i(command_valid ? command_data : ps_write_data),.task_busy_i(task_busy),
         .task_done_i(task_done),.task_error_i(task_error || loader_error || model_crc_error),
         .task_timeout_i(task_timeout),
         .ready_i(task_ready),.cfg_valid_i(cfg_valid),.model_valid_i(model_valid),
@@ -96,9 +106,11 @@ module cop_top #(
         .write_data_o(ps_write_data),.write_strb_o(ps_write_strb),.write_done_i(ps_write_done),
         .write_slverr_i(ps_write_error),.read_offset_o(ps_read_offset),.read_data_i(ps_read_data),
         .read_slverr_i(ps_read_error));
-    cop_config_regs u_config(.clk(cop_clk),.rst_n(rst_n),.write_valid_i(ps_write_valid),
+    cop_config_regs u_config(.clk(cop_clk),.rst_n(rst_n),
+        .write_valid_i(ps_write_valid && !ps_ctrl_access),
         .busy_i(task_busy),.write_offset_i(ps_write_offset),.write_data_i(ps_write_data),
-        .write_strb_i(ps_write_strb),.write_done_o(ps_write_done),.slverr_o(ps_write_error),
+        .write_strb_i(ps_write_strb),.read_offset_i(ps_read_offset),
+        .write_done_o(config_write_done),.slverr_o(config_write_error),.read_data_o(config_read_data),
         .cfg_valid_o(cfg_valid),.cfg_applied_o(cfg_applied),.model_id_o(model_id),
         .weight_crc32_o(weight_crc32),.work_order_o(work_order),
         .timeout_cycles_o(timeout_cycles),.weight_bytes_o(weight_bytes),.roi_count_o(roi_count),
@@ -107,16 +119,18 @@ module cop_top #(
         ps_read_error=0; ps_read_data=0;
         case(ps_read_offset)
             12'h000: ps_read_data=32'h434f5030; 12'h004: ps_read_data=0;
-            12'h010: ps_read_data=status_o; 12'h020: ps_read_data=cfg_applied;
-            12'h024: ps_read_data=model_id; 12'h02c: ps_read_data={27'd0,roi_count};
-            12'h030: ps_read_data=timeout_cycles; 12'h04c: ps_read_data=weight_bytes;
-            12'h064: ps_read_data={24'd0,min_margin}; 12'h06c: ps_read_data={28'd0,result_index_o};
+            12'h008: ps_read_data=0; 12'h010: ps_read_data=status_o; 12'h014: ps_read_data=0;
+            12'h018,12'h01c,12'h020,12'h024,12'h028,12'h02c,12'h030,12'h034,
+            12'h038,12'h03c,12'h040,12'h044,12'h048,12'h04c,12'h050,12'h054,
+            12'h058,12'h05c,12'h060,12'h064: ps_read_data=config_read_data;
+            12'h06c: ps_read_data={28'd0,result_index_o};
             12'h070: ps_read_data=result_mem[result_index_o][31:0];
             12'h074: ps_read_data={8'd0,result_mem[result_index_o][55:32]};
             12'h078: ps_read_data={8'd0,result_mem[result_index_o][63:56],
                 1'b0,result_mem[result_index_o][78:64]};
             12'h07c: ps_read_data=result_seq_o; 12'h080: ps_read_data=result_mem[result_index_o][127:96];
-            12'h084: ps_read_data=dma_bytes; default: ps_read_error=1;
+            12'h084: ps_read_data=dma_bytes; 12'h088: ps_read_data=fw_counts_o;
+            12'h08c: ps_read_data=fw_decision_o; default: ps_read_error=1;
         endcase
     end
     cop_dma_loader loader(.clk(cop_clk),.rst_n(rst_n),.start_i(dma_start_i),
