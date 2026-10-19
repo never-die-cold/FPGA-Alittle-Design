@@ -41,9 +41,10 @@ module cop_task_ctrl (
                     busy_o<=1; result_index_o<=0; count_snapshot<=roi_count_i; state<=LAUNCH;
                 end
                 LAUNCH: if(engine_ready_i) begin engine_start_o<=1; state<=WAIT_ENGINE; end
-                // 引擎的 done 会保持到下一次 start 才清零，发出 start 的那一拍仍可能读到上一笔的
-                // done；因此启动当拍不消费 done，避免新任务用旧结果瞬时“完成”。
-                WAIT_ENGINE: if(engine_error_i) begin
+                // 引擎的 done 与 error 都会保持到下一次 start 才清零：发出 start 的那一拍如果照读，
+                // done 会让新任务用旧结果瞬时“完成”，error 会让 W1C 后的重试被上一笔的错误直接误杀。
+                // 因此启动当拍既不消费 done，也不被 error 终止。
+                WAIT_ENGINE: if(engine_error_i && !engine_start_o) begin
                     busy_o<=0; error_pulse_o<=1; timeout_pulse_o<=engine_timeout_i; state<=IDLE;
                 end else if(engine_done_i && !engine_start_o) begin
                     result_write_o<=1; result_seq_o<=result_seq_o+1;

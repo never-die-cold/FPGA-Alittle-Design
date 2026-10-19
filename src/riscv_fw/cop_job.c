@@ -56,6 +56,9 @@ int main(void)
     order.expected[0]=(uint8_t)word; order.expected[1]=(uint8_t)(word>>8);
     order.expected[2]=(uint8_t)(word>>16); order.policy_max=(uint8_t)(word>>24);
 
+    /* C03 §8 要求“有效空场景 → CHECK_FAIL（actual 三零）”，但 v0 没有“本帧有效且零目标”的表达：
+       ROI_COUNT 只接受 1–16，0 分不清“未配置/无视频”和“有效空帧”。冻结前一律 RECHECK+CONFIG，
+       不得把 0 当有效空帧（OPEN-11）。 */
     if(count==0u || count>16u) {
         judged.reasons=COP_REASON_CONFIG; goto finish;
     }

@@ -56,6 +56,11 @@ make -C src/riscv_fw CROSS=riscv32-unknown-elf- PYTHON=python cop_job.hex cop_jo
 4. Windows 上用 `pwsh` 包 `bash.exe` 且把 stderr 并到 stdout 时，PowerShell 会把 iverilog 的
    `-Wall` 告警记成 `NativeCommandError`，使外层退出码变 1——**判据以脚本自身退出码为准**
    （本目录的 `.exit_code` 文件由脚本 `$?` 写入，不受该影响）。
+5. 独立审查指出：启动保护只挡了遗留 `done`，没挡遗留 `error`——上一笔超时/出错后 `engine.error`
+   保持到下一次 `start`，W1C 后重试会在第一拍被旧 `error` 误杀（任务层报错、引擎刚开始跑）。
+   已对称加保护；`tb_cop_task_ctrl` 增加“遗留 error 后重试仍能跑完”和“启动后真出错”两段，
+   负向对照去掉保护即 `$fatal`。同轮还修了 `windows-rerun.sh` 吞退出码、
+   `%.dis` 规则用管道掩盖 objdump 失败、以及 §2 指纹漏更新（Makefile 一项）。
 
 ## 4. 固件产物
 

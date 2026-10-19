@@ -36,7 +36,10 @@
 - [ ] **A07 PR 与基线**：PR [#86](https://github.com/never-die-cold/FPGA-Alittle-Design/pull/86) 已开，待评审合并；合并后在 `main` 打基线 tag 并回填本节。：`dev/riscv` → `main` 开 PR（不 force push），审完合并；合并后在
       `main` 打基线 tag，并把 tag 写进交接单 §2 锚点行。
 
-## B. 需要板卡（到货后按顺序做，不能跳）
+## B. 硬件与综合（不都需要板卡）
+
+> **B05/B06 现在就能做**：CDC/AXI 深测是纯仿真，综合/实现/时序/DRC 只要本机 Vivado（已装）。
+> 其余项才等板卡。
 
 - [ ] **B01 首个硬件网络**：J02 诊断权重在实体 BRAM 上跑通，结果对齐 `logits=04fd02 class=2 margin=2`。
 - [ ] **B02 payload 物理 bank 适配**（OPEN-1）：DataMover → 各 bank 的地址/位宽适配，真实
@@ -45,7 +48,9 @@
 - [ ] **B04 SoC + 固件端到端**：`soc_top` 打开 `ENABLE_COP`，RISC-V 固件门禁（READY/CFG/MODEL/
       RESULT_SEQ）在真实总线上跑通；这是目前唯一没被行为验证过的固件路径。
 - [ ] **B05 CDC/AXI 深测**（OPEN-4/7）：异步相位、复位、pending 第二写、AW/W 排列、B/R 背压矩阵。
+      **可离板**，纯仿真。
 - [ ] **B06 综合/实现/时序/DRC/bitstream**：XSim 与 Vivado 原始报告入库，100 MHz 结论只认报告。
+      **可离板**（Vivado 2026.1 本机已装），只有 bitstream 之后的板端环节需要板卡。
 - [ ] **B07 上板复验**：位流/固件/模型 SHA256 与源码锚定，NC 执行、JL 不代签。
 
 ## C. 需要真实数据与模型（数据到货后）

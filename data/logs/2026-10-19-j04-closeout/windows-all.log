@@ -10,12 +10,12 @@ PASS: cop_config_regs applies atomically and revokes CFG_VALID on new CFG_SEQ
 E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_config_regs.v:33: $finish called at 330000 (1ps)
 PASS: cop_dma_loader normal/backpressure/CRC32 and short-packet error pulse
 E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_dma_loader.v:26: $finish called at 96000 (1ps)
-PASS: cop_task_ctrl commits result, aborts and soft-resets
-E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_task_ctrl.v:33: $finish called at 136000 (1ps)
+PASS: cop_task_ctrl commits, aborts, soft-resets and ignores stale engine error
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_task_ctrl.v:49: $finish called at 266000 (1ps)
 PASS: cop_axi_lite_frontend one write response and one read response
 E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_axi_lite_frontend.v:23: $finish called at 75000 (1ps)
 make: 进入目录“/e/Projects/FPGA-Alittle-Design/src/riscv_fw”
-make: “cop_job.elf”已是最新。
+riscv32-unknown-elf-gcc -march=rv32i  -mabi=ilp32 -mcmodel=medany -mno-relax -O2 -Wall -Wextra -ffreestanding -nostdlib -nostartfiles -Wl,--build-id=none -T link.ld start.S cop_job.c -o cop_job.elf
 make: 离开目录“/e/Projects/FPGA-Alittle-Design/src/riscv_fw”
 PASS: cop work-order PASS/FAIL/RECHECK, low-confidence and 10/16 policy
 PASS: full diagnostic integer network golden {'pattern': {'class_id': 0, 'margin_q': 0, 'score_q15': 0, 'low_conf': True}, 'zero': {'class_id': 2, 'margin_q': 2, 'score_q15': 258, 'low_conf': True}}

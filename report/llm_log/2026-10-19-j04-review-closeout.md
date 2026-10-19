@@ -60,6 +60,22 @@
 - **适用范围**：换成 AXI-Stream 的 `tlast`、DMA 的 `done`、中断的 `irq` 同样成立。
   #skill候选
 
+
+## 7. 第二轮：独立审查（Codex desktop）与 R1–R5
+
+同一天另一位 reviewer 对 PR #86 做了静态审查，提出 5 条 P2。逐条核实后**全部成立**，修复如下：
+
+| 编号 | 问题 | 我的判断 | 处理 |
+|:---|:---|:---|:---|
+| R1 | 启动保护只挡遗留 `done`，没挡遗留 `error`：上一笔失败后 `engine.error` 保持，W1C 重试在第一拍被误杀 | 成立。这是 done 修复的对称缺口，我上一轮只想了 done | `WAIT_ENGINE` 的 error 分支同样加 `!engine_start_o`；TB 加“遗留 error 后重试”和“启动后真出错”两段；负向对照去掉保护即 `$fatal` |
+| R2 | `count==0` 直接 RECHECK+CONFIG，与 C03 §8“有效空场景 → CHECK_FAIL”冲突 | 成立，但 v0 没有“本帧有效且零目标”的表达，硬实现等于臆造契约 | 记 OPEN-11，并在 `cop_job.c` 就地注释，避免下一个人“顺手修错” |
+| R3 | `windows-rerun.sh` 吞掉被测命令的退出码 | 成立，是我写脚本时的疏忽 | `run()` 保存 rc 并累计 `failed`，末尾非零退出；从错误 cwd 跑实测退出 1 |
+| R4 | `%.dis` 把 objdump 输出直接接给 tr，无 pipefail 时 objdump 失败会被掩成空文件 | 成立，我为修 CRLF 引入了新风险 | 改成写临时文件再 tr 再删，每行由 make 检查退出码 |
+| R5 | 交接单“24 个文件匹配”实际是 23/24，Makefile 指纹漏更新 | 成立，我改完 Makefile 没有重算 | 重算 4 项（含 Makefile）并复核 24/24 |
+
+reviewer 还指出两处**文档说过头**：OPEN-3 写成“CFG_SEQ 不等立即撤销 MODEL/ROI”（实际是 COMMIT 时才清，
+`CFG_VALID` 才是立即为 0），OPEN-4 写成固件“以序号变化为提交点”（实际只比较读前读后相等）。
+两处都按 RTL 实际行为改写了。这提醒我：**给未完成项写「已实现」比给完成项写「未完成」更容易出错**。
 - 另一条工具链经验：Windows 下用 `pwsh` 包 `bash.exe` 且把 stderr 并到 stdout 时，
   PowerShell 会把 iverilog 的 `-Wall` 告警记成 `NativeCommandError`，让外层退出码变 1。
   **判据以脚本自身退出码为准**（把 `2>&1` 放进 bash 内部，或另写 `.exit_code` 文件）。 #skill候选

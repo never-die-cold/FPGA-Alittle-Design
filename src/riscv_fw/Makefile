@@ -71,7 +71,9 @@ coremark.elf: $(CM_SRCS) $(CM_LD)
 	$(PYTHON) bin2hex.py $< $@
 
 %.dis: %.elf
-	$(OBJDUMP) -d $< | tr -d '\r' > $@
+	$(OBJDUMP) -d $< > $@.tmp
+	tr -d '\r' < $@.tmp > $@
+	@rm -f $@.tmp
 
 clean:
 	-$(RM) $(TARGET).elf $(TARGET).bin $(TARGET).hex $(TARGET).dis $(V0_TARGET).elf $(V0_TARGET).bin $(V0_TARGET).hex $(V0_TARGET).dis $(TS_TARGET).elf $(TS_TARGET).bin $(TS_TARGET).hex $(TS_TARGET).dis $(SOC_TARGET).elf $(SOC_TARGET).bin $(SOC_TARGET).hex $(SOC_TARGET).dis $(BENCH_TARGET).elf $(BENCH_TARGET).bin $(BENCH_TARGET).hex $(BENCH_TARGET).dis coremark.elf coremark.bin coremark.hex coremark.dis

@@ -40,20 +40,20 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 65 caa57cc8bf0fe5ac442847adae18a793532d31c7af4fe47da7468f9f40e50874 src/coprocessor/cop_core_mmio_gate.v
 46 ae0e9a92b9010dbd6d7983012fa5d1458ea6cfbcdaec17e8402236136f6d5bba src/coprocessor/cop_ctrl_regs.v
 61 18db51c0fada9c8d15f42a9d57192b2d3a9a2a81073a2452d6447dcd7335bf28 src/coprocessor/cop_dma_loader.v
-57 7b3f856df20de31d788a296e26da5f61d119d071d1592b86ff22821b05f1c7a0 src/coprocessor/cop_task_ctrl.v
+58 8944b3dedc6ce93c157c4b43f9483ab407a68e82175de4377aafedcdc2af7cc3 src/coprocessor/cop_task_ctrl.v
 194 c5bc93aa605b403a29112a863ba8b0a74c31236881d35057e7c56841b30f4f95 src/coprocessor/cop_top.v
 147 071a4f197a4651b0da26645b46a65c166bccbacc77c88b2b4f21b4abce69a591 src/coprocessor/cnn_sequencer.v
 81 22f8b5d3e70bb51f135a0ae52b59879b14c5f90ce78ac70a1d878ae8682afe9b src/riscv/soc_top.v
-105 5543a19e9ac305895d2ea59605b15d06aa0c488f540b1cef31cd4ba6ea44f913 src/riscv_fw/cop_job.c
+108 4e8c6ffb06ed09ddc4659439424af99afd29a47a1a73eb9ff53f8fe14741b416 src/riscv_fw/cop_job.c
 35 1692bb7235424dfce0a3877256a910a16834f9411d21a133cc1c305f61d95ee6 src/riscv_fw/cop_work_order.h
-78 0e7708050fb5d5b1651594314c31311dbb5824eeb1bf277c97db6ed5b92dd042 src/riscv_fw/Makefile
+80 69883b46c317abbe4525c7f2c9d29b88c0e35fa21b285f56d9dcafb7929845cf src/riscv_fw/Makefile
 26 ed9fed691756d69a25ad823d41b1fdc31ac14393912248614288538e01f2ae2a sim/coprocessor/tb_cop_axi_lite_frontend.v
 34 66133a217901355f313e76369dca62e035790aa92e748a5e5625b10250090e2e sim/coprocessor/tb_cop_cdc_mailbox.v
 36 829424c336f1e1e638a7fd1fcb58785d0c0aaf4b0e705459e7b20ec85d817fab sim/coprocessor/tb_cop_config_regs.v
 49 50bfb8057e8f87eb90637ab61f0085e88a91a30107a24f789f1b6ef7500a2466 sim/coprocessor/tb_cop_core_mmio_gate.v
 59 208e21301510a4332b7e8afe8eaacedc77f1bb45dd0b0df3e019aeb672469980 sim/coprocessor/tb_cop_ctrl_regs.v
 29 1b57950f2165727cbdbe43172884aa9f4baf15ac7ebce3ff9dca9d58e2705cc2 sim/coprocessor/tb_cop_dma_loader.v
-36 a626c7abb2252d63bde764d818b18938f13f5a68b622a51346c46246a109959a sim/coprocessor/tb_cop_task_ctrl.v
+52 2c66478b7f327d9405bf03fd0dacc3ed3ae36c06f5a5dd6220f82e7f6c660ee5 sim/coprocessor/tb_cop_task_ctrl.v
 139 cc2eb17bc22a06494ac396969f2ba09cce5037b30cacb9e73b73648f4214faa4 sim/coprocessor/tb_cop_top.v
 163 a66ca4bbad1336f4ab7f2984fb634b92a7b62faec99b11d60a9d641f3c0623e5 sim/coprocessor/tb_cnn_sequencer.v
 19 cbd5a4cb478b01a8668e625602e3e327f2eba4b3c7ae1dcd45cc489f50786e9e sim/coprocessor/test_cop_work_order.c
@@ -67,7 +67,8 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 - `cop_config_regs`：PS 写 shadow，`CFG_COMMIT` 原子复制 applied；运行任务只读 START 时快照。
 - `cop_dma_loader`：valid/ready stream，按 keep 计数并计算 CRC32；短包、超长或 CRC 不符不得置对应 VALID。
 - `cop_task_ctrl`：按 target 顺序启动；16-byte 结果项最后提交；ABORT 回 IDLE，SOFT_RESET 清运行态。
-  引擎 `done` 会保持到下一次 `start` 才清零，因此发出 `start` 的那一拍不消费 `done`，避免新任务复用上一笔结果。
+  引擎 `done`/`error` 都会保持到下一次 `start` 才清零，因此发出 `start` 的那一拍既不消费 `done`
+  （避免复用上一笔结果），也不被 `error` 终止（避免 W1C 后的重试被上一笔错误误杀）。
 - `cop_ctrl_regs`：DONE/ERROR/RESULT_VALID 为 sticky；核写 `CLEAR_DONE/CLEAR_ERROR/CLEAR_RESULT_VALID` 执行 W1C。
 - `cop_axi_lite_frontend`：单 outstanding；AW/W 独立收集；后端完成才返回响应；不支持 burst。
 - `cop_top`：组装上述模块和现役 `cnn_sequencer`；PS 仅可发 ABORT/SOFT_RESET，不可发 START。
@@ -119,12 +120,14 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
   默认不宣称已写入实体 BRAM。影响模型装载、综合资源和实际推理。
 - **OPEN-2 结果外搬**：当前结果在本地 16×16-byte 窗口读回，尚未写 `RESULT_ADDR`；默认固件
   轮询窗口，不宣称结果 DMA 完成。影响 PS 大批量结果读取。
-- **OPEN-3 配置改变后的 VALID 撤销**：C03 未逐字段冻结撤销时点。JL 侧已按保守默认实现：
-  `CFG_SEQ != CFG_APPLIED` 立即撤销 `MODEL_VALID/ROI_VALID`，`CFG_COMMIT` 后必须重新装载才置位，
-  `CFG_VALID = (CFG_APPLIED==CFG_SEQ && fields_valid)`；`cop_config_regs`/`cop_top` 均有撤销用例。
-  仍需队友冻结撤销时点后才能依赖该行为。影响跨模型/ROI 重配置。
+- **OPEN-3 配置改变后的 VALID 撤销**：C03 未逐字段冻结撤销时点。JL 侧已按保守默认实现，实际行为是：
+  写 `CFG_SEQ` 后 `CFG_VALID` 立刻为 0（`CFG_APPLIED==CFG_SEQ && fields_valid` 组合逻辑），
+  但 `MODEL_VALID/ROI_VALID` 要到 `CFG_COMMIT` 那一拍才清；清掉后必须重新装载才置位。
+  `CFG_VALID=0` 已经挡住新任务启动，所以配置未提交时不会用旧 VALID 跑。仍需队友冻结撤销时点
+  后才能依赖“何时撤”的细节。影响跨模型/ROI 重配置。
 - **OPEN-4 返回路径 CDC**：命令邮箱按稳定 payload+toggle；状态/多位返回仅冒烟，未完成全相位
-  证明。默认固件轮询稳定两次并以 RESULT_SEQ 变化为提交点。影响极端相位可靠性。
+  证明。固件的实际做法是：读结果前后各读一次 `RESULT_SEQ` 并要求两次相等、`DONE`/`RESULT_VALID`
+  均置位；**没有**校验相对 START 前序号是否递增。影响极端相位可靠性。
 - **OPEN-5 IRQ/IRQ_ACK**：本轮未生成可签收的 PS IRQ 链；默认轮询 STATUS，不宣称中断可用。
   影响 PS 驱动方式，不影响已测轮询流程。
 - **OPEN-6 FW_DECISION 布局**：固件暂用 `[31:16] seq/[15:8] reasons/[7:0] verdict`；默认仅由
@@ -139,6 +142,10 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 - **OPEN-10 PS 空闲 ABORT**：`CTRL.ABORT` 未加 busy 门禁，空闲时写入会置 `STATUS.ERROR`
   但不产生任务错误脉冲，与 §3.1.1「非驻留拒绝」口径不一致；本轮保留该行为未改，服务停止流程
   需自行按 STATUS 判读。影响停止/恢复流程的错误计数。
+- **OPEN-11 有效空场景**：C03 §8 要求“有效空场景对非零工单为 `CHECK_FAIL`、actual 三类均为 0”，
+  但 v0 没有“本帧有效且零目标”的表达：`ROI_COUNT` 只接受 1–16，0 分不清“未配置/无视频”和
+  “有效空帧”。固件因此把 `count==0` 一律按 `RECHECK+CONFIG` 处理，**不把 0 当有效空帧**。
+  需要先冻结“空帧有效性”信号（寄存器或工单位）再实现。影响空工位/空盘场景的判定口径。
 
 每个 OPEN 的补测位置和 PASS 判据均在第 5/6 节给出；不得用“仿真冒烟 PASS”覆盖其状态。
 
