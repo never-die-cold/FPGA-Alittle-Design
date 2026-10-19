@@ -3,7 +3,7 @@
 // External ROI/ping/pong/parameter/weight banks: synchronous 1-cycle reads.
 // Banks share reset; model and ROI are immutable for the complete busy window.
 module cnn_sequencer (
-    input wire clk, rst_n, ce, start,
+    input wire clk, rst_n, ce, start, abort,
     input wire [7:0] min_margin,
     input wire [31:0] cycle_limit,
     output wire ready,
@@ -96,6 +96,8 @@ module cnn_sequencer (
             state<=IDLE; layer<=0; busy<=0; done<=0; error<=0; cycles<=0; error_layer<=0;
             limit<=0; limit_last<=0; margin_threshold<=0; gap_index<=0; gap_sums<=0; logits<=0;
             result_class<=3; result_margin<=0; result_score<=0; result_low_conf<=1; result_logits<=0;
+        end else if(abort) begin
+            state<=IDLE; layer<=0; busy<=0; done<=0; error<=0; cycles<=0; error_layer<=0;
         end else begin
             if(busy) cycles<=cycles+1;
             if(busy && cycles>=limit_last) begin busy<=0; done<=0; error<=1; error_layer<=7; state<=IDLE; end

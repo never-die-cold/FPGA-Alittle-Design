@@ -22,12 +22,14 @@ module cop_core_mmio_gate #(
     wire result_index_offset = addr_i[11:0] == 12'h06c;
     wire fw_counts_offset = addr_i[11:0] == 12'h088;
     wire fw_decision_offset = addr_i[11:0] == 12'h08c;
-    wire ctrl_bits_valid = (wdata_i & 32'hffff_ffe6) == 0;
-    wire ctrl_has_command = |(wdata_i & 32'h0000_0019);
+    wire ctrl_bits_valid = (wdata_i & 32'hffff_ffc0) == 0;
+    wire ctrl_has_command = |(wdata_i & 32'h0000_003f);
     wire start_allowed = !(wdata_i[0] && busy_i);
+    wire abort_allowed = !(wdata_i[1] && !busy_i);
 
     assign cop_hit_o = addr_i[31:12] == COP_BASE[31:12];
-    wire ctrl_write_valid = ctrl_offset && ctrl_bits_valid && ctrl_has_command && start_allowed;
+    wire ctrl_write_valid = ctrl_offset && ctrl_bits_valid && ctrl_has_command &&
+                            start_allowed && abort_allowed;
     wire data_write_valid = (result_index_offset && wdata_i <= 15) ||
                             fw_counts_offset || fw_decision_offset;
     assign write_request_o = cop_hit_o && aligned && we_i && be_i == 4'b1111

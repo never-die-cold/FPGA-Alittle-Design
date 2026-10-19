@@ -50,7 +50,8 @@ module cop_top #(
     wire done_status,error_status,timeout_status,result_valid_status;
     wire cfg_valid,loader_done,loader_error,loader_short,dma_busy;
     wire model_crc_error=loader_done && !load_kind && loader_crc32!=weight_crc32;
-    wire start_command,task_ready,task_busy,task_done,task_error,task_timeout;
+    wire start_command,abort_command,soft_reset_command;
+    wire task_ready,task_busy,task_done,task_error,task_timeout;
     wire engine_ready,engine_busy,engine_done,engine_error,engine_start;
     wire [2:0] engine_error_layer; wire [31:0] engine_cycles;
     wire [1:0] engine_class; wire [7:0] engine_margin;
@@ -81,6 +82,7 @@ module cop_top #(
         .task_timeout_i(task_timeout),
         .ready_i(task_ready),.cfg_valid_i(cfg_valid),.model_valid_i(model_valid),
         .dma_busy_i(dma_busy),.irq_pending_i(irq_pending_i),.start_pulse_o(start_command),
+        .abort_pulse_o(abort_command),.soft_reset_pulse_o(soft_reset_command),
         .write_done_o(command_done),.done_o(done_status),.error_o(error_status),
         .timeout_o(timeout_status),.result_valid_o(result_valid_status),.result_index_o(result_index_o),
         .fw_counts_o(fw_counts_o),.fw_decision_o(fw_decision_o),.status_o(status_o));
@@ -124,7 +126,8 @@ module cop_top #(
         .store_addr_o(store_addr_o),.store_data_o(store_data_o),.store_strb_o(store_strb_o),
         .busy_o(dma_busy),.done_o(loader_done),.error_o(loader_error),.short_o(loader_short),
         .bytes_received_o(dma_bytes),.crc32_o(loader_crc32));
-    cop_task_ctrl u_task(.clk(cop_clk),.rst_n(rst_n),.start_i(start_command),.cfg_valid_i(cfg_valid),
+    cop_task_ctrl u_task(.clk(cop_clk),.rst_n(rst_n),.start_i(start_command),
+        .abort_i(abort_command),.soft_reset_i(soft_reset_command),.cfg_valid_i(cfg_valid),
         .model_valid_i(model_valid),.roi_valid_i(roi_valid),.roi_count_i(roi_count),
         .engine_ready_i(engine_ready),.engine_done_i(engine_done),.engine_error_i(engine_error),
         .engine_timeout_i(engine_error && engine_error_layer==7),.target_id_i(target_id_i),
@@ -136,6 +139,7 @@ module cop_top #(
         .result_index_o(task_result_index_o),.result_seq_o(result_seq_o),.result_data_o(result_data_o));
     assign engine_start_o=engine_start;
     cnn_sequencer engine(.clk(cop_clk),.rst_n(rst_n),.ce(1'b1),.start(engine_start),
+        .abort(abort_command || soft_reset_command),
         .min_margin(min_margin),.cycle_limit(timeout_cycles),.ready(engine_ready),.busy(engine_busy),
         .done(engine_done),.error(engine_error),.error_layer(engine_error_layer),.cycles(engine_cycles),
         .result_class(engine_class),.result_margin(engine_margin),.result_score(engine_score),
@@ -154,7 +158,9 @@ module cop_top #(
             if(dma_start_i && !dma_busy) load_kind<=dma_kind_i;
             if(loader_done && !load_kind) model_valid<=loader_crc32==weight_crc32;
             if(loader_done && load_kind) roi_valid<=1;
-            if(result_write_o) result_mem[task_result_index_o]<=result_data_o;
+            if(soft_reset_command)
+                for(result_slot=0;result_slot<16;result_slot=result_slot+1) result_mem[result_slot]<=0;
+            else if(result_write_o) result_mem[task_result_index_o]<=result_data_o;
         end
     end
     always @(posedge core_clk or negedge rst_n) begin

@@ -7,7 +7,7 @@ module cop_ctrl_regs (
     input wire [31:0] write_data_i,
     input wire task_busy_i, task_done_i, task_error_i, task_timeout_i,
     input wire ready_i, cfg_valid_i, model_valid_i, dma_busy_i, irq_pending_i,
-    output reg start_pulse_o, write_done_o,
+    output reg start_pulse_o, abort_pulse_o, soft_reset_pulse_o, write_done_o,
     output reg done_o, error_o, timeout_o, result_valid_o,
     output reg [3:0] result_index_o,
     output reg [31:0] fw_counts_o, fw_decision_o,
@@ -18,15 +18,20 @@ module cop_ctrl_regs (
         ready_i && !task_busy_i};
     always @(posedge clk or negedge rst_n) begin
         if(!rst_n) begin
-            start_pulse_o<=0; write_done_o<=0; done_o<=0;
+            start_pulse_o<=0; abort_pulse_o<=0; soft_reset_pulse_o<=0; write_done_o<=0; done_o<=0;
             error_o<=0; timeout_o<=0; result_valid_o<=0;
             result_index_o<=0; fw_counts_o<=0; fw_decision_o<=0;
         end else begin
-            start_pulse_o<=0; write_done_o<=0;
+            start_pulse_o<=0; abort_pulse_o<=0; soft_reset_pulse_o<=0; write_done_o<=0;
             if(write_valid_i) begin
                 write_done_o<=1;
                 if(write_offset_i==12'h00c) begin
                     if(write_data_i[0]) start_pulse_o<=1;
+                    if(write_data_i[1]) begin abort_pulse_o<=1; error_o<=1; end
+                    if(write_data_i[2]) begin
+                        soft_reset_pulse_o<=1; done_o<=0; error_o<=0;
+                        timeout_o<=0; result_valid_o<=0;
+                    end
                     if(write_data_i[3]) begin done_o<=0; result_valid_o<=0; end
                     if(write_data_i[4]) begin error_o<=0; timeout_o<=0; end
                 end else if(write_offset_i==12'h06c) result_index_o<=write_data_i[3:0];

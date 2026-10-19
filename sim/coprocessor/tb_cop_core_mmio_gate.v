@@ -36,6 +36,8 @@ module tb_cop_core_mmio_gate;
         we=0; addr=32'h80010010; expect(1,0,32'h00000402);
         addr=32'h8001000c; expect(1,0,0);
         pending=0; we=1; wdata=32'h00000002; expect(1,0,0);
+        busy=1; expect(1,1,0); busy=0;
+        wdata=32'h00000040; expect(1,0,0);
         we=0; addr=32'h8001002c; expect(1,0,3);
         addr=32'h80010034; expect(1,0,32'h0a010101);
         we=1; addr=32'h8001000c;

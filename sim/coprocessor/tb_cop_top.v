@@ -110,7 +110,18 @@ module tb_cop_top;
         @(negedge core_clk); addr=32'h8001000c; wdata=16; we=1;
         @(negedge core_clk); we=0; wait(!dut.mailbox_pending); repeat(2) @(posedge cop_clk);
         if(status[3]) $fatal(1);
-        $display("PASS: cop_top AXI/J02 result/W1C and DMA error smoke"); $finish;
+        @(negedge core_clk); wdata=1; we=1; @(negedge core_clk); we=0;
+        wait(!dut.mailbox_pending); wait(dut.task_busy);
+        @(negedge core_clk); wdata=2; we=1; @(negedge core_clk); we=0;
+        wait(!dut.mailbox_pending); repeat(2) @(posedge cop_clk); #1;
+        if(dut.task_busy || !status[3]) begin
+            $display("FAIL abort busy=%b error=%b abort=%b task_error=%b state=%0d",
+                dut.task_busy,status[3],dut.abort_command,dut.task_error,dut.u_task.state); $fatal(1);
+        end
+        @(negedge core_clk); wdata=4; we=1; @(negedge core_clk); we=0;
+        wait(!dut.mailbox_pending); repeat(2) @(posedge cop_clk); #1;
+        if(status[4:2] || result_seq || !dut.model_valid) $fatal(1);
+        $display("PASS: cop_top AXI/J02 result, DMA error, ABORT and SOFT_RESET smoke"); $finish;
     end
     initial begin #15000000; $display("TRACE starts=%0d pending=%b cfg=%b model=%b roi=%b busy=%b state=%0d",
         starts,dut.mailbox_pending,dut.cfg_valid,dut.model_valid,dut.roi_valid,dut.task_busy,dut.u_task.state);

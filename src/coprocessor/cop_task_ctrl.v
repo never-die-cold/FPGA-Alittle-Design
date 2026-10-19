@@ -1,7 +1,8 @@
 `timescale 1ns/1ps
 // Per-target launcher and ordered 16-byte result committer.
 module cop_task_ctrl (
-    input wire clk, rst_n, start_i, cfg_valid_i, model_valid_i, roi_valid_i,
+    input wire clk, rst_n, start_i, abort_i, soft_reset_i,
+    input wire cfg_valid_i, model_valid_i, roi_valid_i,
     input wire [4:0] roi_count_i,
     input wire engine_ready_i, engine_done_i, engine_error_i, engine_timeout_i,
     input wire [15:0] target_id_i,
@@ -31,7 +32,11 @@ module cop_task_ctrl (
         end else begin
             done_pulse_o<=0; error_pulse_o<=0; timeout_pulse_o<=0;
             engine_start_o<=0; result_write_o<=0;
-            case(state)
+            if(soft_reset_i) begin
+                state<=IDLE; busy_o<=0; result_index_o<=0; result_seq_o<=0;
+            end else if(abort_i && busy_o) begin
+                state<=IDLE; busy_o<=0; error_pulse_o<=1;
+            end else case(state)
                 IDLE: if(start_i && ready_o && roi_count_i>=1 && roi_count_i<=16) begin
                     busy_o<=1; result_index_o<=0; count_snapshot<=roi_count_i; state<=LAUNCH;
                 end
