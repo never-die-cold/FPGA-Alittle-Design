@@ -127,6 +127,8 @@
 - 已实现并验证：核与最小 SoC 收口见[核报告](report/module1-closure.md)；25 个视觉 RTL tb、13 组视觉 Python 与 3 组 INT8 参考测试见[PR 整合证据](data/logs/2026-10-12-pr-review/README.md)。FILE/LIVE 原型、前端类别/工单展示、PROTOTYPE、记录 v2 与 CSV 已离板验证。当前未提交的构建输入审计将视觉 Python 扩至 14 组，见[离板证据](data/logs/2026-10-12-nc-offline/README.md)。
 - 已实现但验收缺口未闭环：原 vision 的 bit/hwh 与归档 XSA 配对，仍缺构建源码锚定；C01 候选有独立输入清单、构建日志和实机显示/状态诊断，DDR 取帧及完整长测/断源恢复未验收。原 8.14%／25% FAIL、组合 28.30% 均保留在历史记录。
 - 10/13 新增：CNN MAC/卷积寻址/bias/ReLU/requant/GAP/FC 与整网控制器、诊断整数黄金和参数校验；控制器 100 MHz OOC WNS=+0.058 ns、WHS=+0.049 ns、192 DSP，外部存储/SoC 未计入。DDR 单帧所有权适配通过七组离板异常测试，实测两次均在启动 DMA 前失败并恢复。[CNN证据](data/logs/2026-10-13-cnn-arithmetic/README.md)、[DDR证据](data/logs/2026-10-13-ddr-single-frame/README.md)。
+- 10/15–10/17 新增：五组离板独立复核（C01 入口替身 11 条路径、停机期粘滞错误位含桩覆盖、CNN 快批次与几何优化独立复跑一致、N03 包离板 SHA256/配对复算 6/6 OK）；EXE 环在真实网络接通——板端 park 采集后端 + numpy CNN 引擎装入 W05 LIVE 服务骨架，PC 经 192.168.50.99:8765 消费 v1.2 包，/v1/check 两轮 PASS（94–122 s，RECHECK 属实：场景未构图+触边+超限）；板端服务挂掉→OOM 探查→cron 自愈安装全程留档。[10-15证据](data/logs/2026-10-15-c01-entry-surrogate-step2/README.md)、[10-17证据](data/logs/2026-10-17-exe-ring/README.md)。
+- **M3（10/20）卡点报备（10/17，按 §3.4 提前说明）**：已通的是 prototype 六环（真实相机→park 采集→定位→板上 numpy CNN→判定→EXE，PS 过渡路径，一轮 2 分钟级，prototype=true）；**未实现**：C03 硬件 CNN（J02）接入、正式 INT8 模型/生产黄金、正式工位建成与定标采集（N04/N05 等拍摄环境，亚克力工位尚在概念稿阶段）、工业场景矩阵 N10–N12 实测。M3 的硬件闭环与实测项预计顺延；prototype 链按既有口径只作阶段成果，不入验收。裁决与降级范围由 owner 定。
 - 未实现／未接入：正式 INT8 模型/生产黄金、实体缓存与 CNN MMIO/DMA、首网板端输出、custom DDR 完整取帧实测、核工业固件、真实硬件 LIVE 后端及整机发布验收。10/12[文档核对清单](docs/implementation-document-audit-2026-10-12.md)是历史盘点，新实现以上述10/13证据为准。
 
 ### 3.2 交付看板
@@ -222,6 +224,7 @@
 
 | 日期 | 变更 |
 |:---|:---|
+| 2026-10-17 | 归档 10-15 五组离板独立复核与 10-17 EXE 环 LIVE 接通/服务自愈证据、工位概念稿；按 §3.4 报备 M3 卡点（拍摄环境与硬件 CNN 缺口，prototype 链不入验收） |
 | 2026-10-12 | 按合并源码、C02/C03 与三人执行清单校正测试数量、软件实现、接口/ROI方案、责任分工及原 vision/C01 证据边界；保持 M2 未通过 |
 | 2026-10-10 | 接收外包视觉包并保留原文，补充受控工位、单张稳定检查、PS 定位/ROI 评审和 FP32→PTQ→必要时 QAT 路线；不视为板端验收 |
 | 2026-09-10 | 从早期计划草稿整理出执行计划 |

@@ -1,0 +1,12 @@
+### runner-inputs.json（冻结三件套）
+OK       repo     c01_capture.py 
+OK       retained c01_capture.py 
+MISMATCH repo     c01_ddr_onboard.py expected=E822A70800A923CCDB3CE45496E71342B032035389DBA935D6FAC6F09EDD5646
+OK       retained c01_ddr_onboard.py 
+OK       repo     c01_status_onboard.py 
+OK       retained c01_status_onboard.py 
+
+### candidate-artifacts.json
+OK       .bit capture-1791713720540454.bit 
+OK       .hwh capture-1791713720540454.hwh 
+OK       .xsa capture-1791713720540454.xsa 

@@ -1,0 +1,3 @@
+PASS: cnn_sequencer E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/network-vectors/pattern all 9225 packed words/73795 elements match integer network; logits=01fd01 class=0 margin=0 cycles=1123109
+PASS: cnn_sequencer invalid parameters/watchdog/reset/invalid GAP and successful fresh run; no false DONE
+sim/coprocessor/tb_cnn_sequencer.v:136: $finish called at 33645786000 (1ps)

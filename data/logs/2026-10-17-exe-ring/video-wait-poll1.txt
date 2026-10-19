@@ -1,0 +1,17 @@
+HOST_STARTED_UTC=2026-10-16T15:08:22.1207805Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u /home/xilinx/vision_m2/m2_onboard.py smoke'
+sudo -n bash -c 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u /home/xilinx/vision_m2/m2_onboard.py smoke'; printf '\n__PYNQ_RC_abafbd6c77b349088ce2b1207c3422f9=%d\n' $?
+[?2004lR11 busy=1 R12 applied=0
+Traceback (most recent call last):
+  File "/home/xilinx/vision_m2/m2_onboard.py", line 86, in <module>
+    cmds[sys.argv[1]]()
+  File "/home/xilinx/vision_m2/m2_onboard.py", line 62, in cmd_smoke
+    cfg = v.commit(timeout=1.0)
+  File "/home/xilinx/vision_m2/vision_regs.py", line 101, in commit
+    raise RuntimeError("configuration commit is busy")
+RuntimeError: configuration commit is busy
+
+__PYNQ_RC_abafbd6c77b349088ce2b1207c3422f9=1
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=1
