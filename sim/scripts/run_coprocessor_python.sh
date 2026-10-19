@@ -20,6 +20,7 @@ case "${1:-all}" in
     result) run_test result ;;
     model_schema) run_test model_schema ;;
     model_trace) run_test model_trace ;;
-    all) run_test primitives; run_test tensors; run_test conv; run_test network; run_test conv_layer; run_test gap_fc; run_test result; run_test model_schema; run_test model_trace ;;
-    *) echo "usage: $0 [primitives|tensors|conv|network|conv_layer|gap_fc|result|model_schema|model_trace|all]" >&2; exit 2 ;;
+    manifests) run_test manifests ;;
+    all) run_test primitives; run_test tensors; run_test conv; run_test network; run_test conv_layer; run_test gap_fc; run_test result; run_test model_schema; run_test model_trace; run_test manifests ;;
+    *) echo "usage: $0 [primitives|tensors|conv|network|conv_layer|gap_fc|result|model_schema|model_trace|manifests|all]" >&2; exit 2 ;;
 esac

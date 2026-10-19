@@ -30,3 +30,9 @@ data/logs/2026-10-07-pi-pynq/*.log -whitespace
 
 # NumPy assertion output preserves the original trailing space after its colon.
 data/logs/2026-10-10-model-reference/numpy-parity-before.log -whitespace
+
+# Raw run logs are evidence: preserve original bytes and skip whitespace checks.
+# Markdown run indexes/READMEs remain normal LF text.
+data/logs/** -text -whitespace
+data/logs/**/*.md text eol=lf whitespace
+data/logs/README.md text eol=lf whitespace

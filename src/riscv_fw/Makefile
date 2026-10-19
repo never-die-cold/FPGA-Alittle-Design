@@ -30,6 +30,8 @@ SOC_TARGET := soc_check
 SOC_SRCS   := start.S soc_check.c
 BENCH_TARGET := bench_v0_1
 BENCH_SRCS   := start.S bench_v0_1.c
+COP_TARGET := cop_job
+COP_SRCS   := start.S cop_job.c
 
 ifeq ($(OS),Windows_NT)
 RM := del /q
@@ -54,6 +56,9 @@ $(SOC_TARGET).elf: $(SOC_SRCS) link.ld
 
 $(BENCH_TARGET).elf: $(BENCH_SRCS) link.ld
 	$(CC) $(ARCH_IM) $(COMMON) -T link.ld $(BENCH_SRCS) -o $@
+
+$(COP_TARGET).elf: $(COP_SRCS) cop_work_order.h link.ld
+	$(CC) $(ARCH_I) $(COMMON) -T link.ld $(COP_SRCS) -o $@
 
 coremark.elf: $(CM_SRCS) $(CM_LD)
 	$(CC) $(ARCH_IM) $(COMMON) $(CM_FLAGS) -T $(CM_LD) $(CM_SRCS) -o $@

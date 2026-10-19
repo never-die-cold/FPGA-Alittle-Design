@@ -35,8 +35,10 @@
 #   bash sim/scripts/run_iverilog.sh bench_fwd|bench_nofwd|bench_bht1|bench_bht2 # benchmark 四档
 #   bash sim/scripts/run_iverilog.sh vision [单项|all] # 视觉专项；all 含核与视觉
 #   bash sim/scripts/run_iverilog.sh vision_gate # 视觉回归失败门禁自检
+#   bash sim/scripts/run_iverilog.sh cop_mac_lane # CNN INT8 单路有符号乘法诊断
+#   bash sim/scripts/run_iverilog.sh cop_dot8 # CNN INT8 8-lane 加法树诊断
 #   bash sim/scripts/run_iverilog.sh cop_mac # CNN INT8 乘加原语；Verilog-2001
-#   bash sim/scripts/run_iverilog.sh coprocessor [all|pipeline|conv|network] # CNN 算子/全网逐元素对拍
+#   bash sim/scripts/run_iverilog.sh coprocessor [mac_lane|dot8|mac|array|requant|gap|logits|pipeline|conv|network|watchdog|all]
 # 前置：PATH 中含 iverilog / vvp；原验收 13.0，本轮 Linux 11.0 结果另记
 set -u
 
@@ -44,6 +46,8 @@ MODE="${1:-all}"
 IVERILOG_ARGS=()
 
 case "$MODE" in
+    cop_mac_lane) exec bash "$(dirname "$0")/run_coprocessor_iverilog.sh" mac_lane ;;
+    cop_dot8) exec bash "$(dirname "$0")/run_coprocessor_iverilog.sh" dot8 ;;
     cop_mac) exec bash "$(dirname "$0")/run_coprocessor_iverilog.sh" mac ;;
     cop_array) exec bash "$(dirname "$0")/run_coprocessor_iverilog.sh" array ;;
     coprocessor) exec bash "$(dirname "$0")/run_coprocessor_iverilog.sh" "${2:-all}" ;;
@@ -90,7 +94,7 @@ case "$MODE" in
     bench_bht1) TBS=(riscv/tb_core_coremark.v); IVERILOG_ARGS=(-Ptb_core_coremark.ENABLE_FORWARDING=1 -Ptb_core_coremark.BHT_MODE=1) ;;
     bench_bht2) TBS=(riscv/tb_core_coremark.v); IVERILOG_ARGS=(-Ptb_core_coremark.ENABLE_FORWARDING=1 -Ptb_core_coremark.BHT_MODE=2) ;;
     all) TBS=(riscv/tb_imem.v riscv/tb_dmem.v riscv/tb_pynq_z2_clock_config.v riscv/tb_core_smoke.v riscv/tb_core_test.v riscv/tb_core_v1_mem.v riscv/tb_core_fwd.v riscv/tb_decode.v riscv/tb_forwarding.v riscv/tb_hazard.v riscv/tb_branch_predict.v riscv/tb_core_pc_control.v riscv/tb_if_stage.v riscv/tb_core_bht_flow.v riscv/tb_mem_wb_stage.v riscv/tb_id_ex_stage.v riscv/tb_muldiv.v riscv/tb_core_muldiv.v riscv/tb_soc_top.v riscv/tb_soc_check.v) ;;
-    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|v1_fwd|v1_nofwd|v1_fwd_bht1|v1_fwd_bht2|v1_hazard_fwd|v1_hazard_nofwd|v1_muldiv_fwd|v1_muldiv_nofwd|decode|forwarding|hazard|branch_predict|pc_control|if_stage|bht_flow_off|bht_flow_1|bht_flow_2|mem_wb|id_ex|v1_flow|v1_mem|v1_muldiv_flow|muldiv|rv32im|imem|dmem|clock_cfg|coremark|coremark_fwd|coremark_nofwd|soc|soc_check|bench|bench_fwd|bench_nofwd|bench_bht1|bench_bht2|vision [单项或all]|vision_gate|vision_python|all]"; exit 1 ;;
+    *)   echo "用法: bash sim/scripts/run_iverilog.sh [v0|fwd|v1_fwd|v1_nofwd|v1_fwd_bht1|v1_fwd_bht2|v1_hazard_fwd|v1_hazard_nofwd|v1_muldiv_fwd|v1_muldiv_nofwd|decode|forwarding|hazard|branch_predict|pc_control|if_stage|bht_flow_off|bht_flow_1|bht_flow_2|mem_wb|id_ex|v1_flow|v1_mem|v1_muldiv_flow|muldiv|rv32im|imem|dmem|clock_cfg|coremark|coremark_fwd|coremark_nofwd|soc|soc_check|bench|bench_fwd|bench_nofwd|bench_bht1|bench_bht2|cop_mac_lane|cop_dot8|cop_mac|cop_array|coprocessor [单项或all]|vision [单项或all]|vision_gate|vision_python|all]"; exit 1 ;;
 esac
 
 cd "$(dirname "$0")/.."          # -> sim/

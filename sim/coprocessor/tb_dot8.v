@@ -41,6 +41,9 @@ module tb_dot8;
         for (lane = 0; lane < 8; lane = lane + 1)
             set_lane(lane, 8'h80, 8'h80);
         check_sum(19'sd131072);
+        for (lane = 0; lane < 8; lane = lane + 1)
+            set_lane(lane, 8'h80, 8'sd127);
+        check_sum(-19'sd130048);
         set_lane(0, 8'sd1, 8'sd1);     set_lane(1, -8'sd2, 8'sd3);
         set_lane(2, 8'sd4, -8'sd5);    set_lane(3, -8'sd6, -8'sd7);
         set_lane(4, 8'sd8, 8'sd9);     set_lane(5, -8'sd10, 8'sd11);

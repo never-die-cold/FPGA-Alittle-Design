@@ -31,7 +31,7 @@
 |:---|:---|:---|:---|
 | 模块一 | RISC-V 核＋最小 SoC | jianglibo | 已完成收口。[核收口报告](../report/module1-closure.md) |
 | 模块二 | HDMI 视觉预处理 RTL＋已验证视频链路 | never-die-cold | 已完成（RTL／链路级）。[视频记录](../data/logs/2026-10-03-vision-onboard/README.md)、[真实相机记录](../data/logs/2026-10-07-pi-pynq/README.md) |
-| 模块三 | INT8 CNN 推理协处理器 | jianglibo | C02/C03 已冻结；算子/整网控制器 RTL、诊断整数黄金已验证；实体缓存/MMIO/DMA、核接入和正式模型未实现 |
+| 模块三 | INT8 CNN 推理协处理器 | jianglibo | C02/C03 已冻结；J02/J03 算子/整网、J04 控制面与固件已离板验证；实体 BRAM/SoC/视频集成、正式模型与板端输出未验收 |
 | EXE 前端 | 视频/轮次、LIVE 展示、记录与回放 | watercopper | 类别/分数/工单横幅、来源标识、记录 v2 与 CSV 已离板验证；真实硬件闭环与目标机发布未验收 |
 
 里程碑：M1（10/4）核验收；M2（10/12）预处理 + 首个网络 + EXE 原型；
@@ -54,7 +54,7 @@ M3（10/20）工业闭环；M4（10/26）材料收口；11/4 提交。
 ## 3. RTL 代码组成
 
 RTL 有两棵树，加一处预留。核树在 `src/riscv/`，视觉树在 `src/vision/`。
-`src/coprocessor/` 已有冻结的 C02 文档、INT8 标量/张量/卷积软件参考，以及 MAC/卷积/requant/GAP/FC 与整网控制器 RTL；**没有 `cop_top` 顶层、实体缓存、MMIO/DMA 或核接入**。旧图中的行数和实现标记只对应历史快照。
+`src/coprocessor/` 已有冻结的 C02 文档、INT8 标量/张量/卷积软件参考，以及 MAC/卷积/requant/GAP/FC、整网控制器和 J04 控制面 RTL（`cop_top`/MMIO/CDC/DMA/工单固件）；**实体 BRAM 生产地址适配、SoC/视频/板端集成尚未验收**。旧图中的行数和实现标记只对应历史快照。
 
 ![图 2 RTL 组成树](img/fig2_rtl_tree.png)
 
@@ -213,7 +213,7 @@ PS 的配置时钟和像素时钟异步。直接写寄存器会撕裂配置。�
 ## 7. 验证体系
 
 全量功能回归入口：`bash sim/scripts/run_iverilog.sh all`；arch-test、XSim 与 Vivado 另有专项入口。
-它覆盖核 tb、四档 CoreMark/benchmark、门禁自检、25 个视觉 tb 和 Python 检查。视觉 Python 当前 **21 组**，检查链 **14 组**，INT8 参考 **9 组**（均以 `sim/scripts` 的脚本列表为准）；历史全量结果与当前定向回归分别留痕。门禁故意注入的 FAIL 由自检判据处理，真正测试失败使整体失败。
+它覆盖核 tb、四档 CoreMark/benchmark、门禁自检、25 个视觉 tb 和 Python 检查。视觉 Python 当前 **21 组**，检查链 **14 组**，INT8 参考 **10 组**（均以 `sim/scripts` 的脚本列表为准）；历史全量结果与当前定向回归分别留痕。门禁故意注入的 FAIL 由自检判据处理，真正测试失败使整体失败。
 
 - 每个视觉单元都有黄金参考。Python 生成输入和期望，tb 逐像素比对。数据在 `data/golden/vision/`。
 - iverilog 全 PASS 后，XSim 用同一判据复跑（`bash sim/scripts/run_vision_xsim.sh all`）。
@@ -222,7 +222,7 @@ PS 的配置时钟和像素时钟异步。直接写寄存器会撕裂配置。�
 
 ## 8. 未实现清单（明确标注）
 
-- `cop_top`（CNN 协处理器顶层）未实现；C02/C03 已冻结，MAC/卷积/requant/GAP/FC 与整网控制器 RTL、诊断整数黄金已有；实体缓存、MMIO/DMA、核接入与正式模型未实现。
+- J04 控制面/`cop_top`/MMIO/CDC/DMA/工单固件已离板验证；**实体 BRAM 生产地址适配、SoC/视频集成与板端输出未验收**。正式 INT8 模型/整网黄金仍缺。
 - 实际定位部署与逐目标推理：未实现；ARM／Python 定位和裁剪参考已有验证，不等于实时板端部署。
 - 正式紧固件数据集与模型：未完成。采集规程已入库。
 - 核侧工业检查固件未实现；PS 文件检查的候选工单规则已实现，不等于核侧判定。
@@ -249,7 +249,7 @@ bash sim/scripts/run_iverilog.sh all          # 全量回归（核四档 + 视�
 bash sim/scripts/run_vision_xsim.sh all       # XSim 同判据复跑
 bash sim/scripts/run_vision_python.sh        # 21组；VISION_PYTHON可指定真实解释器
 bash sim/scripts/run_inspection_python.sh     # 14组检查链
-bash sim/scripts/run_coprocessor_python.sh all # 9组INT8参考，需python3与NumPy
+bash sim/scripts/run_coprocessor_python.sh all # 10组INT8参考（含 manifests），需python3与NumPy
 ```
 
 ## 自测题（理解门槛演练）
@@ -262,6 +262,7 @@ bash sim/scripts/run_coprocessor_python.sh all # 9组INT8参考，需python3与N
 
 | 日期 | 变更 |
 |:---|:---|
-| 2026-10-19 | 按脚本校正 Python 组数（视觉 21 / 检查链 14 / INT8 9），校正模块三 RTL 现状（算子/控制器已有，顶层/MMIO/DMA/核接入未实现）；历史配图保持原样 |
+| 2026-10-19 | 合并 dev/riscv：J04 控制面/`cop_top`/MMIO/CDC/DMA/工单固件纳入现状；INT8 入口更新为 10 组；实体 BRAM/SoC/视频/板端输出仍未验收 |
+| 2026-10-19 | 按脚本校正 Python 组数（视觉 21 / 检查链 14 / INT8 9），校正模块三 RTL 现状；历史配图保持原样 |
 | 2026-10-12 | 校正25 tb、捕获旁路、C02/C03、软件参考/服务/EXE实现及验收边界；历史配图保持原样 |
 | 2026-10-09 | B02：同步三层状态与证据、当前核/转发/BHT 说明及 23 tb 入口；配图保留历史快照，未重绘。 |

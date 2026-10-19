@@ -124,7 +124,7 @@
 
 ### 3.1 当前状态
 
-- 已实现并验证（历史证据口径）：核与最小 SoC 收口见[核报告](report/module1-closure.md)；25 个视觉 RTL tb、13 组视觉 Python 与 3 组 INT8 参考测试见[PR 整合证据](data/logs/2026-10-12-pr-review/README.md)。FILE/LIVE 原型、前端类别/工单展示、PROTOTYPE、记录 v2 与 CSV 已离板验证。当前脚本入口为 **21 组视觉 Python、14 组检查链、9 组 INT8**（以 `sim/scripts` 为准）；10/12 的 14 组离板记录见[离板证据](data/logs/2026-10-12-nc-offline/README.md)，不覆盖后来新增组。
+- 已实现并验证（历史证据口径）：核与最小 SoC 收口见[核报告](report/module1-closure.md)；25 个视觉 RTL tb、13 组视觉 Python 与 3 组 INT8 参考测试见[PR 整合证据](data/logs/2026-10-12-pr-review/README.md)。FILE/LIVE 原型、前端类别/工单展示、PROTOTYPE、记录 v2 与 CSV 已离板验证。当前脚本入口为 **21 组视觉 Python、14 组检查链、10 组 INT8**（以 `sim/scripts` 为准）；10/12 的 14 组离板记录见[离板证据](data/logs/2026-10-12-nc-offline/README.md)，不覆盖后来新增组。
 - 已实现但验收缺口未闭环：原 vision 的 bit/hwh 与归档 XSA 配对，仍缺构建源码锚定；C01 候选有独立输入清单、构建日志和实机显示/状态诊断，DDR 取帧及完整长测/断源恢复未验收。原 8.14%／25% FAIL、组合 28.30% 均保留在历史记录。
 - 10/13 新增：CNN MAC/卷积寻址/bias/ReLU/requant/GAP/FC 与整网控制器、诊断整数黄金和参数校验；控制器 100 MHz OOC WNS=+0.058 ns、WHS=+0.049 ns、192 DSP，外部存储/SoC 未计入。DDR 单帧所有权适配通过七组离板异常测试，实测两次均在启动 DMA 前失败并恢复。[CNN证据](data/logs/2026-10-13-cnn-arithmetic/README.md)、[DDR证据](data/logs/2026-10-13-ddr-single-frame/README.md)。
 - 10/15–10/17 新增：五组离板独立复核（C01 入口替身 11 条路径、停机期粘滞错误位含桩覆盖、CNN 快批次与几何优化独立复跑一致、N03 包离板 SHA256/配对复算 6/6 OK）；EXE 环在真实网络接通——板端 park 采集后端 + numpy CNN 引擎装入 W05 LIVE 服务骨架，PC 经 192.168.50.99:8765 消费 v1.2 包，/v1/check 两轮 PASS（94–122 s，RECHECK 属实：场景未构图+触边+超限）；板端服务挂掉→OOM 探查→cron 自愈安装全程留档。[10-15证据](data/logs/2026-10-15-c01-entry-surrogate-step2/README.md)、[10-17证据](data/logs/2026-10-17-exe-ring/README.md)。

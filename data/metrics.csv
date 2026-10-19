@@ -28,6 +28,8 @@ PicoRV32 对照 LUT / Fmax（同器件同工具 OOC）,对比实现(OOC；频率
 端到端帧延迟（采集→OSD 显示）,,,,,,
 演示动效帧率（OSD/调参面板）,,,,,,
 CNN 推理单帧耗时 / 能效,,,,,,
+CNN 诊断整网控制周期,协处理器仿真,472593,cycles,Icarus；诊断参数；每7个CE拍停1拍；Conv1–4→GAP→FC逐元素匹配；不含MMIO/DMA/SoC且不是板端延迟,2组输入各1次；每组73795个有效元素,data/logs/2026-10-15-improvements-fast/README.md
+CNN 控制器 OOC 资源与100MHz时序,协处理器实现(OOC),DSP136 / LUT4540 / FF4037 / BRAM0 / WNS+0.317 / WHS+0.123,个 / ns,Vivado2026.1；xc7z020clg400-1；10ns；只含控制器与算术链；无实体BRAM/DMA/SoC/视频且不代表整机时序,1个约束点,data/logs/2026-10-15-improvements-fast/README.md
 资源占用（LUT/FF/BRAM/DSP）,核级实现(OOC),LUT 1606 / FF 401 / BRAM 0 / DSP 0,个,Vivado 2026.1；xc7z020clg400-1；v0 RV32IM 两级流水核 post-route；OOC 无 I/O 约束,1 次（2026-09-28 重综合）,build/reports/utilization_impl.rpt
 模块一收口 nofwd CoreMark CPI,核级基准(仿真),1.885683,CPI,2026-10-07；RTL同96414be；运行HEAD=dcb3ef7；CoreMark2K/32；MEM+WB退休；同hex/tb；Icarus13.0/XSim2026.1计数与CRC一致,cycles=19057438 retired=10106386,data/logs/2026-10-07-module1-closure/all-final.log
 模块一收口 nofwd CoreMark/MHz,核级基准(短测仿真外推),1.681271,CoreMark/MHz,2026-10-07；RTL同96414be；运行HEAD=dcb3ef7；CoreMark2K/32；MEM+WB退休；同hex/tb；Icarus13.0/XSim2026.1计数与CRC一致；不足官方10s；计时窗口t1-t0,ticks=19033218 iterations=32,data/logs/2026-10-07-module1-closure/xsim-pass/module1_nofwd.log

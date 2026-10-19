@@ -24,7 +24,7 @@ JL 可以在电脑上生成 bit/hwh；下载到板卡、在线 ILA、实机网�
 - ✅ EXE MOCK/FILE_REPLAY、轮次/记录/导出，以及 v1.2 报文字段校验已验证；10/12 记录为八组视觉、十三组离板回归通过（历史口径，不当作当前全量）。
 - 🟡 位流指纹与当前硬件配置闭环、长时间/冷启动/断连恢复仍待实测；现有 FP32 权重真实精度未验收。
 - 🟡 10/10 N01/N02现场更新：已记录板端bit/hwh哈希并加载验证 `pipe @ 0x40000000`、帧首提交、60秒在流、Overlay重载及USB原始帧；[本轮原始日志](../data/logs/2026-10-10-onboard-n01/README.md)。板端 bit/hwh 与[10/03 修复后归档 XSA](../data/evidence/2026-10-10-onboard-bit-provenance/README.md)逐字节同哈希，但构建时源码快照尚未锚定。HDMI IN物理拔插且采集卡连接时出现板卡异常重启，人工重载同一bit后恢复；采集卡 HDMI 断开、Pi 软件重启时则完成输入断源/恢复且 PYNQ boot_id 未变。完整 N02 和采集卡共存仍未通过。
-- ✅ 10/12 离板整合记录：25 个视觉 RTL tb、13 组视觉 Python 与 3 组协处理器 Python 通过；[审查证据](../data/logs/2026-10-12-pr-review/README.md)。C02/C03 已由 JL 于 10/11 冻结；当前脚本入口为 **21 组视觉 Python + 14 组检查链 + 9 组 INT8**（以 `sim/scripts` 为准），新增组不在上述 10/12 证据内。
+- ✅ 10/12 离板整合记录：25 个视觉 RTL tb、13 组视觉 Python 与 3 组协处理器 Python 通过；[审查证据](../data/logs/2026-10-12-pr-review/README.md)。C02/C03 已由 JL 于 10/11 冻结；当前脚本入口为 **21 组视觉 Python + 14 组检查链 + 10 组 INT8**（以 `sim/scripts` 为准），新增组不在上述 10/12 证据内。
 - ✅ C01 原彩色捕获候选 RTL/BD/bit/hwh/XSA 已有，显示/状态诊断实机 PASS；停止期 stream_seq 增长疑点已闭环，[原始证据](../data/logs/2026-10-11-c01-probe-evidence/README.md)。该结果不证明 DDR 写完成或帧槽所有权。
 - ✅ W05 FILE 服务骨架、网络 LIVE 替身、PROTOTYPE 标识、类别/分数/工单横幅、记录 schema v2 与 CSV 已离板验证；真实硬件后端、检查快照查看和完整工业验收尚未完成。
 - ✅ 10/13 新增离板计算链：MAC、卷积地址调度、bias/ReLU/requant/GAP/FC 与整网控制器、诊断整数黄金、参数拒绝门；控制器 OOC 100 MHz setup/hold/资源/严重DRC门通过（192 DSP，外部存储未计入）。[当前证据](../data/logs/2026-10-13-cnn-arithmetic/README.md)。

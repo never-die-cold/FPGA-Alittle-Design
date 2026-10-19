@@ -4,11 +4,17 @@ module soc_top #(
     parameter IMEM_INIT_FILE = "src/riscv_fw/hello_v0.hex",
     parameter DMEM_INIT_FILE = "src/riscv_fw/hello_v0.hex",
     parameter ENABLE_FORWARDING = 1'b1,
-    parameter [1:0] BHT_MODE = 2'd0
+    parameter [1:0] BHT_MODE = 2'd0,
+    parameter ENABLE_COP = 1'b0,
+    parameter [31:0] COP_BASE = 32'h8001_0000
 ) (
     input  wire       clk,
     input  wire       rst_n,
-    output wire [3:0] led
+    output wire [3:0] led,
+    input wire [31:0] cop_rdata_i,
+    output wire cop_hit_o, cop_we_o,
+    output wire [31:0] cop_addr_o, cop_wdata_o,
+    output wire [3:0] cop_be_o
 );
 
     localparam [31:0] TIMER_ADDR = 32'h8000_8000;
@@ -22,6 +28,7 @@ module soc_top #(
     wire [3:0]  dmem_be;
     wire        dmem_we;
     wire        timer_hit;
+    wire        cop_hit;
     reg  [31:0] cycle_cnt;
     reg  [3:0]  led_q;
 
@@ -29,7 +36,13 @@ module soc_top #(
 
     // MMIO 计时计数器（32KB 数据区间外）：同拍只读；写被忽略且不落 DMEM
     assign timer_hit  = (dmem_addr == TIMER_ADDR);
-    assign dmem_rdata = timer_hit ? cycle_cnt : dmem_rdata_ram;
+    assign cop_hit = ENABLE_COP && dmem_addr[31:12] == COP_BASE[31:12];
+    assign cop_hit_o = cop_hit;
+    assign cop_we_o = cop_hit && dmem_we;
+    assign cop_addr_o = ENABLE_COP ? dmem_addr : 32'd0;
+    assign cop_wdata_o = ENABLE_COP ? dmem_wdata : 32'd0;
+    assign cop_be_o = ENABLE_COP ? dmem_be : 4'd0;
+    assign dmem_rdata = timer_hit ? cycle_cnt : cop_hit ? cop_rdata_i : dmem_rdata_ram;
 
     core_top #(
         .ENABLE_FORWARDING(ENABLE_FORWARDING),
@@ -47,7 +60,7 @@ module soc_top #(
 
     // 哈佛双口加载：DMEM 预载同一镜像（.data 初值 / .rodata），见 design_v0.md §5.8
     dmem #(.INIT_FILE(DMEM_INIT_FILE)) u_dmem (
-        .clk(clk), .we(dmem_we && !timer_hit), .be(dmem_be),
+        .clk(clk), .we(dmem_we && !timer_hit && !cop_hit), .be(dmem_be),
         .addr(dmem_addr), .wdata(dmem_wdata), .rdata(dmem_rdata_ram)
     );
 
