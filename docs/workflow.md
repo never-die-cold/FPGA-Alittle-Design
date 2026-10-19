@@ -44,6 +44,8 @@
 
 ## §4 收尾（commit 前）
 
+> 仓库卫生规则（生成物、日志 README/manifest、文件预算）见 `docs/repo-hygiene.md`。
+
 - [ ] 涉及 RTL：全量回归 PASS（`bash sim/scripts/run_iverilog.sh all`），tb 落在仓库内（`sim/riscv/`），不得用工作区外临时文件
 - [ ] 新 tb 已接入 `sim/scripts/run_iverilog.sh`（单独模式 + `all` 全量）
 - [ ] 涉及接口的改动已同步对应模块、对应版本的冻结契约（RISC-V：`src/riscv/design_v0.md` / `src/riscv/design_v1.md`；视觉：`src/vision/design_v0.md`）

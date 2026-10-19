@@ -37,8 +37,8 @@ JL 可以在电脑上生成 bit/hwh；下载到板卡、在线 ILA、实机网�
 ### 2.1 NC 离板推进入口（2026-10-12）
 
 当前不具备实机执行条件；NC先做 C01遗留检查、证据/版本盘点、N02/N03/N04/N05返板准备与C04评审。
-执行表、返板顺序和填写模板见[NC离板准备](nc-offline-readiness-2026-10-12.md)；custom DDR写完成/槽交接交给WC实现前先核对[所有权候选交接](c01-ddr-frame-ownership-v0.md)。文档准备完成不勾选N02–N05实机通过。
-2026-10-14扩展：当前源码Windows便携候选已离板验收，N04/N05采集组织、N10–N12场景/指标、N13/N14发布/演示/提交准备见[NC工作板](nc-offboard-workboard-2026-10-14.md)及[原始证据](../data/logs/2026-10-14-nc-offboard-closeout/README.md)。Q1/Q3及Q5的NC口径已确认，Q5交[#75](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/75)与JL对齐、修复后再验收。
+执行表、返板顺序和填写模板见[NC离板准备](runbooks/nc-offline-readiness-2026-10-12.md)；custom DDR写完成/槽交接交给WC实现前先核对[所有权候选交接](contracts/c01-ddr-frame-ownership-v0.md)。文档准备完成不勾选N02–N05实机通过。
+2026-10-14扩展：当前源码Windows便携候选已离板验收，N04/N05采集组织、N10–N12场景/指标、N13/N14发布/演示/提交准备见[NC工作板](runbooks/nc-offboard-workboard-2026-10-14.md)及[原始证据](../data/logs/2026-10-14-nc-offboard-closeout/README.md)。Q1/Q3及Q5的NC口径已确认，Q5交[#75](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/75)与JL对齐、修复后再验收。
 
 ## 3. 首先冻结的交接（G0）
 
@@ -150,6 +150,6 @@ JL无需等待正式模型才写算子；WC无需等待板端服务才写EXE与�
 
 首版以外：连续运动/跟踪、逐帧精确叠加、缺陷/尺寸检测、更多类别、多种复杂背景及非必要性能优化，完成主线后按余量处理。
 
-参考：[主计划](../plan.md)、[训练准备](module3-model-training.md)、[取图/ROI建议](inspection-v0-contract.md)、
-[协议](vision-sync-protocol-decisions.md)、[采集规程](fastener-data-collection-protocol.md)、
-[数据审计](fastener-dataset-audit.md)、[当前整合验证](../data/logs/2026-10-10-dataset-integration/README.md)。
+参考：[主计划](../plan.md)、[训练准备](runbooks/module3-model-training.md)、[取图/ROI建议](contracts/inspection-v0-contract.md)、
+[协议](contracts/vision-sync-protocol-decisions.md)、[采集规程](runbooks/fastener-data-collection-protocol.md)、
+[数据审计](research/fastener-dataset-audit.md)、[当前整合验证](../data/logs/2026-10-10-dataset-integration/README.md)。

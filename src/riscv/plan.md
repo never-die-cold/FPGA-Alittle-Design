@@ -153,7 +153,7 @@ RTL 可独立自测后交付配置和已知问题，验证线复验并反馈缺�
 
 ### 4.4 M1 收口后：PicoRV32 对比实测（验证线）
 
-> 由验证线负责，在 M4 材料收口前完成；不另设逐日窗口。详细口径见 [核心对比说明](../../docs/core_comparison.md)。
+> 由验证线负责，在 M4 材料收口前完成；不另设逐日窗口。详细口径见 [核心对比说明](../../docs/research/core_comparison.md)。
 
 - [x] PicoRV32 regular + large 同器件/工具 OOC 报告已于 10/03 入档，见 `data/logs/2026-10-03-picorv32-compare/`
 - [x] 约束递减多点已记录；Fmax 数值仍为 Slack 外推，最高通过约束点另列，不冒充频率认证
@@ -170,7 +170,7 @@ RTL 可独立自测后交付配置和已知问题，验证线复验并反馈缺�
 <summary>展开 Part B/C 学习资料与自测要求</summary>
 
 > 公共基础与 Part A 学习内容已移入 [历史归档](done/m1-first-phase-completed.md) §B；本节只保留 Part B/C 需要的内容。
-> 每条资料的具体链接与用途单列在 [docs/resources.md](../../docs/resources.md)，本节只保留条目 + 自测验收。
+> 每条资料的具体链接与用途单列在 [docs/resources.md](../../docs/research/resources.md)，本节只保留条目 + 自测验收。
 
 ### Part B 学习内容
 

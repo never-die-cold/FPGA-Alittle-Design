@@ -182,4 +182,4 @@ R13–R15 仍保留。独立 axi_regs 默认旧模式，保留区行为兼容；
 
 当前原 vision 位流仍沿用本文 pipe ABI。新候选在显示旁路增加原彩色 AXIS/VDMA S2MM 捕获及只读状态，不修改 R0–R12 参数语义；新增 capture_status@0x42000000/64KiB、capture_dma@0x43000000/64KiB，pipe@0x40000000/64KiB 保留。
 
-详细 CSR、错误/复位/跨域及 `stream_seq` 的边界见[捕获状态候选契约](../../docs/c01-capture-status-contract.md)。该序号仅证明像素握手几何完整，不能证明 DDR 帧写完成或帧槽所有权。PS 帧所有权、原帧颜色/动态图像验收和核/CNN 集成未完成；最终资源、时序及保留的 CDC 缺口见[实现基线](../../docs/c01-capture-implementation-baseline.md)。现有冻结接口和历史验收均不因候选生成而自动升级。
+详细 CSR、错误/复位/跨域及 `stream_seq` 的边界见[捕获状态候选契约](../../docs/contracts/c01-capture-status-contract.md)。该序号仅证明像素握手几何完整，不能证明 DDR 帧写完成或帧槽所有权。PS 帧所有权、原帧颜色/动态图像验收和核/CNN 集成未完成；最终资源、时序及保留的 CDC 缺口见[实现基线](../../docs/contracts/c01-capture-implementation-baseline.md)。现有冻结接口和历史验收均不因候选生成而自动升级。

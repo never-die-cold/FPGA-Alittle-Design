@@ -88,7 +88,7 @@ BHT 正确预测零冲刷、误预测或 JAL/JALR 冲刷 1 槽。当前 SoC 实�
 
 ## CoreMark 基准 tb（契约先行，2026-09-23 建立）
 
-- 契约（判据/观测/接口唯一入口）：[`docs/coremark.md`](../docs/coremark.md)（§1–§7 契约主体 + 附录 A 计划；SoC 计时器与预载已于 2026-09-28 收口）
+- 契约（判据/观测/接口唯一入口）：[`docs/coremark.md`](../docs/contracts/coremark.md)（§1–§7 契约主体 + 附录 A 计划；SoC 计时器与预载已于 2026-09-28 收口）
 - 通用 tb：`riscv/tb_core_coremark.v`——8192×32 存储模型 + plusargs；`+hex` 默认 `../src/riscv_fw/coremark.hex`，支持 `+timer_addr` 计数器仿真
 - 历史 v0：32 迭代 CoreMark/MHz=1.506，见 `data/logs/2026-09-23-coremark/`；当前 tb 按 `mem_valid` 退休，窗口止于首次 `tohost_exit`，四档 CRC/retired 与周期证据见[模块一报告 §2](../report/module1-closure.md)。
 - 单档复跑：`bash sim/scripts/run_iverilog.sh coremark`（固定 2K/32 迭代、50M 看门狗与 golden 判据；约 2,100 万周期）

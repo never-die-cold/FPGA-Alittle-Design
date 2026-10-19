@@ -1,0 +1,1473 @@
+{
+  "run": "2026-10-15-onboard-n02-n03",
+  "generated_at": "2026-10-19T02:47:00.837667+00:00",
+  "policy": "restore=git blob; drop=canonical copy; keep/unique=stay",
+  "roots": [
+    "exe-ffb7ab2/"
+  ],
+  "summary": {
+    "total": 182,
+    "restore": 118,
+    "keep": 6,
+    "drop": 10,
+    "unique": 48
+  },
+  "files": [
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/docs/c01-ddr-frame-ownership-v0.md",
+      "size": 9619,
+      "sha256": "bae258b1ddcc0d977965f3c8746728c2aa8bf1fc62c3c2cd447c7cf0e69b5d71",
+      "git_blob": "f0b80e699b8701dfcb252f14607a2a44426c58b7",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/docs/coprocessor-integration-v0.md",
+      "size": 20888,
+      "sha256": "778cd68475aa365116f16f9abd31993f82fcea41fb003473db6103f87d454838",
+      "git_blob": "8874edea508a8b83909d64a82133199b53f4ee86",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/docs/vision-live-semantics.md",
+      "size": 14863,
+      "sha256": "3b3f13f26f251973250cf7025711d384654bfc3d906bf2d125bc1a3fb1e260ee",
+      "git_blob": "07ac47de7644c330b5434056d3158eff35b511af",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/base-backend/service/58301060/check-000001/capture.png",
+      "size": 4760,
+      "sha256": "57b29051dc04ed2b0e56dad10e8f65501fc8bfa3d0172f742039c26c4eb644b7",
+      "git_blob": "b615cb614a6d50a6a334bdf634b8f82d5a4ff6c8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/base-backend/service/58301060/check-000001/capture.sha256",
+      "size": 65,
+      "sha256": "0ad730599ddd2c8ffe44b766c0a3181897fa48cf405b4413ae3fc99d62c08425",
+      "git_blob": "f6c5723c373593a76ac5396e5ef644fbd30ce4f2",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/base-backend/service/58301060/check-000001/engine.json",
+      "size": 27,
+      "sha256": "8a1e2099bdadc5cdbff5eb0efd774e065cd91f3a3acbb6ae9bdfa163a1af66d1",
+      "git_blob": "02303ce9de2840bd0b145842bfafad62ce94b382",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/base-backend/service/58301060/check-000001/packet.json",
+      "size": 273,
+      "sha256": "d7115d52d1c65a48736e4f94b80297ba2ab581ba8a6cd13003df9b4e5244c878",
+      "git_blob": "7297f6b9122406da3309680bc1c57f0eff715f65",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/base-backend/service/58301060/check-000002/capture.png",
+      "size": 4760,
+      "sha256": "e4e3f03113556066350d2d57a78c3ef5ce8c08a20237a40f45515c36e7606ba6",
+      "git_blob": "a95942bb7036d048dd8e0d5117ff9574ec598e45",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/base-backend/service/58301060/check-000002/capture.sha256",
+      "size": 65,
+      "sha256": "c9891f9bc144f740e41b7c0eb6be77b4de1831e53c8be0d495ff276caf4d36e9",
+      "git_blob": "2e0fda51fa31df3e90f783e0604e5e593e532936",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/base-backend/service/58301060/check-000002/engine.json",
+      "size": 27,
+      "sha256": "c39e156b2ab983b01b21fb400b899060bd273f3144a55fc5262c3899d6de9bec",
+      "git_blob": "06e4f5081ad69cd0804790a966ef44d497c9d3a3",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/base-backend/service/58301060/check-000002/packet.json",
+      "size": 273,
+      "sha256": "ce57474eb4f04a3dcb39d6db5aa24f746d348903ad1be1d2b317bf70d4981b01",
+      "git_blob": "1c7d1db33ca9b3dcb769e821385754a1d0249dd3",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/base-backend/service/58301060/check-000005/capture.png",
+      "size": 4760,
+      "sha256": "7c3b40697bdfb06d4ee6bb70d4a3c20d3a8ea81f66a810d6e6dacf33963aec72",
+      "git_blob": "866333b3c9d4c3222174973c4ea1185e53a1f14e",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/base-backend/service/58301060/check-000005/capture.sha256",
+      "size": 65,
+      "sha256": "2e510ec11977efaeff9eb56a115f842769c4634cc0031a482cae8565325b38af",
+      "git_blob": "ec60bfcc6b423939c14eef6b534c21b51fc52c91",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/base-backend/service/58301060/check-000005/engine.json",
+      "size": 27,
+      "sha256": "02a1469f1f67527409686fe36b5ec0f000b281a97ce463f827994b1c56680ace",
+      "git_blob": "030830c54191a4cb9ee76c782b932191d27b9607",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/base-backend/service/58301060/check-000005/packet.json",
+      "size": 273,
+      "sha256": "c70d5c31569aeb52ca870f715323b9c0aa426028ff17d02535b575bc8e2bc2cf",
+      "git_blob": "4b2c4d671f2ac4c9f3289539f804b6558fcb0ff1",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/base-backend/service/58301060/session.json",
+      "size": 187,
+      "sha256": "c82f9b28c7ae4effc6859a60455ffbcecd14710ffac4a5980fdd2da395176d70",
+      "git_blob": "bf6068dc62c3bf187814f9e43ffae81f39513150",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/c01-backend/service/0596a7eb/check-000001/capture.png",
+      "size": 4760,
+      "sha256": "8566974d859a63b6cbca79b61992dd60cb462d14bdfae96933f80828c43adf51",
+      "git_blob": "08e598ecf7fc99f32d4e592b49483a14b6fab34c",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/c01-backend/service/0596a7eb/check-000001/capture.sha256",
+      "size": 65,
+      "sha256": "e8d69a5c24fcde408451d58fb9543c01250165d8034afbc2ff88be75b21843a1",
+      "git_blob": "0e974fee833eb4636bf7eb129d990f9cbb3b0c67",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/c01-backend/service/0596a7eb/check-000001/engine.json",
+      "size": 27,
+      "sha256": "8a1e2099bdadc5cdbff5eb0efd774e065cd91f3a3acbb6ae9bdfa163a1af66d1",
+      "git_blob": "02303ce9de2840bd0b145842bfafad62ce94b382",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/base-backend/service/58301060/check-000001/engine.json"
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/c01-backend/service/0596a7eb/check-000001/packet.json",
+      "size": 274,
+      "sha256": "6f83134a16550a77558e8ae86f5940a4c6905d5960791d08289bbfb927ba4b5e",
+      "git_blob": "d8b0d7c868d44f44d07121a060a2bc8d70efc3fe",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/c01-backend/service/0596a7eb/check-000002/capture.png",
+      "size": 4760,
+      "sha256": "e9e0e2f4310e918a0047f3038180de028dc437771794b796ef6b3a5d87e5ebad",
+      "git_blob": "522fa4a1353b1a92009e4b408d4e18328ffb1959",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/c01-backend/service/0596a7eb/check-000002/capture.sha256",
+      "size": 65,
+      "sha256": "3574529ff2b92df585a255a442f35a63c543b3fd73ed7afe5d84385cf2ea8f3e",
+      "git_blob": "2b21ca372cf2d097cc96a4b7dfb005e870cbe7e0",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/c01-backend/service/0596a7eb/check-000002/engine.json",
+      "size": 27,
+      "sha256": "c39e156b2ab983b01b21fb400b899060bd273f3144a55fc5262c3899d6de9bec",
+      "git_blob": "06e4f5081ad69cd0804790a966ef44d497c9d3a3",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/base-backend/service/58301060/check-000002/engine.json"
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/c01-backend/service/0596a7eb/check-000002/packet.json",
+      "size": 273,
+      "sha256": "6a28f2759bb075e2c1fc5fec2cdad6c8f0335697613bd829d832e09616f14dbe",
+      "git_blob": "c45c3a84c61ca7888f024d05c6c2724282434827",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/c01-backend/service/0596a7eb/check-000006/capture.png",
+      "size": 4760,
+      "sha256": "a7126729b0cb4b1396a5141b9d9eb037827fd8cb4ac0bcc37794b553bd8c49f0",
+      "git_blob": "c2279b1bd6d2cc8b948cd01572a86cded9d66323",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/c01-backend/service/0596a7eb/check-000006/capture.sha256",
+      "size": 65,
+      "sha256": "c5c60b2b0cadce82474a5627050d42834ba1f06091611dddf767c7da237d96d9",
+      "git_blob": "01d4478790328ca6727183b74978ac4462e5fd54",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/c01-backend/service/0596a7eb/check-000006/engine.json",
+      "size": 27,
+      "sha256": "be081bbd684e71f83b8e145937de5899d603ce9ab5194fa37e64488d66ecdc88",
+      "git_blob": "e3e8a0cf098bd9d9d2e69d4cb792d393fa3e99d9",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/c01-backend/service/0596a7eb/check-000006/packet.json",
+      "size": 274,
+      "sha256": "dd0600ecbbcf926108a53e18d7950e87bbf0fa92132cb44f16e2b66ee50cbce0",
+      "git_blob": "e0a42cae80344876547925d49b9a0da7c2d02a80",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/c01-backend/service/0596a7eb/session.json",
+      "size": 186,
+      "sha256": "8886145c9a52d2a0c61f081a901ad09f0ba163c06fea7803407cc021e1dd5c6a",
+      "git_blob": "08e61e10184808a21d7c93675da5f2b4bae980bd",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/export-test/records.csv",
+      "size": 1358,
+      "sha256": "d4db1897631ba22a979410a538fa4ee05932af2dd3847f383b3739f91fac7469",
+      "git_blob": "3164d5a0b7377e51d03d7e76f18ab402813d40ad",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/export-test/records.jsonl",
+      "size": 2386,
+      "sha256": "63f54fc84cbf5deaae00b127b77580753d97acd4b65c97737e58a638bcea9b76",
+      "git_blob": "c66b1e123f5b3ce64b79f30561578cef23615662",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/records-test/anomalies.jsonl",
+      "size": 848,
+      "sha256": "105657291a7ff8bd52369e713bf0d8ada2a6223d0163dfe30b3a12f397fa0ace",
+      "git_blob": "351ae38792e66a402ef0b0c463314a3ea28ba707",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/records-test/records.jsonl",
+      "size": 3549,
+      "sha256": "2087f0c16d08ba1de99c15dcd075c1da756ae3d991dfa5f33023ca2ae51b5285",
+      "git_blob": "5326781f8218c55c415ccae2a494b30ce9d685d1",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000001/capture.png",
+      "size": 11,
+      "sha256": "0b090d235552bd7e64b05c4909a20e501fd9311d106e10d9c8b8ce2bdb24cccd",
+      "git_blob": "d4e04e26d75001f54511789d161738d9ef4e872c",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000001/capture.sha256",
+      "size": 65,
+      "sha256": "58b95a4897d5a24dc1ad50f9e82f8935fdca9970764f73d0a209be216b119460",
+      "git_blob": "d286eb62c15ef8db47d972b6eca87a40698d8e1f",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000001/engine.json",
+      "size": 27,
+      "sha256": "8a1e2099bdadc5cdbff5eb0efd774e065cd91f3a3acbb6ae9bdfa163a1af66d1",
+      "git_blob": "02303ce9de2840bd0b145842bfafad62ce94b382",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/base-backend/service/58301060/check-000001/engine.json"
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000001/packet.json",
+      "size": 724,
+      "sha256": "92e9fab8e5cdb0721ec1e031db5a7c68388910c4b7c3c9ff958bf09e5968cd77",
+      "git_blob": "9e3a87757dc3738ed4acdc4245a56283371544f2",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000002/capture.png",
+      "size": 11,
+      "sha256": "68bcc8a43de293e06c73802a9701c9d8aef2e37aea6c88deb16fa88b87c95772",
+      "git_blob": "cdd1b5e7ce5de0c175aee83f5a13b4371e140d16",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000002/capture.sha256",
+      "size": 65,
+      "sha256": "c8b51a4533dfd54a4e21bdc80901fe3af615bfff7b492a72c8434b0ebc2001b9",
+      "git_blob": "cfd7b15ff32797768f12d1bdc602c728211cbe9b",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000002/engine.json",
+      "size": 27,
+      "sha256": "c39e156b2ab983b01b21fb400b899060bd273f3144a55fc5262c3899d6de9bec",
+      "git_blob": "06e4f5081ad69cd0804790a966ef44d497c9d3a3",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/base-backend/service/58301060/check-000002/engine.json"
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000002/packet.json",
+      "size": 929,
+      "sha256": "a2469479b58a19f1fe490efa369e947bd7211a85eeaf5d1489bb9d07efd4c555",
+      "git_blob": "80cc2a905fb11e78a5744c6433352b972736a903",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000003/capture.png",
+      "size": 11,
+      "sha256": "0b090d235552bd7e64b05c4909a20e501fd9311d106e10d9c8b8ce2bdb24cccd",
+      "git_blob": "d4e04e26d75001f54511789d161738d9ef4e872c",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000001/capture.png"
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000003/capture.sha256",
+      "size": 65,
+      "sha256": "58b95a4897d5a24dc1ad50f9e82f8935fdca9970764f73d0a209be216b119460",
+      "git_blob": "d286eb62c15ef8db47d972b6eca87a40698d8e1f",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000001/capture.sha256"
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000003/engine.json",
+      "size": 27,
+      "sha256": "c1107cd8aa5c09091533303dc961718bb328df477f5278456801fc5acde9dd3e",
+      "git_blob": "d5679eefa34f53ca7ee86e3edb6601b51f82000a",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000003/packet.json",
+      "size": 856,
+      "sha256": "437e47d05fc9899355051bd2cb5d8a613482a84b59ed05354679efffe783f8df",
+      "git_blob": "7f6191680474ea693b6cf3369bd73758130a9f0f",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000004/capture.png",
+      "size": 11,
+      "sha256": "68bcc8a43de293e06c73802a9701c9d8aef2e37aea6c88deb16fa88b87c95772",
+      "git_blob": "cdd1b5e7ce5de0c175aee83f5a13b4371e140d16",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000002/capture.png"
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000004/capture.sha256",
+      "size": 65,
+      "sha256": "c8b51a4533dfd54a4e21bdc80901fe3af615bfff7b492a72c8434b0ebc2001b9",
+      "git_blob": "cfd7b15ff32797768f12d1bdc602c728211cbe9b",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000002/capture.sha256"
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000004/engine.json",
+      "size": 27,
+      "sha256": "9ff41e2ab9b4670e6242d11f00a34dc4b342d6793584eb83428674764deda1d6",
+      "git_blob": "f7983ef9ac5e6af4cbfb2953069f2d3d9af3ac92",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000004/packet.json",
+      "size": 856,
+      "sha256": "8fa86d197b5f3aea0bf7102f1ec954f8cd86d1e19574dd018de098747a689be8",
+      "git_blob": "8938112123e0d641f2ac9f044a8c55f4db7385e5",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/session.json",
+      "size": 186,
+      "sha256": "46bb1adb2bbce4e0d31690e2c39c8e3b9ef0c6d8abf45b03bdd61596e9063820",
+      "git_blob": "3447aae233cea8377206c8ee35adacdb15aa6ad8",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/captures/cap-a.png",
+      "size": 11,
+      "sha256": "0b090d235552bd7e64b05c4909a20e501fd9311d106e10d9c8b8ce2bdb24cccd",
+      "git_blob": "d4e04e26d75001f54511789d161738d9ef4e872c",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000001/capture.png"
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/captures/cap-b.png",
+      "size": 11,
+      "sha256": "68bcc8a43de293e06c73802a9701c9d8aef2e37aea6c88deb16fa88b87c95772",
+      "git_blob": "cdd1b5e7ce5de0c175aee83f5a13b4371e140d16",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/build/vision/service-test/be5324b4/check-000002/capture.png"
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/scripts/run_vision_python.sh",
+      "size": 830,
+      "sha256": "c36ff929ebde946472f17774b9bef402bbbb02a52f4cf00c5c46b2ab5e77c2a8",
+      "git_blob": "eb65e098240131ff6688cbac015e193a31b4f2ec",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/scripts/vision_gate.sh",
+      "size": 576,
+      "sha256": "47e99385a82b6267fb2b340a71f13bb90f63fa2b0d8b213ca9a899b84bc6bd79",
+      "git_blob": "99d268f448e38713396df0576a5a8b9b8881c5e6",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/archive/fastener-vision-2026-10-07/train_scene_classifier.py",
+      "size": 4995,
+      "sha256": "b91cad0390ceaf56917e3beb57363f14b76ad31f5485d13417cada87a8411685",
+      "git_blob": "5dfeec660c5eb6277fe6d76634312a7f14ef4a45",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/audit_fastener_dataset.py",
+      "size": 2179,
+      "sha256": "bde0930c4c3f24b7a5ab0d1ddb5f13a892a5c29331e07cc7f16c978dd1b416e0",
+      "git_blob": "3906afebcf650a63b781537a158e4c259eca54fe",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/calibrate_classifier_bn.py",
+      "size": 3332,
+      "sha256": "386b550f82ea326129ce98014c04c729296823f6ca75bf144154643a2b04ca54",
+      "git_blob": "38c40387ed988ef03158c11286ac19d4f7285b6f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/check_model_reference.py",
+      "size": 3761,
+      "sha256": "3ebbf96838286668bc58bb43cb75a6d18c54a85172065686731cfa2ce66f9df8",
+      "git_blob": "bfa4073e13527d2c4107876a2990f2a91af2c26f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/compare_arm_localize_bench.py",
+      "size": 2655,
+      "sha256": "3aee8e562a5212283bc344cbfbae449b24ee86b250856490facf67e23e35dd4c",
+      "git_blob": "eebabcf1b0fa2a6594909effa852c29a6a0630dd",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/compare_localizers.py",
+      "size": 3210,
+      "sha256": "57860ed135dc448d913c1f7514e9912c2e79bef7fea846ef9719ef18d747d0fe",
+      "git_blob": "e3b824b8d525ff5b874e0a929a91c384175941fc",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/controlled_classifier_study.py",
+      "size": 5178,
+      "sha256": "f5ff36a606f712a53dc0ca8c5f61bf68b35a6ee70ca707030afc7d2a1f1fa7aa",
+      "git_blob": "4a0ddc4cfce49e038b933dc4deb5991c88554504",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/evaluate_class_aware.py",
+      "size": 7458,
+      "sha256": "9ba98068ea03b9e516aec4bef1c727a11638a04d94f1f252709a59ec9f9d7c59",
+      "git_blob": "9ec201878e0453799376f9d2a16eeb79a91d7d08",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/evaluate_fastener_classifier.py",
+      "size": 2518,
+      "sha256": "5a902ef1067b69f0542a8b75109209f680fdf410f02214754a498b90f29f2212",
+      "git_blob": "a23ae53dfe268a3998c9cfb270d2fd2c3d8f4524",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/export_model_reference.py",
+      "size": 916,
+      "sha256": "87dc4d5833c92a5768d307e6bd762487e07b476a7487b82d5715328b38fa3276",
+      "git_blob": "edd1b72e93160e64b96645e76f38ff61783509f8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/generate_dataset_audit_fixture.py",
+      "size": 1255,
+      "sha256": "00477b1b66b63770984eb9993cda84687241455e0b5950a0d71b02c121ed4a8d",
+      "git_blob": "353f8718aa173ebbce7a6ea55e53ed4df092f626",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/generate_inspection_fixture.py",
+      "size": 1003,
+      "sha256": "1b6ee1ebfebb27dbdc3d5c1aa1af10ca0c169d00c7cbd541d9a8818924e2aea6",
+      "git_blob": "7a29ab92091fc7327a1ee1d95b193acaf3b5edeb",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/generate_localization_dataset.py",
+      "size": 3628,
+      "sha256": "ac38563f6fcf094fef4e68490a81357613ea52cb30b45248a0b53128a98ef0b8",
+      "git_blob": "aef4f21016759613b0d57940194c477fa6cf6180",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/generate_variable_count_probe.py",
+      "size": 2058,
+      "sha256": "d578866a1c6d4bd9379fbed0bd142189a4c5bab860325d62240ea34ac68a349e",
+      "git_blob": "cc1f1b22f866a18bb68737129332e61f3c4a28cf",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/localization_data.py",
+      "size": 10042,
+      "sha256": "7785d03102cea8c5e411c67d21a27a4809b2d78f3f5aeb2ddb1a93121ca7c46c",
+      "git_blob": "a0b161e80e4ba480ce06c552191b2960ab518b39",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/localization_opencv.py",
+      "size": 2737,
+      "sha256": "de81e15e56496e82d1a747ea2946769213ac1e4aa6ab6973132e2de1184835d7",
+      "git_blob": "de52dd2f87510a7781ee4c4b07c285c51a65959b",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/probe_localization_backgrounds.py",
+      "size": 1645,
+      "sha256": "b455171a111bcdc94961c0eae9e6b7b8dffe159497cf4c88a0187b3a6ae0e907",
+      "git_blob": "ac90b313dc708057edeb53601e65dd79b994c0e3",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_axi_lock_reset.v",
+      "size": 6467,
+      "sha256": "ff5576edaefef414b977e6a541d9387dc66548bcb245801e962c4df58ebede6f",
+      "git_blob": "f37b6af88bcb6542c1f2a37dda4f3e06560c6582",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_axi_regs.v",
+      "size": 4820,
+      "sha256": "bde2a6c4299c7ae6dbd7bee281634753b9ded08d44150c2b5dc36658d9caef8c",
+      "git_blob": "bf79d850c6a804dba17da90bb15e2b002ad72732",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_axi_split.v",
+      "size": 1915,
+      "sha256": "b8ce5c4c64f64bc4159f3234474bfc510cd7b454486e4b4d124bb88f8e03e0f0",
+      "git_blob": "cc8c18bbf136e04e380ce039bd178c2d8c9870b2",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_capture_status_axi.v",
+      "size": 4989,
+      "sha256": "b920a389e58e17cdca5ec5afce86dbebb26209a140f84412d54cc3736829ea66",
+      "git_blob": "1a2b9a6d6821d25e1a9a8aa7357a17cd15d59ff7",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_capture_stream_monitor.v",
+      "size": 3340,
+      "sha256": "c3c226d2c63b5006b157546ec6543182ea3d2ed8862510c2b15d05ca732385d4",
+      "git_blob": "b1dbadffc806318e3e468df2b9f525f0fe9f5323",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_chain.v",
+      "size": 3171,
+      "sha256": "1404bda77deca4955489639bf4d3288a8c46659b74915168114521775ae36faa",
+      "git_blob": "284cf677e89bb971f83e276e5f371d3e958f4ab4",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_config_bridge.v",
+      "size": 1928,
+      "sha256": "f3b0c21d9690b2e8fce712bc38362e0142994da12ff7d6feba7a4bbca95bbb82",
+      "git_blob": "538d57e22b270f28230ba0e01dc4e7c4147bac5f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_cop_buf.v",
+      "size": 3582,
+      "sha256": "0ed8b3f55b2460520b0a1e3f29043317d2e747c16fda37388e31c320690fcf92",
+      "git_blob": "bfd54057fac54e5ad9e5ada37fb4358140d678e4",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_cop_buf_stress.v",
+      "size": 3363,
+      "sha256": "0db426eb51f7214eed0d43e5008804160668db7c5e5425e4b1dc287b3c8c0597",
+      "git_blob": "535ad157eb238426dd79c326e639bcdb410ed0f5",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_fullchain.v",
+      "size": 4133,
+      "sha256": "e3e32f9db17a94b95de124926c524c01596e03912d21e7b874398c73136f73fa",
+      "git_blob": "df4d58ec12b2aac66c26e3bb49d154e8f4262c78",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_gaussian3x3.v",
+      "size": 2142,
+      "sha256": "993889a5d37dd3131e122c763e550d89e19572fcebe664093c333879f9de3f8a",
+      "git_blob": "fc35b2f9c32194be2f6eb5bd6262035a1a249209",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_in_align.v",
+      "size": 6413,
+      "sha256": "e4f55d37097a4efad76836778ed489508441bace113f5149213e0958352415b7",
+      "git_blob": "8003da365684962cbc2a1a7426ca06d895e63853",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_line_buffer.v",
+      "size": 2076,
+      "sha256": "f0dffd9f10f0c76ec48f53fc1d884293499609511cdf29e8065e081887d6b44d",
+      "git_blob": "42a4df6987a35acaa216e5a7433299d5e7460fd7",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_osd.v",
+      "size": 3637,
+      "sha256": "b4e1154cfbbd6cc6ca0901e6a6493304d8b35d980dd91cfe973bb7e9c0251f1e",
+      "git_blob": "45599b783d611b8b5ab890b19e2e392bfce983c1",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_patterns.v",
+      "size": 2464,
+      "sha256": "a7d94098c5e31644dd3064b4e6f8a098d38977d49171c830b5fa6f04a33d5467",
+      "git_blob": "8b9ce7ac96e148f528542e3a2309be58bc6bd9b6",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_rgb2gray.v",
+      "size": 1490,
+      "sha256": "823f4d063d7f307074f28466dd22b8fd3120302a032776f65955ccb799e36990",
+      "git_blob": "a0f7c6d018f38facef1a95a27c761a122e774651",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_scaler.v",
+      "size": 2662,
+      "sha256": "148eacf44e48c85c4fd6f7a58117aacaa742981bf67c900c6c919abaa70a0099",
+      "git_blob": "f8d29809b52af28ba22c3055d4e878c36659a908",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_scaler_ds.v",
+      "size": 2898,
+      "sha256": "6d32a7c381bd49375e316bba51d7f032d14c0aa07606008be0bcb0123a5e001c",
+      "git_blob": "c0ba640b1f4423958d6bf42a1201ce67274bfb83",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_sobel.v",
+      "size": 2018,
+      "sha256": "510809d752c26ddf4b9061d3b56761f87c6beb1d88953f03338161e4394db66c",
+      "git_blob": "7649b9219094830d9be0c6aac869ed237c6cfaf9",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_top.v",
+      "size": 9575,
+      "sha256": "28f3e1aa163743171a83b91b63707460ea031642f899ae3484a3954427d048dc",
+      "git_blob": "8c759c32c3e39961d76bc8d1cbe1e6732b2334af",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_top_async.v",
+      "size": 2497,
+      "sha256": "3f6a3f049be56cb29149feb21eac45a6dd604702d7ba578a1ccc812d884ccf48",
+      "git_blob": "bccfff43b1bd34b2722e7081947a4db20e84ad34",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_top_color.v",
+      "size": 2145,
+      "sha256": "c659c46f092924abde37ab79ff0dab2a3adeea848a0954b7d6468132c5ab2265",
+      "git_blob": "86efbaf80679879f095ccc9620e86d4bf28c92bf",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_video_pipeline.v",
+      "size": 2461,
+      "sha256": "37e0b16e36fe064e390d0a2fb066c676000e43ab84e9f35edbc67b08d61cbbe2",
+      "git_blob": "eb9d13eca1ef2d3d00c80cd12a5e75e01388d564",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_video_real.v",
+      "size": 2889,
+      "sha256": "87554ca1c8071fa135b3c3e0831094fb96391320a63434283f13124f2eb08974",
+      "git_blob": "7507a2a04a2e3ad51e59b289c74805f7a48604df",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/tb_vision_axi.v",
+      "size": 1669,
+      "sha256": "b2827dd89f43116036f8f191829b3a74b2122a68ee48e062735ab1213613c7bb",
+      "git_blob": "2d90dff817b5f6cd6ea3ece1a330cc60aac3f0ae",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_arm_localize.py",
+      "size": 5527,
+      "sha256": "29d867388ebe7711dd9f91ca642cb9a666c5abaaeb27049932781c8290ff8b4a",
+      "git_blob": "be7cf1793aabb5d1bed249adcba4ffb11a1f363c",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_arm_localize_package.py",
+      "size": 2637,
+      "sha256": "9689f809959115a8707b1946d0c967d7b1fb0075a8d48f82157d03871779e626",
+      "git_blob": "ce80cb40a39b437d6ad6c867b6b239bab26ebe18",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_base_captures.py",
+      "size": 5059,
+      "sha256": "98b17883958784901112e7f66d731923c88afc6f209bf2cc75ce467e3096de07",
+      "git_blob": "09733d8acd202212e5b8b51c03106072f2226e6d",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_c01_artifacts.py",
+      "size": 2087,
+      "sha256": "f4f3a8377671f64b06141e4fcfb6089758ad3632ef7189818ccb6f564fdf81d6",
+      "git_blob": "f387ace4326531c2a033294311e77be8470c2299",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_c01_backend.py",
+      "size": 9026,
+      "sha256": "3f481daf5cc1681d94bb7aa635b779918c9930d8d5c2dccbfe95fdcade35ddf3",
+      "git_blob": "ffc78b1e7e9ebb09eed66d79ccaace38178ec355",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_c01_build_inputs.py",
+      "size": 2537,
+      "sha256": "945c630b6302cde7d970f9e59ec170d94af4026fb4aeeffb7e16e9149193306b",
+      "git_blob": "a67e392f73c35ee59bb22f8a673b86699614b362",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_c01_capture.py",
+      "size": 7673,
+      "sha256": "b60b592c98dda142bfe3b3479eb10b1a8c1279047f9b5375e870a0e9f6ff2a23",
+      "git_blob": "f731122a21dd8d7d18f1118cb8366f5c3497035b",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_c01_status_onboard.py",
+      "size": 4654,
+      "sha256": "3ebdbbde8543aee6a5194b76e0421de7d376aa0911b446927ac2f8c2d5a6301f",
+      "git_blob": "be27f5345a0a8944efb1ad40a860ba0e1acd86a5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_class_aware_metrics.py",
+      "size": 1390,
+      "sha256": "38fa4fc3a6d6a7a9e3f19a6827c893fe1ed134455e71b9cac9acd4017913d2fa",
+      "git_blob": "294ece1712e19701032429beb02e382f8588f27c",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_dataset_audit.py",
+      "size": 6283,
+      "sha256": "b3dd3477103fb8552c67e90f36203aa249bfe36be062f577628212f4b0b395a7",
+      "git_blob": "6fe60ea413e70d752bc88dfa8d9df4c6614d3bd7",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_dataset_manifest.py",
+      "size": 7041,
+      "sha256": "3468178b9f1028af243d0bc7d3131369b5ded2e77648abe798afc1cfbf68576c",
+      "git_blob": "f73d2a33e0d4313a8536fc0e2a8cce72f9599af5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_inspection_artifacts.py",
+      "size": 1356,
+      "sha256": "10212581af0081b18f0643d392bfcf5ec8055c3efac4ed6fbbb12389141f7d79",
+      "git_blob": "4c2c9485654d16d11652d5b152ee406c3ee03baa",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_inspection_model.py",
+      "size": 1250,
+      "sha256": "1184ef110fd79b444dfdc956305f19cfdcf013dcbaae9e6dc66fef787bff42ef",
+      "git_blob": "a6a79963c02735378bff095cefa4c4eb74fb16f8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_inspection_replay.py",
+      "size": 3606,
+      "sha256": "db63679cfe0a9a143596956773213094f1c367c7419beb061281421c594d8b55",
+      "git_blob": "d46af302cd7feb71de1c5a4a89a237550bdd8b00",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_inspection_rules.py",
+      "size": 1846,
+      "sha256": "b42e7579a2c4edabf70130d92ac99d299d22c879c767679ae0bb890fcf606598",
+      "git_blob": "0a99a66fcabce8831ebf8c3e6ea55baf7d48d5ed",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_inspection_viewer.py",
+      "size": 3080,
+      "sha256": "3de7221ddfcbc7ed60d3cc582cbb07fa389289cf209ea9e4d458da96199e8986",
+      "git_blob": "b0a399d6cb3aba6e6399bf1765dba71ea723ec85",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_localization_data.py",
+      "size": 6167,
+      "sha256": "554624fe0ed8b6c19c084f6ec0409572cadaf3dcc0c8c369f588388230caae23",
+      "git_blob": "57cb48656ed3393b4697a6991f5d9f58c2a43509",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_localize.py",
+      "size": 2444,
+      "sha256": "579df8f3ba841509703ca16670626b3ecb3ff84d238c87a03341d72b888a6e61",
+      "git_blob": "d81ee007cddbbcd5810c535e59f0e24508055875",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_model_audit.py",
+      "size": 1279,
+      "sha256": "a149af7d0ca5edc6eb0290b0f47ee6e74a7626a3b065d3706bebc5f19cc02d5a",
+      "git_blob": "b130e046ed6f8eba20f07d5978d0010c1ee1f4bd",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_model_reference.py",
+      "size": 1809,
+      "sha256": "8d0a52775adb817b9e81765a722adfd17f42db3f640ba6ea192cd71f5867349b",
+      "git_blob": "eab3fcd26447fdc2e444b0bc7c7367a6e88dfd42",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_n03_board_capture.py",
+      "size": 3217,
+      "sha256": "3cf8cb98486ce5f5b2c26e8a4809e5aa2721edf96a3900780bb3e8a15931b30b",
+      "git_blob": "da672cdc50f8d51814d4d1f066042b72aee9a073",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_n03_buffer_lifecycle.py",
+      "size": 2350,
+      "sha256": "af476bfb6c3b4471fdbd6b966380d685a1f32d30b5897f8869df32d051931c34",
+      "git_blob": "67df8957c443ef80605631051b685e516cf23a2d",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_numpy_reference.py",
+      "size": 4178,
+      "sha256": "aa0d10789b9cdf865b7eb3ca4153e0da41109f0ce57fc7d6c1fc4cc8fef38bfd",
+      "git_blob": "2bbd95f244d2789a70805a0deb6d98238ff140de",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_pynq_file_receiver.py",
+      "size": 1780,
+      "sha256": "d2ae3def7139668d6b15a13157bdbc9464d965e5c255891f0910a5479c6db9e5",
+      "git_blob": "ce330b07516c731b15eb56d23c8feb481c079405",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_reference_package.py",
+      "size": 2722,
+      "sha256": "54e658d51d96aa4a0c00fbb74c79433a6ed6db20942360ef8e41c2151c9c02c3",
+      "git_blob": "48b6cf3c10d9080b39146643a46b80610d0a7cd1",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_reference_tensors.py",
+      "size": 1474,
+      "sha256": "1fe2db86a9b85b54db1f69d80c71c23cd51c67d31563e0c3b6fe3293b465ed5b",
+      "git_blob": "44b30cee99312353339ae1e2c917aa61aebc049b",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_roi_preprocess.py",
+      "size": 2218,
+      "sha256": "9172a90d2c82b3387aeabeb3668d659ae8d11fad10536b3ff2530374f72d7474",
+      "git_blob": "887747c6c3c5cd96cf5be858da9d6a15ba4f4c2b",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_service_engine.py",
+      "size": 4177,
+      "sha256": "4cb2689a8a571676bf245c5f7aa0bb8a95d1dc2d5fab35eade47c10639f298d7",
+      "git_blob": "20cb486c7126299babb2b5a2a4d3a4f369849d56",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_vision_client.py",
+      "size": 3710,
+      "sha256": "8570a34fc9046aa41e7d8d1ecca309c445762ca52423ba5e32bee1c5ac7bacf3",
+      "git_blob": "835ba04caaab9487a42c5ef9e87c2d7e636306c8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_vision_export.py",
+      "size": 3158,
+      "sha256": "4af0c96e5faffcad33ded039197ad4f1d7c1191e2942c937a746b14de3b6bce3",
+      "git_blob": "0ddbb89e110d372055815ca02413eb36163fd8c6",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_vision_joint.py",
+      "size": 11154,
+      "sha256": "37342fed2f24970ee8717f8654d8d6dfecc3c2de1c7993bf83662184b4862365",
+      "git_blob": "5bad3c5555416a296c3910938b5310f5573a0cbe",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_vision_live_service.py",
+      "size": 8038,
+      "sha256": "5286a89c8141298d0722ddb7da0ce41558ffe3869a4b8acbe814cfba564deeaa",
+      "git_blob": "c5e5e1522f516ca70c0351773f3d0a551c61b4fc",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_vision_live_standin.py",
+      "size": 3860,
+      "sha256": "9c7cc370e184d821462493c0cc2bda5b12a935f3962f33d25c54bec5290b097b",
+      "git_blob": "ace813348db810eed8966c5dd248b2ed515ad354",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_vision_protocol.py",
+      "size": 9852,
+      "sha256": "74ea3fd4a5e4deb27bf72934e545a8f867449b8d3b0b019bf288b66f646f5067",
+      "git_blob": "6c0fdde0a70c0d3099d82a0404fb788d7753e748",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_vision_records.py",
+      "size": 5937,
+      "sha256": "7c7259d11938bed8bbb897bfeb53eff1c11261e409007ca81fe526292e63c3c8",
+      "git_blob": "5b69210cf3bcf105a92eaf521197e6288da9e423",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_vision_regs.py",
+      "size": 2046,
+      "sha256": "8a997788e43f6b4e38e6b38731852d77e4c9a8b88bcc146bf7c30d9cf993d4d9",
+      "git_blob": "7a1dd232bd376a095ed1c349656f34859dd63c2b",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_vision_rounds.py",
+      "size": 4690,
+      "sha256": "4f7535ae3b5020d9468d5d749439b54c43decb1ed5f02f8f1c24244379b33d81",
+      "git_blob": "8150e20aa67a061b214d3defba4669b8aa11b3ba",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/test_vision_service_e2e.py",
+      "size": 4380,
+      "sha256": "0b88e6e064d2d5a58fb2751e731aa60963f597557007ea89c07951ce983160a5",
+      "git_blob": "d1fafcecfef1dff470c6718bc2f3242648d864e7",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/train_fastener_classifier.py",
+      "size": 5739,
+      "sha256": "151f784406c27db8ca112e42ca7bc22104d9f4e9a0f1e2c111bb4cf129cb86f1",
+      "git_blob": "d3d763c51ad85af0f3186480b32a12b08d169362",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/train_hog_fastener_classifier.py",
+      "size": 2972,
+      "sha256": "cfef4a9711d04f4a23be8851eea745ff53f2b5361b3dee76b8f6d988ce73fc5e",
+      "git_blob": "b131d45bfebabe17c849e2385aa40edc44988cf8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/train_localization_cnn.py",
+      "size": 1262,
+      "sha256": "b9b351ba6bf382d0ca1812e4d7555e4292b6b961e693896b6461ab4fc4d29db3",
+      "git_blob": "ae67c88c4d59b3a80b5093a83d3b2690789e9e70",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/sim/vision/train_scene_classifier.py",
+      "size": 4385,
+      "sha256": "33e89e0df24b98dccb84388d8424ace348e8a527a59e5d59adab27381782fb5c",
+      "git_blob": "5cba6ba1f6790c0235d448e8af067eea9246b2f3",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/arm_localize.py",
+      "size": 4692,
+      "sha256": "d31abca31b25bdcaffc51e4ce2efe7e000b6e62a09afc39acd69d5460e340061",
+      "git_blob": "71585c8582a239776995f1f6f4be26e2c1e073d2",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/arm_localize_bench.py",
+      "size": 4642,
+      "sha256": "4c34139cd7a056a13c39796c21a4b32571be953fcd603b1815d90e5c7c8388ed",
+      "git_blob": "b28e9c91d817a5af902f918205df20f4123acc95",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/arm_localize_selftest.py",
+      "size": 1919,
+      "sha256": "a071d8183c5c4514b67b1002a08639db1f0e82e64a7a6c37622d6f071130d834",
+      "git_blob": "3f94b2fd57949e2ddd226ecb5745a8f774962d16",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/base_captures.py",
+      "size": 2314,
+      "sha256": "ea0b3264740ab7762ad6fdbd9478d3231f782a44d0895242d31dc21d662441e8",
+      "git_blob": "588998ec6b8877c21b5f7cf171610b0b666d8834",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/c01_backend.py",
+      "size": 2282,
+      "sha256": "c9beba31fa5ce3aa83fbd0e227a72a6297abe3293e119862601eaabeea6cca3a",
+      "git_blob": "81d1de7b0dda4b1f516d84392df1f2f43ba5dde1",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/c01_capture.py",
+      "size": 9515,
+      "sha256": "1f11aefdc11805387b0c345583828fd733e5e38b0b0e043b0510808f648e8430",
+      "git_blob": "d866c0ecc66a75b4934f52136e30f407c9f09624",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/dataset_audit.py",
+      "size": 4094,
+      "sha256": "163ecf52e502c4966522e6d290af22b149f84201a91ca2f1a8f0e724e79c4a62",
+      "git_blob": "2a2efd7d52563e1876d9a413c4b4203b2e4b344c",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/dataset_manifest.py",
+      "size": 8173,
+      "sha256": "35fe4189e1cdca3ce638eb37fc1a98e7fad7ed6346f476f8ef8e7a81dc06d4d0",
+      "git_blob": "2beeb5ad6130244cd60dca6f82e2a102a5f0c23d",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/inspection_artifacts.py",
+      "size": 1282,
+      "sha256": "0dae9f2538cc2846068526c3b3ab360fbf55498ce96682316cadc66c8148bb8e",
+      "git_blob": "77bedecc922c45c22bc376a78bee898c37f17bc7",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/inspection_model.py",
+      "size": 2184,
+      "sha256": "e6745df738ff9735d9d87114339d998598dd217df18c356a3957d4d01cb21c64",
+      "git_blob": "3eb7505377cbd908a45729038b8f7b5fdfb94a6a",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/inspection_replay.py",
+      "size": 2795,
+      "sha256": "a88f3ea4c31b531b610a32d928166ffedd33ee392a936190e5e7c16a3ba76fc2",
+      "git_blob": "8a756998362f2c9e80988f47008bac3577491164",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/inspection_rules.py",
+      "size": 2198,
+      "sha256": "d0f5b2262260aa9480aeef36ee919edce2260082441e8a82111da4e34da9c932",
+      "git_blob": "7745522726510467d14e65f7908b81c4eee21829",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/inspection_run.py",
+      "size": 4627,
+      "sha256": "e84927a01d5842635e6917af3b2f9c9337e119406cdc3ce4e8cfaf011a2b88ef",
+      "git_blob": "45e7a1dd2fc47f31f11ecf33dbf1e86cfc6e8806",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/m2_onboard.py",
+      "size": 3103,
+      "sha256": "679befc31ee11f0ab5ff4d7bf9d19ed83389750b12febdd3b90fdc27373664cd",
+      "git_blob": "d3e88be5c3d45fe8707d12d1e6e93f984e65c5a3",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/model_audit.py",
+      "size": 2562,
+      "sha256": "3992af52b6f490054a61eaffaf180aaca2a5fcf9a905991e302494bd4a858439",
+      "git_blob": "f0c0b3ef5e140877ea7b0b2cecf44a46211c1a92",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/model_reference.py",
+      "size": 2922,
+      "sha256": "e322095979500080d859635d8321cda43a4389fb421c8f2173547a7c0280f21c",
+      "git_blob": "e8a2b11bd79634adfed34dac98e316e7d69d0c3e",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/numpy_reference.py",
+      "size": 2196,
+      "sha256": "e8ff1155c2cad773a3e285967f75d303839ab944eea8da1a50d1dd460fefc114",
+      "git_blob": "d2237e79bcaf38e9760031c258a1772102c41fb1",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/ONBOARD.md",
+      "size": 2946,
+      "sha256": "75cc005ddc16b83de9a1db9c2aecbd9b8fd7e4099154f0608173eddf2c42ceab",
+      "git_blob": "200d153dfa2ffb2b172fe1d60e90b743f5f93b69",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/onboard_smoke.py",
+      "size": 8157,
+      "sha256": "1d27c8c7f9370445b344d8c1c7c7aac491f9205047574086e11d7a53f8c395c8",
+      "git_blob": "cc7638a81fdff46137966bb98c5264264f8d9476",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/README.md",
+      "size": 7043,
+      "sha256": "626fee9b9a2fcb5170cc8ab0625f944a836e566a0c6997d6c265032a62172396",
+      "git_blob": "00a4c3678af53e53e26efd21d460c4658fcf3bd4",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/reference_package.py",
+      "size": 4383,
+      "sha256": "56df919bc985d3a0bacaf9585cb7715b01aa08a5a1559254513d44345292267d",
+      "git_blob": "497c7ffaa43f07081f4319343f545abf9dca8d96",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/reference_tensors.py",
+      "size": 2645,
+      "sha256": "562991e94eb5e9794e5d9dece49792ea1333ac32feb3a6bf51513994973e2bf4",
+      "git_blob": "b536b7da151f7d75eea5eeababf5f23454ac5c3f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/roi_preprocess.py",
+      "size": 1841,
+      "sha256": "5dfaef77a11fbeee743a48a69352e64a8c5e64a2de97437bd1012ba2ab20e669",
+      "git_blob": "6c43bd0a2f7ef09a39cac84bc93b12619ec778a0",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/round_artifacts.py",
+      "size": 3212,
+      "sha256": "f165f132a6e5d81e9867043dae6130df776035a2ef3648a80967bac7d20a54cc",
+      "git_blob": "71992ff3ac255103fa0462fb21089bac39fa73d7",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/vision_demo.py",
+      "size": 2245,
+      "sha256": "e4483dfc84a9e22b468594816e12ac5c31ab1ec5097f4915688b2c4d9936dcfb",
+      "git_blob": "e1220bf8675e7e02b72d41087473180f7364bb45",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/vision_live_service.py",
+      "size": 10757,
+      "sha256": "663b64ce3a3ac51790a60e4bc12416da486620444d64b3a79716ce003f83052b",
+      "git_blob": "66f0cb1ff791f63d6cd8f12af3d5909f60daa0de",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/vision_mock_service.py",
+      "size": 8305,
+      "sha256": "b6401536f896b90fedb8d3a9aa084b71530855861e404ccf678b9ad4ce193685",
+      "git_blob": "fba6a220291f6b1e21031141d10eb7a22b01b431",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/vision_protocol.py",
+      "size": 7201,
+      "sha256": "82a150eb2a04e3bd31152194c69272c49b07345d62973c3c07ef20cd6c6c143d",
+      "git_blob": "f4480f197951cbfcfa8a1c2ce1cec167a2b8dd3f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/pynq_host/vision_regs.py",
+      "size": 5626,
+      "sha256": "1b30a62d27c9cedbc0e5cb94321984e343d903b4a84165fe5e0c4e13a7030479",
+      "git_blob": "e112ae98a2bc8d05e6cb1ad6e490bb1317cb8ec0",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/vision_client/assets/fonts/cjk_subset_chars.txt",
+      "size": 22389,
+      "sha256": "f5e90ec0dd4144b159986ffaba8e942a7f4a32b0d7162eba41f25408c4fb8cc9",
+      "git_blob": "6ead99a3bf661553241e72d70c0c877424de6880",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/vision_client/assets/fonts/InterVariable.ttf",
+      "size": 876576,
+      "sha256": "29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031",
+      "git_blob": "047c92f6e2212473dc436020afed689527076d44",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/vision_client/assets/fonts/make_cjk_subset.py",
+      "size": 2312,
+      "sha256": "9cc06911356021bead44dd392fc760d81b603206347f297efed1e79c190c717b",
+      "git_blob": "a4140013c36d346c7229fad6804da22370fbaba0",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/vision_client/assets/fonts/NotoSansSC-Subset.ttf",
+      "size": 4083656,
+      "sha256": "6bfa815303433eed810082adc64be50216b3fed656ff604ff59faaf65e8e5922",
+      "git_blob": "7ee282a070a05a6c2e8dfdd0b56ee991df120084",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/vision_client/assets/fonts/OFL-NotoSansSC.txt",
+      "size": 4388,
+      "sha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
+      "git_blob": "1c9f43281b8f216c5461fe9ac729afbade7724e4",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/vision_client/assets/fonts/OFL.txt",
+      "size": 4377,
+      "sha256": "5b9321a4298cfeb6b34354164a1c3afc3db114569984c502b9b35d988fd58c57",
+      "git_blob": "21f6aff961064c2e429f570995e446bcdd555422",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/vision_client/export_records.py",
+      "size": 3147,
+      "sha256": "96aa80ab1fa743e6409d06f02580b688e616ee513122ee27d135f0ef9583eec5",
+      "git_blob": "a5caa13413826fb0d98e92c4b78a202165741045",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/vision_client/hud.py",
+      "size": 15751,
+      "sha256": "868dde5e769599fd68f638a3665b8111e879e716a02cf6faa3abd74c3127d87b",
+      "git_blob": "72ac9bfaa5fa4939f8184ac7fc056fa45dab38b5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/vision_client/hud_text.py",
+      "size": 4898,
+      "sha256": "05fb5730448a5cb2b04ef9462e5ecf1a5f455f635c1b6f5e959f84229876e158",
+      "git_blob": "5faef84beacc9b2bee379dab9b44e41a894cdb4c",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/vision_client/preview.py",
+      "size": 13907,
+      "sha256": "ed38a2739796e6e048297cda650ca039e70f14d481ff84905c55670c84fd2357",
+      "git_blob": "75afbd3203a7279d38a7c5993aacf09107511897",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/vision_client/README.md",
+      "size": 8939,
+      "sha256": "c41cfdc803c68c382e65e40838bb409ad4689ca7abbebd42283715b54c88bcf0",
+      "git_blob": "e32343fb266130d3960711917fa25798bb5af1f9",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/vision_client/records.py",
+      "size": 6903,
+      "sha256": "37458ae0836023787d16b3cb456780613ab76d8f849b0466f993615851c0b142",
+      "git_blob": "a4e0b5212a82442e966ec09e3d2278cd8af2bb03",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/vision_client/replay_viewer.py",
+      "size": 2307,
+      "sha256": "9e91c390b58b0c028adc11f0ac24c22961ac0896165af9e135b75ee039eb7442",
+      "git_blob": "0cabf06e554295bf44df616b48b5b9a391e59342",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/vision_client/requirements.txt",
+      "size": 198,
+      "sha256": "39d14f7e4bdef282edb7231606a26a86d69730af12f5d93ee23baea14e28878e",
+      "git_blob": "280a06affd3815f0efe1732b1fbc1f373581d575",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2/src/vision_client/rounds.py",
+      "size": 8097,
+      "sha256": "e8447d4f2f54a3b795dbc31b990c54403494055d4475e0c026de6159078891ca",
+      "git_blob": "99f20139bb9ee02b1d115bfcbf09becc5024b53f",
+      "action": "unique",
+      "canonical": null
+    }
+  ]
+}

@@ -1,12 +1,11 @@
-﻿# 边缘慧眼（EdgeSight）——基于自研 RISC-V 的片上视觉分析仪
+# 边缘慧眼（EdgeSight）——基于自研 RISC-V 的片上视觉分析仪
 
 > 全国大学生嵌入式芯片与系统设计竞赛'2026 · FPGA 创新设计赛道 · **AMD 自主选题赛道（初级组）** 参赛作品仓库
 
 **目标形态**：在 AMD PYNQ-Z2（Zynq-7020）上，用**自研 RISC-V 核、HDMI 视觉流水线与 INT8 CNN 协处理器**分析相机拍到的螺栓、螺母、垫圈等紧固件。板卡 HDMI 视频经 USB 采集卡进入 Windows **EXE 前端**，识别结果经网口同步到前端；统一展示物体矩形框、类别标签、数量统计、工单缺件/错料提示和异常记录，并与 ARM 软件基线对比。
 
-> **当前进度（2026-10-13）**：模块一核＋最小 SoC 已完成收口，见[核收口报告](report/module1-closure.md)。
-> 模块二 HDMI 视觉预处理 RTL＋已验证视频链路已完成（RTL／链路级），见[视频记录](data/logs/2026-10-03-vision-onboard/README.md)和[真实相机链路](data/logs/2026-10-07-pi-pynq/README.md)。
-> **全项目 M2 验收未完成**；CNN 算子/整网控制器与诊断整数黄金已有，控制器 100 MHz OOC 时序通过，见[计算链证据](data/logs/2026-10-13-cnn-arithmetic/README.md)。DDR 单帧驱动已有离板测试；完整 custom DDR 帧、首网板端输出、实体缓存/MMIO/DMA接入和工业闭环未完成。诊断权重未经训练，不能作为正式分类精度，见[项目主计划](plan.md)。
+> **当前进度（2026-10-17）**：模块一核＋最小 SoC 已收口；模块二 HDMI RTL／链路级、CNN 诊断整数与 EXE LIVE prototype 已有证据；**全项目 M2/M3 未验收**，硬件 CNN、正式 INT8、工业闭环未完成。
+> 状态、下一交付物与 M3 卡点只维护在[项目主计划 §3.1](plan.md)；目录与“找东西”规则见 [docs/project-map.md](docs/project-map.md)。
 
 > 👋 新队友请先阅读 [docs/README.md](docs/README.md)（人读入口：5 分钟搞清目录与"找东西"规则），再读 [docs/onboarding.md](docs/onboarding.md)（Git / Markdown / Agent 上手指南）
 
@@ -40,7 +39,7 @@
 
 1. **自研三级流水 RISC-V 核（而非直接例化现成软核）**：以两级流水基线为对照，通过流水线重构、数据转发（旁路）、轻量分支预测优化 CPI，把"流水线优化"本身作为可量化验证的设计内容；
 2. **RTL 图像预处理硬件流水线**：HDMI 视频流逐像素实时处理（灰度化 → 高斯滤波 → 缩放/边缘），零 CPU 占用，与 OpenCV 软件基线对比延迟与帧率；
-3. **轻量 CNN 推理协处理器（算子已有，整机接入待实现）**：v0 已冻结为 RISC-V 本地 MMIO、PS AXI4-Lite 控制和 DMA 数据面，采用 INT8 小图分类，与 ARM Cortex-A9 软件推理对比；首版不启用自定义指令，见[C03](docs/coprocessor-integration-v0.md)。
+3. **轻量 CNN 推理协处理器（算子已有，整机接入待实现）**：v0 已冻结为 RISC-V 本地 MMIO、PS AXI4-Lite 控制和 DMA 数据面，采用 INT8 小图分类，与 ARM Cortex-A9 软件推理对比；首版不启用自定义指令，见[C03](docs/contracts/coprocessor-integration-v0.md)。
 
 **为什么自研核，而不用 PicoRV32 / E203 现成软核？（用数据回答，不用情怀）**
 
@@ -73,7 +72,7 @@ flowchart LR
 
 **演示闭环**：放入紧固件 → EXE 展示实际识别框与类别 → 按工单核对类别和数量 → 缺件/错料提示 → 保存本次检查结果与异常截图。连续视频帧不重复累加批次；视频与网口结果须同步，断联或过期结果显示待确认。
 
-**首版边界**：自由分散、互不遮挡；定位／裁剪与 FP32 文件分类参考已有，真实板端部署与 CNN 硬件分类未完成。C02 已冻结 64×64 灰度 FastenerCNN 与整数算术；正式权重、阈值和实际工位条件仍待验收。C03 区分 16 目标硬件/协议能力与检查 V0 的 10 件业务策略；C04 应用语义仍待完整评审，见[决策单](docs/vision-sync-protocol-decisions.md)。
+**首版边界**：自由分散、互不遮挡；定位／裁剪与 FP32 文件分类参考已有，真实板端部署与 CNN 硬件分类未完成。C02 已冻结 64×64 灰度 FastenerCNN 与整数算术；正式权重、阈值和实际工位条件仍待验收。C03 区分 16 目标硬件/协议能力与检查 V0 的 10 件业务策略；C04 应用语义仍待完整评审，见[决策单](docs/contracts/vision-sync-protocol-decisions.md)。
 
 ---
 
@@ -97,10 +96,10 @@ flowchart LR
 - HDMI IN → 解码 → 逐像素流水线：RGB→灰度 → 3×3 高斯滤波 → 双线性缩放（至网络输入尺寸）→ 可选 Sobel 边缘
 - 行缓存（Line Buffer）调度，全流水无逐帧 DDR 回写依赖，**像素级延迟固定可测**
 - **参数化链路**：当前 PS 经 AXI-Lite 配置视觉寄存器，配置原子生效；RISC-V 应用调度接入尚未实现
-- **架构对比点**：行缓存直通 vs 传统"DDR 帧缓存回写"方案，延迟/带宽/资源三列实测对比（借鉴往届国一作品 Ultra-Vision 的"算法直出"架构，见 [docs/proposal_upgrade.md](docs/proposal_upgrade.md)）
+- **架构对比点**：行缓存直通 vs 传统"DDR 帧缓存回写"方案，延迟/带宽/资源三列实测对比（借鉴往届国一作品 Ultra-Vision 的"算法直出"架构，见 [docs/proposal_upgrade.md](docs/research/proposal_upgrade.md)）
 - 对照组：PS 侧 OpenCV / 裸机 C 软件实现同算法
 
-模块二 RTL／链路级证据见[视频记录](data/logs/2026-10-03-vision-onboard/README.md)和[真实相机恢复记录](data/logs/2026-10-07-pi-pynq/README.md)。现用原 vision 的 bit/hwh 已与归档 XSA 配对，构建源码锚定仍缺；C01 捕获候选另有构建输入与显示/状态诊断证据。完整长测、冷启动、断源恢复和 DDR 取帧仍待验收，见[C01 基线](docs/c01-capture-implementation-baseline.md)。
+模块二 RTL／链路级证据见[视频记录](data/logs/2026-10-03-vision-onboard/README.md)和[真实相机恢复记录](data/logs/2026-10-07-pi-pynq/README.md)。现用原 vision 的 bit/hwh 已与归档 XSA 配对，构建源码锚定仍缺；C01 捕获候选另有构建输入与显示/状态诊断证据。完整长测、冷启动、断源恢复和 DDR 取帧仍待验收，见[C01 基线](docs/contracts/c01-capture-implementation-baseline.md)。
 
 ### 模块三：轻量 CNN 推理协处理器
 
@@ -167,10 +166,12 @@ edgesight/
 ├── sim/                 # testbench、仿真脚本（scripts/ 一键 iverilog；tools/ 含 RV32I 编解码自测）
 ├── build/               # Vivado 可复现构建 tcl + 综合/实现报告
 ├── board/               # 上板步骤、运行脚本与已有实机记录
-├── data/                # 测试数据与参考结果（metrics.csv 指标汇总 + logs/ + scripts/ + evidence/）
-├── skill/                 # 技能包（含 understand-gate 入库理解门槛 skill，OpenCode 自动加载位说明见其文件头）
+├── data/                # 测试数据与参考结果（metrics.csv + logs/ + evidence/ + golden/ + scripts/）
+├── models/              # FP32/HOG 原型权重（外包交付；结构例外，不移动）
+├── results/             # 外包实验逐图评估/训练记录（结构例外，不移动）
+├── skill/                 # 技能包（含 understand-gate 入库理解门槛 skill）
 ├── report/                # 设计报告 + 大模型协作记录（llm_log/）
-├── docs/                  # 非强制扩展：上手 / 清单 / 调研等过程文档（见对照表）
+├── docs/                  # 过程文档与导航（入口：docs/README.md；地图：docs/project-map.md）
 ├── .github/               # Issue 模板（仓库基础设施，不属作品结构对照范围）
 └── .gitignore             # 忽略编译产物（*.hex/*.coe 明确入库）
 ```
@@ -187,6 +188,7 @@ edgesight/
 | `build/` | `build/` | 可复现构建脚本＋已有核／SoC／视觉综合实现报告 |
 | `board/` | `board/` | 上板工程、运行脚本与实测输出 |
 | `data/` | `data/` | 测试数据、黄金参考与 `metrics.csv` 指标汇总（含 `logs/`、`scripts/`、`evidence/`） |
+| `models/`、`results/` | —（指南未列） | 外包交付的模型与实验结果；结构例外，不移动（完整性校验见 `data/evidence/2026-10-10-fastener-handoff/`） |
 | `skill/` | `skill/` | 技能包（大模型协作沉淀，加分项） |
 | `report/` | `report/` | 设计报告 + 大模型协作记录（`llm_log/`） |
 | `docs/` | —（指南未列） | 非强制扩展：过程文档集中地（onboarding / 清单 / 赛题调研） |
@@ -287,12 +289,12 @@ M1 检查点历史为 #19／#20／#21；正式合并和关闭记录见[模块一
 
 ## 参考资料
 
-完整的分类资料清单（FPGA / SoC / RTL / CNN / PYNQ / HDMI / 体系结构，共 40+ 站点）见 **[docs/resources.md](docs/resources.md)**。
+完整的分类资料清单（FPGA / SoC / RTL / CNN / PYNQ / HDMI / 体系结构，共 40+ 站点）见 **[docs/resources.md](docs/research/resources.md)**。
 
 核心必读：
 
 - AMD 赛道官方仓库（选题指南全文 TRACK_GUIDE_2026.md + 三赛道规则/开发板获取/技术支持）：https://gitee.com/Vickyiii/fpgachina26-amd
-- 2026 全部 7 企业选题指南摘要 + 往届获奖作品调研（团队会议归档）：[docs/track_research.md](docs/track_research.md)
+- 2026 全部 7 企业选题指南摘要 + 往届获奖作品调研（团队会议归档）：[docs/track_research.md](docs/research/track_research.md)
 - PYNQ 官方文档：https://pynq.readthedocs.io/en/latest/
 - 蜂鸟 E203 RISC-V 处理器配套书与源码：https://github.com/riscv-mcu/e203_hbirdv1
 - FINN 量化神经网络加速框架：https://github.com/Xilinx/finn

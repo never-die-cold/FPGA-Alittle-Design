@@ -13,8 +13,10 @@ from scan import OUT, ROOT, collect, group, load_roles
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--date", required=True, help="User-facing snapshot date, YYYY-MM-DD")
+    parser.add_argument("--scope", choices=("source", "all"), default="source",
+                        help="source = 源码/文档/测试；all = 连 data/logs、data/evidence 一起索引")
     args = parser.parse_args()
-    paths, tracked, texts, groups, project_count = collect()
+    paths, tracked, texts, groups, project_count = collect(scope=args.scope)
     exact, names = load_roles()
     relations = build_relations(paths, texts)
     revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
@@ -24,8 +26,9 @@ def main():
         records.append({"path": p, "group": group(p), "kind": kind,
                         "state": "索引自身" if p.startswith("docs/file-guide/") else "已纳入Git（含暂存）" if p in tracked else "未忽略的新文件",
                         "description": description, "basis": basis, "relations": relations[p]})
-    metadata = {"date": args.date, "revision": revision, "project_count": project_count,
-                "count": len(records), "note": "Includes current working-tree content; not an exact committed-tree guide."}
+    metadata = {"date": args.date, "revision": revision, "scope": args.scope,
+                "project_count": project_count, "count": len(records),
+                "note": "Includes current working-tree content; not an exact committed-tree guide."}
     write_outputs(records, metadata)
     report = validate(records, paths, metadata)
     print(json.dumps(report, ensure_ascii=False, indent=2))

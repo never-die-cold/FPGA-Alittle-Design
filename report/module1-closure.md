@@ -53,7 +53,7 @@ CoreMark：BHT1=1,587,055/1,854,101=85.60%；BHT2=1,690,538/1,854,101=91.18%；h
 
 ## 4. arch-test 扩展子集与功能边界
 入口：`bash sim/scripts/run_arch_test_matrix.sh`；清单为 I:add/addi/and，M:mul/mulh/mulhsu/mulhu/div/divu/rem/remu，各四档，**44/44 签名匹配官方 golden 且档间 SHA256 相同**。
-[RISC-V 签名和逐项日志](../data/logs/2026-10-07-module1-closure/arch-complete/) 留在仓库；38 用例 RV32I 固件、访存、RAW/load-use、M 握手和冲刷另由全量专项覆盖。
+[RISC-V 签名和逐项日志](../data/logs/2026-10-07-module1-closure/arch-complete) 留在仓库；38 用例 RV32I 固件、访存、RAW/load-use、M 握手和冲刷另由全量专项覆盖。
 尝试扩大为 38 I + 8 M 时，官方 beq-01 超出 32KB，链接器报 overflowed by 195388 bytes；[原失败](../data/logs/2026-10-07-module1-closure/arch-final.log) 不删除。不能放大仿真 RAM 来冒充真实核验证。
 这是已声明扩展子集的全部验证，**不构成上游全部测试或 RISC-V 合规认证**。非对齐异常、CSR、特权/中断未实现；fence/ecall/ebreak 按 NOP。
 
@@ -86,10 +86,10 @@ PicoRV32 regular/large OOC 已于 10/03 入档，数值仍需标注 Slack 外推
 **未实现 / 未接入**：PS↔核 AXI/中断、CNN 自定义指令或 MMIO、统一地址表、工业检查固件；均是后续应用工作包，不作为模块一已完成能力。未实现 CSR/特权/异常模型，未做官方长时间 CoreMark 或上游完整 ISA 认证。
 
 ## 7. 交付与复现
-[一键复现清单与 #skill候选](../docs/module1-reproduction.md) 包含全量、arch、XSim、OOC 和汇总入口；[data/metrics.csv](../data/metrics.csv) 保留旧指标并追加本轮结果。
+[一键复现清单与 #skill候选](../docs/runbooks/module1-reproduction.md) 包含全量、arch、XSim、OOC 和汇总入口；[data/metrics.csv](../data/metrics.csv) 保留旧指标并追加本轮结果。
 本轮用户已授权一次写完、理解题集中末尾；[完整理解问答](llm_log/2026-10-07-module1-closure.md) 已归档，补测通过。用户随后明确授权推送、创建PR、更新清单，再明确要求关闭issue、合并及同步各分支。
 代码和证据经[PR #60](https://github.com/never-die-cold/FPGA-Alittle-Design/pull/60)合并至main，merge commit=f3668f73ad2e6e779f5a2afe066e532770f94a02。原草稿#59因GitHub GraphQL转换故障由相同head的正式#60接续并保留记录；本次依用户授权使用protect-main已配置的用户管理员例外，未代填非作者审查署名。
-[#20](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20)、[#21](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)和M1技术里程碑已关闭。未验证备考移交[#61](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/61)继续待办；100/125MHz和25%未达事实保留。[远程收尾记录](../docs/module1-issue-closeout.md)与[PR记录](../docs/module1-pr.md)同步正式状态。
+[#20](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20)、[#21](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)和M1技术里程碑已关闭。未验证备考移交[#61](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/61)继续待办；100/125MHz和25%未达事实保留。[远程收尾记录](../docs/archive/module1-issue-closeout.md)与[PR记录](../docs/archive/module1-pr.md)同步正式状态。
 
 本轮最终汇总：
 `PASS: 44 arch signatures; eight workload runs; four XSim matches; five OOC audits; two fixed-route gates`。

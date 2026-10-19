@@ -9,7 +9,7 @@
 
 | 内容 | 拆分位置 | 项目维护入口 |
 |---|---|---|
-| 进展与部署方案 | `docs/outsource/fastener-vision-2026-10-07/`，原文保留 | [进展汇报](../工作进展汇报.md)、[受控流水线方案](../修订方案-受控流水线.md)，项目维护版 |
+| 进展与部署方案 | `docs/outsource/fastener-vision-2026-10-07/`，原文保留 | [进展汇报](../%E5%B7%A5%E4%BD%9C%E8%BF%9B%E5%B1%95%E6%B1%87%E6%8A%A5.md)、[受控流水线方案](../%E4%BF%AE%E8%AE%A2%E6%96%B9%E6%A1%88-%E5%8F%97%E6%8E%A7%E6%B5%81%E6%B0%B4%E7%BA%BF.md)，项目维护版 |
 | 实验与数据审计 | 同上，原文保留 | [探索审计](../localization-exploration-audit.md)、[数据审计](../localization-dataset-audit.md)，已有同内容版本 |
 | 定位、训练和评估代码 | 根目录 `sim/vision/` | 接收时 16 个脚本逐字节一致，合并去重；共享 ROI 改造后训练原件另存快照，见下文 |
 | FP32 CNN、HOG/SVM 原型 | 根目录 `models/` | [BN 基线](../../models/cnn-bn64-baseline.pt)、[边缘填充模型](../../models/cnn-border-fill-best.pt)、[HOG/SVM](../../models/hog-svm-train-only.yml) |
@@ -25,7 +25,7 @@
 - 未实现/未接入：正式板端定位、原分辨率 ROI 获取、CNN 协处理器与工业闭环；连续运动的触发、关联、去重未实现。
 - 未验收：真实工位效果、INT8 精度、PYNQ-Z2 延迟与资源、工单误放行率；CPU 合成图数字不能替代这些指标。
 - [定位委托需求](localization-requirements.md) 的接口、独立自测、ARM 计时和冻结合格线仍需逐项验收，本次方案包接收不等于 LOC-R1—R18 验收通过。
-- 已有 [检查 V0 建议稿](../inspection-v0-contract.md) 提出取图与 ROI 规则，仍为未冻结建议，不由交接包自动替换现有接口。
+- 已有 [检查 V0 建议稿](../contracts/inspection-v0-contract.md) 提出取图与 ROI 规则，仍为未冻结建议，不由交接包自动替换现有接口。
 
 ## 复现前提与完整性检查
 
@@ -57,5 +57,5 @@ if ($bad.Count -or $rows.Count -ne 48) { throw 'Installed integrity FAIL' }
 交付原字节保存在 `sim/vision/archive/fastener-vision-2026-10-07/train_scene_classifier.py`，
 `installed.csv` 仅调整这一项去向，原始哈希不变，48/48 完整性检查仍通过。
 快照用于审计和像素对拍，不作为独立训练入口；活跃训练入口仍在 `sim/vision/`。
-新共享实现与交付原函数的 24 组像素对拍通过，证据见[离板检查](../offline-inspection.md)。
+新共享实现与交付原函数的 24 组像素对拍通过，证据见[离板检查](../runbooks/offline-inspection.md)。
 这些测试不包含缺失的原始数据集训练、准确率复验或板端部署。

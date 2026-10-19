@@ -1,0 +1,169 @@
+{
+  "run": "2026-10-16-c01-park-first-board",
+  "generated_at": "2026-10-19T02:47:01.153133+00:00",
+  "policy": "restore=git blob; drop=canonical copy; keep/unique=stay",
+  "roots": [
+    "inputs/"
+  ],
+  "summary": {
+    "total": 19,
+    "restore": 0,
+    "keep": 1,
+    "drop": 1,
+    "unique": 17
+  },
+  "files": [
+    {
+      "path": "data/logs/2026-10-16-c01-park-first-board/inputs/c01_board_cnn.py",
+      "size": 4538,
+      "sha256": "fb29a1e7200891a9f217271e35f57b5340bb5c9ea0933328c39528b0022997c4",
+      "git_blob": "ef54df97713acbf8d54f9d6f6574d72a30377b3c",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-16-c01-park-first-board/inputs/c01_board_cnn_v2.py",
+      "size": 4103,
+      "sha256": "37be89fb4dc45d7567f7c83dcabc5112096d64627866fb148c0fbcc1d73c53fc",
+      "git_blob": "9a28422da792e66362636583cc99b51cda6da733",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-16-c01-park-first-board/inputs/c01_board_cnn_v3.py",
+      "size": 4121,
+      "sha256": "48f6e2cdf622c5cc7bc0d915c36d401155c0a629892f2b20a904398f5c256a6b",
+      "git_blob": "e03bb85fca5dbc1d457ec51cd9f7c9871d764498",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-16-c01-park-first-board/inputs/c01_board_cnn_v4.py",
+      "size": 4515,
+      "sha256": "4655698f0b605896c6b8a4de7b972a6aa9b7efb73f46c53b1a1d816b0d0f8e5f",
+      "git_blob": "1cf7e9de4680a097b0b891f590e6e2f38878e758",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-16-c01-park-first-board/inputs/c01_board_cnn_v5.py",
+      "size": 4521,
+      "sha256": "731bd316413c94fea5bc4d6f197601f1e71968f28b869fefa32e5da27e309093",
+      "git_blob": "7fc03173dfdd36ce834194a694feee00cb33661f",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-16-c01-park-first-board/inputs/c01_board_cnn_v6.py",
+      "size": 4538,
+      "sha256": "fb29a1e7200891a9f217271e35f57b5340bb5c9ea0933328c39528b0022997c4",
+      "git_blob": "ef54df97713acbf8d54f9d6f6574d72a30377b3c",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-16-c01-park-first-board/inputs/c01_board_cnn.py"
+    },
+    {
+      "path": "data/logs/2026-10-16-c01-park-first-board/inputs/c01_park_classify.py",
+      "size": 8979,
+      "sha256": "f8c961ab848e156fe0f405ea3ac19f2aaa0681d1a5a63aae137fa27b435e6bf1",
+      "git_blob": "0e5e6c4479a3d32fbb7d506c18b1e14b53a2ea50",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-16-c01-park-first-board/inputs/c01_park_locate.py",
+      "size": 5475,
+      "sha256": "b2d85a0d0b6d74a787f22af99fa94e7a6106b8f04f182cf7ab940beeda2ed138",
+      "git_blob": "f2d20ef66c7b0c1c72c1e754a08c56d42660d55b",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-16-c01-park-first-board/inputs/c01_park_locate_rounds.py",
+      "size": 5783,
+      "sha256": "9a232651b2b410f54dafa95756eccb20bc8b9955e9fe762a1d91afdc1c5fa69e",
+      "git_blob": "0860ecc009da300e5dbc2ff55309f41c23bbd1f7",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-16-c01-park-first-board/inputs/c01_park_onboard_diag.py",
+      "size": 6245,
+      "sha256": "73defb5206c3522479336f7f84e0114c144cd0956368dac893df3149f9389fa9",
+      "git_blob": "28dea333ca3913dbef57ad11bd136609baee1cab",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-16-c01-park-first-board/inputs/c01_park_v3.py",
+      "size": 9924,
+      "sha256": "abc81a27fbd919c5fca6bda401cca1045e44ab87503d9c55b9bbf6c17e3a658d",
+      "git_blob": "2eb289628b914a7d602d1fecac5f17ba7b0c8c93",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-16-c01-park-first-board/inputs/c01_park_v4.py",
+      "size": 9656,
+      "sha256": "2aa887f019be54aac337086c4a12ccbe4ae02e30b7b2dbf45b805a3d7d1b2137",
+      "git_blob": "c2c3ab2ca073d68aa0bb95f758c129bffbde9ac2",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-16-c01-park-first-board/inputs/c01_steady_observer.py",
+      "size": 7432,
+      "sha256": "92e685f5fdafcda80ebf94ff5ace2ddc01034221826a01b583e138dc3c350b94",
+      "git_blob": "68ebc52d5da0af6f6132edf7fd0a7ff065badf62",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-16-c01-park-first-board/inputs/c01_warmup_observer.py",
+      "size": 7294,
+      "sha256": "a7c912594dfa19db110764451ec4ccc1d2d663d5a574995a0aab669a931c1ba2",
+      "git_blob": "97e79ae941bdedab5acb33cab60c21d3194c54bc",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-16-c01-park-first-board/inputs/cnn_board_package.npz",
+      "size": 140856,
+      "sha256": "1440e3fdb98e9134c4481d07a1214d14d2f58bdb1e756e13dea927658cfcf2c1",
+      "git_blob": "12b3e5e9224428e7944539cd5c1fcc69b3da2e01",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-16-c01-park-first-board/inputs/export_cnn_board_package.py",
+      "size": 2534,
+      "sha256": "e19527ad179fe826be6e0d4e8f13bb6db752da18740ee624c3e224ba460413a2",
+      "git_blob": "8075d25819d84c075e7f1dcc68a7be04c2c48b1d",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-16-c01-park-first-board/inputs/gen_golden_crops.py",
+      "size": 4086,
+      "sha256": "450ade40091e85ad3e18d045e3239e79691356aecc0bebac38c42ea85eb68d76",
+      "git_blob": "cf2d12cdafe00055c1269ff29ae9e61fe260755f",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-16-c01-park-first-board/inputs/golden_crops.npz",
+      "size": 17914,
+      "sha256": "89e22760a78c570372fc277c8e9ba55463ac8fd51b68d45890e6059aca2e2d7b",
+      "git_blob": "3d9e3b571c1ea66ee0effa1eb787c1d00649ed9a",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-16-c01-park-first-board/inputs/golden_crops_meta.json",
+      "size": 1192,
+      "sha256": "effff58def55733b2dc87ef6b3a9fedb632c844618a21b0f0e7af74db809ac38",
+      "git_blob": "b9f8f3cfff702ca11974764e93f64acef4744bb0",
+      "action": "unique",
+      "canonical": null
+    }
+  ]
+}

@@ -1,0 +1,801 @@
+{
+  "run": "c01-capture-19af0b2c829447b89d442a6f4f09f8f3",
+  "generated_at": "2026-10-19T02:47:01.207428+00:00",
+  "policy": "restore=git blob; drop=canonical copy; keep/unique=stay",
+  "roots": [
+    "inputs/"
+  ],
+  "summary": {
+    "total": 98,
+    "restore": 22,
+    "keep": 61,
+    "drop": 5,
+    "unique": 10
+  },
+  "files": [
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/if/pmod_v1_0/pmod.xml",
+      "size": 872,
+      "sha256": "f84776b408fa78165a1702552605f9926961076e65f7e3cd4d718c8bf38287c0",
+      "git_blob": "bc74bdab522252f765da7a0dd34966beb1ba5e50",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/if/pmod_v1_0/pmod_rtl.xml",
+      "size": 8889,
+      "sha256": "24cc6ddbf6d3ec32f3922b85cb3f4137efb52ece1b2972ca8428a4919ffee8ca",
+      "git_blob": "94608d45aa6e9c86366e2da4745287d91f6a03e0",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/if/tmds_v1_0/tmds.xml",
+      "size": 908,
+      "sha256": "c6a3cbcfa3de47ca91a2fbe49de15f1f61c7196039f14381d1598a26233be489",
+      "git_blob": "b337da536a797de83dc6cd598bd6f1ebb903e23a",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/if/tmds_v1_0/tmds_rtl.xml",
+      "size": 3607,
+      "sha256": "f79979c9844723343c83a80cc6bb9d1e49bdeb0796729517f5e339965e70d2c1",
+      "git_blob": "bee9710bcaa75db89259c5d4cd0493d77d17fbc8",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/if/ZmodAWG_Calibration_v1_0/ZmodAWG_Calibration.xml",
+      "size": 621,
+      "sha256": "4eca0e1b4b20aeb9c5c7310539edf97384d107b3092a7ce527bf017f94e15edd",
+      "git_blob": "e09da561f5905d1083eb9f7721676544e6170ef4",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/if/ZmodAWG_Calibration_v1_0/ZmodAWG_Calibration_rtl.xml",
+      "size": 2744,
+      "sha256": "c876fc49bea12aa50240c7bda50a3c0c9cdc7627401dad4e607a132028568e8d",
+      "git_blob": "3861680b09faa8f1805bd4dc0c7e373faec50584",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/if/ZmodScope_Calibration_v1_0/ZmodScope_Calibration.xml",
+      "size": 622,
+      "sha256": "79b722c87260d1f4c7d8166d9036c35dd3ae3e54b97a23031b4d7ca8f74d442b",
+      "git_blob": "958db81d85ef675dea75ce3f5de390b224382833",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/if/ZmodScope_Calibration_v1_0/ZmodScope_Calibration_rtl.xml",
+      "size": 2746,
+      "sha256": "ad1803f8c8a6de654bc36b93a38d8766c83e7d602257f2e9e591122b88aefe98",
+      "git_blob": "60103273ae6fd897cb1dc3f1b9615d6cc519336b",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/.gitignore",
+      "size": 165,
+      "sha256": "f3b54b9401cc0437a9e06a502fc6f5ac6dce6213a0b697640cd83c0dae3066fb",
+      "git_blob": "e868524207dea644a1a1779aa24390010675bed3",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/component.xml",
+      "size": 61061,
+      "sha256": "a2a33a213e6981708a80eca004935b983b04bf88fcd287bc6ea20e62e7fc1522",
+      "git_blob": "c39d5e5106e5d8b5715c3099700ae19669dad402",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/docs/Advantiv_DGL_1080P_CEA.dat",
+      "size": 1041,
+      "sha256": "01c67d02f165795b3bc0451d268c2bb8181b5d281498b5214e52638dfac16bd2",
+      "git_blob": "3c02ed65447b81ea8e2d79716fe70a125a056847",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/docs/Advantiv_DGL_1280_1024_CEA.dat",
+      "size": 1041,
+      "sha256": "8a691e4d0b82aa8546b3d4a4b9a29cab8a3da28343c7708ce4a5cddce3af4604",
+      "git_blob": "0002f26024c814374846428433cf038be2637c00",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/docs/Advantiv_DGL_720P_CEA.dat",
+      "size": 1041,
+      "sha256": "1d4b5740bae04836bf072d1396f8a6b9850ab31f613a0355e3e325234b791703",
+      "git_blob": "32a4257bfb86dc06bf2cdb7725fa25fe894139df",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/docs/dvi2rgb.docx",
+      "size": 233990,
+      "sha256": "4c0e8623cd88515593b3d5a1ca43fb3e0c357c14e8d0aec161916e9649aabb3c",
+      "git_blob": "f0975cd2e3f7a3917f82aae2a5da275573e794e2",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/docs/dvi2rgb.pdf",
+      "size": 325152,
+      "sha256": "2c211e49ce222b298f50447ef562ceaed917b7594de16867250f1a971557c68c",
+      "git_blob": "6b2fcc121c6a9aed1dc68f1fd3f4b86555c70d21",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/gui/dvi2rgb_v1_0.gtcl",
+      "size": 137,
+      "sha256": "c2941550920e603709b73fb31c2e074410a0c7f21eb96e88fdbd88fe0dfb29dc",
+      "git_blob": "6c844c17586b91c43d108edf17874b30b710c0b9",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/ChannelBond.vhd",
+      "size": 6809,
+      "sha256": "9f8359aeb6c1e60cc3cbbc9cf3ddc69895576ef86c032e85e77d0d4fdcf80f3f",
+      "git_blob": "091545bdf0045f7f9cccc5152fa8eec163c6150f",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/dgl_1080p_cea.data",
+      "size": 2304,
+      "sha256": "f4cfdb3e0df0e5a3a7ba8e76e6c19d342c3b0f0348901927a550bd4712ea8add",
+      "git_blob": "4ef226aad872061756c20de592323f69251d5fa1",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/dgl_1280_1024_cea.data",
+      "size": 2304,
+      "sha256": "e3ac222ed44202cc75a92381f8a4b56c18df5d9077774e6923396646de03e6a8",
+      "git_blob": "eadd8ed26d9e8cad4de886ab2221b3581319880f",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/dgl_720p_cea.data",
+      "size": 2304,
+      "sha256": "f067a7eda5698d5af0461ef3a10e30f72a10de3dc5a3ff8c7ec626be91b454be",
+      "git_blob": "8ee16d43ed36f7953fbb9d8a0e111ad80e36831c",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/dvi2rgb.vhd",
+      "size": 14254,
+      "sha256": "a8577e586b4f3ea68fd8f6bcd206ee7fd2b0691349267db433d6777b8b9e8c4f",
+      "git_blob": "756e45b7b70b07b40231e4fe8162bc067bfc5174",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/dvi2rgb.xdc",
+      "size": 945,
+      "sha256": "522d6a186feca27dbece67303f4a9ac95c57ef3a870aa1d468d889adc4da4c46",
+      "git_blob": "ea53af44685ecd58296c4ec8f524e5376b9d03b1",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/dvi2rgb_ooc.xdc",
+      "size": 95,
+      "sha256": "0b74ab740aeab92ea0f247b5bbd931e34d4c8cffc5b118eec9f95a2d63b0e8a9",
+      "git_blob": "b3cf4f76074b018e1369a2a7d20090adce35c8ed",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/DVI_Constants.vhd",
+      "size": 3151,
+      "sha256": "d8dbbbc3c8696d4527ee0d3c4757f1a40d0acebc845899483bc61c2bb8270cde",
+      "git_blob": "83a602e5879fc0d5eafa5c82e8f92b52a1cc82fc",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/EEPROM_8b.vhd",
+      "size": 8403,
+      "sha256": "db5cede08b24e5c4a3068d9de6e6cd5fc19d5aad2c3245b0da6f2265545ce676",
+      "git_blob": "53787d57f4920b624428774ed563f1c8e056f02e",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/GlitchFilter.vhd",
+      "size": 3919,
+      "sha256": "914d9844fd56b3d7f4e67720fc9f0ca965dee6c26e8cf7a5822529a34256e8ab",
+      "git_blob": "ea09a9db0c0425e59c5d9af79fa2d2e98d7ab059",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/ila_pixclk/ila_pixclk.xci",
+      "size": 413833,
+      "sha256": "14da74f4d1a2a281d238298ff5ecaf52b822cd24516faa57a64fb22e19c0e082",
+      "git_blob": "59a2706d64b3e312cd3e8ec8062c217dc4bfe2cb",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/ila_refclk/ila_refclk.xci",
+      "size": 412439,
+      "sha256": "38e1aad3eb8dad626c0e00205ac8be134346b69e8ec387e6cd5f5f02f3edb493",
+      "git_blob": "8355d7864cfed4dc53202ebdc1c604c39406f899",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/ila_timing_workaround.xdc",
+      "size": 3835,
+      "sha256": "6bdbdba0cd188803808ea9347bc35ed34bd832c118fb78b73b6261d293f84d47",
+      "git_blob": "14784ccbda51fcbe51ce242b2bc8ba2c471f0bce",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/InputSERDES.vhd",
+      "size": 10056,
+      "sha256": "9f28ba82371f70e4597e79648a433343d424de7c55ff48e766944f20b19adb00",
+      "git_blob": "8d693e480fa5e4eeab1cc54461bc1709559c4dd9",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/PhaseAlign.vhd",
+      "size": 14475,
+      "sha256": "6019634663033456653d5415205fd3df21b5527c1390ce5012c0702f38490632",
+      "git_blob": "085fac44eecbffdd0bf074ac76ba341b7e7cdaa6",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/ResyncToBUFG.vhd",
+      "size": 3719,
+      "sha256": "5ede27161ccf2723207c9c55e359cdcf1c9c998cb16fcaa909fdc8d58ff81689",
+      "git_blob": "60006a9bb900915887d86c2c2737b7320ac98c21",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/SyncAsync.vhd",
+      "size": 3727,
+      "sha256": "5561ac8099ed13f3114e97387aab5f7f30ad28a8be2fc540004cbee3f19eb3a7",
+      "git_blob": "f1d7d1332c8e1baf0033e5238f5e91ad6b6eca41",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/SyncAsyncReset.vhd",
+      "size": 3734,
+      "sha256": "3ce7ade3267959da59b4d448cc6641018e4f0ac3de9f8f998d0b9ff84a3794bc",
+      "git_blob": "4047c516a8af2efce5b428d386f5b1b290a64bba",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/SyncBase.vhd",
+      "size": 3854,
+      "sha256": "10dc70c19caa969071c2c0be52c3757a62d15d661f4b1b65b3f76818671e478c",
+      "git_blob": "d185810ff26125005477bcbda46ae38540875707",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/TMDS_Clocking.vhd",
+      "size": 12258,
+      "sha256": "488a801b4e718385fb51bff7c2e61d105609939c9faa93feeb4bb8a0de849a90",
+      "git_blob": "66a8541f098602cd3383a0d20b9cc6880a1ef2ef",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/TMDS_Decoder.vhd",
+      "size": 10949,
+      "sha256": "e43a58f978870d512646a7b468a4c70e33a60e97f7f64ef6b9ff867b23c5e466",
+      "git_blob": "47f50b3f1697974b4f3c788da5fdf9097e868064",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/TWI_SlaveCtl.vhd",
+      "size": 11349,
+      "sha256": "b1c9a001d8a7bedb2366d9c1d6d0b061de59327b68d6867df887d0cb73f62f2f",
+      "git_blob": "1d6490368613ea867647d43c6bdd8939bdd72ef5",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/xgui/dvi2rgb_v1_3.tcl",
+      "size": 3478,
+      "sha256": "e507fad7f738d9995bfd7f4aa8be1a2d1e23abadbeb227603dd0e6a54935b5c8",
+      "git_blob": "b688b02c49d6ea4685fa551dbbaf2299a6529950",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/xgui/dvi2rgb_v1_4.tcl",
+      "size": 4394,
+      "sha256": "b46dcc0a4050a1abd3e480a8cc5f8c351b66d0e473b819607c48fb92b4129a46",
+      "git_blob": "126e10bd5de03f7dc07304d1f03613f0509eeeaa",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/xgui/dvi2rgb_v1_5.tcl",
+      "size": 5146,
+      "sha256": "c6cf51d058b384042185e01c5d4d7414d0bbb704592e2b4dac56137db58d9b4b",
+      "git_blob": "dc82f77c4c27c0021f9842af520dfe5e5df0f0f1",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/xgui/dvi2rgb_v1_6.tcl",
+      "size": 5749,
+      "sha256": "e07b498e173fe172ab3916cb74fe295802277b8cadf17b22c8d656e18bf9dba5",
+      "git_blob": "243c60aacdf5546404a66b5fff8c57eb4dc1c4fc",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/xgui/dvi2rgb_v1_7.tcl",
+      "size": 5749,
+      "sha256": "e07b498e173fe172ab3916cb74fe295802277b8cadf17b22c8d656e18bf9dba5",
+      "git_blob": "243c60aacdf5546404a66b5fff8c57eb4dc1c4fc",
+      "action": "drop",
+      "canonical": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/xgui/dvi2rgb_v1_6.tcl"
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/xgui/dvi2rgb_v1_8.tcl",
+      "size": 6424,
+      "sha256": "d6e6e8be8f28ff8904c77a143240abb8f47b8f6362be3465dbdc58b22bb3dd07",
+      "git_blob": "35883595f9f08e382d339d6764551b135c603c18",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/xgui/dvi2rgb_v1_9.tcl",
+      "size": 6424,
+      "sha256": "d6e6e8be8f28ff8904c77a143240abb8f47b8f6362be3465dbdc58b22bb3dd07",
+      "git_blob": "35883595f9f08e382d339d6764551b135c603c18",
+      "action": "drop",
+      "canonical": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/xgui/dvi2rgb_v1_8.tcl"
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/xgui/dvi2rgb_v2_0.tcl",
+      "size": 6531,
+      "sha256": "f20148cfaaf4be467265f7a79718afae20619cb7b47eb4d4dbf175b53ad3129e",
+      "git_blob": "80bd9964480b0a2169a725fd3c3b8a2db5df19c7",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/component.xml",
+      "size": 36310,
+      "sha256": "da4b8a84e98fd5839f1917f8c5805531cfe2dbb5b7555d54617cf574ce63d59a",
+      "git_blob": "9456962bf2c9b6eca6e2fa09eedb3ceb6e2b7a2b",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/docs/rgb2dvi.docx",
+      "size": 149051,
+      "sha256": "ac771fff3b8b4a1673d7228ba6273e608522cdc4cdd3adad50418ec7a03d48ce",
+      "git_blob": "f622bf1bfa5f2bab39f29bbefdd07d3a24132cf6",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/docs/rgb2dvi.pdf",
+      "size": 562709,
+      "sha256": "cb0f2492f587bc453aec91df91c83f7f108c84b1478d42de77c752c8dc2d2dc8",
+      "git_blob": "090ff759314efc47b72bb20b07a48000c7ead2bc",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/src/ClockGen.vhd",
+      "size": 10787,
+      "sha256": "911088c9f4cf5897443a13bdbeaef4a0b3cf8157745582d68b556482e642765b",
+      "git_blob": "c907930e021ae3978009d68b3e0631e7e24ac7c4",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/src/DVI_Constants.vhd",
+      "size": 3151,
+      "sha256": "d8dbbbc3c8696d4527ee0d3c4757f1a40d0acebc845899483bc61c2bb8270cde",
+      "git_blob": "83a602e5879fc0d5eafa5c82e8f92b52a1cc82fc",
+      "action": "drop",
+      "canonical": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/DVI_Constants.vhd"
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/src/OutputSERDES.vhd",
+      "size": 8366,
+      "sha256": "6205d58405919d4f899a525256e2cafa725408f6644642755cd0de63e69b286e",
+      "git_blob": "5f3b247f3a329943a1940fe373eacb2d290b10cc",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/src/rgb2dvi.vhd",
+      "size": 8777,
+      "sha256": "e3f24df794677dcef79628051686677eff6ca86612285635b79c0c6fe1dc49bf",
+      "git_blob": "7b076080b686c891419465083895a6e1a8383fd9",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/src/rgb2dvi.xdc",
+      "size": 292,
+      "sha256": "51b9ac7f1229a2250cddb1d490e45e536dd836eb5c42851f67359c7a5aef6130",
+      "git_blob": "5d402efa39f082dc363263c39b753fce11283108",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/src/rgb2dvi_clocks.xdc",
+      "size": 146,
+      "sha256": "d11f05f62ffa0fce205fc2c2fe95033972da802fdfc7cd3572cef32014fdba57",
+      "git_blob": "6ca365458a4013cd8e735d171ebc7deb48b86c11",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/src/rgb2dvi_ooc.xdc",
+      "size": 136,
+      "sha256": "77f9820235b2c3ce1e99d369db4932a76705633eeb5f950908855183931dc1a2",
+      "git_blob": "92c2bda1af7397575c0a4de6a9bf07a52f745903",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/src/SyncAsync.vhd",
+      "size": 3727,
+      "sha256": "5561ac8099ed13f3114e97387aab5f7f30ad28a8be2fc540004cbee3f19eb3a7",
+      "git_blob": "f1d7d1332c8e1baf0033e5238f5e91ad6b6eca41",
+      "action": "drop",
+      "canonical": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/SyncAsync.vhd"
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/src/SyncAsyncReset.vhd",
+      "size": 3734,
+      "sha256": "3ce7ade3267959da59b4d448cc6641018e4f0ac3de9f8f998d0b9ff84a3794bc",
+      "git_blob": "4047c516a8af2efce5b428d386f5b1b290a64bba",
+      "action": "drop",
+      "canonical": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/src/SyncAsyncReset.vhd"
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/src/TMDS_Encoder.vhd",
+      "size": 7863,
+      "sha256": "b047a257c1172412d1b354a98e3cc77d013d0f3c1af6ff646233abf8b669c196",
+      "git_blob": "75edeef0facbe077d09c515c435f1331f64e0303",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/xgui/rgb2dvi_v1_1.tcl",
+      "size": 2930,
+      "sha256": "44d93693f4a4eac11a86d7ff2be4dc03e2bab44a407c342bd3dd8f1477c55f92",
+      "git_blob": "d0acae511657aa71a6b5e5623cd8de6d46621f9b",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/xgui/rgb2dvi_v1_2.tcl",
+      "size": 3376,
+      "sha256": "c11f022c22fd63e32d2daeec345995f91a9556df9d4946e8a1ef6d8d82a715ff",
+      "git_blob": "a27a496f11b43c446831ce535a612088bd728e95",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/xgui/rgb2dvi_v1_3.tcl",
+      "size": 6195,
+      "sha256": "4cbe81ddb19072e4fd53f425f6d18bbdb97e98919e8d6da55674f3f6d0fe863d",
+      "git_blob": "b6f20ae252833c21891a8ea757b9452090a987c2",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/xgui/rgb2dvi_v1_4.tcl",
+      "size": 6176,
+      "sha256": "70a7d4865a5e5a450ca4de65418125024e3de94621f8699a47f268968011083b",
+      "git_blob": "9de8db0d2ae429e894e5f016b2fe7642d3069857",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/module/synchronizers/example/proj.tcl",
+      "size": 11284,
+      "sha256": "3ea0723794b1dda702143bd2dbe76b1f94c3a4cbd8e45687f38e72d6edc2e4c7",
+      "git_blob": "d89d93209a445781d462c5fe3d831c49c4010ec9",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/module/synchronizers/example/top.vhd",
+      "size": 5827,
+      "sha256": "4c16c11ab37300180f7dbe41da75f41627cbebd1110aa694962f6fa1f6ce67ca",
+      "git_blob": "d3f55c8244be0a51cfa2a522ce9379ce717f7a27",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/module/synchronizers/example/top.xdc",
+      "size": 6138,
+      "sha256": "4492e0eaa82786011e0545f31dcd57d0ed220b754abd98ff573d18607773a23e",
+      "git_blob": "07198f7e85a2ac25ebba5ec4eb45d721f7c92eaf",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/module/synchronizers/HandshakeData.vhd",
+      "size": 11689,
+      "sha256": "12b7684e02c6562f74b31154ec84852285b308922035f6444889d5ec3bf5e2ae",
+      "git_blob": "6a2d5f64ded3f9cac2f2aed7f77c6b237d0a4416",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/module/synchronizers/ResetBridge.vhd",
+      "size": 5567,
+      "sha256": "e6b8c5983dad9142df834f806db9294551218b2cc92964be906c6f3a2e2003b1",
+      "git_blob": "5944a89569475f5b0440b597d752b7369bfdceab",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/module/synchronizers/SyncAsync.vhd",
+      "size": 4635,
+      "sha256": "c105b6539524c2646bf174cc58a025c438ae78f2a1f76de3ab13a7b227efaf4c",
+      "git_blob": "e2e4cc07232c8943c7cc510222b7bb7418188d78",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-library-full/module/synchronizers/SyncBase.vhd",
+      "size": 4872,
+      "sha256": "729d371150b3a69fe183fb5fd50121a4129a6377b930708917a93ef20cf8a217",
+      "git_blob": "17f24d94735dd9ce1712babb33faf0488af24238",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-source/hdmi_pins.xdc",
+      "size": 1872,
+      "sha256": "e072bc981b6af76aae9ea01f38fe9034e93bd039f960e1509865f5b883e00113",
+      "git_blob": "0e13bfc2bee3176d7f68bf93544b60fe1f3db8b8",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/build/hdmi-source/ps7_config.tcl",
+      "size": 37064,
+      "sha256": "de589f06b605b75b31224c19932f169c299e7a5e56f9cab79e2887b73962cd7b",
+      "git_blob": "f2779ab7797e1ca2e47d250adfec703aa58f5288",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/scripts/build_capture_hdmi.tcl",
+      "size": 4472,
+      "sha256": "2f461cbb8273d3a043224684749ba1c7c8f7db91f055c884264b65db2a4f2ba5",
+      "git_blob": "5aebf317729c850475328871f4def5e6d2fb2344",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/scripts/create_capture_hdmi_bd.tcl",
+      "size": 5164,
+      "sha256": "d9215ae156c656fe98fddce9bc3941422b5eb7a4c5be0c3c2182e93a80b9e254",
+      "git_blob": "c1c19c5b69f56eb8fa53cef00621bbbecdabfec4",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/scripts/create_hdmi_bd.tcl",
+      "size": 3022,
+      "sha256": "52b46c72f6f9f5a97b65cc35043ba0643994449c536a3826ecee9b8e7e28c60a",
+      "git_blob": "cd3f5b9d30d3a8a2f656924873796d2b49cdbb03",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/scripts/fetch_hdmi_ip.sh",
+      "size": 582,
+      "sha256": "fb72e287f60d28304d334c35e790c2984bdac27ab47f693042758ac87c48f34b",
+      "git_blob": "5304902a9a0c9bf6d73e59dbede9a92c00c22dc5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/scripts/prepare_hdmi_sources.py",
+      "size": 1624,
+      "sha256": "1be31ff6c7e947f7514c2f54b8d2f8ee088a6334df7d72edc48255670bc85a38",
+      "git_blob": "f111926d0e739e100a78886c9e57b0d388c860b9",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/scripts/run_c01_capture.ps1",
+      "size": 2689,
+      "sha256": "4bfa228da51c71d8d6601be5d3559b4b152d57626a251f1a4ad107ab389d71f7",
+      "git_blob": "b736634d1e80791b9c32cc5fbf520cf916dd2a63",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/sim/scripts/validate_vision_cdc.tcl",
+      "size": 1197,
+      "sha256": "dda2ccf1402cb143000c439feddd6a6b94fd9c469ca48c6752f34cc7da077c1e",
+      "git_blob": "b4f5e2480c3b410cbf316fd989b8df936592588d",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/src/vision/axi_regs.v",
+      "size": 5491,
+      "sha256": "2006ff5367d4e6c71f3f741de2cc58f9296e562895675b754eebeb498297c25f",
+      "git_blob": "ecca64db0ceb6c946adaf28c5d4cf5e23fd48675",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/src/vision/capture_cdc.xdc",
+      "size": 253,
+      "sha256": "40c6d524d480cb26c8c49546716119b13e1586b12f184813dcd5c30555b2e8a8",
+      "git_blob": "919d6451973ffc61de22a1e6f739708770980cfa",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/src/vision/capture_fault_cdc.v",
+      "size": 1064,
+      "sha256": "d5dda2ab50b5e5d208029d345c8593907d58d459a780491eb3fa6c79f829e3c7",
+      "git_blob": "3314c770098cc4cf98bce60bb5f871e56501744b",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/src/vision/capture_status_axi.v",
+      "size": 4953,
+      "sha256": "4e1b64902a0062479c937718cfad68eebb59da406c5f514c15494b46e7572b15",
+      "git_blob": "4de5100087fea4403594ca970c5de53ff4d9933a",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/src/vision/capture_stream_monitor.v",
+      "size": 1920,
+      "sha256": "f9c1e43912c877bdab099b04e2237fe6312d70b069b66f3bee74d125308f3117",
+      "git_blob": "8a07d34d3176be6c92cc4bc24df5566c3e7af8bf",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/src/vision/config_bridge.v",
+      "size": 1661,
+      "sha256": "8c5ad31fa8071124ecfdd2e06e237970b81c6a270f4c81f2fab614dc84cf7fad",
+      "git_blob": "3ccc53f14fb661878bd080759b741fc323b80418",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/src/vision/config_cdc.xdc",
+      "size": 634,
+      "sha256": "4a494f78ed52521a4daeffd41d71c61426b4129d3162869a0814ee1af89b2556",
+      "git_blob": "476360977ff8c0c9dc1cdc20ffff0be2272eea51",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/src/vision/cop_buf.v",
+      "size": 7344,
+      "sha256": "48829e3a9d39e6c0b420c3abf1d7902b0c487c38b9a74ab66eb66f6ca4f4064f",
+      "git_blob": "52e5900e7b5e2f636431b97598d6db1ad8063870",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/src/vision/gaussian_3x3.v",
+      "size": 6960,
+      "sha256": "68d8fedffedcfcf3f83ecc5eb622a2c128c083c740031b8199b945a0a5383d8e",
+      "git_blob": "8f65a5a8d45debead62095cc37225d8a8a318b48",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/src/vision/in_align.v",
+      "size": 2619,
+      "sha256": "51500309b070bdb51a8c07c497cf5675c2972c685b2855ad6639454653f9f890",
+      "git_blob": "7f7768b49e5433a64b01547b8d4e348cc08703a8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/src/vision/line_buffer.v",
+      "size": 850,
+      "sha256": "2ab8e056dd567f5e02e2eaa63354125b007e64ebe6b0e52edd8b1ed894d93f29",
+      "git_blob": "527c50ce1bbfc37188a22cc1871dc4609875a281",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/src/vision/osd_overlay.v",
+      "size": 2870,
+      "sha256": "2b8ede8506c3b42aa408b34de6ac9eb94bffa3f5f4b589f1bd4f5b2dfcde8faf",
+      "git_blob": "9fa15fda23340c71a873f6fbfbfeda2aec2d0ca4",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/src/vision/reset_sync.v",
+      "size": 306,
+      "sha256": "0ccb9079ae49817d44f1392ebeb68caa91bc0b52b9b5b1443d1e9db9cc81be7f",
+      "git_blob": "b23e64a4d9c38a17c16ae005d3bdbce39b37d6cb",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/src/vision/rgb2gray.v",
+      "size": 992,
+      "sha256": "380e5aea268acfa7b45c8860ce29fae99213ecf05305e66099f44af5bc24b5f1",
+      "git_blob": "d743cddac84232b96bec41d56add02ebd553622a",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/src/vision/scaler.v",
+      "size": 12623,
+      "sha256": "cd4030c9ac31c42c95a05972f6f73dd1bfda007b7d78afe6098554f0b65060b1",
+      "git_blob": "b67eb3ba3ca54d80a86bc0ebf5f0f1bbe91b65df",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/src/vision/sobel.v",
+      "size": 5990,
+      "sha256": "e3d75587025a749358754807a77a3a2074b91c8e4fe6dc355cf32d776ec134d2",
+      "git_blob": "98d7d92dbe05e202fb3e95b2fdd673b90e3451d5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/src/vision/video_pipeline.v",
+      "size": 2643,
+      "sha256": "87c5f16fc721a0141d071795c414cd195bf62979e4343e8582044855f57738a4",
+      "git_blob": "fa7d2ad0b4697643030ca87c804f888f977331c4",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/src/vision/vision_axi.v",
+      "size": 2691,
+      "sha256": "128fa1dd6e5e42495fbf2b8548a162eb8929bd282110e7979f6ae5a2093f7a4d",
+      "git_blob": "494336a210ecff32979b7603a3cff42276ab73b5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/c01-capture-19af0b2c829447b89d442a6f4f09f8f3/inputs/src/vision/vision_top.v",
+      "size": 8454,
+      "sha256": "94268ee86e0356eb6b680a7f45176cb9294ff68d797d4d0b9f4902970c4a7bfb",
+      "git_blob": "12bc76625ccbbbfec7dbd6da5e1817221157c33c",
+      "action": "restore",
+      "canonical": null
+    }
+  ]
+}

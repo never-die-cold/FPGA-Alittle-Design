@@ -6,7 +6,7 @@
 > 不用比喻和口语。模块名、信号名、寄存器名按代码原名写（STE 允许技术名）。
 > **配图**：7 幅图由 [img/make_project_diagrams.py](img/make_project_diagrams.py) 生成。
 > **历史快照：BHT 尚未绘制。**7 幅图保留 2026-10-03 版本；重绘另列批次，本轮不运行生成脚本。
-> **状态口径**：2026-10-12；当前实现以正文、冻结契约和收口证据为准，逐项核对见[实现/文档清单](implementation-document-audit-2026-10-12.md)。更细的契约见 [design_v0.md](../src/riscv/design_v0.md)、
+> **状态口径**：2026-10-12；当前实现以正文、冻结契约和收口证据为准，逐项核对见[实现/文档清单](archive/implementation-document-audit-2026-10-12.md)。更细的契约见 [design_v0.md](../src/riscv/design_v0.md)、
 > [design_v1.md](../src/riscv/design_v1.md)、[vision design_v0.md](../src/vision/design_v0.md)。
 
 ---
@@ -22,7 +22,7 @@
 ![图 1 系统总览](img/fig1_system.png)
 
 数据走两条物理路径。视频路径：板卡 HDMI OUT → USB 采集卡 → EXE。
-结果路径：板卡 PS → 网口 → EXE。[轮次级同步契约](vision-sync-protocol-decisions.md)已冻结；mock v1.1 有[落码证据](../data/logs/2026-10-06-vision-sync-schema/README.md)。
+结果路径：板卡 PS → 网口 → EXE。[轮次级同步契约](contracts/vision-sync-protocol-decisions.md)已冻结；mock v1.1 有[落码证据](../data/logs/2026-10-06-vision-sync-schema/README.md)。
 真实识别结果与画面关联尚未实现；过期结果不得显示为当前检查通过，不能把轮次级契约称为逐帧精确对齐。
 
 ## 2. 三个模块与当前状态
@@ -46,7 +46,7 @@ M3（10/20）工业闭环；M4（10/26）材料收口；11/4 提交。
   - 相机：CM3 经 PYNQ 到采集卡取得真实画面，720p 连续 24 帧；[10/07 记录](../data/logs/2026-10-07-pi-pynq/README.md)保留原黑屏、恢复过程与用户确认。
   - v0/PicoRV32 OOC 对比已入档；83.8 MHz 等是 Slack 外推，不是该频率实点通过，见[对比记录](../data/logs/2026-10-03-picorv32-compare/README.md)。
 - 🟡 **已实现但仍有验证／追溯缺口**
-  - 原 vision 的 bit/hwh 已与归档 XSA 配对，构建源码锚定仍缺；C01 捕获候选有独立构建输入和显示/状态实机诊断。完整 DDR 取帧、长测/冷启动/断源恢复未验收，见[C01 基线](c01-capture-implementation-baseline.md)。
+  - 原 vision 的 bit/hwh 已与归档 XSA 配对，构建源码锚定仍缺；C01 捕获候选有独立构建输入和显示/状态实机诊断。完整 DDR 取帧、长测/冷启动/断源恢复未验收，见[C01 基线](contracts/c01-capture-implementation-baseline.md)。
   - 采集卡观测延迟上界 125 ms 已记录，不能当作 PL 本体延迟；PL／识别端到端延迟仍缺同口径实测。
 - ⬜ **未实现 / 未接入**
   - CNN RTL、正式 INT8 模型/整网黄金、DDR 帧槽所有权/完整副本、真实定位/推理后端、核工业检查固件、真实硬件 LIVE 与发布验收、PYNQ 开机自动加载。

@@ -4,16 +4,16 @@
 > 初稿日期：2026-10-10。适用首网：FastenerCNN，预处理版本
 > `scene-gray-border-padding-v1`。
 > 本文冻结网络、整数语义、张量排布和资源目标；核/PS 接口见
-> [C03 契约](../../docs/coprocessor-integration-v0.md)。正文中的“固定/必须/不得”均为 v0 规范性要求。
+> [C03 契约](../../docs/contracts/coprocessor-integration-v0.md)。正文中的“固定/必须/不得”均为 v0 规范性要求。
 
 ## 1. 已有事实与未实现边界
 
 ### 1.1 已有可复现依据
 
-- [FP32 逐层参考](../../docs/module3-prototype-reference.md)已验证网络结构、BN 折叠、形状和 MAC。
-- [ROI 契约](../../docs/inspection-v0-contract.md)及[离板检查](../../docs/offline-inspection.md)
+- [FP32 逐层参考](../../docs/runbooks/module3-prototype-reference.md)已验证网络结构、BN 折叠、形状和 MAC。
+- [ROI 契约](../../docs/contracts/inspection-v0-contract.md)及[离板检查](../../docs/runbooks/offline-inspection.md)
   记录了与交付原函数的 24 组逐像素对拍；输出为 64×64 `uint8`。
-- [训练/量化准备](../../docs/module3-model-training.md)记录的两次 INT8/QAT 演练证明工具链能导出
+- [训练/量化准备](../../docs/runbooks/module3-model-training.md)记录的两次 INT8/QAT 演练证明工具链能导出
   权重、scale 和整数累加结果。
 - 上述 INT8 演练不是本网络的正式量化参数；FP32 hex 不能送入 INT8 MAC。
 

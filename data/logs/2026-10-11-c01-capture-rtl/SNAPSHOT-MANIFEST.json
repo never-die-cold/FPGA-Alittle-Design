@@ -1,0 +1,3124 @@
+{
+  "run": "2026-10-11-c01-capture-rtl",
+  "generated_at": "2026-10-19T02:47:00.176689+00:00",
+  "policy": "restore=git blob; drop=canonical copy; keep/unique=stay",
+  "roots": [
+    "final-inputs/",
+    "handoff-inputs/",
+    "inputs/",
+    "settled-script-archive/"
+  ],
+  "summary": {
+    "total": 388,
+    "restore": 294,
+    "keep": 21,
+    "drop": 19,
+    "unique": 54
+  },
+  "files": [
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/AGENTS.md",
+      "size": 2978,
+      "sha256": "79c749505c199f9504c9fd7d3fa965e1a70896ec6e7251a0f91cdfd32277c625",
+      "git_blob": "93d41815abb3abc86c96fc3f61d3494e38314ec5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/data/golden/vision/fullchain/expected_fullchain.hex",
+      "size": 1536,
+      "sha256": "dc0f0d8861cf210db732630c11a8fc211b3ae08452e5cd13b2b225d52d973b2d",
+      "git_blob": "e14efa25ccb6b0fffd78dfa305b34e9c474cc33c",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/data/golden/vision/fullchain/expected_gauss_sobel.hex",
+      "size": 384,
+      "sha256": "ed9016e9ab446ccb64767eb67060558906ceb65a09badc4954833067e9469641",
+      "git_blob": "952c1fbb27b769277cc950b0f4f50ae214835795",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/data/golden/vision/fullchain/expected_gray_sobel.hex",
+      "size": 384,
+      "sha256": "aed47e9e1f5cd139fae3404f8c90066b196d52c3c151bc49d7e1fd9180181eb1",
+      "git_blob": "8238be92dc81ddb6e39f09749a3fd9271ffa19dd",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/data/golden/vision/gaussian3x3/expected_y.hex",
+      "size": 384,
+      "sha256": "430696174f5056e2164e5383e6c3f9d09bd5d6296f4d26387d801a7ad3ca4f54",
+      "git_blob": "b15e4e3d09255707f49e14d1a9dd56c0aad78524",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/data/golden/vision/gaussian3x3/input_gray.hex",
+      "size": 384,
+      "sha256": "2a0a41b28e112700cad7a77f22f1f3ef008ecee328bf56b1301ae29e5a38a3d4",
+      "git_blob": "c263004f5ca5c6137fcd14a0fbe6c32bb146ac35",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/data/golden/vision/localize/patterns_expected.hex",
+      "size": 288,
+      "sha256": "2dcad878abe7d63ea94729f37368897c2cd927ce633156827f9030452cd06ae1",
+      "git_blob": "b5e43e2249905515b46fdd829f026ca824007c4b",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/data/golden/vision/localize/patterns_rgb.hex",
+      "size": 2688,
+      "sha256": "9cdba62f57a9c3b4320620b5236a090d5d4685bdd4c7274750dc93d2f29ef2cf",
+      "git_blob": "bb76a0e30995cf12a2db61b0fe8848997a137e85",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/data/golden/vision/osd/expected_osd_f1.hex",
+      "size": 384,
+      "sha256": "b0a2bcb35bc7e1b814cd35bc28cd1cbaef600b0b2305cba7b59f3cd8d7791b84",
+      "git_blob": "0445df2a7b28a9bc3b4c67d5bd148038a6d7fb93",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/data/golden/vision/osd/expected_osd_f2.hex",
+      "size": 384,
+      "sha256": "52074c67f9565cec4e727723907c7076df47f242a8f14444845cdaf0701dbed0",
+      "git_blob": "a5d7738c6db64e91e9057b6d248b6f8810c02547",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/data/golden/vision/osd/input_y.hex",
+      "size": 384,
+      "sha256": "2a0a41b28e112700cad7a77f22f1f3ef008ecee328bf56b1301ae29e5a38a3d4",
+      "git_blob": "c263004f5ca5c6137fcd14a0fbe6c32bb146ac35",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/data/golden/vision/rgb2gray/expected_y.hex",
+      "size": 384,
+      "sha256": "2a0a41b28e112700cad7a77f22f1f3ef008ecee328bf56b1301ae29e5a38a3d4",
+      "git_blob": "c263004f5ca5c6137fcd14a0fbe6c32bb146ac35",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/data/golden/vision/rgb2gray/input_rgb.hex",
+      "size": 896,
+      "sha256": "7415a5bde7fa09173a00395cdc7c34b7b9326e203ffa18e3ad0a3c3df72f8569",
+      "git_blob": "4e93a85002b08eb299554a6f3aab63ec19257aca",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/data/golden/vision/scaler/expected_y.hex",
+      "size": 1536,
+      "sha256": "1b0c7a100a80435be773d194d7795f40972bfbc828449ddb60bb94193bdf5686",
+      "git_blob": "4d0a69a094ea1129266ddc7a76fc73931a121a85",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/data/golden/vision/scaler/input_gray.hex",
+      "size": 384,
+      "sha256": "2a0a41b28e112700cad7a77f22f1f3ef008ecee328bf56b1301ae29e5a38a3d4",
+      "git_blob": "c263004f5ca5c6137fcd14a0fbe6c32bb146ac35",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/data/golden/vision/scaler_ds/expected_y.hex",
+      "size": 96,
+      "sha256": "813673d04679d76c3affa03d008f852ba6412c7258e733c0038c0e1b3b3d7d1a",
+      "git_blob": "a60354500bb2ec32b05e34db59d4fc023b236d72",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/data/golden/vision/scaler_ds/input_gray.hex",
+      "size": 1536,
+      "sha256": "efbc0ec5c091fb349fd76fbaae86e0b234ec204da166f3e70a8b8c617d5ce066",
+      "git_blob": "637585acb48047fba1828efe42539ded01876aaf",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/data/golden/vision/sobel/expected_y.hex",
+      "size": 384,
+      "sha256": "aed47e9e1f5cd139fae3404f8c90066b196d52c3c151bc49d7e1fd9180181eb1",
+      "git_blob": "8238be92dc81ddb6e39f09749a3fd9271ffa19dd",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/data/golden/vision/sobel/input_gray.hex",
+      "size": 384,
+      "sha256": "2a0a41b28e112700cad7a77f22f1f3ef008ecee328bf56b1301ae29e5a38a3d4",
+      "git_blob": "c263004f5ca5c6137fcd14a0fbe6c32bb146ac35",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/docs/c01-capture-implementation-baseline.md",
+      "size": 8631,
+      "sha256": "bc4a92391fd70196500fa52ca9bc2bbc5e8fba530807c0c6571b46353e773193",
+      "git_blob": "2171eb5f3e50be37b7b6434740ae4492613ee602",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/docs/c01-capture-status-contract.md",
+      "size": 4113,
+      "sha256": "7a41a52824cf730278aaed6a86bc81ec84adc3c8e4222f8653cbb89841120dda",
+      "git_blob": "e0ba1ad435e707893b0e560cddd4f174d1069901",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/docs/onboard-2026-10-11-c01-draft.md",
+      "size": 11277,
+      "sha256": "f181dae40eb9eafe1f1fff14e5bb3ac4630fb2c77f571fab0d06c6c977edc2b4",
+      "git_blob": "b0b6524b630d3d62af7261175f502bbb0ac900f8",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/docs/project-closeout-three-person-checklist.md",
+      "size": 16034,
+      "sha256": "313e8d973dea6b7cd021280a74eaf8908c2e08df62ef4efa191694ad136e78f3",
+      "git_blob": "a06735530d860d9ea937cf682abba9ae5c6ad94b",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/docs/workflow.md",
+      "size": 4683,
+      "sha256": "b96a5923d3d1e4a83f1a4eebfc9b2674dd9cd7a8a100636a0243ed6c52b92a23",
+      "git_blob": "df80d85547210c045f1396be36ac6a6369b1cbe1",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/report/llm_log/2026-10-11-onboard-n03-diagnostic.md",
+      "size": 8123,
+      "sha256": "be460f6a70ab885ff05f002322f50e2a935ae3d0f84273c8df6b8d7300589064",
+      "git_blob": "477fe42651c0a380cf0a1eeed39397c1cea653e2",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/audit_module1_ooc.tcl",
+      "size": 2945,
+      "sha256": "837bc3cd34c10d8a62f30fe8f77dece0d3ab9f606befced420dd9224b0e22b50",
+      "git_blob": "4ddeaa83985b158b86d16196464bbcc44699eb59",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/build_capture_hdmi.tcl",
+      "size": 4520,
+      "sha256": "7a779608e45a786b243799ef1f6f9aa531eb9a5d57921b3d56a904df3a7a5d7b",
+      "git_blob": "96182154ad7c56429b331b1ab50e961808b53cee",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/build_fwd.sh",
+      "size": 2081,
+      "sha256": "b849178434c5ef016160db83a8ad8c71ecc43dd9136d075ecf6f9384353ddc8f",
+      "git_blob": "91feb6f33ad74e44c16c3a5b6ae4461a00dc1a66",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/build_hdmi.tcl",
+      "size": 3230,
+      "sha256": "3aaca669e90eed2876108c017b085e4dc905aff9078949f0aefd31490f66ca3e",
+      "git_blob": "a29046d6c16b5610f327559f15091e870f301ccb",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/build_vision_client.ps1",
+      "size": 1769,
+      "sha256": "10cd6e2fdf428597a207a85d521779c024299dfb5802dd3f5058d65449927ca7",
+      "git_blob": "c5db7021bf1598ac591b88636fd04c7e6bd1425d",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/c01_status_onboard.py",
+      "size": 4401,
+      "sha256": "d54e99e2189922a442220d46929c6b867befc3af73a1ebb6f526bf7547aef62c",
+      "git_blob": "a4b89efdcd779d841a5e0ee8686f3376988c6bf2",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/capture_uvc_raw.py",
+      "size": 4026,
+      "sha256": "a1e1d457a1c2a4c3ded80a746e06eebbc3674b8bfa56f8337b0ec0eb0798ce02",
+      "git_blob": "b3bc02b61ea3af24b79769dcd9530cae2aeb01da",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/check_c01_artifacts.py",
+      "size": 3701,
+      "sha256": "abbe7783c881ff84d4c9300b0557e0488bd011adf8026439e6a0e0285bfc3d05",
+      "git_blob": "6892aa96ffa97e369d1942ef8146375570e4ca46",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/create_capture_hdmi_bd.tcl",
+      "size": 5398,
+      "sha256": "a786dd3f3e1c1c2e6a0671110db48876fd4cf575426ea74468ef55431e1e2657",
+      "git_blob": "0b0fb6442f33420224ab955abca088b3bd5b38fd",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/create_hdmi_bd.tcl",
+      "size": 3022,
+      "sha256": "52b46c72f6f9f5a97b65cc35043ba0643994449c536a3826ecee9b8e7e28c60a",
+      "git_blob": "cd3f5b9d30d3a8a2f656924873796d2b49cdbb03",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/deploy_vision_onboard.sh",
+      "size": 1821,
+      "sha256": "9cd7751cfc6050397ae250b2f883d8ecb01800d2a455993af8dc0c74c4da296a",
+      "git_blob": "8aee65ff56871237726d9c2dea887223d37b2766",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/fetch_arch_test.sh",
+      "size": 815,
+      "sha256": "ab9d728158df01586a607997681748e37118ac547d3b1ebb33b3180edd0ba765",
+      "git_blob": "030407f3073e69e286c53bf5550a021b1f26711c",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/fetch_hdmi_ip.sh",
+      "size": 582,
+      "sha256": "fb72e287f60d28304d334c35e790c2984bdac27ab47f693042758ac87c48f34b",
+      "git_blob": "5304902a9a0c9bf6d73e59dbede9a92c00c22dc5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/fetch_picorv32.sh",
+      "size": 793,
+      "sha256": "2b3492d1fa0656c52df9c22bb0505945b07cc1d94c3ab47014258f37f94ac165",
+      "git_blob": "fd6d90554d3d99cd387a978e54e7c71d675be26f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/impl_vision.tcl",
+      "size": 3263,
+      "sha256": "f769b6ccae492fb86e8a9cc87f978b6093d5aefb951e8c1351df7d8cab5d0de6",
+      "git_blob": "a59f290c2f9c37e7c27d61d8364bcfd625ad47ce",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/list_dshow_video.ps1",
+      "size": 2674,
+      "sha256": "d8c4ed2d20e6b3ad2c31e2db4ea44ce9974bc6b467af24296fc5b0a20da54e83",
+      "git_blob": "9788db215e3a4388f4d0f25aab33cae07b1ff2f0",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/make_arm_localize_pkg.py",
+      "size": 2502,
+      "sha256": "d03e7da3fefe31a590ead6a5087af4f5fd6e4ea95cd5db728381f2691a309294",
+      "git_blob": "7da38df344a90bc66a38e630661fc718f3e1e0e8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/make_board_pkg.sh",
+      "size": 979,
+      "sha256": "2bf27fe1ea68a65e89ebeebf16ee9505e576052b5154bf422895bd24fab6ffa7",
+      "git_blob": "963d4bf08f21d72857e0533a3c260c93a394dea7",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/make_replay_scene.py",
+      "size": 3357,
+      "sha256": "2f04aec7f160c856301c5266798fb79c53d70de87395e6b5fcebf7a50710f108",
+      "git_blob": "5501d342bcd98ccc91061c2b6292a63dc9150515",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/n03_board_capture.py",
+      "size": 4813,
+      "sha256": "46bb3c0d9e154cf70a5626a31e84fb34252efee67cb1f728f641ce3a13fdde47",
+      "git_blob": "e2917b198cbc3331bb7ee5b28ef874b35257da6a",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/n03_stop_dma.py",
+      "size": 1112,
+      "sha256": "2181de56820ecc086997b69e1912d1bfef7e6e3af4068de6f3ddc88022ec6616",
+      "git_blob": "8f1cbe86723bdea9d565c70c69b8ec27cf15f5f8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/pi_password_reset_once.sh",
+      "size": 926,
+      "sha256": "7fb48d921314df3f1aa1e3a619ceed8b66a81b28a1545fc088315b130386eb0a",
+      "git_blob": "30bba5fc4d61f84a78310598c742bae95e7ed641",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/prepare_hdmi_sources.py",
+      "size": 1624,
+      "sha256": "1be31ff6c7e947f7514c2f54b8d2f8ee088a6334df7d72edc48255670bc85a38",
+      "git_blob": "f111926d0e739e100a78886c9e57b0d388c860b9",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/prepare_pi_password_reset.py",
+      "size": 2867,
+      "sha256": "8add5559da542a427385f538f4c7ac8df47a122518c0168e9b25bc786b321720",
+      "git_blob": "28ca068499201af6ce277e4f5b81e5896d9e1bf9",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/probe_capture_ips.tcl",
+      "size": 1116,
+      "sha256": "f0b73fa4652796df760ddb866d82e88cd319c8b3c92d84ddf20643619e1df59b",
+      "git_blob": "c9ea42b2dac0b294e9d063fb9fb3e552dfbe556f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/pynq_file_receiver.py",
+      "size": 1365,
+      "sha256": "5de1b6378b0a8543272a019ee63af9eb582e87a0bea333eba3ab46d46d552e52",
+      "git_blob": "58f8a43ea4b5a60ec8cbc2e747ea82258a3ef24e",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/pynq_serial_auth.ps1",
+      "size": 2101,
+      "sha256": "db8e7960fbbe7d55daa1af5f15eba727972b3ef80e8b00ae666b6e95bc0edbe4",
+      "git_blob": "30389206187b920c45cf2103a27338ac493dc40f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/pynq_serial_command.ps1",
+      "size": 2843,
+      "sha256": "0351c7b5db4dab0dfcb66c86b6815f59313252e19e47229c372332a5430a4055",
+      "git_blob": "d1768cceaad7674462174976baf836112ba51931",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/pynq_serial_console.ps1",
+      "size": 1591,
+      "sha256": "b663bf413e10a67c31b467d1ab60e3bcfac12c438f2ab022aa73f85ce3febf35",
+      "git_blob": "98d63c9dbb7e2e8e0e988bf49bc29d15494fa06b",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/recover_n03_png.py",
+      "size": 2835,
+      "sha256": "1be90ed1b6ca5b2d87997f67a965bc723e62577d3ea9833161732dbb083c889d",
+      "git_blob": "753a5ad1e5b67c2d0bb8436a2e903ecb7c36dd53",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/report_capture_bus_skew.tcl",
+      "size": 812,
+      "sha256": "0ef5b55f305621b2ecd6f26c39860b9173e9335745d8d11453d12c36c340238e",
+      "git_blob": "41832b41f5d45cb783395bcc7457748d95c719c5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_arch_test.sh",
+      "size": 4674,
+      "sha256": "5ff2266571e3205dfc7ec85a73a89fbaefce6ea37c7ee9f1376d49d0f50875c9",
+      "git_blob": "a8d64e3a8dafa79e9075f2193ebe4a320a3fde19",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_arch_test_matrix.sh",
+      "size": 2359,
+      "sha256": "14a737c06effee736d1fbd7f47481bcc31e5440f7c111fad0cbad747df5fc733",
+      "git_blob": "fb5e3fdb0676c0f206ccfa063f3f08727d049281",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_c01_capture.ps1",
+      "size": 3472,
+      "sha256": "192647ff76335b83b4429116748a0c6ec45ef78897688e812b402011e9080462",
+      "git_blob": "05622a38c270f5f184c282a62e02f40b408e1c9f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_c01_status.ps1",
+      "size": 1119,
+      "sha256": "0c956bff3682bb807bae7595b81c7fa3222673c7bc06328864342f8b9aafec0b",
+      "git_blob": "e4c0b566bac0a1e1172aeaf7ad57475ec1b13bc5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_c01_status_coexist.ps1",
+      "size": 3733,
+      "sha256": "04d7d8b76bb7bf057d76ef1a9eeaf35d9566ec7d2e7372014217fdb1225094f5",
+      "git_blob": "72f4d1e6e1665870eed140c8ec81024b8ac94878",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_cpi_matrix.sh",
+      "size": 3403,
+      "sha256": "8dbe75f24c885bdf1d3be5bd7a209b49138928d6aad8bf52ee4cc7ff8085c16b",
+      "git_blob": "482713a5352369e05058b264837222867d65c70e",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_fmax_compare.sh",
+      "size": 2775,
+      "sha256": "f57eb540ce12876954b6dd6b517de240aa673561fc83dd77f864e9743dced99f",
+      "git_blob": "6038c9659e623d0d227f90540361e9cb0b39c500",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_inspection_python.sh",
+      "size": 602,
+      "sha256": "2d70298104e916d6efd9df0c0d9e1826f16ae69f647c55f665d5d4f167e7aaca",
+      "git_blob": "a724261e4d4b07c3bb98f82164a44cdd0502d8af",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_iverilog.sh",
+      "size": 9972,
+      "sha256": "aa74bdfcc7093f4313215b42002131849a9b782bedae50d32f3e681dc077fba8",
+      "git_blob": "926a115ebf75448440819e786af3114999c2f9e8",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_module1_xsim.ps1",
+      "size": 3931,
+      "sha256": "9618b3df94ee25ce75281ee03a583c790455a0cce1cb0629890b7957fa1f8b62",
+      "git_blob": "30d4ac08af296683611a0a19005653407d434574",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_n03_board_capture.ps1",
+      "size": 1327,
+      "sha256": "5742f812aa98b325ccb4d094650889ce050857253679d8b2c10bdd66d4b827f7",
+      "git_blob": "afdba5fcdb378e695038b260c2e77b329fd681a5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_n03_coexist.ps1",
+      "size": 3287,
+      "sha256": "a935affb9202f508193c3beb17812faa8f9c6e85d8c3c4c68712e30511387ce3",
+      "git_blob": "346b81b508f353cea4266bf41ae0db7e7ffea420",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_pynq_baseline.ps1",
+      "size": 1616,
+      "sha256": "a75adec3603b74b1e88e5726acdeb984d597c18a854a4f804f3061034733a111",
+      "git_blob": "42ae6a511cb2329e77f43f0a691dc3cdc8f1781d",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_vision_iverilog.sh",
+      "size": 3700,
+      "sha256": "97f5da6c9e3495444fc9782db276f3ee2d43efa6b5d3e451264b48ad51b56ce8",
+      "git_blob": "49f804c472ce3d0576369e0dffbcd4ef4dce557d",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_vision_python.sh",
+      "size": 722,
+      "sha256": "ccde8b0b41fae29c4600c42d211fe44ad2981db5ea7d51439e2fcde2e319ebf0",
+      "git_blob": "9e356743ef8e385e315330544373740812cfe9b2",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_vision_xsim.sh",
+      "size": 3164,
+      "sha256": "50c77d2a418429ce6c90889bee56c449cf49f904ef0d9c6eeb7a8fbbfe9114f0",
+      "git_blob": "669d36df0617045a2fc8293579834df64568cbb3",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_vivado_hdmi.sh",
+      "size": 711,
+      "sha256": "5e4386f77272ec6b3ab908cfcc93068d744e4552f396c78857b8d09bc3de43e4",
+      "git_blob": "a7286f0e2528acfbde758432e5bc261072c66b27",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_vivado_vision_impl.sh",
+      "size": 505,
+      "sha256": "403c23cd9af8ccf46fbbe6d32f011552418ad93d1f9f87224c80c156a3a44c5f",
+      "git_blob": "1b9695c1d2ce0962580d0db656fa800d5432a9d9",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_vivado_vision_ooc.sh",
+      "size": 1313,
+      "sha256": "29aa488b7d02a9bd6407ceb98f2984572b743db44785cda4de41ab84d10792f5",
+      "git_blob": "fe5d04e9bf2d496bb7a23f5f9cd142e53b66a409",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/send_pynq_file.ps1",
+      "size": 3860,
+      "sha256": "4510675ec1b145dc407b541d27c6cc4b3a971fdf1d68a7fd8e68833dc2826c52",
+      "git_blob": "84b18e26d04f3ad4475f7a322a9c0ef83723adf6",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/summarize_module1.py",
+      "size": 6282,
+      "sha256": "da4d0ae62da22d8374d35790d0645f1ee5df4feb32ea9576e578d43506203b9f",
+      "git_blob": "d33027d840f3bb64bc129ec05f7e3c61879b0ac2",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/synth_id_ex_ooc.tcl",
+      "size": 767,
+      "sha256": "de1792dde2fe3f20da18625803788da07749fc4e74c370ce64c808070cf203b2",
+      "git_blob": "e51ce5f2fe33734e45631614db930e126bb4c244",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/synth_vision_ooc.tcl",
+      "size": 3383,
+      "sha256": "eae287e87410dafe84e6a91f298011b065ef3ba44f89ed43085380ce298d6765",
+      "git_blob": "a7c8f8872bcb2628603da0fce71e3cc743bf6661",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/test_vision_gate.sh",
+      "size": 1311,
+      "sha256": "57af10fafcd81364a1f46f59dd03b8de2e0cec070e082f05cab6de32d9b49223",
+      "git_blob": "d0c95a267f0ca5592086939772b9c1dedc839dcc",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/validate_capture_subsystem.tcl",
+      "size": 5279,
+      "sha256": "a62eb0346d45653880d7e9251714c7f410f907c8a6ae20aba3fca77b6d13c5a9",
+      "git_blob": "2b7a9d1235a22ece986aedf3c07c50e0bc0bb1bd",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/validate_vision_cdc.tcl",
+      "size": 1197,
+      "sha256": "dda2ccf1402cb143000c439feddd6a6b94fd9c469ca48c6752f34cc7da077c1e",
+      "git_blob": "b4f5e2480c3b410cbf316fd989b8df936592588d",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/vision_gate.sh",
+      "size": 576,
+      "sha256": "47e99385a82b6267fb2b340a71f13bb90f63fa2b0d8b213ca9a899b84bc6bd79",
+      "git_blob": "99d268f448e38713396df0576a5a8b9b8881c5e6",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/archive/fastener-vision-2026-10-07/train_scene_classifier.py",
+      "size": 4995,
+      "sha256": "b91cad0390ceaf56917e3beb57363f14b76ad31f5485d13417cada87a8411685",
+      "git_blob": "5dfeec660c5eb6277fe6d76634312a7f14ef4a45",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/audit_fastener_dataset.py",
+      "size": 2179,
+      "sha256": "bde0930c4c3f24b7a5ab0d1ddb5f13a892a5c29331e07cc7f16c978dd1b416e0",
+      "git_blob": "3906afebcf650a63b781537a158e4c259eca54fe",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/calibrate_classifier_bn.py",
+      "size": 3332,
+      "sha256": "386b550f82ea326129ce98014c04c729296823f6ca75bf144154643a2b04ca54",
+      "git_blob": "38c40387ed988ef03158c11286ac19d4f7285b6f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/check_model_reference.py",
+      "size": 3761,
+      "sha256": "3ebbf96838286668bc58bb43cb75a6d18c54a85172065686731cfa2ce66f9df8",
+      "git_blob": "bfa4073e13527d2c4107876a2990f2a91af2c26f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/compare_arm_localize_bench.py",
+      "size": 2655,
+      "sha256": "3aee8e562a5212283bc344cbfbae449b24ee86b250856490facf67e23e35dd4c",
+      "git_blob": "eebabcf1b0fa2a6594909effa852c29a6a0630dd",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/compare_localizers.py",
+      "size": 3210,
+      "sha256": "57860ed135dc448d913c1f7514e9912c2e79bef7fea846ef9719ef18d747d0fe",
+      "git_blob": "e3b824b8d525ff5b874e0a929a91c384175941fc",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/controlled_classifier_study.py",
+      "size": 5178,
+      "sha256": "f5ff36a606f712a53dc0ca8c5f61bf68b35a6ee70ca707030afc7d2a1f1fa7aa",
+      "git_blob": "4a0ddc4cfce49e038b933dc4deb5991c88554504",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/evaluate_class_aware.py",
+      "size": 7458,
+      "sha256": "9ba98068ea03b9e516aec4bef1c727a11638a04d94f1f252709a59ec9f9d7c59",
+      "git_blob": "9ec201878e0453799376f9d2a16eeb79a91d7d08",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/evaluate_fastener_classifier.py",
+      "size": 2518,
+      "sha256": "5a902ef1067b69f0542a8b75109209f680fdf410f02214754a498b90f29f2212",
+      "git_blob": "a23ae53dfe268a3998c9cfb270d2fd2c3d8f4524",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/export_model_reference.py",
+      "size": 916,
+      "sha256": "87dc4d5833c92a5768d307e6bd762487e07b476a7487b82d5715328b38fa3276",
+      "git_blob": "edd1b72e93160e64b96645e76f38ff61783509f8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/generate_dataset_audit_fixture.py",
+      "size": 1103,
+      "sha256": "1a140b7dd9686198c84f149525354b88b13ea6a22b55b3925a8eff72f3ebf66e",
+      "git_blob": "308f21250a37e93c547476b425fca8e6bc5539c5",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/generate_inspection_fixture.py",
+      "size": 1003,
+      "sha256": "1b6ee1ebfebb27dbdc3d5c1aa1af10ca0c169d00c7cbd541d9a8818924e2aea6",
+      "git_blob": "7a29ab92091fc7327a1ee1d95b193acaf3b5edeb",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/generate_localization_dataset.py",
+      "size": 3628,
+      "sha256": "ac38563f6fcf094fef4e68490a81357613ea52cb30b45248a0b53128a98ef0b8",
+      "git_blob": "aef4f21016759613b0d57940194c477fa6cf6180",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/generate_variable_count_probe.py",
+      "size": 2058,
+      "sha256": "d578866a1c6d4bd9379fbed0bd142189a4c5bab860325d62240ea34ac68a349e",
+      "git_blob": "cc1f1b22f866a18bb68737129332e61f3c4a28cf",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/localization_data.py",
+      "size": 10042,
+      "sha256": "7785d03102cea8c5e411c67d21a27a4809b2d78f3f5aeb2ddb1a93121ca7c46c",
+      "git_blob": "a0b161e80e4ba480ce06c552191b2960ab518b39",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/localization_opencv.py",
+      "size": 2737,
+      "sha256": "de81e15e56496e82d1a747ea2946769213ac1e4aa6ab6973132e2de1184835d7",
+      "git_blob": "de52dd2f87510a7781ee4c4b07c285c51a65959b",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/probe_localization_backgrounds.py",
+      "size": 1645,
+      "sha256": "b455171a111bcdc94961c0eae9e6b7b8dffe159497cf4c88a0187b3a6ae0e907",
+      "git_blob": "ac90b313dc708057edeb53601e65dd79b994c0e3",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_axi_lock_reset.v",
+      "size": 6467,
+      "sha256": "ff5576edaefef414b977e6a541d9387dc66548bcb245801e962c4df58ebede6f",
+      "git_blob": "f37b6af88bcb6542c1f2a37dda4f3e06560c6582",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_axi_regs.v",
+      "size": 4820,
+      "sha256": "bde2a6c4299c7ae6dbd7bee281634753b9ded08d44150c2b5dc36658d9caef8c",
+      "git_blob": "bf79d850c6a804dba17da90bb15e2b002ad72732",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_axi_split.v",
+      "size": 1915,
+      "sha256": "b8ce5c4c64f64bc4159f3234474bfc510cd7b454486e4b4d124bb88f8e03e0f0",
+      "git_blob": "cc8c18bbf136e04e380ce039bd178c2d8c9870b2",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_capture_status_axi.v",
+      "size": 4989,
+      "sha256": "b920a389e58e17cdca5ec5afce86dbebb26209a140f84412d54cc3736829ea66",
+      "git_blob": "1a2b9a6d6821d25e1a9a8aa7357a17cd15d59ff7",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_capture_stream_monitor.v",
+      "size": 3340,
+      "sha256": "c3c226d2c63b5006b157546ec6543182ea3d2ed8862510c2b15d05ca732385d4",
+      "git_blob": "b1dbadffc806318e3e468df2b9f525f0fe9f5323",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_chain.v",
+      "size": 3171,
+      "sha256": "1404bda77deca4955489639bf4d3288a8c46659b74915168114521775ae36faa",
+      "git_blob": "284cf677e89bb971f83e276e5f371d3e958f4ab4",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_config_bridge.v",
+      "size": 1928,
+      "sha256": "f3b0c21d9690b2e8fce712bc38362e0142994da12ff7d6feba7a4bbca95bbb82",
+      "git_blob": "538d57e22b270f28230ba0e01dc4e7c4147bac5f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_cop_buf.v",
+      "size": 3582,
+      "sha256": "0ed8b3f55b2460520b0a1e3f29043317d2e747c16fda37388e31c320690fcf92",
+      "git_blob": "bfd54057fac54e5ad9e5ada37fb4358140d678e4",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_cop_buf_stress.v",
+      "size": 3363,
+      "sha256": "0db426eb51f7214eed0d43e5008804160668db7c5e5425e4b1dc287b3c8c0597",
+      "git_blob": "535ad157eb238426dd79c326e639bcdb410ed0f5",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_fullchain.v",
+      "size": 4133,
+      "sha256": "e3e32f9db17a94b95de124926c524c01596e03912d21e7b874398c73136f73fa",
+      "git_blob": "df4d58ec12b2aac66c26e3bb49d154e8f4262c78",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_gaussian3x3.v",
+      "size": 2142,
+      "sha256": "993889a5d37dd3131e122c763e550d89e19572fcebe664093c333879f9de3f8a",
+      "git_blob": "fc35b2f9c32194be2f6eb5bd6262035a1a249209",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_in_align.v",
+      "size": 6413,
+      "sha256": "e4f55d37097a4efad76836778ed489508441bace113f5149213e0958352415b7",
+      "git_blob": "8003da365684962cbc2a1a7426ca06d895e63853",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_line_buffer.v",
+      "size": 2076,
+      "sha256": "f0dffd9f10f0c76ec48f53fc1d884293499609511cdf29e8065e081887d6b44d",
+      "git_blob": "42a4df6987a35acaa216e5a7433299d5e7460fd7",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_osd.v",
+      "size": 3637,
+      "sha256": "b4e1154cfbbd6cc6ca0901e6a6493304d8b35d980dd91cfe973bb7e9c0251f1e",
+      "git_blob": "45599b783d611b8b5ab890b19e2e392bfce983c1",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_patterns.v",
+      "size": 2464,
+      "sha256": "a7d94098c5e31644dd3064b4e6f8a098d38977d49171c830b5fa6f04a33d5467",
+      "git_blob": "8b9ce7ac96e148f528542e3a2309be58bc6bd9b6",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_rgb2gray.v",
+      "size": 1490,
+      "sha256": "823f4d063d7f307074f28466dd22b8fd3120302a032776f65955ccb799e36990",
+      "git_blob": "a0f7c6d018f38facef1a95a27c761a122e774651",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_scaler.v",
+      "size": 2662,
+      "sha256": "148eacf44e48c85c4fd6f7a58117aacaa742981bf67c900c6c919abaa70a0099",
+      "git_blob": "f8d29809b52af28ba22c3055d4e878c36659a908",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_scaler_ds.v",
+      "size": 2898,
+      "sha256": "6d32a7c381bd49375e316bba51d7f032d14c0aa07606008be0bcb0123a5e001c",
+      "git_blob": "c0ba640b1f4423958d6bf42a1201ce67274bfb83",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_sobel.v",
+      "size": 2018,
+      "sha256": "510809d752c26ddf4b9061d3b56761f87c6beb1d88953f03338161e4394db66c",
+      "git_blob": "7649b9219094830d9be0c6aac869ed237c6cfaf9",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_top.v",
+      "size": 9575,
+      "sha256": "28f3e1aa163743171a83b91b63707460ea031642f899ae3484a3954427d048dc",
+      "git_blob": "8c759c32c3e39961d76bc8d1cbe1e6732b2334af",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_top_async.v",
+      "size": 2497,
+      "sha256": "3f6a3f049be56cb29149feb21eac45a6dd604702d7ba578a1ccc812d884ccf48",
+      "git_blob": "bccfff43b1bd34b2722e7081947a4db20e84ad34",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_top_color.v",
+      "size": 2145,
+      "sha256": "c659c46f092924abde37ab79ff0dab2a3adeea848a0954b7d6468132c5ab2265",
+      "git_blob": "86efbaf80679879f095ccc9620e86d4bf28c92bf",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_video_pipeline.v",
+      "size": 2461,
+      "sha256": "37e0b16e36fe064e390d0a2fb066c676000e43ab84e9f35edbc67b08d61cbbe2",
+      "git_blob": "eb9d13eca1ef2d3d00c80cd12a5e75e01388d564",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_video_real.v",
+      "size": 2889,
+      "sha256": "87554ca1c8071fa135b3c3e0831094fb96391320a63434283f13124f2eb08974",
+      "git_blob": "7507a2a04a2e3ad51e59b289c74805f7a48604df",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_vision_axi.v",
+      "size": 1669,
+      "sha256": "b2827dd89f43116036f8f191829b3a74b2122a68ee48e062735ab1213613c7bb",
+      "git_blob": "2d90dff817b5f6cd6ea3ece1a330cc60aac3f0ae",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_arm_localize.py",
+      "size": 5527,
+      "sha256": "29d867388ebe7711dd9f91ca642cb9a666c5abaaeb27049932781c8290ff8b4a",
+      "git_blob": "be7cf1793aabb5d1bed249adcba4ffb11a1f363c",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_arm_localize_package.py",
+      "size": 2637,
+      "sha256": "9689f809959115a8707b1946d0c967d7b1fb0075a8d48f82157d03871779e626",
+      "git_blob": "ce80cb40a39b437d6ad6c867b6b239bab26ebe18",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_c01_artifacts.py",
+      "size": 2087,
+      "sha256": "f4f3a8377671f64b06141e4fcfb6089758ad3632ef7189818ccb6f564fdf81d6",
+      "git_blob": "f387ace4326531c2a033294311e77be8470c2299",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_c01_status_onboard.py",
+      "size": 3198,
+      "sha256": "24ec03510977b7945b0c8e5d5ac4f9c6b74783d30a547991e61ed11217e5b034",
+      "git_blob": "2a5673cd1d2e99d83dbdc2b805ccea2e3ecb28ef",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_class_aware_metrics.py",
+      "size": 1390,
+      "sha256": "38fa4fc3a6d6a7a9e3f19a6827c893fe1ed134455e71b9cac9acd4017913d2fa",
+      "git_blob": "294ece1712e19701032429beb02e382f8588f27c",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_dataset_audit.py",
+      "size": 5170,
+      "sha256": "97ff067040b9e1aae7423714a4ac583951a84957de64eebc4cd7a027603b8fe1",
+      "git_blob": "39bb0ae6124fc2128ad6f7fc3664ca231050b7c4",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_dataset_manifest.py",
+      "size": 4661,
+      "sha256": "7cd5102649a0082f35cd1b375695d4c1e3a97127a1f17346ebb14312eee725cf",
+      "git_blob": "5607a82bcef9000ce697da9643644b39fa6fb861",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_inspection_artifacts.py",
+      "size": 1356,
+      "sha256": "10212581af0081b18f0643d392bfcf5ec8055c3efac4ed6fbbb12389141f7d79",
+      "git_blob": "4c2c9485654d16d11652d5b152ee406c3ee03baa",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_inspection_model.py",
+      "size": 1250,
+      "sha256": "1184ef110fd79b444dfdc956305f19cfdcf013dcbaae9e6dc66fef787bff42ef",
+      "git_blob": "a6a79963c02735378bff095cefa4c4eb74fb16f8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_inspection_replay.py",
+      "size": 3606,
+      "sha256": "db63679cfe0a9a143596956773213094f1c367c7419beb061281421c594d8b55",
+      "git_blob": "d46af302cd7feb71de1c5a4a89a237550bdd8b00",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_inspection_rules.py",
+      "size": 1846,
+      "sha256": "b42e7579a2c4edabf70130d92ac99d299d22c879c767679ae0bb890fcf606598",
+      "git_blob": "0a99a66fcabce8831ebf8c3e6ea55baf7d48d5ed",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_inspection_viewer.py",
+      "size": 3080,
+      "sha256": "3de7221ddfcbc7ed60d3cc582cbb07fa389289cf209ea9e4d458da96199e8986",
+      "git_blob": "b0a399d6cb3aba6e6399bf1765dba71ea723ec85",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_localization_data.py",
+      "size": 6167,
+      "sha256": "554624fe0ed8b6c19c084f6ec0409572cadaf3dcc0c8c369f588388230caae23",
+      "git_blob": "57cb48656ed3393b4697a6991f5d9f58c2a43509",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_localize.py",
+      "size": 2444,
+      "sha256": "579df8f3ba841509703ca16670626b3ecb3ff84d238c87a03341d72b888a6e61",
+      "git_blob": "d81ee007cddbbcd5810c535e59f0e24508055875",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_model_audit.py",
+      "size": 1279,
+      "sha256": "a149af7d0ca5edc6eb0290b0f47ee6e74a7626a3b065d3706bebc5f19cc02d5a",
+      "git_blob": "b130e046ed6f8eba20f07d5978d0010c1ee1f4bd",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_model_reference.py",
+      "size": 1809,
+      "sha256": "8d0a52775adb817b9e81765a722adfd17f42db3f640ba6ea192cd71f5867349b",
+      "git_blob": "eab3fcd26447fdc2e444b0bc7c7367a6e88dfd42",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_n03_board_capture.py",
+      "size": 3217,
+      "sha256": "3cf8cb98486ce5f5b2c26e8a4809e5aa2721edf96a3900780bb3e8a15931b30b",
+      "git_blob": "da672cdc50f8d51814d4d1f066042b72aee9a073",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_n03_buffer_lifecycle.py",
+      "size": 2350,
+      "sha256": "af476bfb6c3b4471fdbd6b966380d685a1f32d30b5897f8869df32d051931c34",
+      "git_blob": "67df8957c443ef80605631051b685e516cf23a2d",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_numpy_reference.py",
+      "size": 4178,
+      "sha256": "aa0d10789b9cdf865b7eb3ca4153e0da41109f0ce57fc7d6c1fc4cc8fef38bfd",
+      "git_blob": "2bbd95f244d2789a70805a0deb6d98238ff140de",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_pynq_file_receiver.py",
+      "size": 1780,
+      "sha256": "d2ae3def7139668d6b15a13157bdbc9464d965e5c255891f0910a5479c6db9e5",
+      "git_blob": "ce330b07516c731b15eb56d23c8feb481c079405",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_reference_package.py",
+      "size": 2722,
+      "sha256": "54e658d51d96aa4a0c00fbb74c79433a6ed6db20942360ef8e41c2151c9c02c3",
+      "git_blob": "48b6cf3c10d9080b39146643a46b80610d0a7cd1",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_reference_tensors.py",
+      "size": 1474,
+      "sha256": "1fe2db86a9b85b54db1f69d80c71c23cd51c67d31563e0c3b6fe3293b465ed5b",
+      "git_blob": "44b30cee99312353339ae1e2c917aa61aebc049b",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_roi_preprocess.py",
+      "size": 2218,
+      "sha256": "9172a90d2c82b3387aeabeb3668d659ae8d11fad10536b3ff2530374f72d7474",
+      "git_blob": "887747c6c3c5cd96cf5be858da9d6a15ba4f4c2b",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_vision_client.py",
+      "size": 3710,
+      "sha256": "8570a34fc9046aa41e7d8d1ecca309c445762ca52423ba5e32bee1c5ac7bacf3",
+      "git_blob": "835ba04caaab9487a42c5ef9e87c2d7e636306c8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_vision_export.py",
+      "size": 1789,
+      "sha256": "08cfb1c7b401439e06b1b358dd574bd183c62c15629b9f5a2c91ca0d17816bdb",
+      "git_blob": "dcff358df0aa863d9a310ac385f6f09b8a08dc47",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_vision_protocol.py",
+      "size": 9852,
+      "sha256": "74ea3fd4a5e4deb27bf72934e545a8f867449b8d3b0b019bf288b66f646f5067",
+      "git_blob": "6c0fdde0a70c0d3099d82a0404fb788d7753e748",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_vision_records.py",
+      "size": 3249,
+      "sha256": "5146b7cb399b0cc91c7e4bc49cb0a341f796d137339787fdb6740a0452f0f164",
+      "git_blob": "da75008a038e02a0f589e3afdd1637af9dc5c1e0",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_vision_regs.py",
+      "size": 2046,
+      "sha256": "8a997788e43f6b4e38e6b38731852d77e4c9a8b88bcc146bf7c30d9cf993d4d9",
+      "git_blob": "7a1dd232bd376a095ed1c349656f34859dd63c2b",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_vision_rounds.py",
+      "size": 4690,
+      "sha256": "4f7535ae3b5020d9468d5d749439b54c43decb1ed5f02f8f1c24244379b33d81",
+      "git_blob": "8150e20aa67a061b214d3defba4669b8aa11b3ba",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/train_fastener_classifier.py",
+      "size": 5739,
+      "sha256": "151f784406c27db8ca112e42ca7bc22104d9f4e9a0f1e2c111bb4cf129cb86f1",
+      "git_blob": "d3d763c51ad85af0f3186480b32a12b08d169362",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/train_hog_fastener_classifier.py",
+      "size": 2972,
+      "sha256": "cfef4a9711d04f4a23be8851eea745ff53f2b5361b3dee76b8f6d988ce73fc5e",
+      "git_blob": "b131d45bfebabe17c849e2385aa40edc44988cf8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/train_localization_cnn.py",
+      "size": 1262,
+      "sha256": "b9b351ba6bf382d0ca1812e4d7555e4292b6b961e693896b6461ab4fc4d29db3",
+      "git_blob": "ae67c88c4d59b3a80b5093a83d3b2690789e9e70",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/train_scene_classifier.py",
+      "size": 4385,
+      "sha256": "33e89e0df24b98dccb84388d8424ace348e8a527a59e5d59adab27381782fb5c",
+      "git_blob": "5cba6ba1f6790c0235d448e8af067eea9246b2f3",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/axi_regs.v",
+      "size": 5491,
+      "sha256": "2006ff5367d4e6c71f3f741de2cc58f9296e562895675b754eebeb498297c25f",
+      "git_blob": "ecca64db0ceb6c946adaf28c5d4cf5e23fd48675",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/capture_cdc.xdc",
+      "size": 253,
+      "sha256": "40c6d524d480cb26c8c49546716119b13e1586b12f184813dcd5c30555b2e8a8",
+      "git_blob": "919d6451973ffc61de22a1e6f739708770980cfa",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/capture_fault_cdc.v",
+      "size": 1064,
+      "sha256": "d5dda2ab50b5e5d208029d345c8593907d58d459a780491eb3fa6c79f829e3c7",
+      "git_blob": "3314c770098cc4cf98bce60bb5f871e56501744b",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/capture_status_axi.v",
+      "size": 4953,
+      "sha256": "4e1b64902a0062479c937718cfad68eebb59da406c5f514c15494b46e7572b15",
+      "git_blob": "4de5100087fea4403594ca970c5de53ff4d9933a",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/capture_stream_monitor.v",
+      "size": 1920,
+      "sha256": "f9c1e43912c877bdab099b04e2237fe6312d70b069b66f3bee74d125308f3117",
+      "git_blob": "8a07d34d3176be6c92cc4bc24df5566c3e7af8bf",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/config_bridge.v",
+      "size": 1661,
+      "sha256": "8c5ad31fa8071124ecfdd2e06e237970b81c6a270f4c81f2fab614dc84cf7fad",
+      "git_blob": "3ccc53f14fb661878bd080759b741fc323b80418",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/config_cdc.xdc",
+      "size": 634,
+      "sha256": "4a494f78ed52521a4daeffd41d71c61426b4129d3162869a0814ee1af89b2556",
+      "git_blob": "476360977ff8c0c9dc1cdc20ffff0be2272eea51",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/cop_buf.v",
+      "size": 7344,
+      "sha256": "48829e3a9d39e6c0b420c3abf1d7902b0c487c38b9a74ab66eb66f6ca4f4064f",
+      "git_blob": "52e5900e7b5e2f636431b97598d6db1ad8063870",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/design_v0.md",
+      "size": 24691,
+      "sha256": "5963c9b77cb762b7b52ad8a9c331b7f321e021dbcc76a8482dea1a79e6f0f2a0",
+      "git_blob": "6b55bccff3d1d657cf1cecfc966c77f7868c679f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/gaussian_3x3.v",
+      "size": 6960,
+      "sha256": "68d8fedffedcfcf3f83ecc5eb622a2c128c083c740031b8199b945a0a5383d8e",
+      "git_blob": "8f65a5a8d45debead62095cc37225d8a8a318b48",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/in_align.v",
+      "size": 2619,
+      "sha256": "51500309b070bdb51a8c07c497cf5675c2972c685b2855ad6639454653f9f890",
+      "git_blob": "7f7768b49e5433a64b01547b8d4e348cc08703a8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/line_buffer.v",
+      "size": 850,
+      "sha256": "2ab8e056dd567f5e02e2eaa63354125b007e64ebe6b0e52edd8b1ed894d93f29",
+      "git_blob": "527c50ce1bbfc37188a22cc1871dc4609875a281",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/osd_overlay.v",
+      "size": 2870,
+      "sha256": "2b8ede8506c3b42aa408b34de6ac9eb94bffa3f5f4b589f1bd4f5b2dfcde8faf",
+      "git_blob": "9fa15fda23340c71a873f6fbfbfeda2aec2d0ca4",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/README.md",
+      "size": 5374,
+      "sha256": "3cc8553381978e4200fc204324d24ea0af2f8db908a4b92a54d7ba2f0ddf3473",
+      "git_blob": "1bac9a5da8a4acba6886f08bd4481e57a5899253",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/reset_sync.v",
+      "size": 306,
+      "sha256": "0ccb9079ae49817d44f1392ebeb68caa91bc0b52b9b5b1443d1e9db9cc81be7f",
+      "git_blob": "b23e64a4d9c38a17c16ae005d3bdbce39b37d6cb",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/rgb2gray.v",
+      "size": 992,
+      "sha256": "380e5aea268acfa7b45c8860ce29fae99213ecf05305e66099f44af5bc24b5f1",
+      "git_blob": "d743cddac84232b96bec41d56add02ebd553622a",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/scaler.v",
+      "size": 12623,
+      "sha256": "cd4030c9ac31c42c95a05972f6f73dd1bfda007b7d78afe6098554f0b65060b1",
+      "git_blob": "b67eb3ba3ca54d80a86bc0ebf5f0f1bbe91b65df",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/sobel.v",
+      "size": 5990,
+      "sha256": "e3d75587025a749358754807a77a3a2074b91c8e4fe6dc355cf32d776ec134d2",
+      "git_blob": "98d7d92dbe05e202fb3e95b2fdd673b90e3451d5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/video_pipeline.v",
+      "size": 2643,
+      "sha256": "87c5f16fc721a0141d071795c414cd195bf62979e4343e8582044855f57738a4",
+      "git_blob": "fa7d2ad0b4697643030ca87c804f888f977331c4",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/vision_axi.v",
+      "size": 2691,
+      "sha256": "128fa1dd6e5e42495fbf2b8548a162eb8929bd282110e7979f6ae5a2093f7a4d",
+      "git_blob": "494336a210ecff32979b7603a3cff42276ab73b5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/vision_top.v",
+      "size": 8454,
+      "sha256": "94268ee86e0356eb6b680a7f45176cb9294ff68d797d4d0b9f4902970c4a7bfb",
+      "git_blob": "12bc76625ccbbbfec7dbd6da5e1817221157c33c",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/AGENTS.md",
+      "size": 2978,
+      "sha256": "79c749505c199f9504c9fd7d3fa965e1a70896ec6e7251a0f91cdfd32277c625",
+      "git_blob": "93d41815abb3abc86c96fc3f61d3494e38314ec5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/data/golden/vision/fullchain/expected_fullchain.hex",
+      "size": 1536,
+      "sha256": "dc0f0d8861cf210db732630c11a8fc211b3ae08452e5cd13b2b225d52d973b2d",
+      "git_blob": "e14efa25ccb6b0fffd78dfa305b34e9c474cc33c",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/data/golden/vision/fullchain/expected_gauss_sobel.hex",
+      "size": 384,
+      "sha256": "ed9016e9ab446ccb64767eb67060558906ceb65a09badc4954833067e9469641",
+      "git_blob": "952c1fbb27b769277cc950b0f4f50ae214835795",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/data/golden/vision/fullchain/expected_gray_sobel.hex",
+      "size": 384,
+      "sha256": "aed47e9e1f5cd139fae3404f8c90066b196d52c3c151bc49d7e1fd9180181eb1",
+      "git_blob": "8238be92dc81ddb6e39f09749a3fd9271ffa19dd",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/data/golden/vision/gaussian3x3/expected_y.hex",
+      "size": 384,
+      "sha256": "430696174f5056e2164e5383e6c3f9d09bd5d6296f4d26387d801a7ad3ca4f54",
+      "git_blob": "b15e4e3d09255707f49e14d1a9dd56c0aad78524",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/data/golden/vision/gaussian3x3/input_gray.hex",
+      "size": 384,
+      "sha256": "2a0a41b28e112700cad7a77f22f1f3ef008ecee328bf56b1301ae29e5a38a3d4",
+      "git_blob": "c263004f5ca5c6137fcd14a0fbe6c32bb146ac35",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/data/golden/vision/localize/patterns_expected.hex",
+      "size": 288,
+      "sha256": "2dcad878abe7d63ea94729f37368897c2cd927ce633156827f9030452cd06ae1",
+      "git_blob": "b5e43e2249905515b46fdd829f026ca824007c4b",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/data/golden/vision/localize/patterns_rgb.hex",
+      "size": 2688,
+      "sha256": "9cdba62f57a9c3b4320620b5236a090d5d4685bdd4c7274750dc93d2f29ef2cf",
+      "git_blob": "bb76a0e30995cf12a2db61b0fe8848997a137e85",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/data/golden/vision/osd/expected_osd_f1.hex",
+      "size": 384,
+      "sha256": "b0a2bcb35bc7e1b814cd35bc28cd1cbaef600b0b2305cba7b59f3cd8d7791b84",
+      "git_blob": "0445df2a7b28a9bc3b4c67d5bd148038a6d7fb93",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/data/golden/vision/osd/expected_osd_f2.hex",
+      "size": 384,
+      "sha256": "52074c67f9565cec4e727723907c7076df47f242a8f14444845cdaf0701dbed0",
+      "git_blob": "a5d7738c6db64e91e9057b6d248b6f8810c02547",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/data/golden/vision/osd/input_y.hex",
+      "size": 384,
+      "sha256": "2a0a41b28e112700cad7a77f22f1f3ef008ecee328bf56b1301ae29e5a38a3d4",
+      "git_blob": "c263004f5ca5c6137fcd14a0fbe6c32bb146ac35",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/data/golden/vision/rgb2gray/expected_y.hex",
+      "size": 384,
+      "sha256": "2a0a41b28e112700cad7a77f22f1f3ef008ecee328bf56b1301ae29e5a38a3d4",
+      "git_blob": "c263004f5ca5c6137fcd14a0fbe6c32bb146ac35",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/data/golden/vision/rgb2gray/input_rgb.hex",
+      "size": 896,
+      "sha256": "7415a5bde7fa09173a00395cdc7c34b7b9326e203ffa18e3ad0a3c3df72f8569",
+      "git_blob": "4e93a85002b08eb299554a6f3aab63ec19257aca",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/data/golden/vision/scaler/expected_y.hex",
+      "size": 1536,
+      "sha256": "1b0c7a100a80435be773d194d7795f40972bfbc828449ddb60bb94193bdf5686",
+      "git_blob": "4d0a69a094ea1129266ddc7a76fc73931a121a85",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/data/golden/vision/scaler/input_gray.hex",
+      "size": 384,
+      "sha256": "2a0a41b28e112700cad7a77f22f1f3ef008ecee328bf56b1301ae29e5a38a3d4",
+      "git_blob": "c263004f5ca5c6137fcd14a0fbe6c32bb146ac35",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/data/golden/vision/scaler_ds/expected_y.hex",
+      "size": 96,
+      "sha256": "813673d04679d76c3affa03d008f852ba6412c7258e733c0038c0e1b3b3d7d1a",
+      "git_blob": "a60354500bb2ec32b05e34db59d4fc023b236d72",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/data/golden/vision/scaler_ds/input_gray.hex",
+      "size": 1536,
+      "sha256": "efbc0ec5c091fb349fd76fbaae86e0b234ec204da166f3e70a8b8c617d5ce066",
+      "git_blob": "637585acb48047fba1828efe42539ded01876aaf",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/data/golden/vision/sobel/expected_y.hex",
+      "size": 384,
+      "sha256": "aed47e9e1f5cd139fae3404f8c90066b196d52c3c151bc49d7e1fd9180181eb1",
+      "git_blob": "8238be92dc81ddb6e39f09749a3fd9271ffa19dd",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/data/golden/vision/sobel/input_gray.hex",
+      "size": 384,
+      "sha256": "2a0a41b28e112700cad7a77f22f1f3ef008ecee328bf56b1301ae29e5a38a3d4",
+      "git_blob": "c263004f5ca5c6137fcd14a0fbe6c32bb146ac35",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/docs/c01-capture-implementation-baseline.md",
+      "size": 11837,
+      "sha256": "70dfa6c1247e8a6017d49d1485354f23dc131f8982b276caf799dc2e39d404f0",
+      "git_blob": "0ff2b411feec65f1822d4427d05c167b3461e4e8",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/docs/c01-capture-status-contract.md",
+      "size": 4113,
+      "sha256": "7a41a52824cf730278aaed6a86bc81ec84adc3c8e4222f8653cbb89841120dda",
+      "git_blob": "e0ba1ad435e707893b0e560cddd4f174d1069901",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/docs/c01-capture-status-contract.md"
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/docs/onboard-2026-10-11-c01-draft.md",
+      "size": 14483,
+      "sha256": "a801b9d17e50635d18aa1a52a657ea757cc5a8f1088b15b1723b66b74b47c050",
+      "git_blob": "bb979e6ab56ef0f818d492d6723edd1706e72e18",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/docs/project-closeout-three-person-checklist.md",
+      "size": 16034,
+      "sha256": "313e8d973dea6b7cd021280a74eaf8908c2e08df62ef4efa191694ad136e78f3",
+      "git_blob": "a06735530d860d9ea937cf682abba9ae5c6ad94b",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/docs/project-closeout-three-person-checklist.md"
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/docs/project-handoff-2026-10-11.md",
+      "size": 16508,
+      "sha256": "66f6ef7ddf8a6382990da66d5d63fbf29e3e4c4a8fc4611c1d3be1334c7870b4",
+      "git_blob": "5fbb3f46464becc1af1ae3865e750f62f098d39e",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/docs/workflow.md",
+      "size": 4683,
+      "sha256": "b96a5923d3d1e4a83f1a4eebfc9b2674dd9cd7a8a100636a0243ed6c52b92a23",
+      "git_blob": "df80d85547210c045f1396be36ac6a6369b1cbe1",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/report/llm_log/2026-10-11-onboard-n03-diagnostic.md",
+      "size": 11112,
+      "sha256": "a6b5703c7833a3f37343dd12d90ad411db897c5cbc514a635d45e7bb9e805d35",
+      "git_blob": "adc728d1be380f5ff47fb485f5e9cc3838695e3a",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/audit_module1_ooc.tcl",
+      "size": 2945,
+      "sha256": "837bc3cd34c10d8a62f30fe8f77dece0d3ab9f606befced420dd9224b0e22b50",
+      "git_blob": "4ddeaa83985b158b86d16196464bbcc44699eb59",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/build_capture_hdmi.tcl",
+      "size": 4520,
+      "sha256": "7a779608e45a786b243799ef1f6f9aa531eb9a5d57921b3d56a904df3a7a5d7b",
+      "git_blob": "96182154ad7c56429b331b1ab50e961808b53cee",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/build_fwd.sh",
+      "size": 2081,
+      "sha256": "b849178434c5ef016160db83a8ad8c71ecc43dd9136d075ecf6f9384353ddc8f",
+      "git_blob": "91feb6f33ad74e44c16c3a5b6ae4461a00dc1a66",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/build_hdmi.tcl",
+      "size": 3230,
+      "sha256": "3aaca669e90eed2876108c017b085e4dc905aff9078949f0aefd31490f66ca3e",
+      "git_blob": "a29046d6c16b5610f327559f15091e870f301ccb",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/build_vision_client.ps1",
+      "size": 1769,
+      "sha256": "10cd6e2fdf428597a207a85d521779c024299dfb5802dd3f5058d65449927ca7",
+      "git_blob": "c5db7021bf1598ac591b88636fd04c7e6bd1425d",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/build_vision_client.ps1"
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/c01_status_onboard.py",
+      "size": 4638,
+      "sha256": "28dd6132d98c345e6805bdbfa595b8fcb4f7dad14e4a32839bdaa1cd6ff719c3",
+      "git_blob": "b5d93cb53e890cfb8eddc15dcb0fd194c5accccc",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/capture_uvc_raw.py",
+      "size": 4026,
+      "sha256": "a1e1d457a1c2a4c3ded80a746e06eebbc3674b8bfa56f8337b0ec0eb0798ce02",
+      "git_blob": "b3bc02b61ea3af24b79769dcd9530cae2aeb01da",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/check_c01_artifacts.py",
+      "size": 3701,
+      "sha256": "abbe7783c881ff84d4c9300b0557e0488bd011adf8026439e6a0e0285bfc3d05",
+      "git_blob": "6892aa96ffa97e369d1942ef8146375570e4ca46",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/create_capture_hdmi_bd.tcl",
+      "size": 5398,
+      "sha256": "a786dd3f3e1c1c2e6a0671110db48876fd4cf575426ea74468ef55431e1e2657",
+      "git_blob": "0b0fb6442f33420224ab955abca088b3bd5b38fd",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/create_hdmi_bd.tcl",
+      "size": 3022,
+      "sha256": "52b46c72f6f9f5a97b65cc35043ba0643994449c536a3826ecee9b8e7e28c60a",
+      "git_blob": "cd3f5b9d30d3a8a2f656924873796d2b49cdbb03",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/deploy_vision_onboard.sh",
+      "size": 1821,
+      "sha256": "9cd7751cfc6050397ae250b2f883d8ecb01800d2a455993af8dc0c74c4da296a",
+      "git_blob": "8aee65ff56871237726d9c2dea887223d37b2766",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/fetch_arch_test.sh",
+      "size": 815,
+      "sha256": "ab9d728158df01586a607997681748e37118ac547d3b1ebb33b3180edd0ba765",
+      "git_blob": "030407f3073e69e286c53bf5550a021b1f26711c",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/fetch_hdmi_ip.sh",
+      "size": 582,
+      "sha256": "fb72e287f60d28304d334c35e790c2984bdac27ab47f693042758ac87c48f34b",
+      "git_blob": "5304902a9a0c9bf6d73e59dbede9a92c00c22dc5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/fetch_picorv32.sh",
+      "size": 793,
+      "sha256": "2b3492d1fa0656c52df9c22bb0505945b07cc1d94c3ab47014258f37f94ac165",
+      "git_blob": "fd6d90554d3d99cd387a978e54e7c71d675be26f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/impl_vision.tcl",
+      "size": 3263,
+      "sha256": "f769b6ccae492fb86e8a9cc87f978b6093d5aefb951e8c1351df7d8cab5d0de6",
+      "git_blob": "a59f290c2f9c37e7c27d61d8364bcfd625ad47ce",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/list_dshow_video.ps1",
+      "size": 2674,
+      "sha256": "d8c4ed2d20e6b3ad2c31e2db4ea44ce9974bc6b467af24296fc5b0a20da54e83",
+      "git_blob": "9788db215e3a4388f4d0f25aab33cae07b1ff2f0",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/make_arm_localize_pkg.py",
+      "size": 2502,
+      "sha256": "d03e7da3fefe31a590ead6a5087af4f5fd6e4ea95cd5db728381f2691a309294",
+      "git_blob": "7da38df344a90bc66a38e630661fc718f3e1e0e8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/make_board_pkg.sh",
+      "size": 979,
+      "sha256": "2bf27fe1ea68a65e89ebeebf16ee9505e576052b5154bf422895bd24fab6ffa7",
+      "git_blob": "963d4bf08f21d72857e0533a3c260c93a394dea7",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/make_replay_scene.py",
+      "size": 3357,
+      "sha256": "2f04aec7f160c856301c5266798fb79c53d70de87395e6b5fcebf7a50710f108",
+      "git_blob": "5501d342bcd98ccc91061c2b6292a63dc9150515",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/n03_board_capture.py",
+      "size": 4813,
+      "sha256": "46bb3c0d9e154cf70a5626a31e84fb34252efee67cb1f728f641ce3a13fdde47",
+      "git_blob": "e2917b198cbc3331bb7ee5b28ef874b35257da6a",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/n03_stop_dma.py",
+      "size": 1112,
+      "sha256": "2181de56820ecc086997b69e1912d1bfef7e6e3af4068de6f3ddc88022ec6616",
+      "git_blob": "8f1cbe86723bdea9d565c70c69b8ec27cf15f5f8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/pi_password_reset_once.sh",
+      "size": 926,
+      "sha256": "7fb48d921314df3f1aa1e3a619ceed8b66a81b28a1545fc088315b130386eb0a",
+      "git_blob": "30bba5fc4d61f84a78310598c742bae95e7ed641",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/prepare_hdmi_sources.py",
+      "size": 1624,
+      "sha256": "1be31ff6c7e947f7514c2f54b8d2f8ee088a6334df7d72edc48255670bc85a38",
+      "git_blob": "f111926d0e739e100a78886c9e57b0d388c860b9",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/prepare_pi_password_reset.py",
+      "size": 2867,
+      "sha256": "8add5559da542a427385f538f4c7ac8df47a122518c0168e9b25bc786b321720",
+      "git_blob": "28ca068499201af6ce277e4f5b81e5896d9e1bf9",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/probe_capture_ips.tcl",
+      "size": 1116,
+      "sha256": "f0b73fa4652796df760ddb866d82e88cd319c8b3c92d84ddf20643619e1df59b",
+      "git_blob": "c9ea42b2dac0b294e9d063fb9fb3e552dfbe556f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/pynq_file_receiver.py",
+      "size": 1365,
+      "sha256": "5de1b6378b0a8543272a019ee63af9eb582e87a0bea333eba3ab46d46d552e52",
+      "git_blob": "58f8a43ea4b5a60ec8cbc2e747ea82258a3ef24e",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/pynq_serial_auth.ps1",
+      "size": 2101,
+      "sha256": "db8e7960fbbe7d55daa1af5f15eba727972b3ef80e8b00ae666b6e95bc0edbe4",
+      "git_blob": "30389206187b920c45cf2103a27338ac493dc40f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/pynq_serial_command.ps1",
+      "size": 2843,
+      "sha256": "0351c7b5db4dab0dfcb66c86b6815f59313252e19e47229c372332a5430a4055",
+      "git_blob": "d1768cceaad7674462174976baf836112ba51931",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/pynq_serial_console.ps1",
+      "size": 1591,
+      "sha256": "b663bf413e10a67c31b467d1ab60e3bcfac12c438f2ab022aa73f85ce3febf35",
+      "git_blob": "98d63c9dbb7e2e8e0e988bf49bc29d15494fa06b",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/recover_n03_png.py",
+      "size": 2835,
+      "sha256": "1be90ed1b6ca5b2d87997f67a965bc723e62577d3ea9833161732dbb083c889d",
+      "git_blob": "753a5ad1e5b67c2d0bb8436a2e903ecb7c36dd53",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/report_capture_bus_skew.tcl",
+      "size": 812,
+      "sha256": "0ef5b55f305621b2ecd6f26c39860b9173e9335745d8d11453d12c36c340238e",
+      "git_blob": "41832b41f5d45cb783395bcc7457748d95c719c5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/run_arch_test.sh",
+      "size": 4674,
+      "sha256": "5ff2266571e3205dfc7ec85a73a89fbaefce6ea37c7ee9f1376d49d0f50875c9",
+      "git_blob": "a8d64e3a8dafa79e9075f2193ebe4a320a3fde19",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/run_arch_test_matrix.sh",
+      "size": 2359,
+      "sha256": "14a737c06effee736d1fbd7f47481bcc31e5440f7c111fad0cbad747df5fc733",
+      "git_blob": "fb5e3fdb0676c0f206ccfa063f3f08727d049281",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/run_c01_capture.ps1",
+      "size": 3472,
+      "sha256": "192647ff76335b83b4429116748a0c6ec45ef78897688e812b402011e9080462",
+      "git_blob": "05622a38c270f5f184c282a62e02f40b408e1c9f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/run_c01_status.ps1",
+      "size": 1119,
+      "sha256": "0c956bff3682bb807bae7595b81c7fa3222673c7bc06328864342f8b9aafec0b",
+      "git_blob": "e4c0b566bac0a1e1172aeaf7ad57475ec1b13bc5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/run_c01_status_coexist.ps1",
+      "size": 3733,
+      "sha256": "04d7d8b76bb7bf057d76ef1a9eeaf35d9566ec7d2e7372014217fdb1225094f5",
+      "git_blob": "72f4d1e6e1665870eed140c8ec81024b8ac94878",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/run_cpi_matrix.sh",
+      "size": 3403,
+      "sha256": "8dbe75f24c885bdf1d3be5bd7a209b49138928d6aad8bf52ee4cc7ff8085c16b",
+      "git_blob": "482713a5352369e05058b264837222867d65c70e",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/run_fmax_compare.sh",
+      "size": 2775,
+      "sha256": "f57eb540ce12876954b6dd6b517de240aa673561fc83dd77f864e9743dced99f",
+      "git_blob": "6038c9659e623d0d227f90540361e9cb0b39c500",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/run_inspection_python.sh",
+      "size": 602,
+      "sha256": "2d70298104e916d6efd9df0c0d9e1826f16ae69f647c55f665d5d4f167e7aaca",
+      "git_blob": "a724261e4d4b07c3bb98f82164a44cdd0502d8af",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_inspection_python.sh"
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/run_iverilog.sh",
+      "size": 9972,
+      "sha256": "aa74bdfcc7093f4313215b42002131849a9b782bedae50d32f3e681dc077fba8",
+      "git_blob": "926a115ebf75448440819e786af3114999c2f9e8",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_iverilog.sh"
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/run_module1_xsim.ps1",
+      "size": 3931,
+      "sha256": "9618b3df94ee25ce75281ee03a583c790455a0cce1cb0629890b7957fa1f8b62",
+      "git_blob": "30d4ac08af296683611a0a19005653407d434574",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/run_n03_board_capture.ps1",
+      "size": 1327,
+      "sha256": "5742f812aa98b325ccb4d094650889ce050857253679d8b2c10bdd66d4b827f7",
+      "git_blob": "afdba5fcdb378e695038b260c2e77b329fd681a5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/run_n03_coexist.ps1",
+      "size": 3287,
+      "sha256": "a935affb9202f508193c3beb17812faa8f9c6e85d8c3c4c68712e30511387ce3",
+      "git_blob": "346b81b508f353cea4266bf41ae0db7e7ffea420",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/run_pynq_baseline.ps1",
+      "size": 1616,
+      "sha256": "a75adec3603b74b1e88e5726acdeb984d597c18a854a4f804f3061034733a111",
+      "git_blob": "42ae6a511cb2329e77f43f0a691dc3cdc8f1781d",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/run_vision_iverilog.sh",
+      "size": 3700,
+      "sha256": "97f5da6c9e3495444fc9782db276f3ee2d43efa6b5d3e451264b48ad51b56ce8",
+      "git_blob": "49f804c472ce3d0576369e0dffbcd4ef4dce557d",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_vision_iverilog.sh"
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/run_vision_python.sh",
+      "size": 722,
+      "sha256": "ccde8b0b41fae29c4600c42d211fe44ad2981db5ea7d51439e2fcde2e319ebf0",
+      "git_blob": "9e356743ef8e385e315330544373740812cfe9b2",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/scripts/run_vision_python.sh"
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/run_vision_xsim.sh",
+      "size": 3164,
+      "sha256": "50c77d2a418429ce6c90889bee56c449cf49f904ef0d9c6eeb7a8fbbfe9114f0",
+      "git_blob": "669d36df0617045a2fc8293579834df64568cbb3",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/run_vivado_hdmi.sh",
+      "size": 711,
+      "sha256": "5e4386f77272ec6b3ab908cfcc93068d744e4552f396c78857b8d09bc3de43e4",
+      "git_blob": "a7286f0e2528acfbde758432e5bc261072c66b27",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/run_vivado_vision_impl.sh",
+      "size": 505,
+      "sha256": "403c23cd9af8ccf46fbbe6d32f011552418ad93d1f9f87224c80c156a3a44c5f",
+      "git_blob": "1b9695c1d2ce0962580d0db656fa800d5432a9d9",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/run_vivado_vision_ooc.sh",
+      "size": 1313,
+      "sha256": "29aa488b7d02a9bd6407ceb98f2984572b743db44785cda4de41ab84d10792f5",
+      "git_blob": "fe5d04e9bf2d496bb7a23f5f9cd142e53b66a409",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/send_pynq_file.ps1",
+      "size": 3860,
+      "sha256": "4510675ec1b145dc407b541d27c6cc4b3a971fdf1d68a7fd8e68833dc2826c52",
+      "git_blob": "84b18e26d04f3ad4475f7a322a9c0ef83723adf6",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/summarize_module1.py",
+      "size": 6282,
+      "sha256": "da4d0ae62da22d8374d35790d0645f1ee5df4feb32ea9576e578d43506203b9f",
+      "git_blob": "d33027d840f3bb64bc129ec05f7e3c61879b0ac2",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/synth_id_ex_ooc.tcl",
+      "size": 767,
+      "sha256": "de1792dde2fe3f20da18625803788da07749fc4e74c370ce64c808070cf203b2",
+      "git_blob": "e51ce5f2fe33734e45631614db930e126bb4c244",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/synth_vision_ooc.tcl",
+      "size": 3383,
+      "sha256": "eae287e87410dafe84e6a91f298011b065ef3ba44f89ed43085380ce298d6765",
+      "git_blob": "a7c8f8872bcb2628603da0fce71e3cc743bf6661",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/test_vision_gate.sh",
+      "size": 1311,
+      "sha256": "57af10fafcd81364a1f46f59dd03b8de2e0cec070e082f05cab6de32d9b49223",
+      "git_blob": "d0c95a267f0ca5592086939772b9c1dedc839dcc",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/validate_capture_subsystem.tcl",
+      "size": 5279,
+      "sha256": "a62eb0346d45653880d7e9251714c7f410f907c8a6ae20aba3fca77b6d13c5a9",
+      "git_blob": "2b7a9d1235a22ece986aedf3c07c50e0bc0bb1bd",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/validate_vision_cdc.tcl",
+      "size": 1197,
+      "sha256": "dda2ccf1402cb143000c439feddd6a6b94fd9c469ca48c6752f34cc7da077c1e",
+      "git_blob": "b4f5e2480c3b410cbf316fd989b8df936592588d",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/vision_gate.sh",
+      "size": 576,
+      "sha256": "47e99385a82b6267fb2b340a71f13bb90f63fa2b0d8b213ca9a899b84bc6bd79",
+      "git_blob": "99d268f448e38713396df0576a5a8b9b8881c5e6",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/archive/fastener-vision-2026-10-07/train_scene_classifier.py",
+      "size": 4995,
+      "sha256": "b91cad0390ceaf56917e3beb57363f14b76ad31f5485d13417cada87a8411685",
+      "git_blob": "5dfeec660c5eb6277fe6d76634312a7f14ef4a45",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/audit_fastener_dataset.py",
+      "size": 2179,
+      "sha256": "bde0930c4c3f24b7a5ab0d1ddb5f13a892a5c29331e07cc7f16c978dd1b416e0",
+      "git_blob": "3906afebcf650a63b781537a158e4c259eca54fe",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/calibrate_classifier_bn.py",
+      "size": 3332,
+      "sha256": "386b550f82ea326129ce98014c04c729296823f6ca75bf144154643a2b04ca54",
+      "git_blob": "38c40387ed988ef03158c11286ac19d4f7285b6f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/check_model_reference.py",
+      "size": 3761,
+      "sha256": "3ebbf96838286668bc58bb43cb75a6d18c54a85172065686731cfa2ce66f9df8",
+      "git_blob": "bfa4073e13527d2c4107876a2990f2a91af2c26f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/compare_arm_localize_bench.py",
+      "size": 2655,
+      "sha256": "3aee8e562a5212283bc344cbfbae449b24ee86b250856490facf67e23e35dd4c",
+      "git_blob": "eebabcf1b0fa2a6594909effa852c29a6a0630dd",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/compare_localizers.py",
+      "size": 3210,
+      "sha256": "57860ed135dc448d913c1f7514e9912c2e79bef7fea846ef9719ef18d747d0fe",
+      "git_blob": "e3b824b8d525ff5b874e0a929a91c384175941fc",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/controlled_classifier_study.py",
+      "size": 5178,
+      "sha256": "f5ff36a606f712a53dc0ca8c5f61bf68b35a6ee70ca707030afc7d2a1f1fa7aa",
+      "git_blob": "4a0ddc4cfce49e038b933dc4deb5991c88554504",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/evaluate_class_aware.py",
+      "size": 7458,
+      "sha256": "9ba98068ea03b9e516aec4bef1c727a11638a04d94f1f252709a59ec9f9d7c59",
+      "git_blob": "9ec201878e0453799376f9d2a16eeb79a91d7d08",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/evaluate_fastener_classifier.py",
+      "size": 2518,
+      "sha256": "5a902ef1067b69f0542a8b75109209f680fdf410f02214754a498b90f29f2212",
+      "git_blob": "a23ae53dfe268a3998c9cfb270d2fd2c3d8f4524",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/export_model_reference.py",
+      "size": 916,
+      "sha256": "87dc4d5833c92a5768d307e6bd762487e07b476a7487b82d5715328b38fa3276",
+      "git_blob": "edd1b72e93160e64b96645e76f38ff61783509f8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/generate_dataset_audit_fixture.py",
+      "size": 1103,
+      "sha256": "1a140b7dd9686198c84f149525354b88b13ea6a22b55b3925a8eff72f3ebf66e",
+      "git_blob": "308f21250a37e93c547476b425fca8e6bc5539c5",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/generate_dataset_audit_fixture.py"
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/generate_inspection_fixture.py",
+      "size": 1003,
+      "sha256": "1b6ee1ebfebb27dbdc3d5c1aa1af10ca0c169d00c7cbd541d9a8818924e2aea6",
+      "git_blob": "7a29ab92091fc7327a1ee1d95b193acaf3b5edeb",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/generate_localization_dataset.py",
+      "size": 3628,
+      "sha256": "ac38563f6fcf094fef4e68490a81357613ea52cb30b45248a0b53128a98ef0b8",
+      "git_blob": "aef4f21016759613b0d57940194c477fa6cf6180",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/generate_variable_count_probe.py",
+      "size": 2058,
+      "sha256": "d578866a1c6d4bd9379fbed0bd142189a4c5bab860325d62240ea34ac68a349e",
+      "git_blob": "cc1f1b22f866a18bb68737129332e61f3c4a28cf",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/localization_data.py",
+      "size": 10042,
+      "sha256": "7785d03102cea8c5e411c67d21a27a4809b2d78f3f5aeb2ddb1a93121ca7c46c",
+      "git_blob": "a0b161e80e4ba480ce06c552191b2960ab518b39",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/localization_opencv.py",
+      "size": 2737,
+      "sha256": "de81e15e56496e82d1a747ea2946769213ac1e4aa6ab6973132e2de1184835d7",
+      "git_blob": "de52dd2f87510a7781ee4c4b07c285c51a65959b",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/localization_opencv.py"
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/probe_localization_backgrounds.py",
+      "size": 1645,
+      "sha256": "b455171a111bcdc94961c0eae9e6b7b8dffe159497cf4c88a0187b3a6ae0e907",
+      "git_blob": "ac90b313dc708057edeb53601e65dd79b994c0e3",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_axi_lock_reset.v",
+      "size": 6467,
+      "sha256": "ff5576edaefef414b977e6a541d9387dc66548bcb245801e962c4df58ebede6f",
+      "git_blob": "f37b6af88bcb6542c1f2a37dda4f3e06560c6582",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_axi_regs.v",
+      "size": 4820,
+      "sha256": "bde2a6c4299c7ae6dbd7bee281634753b9ded08d44150c2b5dc36658d9caef8c",
+      "git_blob": "bf79d850c6a804dba17da90bb15e2b002ad72732",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_axi_split.v",
+      "size": 1915,
+      "sha256": "b8ce5c4c64f64bc4159f3234474bfc510cd7b454486e4b4d124bb88f8e03e0f0",
+      "git_blob": "cc8c18bbf136e04e380ce039bd178c2d8c9870b2",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_capture_status_axi.v",
+      "size": 4989,
+      "sha256": "b920a389e58e17cdca5ec5afce86dbebb26209a140f84412d54cc3736829ea66",
+      "git_blob": "1a2b9a6d6821d25e1a9a8aa7357a17cd15d59ff7",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_capture_stream_monitor.v",
+      "size": 3340,
+      "sha256": "c3c226d2c63b5006b157546ec6543182ea3d2ed8862510c2b15d05ca732385d4",
+      "git_blob": "b1dbadffc806318e3e468df2b9f525f0fe9f5323",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_chain.v",
+      "size": 3171,
+      "sha256": "1404bda77deca4955489639bf4d3288a8c46659b74915168114521775ae36faa",
+      "git_blob": "284cf677e89bb971f83e276e5f371d3e958f4ab4",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_config_bridge.v",
+      "size": 1928,
+      "sha256": "f3b0c21d9690b2e8fce712bc38362e0142994da12ff7d6feba7a4bbca95bbb82",
+      "git_blob": "538d57e22b270f28230ba0e01dc4e7c4147bac5f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_cop_buf.v",
+      "size": 3582,
+      "sha256": "0ed8b3f55b2460520b0a1e3f29043317d2e747c16fda37388e31c320690fcf92",
+      "git_blob": "bfd54057fac54e5ad9e5ada37fb4358140d678e4",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_cop_buf_stress.v",
+      "size": 3363,
+      "sha256": "0db426eb51f7214eed0d43e5008804160668db7c5e5425e4b1dc287b3c8c0597",
+      "git_blob": "535ad157eb238426dd79c326e639bcdb410ed0f5",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/tb_cop_buf_stress.v"
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_fullchain.v",
+      "size": 4133,
+      "sha256": "e3e32f9db17a94b95de124926c524c01596e03912d21e7b874398c73136f73fa",
+      "git_blob": "df4d58ec12b2aac66c26e3bb49d154e8f4262c78",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_gaussian3x3.v",
+      "size": 2142,
+      "sha256": "993889a5d37dd3131e122c763e550d89e19572fcebe664093c333879f9de3f8a",
+      "git_blob": "fc35b2f9c32194be2f6eb5bd6262035a1a249209",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_in_align.v",
+      "size": 6413,
+      "sha256": "e4f55d37097a4efad76836778ed489508441bace113f5149213e0958352415b7",
+      "git_blob": "8003da365684962cbc2a1a7426ca06d895e63853",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_line_buffer.v",
+      "size": 2076,
+      "sha256": "f0dffd9f10f0c76ec48f53fc1d884293499609511cdf29e8065e081887d6b44d",
+      "git_blob": "42a4df6987a35acaa216e5a7433299d5e7460fd7",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_osd.v",
+      "size": 3637,
+      "sha256": "b4e1154cfbbd6cc6ca0901e6a6493304d8b35d980dd91cfe973bb7e9c0251f1e",
+      "git_blob": "45599b783d611b8b5ab890b19e2e392bfce983c1",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_patterns.v",
+      "size": 2464,
+      "sha256": "a7d94098c5e31644dd3064b4e6f8a098d38977d49171c830b5fa6f04a33d5467",
+      "git_blob": "8b9ce7ac96e148f528542e3a2309be58bc6bd9b6",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_rgb2gray.v",
+      "size": 1490,
+      "sha256": "823f4d063d7f307074f28466dd22b8fd3120302a032776f65955ccb799e36990",
+      "git_blob": "a0f7c6d018f38facef1a95a27c761a122e774651",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_scaler.v",
+      "size": 2662,
+      "sha256": "148eacf44e48c85c4fd6f7a58117aacaa742981bf67c900c6c919abaa70a0099",
+      "git_blob": "f8d29809b52af28ba22c3055d4e878c36659a908",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_scaler_ds.v",
+      "size": 2898,
+      "sha256": "6d32a7c381bd49375e316bba51d7f032d14c0aa07606008be0bcb0123a5e001c",
+      "git_blob": "c0ba640b1f4423958d6bf42a1201ce67274bfb83",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_sobel.v",
+      "size": 2018,
+      "sha256": "510809d752c26ddf4b9061d3b56761f87c6beb1d88953f03338161e4394db66c",
+      "git_blob": "7649b9219094830d9be0c6aac869ed237c6cfaf9",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_top.v",
+      "size": 9575,
+      "sha256": "28f3e1aa163743171a83b91b63707460ea031642f899ae3484a3954427d048dc",
+      "git_blob": "8c759c32c3e39961d76bc8d1cbe1e6732b2334af",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_top_async.v",
+      "size": 2497,
+      "sha256": "3f6a3f049be56cb29149feb21eac45a6dd604702d7ba578a1ccc812d884ccf48",
+      "git_blob": "bccfff43b1bd34b2722e7081947a4db20e84ad34",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_top_color.v",
+      "size": 2145,
+      "sha256": "c659c46f092924abde37ab79ff0dab2a3adeea848a0954b7d6468132c5ab2265",
+      "git_blob": "86efbaf80679879f095ccc9620e86d4bf28c92bf",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_video_pipeline.v",
+      "size": 2461,
+      "sha256": "37e0b16e36fe064e390d0a2fb066c676000e43ab84e9f35edbc67b08d61cbbe2",
+      "git_blob": "eb9d13eca1ef2d3d00c80cd12a5e75e01388d564",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_video_real.v",
+      "size": 2889,
+      "sha256": "87554ca1c8071fa135b3c3e0831094fb96391320a63434283f13124f2eb08974",
+      "git_blob": "7507a2a04a2e3ad51e59b289c74805f7a48604df",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/tb_vision_axi.v",
+      "size": 1669,
+      "sha256": "b2827dd89f43116036f8f191829b3a74b2122a68ee48e062735ab1213613c7bb",
+      "git_blob": "2d90dff817b5f6cd6ea3ece1a330cc60aac3f0ae",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_arm_localize.py",
+      "size": 5527,
+      "sha256": "29d867388ebe7711dd9f91ca642cb9a666c5abaaeb27049932781c8290ff8b4a",
+      "git_blob": "be7cf1793aabb5d1bed249adcba4ffb11a1f363c",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_arm_localize_package.py",
+      "size": 2637,
+      "sha256": "9689f809959115a8707b1946d0c967d7b1fb0075a8d48f82157d03871779e626",
+      "git_blob": "ce80cb40a39b437d6ad6c867b6b239bab26ebe18",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_c01_artifacts.py",
+      "size": 2087,
+      "sha256": "f4f3a8377671f64b06141e4fcfb6089758ad3632ef7189818ccb6f564fdf81d6",
+      "git_blob": "f387ace4326531c2a033294311e77be8470c2299",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_c01_status_onboard.py",
+      "size": 3350,
+      "sha256": "50c0f1b2a29834b85e38ca21ff2b0cc20a12e07d363a79186a54450b0cf5b4f8",
+      "git_blob": "22acd27f6a677c3a5e2784d4fc3b4e7574f29fad",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_class_aware_metrics.py",
+      "size": 1390,
+      "sha256": "38fa4fc3a6d6a7a9e3f19a6827c893fe1ed134455e71b9cac9acd4017913d2fa",
+      "git_blob": "294ece1712e19701032429beb02e382f8588f27c",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_dataset_audit.py",
+      "size": 5170,
+      "sha256": "97ff067040b9e1aae7423714a4ac583951a84957de64eebc4cd7a027603b8fe1",
+      "git_blob": "39bb0ae6124fc2128ad6f7fc3664ca231050b7c4",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_dataset_audit.py"
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_dataset_manifest.py",
+      "size": 4661,
+      "sha256": "7cd5102649a0082f35cd1b375695d4c1e3a97127a1f17346ebb14312eee725cf",
+      "git_blob": "5607a82bcef9000ce697da9643644b39fa6fb861",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_dataset_manifest.py"
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_inspection_artifacts.py",
+      "size": 1356,
+      "sha256": "10212581af0081b18f0643d392bfcf5ec8055c3efac4ed6fbbb12389141f7d79",
+      "git_blob": "4c2c9485654d16d11652d5b152ee406c3ee03baa",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_inspection_model.py",
+      "size": 1250,
+      "sha256": "1184ef110fd79b444dfdc956305f19cfdcf013dcbaae9e6dc66fef787bff42ef",
+      "git_blob": "a6a79963c02735378bff095cefa4c4eb74fb16f8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_inspection_replay.py",
+      "size": 3606,
+      "sha256": "db63679cfe0a9a143596956773213094f1c367c7419beb061281421c594d8b55",
+      "git_blob": "d46af302cd7feb71de1c5a4a89a237550bdd8b00",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_inspection_rules.py",
+      "size": 1846,
+      "sha256": "b42e7579a2c4edabf70130d92ac99d299d22c879c767679ae0bb890fcf606598",
+      "git_blob": "0a99a66fcabce8831ebf8c3e6ea55baf7d48d5ed",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_inspection_viewer.py",
+      "size": 3080,
+      "sha256": "3de7221ddfcbc7ed60d3cc582cbb07fa389289cf209ea9e4d458da96199e8986",
+      "git_blob": "b0a399d6cb3aba6e6399bf1765dba71ea723ec85",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_localization_data.py",
+      "size": 6167,
+      "sha256": "554624fe0ed8b6c19c084f6ec0409572cadaf3dcc0c8c369f588388230caae23",
+      "git_blob": "57cb48656ed3393b4697a6991f5d9f58c2a43509",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_localize.py",
+      "size": 2444,
+      "sha256": "579df8f3ba841509703ca16670626b3ecb3ff84d238c87a03341d72b888a6e61",
+      "git_blob": "d81ee007cddbbcd5810c535e59f0e24508055875",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_localize.py"
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_model_audit.py",
+      "size": 1279,
+      "sha256": "a149af7d0ca5edc6eb0290b0f47ee6e74a7626a3b065d3706bebc5f19cc02d5a",
+      "git_blob": "b130e046ed6f8eba20f07d5978d0010c1ee1f4bd",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_model_reference.py",
+      "size": 1809,
+      "sha256": "8d0a52775adb817b9e81765a722adfd17f42db3f640ba6ea192cd71f5867349b",
+      "git_blob": "eab3fcd26447fdc2e444b0bc7c7367a6e88dfd42",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_n03_board_capture.py",
+      "size": 3217,
+      "sha256": "3cf8cb98486ce5f5b2c26e8a4809e5aa2721edf96a3900780bb3e8a15931b30b",
+      "git_blob": "da672cdc50f8d51814d4d1f066042b72aee9a073",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_n03_buffer_lifecycle.py",
+      "size": 2350,
+      "sha256": "af476bfb6c3b4471fdbd6b966380d685a1f32d30b5897f8869df32d051931c34",
+      "git_blob": "67df8957c443ef80605631051b685e516cf23a2d",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_numpy_reference.py",
+      "size": 4178,
+      "sha256": "aa0d10789b9cdf865b7eb3ca4153e0da41109f0ce57fc7d6c1fc4cc8fef38bfd",
+      "git_blob": "2bbd95f244d2789a70805a0deb6d98238ff140de",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_pynq_file_receiver.py",
+      "size": 1780,
+      "sha256": "d2ae3def7139668d6b15a13157bdbc9464d965e5c255891f0910a5479c6db9e5",
+      "git_blob": "ce330b07516c731b15eb56d23c8feb481c079405",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_reference_package.py",
+      "size": 2722,
+      "sha256": "54e658d51d96aa4a0c00fbb74c79433a6ed6db20942360ef8e41c2151c9c02c3",
+      "git_blob": "48b6cf3c10d9080b39146643a46b80610d0a7cd1",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_reference_tensors.py",
+      "size": 1474,
+      "sha256": "1fe2db86a9b85b54db1f69d80c71c23cd51c67d31563e0c3b6fe3293b465ed5b",
+      "git_blob": "44b30cee99312353339ae1e2c917aa61aebc049b",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_roi_preprocess.py",
+      "size": 2218,
+      "sha256": "9172a90d2c82b3387aeabeb3668d659ae8d11fad10536b3ff2530374f72d7474",
+      "git_blob": "887747c6c3c5cd96cf5be858da9d6a15ba4f4c2b",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_vision_client.py",
+      "size": 3710,
+      "sha256": "8570a34fc9046aa41e7d8d1ecca309c445762ca52423ba5e32bee1c5ac7bacf3",
+      "git_blob": "835ba04caaab9487a42c5ef9e87c2d7e636306c8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_vision_export.py",
+      "size": 1789,
+      "sha256": "08cfb1c7b401439e06b1b358dd574bd183c62c15629b9f5a2c91ca0d17816bdb",
+      "git_blob": "dcff358df0aa863d9a310ac385f6f09b8a08dc47",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_vision_export.py"
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_vision_protocol.py",
+      "size": 9852,
+      "sha256": "74ea3fd4a5e4deb27bf72934e545a8f867449b8d3b0b019bf288b66f646f5067",
+      "git_blob": "6c0fdde0a70c0d3099d82a0404fb788d7753e748",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_vision_records.py",
+      "size": 3249,
+      "sha256": "5146b7cb399b0cc91c7e4bc49cb0a341f796d137339787fdb6740a0452f0f164",
+      "git_blob": "da75008a038e02a0f589e3afdd1637af9dc5c1e0",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_vision_records.py"
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_vision_regs.py",
+      "size": 2046,
+      "sha256": "8a997788e43f6b4e38e6b38731852d77e4c9a8b88bcc146bf7c30d9cf993d4d9",
+      "git_blob": "7a1dd232bd376a095ed1c349656f34859dd63c2b",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_vision_rounds.py",
+      "size": 4690,
+      "sha256": "4f7535ae3b5020d9468d5d749439b54c43decb1ed5f02f8f1c24244379b33d81",
+      "git_blob": "8150e20aa67a061b214d3defba4669b8aa11b3ba",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/sim/vision/test_vision_rounds.py"
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/train_fastener_classifier.py",
+      "size": 5739,
+      "sha256": "151f784406c27db8ca112e42ca7bc22104d9f4e9a0f1e2c111bb4cf129cb86f1",
+      "git_blob": "d3d763c51ad85af0f3186480b32a12b08d169362",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/train_hog_fastener_classifier.py",
+      "size": 2972,
+      "sha256": "cfef4a9711d04f4a23be8851eea745ff53f2b5361b3dee76b8f6d988ce73fc5e",
+      "git_blob": "b131d45bfebabe17c849e2385aa40edc44988cf8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/train_localization_cnn.py",
+      "size": 1262,
+      "sha256": "b9b351ba6bf382d0ca1812e4d7555e4292b6b961e693896b6461ab4fc4d29db3",
+      "git_blob": "ae67c88c4d59b3a80b5093a83d3b2690789e9e70",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/train_scene_classifier.py",
+      "size": 4385,
+      "sha256": "33e89e0df24b98dccb84388d8424ace348e8a527a59e5d59adab27381782fb5c",
+      "git_blob": "5cba6ba1f6790c0235d448e8af067eea9246b2f3",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/axi_regs.v",
+      "size": 5491,
+      "sha256": "2006ff5367d4e6c71f3f741de2cc58f9296e562895675b754eebeb498297c25f",
+      "git_blob": "ecca64db0ceb6c946adaf28c5d4cf5e23fd48675",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/capture_cdc.xdc",
+      "size": 253,
+      "sha256": "40c6d524d480cb26c8c49546716119b13e1586b12f184813dcd5c30555b2e8a8",
+      "git_blob": "919d6451973ffc61de22a1e6f739708770980cfa",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/capture_fault_cdc.v",
+      "size": 1064,
+      "sha256": "d5dda2ab50b5e5d208029d345c8593907d58d459a780491eb3fa6c79f829e3c7",
+      "git_blob": "3314c770098cc4cf98bce60bb5f871e56501744b",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/capture_status_axi.v",
+      "size": 4953,
+      "sha256": "4e1b64902a0062479c937718cfad68eebb59da406c5f514c15494b46e7572b15",
+      "git_blob": "4de5100087fea4403594ca970c5de53ff4d9933a",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/capture_stream_monitor.v",
+      "size": 1920,
+      "sha256": "f9c1e43912c877bdab099b04e2237fe6312d70b069b66f3bee74d125308f3117",
+      "git_blob": "8a07d34d3176be6c92cc4bc24df5566c3e7af8bf",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/config_bridge.v",
+      "size": 1661,
+      "sha256": "8c5ad31fa8071124ecfdd2e06e237970b81c6a270f4c81f2fab614dc84cf7fad",
+      "git_blob": "3ccc53f14fb661878bd080759b741fc323b80418",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/config_cdc.xdc",
+      "size": 634,
+      "sha256": "4a494f78ed52521a4daeffd41d71c61426b4129d3162869a0814ee1af89b2556",
+      "git_blob": "476360977ff8c0c9dc1cdc20ffff0be2272eea51",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/cop_buf.v",
+      "size": 7344,
+      "sha256": "48829e3a9d39e6c0b420c3abf1d7902b0c487c38b9a74ab66eb66f6ca4f4064f",
+      "git_blob": "52e5900e7b5e2f636431b97598d6db1ad8063870",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/design_v0.md",
+      "size": 24691,
+      "sha256": "5963c9b77cb762b7b52ad8a9c331b7f321e021dbcc76a8482dea1a79e6f0f2a0",
+      "git_blob": "6b55bccff3d1d657cf1cecfc966c77f7868c679f",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/gaussian_3x3.v",
+      "size": 6960,
+      "sha256": "68d8fedffedcfcf3f83ecc5eb622a2c128c083c740031b8199b945a0a5383d8e",
+      "git_blob": "8f65a5a8d45debead62095cc37225d8a8a318b48",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/in_align.v",
+      "size": 2619,
+      "sha256": "51500309b070bdb51a8c07c497cf5675c2972c685b2855ad6639454653f9f890",
+      "git_blob": "7f7768b49e5433a64b01547b8d4e348cc08703a8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/line_buffer.v",
+      "size": 850,
+      "sha256": "2ab8e056dd567f5e02e2eaa63354125b007e64ebe6b0e52edd8b1ed894d93f29",
+      "git_blob": "527c50ce1bbfc37188a22cc1871dc4609875a281",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/osd_overlay.v",
+      "size": 2870,
+      "sha256": "2b8ede8506c3b42aa408b34de6ac9eb94bffa3f5f4b589f1bd4f5b2dfcde8faf",
+      "git_blob": "9fa15fda23340c71a873f6fbfbfeda2aec2d0ca4",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/README.md",
+      "size": 5374,
+      "sha256": "3cc8553381978e4200fc204324d24ea0af2f8db908a4b92a54d7ba2f0ddf3473",
+      "git_blob": "1bac9a5da8a4acba6886f08bd4481e57a5899253",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-11-c01-capture-rtl/final-inputs/src/vision/README.md"
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/reset_sync.v",
+      "size": 306,
+      "sha256": "0ccb9079ae49817d44f1392ebeb68caa91bc0b52b9b5b1443d1e9db9cc81be7f",
+      "git_blob": "b23e64a4d9c38a17c16ae005d3bdbce39b37d6cb",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/rgb2gray.v",
+      "size": 992,
+      "sha256": "380e5aea268acfa7b45c8860ce29fae99213ecf05305e66099f44af5bc24b5f1",
+      "git_blob": "d743cddac84232b96bec41d56add02ebd553622a",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/scaler.v",
+      "size": 12623,
+      "sha256": "cd4030c9ac31c42c95a05972f6f73dd1bfda007b7d78afe6098554f0b65060b1",
+      "git_blob": "b67eb3ba3ca54d80a86bc0ebf5f0f1bbe91b65df",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/sobel.v",
+      "size": 5990,
+      "sha256": "e3d75587025a749358754807a77a3a2074b91c8e4fe6dc355cf32d776ec134d2",
+      "git_blob": "98d7d92dbe05e202fb3e95b2fdd673b90e3451d5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/video_pipeline.v",
+      "size": 2643,
+      "sha256": "87c5f16fc721a0141d071795c414cd195bf62979e4343e8582044855f57738a4",
+      "git_blob": "fa7d2ad0b4697643030ca87c804f888f977331c4",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/vision_axi.v",
+      "size": 2691,
+      "sha256": "128fa1dd6e5e42495fbf2b8548a162eb8929bd282110e7979f6ae5a2093f7a4d",
+      "git_blob": "494336a210ecff32979b7603a3cff42276ab73b5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/src/vision/vision_top.v",
+      "size": 8454,
+      "sha256": "94268ee86e0356eb6b680a7f45176cb9294ff68d797d4d0b9f4902970c4a7bfb",
+      "git_blob": "12bc76625ccbbbfec7dbd6da5e1817221157c33c",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/sim/build/hdmi-source/hdmi_pins.xdc",
+      "size": 1872,
+      "sha256": "e072bc981b6af76aae9ea01f38fe9034e93bd039f960e1509865f5b883e00113",
+      "git_blob": "0e13bfc2bee3176d7f68bf93544b60fe1f3db8b8",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/sim/build/hdmi-source/ps7_config.tcl",
+      "size": 37064,
+      "sha256": "de589f06b605b75b31224c19932f169c299e7a5e56f9cab79e2887b73962cd7b",
+      "git_blob": "f2779ab7797e1ca2e47d250adfec703aa58f5288",
+      "action": "keep",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/sim/scripts/build_capture_hdmi.tcl",
+      "size": 3319,
+      "sha256": "9f6dd3f9631ec38154946a364dbd78f83ecdd56c63620791aac82910fb95e852",
+      "git_blob": "72e9bef078faa3fb2b8dbf34f5a81b0ed0174931",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/sim/scripts/create_capture_hdmi_bd.tcl",
+      "size": 5164,
+      "sha256": "d9215ae156c656fe98fddce9bc3941422b5eb7a4c5be0c3c2182e93a80b9e254",
+      "git_blob": "c1c19c5b69f56eb8fa53cef00621bbbecdabfec4",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/sim/scripts/create_hdmi_bd.tcl",
+      "size": 3022,
+      "sha256": "52b46c72f6f9f5a97b65cc35043ba0643994449c536a3826ecee9b8e7e28c60a",
+      "git_blob": "cd3f5b9d30d3a8a2f656924873796d2b49cdbb03",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/sim/scripts/run_vision_iverilog.sh",
+      "size": 3669,
+      "sha256": "a73bc9670423125d28b6bb1ce3f871dc91fe89c8b07576d72be6ebaadb672344",
+      "git_blob": "c014a1f7e10b649d24f30ef4cb60e6c360271944",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/sim/vision/tb_capture_status_axi.v",
+      "size": 4989,
+      "sha256": "b920a389e58e17cdca5ec5afce86dbebb26209a140f84412d54cc3736829ea66",
+      "git_blob": "1a2b9a6d6821d25e1a9a8aa7357a17cd15d59ff7",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/sim/vision/tb_capture_stream_monitor.v",
+      "size": 3340,
+      "sha256": "c3c226d2c63b5006b157546ec6543182ea3d2ed8862510c2b15d05ca732385d4",
+      "git_blob": "b1dbadffc806318e3e468df2b9f525f0fe9f5323",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/src/vision/axi_regs.v",
+      "size": 5491,
+      "sha256": "2006ff5367d4e6c71f3f741de2cc58f9296e562895675b754eebeb498297c25f",
+      "git_blob": "ecca64db0ceb6c946adaf28c5d4cf5e23fd48675",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/src/vision/capture_cdc.xdc",
+      "size": 374,
+      "sha256": "d83995ae366ac75b5f4e846c99215fe5fbdafedd890d59924083d026a34ad753",
+      "git_blob": "116ac54f2976344429abec3a9675ed0493994f9d",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/src/vision/capture_fault_cdc.v",
+      "size": 1064,
+      "sha256": "d5dda2ab50b5e5d208029d345c8593907d58d459a780491eb3fa6c79f829e3c7",
+      "git_blob": "3314c770098cc4cf98bce60bb5f871e56501744b",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/src/vision/capture_status_axi.v",
+      "size": 4953,
+      "sha256": "4e1b64902a0062479c937718cfad68eebb59da406c5f514c15494b46e7572b15",
+      "git_blob": "4de5100087fea4403594ca970c5de53ff4d9933a",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/src/vision/capture_stream_monitor.v",
+      "size": 1920,
+      "sha256": "f9c1e43912c877bdab099b04e2237fe6312d70b069b66f3bee74d125308f3117",
+      "git_blob": "8a07d34d3176be6c92cc4bc24df5566c3e7af8bf",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/src/vision/config_bridge.v",
+      "size": 1661,
+      "sha256": "8c5ad31fa8071124ecfdd2e06e237970b81c6a270f4c81f2fab614dc84cf7fad",
+      "git_blob": "3ccc53f14fb661878bd080759b741fc323b80418",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/src/vision/config_cdc.xdc",
+      "size": 811,
+      "sha256": "640b7b3ede96912af87cc6a520fa0001ce9a65726338e29fa5475ef799654277",
+      "git_blob": "9c994e1130bd1bafbc53b39a20c77bf80b6e0a5c",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/src/vision/cop_buf.v",
+      "size": 7344,
+      "sha256": "48829e3a9d39e6c0b420c3abf1d7902b0c487c38b9a74ab66eb66f6ca4f4064f",
+      "git_blob": "52e5900e7b5e2f636431b97598d6db1ad8063870",
+      "action": "unique",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/src/vision/gaussian_3x3.v",
+      "size": 6960,
+      "sha256": "68d8fedffedcfcf3f83ecc5eb622a2c128c083c740031b8199b945a0a5383d8e",
+      "git_blob": "8f65a5a8d45debead62095cc37225d8a8a318b48",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/src/vision/in_align.v",
+      "size": 2619,
+      "sha256": "51500309b070bdb51a8c07c497cf5675c2972c685b2855ad6639454653f9f890",
+      "git_blob": "7f7768b49e5433a64b01547b8d4e348cc08703a8",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/src/vision/line_buffer.v",
+      "size": 850,
+      "sha256": "2ab8e056dd567f5e02e2eaa63354125b007e64ebe6b0e52edd8b1ed894d93f29",
+      "git_blob": "527c50ce1bbfc37188a22cc1871dc4609875a281",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/src/vision/osd_overlay.v",
+      "size": 2870,
+      "sha256": "2b8ede8506c3b42aa408b34de6ac9eb94bffa3f5f4b589f1bd4f5b2dfcde8faf",
+      "git_blob": "9fa15fda23340c71a873f6fbfbfeda2aec2d0ca4",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/src/vision/reset_sync.v",
+      "size": 306,
+      "sha256": "0ccb9079ae49817d44f1392ebeb68caa91bc0b52b9b5b1443d1e9db9cc81be7f",
+      "git_blob": "b23e64a4d9c38a17c16ae005d3bdbce39b37d6cb",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/src/vision/rgb2gray.v",
+      "size": 992,
+      "sha256": "380e5aea268acfa7b45c8860ce29fae99213ecf05305e66099f44af5bc24b5f1",
+      "git_blob": "d743cddac84232b96bec41d56add02ebd553622a",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/src/vision/scaler.v",
+      "size": 12623,
+      "sha256": "cd4030c9ac31c42c95a05972f6f73dd1bfda007b7d78afe6098554f0b65060b1",
+      "git_blob": "b67eb3ba3ca54d80a86bc0ebf5f0f1bbe91b65df",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/src/vision/sobel.v",
+      "size": 5990,
+      "sha256": "e3d75587025a749358754807a77a3a2074b91c8e4fe6dc355cf32d776ec134d2",
+      "git_blob": "98d7d92dbe05e202fb3e95b2fdd673b90e3451d5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/src/vision/video_pipeline.v",
+      "size": 2643,
+      "sha256": "87c5f16fc721a0141d071795c414cd195bf62979e4343e8582044855f57738a4",
+      "git_blob": "fa7d2ad0b4697643030ca87c804f888f977331c4",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/src/vision/vision_axi.v",
+      "size": 2691,
+      "sha256": "128fa1dd6e5e42495fbf2b8548a162eb8929bd282110e7979f6ae5a2093f7a4d",
+      "git_blob": "494336a210ecff32979b7603a3cff42276ab73b5",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/inputs/src/vision/vision_top.v",
+      "size": 8454,
+      "sha256": "94268ee86e0356eb6b680a7f45176cb9294ff68d797d4d0b9f4902970c4a7bfb",
+      "git_blob": "12bc76625ccbbbfec7dbd6da5e1817221157c33c",
+      "action": "restore",
+      "canonical": null
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/settled-script-archive/c01_status_onboard.py",
+      "size": 4638,
+      "sha256": "28dd6132d98c345e6805bdbfa595b8fcb4f7dad14e4a32839bdaa1cd6ff719c3",
+      "git_blob": "b5d93cb53e890cfb8eddc15dcb0fd194c5accccc",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/scripts/c01_status_onboard.py"
+    },
+    {
+      "path": "data/logs/2026-10-11-c01-capture-rtl/settled-script-archive/test_c01_status_onboard.py",
+      "size": 3350,
+      "sha256": "50c0f1b2a29834b85e38ca21ff2b0cc20a12e07d363a79186a54450b0cf5b4f8",
+      "git_blob": "22acd27f6a677c3a5e2784d4fc3b4e7574f29fad",
+      "action": "drop",
+      "canonical": "data/logs/2026-10-11-c01-capture-rtl/handoff-inputs/sim/vision/test_c01_status_onboard.py"
+    }
+  ]
+}

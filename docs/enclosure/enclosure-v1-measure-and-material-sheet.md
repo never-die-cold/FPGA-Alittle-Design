@@ -20,7 +20,7 @@
 ## 2．尺寸推导链（实测后代入，先算再下单）
 
 - 中层高 H_mid = D（镜头工作距离）＋ 元件最大高度 ＋ 5 mm 裕量 ＝ ____ mm
-- 识别区最小边距：FOV 除以 16 目标上限与最小间距档（档位见[采集规程](../fastener-data-collection-protocol.md)），
+- 识别区最小边距：FOV 除以 16 目标上限与最小间距档（档位见[采集规程](../runbooks/fastener-data-collection-protocol.md)），
   取两者较严者反推承物板可用面积 ≥ ____ × ____ mm
 - 上层高 = Pi 总高 ＋ CSI 排线弯折余量 ＋ 顶盖间隙 ＝ ____ mm
 - 下层高 = PYNQ 总高 ＋ 绝缘支柱高 ＋ 插头纵深 ＝ ____ mm

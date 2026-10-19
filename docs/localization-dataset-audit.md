@@ -1,5 +1,7 @@
 # Localization Prototype Dataset Audit
 
+> 副本说明：与 [外包原文](outsource/fastener-vision-2026-10-07/localization-dataset-audit.md) 字节相同；保留用于 48/48 完整性校验。本文件是项目维护入口。
+
 Date: 2026-10-07. Purpose: select public data for an initial OpenCV/CNN comparison before the project has physical fasteners.
 
 ## Findings
