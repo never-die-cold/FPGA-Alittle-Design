@@ -11,6 +11,7 @@
 | [`arm-localize-runbook.md`](arm-localize-runbook.md) | ARM 文件定位/裁剪便携包 |
 | [`fastener-collection-handoff.md`](fastener-collection-handoff.md) | 紧固件采集交接包：编号规则、采集表与验收矩阵（W01） |
 | [`fastener-data-collection-protocol.md`](fastener-data-collection-protocol.md) | fastener-data-collection —— 紧固件数据采集规程（草案） |
+| [`coprocessor-j04-handoff.md`](coprocessor-j04-handoff.md) | J04 协处理器实现交接：冒烟入口、指纹、OPEN-1..8 与接手步骤 |
 | [`module1-reproduction.md`](module1-reproduction.md) | 模块一复现清单（#skill候选） |
 | [`module3-model-training.md`](module3-model-training.md) | 模块三模型训练前期准备（INT8 CNN 训练与量化路线） |
 | [`module3-prototype-reference.md`](module3-prototype-reference.md) | 模块三：交付原型的 FP32 逐层软件参考 |

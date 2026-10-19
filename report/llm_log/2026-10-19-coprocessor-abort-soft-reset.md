@@ -2,7 +2,7 @@
 
 > 标签：#coprocessor #架构决策 #验证
 > 平台：Codex（VS Code 插件，WSL，夜间）＋ OpenCode ｜ 模型：Codex = GPT-5 系列；OpenCode = deepseek-flash（deepseek/deepseek-flash）
-> 相关 commit：`9fdd035` 前的 J04-23/24 提交；总记录见 `2026-10-18-j04-closeout.md`（J04-23/24 段）
+> 相关 commit：发布分支 `b39f811`（J04-24；J04-23 合并在该步）；总记录见 `2026-10-18-j04-closeout.md`（J04-23/24 段）
 
 ## 1. 任务与初始提示词
 
