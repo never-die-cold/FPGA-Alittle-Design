@@ -18,7 +18,7 @@
 | J02 | ✅ | 诊断整数参考、逐层黄金、文件/来源 SHA256 与篡改负例可复现；不是 J06 正式模型 |
 | J03 | ✅ | 活跃 Conv→GAP→FC 链逐元素对拍；独立、协处理器 all、全仓 all 退出 0 |
 | J04a | ✅ | JL 侧实现、模块/顶层冒烟、J02 zero、工单固件与交接单已落库；24 个文件 SHA256 与远端一致 |
-| J04b | 🟡 | 完整验证、物理 bank/结果 DMA、CDC/AXI 深测、综合与板验未完成；OPEN-1..10 见[交接单](../../docs/runbooks/coprocessor-j04-handoff.md) |
+| J04b | 🟡 | 完整验证、物理 bank/结果 DMA、CDC/AXI 深测、100 MHz 时序与板验未完成；OPEN-1..12 见[交接单](../../docs/runbooks/coprocessor-j04-handoff.md) |
 | J05 | ⬜ | 等真实审计 ROI；训练/PTQ/QAT、混淆矩阵与阈值未完成 |
 | J06 | ⬜ | 正式模型、真实参数/黄金、版本/哈希发布未完成 |
 | J07 | ⬜ | 视频原帧通路+核+CNN 的综合实现和整机回归未完成 |

@@ -35,7 +35,7 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 
 ```text
 43 82f44ec0627728ab287e693a0124966a2d7b78280ae21f8f06ac7efd1a3a2ca2 src/coprocessor/cop_axi_lite_frontend.v
-46 15aff88321fab1130bbc189e438beabe4061e598eccbe13c7c3b313ebe0bb0e2 src/coprocessor/cop_cdc_mailbox.v
+49 9b3a2f34b5f5e95ab94a649b1ff786b00e33fccdaac1d1ee86a2a62aa31b9ccf src/coprocessor/cop_cdc_mailbox.v
 63 c5eccd3a95c6c8739fba4ad9bf9f51bb583b6c8743d99b4421ac27157a129cdc src/coprocessor/cop_config_regs.v
 65 caa57cc8bf0fe5ac442847adae18a793532d31c7af4fe47da7468f9f40e50874 src/coprocessor/cop_core_mmio_gate.v
 46 ae0e9a92b9010dbd6d7983012fa5d1458ea6cfbcdaec17e8402236136f6d5bba src/coprocessor/cop_ctrl_regs.v
@@ -47,7 +47,7 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 108 4e8c6ffb06ed09ddc4659439424af99afd29a47a1a73eb9ff53f8fe14741b416 src/riscv_fw/cop_job.c
 35 1692bb7235424dfce0a3877256a910a16834f9411d21a133cc1c305f61d95ee6 src/riscv_fw/cop_work_order.h
 80 69883b46c317abbe4525c7f2c9d29b88c0e35fa21b285f56d9dcafb7929845cf src/riscv_fw/Makefile
-26 ed9fed691756d69a25ad823d41b1fdc31ac14393912248614288538e01f2ae2a sim/coprocessor/tb_cop_axi_lite_frontend.v
+60 3953f4d2b2d92b6a1898af605b1b114ab30c83068e8e0e44d033d97ce6abe277 sim/coprocessor/tb_cop_axi_lite_frontend.v
 34 66133a217901355f313e76369dca62e035790aa92e748a5e5625b10250090e2e sim/coprocessor/tb_cop_cdc_mailbox.v
 36 829424c336f1e1e638a7fd1fcb58785d0c0aaf4b0e705459e7b20ec85d817fab sim/coprocessor/tb_cop_config_regs.v
 49 50bfb8057e8f87eb90637ab61f0085e88a91a30107a24f789f1b6ef7500a2466 sim/coprocessor/tb_cop_core_mmio_gate.v
@@ -57,7 +57,7 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 139 cc2eb17bc22a06494ac396969f2ba09cce5037b30cacb9e73b73648f4214faa4 sim/coprocessor/tb_cop_top.v
 163 a66ca4bbad1336f4ab7f2984fb634b92a7b62faec99b11d60a9d641f3c0623e5 sim/coprocessor/tb_cnn_sequencer.v
 19 cbd5a4cb478b01a8668e625602e3e327f2eba4b3c7ae1dcd45cc489f50786e9e sim/coprocessor/test_cop_work_order.c
-94 392e7fdf453770428fd507013eec7d3ac00d31f5836f274e288ad60202b4fb42 sim/scripts/run_coprocessor_iverilog.sh
+95 c028b64633d64b4cab905cf1999bd5f68432cf851f550e794e56b0e638aa5cbc sim/scripts/run_coprocessor_iverilog.sh
 ```
 
 ## 3. 模块接口与时序约定
@@ -83,6 +83,8 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 | 连续两笔任务不误完成 | `cop_top` 第二次 START 后 20 拍仍 `busy`/`WAIT_ENGINE`；去掉保护拍负向对照立即 FAIL | PASS |
 | AXI4-Lite 深测 | `axi_lite`：AW/W 同拍与 W 先到、B/R 背压不丢响应、写读 SLVERR、未完成时拒收第二笔、复位清 B/R | PASS |
 | 固件构建链自检 | `test_firmware_rules.sh`：`OBJDUMP=false` 必须让 make 非零退出且不改写 `.dis` | PASS |
+| cop_top OOC 综合/实现 | `build/build_cop.tcl`：0 critical DRC、LUT 6,699 / FF 7,181 / DSP 136 / BRAM 0；CDC 45 端点 0 unsafe | 完成 |
+| cop_top OOC 时序 | `cop_clk` 10 ns：WNS **−2.743 ns**（Fmax ≈ 78.5 MHz），关键路径在 `cop_dma_loader` CRC32 | **不达 100 MHz**，见 OPEN-12 |
 | J02 zero 黄金 | 9225 packed words/73795 elements；logits `04fd02` | 逐元素 PASS |
 | 协处理器集合 | `run_coprocessor_iverilog.sh all`，退出码 0 | PASS |
 | 默认关闭核回归 | `run_iverilog.sh soc`，first=13/1101，second=65/0001 | PASS |
@@ -98,7 +100,7 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 | AXI 多 outstanding、burst、跨 AXI 时钟域复位序列 | RTL 验证队友 | 现命名“单笔、无 burst”是有意约束；若要支持需先冻结契约再扩 TB |
 | payload 各 bank 物理地址适配与结果 DMA | SoC 集成队友 | 接真实 BRAM/DataMover；逐字节与 C02 payload/result 黄金一致 |
 | 全仓回归、四档 CoreMark、arch-test | 核验证队友 | `run_iverilog.sh all` 与规定矩阵退出 0，无历史回归退化 |
-| XSim、综合、实现、资源、WNS/Fmax、DRC、bitstream | NC/FPGA 队友 | Vivado 原始报告达冻结门槛，无 critical warning 漏审 |
+| 整机 SoC 时序、bitstream、XSim 回归 | NC/FPGA 队友 | `cop_top` OOC 的综合/实现已做过（见 §4 与 OPEN-12），但整机含视频/存储/PS，仍需单独收口 |
 | PYNQ、网口/串口、实机上板 | NC | 按 J08 包运行并返回日志、版本、位流/模型 SHA256 |
 | 正式 PTQ/QAT、真实精度与真实黄金 | JL 后续 J05/J06 | 真实留出集报告和正式 manifest；本 J04 包不替代 |
 
@@ -134,17 +136,22 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
   影响 PS 驱动方式，不影响已测轮询流程。
 - **OPEN-6 FW_DECISION 布局**：固件暂用 `[31:16] seq/[15:8] reasons/[7:0] verdict`；默认仅由
   共用头文件读写，WC 冻结前禁止外部硬编码。影响 WC 协议解析。
-- **OPEN-7 AXI/CDC/综合深度**：AXI 面已补 AW/W 乱序、B/R 背压、SLVERR 与复位用例；CDC 仍只有
-  单一相位与 pending 拒绝，综合/时序完全未做。未覆盖情形一律 UNVERIFIED，不能外推 Vivado、
-  100 MHz 或板端结论。
-- **OPEN-8 组合 RAM 读告警**：Icarus 对 shadow/result memory 报敏感列表告警；默认保留行为，
-  不据此宣称 BRAM 推断。影响综合资源/时序，交给 Vivado 报告判定。
+- **OPEN-7 AXI/CDC 深度**：AXI 面已补 AW/W 乱序、B/R 背压、SLVERR 与复位用例；CDC 仍只有单一相位
+  与 pending 拒绝，异步相位扫描/复位中途未做。综合与时序已在 `cop_top` OOC 做过（OPEN-12），
+  但整机含视频/存储/PS，不能外推板端结论。
+- **OPEN-8 组合 RAM 读告警**：Icarus 对 shadow/result memory 报敏感列表告警。Vivado 实测 `cop_top`
+  **BRAM=0、全部落成寄存器**（FF 7,181），说明这些数组没有被推成 BRAM；告警是仿真器敏感列表
+  问题，不是资源问题。但寄存器化是否可接受，仍要随整机时序一起看。
 - **OPEN-9 只读常量未实现**：`VERSION(0x004)`、`CAPABILITY(0x008)`、`ERROR_CODE(0x014)` 当前
   读回固定 0；C03 §4 只给语义、未冻结位图与错误码编码，本轮不臆造取值。WC 驱动冻结前不得把
   0 当作合法版本/能力位，也不得据 0 判断错误原因。影响驱动版本协商与错误定位。
 - **OPEN-10 PS 空闲 ABORT**：`CTRL.ABORT` 未加 busy 门禁，空闲时写入会置 `STATUS.ERROR`
   但不产生任务错误脉冲，与 §3.1.1「非驻留拒绝」口径不一致；本轮保留该行为未改，服务停止流程
   需自行按 STATUS 判读。影响停止/恢复流程的错误计数。
+- **OPEN-12 `cop_top` 跑不到 100 MHz**：`build_cop.tcl` 的 OOC 实现给出 `cop_clk` 10 ns WNS **−2.743 ns**
+  （Fmax ≈ 78.5 MHz），前 10 条违例路径都在 `cop_dma_loader` 的 CRC32（`crc_state_reg`→`crc32_o_reg`，
+  13 级 LUT）。修法至少三种（两级流水 / CRC 降频 / 查表），**都要先冻结 loader 吞吐要求**，本轮未改。
+  影响 J04b 的 100 MHz 门槛与整机时序。
 - **OPEN-11 有效空场景**：C03 §8 要求“有效空场景对非零工单为 `CHECK_FAIL`、actual 三类均为 0”，
   但 v0 没有“本帧有效且零目标”的表达：`ROI_COUNT` 只接受 1–16，0 分不清“未配置/无视频”和
   “有效空帧”。固件因此把 `count==0` 一律按 `RECHECK+CONFIG` 处理，**不把 0 当有效空帧**。

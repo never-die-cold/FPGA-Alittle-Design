@@ -18,7 +18,7 @@
 | MMIO、状态、DMA、结果与 PS/核分工 | [C03](coprocessor-integration-v0.md) |
 | 核现役语义与待确认 SoC 回写 | [design_v1 §17](../../src/riscv/design_v1.md) |
 | J01–J10 状态和 J04 收口边界 | [模块计划](../../src/coprocessor/plan.md) |
-| J04 实现交接与 OPEN-1..8 | [实现交接单](../runbooks/coprocessor-j04-handoff.md) |
+| J04 实现交接与 OPEN-1..12 | [实现交接单](../runbooks/coprocessor-j04-handoff.md) |
 | J03 本轮离板复验 | [验收索引](../../data/logs/2026-10-18-j03-closeout/README.md) |
 | 10/13 CNN/DDR 历史接口与失败边界 | [历史交接](../archive/cnn-ddr-offline-handoff-2026-10-13.md) |
 | 三人职责与最终签收 | [收口清单](../project-closeout-three-person-checklist.md) |
