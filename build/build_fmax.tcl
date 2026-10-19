@@ -6,7 +6,7 @@
 # 产出：build/run/fmax/<label>/（临时产物，不入库）、build/reports/fmax/<label>/（报告证据）
 # 口径：与 build/build.tcl（v0 基线）完全同法——OOC、默认优化 directive、
 #       xc7z020clg400-1，仅时钟周期作为变量（约束递减 10ns→5ns→收敛），
-#       保证自研核与 PicoRV32 两边同法可比（docs/core_comparison.md §3）
+#       保证自研核与 PicoRV32 两边同法可比（docs/research/core_comparison.md §3）
 # ============================================================
 
 set top    [lindex $argv 0]

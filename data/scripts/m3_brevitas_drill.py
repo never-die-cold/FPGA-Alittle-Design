@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""模块三训练侧 Brevitas QAT 演练（docs/module3-model-training.md §2 推荐路线验证，2026-10-03）
+"""模块三训练侧 Brevitas QAT 演练（docs/runbooks/module3-model-training.md §2 推荐路线验证，2026-10-03）
 
 目的：证明正式量化路线"Brevitas QAT 训练 → INT8 导出 → 纯整数累加复现"可行，暴露接口问题。
 与 2026-09-30 m3_train_drill.py 同网络（conv3x3 1→4→4 + fc，输入 8x8）、同两类合成数据，结果可对照。
