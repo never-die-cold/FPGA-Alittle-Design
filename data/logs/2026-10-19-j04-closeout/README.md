@@ -33,6 +33,10 @@ make -C src/riscv_fw CROSS=riscv32-unknown-elf- PYTHON=python cop_job.hex cop_jo
 | Windows `cop_top` | 0 | [windows-cop_top.exit_code](windows-cop_top.exit_code)；AXI/J02/DMA error/ABORT/SOFT_RESET PASS |
 | Windows `firmware` | 0 | [windows-firmware.exit_code](windows-firmware.exit_code)；RV32I ELF 构建 + 主机规则测试 PASS |
 | Windows `run_iverilog.sh soc` | 0 | [windows-soc.exit_code](windows-soc.exit_code)；first=13/1101，second=65/0001 |
+| Windows 核 20 个 TB + 协处理器 `all` | 中止（非失败） | [windows-core-20tbs.partial.log](windows-core-20tbs.partial.log)：72 个 `PASS`、0 个失败；之后进入 CoreMark 四档基准的长仿真，本轮主动中止，**不声称全仓单次跑完** |
+| Windows `run_coprocessor_python.sh all` | 0 | [windows-cop-python.log](windows-cop-python.log)；整数算子/网络 Python 参考 |
+| Windows `run_vision_iverilog.sh all` | 0 | [windows-vision-rtl.log](windows-vision-rtl.log)；28 个视觉 RTL `PASS` |
+| Windows `run_vision_python.sh` | 0 | [windows-vision-python.log](windows-vision-python.log)；需 PATH 里有 `git`（打包用例调 `git rev-parse`） |
 | Windows `cop_top` 负向对照（去掉 done 保护拍） | 1 | `FAIL second task finished early busy=0 state=0 seq=2`；证明该用例能判别旧缺陷 |
 
 ## 3. 失败与修复
@@ -46,7 +50,10 @@ make -C src/riscv_fw CROSS=riscv32-unknown-elf- PYTHON=python cop_job.hex cop_jo
    并回写旧结果（负向对照：`busy=0 state=0 seq=2`，日志见第 2 节末行）。已在启动当拍不消费
    `done`，并在 `tb_cop_task_ctrl` 加遗留 `done` 用例、在 `tb_cop_top` 加“第二次 START 后
    20 拍仍 busy”断言。
-3. Windows 上用 `pwsh` 包 `bash.exe` 且把 stderr 并到 stdout 时，PowerShell 会把 iverilog 的
+3. `run_vision_python.sh` 曾因 `sim/scripts/make_arm_localize_pkg.py` 仍指向 `docs/arm-localize-runbook.md`
+   （该文件已迁到 `docs/runbooks/`）而失败；已改路径。另需 PATH 里有 `git`，否则打包用例报
+   `FileNotFoundError`。
+4. Windows 上用 `pwsh` 包 `bash.exe` 且把 stderr 并到 stdout 时，PowerShell 会把 iverilog 的
    `-Wall` 告警记成 `NativeCommandError`，使外层退出码变 1——**判据以脚本自身退出码为准**
    （本目录的 `.exit_code` 文件由脚本 `$?` 写入，不受该影响）。
 
@@ -65,6 +72,8 @@ make -C src/riscv_fw CROSS=riscv32-unknown-elf- PYTHON=python cop_job.hex cop_jo
 ## 5. 边界
 
 - 未运行 Vivado、综合、实现、bitstream；未上板。
+- 全仓 `run_iverilog.sh all` 没有单次跑完：核 20 个 TB、协处理器 `all`、协处理器 Python、视觉 RTL、
+  视觉 Python 均已单独跑过且退出 0，CoreMark 四档基准与 `v1_*` 变体本轮未重跑（本次未改核 RTL）。
 - `cop_top`/DMA 仅用 J02 诊断权重与内存模型；物理 bank/结果 DMA 仍是 OPEN-1/2。
 - `VERSION`/`CAPABILITY`/`ERROR_CODE` 仍读 0（OPEN-9）；PS 空闲 ABORT 未按非驻留拒绝处理（OPEN-10）。
 - 本证据不改变 J04b 状态，也不代表 M2/M3 验收；`prototype`/诊断黄金不能写成硬件识别。

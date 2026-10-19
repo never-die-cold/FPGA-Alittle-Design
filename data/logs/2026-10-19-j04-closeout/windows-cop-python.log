@@ -1,0 +1,13 @@
+PASS: C02 scalar quantize/bias/scale-encode/requant/GAP/logit boundaries and invalid inputs
+PASS: C02 tensor/per-channel quantization values, layouts and rejection gates
+PASS: INT8 Conv2d addressing, bias, padding, stride and INT32 overflow gate
+PASS: full integer network independent bias/GAP/FC golden; schema, symmetric INT8 and overflow gates
+PASS: per-channel ReLU/requant and complete Conv layer integer output
+PASS: GAP rounding and signed FC accumulation/requantization
+PASS: class tie-break, integer score and low-confidence semantics
+PASS: frozen FastenerCNN layer order, shapes, dtypes and channel parameters
+PASS: FastenerCNN execution order, traces, shapes and result semantics
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+PASS: full-shape C02 convolution/FC diagnostics ['padding_tail', 'conv1', 'conv2', 'conv3', 'conv4', 'fc']
+PASS: full diagnostic integer network golden {'pattern': {'class_id': 0, 'margin_q': 0, 'score_q15': 0, 'low_conf': True}, 'zero': {'class_id': 2, 'margin_q': 2, 'score_q15': 258, 'low_conf': True}}
+PASS: diagnostic manifests cover required files, sources and tamper detection
