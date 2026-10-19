@@ -70,7 +70,7 @@
 | R1 | 启动保护只挡遗留 `done`，没挡遗留 `error`：上一笔失败后 `engine.error` 保持，W1C 重试在第一拍被误杀 | 成立。这是 done 修复的对称缺口，我上一轮只想了 done | `WAIT_ENGINE` 的 error 分支同样加 `!engine_start_o`；TB 加“遗留 error 后重试”和“启动后真出错”两段；负向对照去掉保护即 `$fatal` |
 | R2 | `count==0` 直接 RECHECK+CONFIG，与 C03 §8“有效空场景 → CHECK_FAIL”冲突 | 成立，但 v0 没有“本帧有效且零目标”的表达，硬实现等于臆造契约 | 记 OPEN-11，并在 `cop_job.c` 就地注释，避免下一个人“顺手修错” |
 | R3 | `windows-rerun.sh` 吞掉被测命令的退出码 | 成立，是我写脚本时的疏忽 | `run()` 保存 rc 并累计 `failed`，末尾非零退出；从错误 cwd 跑实测退出 1 |
-| R4 | `%.dis` 把 objdump 输出直接接给 tr，无 pipefail 时 objdump 失败会被掩成空文件 | 成立，我为修 CRLF 引入了新风险 | 改成写临时文件再 tr 再删，每行由 make 检查退出码 |
+| R4 | `%.dis` 把 objdump 输出直接接给 tr，无 pipefail 时 objdump 失败会被掩成空文件 | 成立，我为修 CRLF 引入了新风险 | 改成写临时文件再 tr 再删；新增 `sim/scripts/test_firmware_rules.sh`（`OBJDUMP=false` 必须让 make 失败且不改写产物），并接进 `firmware` 入口 |
 | R5 | 交接单“24 个文件匹配”实际是 23/24，Makefile 指纹漏更新 | 成立，我改完 Makefile 没有重算 | 重算 4 项（含 Makefile）并复核 24/24 |
 
 reviewer 还指出两处**文档说过头**：OPEN-3 写成“CFG_SEQ 不等立即撤销 MODEL/ROI”（实际是 COMMIT 时才清，

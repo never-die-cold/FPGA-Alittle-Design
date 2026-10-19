@@ -67,6 +67,7 @@ run_firmware() {
     gcc -std=c99 -Wall -Wextra -Werror -I"$ROOT/src/riscv_fw" \
         "$ROOT/sim/coprocessor/test_cop_work_order.c" -o "$BUILD/test_cop_work_order"
     vision_run_checked "$BUILD/cop_work_order.log" "$BUILD/test_cop_work_order"
+    vision_run_checked "$BUILD/firmware_rules.log" bash "$ROOT/sim/scripts/test_firmware_rules.sh"
 }
 case "${1:-all}" in
     mac_lane) run_test mac_lane ;;

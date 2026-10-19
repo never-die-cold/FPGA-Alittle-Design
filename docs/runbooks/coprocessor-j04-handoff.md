@@ -84,7 +84,7 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 | J02 zero 黄金 | 9225 packed words/73795 elements；logits `04fd02` | 逐元素 PASS |
 | 协处理器集合 | `run_coprocessor_iverilog.sh all`，退出码 0 | PASS |
 | 默认关闭核回归 | `run_iverilog.sh soc`，first=13/1101，second=65/0001 | PASS |
-| RV32I 工单固件 | `firmware` 构建 ELF/hex/dis + 主机规则测试 | PASS |
+| RV32I 工单固件 | `firmware` 构建 ELF/hex/dis + 主机规则测试 + `test_firmware_rules.sh`（objdump 失败必须让 make 失败） | PASS |
 
 最终原始输出与退出码：`data/logs/2026-10-19-j04-closeout/{cop_top,all}.{log,exit_code}`。
 
