@@ -108,7 +108,7 @@ python sim/vision/generate_dataset_audit_fixture.py sim/build/vision/inspection/
 GT 交叉核对与朝向覆盖统计已于 2026-10-13 实现（见上）；逐格数量与真实支持条件仍须人工复核。
 同一会话不能证明所有帧真正独立重摆；实物编号也依赖人工如实维护。
 真实相机数据仍未收到，不能据此复验 FP32 精度、可信 PTQ 或正式 INT8。
-CNN RTL、核握手、原分辨率板端取图与 LIVE 闭环仍未实现/未接入。
+CNN 协处理器顶层/核接入、核握手、原分辨率板端取图与 LIVE 闭环仍未实现/未接入。
 
 ## 变更记录
 

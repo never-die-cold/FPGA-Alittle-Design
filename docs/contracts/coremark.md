@@ -3,14 +3,14 @@
 > 本文由原 `coremark_tb_contract.md`（契约主体，§1–§7 编号不变）与 `coremark_plan.md`（附录 A 计划与进度）合并而来（2026-09-24）。
 > 状态：仿真契约已接入一键回归；SoC 计数器/板上预载与 verify 独立 golden 复核仍待收口
 > 起草：基准线（`dev/bench`）｜消费者：基准线（移植层）、验证线（tb/回归/证据）、RTL 线（存储/计数器）
-> 依据：`docs/core_comparison.md`（执行决策）、`src/riscv/design_v0.md`（接口唯一权威）、`sim/riscv/tb_core_coremark.v`（既有通用 tb）
+> 依据：`docs/research/core_comparison.md`（执行决策）、`src/riscv/design_v0.md`（接口唯一权威）、`sim/riscv/tb_core_coremark.v`（既有通用 tb）
 > 本文与 `design_v0.md` 冲突时以 `design_v0.md` 为准，并立即修正本文；变更流程见 §7。
 
 ## 1. 目的与范围
 
 ### 1.1 为什么要有这份契约
 
-CoreMark 是本项目唯一正式基准（`docs/core_comparison.md` §1 决策 1），它横跨三条线：
+CoreMark 是本项目唯一正式基准（`docs/research/core_comparison.md` §1 决策 1），它横跨三条线：
 移植层决定程序写什么、tb 决定怎么判、RTL/SoC 决定硬件提供什么。
 三者任何一处对不上（如 2026-09-15 `muldiv` 接口缺口），都要在实现之后返工。
 本契约把接口、观测、判据在写码前冻结，作为仿真跑分 PASS/FAIL 的唯一判定依据。
@@ -25,7 +25,7 @@ CoreMark 是本项目唯一正式基准（`docs/core_comparison.md` §1 决策 1
 
 - 不定义 CoreMark 算法本身的实现（以 EEMBC 官方源码为准）
 - 不替代 `design_v0.md` 的核接口权威（本文只引用其 §3 / §5.7 / §8）
-- 不覆盖上板流程、综合与时序约束、PicoRV32 对比（见 `docs/core_comparison.md` §4）
+- 不覆盖上板流程、综合与时序约束、PicoRV32 对比（见 `docs/research/core_comparison.md` §4）
 
 ### 1.4 读者与角色
 
@@ -40,7 +40,7 @@ CoreMark 是本项目唯一正式基准（`docs/core_comparison.md` §1 决策 1
 | 文档 | 关系 |
 |:---|:---|
 | `src/riscv/design_v0.md` | 接口唯一权威；本文引用其 §3（存储）、§5.7（core_top）、§8（tohost 约定） |
-| `docs/core_comparison.md` | 执行决策与指标定义（CoreMark/MHz、四档、仿真外推口径） |
+| `docs/research/core_comparison.md` | 执行决策与指标定义（CoreMark/MHz、四档、仿真外推口径） |
 | `sim/riscv/tb_core_coremark.v` | 既有通用 tb；本文冻结的 plusargs/判据以它为基础并向后兼容 |
 | `report/llm_log/2026-09-23-coremark-tb.md` | 通用 tb 的落地记录与理解门槛 |
 
@@ -220,7 +220,7 @@ CoreMark/MHz = iterations × 1_000_000 / ticks_elapsed
 
 - 仿真周期 10 ns 只影响"秒数"换算，**不影响** CoreMark/MHz；四档对比用同一公式、同一迭代数
 - tb 的全局 `cycles/instrs/bubbles/CPI` 只作健康检查与报告，**不参与**评分（评分必须与板上同口径）
-- 四档对比判据：同一 hex + 同一 golden；**CRC 判据必须四档全等**（优化不改语义）；CoreMark/MHz 按档记录，入 `docs/core_comparison.md` §2/§5 与 `data/metrics.csv`
+- 四档对比判据：同一 hex + 同一 golden；**CRC 判据必须四档全等**（优化不改语义）；CoreMark/MHz 按档记录，入 `docs/research/core_comparison.md` §2/§5 与 `data/metrics.csv`
 - 有效性层级：
   - 仿真（本文）：功能有效性 = §5.1 + §5.2；成绩按"仿真外推口径"注明（短迭代，不满足官方 ≥10s）
   - 板上（M3，`core_comparison.md`）：官方 ≥10s 有效性；用实测频率换算 score；观测协议与本文相同
@@ -270,7 +270,7 @@ vvp build/tb_core_coremark.vvp +hex=<镜像> +exp_exit=0 +timer_addr=80008000 +m
 | 原始日志 | `data/logs/YYYY-MM-DD-coremark/` | 四档各一份；附运行命令、参数、commit hash |
 | golden | `data/golden/coremark_2k_32iter/` | golden 值 + 生成/复核命令 + 源码 SHA-256（§5.2） |
 | 指标 | `data/metrics.csv` | 增行：CoreMark/MHz、CoreMark/LUT；测量条件按 `data/README.md` 填全 |
-| 对比表 | `docs/core_comparison.md` §2/§5 | 刷实测值（四档 + 引用数据口径） |
+| 对比表 | `docs/research/core_comparison.md` §2/§5 | 刷实测值（四档 + 引用数据口径） |
 
 ### 6.4 四档运行矩阵（M1 内完成）
 
@@ -288,7 +288,7 @@ vvp build/tb_core_coremark.vvp +hex=<镜像> +exp_exit=0 +timer_addr=80008000 +m
 
 ### 7.1 变更规则
 
-- 本文转"已冻结 v1.0"后：任何改动走 PR；涉及接口/判据的改动须 ① 受影响线在 PR 确认 ② `report/llm_log/` 留决策记录 ③ 同步更新引用方（`sim/README.md`、`docs/core_comparison.md`）
+- 本文转"已冻结 v1.0"后：任何改动走 PR；涉及接口/判据的改动须 ① 受影响线在 PR 确认 ② `report/llm_log/` 留决策记录 ③ 同步更新引用方（`sim/README.md`、`docs/research/core_comparison.md`）
 - 与 `design_v0.md` 冲突：以 `design_v0.md` 为准并立即修正本文（§1.5）
 
 ### 7.2 未决项收口（标志达成即关闭）
@@ -296,12 +296,12 @@ vvp build/tb_core_coremark.vvp +hex=<镜像> +exp_exit=0 +timer_addr=80008000 +m
 | # | 未决项 | 收口标志 |
 |:--:|:---|:---|
 | 1 | 8B 存储模型实现 | ✅ RTL/固件/tb 统一 8192×32，CoreMark + 全量 8 tb 回归 PASS（见 `data/logs/2026-09-23-coremark-script-regression/`） |
-| 2 | SoC 计数器地址确认/实现 | 地址与读语义写入 `design_v0.md` §3.3，SoC RTL 实现并复测 |
+| 2 | SoC 计数器地址确认/实现 | ✅ 地址与读语义写入 `design_v0.md` §3.3；`soc_top.v` 已实现并由 `tb_soc_top`/`tb_soc_check` 覆盖 |
 | 3 | `coremark.hex` 移植 | ✅ v0 32 迭代 PASS，判据全过（`data/logs/2026-09-23-coremark/`） |
 | 4 | crcfinal golden 独立复核 | ✅ bench 双路 + RTL 仿真一致；⬜ 验证线独立复核（`data/golden/coremark_2k_32iter/`） |
 | 5 | 观测块判据扩展 | ✅ tb 支持 `+exp_*` 判据与 obs dump |
 | 6 | `coremark` 回归模式 | ✅ 单档与 `all` 已接入；50M 看门狗与 golden 判据固定并实跑 PASS |
-| 7 | DMEM 镜像预载（哈佛加载器） | tb ✅；⬜ `soc_top` 需支持预载/等效加载，之后才能板上运行（RTL 线） |
+| 7 | DMEM 镜像预载（哈佛加载器） | tb ✅；`soc_top` 已有 `IMEM_INIT_FILE`/`DMEM_INIT_FILE` 双口预载参数；板上镜像加载/等效路径未验收（RTL 线） |
 
 ### 7.3 变更记录
 
@@ -323,7 +323,7 @@ vvp build/tb_core_coremark.vvp +hex=<镜像> +exp_exit=0 +timer_addr=80008000 +m
 
 > 状态：执行中；v0 CoreMark 仿真通过，脚本入口已接入；剩余 SoC 计数器/DMEM 上板预载、metrics 与四档数据
 > 主责：基准线 `dev/bench`｜窗口：9/25–10/1（与 Part B/C 并行，2026-09-21 压缩排期）
-> 依据：`docs/core_comparison.md`（决策与指标定义）、`src/riscv/plan.md` §1–§3（剩余计划与遗留）、`sim/README.md`
+> 依据：`docs/research/core_comparison.md`（决策与指标定义）、`src/riscv/plan.md` §1–§3（剩余计划与遗留）、`sim/README.md`
 > 配套契约：本文 §1–§7——接口/观测/判据的唯一执行口径
 > 冲突处理：接口以 `src/riscv/design_v0.md` 为唯一权威；本附录只回答"做什么、谁做、怎么验收、卡在哪"
 
@@ -341,14 +341,14 @@ vvp build/tb_core_coremark.vvp +hex=<镜像> +exp_exit=0 +timer_addr=80008000 +m
 | # | 项 | 现状 | 责任线 |
 |:--:|:---|:---|:---|
 | 1 | 8B 存储模型（32KB 统一 RTL/固件/链接） | ✅ 已合入；IMEM/DMEM RTL、固件、链接与仿真模型统一 8192×32 | 完成 |
-| 2 | SoC 计时计数器（地址 `0x8000_8000`） | ⬜ RTL/SoC 尚未实现；仿真由 tb `+timer_addr` 模拟 | RTL 线 |
+| 2 | SoC 计时计数器（地址 `0x8000_8000`） | ✅ 已实现于 `soc_top.v`：32 位自由运行、同拍组合读、写忽略；`tb_soc_top`/`tb_soc_check` 与 2026-09-28 收口证据覆盖 | 完成 |
 | 3 | vendor CoreMark + 移植层 | ✅ 2026-09-23：vendor/ + portme + 构建落地 | bench |
 | 4 | `coremark.hex` + golden（crcfinal） | ✅ hex/golden 入库且 RTL 仿真吻合；verify 独立复核仍待办 | verify 复核 |
 | 5 | `coremark` 回归模式（`run_iverilog.sh`） | ✅ `coremark` 单档模式与 `all` 全量入口已接入 | 完成 |
-| 6 | `data/metrics.csv` 两行数值 | 🟡 CoreMark/MHz=1.506 与 CPI=2.105 已填；CoreMark/LUT 待重综合 | bench |
+| 6 | `data/metrics.csv` 数值 | ✅ CoreMark/MHz=1.506、CPI=2.105、CoreMark/LUT=0.000938 已入表；四档数据见模块一收口报告 | 完成 |
 | 7 | DMEM 镜像预载（哈佛加载器） | ✅ 仿真 tb 双口预载；`soc_top` 板上加载仍待实现 | RTL 线 |
 
-**依赖链**：#1 已完成；仿真用例可依赖 tb 计数器参数运行。剩余板上路径依赖 #2/#7；bench 数据收口依赖 verify 独立 golden 复核与四档 RTL。
+**依赖链**：#1/#2 已完成；仿真用例可依赖 tb/SoC 计数器运行。剩余板上镜像加载路径依赖 #7；bench 数据收口依赖 verify 独立 golden 复核与四档 RTL。
 
 **2026-09-23 实跑快照**：v0 32 迭代 PASS——四常数 + golden（`crcfinal=0x8799`）全对，CPI=2.105、CoreMark/MHz=1.506（仿真外推口径）；证据 `data/logs/2026-09-23-coremark/`。实跑修正两点：① 哈佛加载器语义——镜像须同时预载 DMEM（`.data` 初值与 `.rodata` 跳转表；见本文 §3.2，实跑定位到间接跳转飞入数据区）；② `ee_printf` 置空，结果全部走观测块（原 D2 设想的 dmem 缓冲不必要）。
 
@@ -393,8 +393,8 @@ vvp build/tb_core_coremark.vvp +hex=<镜像> +exp_exit=0 +timer_addr=80008000 +m
 
 ## A.6 阶段 F：数据入档（9/29–10/1，bench）
 
-- [ ] F1. `data/metrics.csv` 两行收口中：CoreMark/MHz ✅ 1.506（口径/条件/证据齐全）；CPI 行 ✅ 2.105（同轮数据，全局口径）；CoreMark/LUT ⬜ 待 8B 后 Vivado 重综合取 post-route LUT（公式已注明）
-- [ ] F2. `docs/core_comparison.md` §5 勾选、§2 表更新为实测行（M1 后）
+- [x] F1. `data/metrics.csv` 数值：CoreMark/MHz 1.506、CPI 2.105、CoreMark/LUT 0.000938 已入表（口径/条件/证据齐全；post-route LUT 见 `build/reports/utilization_impl.rpt`）
+- [ ] F2. `docs/research/core_comparison.md` §5 勾选、§2 表更新为实测行（M1 后）
 - [ ] F3. README「为什么自研核」占位数字刷新（实测后再写，禁止先写目标后凑数）
 
 ## A.7 阶段 G：四档对比（9/29–10/1，配合 Part B/C）

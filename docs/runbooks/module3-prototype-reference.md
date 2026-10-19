@@ -9,7 +9,7 @@
 - 已实现并验证：实际网络审计、推理 BN 折叠、NumPy 独立算子、逐层对拍、位模式导出和隔离复算。
 - 已实现但未验证：PYNQ NumPy 环境兼容性与板端运行时间；现有权重在真实工位的分类效果。
 - 未实现/未接入：可信 PTQ/QAT、正式缩放/零点/舍入/饱和参数、INT8 权重排布、
-  CNN RTL、与核握手、真实取图和 LIVE 服务。
+  CNN 协处理器顶层/核接入、与核握手、真实取图和 LIVE 服务。
 
 ## 实际网络与预算
 
@@ -87,8 +87,8 @@ FP32 hex 不能直接送入 INT8 MAC；包中未提供 INT8 scale/zero-point。
 bash sim/scripts/run_inspection_python.sh
 ```
 
-当前入口共十一组：原有六组应用测试 + 五组逐层参考/审计/文件/包测试。
-后续增加两组[数据集清单/泄漏审计](../research/fastener-dataset-audit.md)，当前共十三组；不改变本 FP32 参考包。
+历史记录曾为十一组：原有六组应用测试 + 五组逐层参考/审计/文件/包测试。
+后续增加两组[数据集清单/泄漏审计](../research/fastener-dataset-audit.md)；当前 `run_inspection_python.sh` 入口共 **14 组**（以脚本列表为准），不改变本 FP32 参考包。
 本轮不改既有八组视觉或 EXE 实现，不重复以相同条件跑硬件无关的旧入口。
 
 ```powershell

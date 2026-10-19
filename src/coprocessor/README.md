@@ -39,15 +39,15 @@ RISC-V 以 load/store 访问且不启用自定义指令。
 100 MHz OOC 为 DSP 136/220、LUT 4540、FF 4037，WNS 0.317 ns、WHS 0.123 ns；DSP 门限为 176，保留至少 20% 器件余量。
 这些数据包含控制器与算术链，尚不包含实体 BRAM/SoC/视频；[命令与原始证据](../../data/logs/2026-10-15-improvements-fast/README.md)。
 
-`int8_reference.py` 实现输入/bias量化、舍入、scale编码与requant；`int8_tensor_reference.py` 实现张量/逐通道权重量化、bias和OIHW卷积累加，溢出拒绝。3组测试由 `bash sim/scripts/run_coprocessor_python.sh all` 复现，需真实 `python3` 与 NumPy；[10/12证据](../../data/logs/2026-10-12-pr-review/README.md)通过。
-`int8_network_reference.py` 新增完整固定结构整数链、模型形状/类型/范围和通用累加界检查；独立常量网络黄金检查 Conv/GAP/FC。`generate_network_vectors.py` 提供固定种子诊断权重和两组输入的逐层黄金及文件/源码哈希，**不是训练后的正式模型**。Python 回归现在为四组，支持 `COPROCESSOR_PYTHON` 或 `VISION_PYTHON` 指定解释器。
+`int8_reference.py` 实现输入/bias量化、舍入、scale编码与requant；`int8_tensor_reference.py` 实现张量/逐通道权重量化、bias和OIHW卷积累加，溢出拒绝。当前 `bash sim/scripts/run_coprocessor_python.sh all` 入口共 **9 组**：primitives / tensors / conv / network / conv_layer / gap_fc / result / model_schema / model_trace；需真实 `python3` 与 NumPy。历史 10/12 证据为 3 组，不覆盖后来新增组。
+`int8_network_reference.py` 新增完整固定结构整数链、模型形状/类型/范围和通用累加界检查；独立常量网络黄金检查 Conv/GAP/FC。`generate_network_vectors.py` 提供固定种子诊断权重和两组输入的逐层黄金及文件/源码哈希，**不是训练后的正式模型**。Python 回归当前为 **9 组**，支持 `COPROCESSOR_PYTHON` 或 `VISION_PYTHON` 指定解释器。
 
 综合入口：`powershell.exe -NoProfile -File sim/scripts/run_cnn_ooc.ps1`，自动存档源码/脚本，运行 100 MHz 控制器 OOC 综合与布局布线，保存时序/资源/DRC和退出码。外部存储、SoC与视频未计入，OOC报告不代替整机时序或板端实测。
 
 ## 设计参考
 
-- 软/硬件双版本同界面对比范式：往届国一 hlstrack2025_40562（YOLO+UKF 的 soft/hardware 双 notebook），见 [docs/track_research.md](../../docs/research/track_research.md)
+- 软/硬件双版本同界面对比范式：往届国一 hlstrack2025_40562（YOLO+UKF 的 soft/hardware 双 notebook），见 [docs/research/track_research.md](../../docs/research/track_research.md)
 - 算子化验证（CONV/POOL/GEMM 加速比表）与吞吐率指标（每拍采样数/SSR 思路）：[docs/proposal_upgrade.md](../../docs/research/proposal_upgrade.md)
-- 训练/量化侧前期准备与接口对齐点：[docs/module3-model-training.md](../../docs/runbooks/module3-model-training.md)
+- 训练/量化侧前期准备与接口对齐点：[docs/runbooks/module3-model-training.md](../../docs/runbooks/module3-model-training.md)
 
 > 未实现：正式 INT8 训练/权重发布、实体 BRAM 与完整协处理器顶层、C03 MMIO/DMA、核接入和工业固件；首网板端输出与整机时序/性能尚未验证。

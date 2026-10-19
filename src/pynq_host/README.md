@@ -1,4 +1,4 @@
-﻿# src/pynq_host —— PYNQ 上位机
+# src/pynq_host —— PYNQ 上位机
 
 PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采集；Jupyter 保留为板端调试与复现入口。最终工业操作界面为 Windows EXE，由 `watercopper` 负责：采集卡视频和网口识别结果统一展示，见根目录 [项目主计划](../../plan.md) §1.3。
 
@@ -34,7 +34,7 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
 
 后续新增 `dataset_manifest.py`、`dataset_audit.py` 和仓库 CLI：720p 采集清单、
 会话/精确重复像素/实物编号泄漏、覆盖统计和来源声明已用测试夹具验证，理解题及补测已通过。
-这些工具的测试夹具证据见[数据集审计](../../docs/research/fastener-dataset-audit.md)，不验收真实标签或模型精度。10/12统一视觉Python为14组，含尚未提交的构建输入审计；[离板证据](../../data/logs/2026-10-12-nc-offline/README.md)退出0。10/13加入DDR单帧异常组后总入口为15组，见本轮总回归记录。
+这些工具的测试夹具证据见[数据集审计](../../docs/research/fastener-dataset-audit.md)，不验收真实标签或模型精度。10/12 离板证据记录为 14 组（含当时尚未提交的构建输入审计）并退出 0；10/13 记录为 15 组。当前 `run_vision_python.sh` 入口为 **21 组**，`run_inspection_python.sh` 为 **14 组**；新增组以脚本和各自证据为准，不把历史 15 组当当前全量。
 
 - `demo.ipynb`：板端调试与复现 notebook
 - `benchmark.ipynb`：基线对比与指标采集（CPI、延迟、帧率、加速比）
@@ -57,7 +57,7 @@ N06 诊断包接线（NC 执行；板端脚本提供 overlay 与 read，取帧�
 EXE `--source 0 --endpoint http://<板IP>:8765` 联调。板端需 pynq-venv 的 python3 + OpenCV + torch；
 FP32 软件推理来源记录在产物 `result.json` 的 provenance，不当作 CNN 硬件验收。
 服务失败（无视频/超时/所有权错误）转 HTTP 503 且不产 `packet.json`；离板替身测试
-`test_base_captures.py`、`test_c01_backend.py`（视觉栈现 18 组；检查链 14 组）；
+`test_base_captures.py`、`test_c01_backend.py`（视觉栈现 **21 组**；检查链 **14 组**）；
 快照核对器 `round_artifacts.py`（C04 §2.3，待 NC 确认）。
 
 ## 板卡访问

@@ -200,6 +200,6 @@ ROSS 接入、官方 MCP 调用案例和云 GPU 训练在本次研究中均未�
 
 ### 项目状态依据
 
-仓库快照 a2c29d8，分支 codex/vision-offboard。README.md 用于确认自主选题初级组；plan.md 用于产品边界和里程碑；src/riscv/plan.md、design_v0.md、design_v1.md 用于核状态与验收；src/vision/design_v0.md 用于视觉链路和 CDC 契约；docs/module3-model-training.md 用于训练交付；src/pynq_host/README.md 用于 MOCK 软件边界；skill/README.md 用于已收录技能。
+仓库快照 a2c29d8，分支 codex/vision-offboard。README.md 用于确认自主选题初级组；plan.md 用于产品边界和里程碑；src/riscv/plan.md、design_v0.md、design_v1.md 用于核状态与验收；src/vision/design_v0.md 用于视觉链路和 CDC 契约；docs/runbooks/module3-model-training.md 用于训练交付；src/pynq_host/README.md 用于 MOCK 软件边界；skill/README.md 用于已收录技能。
 
 已有证据索引为 report/llm_log/2026-10-02-vision-offboard-closure.md 和 data/logs/2026-10-02-vision-offboard/README.md。研究不以尚未跟踪的上板脚本作为验收依据。

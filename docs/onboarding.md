@@ -74,7 +74,7 @@ Agent = 能帮你**实际干活**的 AI（写代码、改文件、跑命令）�
 | ② | `docs/README.md` | 人读入口：目录地图与"找东西"规则 |
 | ③ | `report/llm_log/README.md` + `template.md` | 大模型协作记录的规矩：什么时候记、怎么记 |
 | ④ | `report/llm_log/2026-09-04-project-kickoff.md` | 看一条真实记录长什么样 |
-| ⑤ | `docs/resources.md` | 学习资源清单，后续学习要用 |
+| ⑤ | `docs/research/resources.md` | 学习资源清单，后续学习要用 |
 
 > ⚠️ 注意：src/、sim/、build/ 等目录现在大部分是**空壳占位**（只有说明 README），这是正常的——下周开工后往里填代码。
 

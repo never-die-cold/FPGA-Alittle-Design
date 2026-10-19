@@ -127,7 +127,7 @@ RTL 可独立自测后交付配置和已知问题，验证线复验并反馈缺�
 - [x] 完整 v1 核：三级＋转发＋可切换 BHT，四档 XSim、OOC 与 40MHz 主档上板见[收口报告](../../report/module1-closure.md)
 - [x] benchmark 源码、Makefile 与反汇编：`src/riscv_fw/bench_v0_1.*`，四档接入 `run_iverilog.sh all`
 - [x] 对比数据报告：`report/module1-closure.md`，含 v0 锚点与同 RTL 四档、原始日志和明确限制
-- [x] 复现清单：`docs/module1-reproduction.md`，标 `#skill候选`；不等于已创建正式技能包
+- [x] 复现清单：`docs/runbooks/module1-reproduction.md`，标 `#skill候选`；不等于已创建正式技能包
 
 #### 验收标准
 
@@ -158,7 +158,7 @@ RTL 可独立自测后交付配置和已知问题，验证线复验并反馈缺�
 - [x] PicoRV32 regular + large 同器件/工具 OOC 报告已于 10/03 入档，见 `data/logs/2026-10-03-picorv32-compare/`
 - [x] 约束递减多点已记录；Fmax 数值仍为 Slack 外推，最高通过约束点另列，不冒充频率认证
 - [ ] 性能数据引用官方公开口径（0.309 DMIPS/MHz、CPI 4–5），不重跑其基准；脚注注明来源与口径差异
-- [ ] 产出：`docs/core_comparison.md` §2 表更新为实测行 + `data/logs/` 原始报告
+- [ ] 产出：`docs/research/core_comparison.md` §2 表更新为实测行 + `data/logs/` 原始报告
 
 ---
 
@@ -170,11 +170,11 @@ RTL 可独立自测后交付配置和已知问题，验证线复验并反馈缺�
 <summary>展开 Part B/C 学习资料与自测要求</summary>
 
 > 公共基础与 Part A 学习内容已移入 [历史归档](done/m1-first-phase-completed.md) §B；本节只保留 Part B/C 需要的内容。
-> 每条资料的具体链接与用途单列在 [docs/resources.md](../../docs/research/resources.md)，本节只保留条目 + 自测验收。
+> 每条资料的具体链接与用途单列在 [docs/research/resources.md](../../docs/research/resources.md)，本节只保留条目 + 自测验收。
 
 ### Part B 学习内容
 
-| 学习内容 | 资源（docs/resources.md） | 自测验收 |
+| 学习内容 | 资源（docs/research/resources.md） | 自测验收 |
 |:---|:---|:---|
 | 流水线与冒险理论 | §7：COAD 4.6–4.9 + 胡伟武书流水线章 | 能区分 RAW/WAR/WAW，说出 load-use 为何必须 stall |
 | 转发/停顿工程实现 | §3：蜂鸟 E203 流水线章节精读（long-pipe 结构） | 能画出三级流水时序图并标出三条旁路路径 |
@@ -182,7 +182,7 @@ RTL 可独立自测后交付配置和已知问题，验证线复验并反馈缺�
 
 ### Part C 学习内容
 
-| 学习内容 | 资源（docs/resources.md） | 自测验收 |
+| 学习内容 | 资源（docs/research/resources.md） | 自测验收 |
 |:---|:---|:---|
 | 分支预测 | §7：COAD 预测章节 + E203 对应实现 | 能解释 2-bit 饱和计数器为何抗"单次抖动" |
 | 验证方法学 | §3：riscv-arch-test README（编译/比对 signature 机制） | 能独立新增一条 arch-test 用例并跑通 |

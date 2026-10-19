@@ -36,7 +36,7 @@ Digilent 并行视频字节顺序是 R,B,G，`vision_axi.v` 双向转换为内�
 在仓库根目录、MSYS2 UCRT64 shell 中运行：
 
 ```bash
-bash sim/scripts/run_iverilog.sh all          # 核、CoreMark、门禁、视觉、stdlib Python
+bash sim/scripts/run_iverilog.sh all          # 核、CoreMark、门禁、视觉、Python 检查
 bash sim/scripts/run_iverilog.sh vision all   # 当前25个视觉tb
 bash sim/scripts/run_iverilog.sh vision_python
 bash sim/scripts/run_vision_xsim.sh all
@@ -72,5 +72,5 @@ PS 总线挂死（串口/网口同死）。修复为双复位拓扑（axi_rst_n 
 灰度 `out_*` 的 OSD 是诊断能力；HDMI 主显示保留彩色原图。EXE 模拟框不是物体检测；
 单独 UVC 预览标为 `UNASSOCIATED`；[轮次协议](../../docs/contracts/vision-sync-protocol-decisions.md) v1.2 支持 MOCK/LIVE，FILE/LIVE 原型恒标 PROTOTYPE，按年龄窗叠加不代表逐帧精确关联或硬件分类。
 
-未实现 / 未接入：CNN RTL/正式INT8模型、实际定位/硬件后端、核工业固件、真实识别结果与
+未实现 / 未接入：CNN 协处理器顶层/核接入/正式 INT8 模型、实际定位/硬件后端、核工业固件、真实识别结果与
 采集卡画面关联。它们属于模块三应用交接，整帧快照不代表逐目标硬件裁剪已经完成。

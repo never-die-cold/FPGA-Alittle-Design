@@ -90,6 +90,6 @@
 - 已实现并离板验证：共用预处理模块、FP32 文件检查与 request_id 幂等复用；这些软件证据不替代板端验收。
 - 已实现：v1.2 LIVE校验、FILE/LIVE服务、前端手动有效轮记录与session/check去重；FILE_REPLAY按request_id复用产物。HTTP `/v1/check`每次递增check_id，trigger_ref只回显，不能称网络请求重试已幂等。
 - 未实现/未验：custom DDR安全完整帧副本、正式部署模型/运行时、HTTP请求级幂等、真实V0整机验收；base已有27帧短测，不替代custom或长测。
-- 未实现：CNN RTL、PS↔RISC-V应用接口与V1闭环；C01彩色捕获硬件候选已有，不再列为从零未实现。
+- 未实现：CNN 协处理器顶层/核接入、PS↔RISC-V 应用接口与 V1 闭环（算子/控制器 RTL 已有）；C01 彩色捕获硬件候选已有，不再列为从零未实现。
 - 依据：create_hdmi_bd.tcl、vision_axi.v、video_pipeline.v、训练preprocess、旧ROI参考及主计划。
 - 官方取图/默认BGR依据：[PYNQ Video](https://pynq.readthedocs.io/en/latest/pynq_libraries/video.html)。

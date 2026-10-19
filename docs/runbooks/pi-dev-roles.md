@@ -36,7 +36,7 @@ python sim/vision/compare_arm_localize_bench.py \
   data/evidence/2026-10-03-arm-localize-baseline/pc-benchmark data/logs/<date>-pi-a72-bench/pi-benchmark
 ```
 
-归档：`data/logs/<date>-pi-a72-bench/`（README 写明命令、Python/OS 版本、原始输出链接）+ `docs/arm-localize-results.md` 附三方表。注意：armv7l 32 位系统下 Python 版本可能与 A9（3.10）不同，差异在 README 注明口径。
+归档：`data/logs/<date>-pi-a72-bench/`（README 写明命令、Python/OS 版本、原始输出链接）+ `docs/runbooks/arm-localize-results.md` 附三方表。注意：armv7l 32 位系统下 Python 版本可能与 A9（3.10）不同，差异在 README 注明口径。
 
 ## §4 R2 mock 宿主 runbook
 

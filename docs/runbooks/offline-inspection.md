@@ -10,7 +10,7 @@
   Python 和 Windows EXE 的文件回放展示。
 - 已实现但未验证：上述新模块的 PYNQ 环境兼容性、真实零件精度与工位效果。
 - 后续已有FILE/LIVE HTTP骨架、LIVE分类/工单展示与PROTOTYPE标识；其输入仍为文件。FILE_REPLAY的request_id复用不代表HTTP请求重试幂等，见[核对清单](../archive/implementation-document-audit-2026-10-12.md)。
-- 未实现/未接入：custom DDR安全完整取帧、真实硬件LIVE后端、正式INT8模型/整网黄金、CNN RTL、RISC-V工单判定和工业闭环。原vision已与归档XSA配对但缺源码锚定；完整长测/冷启动/断源复验仍待补。
+- 未实现/未接入：custom DDR 安全完整取帧、真实硬件 LIVE 后端、正式 INT8 模型/整网黄金、CNN 协处理器顶层/核接入、RISC-V 工单判定和工业闭环。原 vision 已与归档 XSA 配对但缺源码锚定；完整长测/冷启动/断源复验仍待补。
 
 ## 运行入口
 
@@ -56,7 +56,7 @@ sim/build/vision-client/dist/vision_preview/vision_preview.exe --replay data/evi
 后续已增加五组[逐层参考准备测试](module3-prototype-reference.md)，该入口目前共十一组。
 原六组历史日志保留；浮点参考包不改变文件回放/网络协议或 EXE 打包入口。
 
-后续又增加两组[数据集结构/泄漏审计](../research/fastener-dataset-audit.md)，当前入口共十三组。
+后续又增加两组[数据集结构/泄漏审计](../research/fastener-dataset-audit.md)；当前 `run_inspection_python.sh` 入口共 **14 组**（以脚本列表为准）。
 该工具不运行分类器；真实采集数据、标签审查、精度和可信量化仍待完成。
 
 ## 数据与模型规则

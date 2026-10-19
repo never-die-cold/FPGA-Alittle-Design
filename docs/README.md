@@ -18,8 +18,8 @@
 |:---|:---|:---|
 | 当前 | 无历史标记，且被本文或 `project-map.md` 列为入口 | `plan.md`、`workflow.md`、`onboarding.md`、`project-closeout-three-person-checklist.md`、各模块 README/契约 |
 | 历史快照 | 首行有“历史快照（日期）”标记 | `archive/three-day-plan.md`、`archive/partB-*`、`archive/partC-*`、旧 review/交接单 |
-| 草案/建议稿 | 标题或状态行注明“草案/建议” | `inspection-v0-contract.md`、`c01-capture-status-contract.md` |
-| 外包原文 | `docs/outsource/fastener-vision-2026-10-07/`，原字节保留 | 不改写；项目维护版另见 `fastener-handoff.md` |
+| 草案/建议稿 | 标题或状态行注明“草案/建议” | `contracts/inspection-v0-contract.md`、`contracts/c01-capture-status-contract.md` |
+| 外包原文 | `docs/outsource/fastener-vision-2026-10-07/`，原字节保留 | 不改写；项目维护版另见 `outsource/fastener-handoff.md` |
 | 归档 | `docs/archive/` | 一次性执行单、过期计划；不改写原文 |
 
 **规则**：历史文档不改写；当前文档只在一处维护，其他地方链接。
