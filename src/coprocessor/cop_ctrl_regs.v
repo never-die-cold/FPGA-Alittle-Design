@@ -27,7 +27,7 @@ module cop_ctrl_regs (
                 write_done_o<=1;
                 if(write_offset_i==12'h00c) begin
                     if(write_data_i[0]) start_pulse_o<=1;
-                    if(write_data_i[1]) begin abort_pulse_o<=1; error_o<=1; end
+                    if(write_data_i[1]) begin abort_pulse_o<=1; error_o<=1; done_o<=0; result_valid_o<=0; end
                     if(write_data_i[2]) begin
                         soft_reset_pulse_o<=1; done_o<=0; error_o<=0;
                         timeout_o<=0; result_valid_o<=0;

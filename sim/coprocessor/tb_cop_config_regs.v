@@ -26,7 +26,11 @@ module tb_cop_config_regs;
         if(!cfg_valid || applied!=7 || model_id!==32'h12345678 || roi_count!=1 ||
            timeout_cycles!=1000 || weight_bytes!=64 || work_order!=32'h0a010101 ||
            min_margin!=12 || read_data!=32'h0a010101) $fatal(1);
-        $display("PASS: cop_config_regs atomically applies one valid shadow configuration"); $finish;
+        wr(12'h01c,8);
+        if(cfg_valid) $fatal(1);
+        wr(12'h068,1);
+        if(!cfg_valid || applied!=8) $fatal(1);
+        $display("PASS: cop_config_regs applies atomically and revokes CFG_VALID on new CFG_SEQ"); $finish;
     end
     initial begin #3000; $fatal(1,"config timeout"); end
 endmodule

@@ -15,9 +15,14 @@ module tb_cop_task_ctrl;
         .result_write_o(result_write),.result_index_o(index),.result_seq_o(seq),.result_data_o(result));
     initial begin
         repeat(2) @(posedge clk); rst_n=1; if(!ready) $fatal(1);
+        // 上一笔任务结束后 engine.done 保持高电平，直到下一次 start 才清零：新任务不得消费它。
+        engine_done=1;
         @(negedge clk); start=1; @(negedge clk); start=0; engine_ready=1;
         @(posedge clk); #1; if(!engine_start || !busy) $fatal(1); engine_ready=0;
-        @(negedge clk); engine_done=1; @(posedge clk); #1; engine_done=0;
+        engine_done=0;                                  // 引擎在 start 当拍清 done
+        repeat(5) @(posedge clk); #1;
+        if(done || result_write || !busy || index!=0) $fatal(1);  // 遗留 done 零副作用
+        @(negedge clk); engine_done=1; @(posedge clk); #1; engine_done=0;  // 本笔真正完成
         if(!done || busy || !result_write || seq!=1 || index!=0) $fatal(1);
         if(result[15:0]!==16'h1234 || result[23:16]!==8'd2 || result[55:32]!==24'h04fd02 ||
            result[63:56]!==8'd2 || result[78:64]!==15'd258 || result[127:96]!==32'd472593) $fatal(1);

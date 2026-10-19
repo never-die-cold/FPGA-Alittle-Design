@@ -115,6 +115,11 @@ module tb_cop_top;
         if(status[3]) $fatal(1);
         @(negedge core_clk); wdata=1; we=1; @(negedge core_clk); we=0;
         wait(!dut.mailbox_pending); wait(dut.task_busy);
+        repeat(20) @(posedge cop_clk); #1;
+        if(!dut.task_busy || dut.u_task.state!=2) begin
+            $display("FAIL second task finished early busy=%b state=%0d seq=%0d",
+                dut.task_busy,dut.u_task.state,result_seq); $fatal(1);
+        end
         ps_wr(12'h00c,2); repeat(2) @(posedge cop_clk); #1;
         if(dut.task_busy || !status[3]) begin
             $display("FAIL abort busy=%b error=%b abort=%b task_error=%b state=%0d",
@@ -122,7 +127,11 @@ module tb_cop_top;
         end
         ps_wr(12'h00c,4); repeat(2) @(posedge cop_clk); #1;
         if(status[4:2] || result_seq || !dut.model_valid) $fatal(1);
-        $display("PASS: cop_top AXI/J02 result, DMA error, ABORT and SOFT_RESET smoke"); $finish;
+        ps_wr(12'h01c,2); repeat(2) @(posedge cop_clk); #1;
+        if(status[5] || !dut.model_valid) $fatal(1);
+        ps_wr(12'h068,1); repeat(2) @(posedge cop_clk); #1;
+        if(!status[5] || status[6] || dut.roi_valid || status[0]) $fatal(1);
+        $display("PASS: cop_top AXI/J02 result, DMA error, ABORT/SOFT_RESET and CFG_VALID revocation"); $finish;
     end
     initial begin #15000000; $display("TRACE starts=%0d pending=%b cfg=%b model=%b roi=%b busy=%b state=%0d",
         starts,dut.mailbox_pending,dut.cfg_valid,dut.model_valid,dut.roi_valid,dut.task_busy,dut.u_task.state);

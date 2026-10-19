@@ -49,7 +49,7 @@ module cop_top #(
     wire [11:0] core_offset,command_offset; wire [31:0] core_data,command_data;
     wire done_status,error_status,timeout_status,result_valid_status;
     wire cfg_valid,loader_done,loader_error,loader_short,dma_busy;
-    wire model_crc_error=loader_done && !load_kind && loader_crc32!=weight_crc32;
+    wire model_crc_error;
     wire start_command,abort_command,soft_reset_command;
     wire task_ready,task_busy,task_done,task_error,task_timeout;
     wire engine_ready,engine_busy,engine_done,engine_error,engine_start;
@@ -57,9 +57,10 @@ module cop_top #(
     wire [1:0] engine_class; wire [7:0] engine_margin;
     wire [14:0] engine_score; wire engine_low_conf; wire [23:0] engine_logits;
     reg [127:0] result_mem [0:15]; reg [127:0] result_sample1,result_sample2;
-    reg [31:0] result_seq_sync1,result_seq_sync2; integer result_slot;
+    reg [31:0] result_seq_sync1,result_seq_sync2; reg [31:0] cfg_applied_q; integer result_slot;
     wire [31:0] cfg_applied,model_id,weight_crc32,timeout_cycles,weight_bytes,dma_bytes,work_order;
     wire [31:0] loader_crc32;
+    wire cfg_commit = cfg_applied != cfg_applied_q;
     wire ps_write_valid,ps_write_done,ps_write_error,config_write_done,config_write_error;
     wire [11:0] ps_write_offset,ps_read_offset;
     wire [31:0] ps_write_data; wire [3:0] ps_write_strb; reg [31:0] ps_read_data; reg ps_read_error;
@@ -72,6 +73,7 @@ module cop_top #(
     assign ps_write_done=ps_ctrl_access ? ps_write_valid : config_write_done;
     assign ps_write_error=ps_ctrl_access ? (!ps_ctrl_allowed || command_valid) : config_write_error;
     wire [4:0] roi_count; wire [7:0] min_margin; reg model_valid,roi_valid,load_kind;
+    assign model_crc_error = loader_done && !load_kind && loader_crc32 != weight_crc32;
     cop_core_mmio_gate #(.COP_BASE(COP_BASE)) gate(
         .addr_i(core_addr_i),.wdata_i(core_wdata_i),.status_i(status_o),.be_i(core_be_i),
         .we_i(core_we_i),.busy_i(task_busy),.mailbox_pending_i(mailbox_pending),
@@ -165,13 +167,18 @@ module cop_top #(
         .write_bank(write_bank_o),.write_address(write_address_o),.write_data(memory_write_data_o));
     always @(posedge cop_clk or negedge rst_n) begin
         if(!rst_n) begin
-            model_valid<=0; roi_valid<=0; load_kind<=0;
+            model_valid<=0; roi_valid<=0; load_kind<=0; cfg_applied_q<=0;
             for(result_slot=0;result_slot<16;result_slot=result_slot+1) result_mem[result_slot]<=0;
         end
         else begin
+            cfg_applied_q<=cfg_applied;
             if(dma_start_i && !dma_busy) load_kind<=dma_kind_i;
-            if(loader_done && !load_kind) model_valid<=loader_crc32==weight_crc32;
-            if(loader_done && load_kind) roi_valid<=1;
+            if(cfg_commit) begin
+                model_valid<=0; roi_valid<=0;
+            end else begin
+                if(loader_done && !load_kind) model_valid<=loader_crc32==weight_crc32;
+                if(loader_done && load_kind) roi_valid<=1;
+            end
             if(soft_reset_command)
                 for(result_slot=0;result_slot<16;result_slot=result_slot+1) result_mem[result_slot]<=0;
             else if(result_write_o) result_mem[task_result_index_o]<=result_data_o;
