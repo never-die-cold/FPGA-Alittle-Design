@@ -76,6 +76,8 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 | 默认关闭核回归 | `run_iverilog.sh soc`，first=13/1101，second=65/0001 | PASS |
 | RV32I 工单固件 | `firmware` 构建 ELF/hex/dis + 主机规则测试 | PASS |
 
+最终原始输出与退出码：`data/logs/2026-10-19-j04-closeout/{cop_top,all}.{log,exit_code}`。
+
 ## 5. 未验证矩阵与接手方法
 
 | 未验证项 | 接手人 | 手段 / PASS 判据 |

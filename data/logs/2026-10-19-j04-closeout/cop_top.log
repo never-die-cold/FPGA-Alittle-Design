@@ -1,0 +1,9 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+PASS: full diagnostic integer network golden {'pattern': {'class_id': 0, 'margin_q': 0, 'score_q15': 0, 'low_conf': True}, 'zero': {'class_id': 2, 'margin_q': 2, 'score_q15': 258, 'low_conf': True}}
+/home/jianglibo/FPGA-Alittle-Design/src/coprocessor/cop_config_regs.v:37: warning: @* is sensitive to all 20 words in array 'shadow'.
+/home/jianglibo/FPGA-Alittle-Design/src/coprocessor/cop_top.v:127: warning: @* is sensitive to all 16 words in array 'result_mem'.
+/home/jianglibo/FPGA-Alittle-Design/src/coprocessor/cop_top.v:128: warning: @* is sensitive to all 16 words in array 'result_mem'.
+/home/jianglibo/FPGA-Alittle-Design/src/coprocessor/cop_top.v:129: warning: @* is sensitive to all 16 words in array 'result_mem'.
+/home/jianglibo/FPGA-Alittle-Design/src/coprocessor/cop_top.v:130: warning: @* is sensitive to all 16 words in array 'result_mem'.
+/home/jianglibo/FPGA-Alittle-Design/src/coprocessor/cop_top.v:131: warning: @* is sensitive to all 16 words in array 'result_mem'.
+PASS: cop_top AXI/J02 result, DMA error, ABORT and SOFT_RESET smoke
