@@ -29,7 +29,7 @@
 - dev/exe 定向测试：`test_c01_capture_ordering.py`、`test_vision_rounds.py`、`test_vision_live_standin.py` PASS。
 - `check_repo_hygiene.py`：PASS，0 error；12 条证据区重复告警保留。
 - `index_runs.py --check`：OK。
-- 当前所有分支：`main`、`dev/riscv`、`dev/vision`、`dev/model`、`dev/exe`、`chore/repo-cleanup` 均指向 `8d664b9`（最终同步提交见 `git log`）。
+- 当前所有分支：`main`、`dev/riscv`、`dev/vision`、`dev/model`、`dev/exe`、`chore/repo-cleanup` 均与 main 同步；最终推进记录以 `git log` 为准。
 
 ## 回退
 
