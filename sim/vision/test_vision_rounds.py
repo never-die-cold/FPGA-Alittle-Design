@@ -108,7 +108,9 @@ def main():
             remote.poll(time.time(), 60)
             assert time.perf_counter() - started < .5
             assert entered.wait(1)
+            assert remote.manual_in_flight is False  # 首轮为自动轮
             assert remote.trigger(time.time())
+            assert remote.manual_pending is True
             for _ in range(30):
                 remote.poll(time.time(), 60)
                 remote.overlay(time.time())
@@ -120,6 +122,8 @@ def main():
                 assert time.monotonic() < deadline
                 time.sleep(.005)
             assert remote.last_round_manual and len(calls) == 2
+            assert calls[0] == {} and "trigger_ref" in calls[1]  # 手动轮携唯一 trigger_ref
+            assert remote.manual_in_flight is False  # 采纳后手动轮在飞标记清除
             entered.clear(); release.clear(); remote.last_trigger = 0
             remote.poll(time.time(), 60)
             assert entered.wait(1)

@@ -50,19 +50,23 @@ def main():
         remote.poll(time.time(), 0.5)
         assert remote.last_round_manual and remote.packet["check_id"] == 4
         assert remote.packet["status"] == "CHECK_PASS"  # (4+2) % 3 == 0 → PASS
-        # live_view 显示摘要（endpoint_state 的纯函数核心）：判定/差额/实际工单/类别分数
+        # live_view 显示摘要（endpoint_state / 识别范围表消费）：判定/差额/实际工单/类别分数/计数
         pass_view, fail_view, recheck_view = (live_view(p) for p in packets)
         assert pass_view["verdict"] == "CHECK_PASS" and pass_view["delta"] == ""
         assert pass_view["targets"] == "6/6"
         assert pass_view["labels"][0] == ("bolt", "0.97") and pass_view["labels"][3] == ("nut", "0.88")
+        assert pass_view["counts"] == {"bolt": 2, "nut": 2, "washer": 2}
         assert fail_view["verdict"] == "CHECK_FAIL" and fail_view["delta"] == "-washerx1"
         assert fail_view["targets"] == "5/6"
+        assert fail_view["counts"] == {"bolt": 2, "nut": 2, "washer": 1}
         assert recheck_view["verdict"] == "RECHECK" and recheck_view["delta"] == "-washerx1"
         assert recheck_view["labels"][5] == ("unclassified", "0.42")
-        # 退化路径：LOCATION_ONLY（MOCK 报文无类别/分数）→ 目标数 + unclassified/-- + 无差额
+        assert recheck_view["counts"] == {"bolt": 2, "nut": 2, "washer": 1}
+        # 退化路径：LOCATION_ONLY（MOCK 报文无类别/分数）→ 目标数 + unclassified/-- + 无差额、计数未知
         only = live_view(mock_packet("sess", 1, 0, 1))
         assert only == {"verdict": "LOCATION_ONLY", "delta": "", "targets": "2",
-                        "labels": [("unclassified", "--"), ("unclassified", "--")]}
+                        "labels": [("unclassified", "--"), ("unclassified", "--")],
+                        "counts": None}
     finally:
         server.shutdown()
         server.server_close()
