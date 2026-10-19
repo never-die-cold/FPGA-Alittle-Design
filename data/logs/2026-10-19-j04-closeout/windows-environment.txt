@@ -1,0 +1,11 @@
+J04 证据环境（Windows/MSYS2）
+date: 2026-10-19 (Asia/Shanghai)
+base commit: 7d6355b
+worktree: review fixes in progress (uncommitted at capture time)
+uname: MSYS2 on Windows, ucrt64 toolchain
+iverilog: Icarus Verilog version 13.0 (stable) (v13_0)
+gcc: gcc.exe (x86_64-posix-seh-rev0, Built by MinGW-W64 project) 8.1.0
+riscv-gcc: riscv32-unknown-elf-gcc.exe (GCC) 14.2.0
+python: Python 3.12.10
+make: GNU Make 4.4.1
+notes: Vivado not invoked; no board attached; Windows Store bash/WSL alias is not used, commands run under C:\msys64\usr\bin\bash.exe with /ucrt64/bin on PATH.

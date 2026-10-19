@@ -1,0 +1,10 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+PASS: full diagnostic integer network golden {'pattern': {'class_id': 0, 'margin_q': 0, 'score_q15': 0, 'low_conf': True}, 'zero': {'class_id': 2, 'margin_q': 2, 'score_q15': 258, 'low_conf': True}}
+E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_config_regs.v:39: warning: @* is sensitive to all 20 words in array 'shadow'.
+E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_top.v:129: warning: @* is sensitive to all 16 words in array 'result_mem'.
+E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_top.v:130: warning: @* is sensitive to all 16 words in array 'result_mem'.
+E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_top.v:131: warning: @* is sensitive to all 16 words in array 'result_mem'.
+E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_top.v:132: warning: @* is sensitive to all 16 words in array 'result_mem'.
+E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_top.v:133: warning: @* is sensitive to all 16 words in array 'result_mem'.
+PASS: cop_top AXI/J02 result, DMA error, ABORT/SOFT_RESET and CFG_VALID revocation
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_top.v:134: $finish called at 5680746000 (1ps)
