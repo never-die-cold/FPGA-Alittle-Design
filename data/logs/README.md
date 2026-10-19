@@ -29,7 +29,7 @@
 | `cnn-ooc-106904d01e0045089b9d1688ddce6e85` | — | 10 | 27 KB | cnn-ooc-106904d01e0045089b9d1688ddce6e85 |
 | `c01-capture-e2a602d6e0da49a2b6da072abca47c70` | — | 83 | 3.3 MB | c01-capture-e2a602d6e0da49a2b6da072abca47c70 |
 | `c01-capture-19af0b2c829447b89d442a6f4f09f8f3` | — | 79 | 2.7 MB | c01-capture-19af0b2c829447b89d442a6f4f09f8f3 |
-| `2026-10-19-worktree-inventory` | 2026-10-19 | 39 | 6.6 MB | Worktree 与大缓存清理前抢救记录（2026-10-19） |
+| `2026-10-19-worktree-inventory` | 2026-10-19 | 33 | 6.4 MB | Worktree 与大缓存清理前抢救记录（2026-10-19） |
 | `2026-10-17-exe-ring` | 2026-10-17 | 52 | 87 KB | EXE 环接通：PC↔PYNQ 网络上 LIVE 服务全链（2026-10-17） |
 | `2026-10-16-c01-park-first-board` | 2026-10-16 | 73 | 1.4 MB | C01 park 驱动暖机清除与保护复制：首次板端打通（2026-10-16） |
 | `2026-10-15-onboard-n02-n03` | 2026-10-15 | 98 | 5.9 MB | 2026-10-15-onboard-n02-n03 |
