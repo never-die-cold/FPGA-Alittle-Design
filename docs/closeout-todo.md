@@ -11,7 +11,7 @@
 
 | 事实 | 值 |
 |:---|:---|
-| 工作分支 | `dev/riscv` @ `7d6355b` + 本地 J04 审查修复（待 PR） |
+| 工作分支 | `dev/riscv` @ `855b433`（PR #86，待评审合并） |
 | 协处理器状态 | J04a ✅ 实现/离板冒烟；J04b 🟡 完整验证/物理 bank/综合/板验（[模块计划](../src/coprocessor/plan.md)） |
 | 未决 OPEN | OPEN-1..10，见[交接单](runbooks/coprocessor-j04-handoff.md) §7 |
 | 板卡 | ⛔ 无（`192.168.50.99` 不可达，无 JTAG/USB） |
@@ -33,7 +33,7 @@
       或指向 `9fdd035` 等失效锚点的表述；`git grep` 一遍关键词收口。
 - [ ] **A06 仓库卫生**（部分完成：`git diff --check` 干净、生成物不入库；日志索引仍需按 `repo-hygiene.md` 再扫一遍）：生成物不入库、`*.hex/*.dis` 只留证据类、日志 README 六要素齐全，
       按 [仓库卫生](repo-hygiene.md) 自查。
-- [ ] **A07 PR 与基线**（PR 已开，待评审合并后打 tag）：`dev/riscv` → `main` 开 PR（不 force push），审完合并；合并后在
+- [ ] **A07 PR 与基线**：PR [#86](https://github.com/never-die-cold/FPGA-Alittle-Design/pull/86) 已开，待评审合并；合并后在 `main` 打基线 tag 并回填本节。：`dev/riscv` → `main` 开 PR（不 force push），审完合并；合并后在
       `main` 打基线 tag，并把 tag 写进交接单 §2 锚点行。
 
 ## B. 需要板卡（到货后按顺序做，不能跳）
