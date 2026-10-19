@@ -11,7 +11,8 @@ def bin_to_hex(src, dst):
         data = f.read()
     data += b"\x00" * ((-len(data)) % 4)
     words = [data[i:i + 4] for i in range(0, len(data), 4)]
-    with open(dst, "w") as f:
+    # 固定 LF：否则 Windows 下默认换行转换会让入库指纹随平台变化。
+    with open(dst, "w", newline="\n") as f:
         for w in words:
             f.write("%08x\n" % int.from_bytes(w, "little"))
     return len(data), len(words)
