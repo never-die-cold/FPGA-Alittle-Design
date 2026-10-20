@@ -15,22 +15,23 @@
 7. 当前目录缺 README 的标记为 `PROVENANCE GAP`；补说明时只写能核实的事实，未知处写“待核”。
 
 <!-- RUN-INDEX:START -->
-## 目录索引（118 个运行，自动生成）
+## 目录索引（119 个运行，自动生成）
 
 | 目录 | 日期 | 文件数 | 大小 | 说明 |
 |:---|:---:|---:|---:|:---|
 | `v0_baseline_2026-09-14` | — | 3 | 9 KB | v0 核回归基线（2026-09-14） |
-| `local-vivado-originals` | — | 14 | 456 KB | local-vivado-originals |
-| `cnn-ooc-da63cadcd3db4a9e9f826cf2e4949e68` | — | 17 | 8.2 MB | cnn-ooc-da63cadcd3db4a9e9f826cf2e4949e68 |
-| `cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9` | — | 14 | 4.9 MB | cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9 |
-| `cnn-ooc-5c9bc74c61e7445ca8c56b2f49389102` | — | 16 | 8.4 MB | cnn-ooc-5c9bc74c61e7445ca8c56b2f49389102 |
-| `cnn-ooc-4065cdcc415b43fbbc713dbeeceddbfb` | — | 16 | 8.4 MB | cnn-ooc-4065cdcc415b43fbbc713dbeeceddbfb |
-| `cnn-ooc-1cefffc05185438195b8803d87fc11df` | — | 15 | 4.9 MB | cnn-ooc-1cefffc05185438195b8803d87fc11df |
+| `local-vivado-originals` | — | 7 | 449 KB | local-vivado-originals |
+| `cnn-ooc-da63cadcd3db4a9e9f826cf2e4949e68` | — | 15 | 827 KB | cnn-ooc-da63cadcd3db4a9e9f826cf2e4949e68 |
+| `cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9` | — | 12 | 791 KB | cnn-ooc-a96a8b86f6264e50af90da61e3dc3aa9 |
+| `cnn-ooc-5c9bc74c61e7445ca8c56b2f49389102` | — | 14 | 1.1 MB | cnn-ooc-5c9bc74c61e7445ca8c56b2f49389102 |
+| `cnn-ooc-4065cdcc415b43fbbc713dbeeceddbfb` | — | 14 | 1.0 MB | cnn-ooc-4065cdcc415b43fbbc713dbeeceddbfb |
+| `cnn-ooc-1cefffc05185438195b8803d87fc11df` | — | 13 | 797 KB | cnn-ooc-1cefffc05185438195b8803d87fc11df |
 | `cnn-ooc-106904d01e0045089b9d1688ddce6e85` | — | 10 | 27 KB | cnn-ooc-106904d01e0045089b9d1688ddce6e85 |
-| `c01-capture-e2a602d6e0da49a2b6da072abca47c70` | — | 83 | 3.3 MB | c01-capture-e2a602d6e0da49a2b6da072abca47c70 |
-| `c01-capture-19af0b2c829447b89d442a6f4f09f8f3` | — | 79 | 2.7 MB | c01-capture-19af0b2c829447b89d442a6f4f09f8f3 |
+| `c01-capture-e2a602d6e0da49a2b6da072abca47c70` | — | 82 | 3.3 MB | c01-capture-e2a602d6e0da49a2b6da072abca47c70 |
+| `c01-capture-19af0b2c829447b89d442a6f4f09f8f3` | — | 78 | 2.7 MB | c01-capture-19af0b2c829447b89d442a6f4f09f8f3 |
 | `2026-10-20-repo-hygiene` | 2026-10-20 | 5 | 9 KB | 根目录生成物归位与卫生检查修复 |
 | `2026-10-20-pr-merge-sync` | 2026-10-20 | 9 | 134 KB | PR #86 合并前验证与三人分支同步 |
+| `2026-10-20-cop-sim-round` | 2026-10-20 | 91 | 643 KB | 2026-10-20 COP_SIM：服务 + EXE 一轮与异常矩阵 |
 | `2026-10-19-worktree-inventory` | 2026-10-19 | 33 | 6.4 MB | Worktree 与大缓存清理前抢救记录（2026-10-19） |
 | `2026-10-19-j04-closeout` | 2026-10-19 | 20 | 124 KB | J04 离板冒烟证据（JL Linux + Windows 复跑） |
 | `2026-10-19-deepseek-independent-review` | 2026-10-19 | 7 | 4 KB | DeepSeek 工作结果独立轻量核查 |
@@ -41,7 +42,7 @@
 | `2026-10-16-c01-park-first-board` | 2026-10-16 | 73 | 1.4 MB | C01 park 驱动暖机清除与保护复制：首次板端打通（2026-10-16） |
 | `2026-10-15-onboard-n02-n03` | 2026-10-15 | 98 | 5.9 MB | 2026-10-15-onboard-n02-n03 |
 | `2026-10-15-n03-package-independent-verify` | 2026-10-15 | 13 | 26 KB | N03 实验包：离板 SHA256 / 配对独立复核（2026-10-15） |
-| `2026-10-15-improvements-fast` | 2026-10-15 | 57 | 588 KB | 改进建议快速批次：执行与证据（2026-10-15） |
+| `2026-10-15-improvements-fast` | 2026-10-15 | 56 | 586 KB | 改进建议快速批次：执行与证据（2026-10-15） |
 | `2026-10-15-cnn-watchdog-step2` | 2026-10-15 | 23 | 101 KB | CNN watchdog 最后周期锁存（2026-10-15） |
 | `2026-10-15-cnn-geometry-step1` | 2026-10-15 | 22 | 131 KB | CNN 输出尺寸位宽优化：第 1 步（2026-10-15） |
 | `2026-10-15-cnn-geometry-independent-review` | 2026-10-15 | 16 | 9 KB | CNN 输出尺寸位宽优化（第 1 步）：独立复核（2026-10-15） |
@@ -54,20 +55,20 @@
 | `2026-10-14-nc-offboard-closeout` | 2026-10-14 | 30 | 361 KB | NC扩展离板交付与Windows候选验收 |
 | `2026-10-14-n03-return-review` | 2026-10-14 | 31 | 34 KB | N03返板包离板复核 |
 | `2026-10-14-c04-nc-review` | 2026-10-14 | 26 | 28 KB | C04 NC离板复核证据 |
-| `2026-10-13-soc-reset-ce` | 2026-10-13 | 188 | 1.4 MB | 2026-10-13 SoC 复位/CE 物理代价修复：mem_wb_stage 分离复位 |
+| `2026-10-13-soc-reset-ce` | 2026-10-13 | 186 | 1.3 MB | 2026-10-13 SoC 复位/CE 物理代价修复：mem_wb_stage 分离复位 |
 | `2026-10-13-ddr-single-frame` | 2026-10-13 | 28 | 25 KB | C01 单帧 DDR 驱动与失败实验（2026-10-13） |
-| `2026-10-13-cnn-arithmetic` | 2026-10-13 | 61 | 17.2 MB | CNN 整数计算链离板证据（2026-10-13） |
-| `2026-10-13-branch-merge` | 2026-10-13 | 9 | 134 KB | 三分支 PR 合并与合并后回归（2026-10-13） |
-| `2026-10-12-unattended-offline` | 2026-10-12 | 48 | 3.7 MB | 用户离开期间的离板续工证据 |
+| `2026-10-13-cnn-arithmetic` | 2026-10-13 | 56 | 2.5 MB | CNN 整数计算链离板证据（2026-10-13） |
+| `2026-10-13-branch-merge` | 2026-10-13 | 9 | 133 KB | 三分支 PR 合并与合并后回归（2026-10-13） |
+| `2026-10-12-unattended-offline` | 2026-10-12 | 48 | 3.6 MB | 用户离开期间的离板续工证据 |
 | `2026-10-12-source-recovery-prep` | 2026-10-12 | 18 | 1.5 MB | N02：采集卡连接时 Pi 软件重启断源/恢复（2026-10-12） |
 | `2026-10-12-real-frame-prototype` | 2026-10-12 | 18 | 5.3 MB | PYNQ 测试原图的电脑软件诊断（2026-10-12） |
 | `2026-10-12-pr-review` | 2026-10-12 | 38 | 4.0 MB | 2026-10-12 PR #69/#70/#71 审查证据 |
-| `2026-10-12-nc-offline` | 2026-10-12 | 36 | 357 KB | 2026-10-12 NC离板续工证据 |
+| `2026-10-12-nc-offline` | 2026-10-12 | 33 | 353 KB | 2026-10-12 NC离板续工证据 |
 | `2026-10-12-n03-base-return` | 2026-10-12 | 34 | 8.1 MB | N03 base 取帧与显示共存短诊断（2026-10-12） |
 | `2026-10-12-n02-extended` | 2026-10-12 | 54 | 6.5 MB | N02 原 vision 分段观察与重载（2026-10-12） |
 | `2026-10-12-document-audit` | 2026-10-12 | 5 | 6 KB | 2026-10-12 文档/实现核对证据 |
 | `2026-10-12-collection-readiness` | 2026-10-12 | 29 | 105 KB | 采集规程与模板同步证据 |
-| `2026-10-12-cnn-mac-step1` | 2026-10-12 | 14 | 76 KB | CNN MAC 第一步（2026-10-12） |
+| `2026-10-12-cnn-mac-step1` | 2026-10-12 | 14 | 75 KB | CNN MAC 第一步（2026-10-12） |
 | `2026-10-12-board-connect` | 2026-10-12 | 37 | 895 KB | 2026-10-12 板卡连接与原 vision 短基线 |
 | `2026-10-11-onboard-resume` | 2026-10-11 | 81 | 2.9 MB | 2026-10-11 现场续工记录 |
 | `2026-10-11-n03-buffer-guard` | 2026-10-11 | 53 | 6.9 MB | N03 缓冲保护与 C01 接手进展 |
@@ -75,8 +76,8 @@
 | `2026-10-11-c01-hdmi-1791713720540454` | 2026-10-11 | 6 | 480 KB | 2026-10-11-c01-hdmi-1791713720540454 |
 | `2026-10-11-c01-hdmi-1791711069004993` | 2026-10-11 | 5 | 373 KB | 2026-10-11-c01-hdmi-1791711069004993 |
 | `2026-10-11-c01-hdmi-1791710185764742` | 2026-10-11 | 5 | 373 KB | 2026-10-11-c01-hdmi-1791710185764742 |
-| `2026-10-11-c01-capture-rtl` | 2026-10-11 | 251 | 10.9 MB | C01 捕获 RTL / 集成候选证据（2026-10-11） |
-| `2026-10-11-c01-capture-probe` | 2026-10-11 | 33 | 513 KB | 2026-10-11-c01-capture-probe |
+| `2026-10-11-c01-capture-rtl` | 2026-10-11 | 245 | 7.1 MB | C01 捕获 RTL / 集成候选证据（2026-10-11） |
+| `2026-10-11-c01-capture-probe` | 2026-10-11 | 27 | 506 KB | 2026-10-11-c01-capture-probe |
 | `2026-10-10-q01-result-fields` | 2026-10-10 | 16 | 6 KB | Q01 结果字段白名单复验 |
 | `2026-10-10-onboard-n01` | 2026-10-10 | 89 | 3.7 MB | 上板 N01：现场版本与连接盘点 |
 | `2026-10-10-offline-inspection` | 2026-10-10 | 48 | 9 KB | 2026-10-10 离板检查验证记录 |
@@ -98,7 +99,7 @@
 | `2026-10-07-pi-pynq` | 2026-10-07 | 17 | 2.9 MB | 相机经 PYNQ 黑屏诊断与恢复（2026-10-07） |
 | `2026-10-07-partC-postopt` | 2026-10-07 | 48 | 1.4 MB | Part C PC/flush 优化后复验与上板（2026-10-07） |
 | `2026-10-07-module1-closure` | 2026-10-07 | 268 | 1.5 MB | 2026-10-07 模块一收口复验 |
-| `2026-10-07-hdmi-diagnostic` | 2026-10-07 | 2 | 2 KB | 2026-10-07-hdmi-diagnostic |
+| `2026-10-07-hdmi-diagnostic` | 2026-10-07 | 1 | 664 B | 2026-10-07-hdmi-diagnostic |
 | `2026-10-06-vision-sync-schema` | 2026-10-06 | 7 | 10 KB | 2026-10-06 视频/结果同步协议落码证据（schema v1.1 + EXE 轮次叠加） |
 | `2026-10-06-pi-pynq` | 2026-10-06 | 9 | 7 KB | 树莓派相机经 PYNQ 的实机检查（2026-10-06） |
 | `2026-10-06-pi-boot` | 2026-10-06 | 95 | 817 KB | Raspberry Pi 4B 启动诊断（2026-10-06） |
@@ -119,10 +120,10 @@
 | `2026-10-04-fix-implicit-ports` | 2026-10-04 | 8 | 84 KB | ID+EX 隐式端口修复验证 |
 | `2026-10-03-vision-onboard` | 2026-10-03 | 26 | 1.7 MB | 模块二上板证据（2026-10-03） |
 | `2026-10-03-picorv32-compare` | 2026-10-03 | 25 | 876 KB | PicoRV32 vs 自研 v0 核 Fmax 对比实测（验证线，M4 前置提前完成） |
-| `2026-10-03-m3-brevitas-drill` | 2026-10-03 | 4 | 12 KB | 2026-10-03-m3-brevitas-drill |
+| `2026-10-03-m3-brevitas-drill` | 2026-10-03 | 4 | 9 KB | 2026-10-03-m3-brevitas-drill |
 | `2026-10-03-arm-localize-baseline` | 2026-10-03 | 35 | 11 KB | 2026-10-03-arm-localize-baseline |
-| `2026-10-02-vision-offboard` | 2026-10-02 | 81 | 2.6 MB | 模块二离板冲刺证据（2026-10-02） |
-| `2026-10-01-vision-offboard` | 2026-10-01 | 3 | 8 KB | 模块二跨分支离板复验（2026-10-01） |
+| `2026-10-02-vision-offboard` | 2026-10-02 | 72 | 2.6 MB | 模块二离板冲刺证据（2026-10-02） |
+| `2026-10-01-vision-offboard` | 2026-10-01 | 3 | 7 KB | 模块二跨分支离板复验（2026-10-01） |
 | `2026-10-01-vision-m2-sprint` | 2026-10-01 | 16 | 105 KB | 2026-10-01-vision-m2-sprint |
 | `2026-09-30-scaler-retiming` | 2026-09-30 | 5 | 30 KB | 2026-09-30-scaler-retiming |
 | `2026-09-30-r2r5-verify` | 2026-09-30 | 2 | 40 KB | 2026-09-30 R2–R5 独立复验（dev/rtl 522e819） |

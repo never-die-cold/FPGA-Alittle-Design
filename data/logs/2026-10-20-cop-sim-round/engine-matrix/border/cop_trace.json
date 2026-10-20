@@ -1,0 +1,158 @@
+{
+ "compute_backend": "SCRIPTED bolt",
+ "decision": {
+  "actual": {
+   "bolt": 1,
+   "nut": 0,
+   "washer": 0
+  },
+  "delta": {
+   "bolt": 0,
+   "nut": 0,
+   "washer": 0
+  },
+  "expected": {
+   "bolt": 1,
+   "nut": 0,
+   "washer": 0
+  },
+  "extra": {
+   "bolt": 0,
+   "nut": 0,
+   "washer": 0
+  },
+  "missing": {
+   "bolt": 0,
+   "nut": 0,
+   "washer": 0
+  },
+  "reasons": [
+   "touches_border"
+  ],
+  "verdict": "RECHECK"
+ },
+ "descriptors": [
+  {
+   "bbox": [
+    0,
+    10,
+    40,
+    60
+   ],
+   "target_id": 0,
+   "touches_border": true
+  }
+ ],
+ "driver": {
+  "backend": "COP_SIM",
+  "capture_id": 1,
+  "cfg_seq": 1,
+  "dma_bytes": 4123,
+  "elapsed_ms": 2.241,
+  "events": [
+   {
+    "aborted": false,
+    "kind": "recover",
+    "status": 0
+   },
+   {
+    "bytes": 27,
+    "crc32": 605321733,
+    "kind": "model_load",
+    "sim_reported": {
+     "bytes": 27,
+     "crc32": 605321733
+    }
+   }
+  ],
+  "fw": {
+   "actual": [
+    1,
+    0,
+    0
+   ],
+   "reasons": 0,
+   "reasons_names": [],
+   "result_seq": 1,
+   "verdict": "CHECK_PASS",
+   "verdict_id": 1
+  },
+  "job_id": 1,
+  "perf_cycles": 2900,
+  "polls": 2,
+  "ps_decision": {
+   "actual": {
+    "bolt": 1,
+    "nut": 0,
+    "washer": 0
+   },
+   "delta": {
+    "bolt": 0,
+    "nut": 0,
+    "washer": 0
+   },
+   "expected": {
+    "bolt": 1,
+    "nut": 0,
+    "washer": 0
+   },
+   "extra": {
+    "bolt": 0,
+    "nut": 0,
+    "washer": 0
+   },
+   "missing": {
+    "bolt": 0,
+    "nut": 0,
+    "washer": 0
+   },
+   "reasons": [
+    "touches_border"
+   ],
+   "verdict": "RECHECK"
+  },
+  "result_seq": 1,
+  "source_config_id": 967942156,
+  "status": 229,
+  "targets": [
+   {
+    "class_id": 0,
+    "error": 0,
+    "logits": [
+     127,
+     129,
+     129
+    ],
+    "low_conf": 0,
+    "margin_q": 254,
+    "score_q15": 32767,
+    "valid": 1
+   }
+  ],
+  "work_order_rev": 1
+ },
+ "frame": {
+  "height": 720,
+  "pixel_sha256": "a60bc06a3148c33a8537f92bb56a4227cb9e62e6027b6b4a4754f994be045ac2",
+  "width": 1280
+ },
+ "kind": "cop_job",
+ "min_score": 0.8,
+ "policy_max": 10,
+ "preprocess": "scene-gray-border-padding-v1",
+ "protocol_check": "chk000001",
+ "roi_quantization": "SIM_ONLY S_input=0.0078740157",
+ "rois": [
+  {
+   "bytes_sha256": "834369536b343287d6d8eea4dd9f232218c1ffbc87cb979cc7cc65e760b27e2b",
+   "index": 0,
+   "path": "cop/roi_000.bin"
+  }
+ ],
+ "simulated": true,
+ "work_order": {
+  "bolt": 1,
+  "nut": 0,
+  "washer": 0
+ }
+}
