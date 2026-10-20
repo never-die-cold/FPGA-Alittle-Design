@@ -28,9 +28,9 @@ PASS: PGM/hex exact row order, hashes, target association and stale manifest iso
 PASS: ARM portable package D:\Desktop\contests\2026fpga\FPGA-Alittle-Design\sim\build\exe-wt\sim\build\arm-localize-package-test.tar.gz
 PASS: isolated portable package, missing/tampered file gate and retained benchmark samples
 TEST_READY
-PASS: UART file D:\Desktop\contests\2026fpga\FPGA-Alittle-Design\sim\build\exe-wt\sim\build\uart-receiver-ozd1lgsr\capture.bit 8192 dc404a613fedaeb54034514bc6505f56b933caa5250299ba7d094377a51caa46
+PASS: UART file D:\Desktop\contests\2026fpga\FPGA-Alittle-Design\sim\build\exe-wt\sim\build\uart-receiver-jicwo43l\capture.bit 8192 dc404a613fedaeb54034514bc6505f56b933caa5250299ba7d094377a51caa46
 TEST_READY
-PASS: UART file D:\Desktop\contests\2026fpga\FPGA-Alittle-Design\sim\build\exe-wt\sim\build\uart-receiver-ozd1lgsr\fragmented.bit 8192 dc404a613fedaeb54034514bc6505f56b933caa5250299ba7d094377a51caa46
+PASS: UART file D:\Desktop\contests\2026fpga\FPGA-Alittle-Design\sim\build\exe-wt\sim\build\uart-receiver-jicwo43l\fragmented.bit 8192 dc404a613fedaeb54034514bc6505f56b933caa5250299ba7d094377a51caa46
 TEST_READY
 TEST_READY
 TEST_READY
@@ -148,7 +148,7 @@ test_source_changes_during_copy_not_published (__main__.Tests.test_source_change
 test_unsafe_stop_keeps_buffers (__main__.Tests.test_unsafe_stop_keeps_buffers) ... ok
 
 ----------------------------------------------------------------------
-Ran 9 tests in 0.016s
+Ran 9 tests in 0.019s
 
 OK
 PASS: C01 single-frame ownership, cache, faults and quarantine
@@ -166,7 +166,7 @@ test_success_path_publishes_and_restores (__main__.Tests.test_success_path_publi
 test_unsafe_stop_holds_buffers_and_never_exits (__main__.Tests.test_unsafe_stop_holds_buffers_and_never_exits) ... ok
 
 ----------------------------------------------------------------------
-Ran 11 tests in 9.247s
+Ran 11 tests in 9.249s
 
 OK
 PASS: c01_ddr_onboard main: PNG/recovery, NOVIDEO retry, mode guard and UNSAFE-STOP hold
@@ -177,7 +177,7 @@ test_start_transient_absorbed_once_at_grant (__main__.Tests.test_start_transient
 test_unknown_owner_quarantines (__main__.Tests.test_unknown_owner_quarantines) ... ok
 
 ----------------------------------------------------------------------
-Ran 5 tests in 0.060s
+Ran 5 tests in 0.049s
 
 OK
 PASS: park candidate captures arm-transient absorption, latched epoch health, repeat W1C warmup, active faults and ownership

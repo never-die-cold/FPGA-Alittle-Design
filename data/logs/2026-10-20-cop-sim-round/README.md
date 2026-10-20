@@ -1,6 +1,7 @@
 # 2026-10-20 COP_SIM：服务 + EXE 一轮与异常矩阵
 
-> 基线：`dev/exe` @ `fc57cf2`；本轮改动提交见 `git log -- data/logs/2026-10-20-cop-sim-round`。
+> 基线：`dev/exe` @ `fc57cf2` + JL K1/K2 合并 `f540a38`；本轮改动提交见
+> `git log -- data/logs/2026-10-20-cop-sim-round`。
 > 结论：**模拟跑通 + 软件跑通**。计算后端是 C03 寄存器模型与合成分类器，
 > **不是板上跑通，也不是识别精度证据**。板端链路仍等 JL 的固件重复作业/数据面与 NC 的实机。
 
@@ -18,13 +19,16 @@ EXE 画布（SHA256 见 §3）；`run/service/.../capture.png` 为本轮权威�
 |---|---|---|
 | 寄存器契约常量 | `src/pynq_host/cop_regs.py` | C03 §4 offset/STATUS/CTRL、`cop_judge` 镜像、`FW_DECISION` 编解码 |
 | 模拟硬件 | `src/pynq_host/cop_mmio_sim.py` | 配置原子提交、busy 拒 commit、sticky/W1C、结果窗、watchdog、ABORT/SOFT_RESET、CRC/短包/旧结果注入 |
-| PS 驱动 | `src/pynq_host/cop_driver.py` | 提交、等 DONE/ERROR/TIMEOUT、`RESULT_SEQ` 双读、`FW_DECISION` 复算、PS 判定不得更宽松、同 JOB_ID 去重、恢复重试 |
+| PS 驱动 | `src/pynq_host/cop_driver.py` | 提交、等 DONE/ERROR/TIMEOUT、`RESULT_SEQ` 双读、`FW_DECISION` 复算、PS 判定不得更宽松、同 JOB_ID 去重、恢复重试；正常轮不写 `CTRL` |
 | 服务引擎 | `src/pynq_host/cop_engine.py` | 定位 → 共享 ROI → sim INT8 → 驱动 → 规则 → `cop_trace.json` |
 | 服务接入 | `src/pynq_host/vision_live_service.py` | `--engine cop-sim`、`/v1/status` 的 `engine`、`trigger_ref` 16 条回放 |
 | EXE 异常语义 | `src/vision_client/rounds.py`、`preview.py` | 手动失败立即撤旧 PASS；同 ref 重试；`--image` 静态图联调 |
 | 追溯 | `src/pynq_host/round_artifacts.py` | 快照核对新增 `cop_trace.json` 帧/ROI 哈希链 |
 
 接口口径与 JL 待办单独成文：[PS 驱动使用档](../../../docs/contracts/coprocessor-ps-driver-v0.md)。
+K1 对齐（并入 `f540a38` 后修正）：正常轮次 PS **不写** `CTRL`，成功 DONE/RESULT_VALID
+由固件下一轮 START 前清（C03 §3.2）；`PynqMmio` 强制 Address Editor 的 PS base，
+不默认核侧 `0x8001_0000`；READY 窗口与“消费后清 DONE”回执两项已登记，待 JL 确认。
 
 ## 2. 复现命令（仓库内，原始退出码）
 
@@ -52,15 +56,15 @@ VISION_PYTHON=sim/build/vision-venv/Scripts/python.exe bash sim/scripts/run_cop_
 
 | 项 | 值 |
 |---|---|
-| session | `440dd9bf-7300-46a1-b579-11713443deb6` |
+| session | `2daf0ed0-5283-40cf-af25-d85b0280e591` |
 | check | 1（手动轮） |
 | status | `CHECK_PASS`，actual/expected = 1/1/1，reasons=[] |
 | targets | 3（bolt/nut/washer，bbox 与夹具同帧） |
 | 硬件序号 | `cfg_seq=1`、`result_seq=1`；`FW_DECISION` verdict=CHECK_PASS、reasons=0 |
 | capture SHA256 | `bb9e05f3893353de880d310ecdbfbf603b529407a1c503c17e2213358ff0d73b` |
-| 显示截图 | [run/screen.png](run/screen.png)，1600×900，`PROTOTYPE` 徽标 + `CHECK_PASS` + 三目标框；SHA256 `405ab6c7dc683421516ac4b6e1f3d63ea429235f78ce62f65ce55df72da5a252` |
+| 显示截图 | [run/screen.png](run/screen.png)，1600×900，`PROTOTYPE` 徽标 + `CHECK_PASS` + 三目标框；SHA256 `d048c2ebe1803d2730d59249ae495fb5fba15ddf4112df7b2c4e42d4774511eb` |
 | 记录 | [run/records/records.jsonl](run/records/records.jsonl)（1 条，`prototype=true`，截图前缀 `proto_`） |
-| 追溯 | [run/service/440dd9bf/check-000001/cop_trace.json](run/service/440dd9bf/check-000001/cop_trace.json) |
+| 追溯 | [run/service/2daf0ed0/check-000001/cop_trace.json](run/service/2daf0ed0/check-000001/cop_trace.json) |
 
 ROI 字节哈希（可直接与 trace 对）：
 
@@ -82,11 +86,11 @@ ROI 字节哈希（可直接与 trace 对）：
 | 超时 | `TIMEOUT_CYCLES=1000` + 每目标延时 | `ERROR+TIMEOUT`、无 RESULT_VALID；驱动清状态后重试成功 | `test_cop_mmio`、`test_cop_driver` PASS |
 | ABORT / 空闲 ABORT | CTRL.ABORT | busy 中终止；空闲置 ERROR（OPEN-10）；W1C 可恢复 | `test_cop_mmio` PASS |
 | 模型 CRC / 短包 | `crc_mismatch` / `short_payload` | MODEL_VALID=0、配置不应用；重载后成功 | `test_cop_mmio`、`test_cop_driver` PASS |
-| 旧结果 | 结果完成但 `RESULT_SEQ` 不递增 | 驱动拒绝（`RESULT_SEQ 2 after 2`），不发布 PASS | `test_cop_driver`、[anomalies/check-000003](anomalies/service/6b84f491/check-000003/cop_trace.json) |
+| 旧结果 | 结果完成但 `RESULT_SEQ` 不递增 | 驱动拒绝（`RESULT_SEQ 2 after 2`），不发布 PASS | `test_cop_driver`、[anomalies/check-000003](anomalies/service/030ec869/check-000003/cop_trace.json) |
 | 重复 JOB_ID | 同键不同目标 | `CopProtocolError`，不重复发布 | `test_cop_driver` PASS |
-| 重复请求 | 同 `trigger_ref` 两次 POST | 同 check_id/frame_id/created_at，只一个轮次目录 | `test_cop_service` PASS；[check-000002](anomalies/service/6b84f491/check-000002/packet.json) |
-| 运行失败 | stale 结果 | 服务 503、无 packet.json、写失败 trace；EXE 立即撤旧 PASS | [check-000003](anomalies/service/6b84f491/check-000003/cop_trace.json)（无 packet.json） |
-| 失败后重试 | 清除故障，同 ref 再 POST | 新 check_id 正常 PASS，只记一条 | [check-000004](anomalies/service/6b84f491/check-000004/packet.json)、[records](anomalies/records/records.jsonl) |
+| 重复请求 | 同 `trigger_ref` 两次 POST | 同 check_id/frame_id/created_at，只一个轮次目录 | `test_cop_service` PASS；[check-000002](anomalies/service/030ec869/check-000002/packet.json) |
+| 运行失败 | stale 结果 | 服务 503、无 packet.json、写失败 trace；EXE 立即撤旧 PASS | [check-000003](anomalies/service/030ec869/check-000003/cop_trace.json)（无 packet.json） |
+| 失败后重试 | 清除故障，同 ref 再 POST | 新 check_id 正常 PASS，只记一条 | [check-000004](anomalies/service/030ec869/check-000004/packet.json)、[records](anomalies/records/records.jsonl) |
 | 边界/低置信/目标错误/超 10/空场景 | 引擎矩阵 | border/低置信/错误→RECHECK；>10→target_limit；空→PS 本地 CHECK_FAIL | [engine-matrix/](engine-matrix/)、`test_cop_engine` PASS |
 
 UI 约束的落点：`RemoteRounds._state` 在 `manual_failed` 时返回 `error`，`overlay` 返回

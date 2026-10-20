@@ -1,6 +1,6 @@
 {
   "outcome": "模拟跑通 (COP_SIM service + EXE)",
-  "session_id": "440dd9bf-7300-46a1-b579-11713443deb6",
+  "session_id": "2daf0ed0-5283-40cf-af25-d85b0280e591",
   "check_id": 1,
   "status": "CHECK_PASS",
   "decision": {
@@ -35,10 +35,10 @@
   "prototype": true,
   "record": "records/records.jsonl",
   "screenshot": "screen.png",
-  "record_screenshot": "screenshots/proto_440dd9bf_000001.png",
+  "record_screenshot": "screenshots/proto_2daf0ed0_000001.png",
   "capture_sha256": "bb9e05f3893353de880d310ecdbfbf603b529407a1c503c17e2213358ff0d73b",
-  "trace": "service/440dd9bf/check-000001/cop_trace.json",
+  "trace": "service/2daf0ed0/check-000001/cop_trace.json",
   "roi_count": 3,
-  "screen_sha256": "405ab6c7dc683421516ac4b6e1f3d63ea429235f78ce62f65ce55df72da5a252",
+  "screen_sha256": "d048c2ebe1803d2730d59249ae495fb5fba15ddf4112df7b2c4e42d4774511eb",
   "boundary": "simulated compute/register model; not board recognition"
 }

@@ -31,7 +31,7 @@
 | `c01-capture-19af0b2c829447b89d442a6f4f09f8f3` | — | 78 | 2.7 MB | c01-capture-19af0b2c829447b89d442a6f4f09f8f3 |
 | `2026-10-20-repo-hygiene` | 2026-10-20 | 5 | 9 KB | 根目录生成物归位与卫生检查修复 |
 | `2026-10-20-pr-merge-sync` | 2026-10-20 | 9 | 134 KB | PR #86 合并前验证与三人分支同步 |
-| `2026-10-20-cop-sim-round` | 2026-10-20 | 91 | 643 KB | 2026-10-20 COP_SIM：服务 + EXE 一轮与异常矩阵 |
+| `2026-10-20-cop-sim-round` | 2026-10-20 | 91 | 642 KB | 2026-10-20 COP_SIM：服务 + EXE 一轮与异常矩阵 |
 | `2026-10-19-worktree-inventory` | 2026-10-19 | 33 | 6.4 MB | Worktree 与大缓存清理前抢救记录（2026-10-19） |
 | `2026-10-19-j04-closeout` | 2026-10-19 | 20 | 124 KB | J04 离板冒烟证据（JL Linux + Windows 复跑） |
 | `2026-10-19-deepseek-independent-review` | 2026-10-19 | 7 | 4 KB | DeepSeek 工作结果独立轻量核查 |

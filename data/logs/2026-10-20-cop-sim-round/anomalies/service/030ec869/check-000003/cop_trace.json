@@ -33,7 +33,7 @@
    "touches_border": false
   }
  ],
- "error": "stale/regressed RESULT_SEQ 2 after 2",
+ "error": "old DONE/RESULT_SEQ 2 persisted; firmware did not start a new job",
  "frame": {
   "height": 720,
   "pixel_sha256": "a60bc06a3148c33a8537f92bb56a4227cb9e62e6027b6b4a4754f994be045ac2",

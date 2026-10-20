@@ -66,14 +66,8 @@
   "capture_id": 2,
   "cfg_seq": 2,
   "dma_bytes": 24603,
-  "elapsed_ms": 2.164,
-  "events": [
-   {
-    "aborted": false,
-    "kind": "recover",
-    "status": 97
-   }
-  ],
+  "elapsed_ms": 2.667,
+  "events": [],
   "fw": {
    "actual": [
     1,
@@ -87,7 +81,7 @@
    "verdict_id": 1
   },
   "job_id": 2,
-  "perf_cycles": 2500,
+  "perf_cycles": 2539,
   "polls": 2,
   "ps_decision": {
    "actual": {
