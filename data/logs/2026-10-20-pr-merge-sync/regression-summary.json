@@ -1,0 +1,57 @@
+{
+  "tested_source_commit": "04024d1223c60a0bb053f6a337dc8747aecb19ff",
+  "command": "COPROCESSOR_PYTHON=python VISION_PYTHON=python RISCV_CROSS=riscv32-unknown-elf- bash sim/scripts/run_iverilog.sh all",
+  "exit_code": 0,
+  "pass_lines": 152,
+  "unexpected_failure_lines": 0,
+  "expected_gate_failure_lines": 9,
+  "gate_self_test_cases": [
+    [
+      "pass",
+      "0",
+      "accept"
+    ],
+    [
+      "tcl_echo",
+      "0",
+      "accept"
+    ],
+    [
+      "fail_zero",
+      "1",
+      "reject"
+    ],
+    [
+      "mixed",
+      "1",
+      "reject"
+    ],
+    [
+      "fatal",
+      "1",
+      "reject"
+    ],
+    [
+      "no_pass",
+      "1",
+      "reject"
+    ],
+    [
+      "process_failed",
+      "1",
+      "reject"
+    ],
+    [
+      "missing_tb",
+      "1",
+      "reject"
+    ]
+  ],
+  "full_coremark_configurations": [
+    "== coremark mode=0 hex=../src/riscv_fw/coremark.hex exit=0 tohost=34713 cycles=19057438 retired=10106386 bubbles=8951052",
+    "== coremark mode=1 hex=../src/riscv_fw/coremark.hex exit=0 tohost=34713 cycles=17114141 retired=10106386 bubbles=7007755",
+    "== coremark mode=1 hex=../src/riscv_fw/coremark.hex exit=0 tohost=34713 cycles=16335562 retired=10106386 bubbles=6229176",
+    "== coremark mode=1 hex=../src/riscv_fw/coremark.hex exit=0 tohost=34713 cycles=16232079 retired=10106386 bubbles=6125693"
+  ],
+  "log_sha256": "276b0b1d9b7844cd72756057649ee59192275240ec686f37ca1ceb4f167fd490"
+}

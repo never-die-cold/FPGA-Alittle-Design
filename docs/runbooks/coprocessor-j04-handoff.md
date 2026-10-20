@@ -85,10 +85,11 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 | 连续两笔任务不误完成 | `cop_top` 第二次 START 后 20 拍仍 `busy`/`WAIT_ENGINE`；去掉保护拍负向对照立即 FAIL | PASS |
 | AXI4-Lite 深测 | `axi_lite`：AW/W 同拍与 W 先到、B/R 背压不丢响应、写读 SLVERR、未完成时拒收第二笔、复位清 B/R | PASS |
 | 固件构建链自检 | `test_firmware_rules.sh`：`OBJDUMP=false` 必须让 make 非零退出且不改写 `.dis` | PASS |
-| cop_top OOC 综合/实现 | `build/build_cop.tcl`：0 critical DRC、LUT 6,699 / FF 7,181 / DSP 136 / BRAM 0；CDC 45 端点 0 unsafe | 完成 |
+| cop_top OOC 综合/实现 | `build/build_cop.tcl`：0 critical DRC、LUT 6,308 / FF 7,256 / DSP 136 / BRAM 0；core→cop 45 safe，cop→core 99 unsafe / 45 unknown | OOC 实现已跑；返回 CDC 未收口 |
 | cop_top OOC 时序 | `cop_clk` 10 ns：WNS **+0.165 ns**（Fmax ≈ 101.7 MHz）；CRC 逐字节化之前是 −2.743 ns / 78.5 MHz | PASS（OOC，无 I/O delay） |
 | J02 zero 黄金 | 9225 packed words/73795 elements；logits `04fd02` | 逐元素 PASS |
 | 协处理器集合 | `run_coprocessor_iverilog.sh all`，退出码 0 | PASS |
+| 全仓入口（2026-10-20 复跑） | `run_iverilog.sh all`：核/协处理器/四档完整 CoreMark/视觉全部完成；[原始证据](../../data/logs/2026-10-20-pr-merge-sync/README.md) | PASS，退出码 0 |
 | 默认关闭核回归 | `run_iverilog.sh soc`，first=13/1101，second=65/0001 | PASS |
 | RV32I 工单固件 | `firmware` 构建 ELF/hex/dis + 主机规则测试 + `test_firmware_rules.sh`（objdump 失败必须让 make 失败） | PASS |
 
@@ -101,7 +102,7 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 | 完整 CDC 相位、复位、连续任务扫描 | RTL 验证队友 | 扩展 mailbox/top TB；无丢单、撕裂、误 ACK，全部断言 PASS |
 | AXI 多 outstanding、burst、跨 AXI 时钟域复位序列 | RTL 验证队友 | 现命名“单笔、无 burst”是有意约束；若要支持需先冻结契约再扩 TB |
 | payload 各 bank 物理地址适配与结果 DMA | SoC 集成队友 | 接真实 BRAM/DataMover；逐字节与 C02 payload/result 黄金一致 |
-| 全仓回归、四档 CoreMark、arch-test | 核验证队友 | `run_iverilog.sh all` 与规定矩阵退出 0，无历史回归退化 |
+| arch-test 本轮重跑 | 核验证队友 | 本次全仓入口及四档 CoreMark 已通过，但该入口不含 arch-test；规定 arch-test 矩阵仍需单独重跑 |
 | 整机 SoC 时序、bitstream、XSim 回归 | NC/FPGA 队友 | `cop_top` OOC 的综合/实现已做过（见 §4 与 OPEN-12），但整机含视频/存储/PS，仍需单独收口 |
 | PYNQ、网口/串口、实机上板 | NC | 按 J08 包运行并返回日志、版本、位流/模型 SHA256 |
 | 正式 PTQ/QAT、真实精度与真实黄金 | JL 后续 J05/J06 | 真实留出集报告和正式 manifest；本 J04 包不替代 |
@@ -116,8 +117,8 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
   排列和 B/R 背压；第一笔不变、第二笔零副作用、无协议错误才 PASS。
 - **P0-4 配置失效规则**：JL 已按 OPEN-3 的保守默认实现并加撤销用例；队友仍需冻结撤销时点，
   并补模型地址/长度/CRC 与 ROI 配置更新的逐字段矩阵。
-- **P1**：跑全仓 `run_iverilog.sh all`、CoreMark/arch-test 矩阵；保存原始日志和退出码。
-- **P2**：跑 XSim/Vivado/时序/资源/DRC/bitstream，最后由 NC 上板；必须记录源码、位流、
+- **P1**：全仓入口与四档 CoreMark 已于 2026-10-20 复跑；继续补独立 arch-test 矩阵，保存原始日志和退出码。
+- **P2**：跑整机 XSim/Vivado/时序/资源/DRC/bitstream，最后由 NC 上板；必须记录源码、位流、
   固件和模型 SHA256，不能用本交接单代签。
 
 ## 7. OPEN（保守默认与影响面）
@@ -142,8 +143,8 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
   与 pending 拒绝，异步相位扫描/复位中途未做。综合与时序已在 `cop_top` OOC 做过（OPEN-12），
   但整机含视频/存储/PS，不能外推板端结论。
 - **OPEN-8 组合 RAM 读告警**：Icarus 对 shadow/result memory 报敏感列表告警。Vivado 实测 `cop_top`
-  **BRAM=0、全部落成寄存器**（FF 7,181），说明这些数组没有被推成 BRAM；告警是仿真器敏感列表
-  问题，不是资源问题。但寄存器化是否可接受，仍要随整机时序一起看。
+  **BRAM=0、FF 7,256**；控制/结果数组没有推成 BRAM，外部权重/激活存储不在该 OOC 统计内，
+  不能据此断言整网权重已落 FF 或实体 BRAM 已实现。敏感列表告警与物理 bank 接入分别处理，后者仍属 OPEN-1。
 - **OPEN-9 只读常量未实现**：`VERSION(0x004)`、`CAPABILITY(0x008)`、`ERROR_CODE(0x014)` 当前
   读回固定 0；C03 §4 只给语义、未冻结位图与错误码编码，本轮不臆造取值。WC 驱动冻结前不得把
   0 当作合法版本/能力位，也不得据 0 判断错误原因。影响驱动版本协商与错误定位。
@@ -168,6 +169,6 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 用户明确覆盖仓库逐题理解门槛：本次一次性收口不逐题等待；仍保持每提交不超过 100 行、
 每步独立 TB + `all`、只做本地 commit、不 push。未执行 merge、tag 或破坏性 git 操作。
 
-**J04 实现完成 ≠ 完整验证通过 ≠ 板级验收。** 本轮未做完整回归矩阵、穷举负例、CDC
-全场景扫描、XSim/Vivado、综合实现、bitstream 或上板；JL 只对本单列出的离板冒烟证据负责，
-不代 WC/NC/验证队友签字。
+**J04 实现完成 ≠ 完整验证通过 ≠ 板级验收。** 早期交接只覆盖列出的冒烟；后续 `cop_top` OOC 与
+2026-10-20 全仓入口复跑证据已补入 §4。独立 arch-test 本轮重跑、穷举负例、CDC 全场景与返回路径、
+整机综合/实现/XSim、bitstream 和上板仍未完成；不代 WC/NC/验证队友签字。

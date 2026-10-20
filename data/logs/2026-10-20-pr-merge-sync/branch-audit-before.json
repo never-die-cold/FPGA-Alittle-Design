@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-20",
+  "head": "04024d1223c60a0bb053f6a337dc8747aecb19ff",
+  "main": "411d9eebf08bba7cc5f615ad107ca6dc00a2c15f",
+  "main_vs_riscv": "0\t25",
+  "refs": [
+    "refs/heads/chore/repo-cleanup 411d9eebf08bba7cc5f615ad107ca6dc00a2c15f refs/remotes/origin/chore/repo-cleanup",
+    "refs/heads/dev/exe 411d9eebf08bba7cc5f615ad107ca6dc00a2c15f refs/remotes/origin/dev/exe",
+    "refs/heads/dev/model 411d9eebf08bba7cc5f615ad107ca6dc00a2c15f refs/remotes/origin/dev/model",
+    "refs/heads/dev/riscv 04024d1223c60a0bb053f6a337dc8747aecb19ff refs/remotes/origin/dev/riscv",
+    "refs/heads/dev/vision 411d9eebf08bba7cc5f615ad107ca6dc00a2c15f refs/remotes/origin/dev/vision",
+    "refs/heads/main 411d9eebf08bba7cc5f615ad107ca6dc00a2c15f refs/remotes/origin/main",
+    "refs/remotes/origin/HEAD 411d9eebf08bba7cc5f615ad107ca6dc00a2c15f ",
+    "refs/remotes/origin/chore/repo-cleanup 411d9eebf08bba7cc5f615ad107ca6dc00a2c15f ",
+    "refs/remotes/origin/dev/exe 411d9eebf08bba7cc5f615ad107ca6dc00a2c15f ",
+    "refs/remotes/origin/dev/model 411d9eebf08bba7cc5f615ad107ca6dc00a2c15f ",
+    "refs/remotes/origin/dev/riscv 04024d1223c60a0bb053f6a337dc8747aecb19ff ",
+    "refs/remotes/origin/dev/vision 411d9eebf08bba7cc5f615ad107ca6dc00a2c15f ",
+    "refs/remotes/origin/main 411d9eebf08bba7cc5f615ad107ca6dc00a2c15f "
+  ],
+  "keep": [
+    "main",
+    "dev/riscv",
+    "dev/vision",
+    "dev/exe"
+  ],
+  "retire_if_merged": [
+    "dev/model",
+    "chore/repo-cleanup"
+  ]
+}

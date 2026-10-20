@@ -19,6 +19,8 @@ src/riscv_fw/coremark/vendor/** -whitespace
 data/logs/2026-10-07-partC-postopt/** -whitespace
 data/logs/2026-10-07-partC-postopt/*.md whitespace
 build/reports/soc_40mhz_bht2/** -whitespace
+# Raw Vivado OOC reports retain the tool's table padding and final blank lines.
+build/reports/cop/*.rpt -whitespace
 
 # Archived Pi terminal output retains original CR/control characters.
 data/logs/2026-10-06-pi-boot/*.txt -whitespace

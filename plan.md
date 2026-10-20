@@ -80,19 +80,19 @@
 
 ## §2 成员分工与协作规矩
 
-> 2026-10-08 起按功能保留五个分支：`dev/riscv`、`dev/vision`、`dev/model`、`dev/exe`、`main`。开发分支经 PR 合入主干；任何人（含组长）不直接 push `main`。历史三线分支名仅在旧记录中保留。
+> 2026-10-20 起保留主干与三个人的工作分支：`main`、`dev/riscv`（JL）、`dev/vision`（NC）、`dev/exe`（WC）。`dev/model` 与已结束的临时分支在独有提交已合入后退役；模型工作由 JL 按包协调，在 `dev/riscv` 推进。开发分支经 PR 合入主干；任何人（含组长）不直接 push `main`。历史分支名仅在旧记录中保留。
 
 ### 2.1 成员职责
 
 | 成员 | 模块一职责 | 后续职责 | 工作分支 |
 |:---|:---|:---|:---|
 | `jianglibo` | RTL、自测及缺陷修复；核已收口 | 训练/量化/整数参考、CNN RTL、核固件与集成位流 | `dev/riscv`、模型工作按包协调 |
-| `never-die-cold` | 专项验证、综合与问题定位；核已收口 | 全部上板/采集/实测、集成验收与最终提交；视觉离板遗留核对 | `dev/vision`、`dev/model` |
+| `never-die-cold` | 专项验证、综合与问题定位；核已收口 | 全部上板/采集/实测、集成验收与最终提交；视觉离板遗留核对 | `dev/vision` |
 | `watercopper` | arch-test/benchmark、日志与材料；核已收口 | 数据/定位/ROI、PS驱动/服务软件、EXE、发布与材料 | `dev/exe` |
 
 当前执行依赖与N/J/W工作包以[三人清单](docs/project-closeout-three-person-checklist.md)为准；旧“训练NC、板务WC”安排只作历史，不再作为续工分配。
 
-分支用途：`dev/riscv` 管核与协处理器 RTL；`dev/vision` 管视觉链路；`dev/model` 管训练、模型与黄金参考；`dev/exe` 管前端与联调；`main` 管经 PR 审查的集成版本。模型负责人仍按具体工作包协调，本次不改变成员职责。
+分支用途：`dev/riscv` 管核、协处理器、训练、模型与黄金参考；`dev/vision` 管视觉链路和板端验收；`dev/exe` 管前端、服务与联调；`main` 管经 PR 审查的集成版本。三人职责仍按具体工作包协调。
 
 目录分工：
 

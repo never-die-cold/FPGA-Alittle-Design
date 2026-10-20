@@ -20,8 +20,8 @@ D:/Vivado_downloads/2026.1/Vivado/bin/vivado.bat -mode batch -source build/build
 
 | 项 | 值 |
 |:---|:---|
-| Slice LUTs（impl） | 6,699 / 53,200（12.59%） |
-| Slice Registers | 7,181 / 106,400（6.75%） |
+| Slice LUTs（impl，CRC 修复后） | 6,308 / 53,200（11.86%） |
+| Slice Registers（CRC 修复后） | 7,256 / 106,400（6.82%） |
 | DSP48E1 | **136** |
 | Block RAM | **0** |
 | 综合告警 | 0 critical、0 error；119 warnings（多数是诊断模块未用寄存器被裁） |
@@ -60,6 +60,9 @@ TB 现在按 AXI-Stream 语义驱动（valid 保持到被接收），并断言�
 | 方向 | 端点 | Safe | Unsafe | Unknown | No ASYNC_REG |
 |:---|---:|---:|---:|---:|---:|
 | `core_clk` → `cop_clk` | 45 | 45 | 0 | 0 | 1 → **0** |
+| `cop_clk` → `core_clk`（当前未收口） | 177 | 33 | 99 | 45 | 131 |
+
+返回方向的 99 unsafe / 45 unknown 来自当前 `cdc_impl.rpt`，不得将上述正向 45 safe 概括为整个 `cop_top` CDC 通过；它对应 J04b/OPEN-4 的状态与多位结果返回缺口。本次只合入 J04a 离板实现和已列出的 OOC 时序证据，不放行整机位流或板级验收。
 
 - 修前 `cop_cdc_mailbox` 的两级同步链没标 `ASYNC_REG`，报告 `No ASYNC_REG=1`；
   给 `ack_sync1/2`、`req_sync1/2` 加 `(* ASYNC_REG = "TRUE" *)` 后归零（Icarus 也照常通过）。
