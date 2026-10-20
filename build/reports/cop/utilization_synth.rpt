@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
-| Date         : Mon Oct 19 20:50:45 2026
+| Date         : Tue Oct 20 14:22:10 2026
 | Host         : never-die-cold running 64-bit major release  (build 9200)
 | Command      : report_utilization -file E:/Projects/FPGA-Alittle-Design/build/reports/cop/utilization_synth.rpt
 | Design       : cop_top
@@ -31,15 +31,15 @@ Table of Contents
 +-------------------------+------+-------+------------+-----------+-------+
 |        Site Type        | Used | Fixed | Prohibited | Available | Util% |
 +-------------------------+------+-------+------------+-----------+-------+
-| Slice LUTs*             | 6648 |     0 |          0 |     53200 | 12.50 |
-|   LUT as Logic          | 6648 |     0 |          0 |     53200 | 12.50 |
+| Slice LUTs*             | 6353 |     0 |          0 |     53200 | 11.94 |
+|   LUT as Logic          | 6353 |     0 |          0 |     53200 | 11.94 |
 |   LUT as Memory         |    0 |     0 |          0 |     17400 |  0.00 |
-| Slice Registers         | 7181 |     0 |          0 |    106400 |  6.75 |
-|   Register as Flip Flop | 7181 |     0 |          0 |    106400 |  6.75 |
+| Slice Registers         | 7256 |     0 |          0 |    106400 |  6.82 |
+|   Register as Flip Flop | 7256 |     0 |          0 |    106400 |  6.82 |
 |   Register as Latch     |    0 |     0 |          0 |    106400 |  0.00 |
 | F7 Muxes                |  420 |     0 |          0 |     26600 |  1.58 |
 | F8 Muxes                |   99 |     0 |          0 |     13300 |  0.74 |
-| Unique Control Sets     |   80 |       |          0 |     13300 |  0.60 |
+| Unique Control Sets     |   82 |       |          0 |     13300 |  0.62 |
 +-------------------------+------+-------+------------+-----------+-------+
 * Warning! The Final LUT count, after physical optimizations and full implementation, is typically lower. Run opt_design after synthesis, if not already completed, for a more realistic count.
 Warning! LUT value is adjusted to account for LUT combining.
@@ -60,7 +60,7 @@ Warning! For any ECO changes, please run place_design if there are unplaced inst
 | 0     |            _ |       Reset |            - |
 | 0     |          Yes |           - |            - |
 | 35    |          Yes |           - |          Set |
-| 5582  |          Yes |           - |        Reset |
+| 5657  |          Yes |           - |        Reset |
 | 0     |          Yes |         Set |            - |
 | 1564  |          Yes |       Reset |            - |
 +-------+--------------+-------------+--------------+
@@ -152,16 +152,16 @@ Warning! For any ECO changes, please run place_design if there are unplaced inst
 +----------+------+---------------------+
 | Ref Name | Used | Functional Category |
 +----------+------+---------------------+
-| FDCE     | 5582 |        Flop & Latch |
-| LUT6     | 2649 |                 LUT |
-| LUT2     | 2272 |                 LUT |
+| FDCE     | 5657 |        Flop & Latch |
+| LUT6     | 2402 |                 LUT |
+| LUT2     | 2380 |                 LUT |
 | FDRE     | 1564 |        Flop & Latch |
-| LUT5     | 1131 |                 LUT |
+| LUT5     | 1225 |                 LUT |
 | CARRY4   |  767 |          CarryLogic |
-| LUT3     |  711 |                 LUT |
-| LUT4     |  584 |                 LUT |
+| LUT4     |  569 |                 LUT |
+| LUT3     |  449 |                 LUT |
 | MUXF7    |  420 |               MuxFx |
-| LUT1     |  162 |                 LUT |
+| LUT1     |  146 |                 LUT |
 | DSP48E1  |  136 |    Block Arithmetic |
 | MUXF8    |   99 |               MuxFx |
 | FDPE     |   35 |        Flop & Latch |

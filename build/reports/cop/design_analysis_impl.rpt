@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
-| Date         : Mon Oct 19 20:54:01 2026
+| Date         : Tue Oct 20 14:24:07 2026
 | Host         : never-die-cold running 64-bit major release  (build 9200)
 | Command      : report_design_analysis -file E:/Projects/FPGA-Alittle-Design/build/reports/cop/design_analysis_impl.rpt
 | Design       : cop_top
@@ -21,49 +21,49 @@ Table of Contents
 1. Setup Path Characteristics 1-1
 ---------------------------------
 
-+---------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
-|      Characteristics      |                                                                 Path #1                                                                 |
-+---------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
-| Requirement               | 10.000                                                                                                                                  |
-| Path Delay                | 12.734                                                                                                                                  |
-| Logic Delay               | 2.068(17%)                                                                                                                              |
-| Net Delay                 | 10.666(83%)                                                                                                                             |
-| Clock Skew                | -0.003                                                                                                                                  |
-| Slack                     | -2.743                                                                                                                                  |
-| Clock Uncertainty         | 0.035                                                                                                                                   |
-| Clock Relationship        | Safely Timed                                                                                                                            |
-| Clock Delay Group         | Same Clock                                                                                                                              |
-| Logic Levels              | 13                                                                                                                                      |
-| Routes                    | 13                                                                                                                                      |
-| Logical Path              | FDPE/C-(14)-LUT4-(4)-LUT6-(2)-LUT5-(4)-LUT6-(1)-LUT6-(9)-LUT6-(1)-LUT5-(3)-LUT6-(2)-LUT4-(2)-LUT6-(5)-LUT2-(4)-LUT6-(2)-LUT6-(1)-FDCE/D |
-| Start Point Clock         | cop_clk                                                                                                                                 |
-| End Point Clock           | cop_clk                                                                                                                                 |
-| DSP Block                 | None                                                                                                                                    |
-| RAM Registers             | None-None                                                                                                                               |
-| IO Crossings              | 0                                                                                                                                       |
-| Config Crossings          | 0                                                                                                                                       |
-| SLR Crossings             | 0                                                                                                                                       |
-| PBlocks                   | 0                                                                                                                                       |
-| High Fanout               | 14                                                                                                                                      |
-| ASYNC REG                 | 0                                                                                                                                       |
-| Dont Touch                | 0                                                                                                                                       |
-| Mark Debug                | 0                                                                                                                                       |
-| Start Point Pin Primitive | FDPE/C                                                                                                                                  |
-| End Point Pin Primitive   | FDCE/D                                                                                                                                  |
-| Start Point Pin           | crc_state_reg[3]/C                                                                                                                      |
-| End Point Pin             | crc32_o_reg[21]/D                                                                                                                       |
-+---------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
++---------------------------+-------------------------------------------------------------------+
+|      Characteristics      |                              Path #1                              |
++---------------------------+-------------------------------------------------------------------+
+| Requirement               | 10.000                                                            |
+| Path Delay                | 8.492                                                             |
+| Logic Delay               | 5.175(61%)                                                        |
+| Net Delay                 | 3.317(39%)                                                        |
+| Clock Skew                | 0.093                                                             |
+| Slack                     | 0.165                                                             |
+| Clock Uncertainty         | 0.035                                                             |
+| Clock Relationship        | Safely Timed                                                      |
+| Clock Delay Group         | Same Clock                                                        |
+| Logic Levels              | 4                                                                 |
+| Routes                    | 4                                                                 |
+| Logical Path              | FDCE/C-(140)-LUT6-(1)-MUXF7-LUT2-(20)-DSP48E1-(1)-DSP48E1/PCIN[0] |
+| Start Point Clock         | cop_clk                                                           |
+| End Point Clock           | cop_clk                                                           |
+| DSP Block                 | Seq                                                               |
+| RAM Registers             | None-None                                                         |
+| IO Crossings              | 0                                                                 |
+| Config Crossings          | 0                                                                 |
+| SLR Crossings             | 0                                                                 |
+| PBlocks                   | 0                                                                 |
+| High Fanout               | 140                                                               |
+| ASYNC REG                 | 0                                                                 |
+| Dont Touch                | 0                                                                 |
+| Mark Debug                | 0                                                                 |
+| Start Point Pin Primitive | FDCE/C                                                            |
+| End Point Pin Primitive   | DSP48E1/PCIN[0]                                                   |
+| Start Point Pin           | q_send_reg[1]/C                                                   |
+| End Point Pin             | product_reg/PCIN[0]                                               |
++---------------------------+-------------------------------------------------------------------+
 * Bounding box calculated as % of dimensions for the target device (308, 299)
 
 
 2. Logic Level Distribution
 ---------------------------
 
-+-----------------+-------------+-----+-----+----+----+-----+----+
-| End Point Clock | Requirement |  1  |  4  | 12 | 13 |  15 | 16 |
-+-----------------+-------------+-----+-----+----+----+-----+----+
-| cop_clk         | 10.000ns    | 466 | 204 | 22 | 62 | 168 | 78 |
-+-----------------+-------------+-----+-----+----+----+-----+----+
++-----------------+-------------+-----+-----+----+----+----+-----+----+
+| End Point Clock | Requirement |  1  |  3  |  4 | 11 | 12 |  13 | 14 |
++-----------------+-------------+-----+-----+----+----+----+-----+----+
+| cop_clk         | 10.000ns    | 224 | 193 | 59 |  3 |  1 | 517 |  3 |
++-----------------+-------------+-----+-----+----+----+----+-----+----+
 * Columns represent the logic levels per end point clock
 ** Distribution is for top worst 1000 paths
 

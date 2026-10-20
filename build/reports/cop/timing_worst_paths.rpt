@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
-| Date         : Mon Oct 19 20:54:01 2026
+| Date         : Tue Oct 20 14:24:08 2026
 | Host         : never-die-cold running 64-bit major release  (build 9200)
 | Command      : report_timing -delay_type max -max_paths 10 -sort_by group -file E:/Projects/FPGA-Alittle-Design/build/reports/cop/timing_worst_paths.rpt
 | Design       : cop_top
@@ -12,727 +12,19 @@ Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanc
 
 Timing Report
 
-Slack (VIOLATED) :        -2.743ns  (required time - arrival time)
-  Source:                 loader/crc_state_reg[3]/C
-                            (rising edge-triggered cell FDPE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            loader/crc32_o_reg[21]/D
+Slack (MET) :             0.165ns  (required time - arrival time)
+  Source:                 engine/engine/q_send_reg[1]/C
                             (rising edge-triggered cell FDCE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/engine/requant_lanes[1].requant/product_reg/PCIN[0]
+                            (rising edge-triggered cell DSP48E1 clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
   Path Group:             cop_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (cop_clk rise@10.000ns - cop_clk rise@0.000ns)
-  Data Path Delay:        12.734ns  (logic 2.068ns (16.240%)  route 10.666ns (83.760%))
-  Logic Levels:           13  (LUT2=1 LUT4=2 LUT5=2 LUT6=8)
-  Clock Path Skew:        -0.003ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    1.778ns = ( 11.778 - 10.000 ) 
-    Source Clock Delay      (SCD):    1.912ns
-    Clock Pessimism Removal (CPR):    0.131ns
-  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
-    Total System Jitter     (TSJ):    0.071ns
-    Total Input Jitter      (TIJ):    0.000ns
-    Discrete Jitter          (DJ):    0.000ns
-    Phase Error              (PE):    0.000ns
-
-    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
-  -------------------------------------------------------------------    -------------------
-                         (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
-                                                      0.000     0.000 r  cop_clk
-                         net (fo=7003, unset)         1.912     1.912    loader/cop_clk
-    SLICE_X84Y106        FDPE                                         r  loader/crc_state_reg[3]/C
-  -------------------------------------------------------------------    -------------------
-    SLICE_X84Y106        FDPE (Prop_fdpe_C_Q)         0.456     2.368 r  loader/crc_state_reg[3]/Q
-                         net (fo=14, routed)          0.802     3.170    loader/crc_state_reg_n_0_[3]
-    SLICE_X82Y107        LUT4 (Prop_lut4_I1_O)        0.124     3.294 r  loader/crc_state[11]_i_60/O
-                         net (fo=4, routed)           0.851     4.144    loader/crc_state[11]_i_60_n_0
-    SLICE_X87Y107        LUT6 (Prop_lut6_I2_O)        0.124     4.268 r  loader/crc_state[31]_i_50/O
-                         net (fo=2, routed)           0.962     5.231    loader/crc_state[31]_i_50_n_0
-    SLICE_X84Y109        LUT5 (Prop_lut5_I2_O)        0.124     5.355 r  loader/crc_state[31]_i_34/O
-                         net (fo=4, routed)           0.921     6.276    loader/crc_state[31]_i_34_n_0
-    SLICE_X83Y112        LUT6 (Prop_lut6_I4_O)        0.124     6.400 r  loader/crc_state[11]_i_19/O
-                         net (fo=1, routed)           0.661     7.061    loader/crc_state[11]_i_19_n_0
-    SLICE_X82Y112        LUT6 (Prop_lut6_I0_O)        0.124     7.185 r  loader/crc_state[11]_i_14/O
-                         net (fo=9, routed)           0.926     8.111    loader/crc_state[11]_i_14_n_0
-    SLICE_X83Y115        LUT6 (Prop_lut6_I0_O)        0.124     8.235 r  loader/crc_state[31]_i_17/O
-                         net (fo=1, routed)           0.668     8.903    loader/crc_state[31]_i_17_n_0
-    SLICE_X86Y115        LUT5 (Prop_lut5_I3_O)        0.124     9.027 r  loader/crc_state[31]_i_10/O
-                         net (fo=3, routed)           1.084    10.111    loader/crc_state[31]_i_10_n_0
-    SLICE_X91Y115        LUT6 (Prop_lut6_I1_O)        0.124    10.235 r  loader/crc_state[18]_i_6/O
-                         net (fo=2, routed)           0.446    10.681    loader/crc_state[18]_i_6_n_0
-    SLICE_X91Y115        LUT4 (Prop_lut4_I1_O)        0.124    10.805 r  loader/crc_state[10]_i_4/O
-                         net (fo=2, routed)           1.046    11.850    loader/crc_state[10]_i_4_n_0
-    SLICE_X88Y114        LUT6 (Prop_lut6_I3_O)        0.124    11.974 r  loader/crc_state[2]_i_2/O
-                         net (fo=5, routed)           0.742    12.717    loader/crc_state[2]_i_2_n_0
-    SLICE_X91Y114        LUT2 (Prop_lut2_I1_O)        0.124    12.841 r  loader/crc_state[0]_i_2/O
-                         net (fo=4, routed)           0.625    13.465    loader/crc_state[0]_i_2_n_0
-    SLICE_X91Y113        LUT6 (Prop_lut6_I4_O)        0.124    13.589 r  loader/crc_state[21]_i_3/O
-                         net (fo=2, routed)           0.933    14.522    loader/crc_state[21]_i_3_n_0
-    SLICE_X91Y107        LUT6 (Prop_lut6_I2_O)        0.124    14.646 r  loader/crc32_o[21]_i_1/O
-                         net (fo=1, routed)           0.000    14.646    loader/p_1_in[21]
-    SLICE_X91Y107        FDCE                                         r  loader/crc32_o_reg[21]/D
-  -------------------------------------------------------------------    -------------------
-
-                         (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
-                                                      0.000    10.000 r  cop_clk
-                         net (fo=7003, unset)         1.778    11.778    loader/cop_clk
-    SLICE_X91Y107        FDCE                                         r  loader/crc32_o_reg[21]/C
-                         clock pessimism              0.131    11.909    <hidden>
-                         clock uncertainty           -0.035    11.874    <hidden>
-    SLICE_X91Y107        FDCE (Setup_fdce_C_D)        0.029    11.903    loader/crc32_o_reg[21]
-  -------------------------------------------------------------------
-                         required time                         11.903    <hidden>
-                         arrival time                         -14.646    <hidden>
-  -------------------------------------------------------------------
-                         slack                                 -2.743    <hidden>
-
-Slack (VIOLATED) :        -2.714ns  (required time - arrival time)
-  Source:                 loader/crc_state_reg[0]/C
-                            (rising edge-triggered cell FDPE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            loader/crc32_o_reg[19]/D
-                            (rising edge-triggered cell FDCE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Path Group:             cop_clk
-  Path Type:              Setup (Max at Slow Process Corner)
-  Requirement:            10.000ns  (cop_clk rise@10.000ns - cop_clk rise@0.000ns)
-  Data Path Delay:        12.688ns  (logic 1.944ns (15.322%)  route 10.744ns (84.678%))
-  Logic Levels:           12  (LUT2=1 LUT3=2 LUT5=2 LUT6=7)
-  Clock Path Skew:        -0.023ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    1.720ns = ( 11.720 - 10.000 ) 
-    Source Clock Delay      (SCD):    1.912ns
-    Clock Pessimism Removal (CPR):    0.169ns
-  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
-    Total System Jitter     (TSJ):    0.071ns
-    Total Input Jitter      (TIJ):    0.000ns
-    Discrete Jitter          (DJ):    0.000ns
-    Phase Error              (PE):    0.000ns
-
-    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
-  -------------------------------------------------------------------    -------------------
-                         (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
-                                                      0.000     0.000 r  cop_clk
-                         net (fo=7003, unset)         1.912     1.912    loader/cop_clk
-    SLICE_X88Y108        FDPE                                         r  loader/crc_state_reg[0]/C
-  -------------------------------------------------------------------    -------------------
-    SLICE_X88Y108        FDPE (Prop_fdpe_C_Q)         0.456     2.368 r  loader/crc_state_reg[0]/Q
-                         net (fo=11, routed)          0.858     3.226    loader/crc_state_reg_n_0_[0]
-    SLICE_X85Y108        LUT6 (Prop_lut6_I1_O)        0.124     3.350 r  loader/crc_state[11]_i_54/O
-                         net (fo=11, routed)          1.030     4.379    loader/crc_state[11]_i_54_n_0
-    SLICE_X86Y111        LUT6 (Prop_lut6_I3_O)        0.124     4.503 r  loader/crc_state[29]_i_51/O
-                         net (fo=10, routed)          0.854     5.357    loader/crc_state[29]_i_51_n_0
-    SLICE_X85Y111        LUT3 (Prop_lut3_I2_O)        0.124     5.481 r  loader/crc_state[29]_i_53/O
-                         net (fo=4, routed)           1.195     6.676    loader/crc_state[29]_i_53_n_0
-    SLICE_X83Y107        LUT6 (Prop_lut6_I3_O)        0.124     6.800 r  loader/crc_state[27]_i_34/O
-                         net (fo=8, routed)           0.845     7.645    loader/crc_state[27]_i_34_n_0
-    SLICE_X87Y115        LUT6 (Prop_lut6_I5_O)        0.124     7.769 r  loader/crc_state[27]_i_26/O
-                         net (fo=14, routed)          1.088     8.857    loader/crc_state[27]_i_26_n_0
-    SLICE_X87Y114        LUT6 (Prop_lut6_I3_O)        0.124     8.981 r  loader/crc_state[25]_i_23/O
-                         net (fo=4, routed)           0.677     9.658    loader/crc_state[25]_i_23_n_0
-    SLICE_X86Y114        LUT5 (Prop_lut5_I0_O)        0.124     9.782 r  loader/crc_state[25]_i_19/O
-                         net (fo=2, routed)           0.965    10.747    loader/crc_state[25]_i_19_n_0
-    SLICE_X91Y112        LUT6 (Prop_lut6_I4_O)        0.124    10.871 r  loader/crc_state[25]_i_8/O
-                         net (fo=6, routed)           0.624    11.495    loader/crc_state[25]_i_8_n_0
-    SLICE_X92Y112        LUT2 (Prop_lut2_I0_O)        0.124    11.619 r  loader/crc_state[27]_i_11/O
-                         net (fo=6, routed)           0.799    12.417    loader/crc_state[27]_i_11_n_0
-    SLICE_X91Y106        LUT3 (Prop_lut3_I0_O)        0.124    12.541 r  loader/crc_state[19]_i_5/O
-                         net (fo=1, routed)           0.823    13.364    loader/crc_state[19]_i_5_n_0
-    SLICE_X89Y106        LUT5 (Prop_lut5_I2_O)        0.124    13.488 r  loader/crc_state[19]_i_2/O
-                         net (fo=4, routed)           0.988    14.476    loader/crc_state[19]_i_2_n_0
-    SLICE_X88Y105        LUT6 (Prop_lut6_I3_O)        0.124    14.600 r  loader/crc32_o[19]_i_1/O
-                         net (fo=1, routed)           0.000    14.600    loader/p_1_in[19]
-    SLICE_X88Y105        FDCE                                         r  loader/crc32_o_reg[19]/D
-  -------------------------------------------------------------------    -------------------
-
-                         (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
-                                                      0.000    10.000 r  cop_clk
-                         net (fo=7003, unset)         1.720    11.720    loader/cop_clk
-    SLICE_X88Y105        FDCE                                         r  loader/crc32_o_reg[19]/C
-                         clock pessimism              0.169    11.889    <hidden>
-                         clock uncertainty           -0.035    11.854    <hidden>
-    SLICE_X88Y105        FDCE (Setup_fdce_C_D)        0.032    11.886    loader/crc32_o_reg[19]
-  -------------------------------------------------------------------
-                         required time                         11.886    <hidden>
-                         arrival time                         -14.600    <hidden>
-  -------------------------------------------------------------------
-                         slack                                 -2.714    <hidden>
-
-Slack (VIOLATED) :        -2.712ns  (required time - arrival time)
-  Source:                 loader/crc_state_reg[7]/C
-                            (rising edge-triggered cell FDPE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            loader/crc_state_reg[29]/D
-                            (rising edge-triggered cell FDPE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Path Group:             cop_clk
-  Path Type:              Setup (Max at Slow Process Corner)
-  Requirement:            10.000ns  (cop_clk rise@10.000ns - cop_clk rise@0.000ns)
-  Data Path Delay:        12.683ns  (logic 2.068ns (16.306%)  route 10.615ns (83.694%))
-  Logic Levels:           13  (LUT2=1 LUT4=4 LUT5=3 LUT6=5)
-  Clock Path Skew:        -0.025ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    1.718ns = ( 11.718 - 10.000 ) 
-    Source Clock Delay      (SCD):    1.912ns
-    Clock Pessimism Removal (CPR):    0.169ns
-  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
-    Total System Jitter     (TSJ):    0.071ns
-    Total Input Jitter      (TIJ):    0.000ns
-    Discrete Jitter          (DJ):    0.000ns
-    Phase Error              (PE):    0.000ns
-
-    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
-  -------------------------------------------------------------------    -------------------
-                         (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
-                                                      0.000     0.000 r  cop_clk
-                         net (fo=7003, unset)         1.912     1.912    loader/cop_clk
-    SLICE_X88Y107        FDPE                                         r  loader/crc_state_reg[7]/C
-  -------------------------------------------------------------------    -------------------
-    SLICE_X88Y107        FDPE (Prop_fdpe_C_Q)         0.456     2.368 r  loader/crc_state_reg[7]/Q
-                         net (fo=11, routed)          0.783     3.151    loader/crc_state_reg_n_0_[7]
-    SLICE_X87Y109        LUT4 (Prop_lut4_I1_O)        0.124     3.275 r  loader/crc_state[30]_i_15/O
-                         net (fo=11, routed)          0.805     4.080    loader/crc_state[30]_i_15_n_0
-    SLICE_X85Y108        LUT6 (Prop_lut6_I5_O)        0.124     4.204 r  loader/crc_state[11]_i_42/O
-                         net (fo=12, routed)          1.093     5.297    loader/crc_state[11]_i_42_n_0
-    SLICE_X83Y109        LUT6 (Prop_lut6_I3_O)        0.124     5.421 r  loader/crc_state[31]_i_23/O
-                         net (fo=9, routed)           0.806     6.228    loader/crc_state[31]_i_23_n_0
-    SLICE_X84Y112        LUT4 (Prop_lut4_I0_O)        0.124     6.352 r  loader/crc_state[11]_i_30/O
-                         net (fo=7, routed)           0.829     7.181    loader/crc_state[11]_i_30_n_0
-    SLICE_X82Y114        LUT5 (Prop_lut5_I0_O)        0.124     7.305 r  loader/crc_state[29]_i_37/O
-                         net (fo=1, routed)           0.743     8.048    loader/crc_state[29]_i_37_n_0
-    SLICE_X86Y113        LUT6 (Prop_lut6_I5_O)        0.124     8.172 r  loader/crc_state[29]_i_22/O
-                         net (fo=9, routed)           0.667     8.839    loader/crc_state[29]_i_22_n_0
-    SLICE_X89Y114        LUT4 (Prop_lut4_I2_O)        0.124     8.963 r  loader/crc_state[29]_i_27/O
-                         net (fo=9, routed)           1.021     9.985    loader/crc_state[29]_i_27_n_0
-    SLICE_X85Y114        LUT6 (Prop_lut6_I2_O)        0.124    10.109 r  loader/crc_state[17]_i_8/O
-                         net (fo=2, routed)           0.740    10.848    loader/crc_state[17]_i_8_n_0
-    SLICE_X85Y112        LUT4 (Prop_lut4_I1_O)        0.124    10.972 r  loader/crc_state[9]_i_4/O
-                         net (fo=3, routed)           0.457    11.429    loader/crc_state[9]_i_4_n_0
-    SLICE_X84Y112        LUT5 (Prop_lut5_I2_O)        0.124    11.553 r  loader/crc_state[1]_i_2/O
-                         net (fo=3, routed)           0.829    12.383    loader/crc_state[1]_i_2_n_0
-    SLICE_X91Y110        LUT2 (Prop_lut2_I1_O)        0.124    12.507 r  loader/crc_state[3]_i_3/O
-                         net (fo=10, routed)          0.760    13.267    loader/crc_state[3]_i_3_n_0
-    SLICE_X91Y107        LUT5 (Prop_lut5_I3_O)        0.124    13.391 r  loader/crc_state[30]_i_3/O
-                         net (fo=14, routed)          1.080    14.471    loader/crc_state[30]_i_3_n_0
-    SLICE_X88Y110        LUT6 (Prop_lut6_I5_O)        0.124    14.595 r  loader/crc_state[29]_i_1/O
-                         net (fo=1, routed)           0.000    14.595    loader/crc_state[29]_i_1_n_0
-    SLICE_X88Y110        FDPE                                         r  loader/crc_state_reg[29]/D
-  -------------------------------------------------------------------    -------------------
-
-                         (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
-                                                      0.000    10.000 r  cop_clk
-                         net (fo=7003, unset)         1.718    11.718    loader/cop_clk
-    SLICE_X88Y110        FDPE                                         r  loader/crc_state_reg[29]/C
-                         clock pessimism              0.169    11.887    <hidden>
-                         clock uncertainty           -0.035    11.852    <hidden>
-    SLICE_X88Y110        FDPE (Setup_fdpe_C_D)        0.031    11.883    loader/crc_state_reg[29]
-  -------------------------------------------------------------------
-                         required time                         11.883    <hidden>
-                         arrival time                         -14.595    <hidden>
-  -------------------------------------------------------------------
-                         slack                                 -2.712    <hidden>
-
-Slack (VIOLATED) :        -2.679ns  (required time - arrival time)
-  Source:                 loader/crc_state_reg[7]/C
-                            (rising edge-triggered cell FDPE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            loader/crc32_o_reg[22]/D
-                            (rising edge-triggered cell FDCE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Path Group:             cop_clk
-  Path Type:              Setup (Max at Slow Process Corner)
-  Requirement:            10.000ns  (cop_clk rise@10.000ns - cop_clk rise@0.000ns)
-  Data Path Delay:        12.674ns  (logic 2.068ns (16.317%)  route 10.606ns (83.683%))
-  Logic Levels:           13  (LUT3=2 LUT4=1 LUT5=2 LUT6=8)
-  Clock Path Skew:        -0.001ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    1.780ns = ( 11.780 - 10.000 ) 
-    Source Clock Delay      (SCD):    1.912ns
-    Clock Pessimism Removal (CPR):    0.131ns
-  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
-    Total System Jitter     (TSJ):    0.071ns
-    Total Input Jitter      (TIJ):    0.000ns
-    Discrete Jitter          (DJ):    0.000ns
-    Phase Error              (PE):    0.000ns
-
-    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
-  -------------------------------------------------------------------    -------------------
-                         (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
-                                                      0.000     0.000 r  cop_clk
-                         net (fo=7003, unset)         1.912     1.912    loader/cop_clk
-    SLICE_X88Y107        FDPE                                         r  loader/crc_state_reg[7]/C
-  -------------------------------------------------------------------    -------------------
-    SLICE_X88Y107        FDPE (Prop_fdpe_C_Q)         0.456     2.368 r  loader/crc_state_reg[7]/Q
-                         net (fo=11, routed)          0.783     3.151    loader/crc_state_reg_n_0_[7]
-    SLICE_X87Y109        LUT4 (Prop_lut4_I1_O)        0.124     3.275 r  loader/crc_state[30]_i_15/O
-                         net (fo=11, routed)          0.805     4.080    loader/crc_state[30]_i_15_n_0
-    SLICE_X85Y108        LUT6 (Prop_lut6_I5_O)        0.124     4.204 r  loader/crc_state[11]_i_42/O
-                         net (fo=12, routed)          1.093     5.297    loader/crc_state[11]_i_42_n_0
-    SLICE_X83Y109        LUT6 (Prop_lut6_I3_O)        0.124     5.421 r  loader/crc_state[31]_i_23/O
-                         net (fo=9, routed)           0.866     6.287    loader/crc_state[31]_i_23_n_0
-    SLICE_X83Y110        LUT6 (Prop_lut6_I0_O)        0.124     6.411 r  loader/crc_state[31]_i_20/O
-                         net (fo=5, routed)           0.653     7.064    loader/crc_state[31]_i_20_n_0
-    SLICE_X82Y112        LUT6 (Prop_lut6_I0_O)        0.124     7.188 r  loader/crc_state[31]_i_14/O
-                         net (fo=7, routed)           0.821     8.009    loader/crc_state[31]_i_14_n_0
-    SLICE_X83Y114        LUT6 (Prop_lut6_I3_O)        0.124     8.133 r  loader/crc_state[25]_i_25/O
-                         net (fo=6, routed)           0.825     8.959    loader/crc_state[25]_i_25_n_0
-    SLICE_X85Y113        LUT5 (Prop_lut5_I0_O)        0.124     9.083 r  loader/crc_state[25]_i_13/O
-                         net (fo=4, routed)           0.845     9.928    loader/crc_state[25]_i_13_n_0
-    SLICE_X90Y114        LUT3 (Prop_lut3_I1_O)        0.124    10.052 r  loader/crc_state[25]_i_18/O
-                         net (fo=9, routed)           0.880    10.932    loader/crc_state[25]_i_18_n_0
-    SLICE_X92Y113        LUT6 (Prop_lut6_I4_O)        0.124    11.056 r  loader/crc_state[16]_i_10/O
-                         net (fo=7, routed)           0.723    11.779    loader/crc_state[16]_i_10_n_0
-    SLICE_X88Y112        LUT5 (Prop_lut5_I4_O)        0.124    11.903 r  loader/crc_state[25]_i_11/O
-                         net (fo=1, routed)           0.777    12.680    loader/crc_state[25]_i_11_n_0
-    SLICE_X89Y109        LUT6 (Prop_lut6_I0_O)        0.124    12.804 r  loader/crc_state[25]_i_4/O
-                         net (fo=9, routed)           0.881    13.685    loader/crc_state[25]_i_4_n_0
-    SLICE_X93Y107        LUT3 (Prop_lut3_I0_O)        0.124    13.809 r  loader/crc_state[22]_i_3/O
-                         net (fo=2, routed)           0.653    14.462    loader/crc_state[22]_i_3_n_0
-    SLICE_X93Y106        LUT6 (Prop_lut6_I1_O)        0.124    14.586 r  loader/crc32_o[22]_i_1/O
-                         net (fo=1, routed)           0.000    14.586    loader/p_1_in[22]
-    SLICE_X93Y106        FDCE                                         r  loader/crc32_o_reg[22]/D
-  -------------------------------------------------------------------    -------------------
-
-                         (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
-                                                      0.000    10.000 r  cop_clk
-                         net (fo=7003, unset)         1.780    11.780    loader/cop_clk
-    SLICE_X93Y106        FDCE                                         r  loader/crc32_o_reg[22]/C
-                         clock pessimism              0.131    11.911    <hidden>
-                         clock uncertainty           -0.035    11.876    <hidden>
-    SLICE_X93Y106        FDCE (Setup_fdce_C_D)        0.031    11.907    loader/crc32_o_reg[22]
-  -------------------------------------------------------------------
-                         required time                         11.907    <hidden>
-                         arrival time                         -14.586    <hidden>
-  -------------------------------------------------------------------
-                         slack                                 -2.679    <hidden>
-
-Slack (VIOLATED) :        -2.648ns  (required time - arrival time)
-  Source:                 loader/crc_state_reg[7]/C
-                            (rising edge-triggered cell FDPE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            loader/crc32_o_reg[26]/D
-                            (rising edge-triggered cell FDCE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Path Group:             cop_clk
-  Path Type:              Setup (Max at Slow Process Corner)
-  Requirement:            10.000ns  (cop_clk rise@10.000ns - cop_clk rise@0.000ns)
-  Data Path Delay:        12.640ns  (logic 2.068ns (16.361%)  route 10.572ns (83.639%))
-  Logic Levels:           13  (LUT2=1 LUT3=1 LUT4=1 LUT5=2 LUT6=8)
-  Clock Path Skew:        -0.004ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    1.777ns = ( 11.777 - 10.000 ) 
-    Source Clock Delay      (SCD):    1.912ns
-    Clock Pessimism Removal (CPR):    0.131ns
-  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
-    Total System Jitter     (TSJ):    0.071ns
-    Total Input Jitter      (TIJ):    0.000ns
-    Discrete Jitter          (DJ):    0.000ns
-    Phase Error              (PE):    0.000ns
-
-    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
-  -------------------------------------------------------------------    -------------------
-                         (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
-                                                      0.000     0.000 r  cop_clk
-                         net (fo=7003, unset)         1.912     1.912    loader/cop_clk
-    SLICE_X88Y107        FDPE                                         r  loader/crc_state_reg[7]/C
-  -------------------------------------------------------------------    -------------------
-    SLICE_X88Y107        FDPE (Prop_fdpe_C_Q)         0.456     2.368 r  loader/crc_state_reg[7]/Q
-                         net (fo=11, routed)          0.783     3.151    loader/crc_state_reg_n_0_[7]
-    SLICE_X87Y109        LUT4 (Prop_lut4_I1_O)        0.124     3.275 r  loader/crc_state[30]_i_15/O
-                         net (fo=11, routed)          0.805     4.080    loader/crc_state[30]_i_15_n_0
-    SLICE_X85Y108        LUT6 (Prop_lut6_I5_O)        0.124     4.204 r  loader/crc_state[11]_i_42/O
-                         net (fo=12, routed)          1.093     5.297    loader/crc_state[11]_i_42_n_0
-    SLICE_X83Y109        LUT6 (Prop_lut6_I3_O)        0.124     5.421 r  loader/crc_state[31]_i_23/O
-                         net (fo=9, routed)           0.866     6.287    loader/crc_state[31]_i_23_n_0
-    SLICE_X83Y110        LUT6 (Prop_lut6_I0_O)        0.124     6.411 r  loader/crc_state[31]_i_20/O
-                         net (fo=5, routed)           0.653     7.064    loader/crc_state[31]_i_20_n_0
-    SLICE_X82Y112        LUT6 (Prop_lut6_I0_O)        0.124     7.188 r  loader/crc_state[31]_i_14/O
-                         net (fo=7, routed)           0.821     8.009    loader/crc_state[31]_i_14_n_0
-    SLICE_X83Y114        LUT6 (Prop_lut6_I3_O)        0.124     8.133 r  loader/crc_state[25]_i_25/O
-                         net (fo=6, routed)           0.825     8.959    loader/crc_state[25]_i_25_n_0
-    SLICE_X85Y113        LUT5 (Prop_lut5_I0_O)        0.124     9.083 r  loader/crc_state[25]_i_13/O
-                         net (fo=4, routed)           0.845     9.928    loader/crc_state[25]_i_13_n_0
-    SLICE_X90Y114        LUT3 (Prop_lut3_I1_O)        0.124    10.052 r  loader/crc_state[25]_i_18/O
-                         net (fo=9, routed)           0.880    10.932    loader/crc_state[25]_i_18_n_0
-    SLICE_X92Y113        LUT6 (Prop_lut6_I4_O)        0.124    11.056 r  loader/crc_state[16]_i_10/O
-                         net (fo=7, routed)           0.723    11.779    loader/crc_state[16]_i_10_n_0
-    SLICE_X88Y112        LUT5 (Prop_lut5_I4_O)        0.124    11.903 r  loader/crc_state[25]_i_11/O
-                         net (fo=1, routed)           0.777    12.680    loader/crc_state[25]_i_11_n_0
-    SLICE_X89Y109        LUT6 (Prop_lut6_I0_O)        0.124    12.804 r  loader/crc_state[25]_i_4/O
-                         net (fo=9, routed)           0.588    13.392    loader/crc_state[25]_i_4_n_0
-    SLICE_X90Y109        LUT2 (Prop_lut2_I1_O)        0.124    13.516 r  loader/crc_state[26]_i_3/O
-                         net (fo=4, routed)           0.911    14.428    loader/crc_state[26]_i_3_n_0
-    SLICE_X91Y109        LUT6 (Prop_lut6_I1_O)        0.124    14.552 r  loader/crc32_o[26]_i_1/O
-                         net (fo=1, routed)           0.000    14.552    loader/p_1_in[26]
-    SLICE_X91Y109        FDCE                                         r  loader/crc32_o_reg[26]/D
-  -------------------------------------------------------------------    -------------------
-
-                         (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
-                                                      0.000    10.000 r  cop_clk
-                         net (fo=7003, unset)         1.777    11.777    loader/cop_clk
-    SLICE_X91Y109        FDCE                                         r  loader/crc32_o_reg[26]/C
-                         clock pessimism              0.131    11.908    <hidden>
-                         clock uncertainty           -0.035    11.873    <hidden>
-    SLICE_X91Y109        FDCE (Setup_fdce_C_D)        0.031    11.904    loader/crc32_o_reg[26]
-  -------------------------------------------------------------------
-                         required time                         11.904    <hidden>
-                         arrival time                         -14.552    <hidden>
-  -------------------------------------------------------------------
-                         slack                                 -2.648    <hidden>
-
-Slack (VIOLATED) :        -2.632ns  (required time - arrival time)
-  Source:                 loader/crc_state_reg[7]/C
-                            (rising edge-triggered cell FDPE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            loader/crc32_o_reg[16]/D
-                            (rising edge-triggered cell FDCE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Path Group:             cop_clk
-  Path Type:              Setup (Max at Slow Process Corner)
-  Requirement:            10.000ns  (cop_clk rise@10.000ns - cop_clk rise@0.000ns)
-  Data Path Delay:        12.623ns  (logic 2.068ns (16.383%)  route 10.555ns (83.617%))
-  Logic Levels:           13  (LUT2=1 LUT3=1 LUT4=1 LUT5=2 LUT6=8)
-  Clock Path Skew:        -0.003ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    1.778ns = ( 11.778 - 10.000 ) 
-    Source Clock Delay      (SCD):    1.912ns
-    Clock Pessimism Removal (CPR):    0.131ns
-  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
-    Total System Jitter     (TSJ):    0.071ns
-    Total Input Jitter      (TIJ):    0.000ns
-    Discrete Jitter          (DJ):    0.000ns
-    Phase Error              (PE):    0.000ns
-
-    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
-  -------------------------------------------------------------------    -------------------
-                         (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
-                                                      0.000     0.000 r  cop_clk
-                         net (fo=7003, unset)         1.912     1.912    loader/cop_clk
-    SLICE_X88Y107        FDPE                                         r  loader/crc_state_reg[7]/C
-  -------------------------------------------------------------------    -------------------
-    SLICE_X88Y107        FDPE (Prop_fdpe_C_Q)         0.456     2.368 r  loader/crc_state_reg[7]/Q
-                         net (fo=11, routed)          0.783     3.151    loader/crc_state_reg_n_0_[7]
-    SLICE_X87Y109        LUT4 (Prop_lut4_I1_O)        0.124     3.275 r  loader/crc_state[30]_i_15/O
-                         net (fo=11, routed)          0.805     4.080    loader/crc_state[30]_i_15_n_0
-    SLICE_X85Y108        LUT6 (Prop_lut6_I5_O)        0.124     4.204 r  loader/crc_state[11]_i_42/O
-                         net (fo=12, routed)          1.093     5.297    loader/crc_state[11]_i_42_n_0
-    SLICE_X83Y109        LUT6 (Prop_lut6_I3_O)        0.124     5.421 r  loader/crc_state[31]_i_23/O
-                         net (fo=9, routed)           0.866     6.287    loader/crc_state[31]_i_23_n_0
-    SLICE_X83Y110        LUT6 (Prop_lut6_I0_O)        0.124     6.411 r  loader/crc_state[31]_i_20/O
-                         net (fo=5, routed)           0.653     7.064    loader/crc_state[31]_i_20_n_0
-    SLICE_X82Y112        LUT6 (Prop_lut6_I0_O)        0.124     7.188 r  loader/crc_state[31]_i_14/O
-                         net (fo=7, routed)           0.821     8.009    loader/crc_state[31]_i_14_n_0
-    SLICE_X83Y114        LUT6 (Prop_lut6_I3_O)        0.124     8.133 r  loader/crc_state[25]_i_25/O
-                         net (fo=6, routed)           0.825     8.959    loader/crc_state[25]_i_25_n_0
-    SLICE_X85Y113        LUT5 (Prop_lut5_I0_O)        0.124     9.083 r  loader/crc_state[25]_i_13/O
-                         net (fo=4, routed)           0.845     9.928    loader/crc_state[25]_i_13_n_0
-    SLICE_X90Y114        LUT3 (Prop_lut3_I1_O)        0.124    10.052 r  loader/crc_state[25]_i_18/O
-                         net (fo=9, routed)           0.880    10.932    loader/crc_state[25]_i_18_n_0
-    SLICE_X92Y113        LUT6 (Prop_lut6_I4_O)        0.124    11.056 r  loader/crc_state[16]_i_10/O
-                         net (fo=7, routed)           0.723    11.779    loader/crc_state[16]_i_10_n_0
-    SLICE_X88Y112        LUT5 (Prop_lut5_I4_O)        0.124    11.903 r  loader/crc_state[25]_i_11/O
-                         net (fo=1, routed)           0.777    12.680    loader/crc_state[25]_i_11_n_0
-    SLICE_X89Y109        LUT6 (Prop_lut6_I0_O)        0.124    12.804 r  loader/crc_state[25]_i_4/O
-                         net (fo=9, routed)           0.588    13.392    loader/crc_state[25]_i_4_n_0
-    SLICE_X90Y109        LUT2 (Prop_lut2_I1_O)        0.124    13.516 r  loader/crc_state[26]_i_3/O
-                         net (fo=4, routed)           0.894    14.411    loader/crc_state[26]_i_3_n_0
-    SLICE_X93Y109        LUT6 (Prop_lut6_I0_O)        0.124    14.535 r  loader/crc32_o[16]_i_1/O
-                         net (fo=1, routed)           0.000    14.535    loader/p_1_in[16]
-    SLICE_X93Y109        FDCE                                         r  loader/crc32_o_reg[16]/D
-  -------------------------------------------------------------------    -------------------
-
-                         (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
-                                                      0.000    10.000 r  cop_clk
-                         net (fo=7003, unset)         1.778    11.778    loader/cop_clk
-    SLICE_X93Y109        FDCE                                         r  loader/crc32_o_reg[16]/C
-                         clock pessimism              0.131    11.909    <hidden>
-                         clock uncertainty           -0.035    11.874    <hidden>
-    SLICE_X93Y109        FDCE (Setup_fdce_C_D)        0.029    11.903    loader/crc32_o_reg[16]
-  -------------------------------------------------------------------
-                         required time                         11.903    <hidden>
-                         arrival time                         -14.535    <hidden>
-  -------------------------------------------------------------------
-                         slack                                 -2.632    <hidden>
-
-Slack (VIOLATED) :        -2.624ns  (required time - arrival time)
-  Source:                 loader/crc_state_reg[7]/C
-                            (rising edge-triggered cell FDPE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            loader/crc_state_reg[19]/D
-                            (rising edge-triggered cell FDPE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Path Group:             cop_clk
-  Path Type:              Setup (Max at Slow Process Corner)
-  Requirement:            10.000ns  (cop_clk rise@10.000ns - cop_clk rise@0.000ns)
-  Data Path Delay:        12.597ns  (logic 2.068ns (16.417%)  route 10.529ns (83.583%))
-  Logic Levels:           13  (LUT3=1 LUT4=3 LUT5=3 LUT6=6)
-  Clock Path Skew:        -0.023ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    1.720ns = ( 11.720 - 10.000 ) 
-    Source Clock Delay      (SCD):    1.912ns
-    Clock Pessimism Removal (CPR):    0.169ns
-  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
-    Total System Jitter     (TSJ):    0.071ns
-    Total Input Jitter      (TIJ):    0.000ns
-    Discrete Jitter          (DJ):    0.000ns
-    Phase Error              (PE):    0.000ns
-
-    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
-  -------------------------------------------------------------------    -------------------
-                         (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
-                                                      0.000     0.000 r  cop_clk
-                         net (fo=7003, unset)         1.912     1.912    loader/cop_clk
-    SLICE_X88Y107        FDPE                                         r  loader/crc_state_reg[7]/C
-  -------------------------------------------------------------------    -------------------
-    SLICE_X88Y107        FDPE (Prop_fdpe_C_Q)         0.456     2.368 r  loader/crc_state_reg[7]/Q
-                         net (fo=11, routed)          0.783     3.151    loader/crc_state_reg_n_0_[7]
-    SLICE_X87Y109        LUT4 (Prop_lut4_I1_O)        0.124     3.275 r  loader/crc_state[30]_i_15/O
-                         net (fo=11, routed)          0.805     4.080    loader/crc_state[30]_i_15_n_0
-    SLICE_X85Y108        LUT6 (Prop_lut6_I5_O)        0.124     4.204 r  loader/crc_state[11]_i_42/O
-                         net (fo=12, routed)          1.093     5.297    loader/crc_state[11]_i_42_n_0
-    SLICE_X83Y109        LUT6 (Prop_lut6_I3_O)        0.124     5.421 r  loader/crc_state[31]_i_23/O
-                         net (fo=9, routed)           0.866     6.287    loader/crc_state[31]_i_23_n_0
-    SLICE_X83Y110        LUT6 (Prop_lut6_I0_O)        0.124     6.411 r  loader/crc_state[31]_i_20/O
-                         net (fo=5, routed)           0.653     7.064    loader/crc_state[31]_i_20_n_0
-    SLICE_X82Y112        LUT6 (Prop_lut6_I0_O)        0.124     7.188 r  loader/crc_state[31]_i_14/O
-                         net (fo=7, routed)           0.821     8.009    loader/crc_state[31]_i_14_n_0
-    SLICE_X83Y114        LUT6 (Prop_lut6_I3_O)        0.124     8.133 r  loader/crc_state[25]_i_25/O
-                         net (fo=6, routed)           0.825     8.959    loader/crc_state[25]_i_25_n_0
-    SLICE_X85Y113        LUT5 (Prop_lut5_I0_O)        0.124     9.083 r  loader/crc_state[25]_i_13/O
-                         net (fo=4, routed)           0.845     9.928    loader/crc_state[25]_i_13_n_0
-    SLICE_X90Y114        LUT3 (Prop_lut3_I1_O)        0.124    10.052 r  loader/crc_state[25]_i_18/O
-                         net (fo=9, routed)           1.254    11.306    loader/crc_state[25]_i_18_n_0
-    SLICE_X90Y105        LUT5 (Prop_lut5_I2_O)        0.124    11.430 r  loader/crc_state[13]_i_6/O
-                         net (fo=2, routed)           0.673    12.103    loader/crc_state[13]_i_6_n_0
-    SLICE_X90Y105        LUT4 (Prop_lut4_I0_O)        0.124    12.227 r  loader/crc_state[29]_i_7/O
-                         net (fo=2, routed)           0.659    12.886    loader/crc_state[29]_i_7_n_0
-    SLICE_X93Y105        LUT5 (Prop_lut5_I3_O)        0.124    13.010 r  loader/crc_state[29]_i_3/O
-                         net (fo=6, routed)           0.749    13.759    loader/crc_state[29]_i_3_n_0
-    SLICE_X89Y107        LUT4 (Prop_lut4_I3_O)        0.124    13.883 r  loader/crc_state[19]_i_3/O
-                         net (fo=2, routed)           0.501    14.385    loader/crc_state[19]_i_3_n_0
-    SLICE_X88Y106        LUT6 (Prop_lut6_I4_O)        0.124    14.509 r  loader/crc_state[19]_i_1/O
-                         net (fo=1, routed)           0.000    14.509    loader/crc_state[19]_i_1_n_0
-    SLICE_X88Y106        FDPE                                         r  loader/crc_state_reg[19]/D
-  -------------------------------------------------------------------    -------------------
-
-                         (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
-                                                      0.000    10.000 r  cop_clk
-                         net (fo=7003, unset)         1.720    11.720    loader/cop_clk
-    SLICE_X88Y106        FDPE                                         r  loader/crc_state_reg[19]/C
-                         clock pessimism              0.169    11.889    <hidden>
-                         clock uncertainty           -0.035    11.854    <hidden>
-    SLICE_X88Y106        FDPE (Setup_fdpe_C_D)        0.031    11.885    loader/crc_state_reg[19]
-  -------------------------------------------------------------------
-                         required time                         11.885    <hidden>
-                         arrival time                         -14.509    <hidden>
-  -------------------------------------------------------------------
-                         slack                                 -2.624    <hidden>
-
-Slack (VIOLATED) :        -2.567ns  (required time - arrival time)
-  Source:                 loader/crc_state_reg[7]/C
-                            (rising edge-triggered cell FDPE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            loader/crc_state_reg[23]/D
-                            (rising edge-triggered cell FDPE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Path Group:             cop_clk
-  Path Type:              Setup (Max at Slow Process Corner)
-  Requirement:            10.000ns  (cop_clk rise@10.000ns - cop_clk rise@0.000ns)
-  Data Path Delay:        12.503ns  (logic 2.068ns (16.541%)  route 10.435ns (83.459%))
-  Logic Levels:           13  (LUT2=1 LUT4=4 LUT5=3 LUT6=5)
-  Clock Path Skew:        -0.061ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    1.720ns = ( 11.720 - 10.000 ) 
-    Source Clock Delay      (SCD):    1.912ns
-    Clock Pessimism Removal (CPR):    0.131ns
-  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
-    Total System Jitter     (TSJ):    0.071ns
-    Total Input Jitter      (TIJ):    0.000ns
-    Discrete Jitter          (DJ):    0.000ns
-    Phase Error              (PE):    0.000ns
-
-    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
-  -------------------------------------------------------------------    -------------------
-                         (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
-                                                      0.000     0.000 r  cop_clk
-                         net (fo=7003, unset)         1.912     1.912    loader/cop_clk
-    SLICE_X88Y107        FDPE                                         r  loader/crc_state_reg[7]/C
-  -------------------------------------------------------------------    -------------------
-    SLICE_X88Y107        FDPE (Prop_fdpe_C_Q)         0.456     2.368 r  loader/crc_state_reg[7]/Q
-                         net (fo=11, routed)          0.783     3.151    loader/crc_state_reg_n_0_[7]
-    SLICE_X87Y109        LUT4 (Prop_lut4_I1_O)        0.124     3.275 r  loader/crc_state[30]_i_15/O
-                         net (fo=11, routed)          0.805     4.080    loader/crc_state[30]_i_15_n_0
-    SLICE_X85Y108        LUT6 (Prop_lut6_I5_O)        0.124     4.204 r  loader/crc_state[11]_i_42/O
-                         net (fo=12, routed)          1.093     5.297    loader/crc_state[11]_i_42_n_0
-    SLICE_X83Y109        LUT6 (Prop_lut6_I3_O)        0.124     5.421 r  loader/crc_state[31]_i_23/O
-                         net (fo=9, routed)           0.806     6.228    loader/crc_state[31]_i_23_n_0
-    SLICE_X84Y112        LUT4 (Prop_lut4_I0_O)        0.124     6.352 r  loader/crc_state[11]_i_30/O
-                         net (fo=7, routed)           0.829     7.181    loader/crc_state[11]_i_30_n_0
-    SLICE_X82Y114        LUT5 (Prop_lut5_I0_O)        0.124     7.305 r  loader/crc_state[29]_i_37/O
-                         net (fo=1, routed)           0.743     8.048    loader/crc_state[29]_i_37_n_0
-    SLICE_X86Y113        LUT6 (Prop_lut6_I5_O)        0.124     8.172 r  loader/crc_state[29]_i_22/O
-                         net (fo=9, routed)           0.667     8.839    loader/crc_state[29]_i_22_n_0
-    SLICE_X89Y114        LUT4 (Prop_lut4_I2_O)        0.124     8.963 r  loader/crc_state[29]_i_27/O
-                         net (fo=9, routed)           1.021     9.985    loader/crc_state[29]_i_27_n_0
-    SLICE_X85Y114        LUT6 (Prop_lut6_I2_O)        0.124    10.109 r  loader/crc_state[17]_i_8/O
-                         net (fo=2, routed)           0.740    10.848    loader/crc_state[17]_i_8_n_0
-    SLICE_X85Y112        LUT4 (Prop_lut4_I1_O)        0.124    10.972 r  loader/crc_state[9]_i_4/O
-                         net (fo=3, routed)           0.457    11.429    loader/crc_state[9]_i_4_n_0
-    SLICE_X84Y112        LUT5 (Prop_lut5_I2_O)        0.124    11.553 r  loader/crc_state[1]_i_2/O
-                         net (fo=3, routed)           0.829    12.383    loader/crc_state[1]_i_2_n_0
-    SLICE_X91Y110        LUT2 (Prop_lut2_I1_O)        0.124    12.507 r  loader/crc_state[3]_i_3/O
-                         net (fo=10, routed)          0.760    13.267    loader/crc_state[3]_i_3_n_0
-    SLICE_X91Y107        LUT5 (Prop_lut5_I3_O)        0.124    13.391 r  loader/crc_state[30]_i_3/O
-                         net (fo=14, routed)          0.900    14.291    loader/crc_state[30]_i_3_n_0
-    SLICE_X85Y106        LUT6 (Prop_lut6_I5_O)        0.124    14.415 r  loader/crc_state[23]_i_1/O
-                         net (fo=1, routed)           0.000    14.415    loader/crc_state[23]_i_1_n_0
-    SLICE_X85Y106        FDPE                                         r  loader/crc_state_reg[23]/D
-  -------------------------------------------------------------------    -------------------
-
-                         (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
-                                                      0.000    10.000 r  cop_clk
-                         net (fo=7003, unset)         1.720    11.720    loader/cop_clk
-    SLICE_X85Y106        FDPE                                         r  loader/crc_state_reg[23]/C
-                         clock pessimism              0.131    11.851    <hidden>
-                         clock uncertainty           -0.035    11.816    <hidden>
-    SLICE_X85Y106        FDPE (Setup_fdpe_C_D)        0.032    11.848    loader/crc_state_reg[23]
-  -------------------------------------------------------------------
-                         required time                         11.848    <hidden>
-                         arrival time                         -14.415    <hidden>
-  -------------------------------------------------------------------
-                         slack                                 -2.567    <hidden>
-
-Slack (VIOLATED) :        -2.545ns  (required time - arrival time)
-  Source:                 loader/crc_state_reg[7]/C
-                            (rising edge-triggered cell FDPE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            loader/crc_state_reg[26]/D
-                            (rising edge-triggered cell FDPE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Path Group:             cop_clk
-  Path Type:              Setup (Max at Slow Process Corner)
-  Requirement:            10.000ns  (cop_clk rise@10.000ns - cop_clk rise@0.000ns)
-  Data Path Delay:        12.536ns  (logic 2.068ns (16.496%)  route 10.468ns (83.504%))
-  Logic Levels:           13  (LUT2=1 LUT3=1 LUT4=1 LUT5=2 LUT6=8)
-  Clock Path Skew:        -0.002ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    1.779ns = ( 11.779 - 10.000 ) 
-    Source Clock Delay      (SCD):    1.912ns
-    Clock Pessimism Removal (CPR):    0.131ns
-  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
-    Total System Jitter     (TSJ):    0.071ns
-    Total Input Jitter      (TIJ):    0.000ns
-    Discrete Jitter          (DJ):    0.000ns
-    Phase Error              (PE):    0.000ns
-
-    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
-  -------------------------------------------------------------------    -------------------
-                         (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
-                                                      0.000     0.000 r  cop_clk
-                         net (fo=7003, unset)         1.912     1.912    loader/cop_clk
-    SLICE_X88Y107        FDPE                                         r  loader/crc_state_reg[7]/C
-  -------------------------------------------------------------------    -------------------
-    SLICE_X88Y107        FDPE (Prop_fdpe_C_Q)         0.456     2.368 r  loader/crc_state_reg[7]/Q
-                         net (fo=11, routed)          0.783     3.151    loader/crc_state_reg_n_0_[7]
-    SLICE_X87Y109        LUT4 (Prop_lut4_I1_O)        0.124     3.275 r  loader/crc_state[30]_i_15/O
-                         net (fo=11, routed)          0.805     4.080    loader/crc_state[30]_i_15_n_0
-    SLICE_X85Y108        LUT6 (Prop_lut6_I5_O)        0.124     4.204 r  loader/crc_state[11]_i_42/O
-                         net (fo=12, routed)          1.093     5.297    loader/crc_state[11]_i_42_n_0
-    SLICE_X83Y109        LUT6 (Prop_lut6_I3_O)        0.124     5.421 r  loader/crc_state[31]_i_23/O
-                         net (fo=9, routed)           0.866     6.287    loader/crc_state[31]_i_23_n_0
-    SLICE_X83Y110        LUT6 (Prop_lut6_I0_O)        0.124     6.411 r  loader/crc_state[31]_i_20/O
-                         net (fo=5, routed)           0.653     7.064    loader/crc_state[31]_i_20_n_0
-    SLICE_X82Y112        LUT6 (Prop_lut6_I0_O)        0.124     7.188 r  loader/crc_state[31]_i_14/O
-                         net (fo=7, routed)           0.821     8.009    loader/crc_state[31]_i_14_n_0
-    SLICE_X83Y114        LUT6 (Prop_lut6_I3_O)        0.124     8.133 r  loader/crc_state[25]_i_25/O
-                         net (fo=6, routed)           0.825     8.959    loader/crc_state[25]_i_25_n_0
-    SLICE_X85Y113        LUT5 (Prop_lut5_I0_O)        0.124     9.083 r  loader/crc_state[25]_i_13/O
-                         net (fo=4, routed)           0.845     9.928    loader/crc_state[25]_i_13_n_0
-    SLICE_X90Y114        LUT3 (Prop_lut3_I1_O)        0.124    10.052 r  loader/crc_state[25]_i_18/O
-                         net (fo=9, routed)           0.880    10.932    loader/crc_state[25]_i_18_n_0
-    SLICE_X92Y113        LUT6 (Prop_lut6_I4_O)        0.124    11.056 r  loader/crc_state[16]_i_10/O
-                         net (fo=7, routed)           0.723    11.779    loader/crc_state[16]_i_10_n_0
-    SLICE_X88Y112        LUT5 (Prop_lut5_I4_O)        0.124    11.903 r  loader/crc_state[25]_i_11/O
-                         net (fo=1, routed)           0.777    12.680    loader/crc_state[25]_i_11_n_0
-    SLICE_X89Y109        LUT6 (Prop_lut6_I0_O)        0.124    12.804 r  loader/crc_state[25]_i_4/O
-                         net (fo=9, routed)           0.588    13.392    loader/crc_state[25]_i_4_n_0
-    SLICE_X90Y109        LUT2 (Prop_lut2_I1_O)        0.124    13.516 r  loader/crc_state[26]_i_3/O
-                         net (fo=4, routed)           0.808    14.324    loader/crc_state[26]_i_3_n_0
-    SLICE_X93Y108        LUT6 (Prop_lut6_I4_O)        0.124    14.448 r  loader/crc_state[26]_i_1/O
-                         net (fo=1, routed)           0.000    14.448    loader/crc_state[26]_i_1_n_0
-    SLICE_X93Y108        FDPE                                         r  loader/crc_state_reg[26]/D
-  -------------------------------------------------------------------    -------------------
-
-                         (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
-                                                      0.000    10.000 r  cop_clk
-                         net (fo=7003, unset)         1.779    11.779    loader/cop_clk
-    SLICE_X93Y108        FDPE                                         r  loader/crc_state_reg[26]/C
-                         clock pessimism              0.131    11.910    <hidden>
-                         clock uncertainty           -0.035    11.875    <hidden>
-    SLICE_X93Y108        FDPE (Setup_fdpe_C_D)        0.029    11.904    loader/crc_state_reg[26]
-  -------------------------------------------------------------------
-                         required time                         11.904    <hidden>
-                         arrival time                         -14.448    <hidden>
-  -------------------------------------------------------------------
-                         slack                                 -2.545    <hidden>
-
-Slack (VIOLATED) :        -2.532ns  (required time - arrival time)
-  Source:                 loader/crc_state_reg[7]/C
-                            (rising edge-triggered cell FDPE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            loader/crc_state_reg[13]/D
-                            (rising edge-triggered cell FDPE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Path Group:             cop_clk
-  Path Type:              Setup (Max at Slow Process Corner)
-  Requirement:            10.000ns  (cop_clk rise@10.000ns - cop_clk rise@0.000ns)
-  Data Path Delay:        12.515ns  (logic 2.068ns (16.524%)  route 10.447ns (83.476%))
-  Logic Levels:           13  (LUT2=1 LUT3=1 LUT4=3 LUT5=2 LUT6=6)
-  Clock Path Skew:        -0.062ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    1.719ns = ( 11.719 - 10.000 ) 
-    Source Clock Delay      (SCD):    1.912ns
-    Clock Pessimism Removal (CPR):    0.131ns
-  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
-    Total System Jitter     (TSJ):    0.071ns
-    Total Input Jitter      (TIJ):    0.000ns
-    Discrete Jitter          (DJ):    0.000ns
-    Phase Error              (PE):    0.000ns
-
-    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
-  -------------------------------------------------------------------    -------------------
-                         (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
-                                                      0.000     0.000 r  cop_clk
-                         net (fo=7003, unset)         1.912     1.912    loader/cop_clk
-    SLICE_X88Y107        FDPE                                         r  loader/crc_state_reg[7]/C
-  -------------------------------------------------------------------    -------------------
-    SLICE_X88Y107        FDPE (Prop_fdpe_C_Q)         0.456     2.368 r  loader/crc_state_reg[7]/Q
-                         net (fo=11, routed)          0.783     3.151    loader/crc_state_reg_n_0_[7]
-    SLICE_X87Y109        LUT4 (Prop_lut4_I1_O)        0.124     3.275 r  loader/crc_state[30]_i_15/O
-                         net (fo=11, routed)          0.805     4.080    loader/crc_state[30]_i_15_n_0
-    SLICE_X85Y108        LUT6 (Prop_lut6_I5_O)        0.124     4.204 r  loader/crc_state[11]_i_42/O
-                         net (fo=12, routed)          1.093     5.297    loader/crc_state[11]_i_42_n_0
-    SLICE_X83Y109        LUT6 (Prop_lut6_I3_O)        0.124     5.421 r  loader/crc_state[31]_i_23/O
-                         net (fo=9, routed)           0.866     6.287    loader/crc_state[31]_i_23_n_0
-    SLICE_X83Y110        LUT6 (Prop_lut6_I0_O)        0.124     6.411 r  loader/crc_state[31]_i_20/O
-                         net (fo=5, routed)           0.653     7.064    loader/crc_state[31]_i_20_n_0
-    SLICE_X82Y112        LUT6 (Prop_lut6_I0_O)        0.124     7.188 r  loader/crc_state[31]_i_14/O
-                         net (fo=7, routed)           0.821     8.009    loader/crc_state[31]_i_14_n_0
-    SLICE_X83Y114        LUT6 (Prop_lut6_I3_O)        0.124     8.133 r  loader/crc_state[25]_i_25/O
-                         net (fo=6, routed)           0.825     8.959    loader/crc_state[25]_i_25_n_0
-    SLICE_X85Y113        LUT5 (Prop_lut5_I0_O)        0.124     9.083 r  loader/crc_state[25]_i_13/O
-                         net (fo=4, routed)           0.845     9.928    loader/crc_state[25]_i_13_n_0
-    SLICE_X90Y114        LUT3 (Prop_lut3_I1_O)        0.124    10.052 r  loader/crc_state[25]_i_18/O
-                         net (fo=9, routed)           1.254    11.306    loader/crc_state[25]_i_18_n_0
-    SLICE_X90Y105        LUT5 (Prop_lut5_I2_O)        0.124    11.430 r  loader/crc_state[13]_i_6/O
-                         net (fo=2, routed)           0.673    12.103    loader/crc_state[13]_i_6_n_0
-    SLICE_X90Y105        LUT4 (Prop_lut4_I0_O)        0.124    12.227 r  loader/crc_state[29]_i_7/O
-                         net (fo=2, routed)           0.583    12.810    loader/crc_state[29]_i_7_n_0
-    SLICE_X91Y106        LUT4 (Prop_lut4_I1_O)        0.124    12.934 r  loader/crc_state[5]_i_4/O
-                         net (fo=3, routed)           0.164    13.098    loader/crc_state[5]_i_4_n_0
-    SLICE_X91Y106        LUT2 (Prop_lut2_I1_O)        0.124    13.222 r  loader/crc_state[27]_i_5/O
-                         net (fo=16, routed)          1.081    14.303    loader/crc_state[27]_i_5_n_0
-    SLICE_X82Y108        LUT6 (Prop_lut6_I5_O)        0.124    14.427 r  loader/crc_state[13]_i_1/O
-                         net (fo=1, routed)           0.000    14.427    loader/crc_state[13]_i_1_n_0
-    SLICE_X82Y108        FDPE                                         r  loader/crc_state_reg[13]/D
-  -------------------------------------------------------------------    -------------------
-
-                         (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
-                                                      0.000    10.000 r  cop_clk
-                         net (fo=7003, unset)         1.719    11.719    loader/cop_clk
-    SLICE_X82Y108        FDPE                                         r  loader/crc_state_reg[13]/C
-                         clock pessimism              0.131    11.850    <hidden>
-                         clock uncertainty           -0.035    11.815    <hidden>
-    SLICE_X82Y108        FDPE (Setup_fdpe_C_D)        0.081    11.896    loader/crc_state_reg[13]
-  -------------------------------------------------------------------
-                         required time                         11.896    <hidden>
-                         arrival time                         -14.427    <hidden>
-  -------------------------------------------------------------------
-                         slack                                 -2.532    <hidden>
-
-Slack (MET) :             19.341ns  (required time - arrival time)
-  Source:                 mailbox/ack_sync2_reg/C
-                            (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
-  Destination:            mailbox/payload_data_reg[22]/CE
-                            (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
-  Path Group:             core_clk
-  Path Type:              Setup (Max at Slow Process Corner)
-  Requirement:            25.000ns  (core_clk rise@25.000ns - core_clk rise@0.000ns)
-  Data Path Delay:        5.229ns  (logic 0.966ns (18.475%)  route 4.263ns (81.525%))
-  Logic Levels:           3  (LUT2=1 LUT6=2)
-  Clock Path Skew:        -0.190ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    1.544ns = ( 26.544 - 25.000 ) 
-    Source Clock Delay      (SCD):    1.849ns
+  Data Path Delay:        8.492ns  (logic 5.175ns (60.938%)  route 3.317ns (39.062%))
+  Logic Levels:           4  (DSP48E1=1 LUT2=1 LUT6=1 MUXF7=1)
+  Clock Path Skew:        0.093ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.697ns = ( 11.697 - 10.000 ) 
+    Source Clock Delay      (SCD):    1.719ns
     Clock Pessimism Removal (CPR):    0.115ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
@@ -742,51 +34,548 @@ Slack (MET) :             19.341ns  (required time - arrival time)
 
     Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
   -------------------------------------------------------------------    -------------------
-                         (clock core_clk rise edge)
-                                                      0.000     0.000 r  <hidden>
-                                                      0.000     0.000 r  core_clk
-                         net (fo=308, unset)          1.849     1.849    mailbox/core_clk
-    SLICE_X107Y78        FDCE                                         r  mailbox/ack_sync2_reg/C
+                         (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  cop_clk
+                         net (fo=7078, unset)         1.719     1.719    engine/engine/cop_clk
+    SLICE_X69Y21         FDCE                                         r  engine/engine/q_send_reg[1]/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X107Y78        FDCE (Prop_fdce_C_Q)         0.419     2.268 r  mailbox/ack_sync2_reg/Q
-                         net (fo=2, routed)           0.918     3.186    mailbox/ack_sync2
-    SLICE_X105Y78        LUT2 (Prop_lut2_I0_O)        0.299     3.485 f  mailbox/core_rdata_o[10]_INST_0_i_3/O
-                         net (fo=2, routed)           0.820     4.305    mailbox/mailbox_pending
-    SLICE_X105Y77        LUT6 (Prop_lut6_I3_O)        0.124     4.429 r  mailbox/req_toggle_i_4/O
-                         net (fo=1, routed)           0.473     4.902    mailbox/req_toggle_i_4_n_0
-    SLICE_X105Y77        LUT6 (Prop_lut6_I2_O)        0.124     5.026 r  mailbox/req_toggle_i_1/O
-                         net (fo=45, routed)          2.052     7.078    mailbox/req_toggle0
-    SLICE_X87Y91         FDCE                                         r  mailbox/payload_data_reg[22]/CE
+    SLICE_X69Y21         FDCE (Prop_fdce_C_Q)         0.456     2.175 r  engine/engine/q_send_reg[1]/Q
+                         net (fo=140, routed)         1.010     3.185    engine/engine/requant_lanes[1].requant/sel0_32[1]
+    SLICE_X73Y21         LUT6 (Prop_lut6_I2_O)        0.124     3.309 r  engine/engine/requant_lanes[1].requant/product0_i_96__0/O
+                         net (fo=1, routed)           0.000     3.309    engine/engine/requant_lanes[1].requant/product0_i_96__0_n_0
+    SLICE_X73Y21         MUXF7 (Prop_muxf7_I0_O)      0.212     3.521 r  engine/engine/requant_lanes[1].requant/product0_i_33__0/O
+                         net (fo=32, routed)          1.131     4.652    engine/engine/requant_lanes[1].requant/product0_i_33__0_n_0
+    SLICE_X73Y23         LUT2 (Prop_lut2_I0_O)        0.324     4.976 r  engine/engine/requant_lanes[1].requant/product0_i_1__0/O
+                         net (fo=20, routed)          1.175     6.150    engine/engine/requant_lanes[1].requant/value[31]
+    DSP48_X3Y8           DSP48E1 (Prop_dsp48e1_B[15]_PCOUT[0])
+                                                      4.059    10.209 r  engine/engine/requant_lanes[1].requant/product0/PCOUT[0]
+                         net (fo=1, routed)           0.002    10.211    engine/engine/requant_lanes[1].requant/product0_n_153
+    DSP48_X3Y9           DSP48E1                                      r  engine/engine/requant_lanes[1].requant/product_reg/PCIN[0]
   -------------------------------------------------------------------    -------------------
 
-                         (clock core_clk rise edge)
-                                                     25.000    25.000 r  <hidden>
-                                                      0.000    25.000 r  core_clk
-                         net (fo=308, unset)          1.544    26.544    mailbox/core_clk
-    SLICE_X87Y91         FDCE                                         r  mailbox/payload_data_reg[22]/C
-                         clock pessimism              0.115    26.659    <hidden>
-                         clock uncertainty           -0.035    26.624    <hidden>
-    SLICE_X87Y91         FDCE (Setup_fdce_C_CE)      -0.205    26.419    mailbox/payload_data_reg[22]
+                         (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  cop_clk
+                         net (fo=7078, unset)         1.697    11.697    engine/engine/requant_lanes[1].requant/cop_clk
+    DSP48_X3Y9           DSP48E1                                      r  engine/engine/requant_lanes[1].requant/product_reg/CLK
+                         clock pessimism              0.115    11.812    <hidden>
+                         clock uncertainty           -0.035    11.776    <hidden>
+    DSP48_X3Y9           DSP48E1 (Setup_dsp48e1_CLK_PCIN[0])
+                                                     -1.400    10.376    engine/engine/requant_lanes[1].requant/product_reg
   -------------------------------------------------------------------
-                         required time                         26.419    <hidden>
-                         arrival time                          -7.078    <hidden>
+                         required time                         10.376    <hidden>
+                         arrival time                         -10.211    <hidden>
   -------------------------------------------------------------------
-                         slack                                 19.341    <hidden>
+                         slack                                  0.165    <hidden>
 
-Slack (MET) :             19.341ns  (required time - arrival time)
-  Source:                 mailbox/ack_sync2_reg/C
+Slack (MET) :             0.165ns  (required time - arrival time)
+  Source:                 engine/engine/q_send_reg[1]/C
+                            (rising edge-triggered cell FDCE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/engine/requant_lanes[1].requant/product_reg/PCIN[10]
+                            (rising edge-triggered cell DSP48E1 clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cop_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cop_clk rise@10.000ns - cop_clk rise@0.000ns)
+  Data Path Delay:        8.492ns  (logic 5.175ns (60.938%)  route 3.317ns (39.062%))
+  Logic Levels:           4  (DSP48E1=1 LUT2=1 LUT6=1 MUXF7=1)
+  Clock Path Skew:        0.093ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.697ns = ( 11.697 - 10.000 ) 
+    Source Clock Delay      (SCD):    1.719ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  cop_clk
+                         net (fo=7078, unset)         1.719     1.719    engine/engine/cop_clk
+    SLICE_X69Y21         FDCE                                         r  engine/engine/q_send_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X69Y21         FDCE (Prop_fdce_C_Q)         0.456     2.175 r  engine/engine/q_send_reg[1]/Q
+                         net (fo=140, routed)         1.010     3.185    engine/engine/requant_lanes[1].requant/sel0_32[1]
+    SLICE_X73Y21         LUT6 (Prop_lut6_I2_O)        0.124     3.309 r  engine/engine/requant_lanes[1].requant/product0_i_96__0/O
+                         net (fo=1, routed)           0.000     3.309    engine/engine/requant_lanes[1].requant/product0_i_96__0_n_0
+    SLICE_X73Y21         MUXF7 (Prop_muxf7_I0_O)      0.212     3.521 r  engine/engine/requant_lanes[1].requant/product0_i_33__0/O
+                         net (fo=32, routed)          1.131     4.652    engine/engine/requant_lanes[1].requant/product0_i_33__0_n_0
+    SLICE_X73Y23         LUT2 (Prop_lut2_I0_O)        0.324     4.976 r  engine/engine/requant_lanes[1].requant/product0_i_1__0/O
+                         net (fo=20, routed)          1.175     6.150    engine/engine/requant_lanes[1].requant/value[31]
+    DSP48_X3Y8           DSP48E1 (Prop_dsp48e1_B[15]_PCOUT[10])
+                                                      4.059    10.209 r  engine/engine/requant_lanes[1].requant/product0/PCOUT[10]
+                         net (fo=1, routed)           0.002    10.211    engine/engine/requant_lanes[1].requant/product0_n_143
+    DSP48_X3Y9           DSP48E1                                      r  engine/engine/requant_lanes[1].requant/product_reg/PCIN[10]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  cop_clk
+                         net (fo=7078, unset)         1.697    11.697    engine/engine/requant_lanes[1].requant/cop_clk
+    DSP48_X3Y9           DSP48E1                                      r  engine/engine/requant_lanes[1].requant/product_reg/CLK
+                         clock pessimism              0.115    11.812    <hidden>
+                         clock uncertainty           -0.035    11.776    <hidden>
+    DSP48_X3Y9           DSP48E1 (Setup_dsp48e1_CLK_PCIN[10])
+                                                     -1.400    10.376    engine/engine/requant_lanes[1].requant/product_reg
+  -------------------------------------------------------------------
+                         required time                         10.376    <hidden>
+                         arrival time                         -10.211    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.165    <hidden>
+
+Slack (MET) :             0.165ns  (required time - arrival time)
+  Source:                 engine/engine/q_send_reg[1]/C
+                            (rising edge-triggered cell FDCE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/engine/requant_lanes[1].requant/product_reg/PCIN[11]
+                            (rising edge-triggered cell DSP48E1 clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cop_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cop_clk rise@10.000ns - cop_clk rise@0.000ns)
+  Data Path Delay:        8.492ns  (logic 5.175ns (60.938%)  route 3.317ns (39.062%))
+  Logic Levels:           4  (DSP48E1=1 LUT2=1 LUT6=1 MUXF7=1)
+  Clock Path Skew:        0.093ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.697ns = ( 11.697 - 10.000 ) 
+    Source Clock Delay      (SCD):    1.719ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  cop_clk
+                         net (fo=7078, unset)         1.719     1.719    engine/engine/cop_clk
+    SLICE_X69Y21         FDCE                                         r  engine/engine/q_send_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X69Y21         FDCE (Prop_fdce_C_Q)         0.456     2.175 r  engine/engine/q_send_reg[1]/Q
+                         net (fo=140, routed)         1.010     3.185    engine/engine/requant_lanes[1].requant/sel0_32[1]
+    SLICE_X73Y21         LUT6 (Prop_lut6_I2_O)        0.124     3.309 r  engine/engine/requant_lanes[1].requant/product0_i_96__0/O
+                         net (fo=1, routed)           0.000     3.309    engine/engine/requant_lanes[1].requant/product0_i_96__0_n_0
+    SLICE_X73Y21         MUXF7 (Prop_muxf7_I0_O)      0.212     3.521 r  engine/engine/requant_lanes[1].requant/product0_i_33__0/O
+                         net (fo=32, routed)          1.131     4.652    engine/engine/requant_lanes[1].requant/product0_i_33__0_n_0
+    SLICE_X73Y23         LUT2 (Prop_lut2_I0_O)        0.324     4.976 r  engine/engine/requant_lanes[1].requant/product0_i_1__0/O
+                         net (fo=20, routed)          1.175     6.150    engine/engine/requant_lanes[1].requant/value[31]
+    DSP48_X3Y8           DSP48E1 (Prop_dsp48e1_B[15]_PCOUT[11])
+                                                      4.059    10.209 r  engine/engine/requant_lanes[1].requant/product0/PCOUT[11]
+                         net (fo=1, routed)           0.002    10.211    engine/engine/requant_lanes[1].requant/product0_n_142
+    DSP48_X3Y9           DSP48E1                                      r  engine/engine/requant_lanes[1].requant/product_reg/PCIN[11]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  cop_clk
+                         net (fo=7078, unset)         1.697    11.697    engine/engine/requant_lanes[1].requant/cop_clk
+    DSP48_X3Y9           DSP48E1                                      r  engine/engine/requant_lanes[1].requant/product_reg/CLK
+                         clock pessimism              0.115    11.812    <hidden>
+                         clock uncertainty           -0.035    11.776    <hidden>
+    DSP48_X3Y9           DSP48E1 (Setup_dsp48e1_CLK_PCIN[11])
+                                                     -1.400    10.376    engine/engine/requant_lanes[1].requant/product_reg
+  -------------------------------------------------------------------
+                         required time                         10.376    <hidden>
+                         arrival time                         -10.211    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.165    <hidden>
+
+Slack (MET) :             0.165ns  (required time - arrival time)
+  Source:                 engine/engine/q_send_reg[1]/C
+                            (rising edge-triggered cell FDCE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/engine/requant_lanes[1].requant/product_reg/PCIN[12]
+                            (rising edge-triggered cell DSP48E1 clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cop_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cop_clk rise@10.000ns - cop_clk rise@0.000ns)
+  Data Path Delay:        8.492ns  (logic 5.175ns (60.938%)  route 3.317ns (39.062%))
+  Logic Levels:           4  (DSP48E1=1 LUT2=1 LUT6=1 MUXF7=1)
+  Clock Path Skew:        0.093ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.697ns = ( 11.697 - 10.000 ) 
+    Source Clock Delay      (SCD):    1.719ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  cop_clk
+                         net (fo=7078, unset)         1.719     1.719    engine/engine/cop_clk
+    SLICE_X69Y21         FDCE                                         r  engine/engine/q_send_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X69Y21         FDCE (Prop_fdce_C_Q)         0.456     2.175 r  engine/engine/q_send_reg[1]/Q
+                         net (fo=140, routed)         1.010     3.185    engine/engine/requant_lanes[1].requant/sel0_32[1]
+    SLICE_X73Y21         LUT6 (Prop_lut6_I2_O)        0.124     3.309 r  engine/engine/requant_lanes[1].requant/product0_i_96__0/O
+                         net (fo=1, routed)           0.000     3.309    engine/engine/requant_lanes[1].requant/product0_i_96__0_n_0
+    SLICE_X73Y21         MUXF7 (Prop_muxf7_I0_O)      0.212     3.521 r  engine/engine/requant_lanes[1].requant/product0_i_33__0/O
+                         net (fo=32, routed)          1.131     4.652    engine/engine/requant_lanes[1].requant/product0_i_33__0_n_0
+    SLICE_X73Y23         LUT2 (Prop_lut2_I0_O)        0.324     4.976 r  engine/engine/requant_lanes[1].requant/product0_i_1__0/O
+                         net (fo=20, routed)          1.175     6.150    engine/engine/requant_lanes[1].requant/value[31]
+    DSP48_X3Y8           DSP48E1 (Prop_dsp48e1_B[15]_PCOUT[12])
+                                                      4.059    10.209 r  engine/engine/requant_lanes[1].requant/product0/PCOUT[12]
+                         net (fo=1, routed)           0.002    10.211    engine/engine/requant_lanes[1].requant/product0_n_141
+    DSP48_X3Y9           DSP48E1                                      r  engine/engine/requant_lanes[1].requant/product_reg/PCIN[12]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  cop_clk
+                         net (fo=7078, unset)         1.697    11.697    engine/engine/requant_lanes[1].requant/cop_clk
+    DSP48_X3Y9           DSP48E1                                      r  engine/engine/requant_lanes[1].requant/product_reg/CLK
+                         clock pessimism              0.115    11.812    <hidden>
+                         clock uncertainty           -0.035    11.776    <hidden>
+    DSP48_X3Y9           DSP48E1 (Setup_dsp48e1_CLK_PCIN[12])
+                                                     -1.400    10.376    engine/engine/requant_lanes[1].requant/product_reg
+  -------------------------------------------------------------------
+                         required time                         10.376    <hidden>
+                         arrival time                         -10.211    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.165    <hidden>
+
+Slack (MET) :             0.165ns  (required time - arrival time)
+  Source:                 engine/engine/q_send_reg[1]/C
+                            (rising edge-triggered cell FDCE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/engine/requant_lanes[1].requant/product_reg/PCIN[13]
+                            (rising edge-triggered cell DSP48E1 clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cop_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cop_clk rise@10.000ns - cop_clk rise@0.000ns)
+  Data Path Delay:        8.492ns  (logic 5.175ns (60.938%)  route 3.317ns (39.062%))
+  Logic Levels:           4  (DSP48E1=1 LUT2=1 LUT6=1 MUXF7=1)
+  Clock Path Skew:        0.093ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.697ns = ( 11.697 - 10.000 ) 
+    Source Clock Delay      (SCD):    1.719ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  cop_clk
+                         net (fo=7078, unset)         1.719     1.719    engine/engine/cop_clk
+    SLICE_X69Y21         FDCE                                         r  engine/engine/q_send_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X69Y21         FDCE (Prop_fdce_C_Q)         0.456     2.175 r  engine/engine/q_send_reg[1]/Q
+                         net (fo=140, routed)         1.010     3.185    engine/engine/requant_lanes[1].requant/sel0_32[1]
+    SLICE_X73Y21         LUT6 (Prop_lut6_I2_O)        0.124     3.309 r  engine/engine/requant_lanes[1].requant/product0_i_96__0/O
+                         net (fo=1, routed)           0.000     3.309    engine/engine/requant_lanes[1].requant/product0_i_96__0_n_0
+    SLICE_X73Y21         MUXF7 (Prop_muxf7_I0_O)      0.212     3.521 r  engine/engine/requant_lanes[1].requant/product0_i_33__0/O
+                         net (fo=32, routed)          1.131     4.652    engine/engine/requant_lanes[1].requant/product0_i_33__0_n_0
+    SLICE_X73Y23         LUT2 (Prop_lut2_I0_O)        0.324     4.976 r  engine/engine/requant_lanes[1].requant/product0_i_1__0/O
+                         net (fo=20, routed)          1.175     6.150    engine/engine/requant_lanes[1].requant/value[31]
+    DSP48_X3Y8           DSP48E1 (Prop_dsp48e1_B[15]_PCOUT[13])
+                                                      4.059    10.209 r  engine/engine/requant_lanes[1].requant/product0/PCOUT[13]
+                         net (fo=1, routed)           0.002    10.211    engine/engine/requant_lanes[1].requant/product0_n_140
+    DSP48_X3Y9           DSP48E1                                      r  engine/engine/requant_lanes[1].requant/product_reg/PCIN[13]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  cop_clk
+                         net (fo=7078, unset)         1.697    11.697    engine/engine/requant_lanes[1].requant/cop_clk
+    DSP48_X3Y9           DSP48E1                                      r  engine/engine/requant_lanes[1].requant/product_reg/CLK
+                         clock pessimism              0.115    11.812    <hidden>
+                         clock uncertainty           -0.035    11.776    <hidden>
+    DSP48_X3Y9           DSP48E1 (Setup_dsp48e1_CLK_PCIN[13])
+                                                     -1.400    10.376    engine/engine/requant_lanes[1].requant/product_reg
+  -------------------------------------------------------------------
+                         required time                         10.376    <hidden>
+                         arrival time                         -10.211    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.165    <hidden>
+
+Slack (MET) :             0.165ns  (required time - arrival time)
+  Source:                 engine/engine/q_send_reg[1]/C
+                            (rising edge-triggered cell FDCE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/engine/requant_lanes[1].requant/product_reg/PCIN[14]
+                            (rising edge-triggered cell DSP48E1 clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cop_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cop_clk rise@10.000ns - cop_clk rise@0.000ns)
+  Data Path Delay:        8.492ns  (logic 5.175ns (60.938%)  route 3.317ns (39.062%))
+  Logic Levels:           4  (DSP48E1=1 LUT2=1 LUT6=1 MUXF7=1)
+  Clock Path Skew:        0.093ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.697ns = ( 11.697 - 10.000 ) 
+    Source Clock Delay      (SCD):    1.719ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  cop_clk
+                         net (fo=7078, unset)         1.719     1.719    engine/engine/cop_clk
+    SLICE_X69Y21         FDCE                                         r  engine/engine/q_send_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X69Y21         FDCE (Prop_fdce_C_Q)         0.456     2.175 r  engine/engine/q_send_reg[1]/Q
+                         net (fo=140, routed)         1.010     3.185    engine/engine/requant_lanes[1].requant/sel0_32[1]
+    SLICE_X73Y21         LUT6 (Prop_lut6_I2_O)        0.124     3.309 r  engine/engine/requant_lanes[1].requant/product0_i_96__0/O
+                         net (fo=1, routed)           0.000     3.309    engine/engine/requant_lanes[1].requant/product0_i_96__0_n_0
+    SLICE_X73Y21         MUXF7 (Prop_muxf7_I0_O)      0.212     3.521 r  engine/engine/requant_lanes[1].requant/product0_i_33__0/O
+                         net (fo=32, routed)          1.131     4.652    engine/engine/requant_lanes[1].requant/product0_i_33__0_n_0
+    SLICE_X73Y23         LUT2 (Prop_lut2_I0_O)        0.324     4.976 r  engine/engine/requant_lanes[1].requant/product0_i_1__0/O
+                         net (fo=20, routed)          1.175     6.150    engine/engine/requant_lanes[1].requant/value[31]
+    DSP48_X3Y8           DSP48E1 (Prop_dsp48e1_B[15]_PCOUT[14])
+                                                      4.059    10.209 r  engine/engine/requant_lanes[1].requant/product0/PCOUT[14]
+                         net (fo=1, routed)           0.002    10.211    engine/engine/requant_lanes[1].requant/product0_n_139
+    DSP48_X3Y9           DSP48E1                                      r  engine/engine/requant_lanes[1].requant/product_reg/PCIN[14]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  cop_clk
+                         net (fo=7078, unset)         1.697    11.697    engine/engine/requant_lanes[1].requant/cop_clk
+    DSP48_X3Y9           DSP48E1                                      r  engine/engine/requant_lanes[1].requant/product_reg/CLK
+                         clock pessimism              0.115    11.812    <hidden>
+                         clock uncertainty           -0.035    11.776    <hidden>
+    DSP48_X3Y9           DSP48E1 (Setup_dsp48e1_CLK_PCIN[14])
+                                                     -1.400    10.376    engine/engine/requant_lanes[1].requant/product_reg
+  -------------------------------------------------------------------
+                         required time                         10.376    <hidden>
+                         arrival time                         -10.211    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.165    <hidden>
+
+Slack (MET) :             0.165ns  (required time - arrival time)
+  Source:                 engine/engine/q_send_reg[1]/C
+                            (rising edge-triggered cell FDCE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/engine/requant_lanes[1].requant/product_reg/PCIN[15]
+                            (rising edge-triggered cell DSP48E1 clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cop_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cop_clk rise@10.000ns - cop_clk rise@0.000ns)
+  Data Path Delay:        8.492ns  (logic 5.175ns (60.938%)  route 3.317ns (39.062%))
+  Logic Levels:           4  (DSP48E1=1 LUT2=1 LUT6=1 MUXF7=1)
+  Clock Path Skew:        0.093ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.697ns = ( 11.697 - 10.000 ) 
+    Source Clock Delay      (SCD):    1.719ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  cop_clk
+                         net (fo=7078, unset)         1.719     1.719    engine/engine/cop_clk
+    SLICE_X69Y21         FDCE                                         r  engine/engine/q_send_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X69Y21         FDCE (Prop_fdce_C_Q)         0.456     2.175 r  engine/engine/q_send_reg[1]/Q
+                         net (fo=140, routed)         1.010     3.185    engine/engine/requant_lanes[1].requant/sel0_32[1]
+    SLICE_X73Y21         LUT6 (Prop_lut6_I2_O)        0.124     3.309 r  engine/engine/requant_lanes[1].requant/product0_i_96__0/O
+                         net (fo=1, routed)           0.000     3.309    engine/engine/requant_lanes[1].requant/product0_i_96__0_n_0
+    SLICE_X73Y21         MUXF7 (Prop_muxf7_I0_O)      0.212     3.521 r  engine/engine/requant_lanes[1].requant/product0_i_33__0/O
+                         net (fo=32, routed)          1.131     4.652    engine/engine/requant_lanes[1].requant/product0_i_33__0_n_0
+    SLICE_X73Y23         LUT2 (Prop_lut2_I0_O)        0.324     4.976 r  engine/engine/requant_lanes[1].requant/product0_i_1__0/O
+                         net (fo=20, routed)          1.175     6.150    engine/engine/requant_lanes[1].requant/value[31]
+    DSP48_X3Y8           DSP48E1 (Prop_dsp48e1_B[15]_PCOUT[15])
+                                                      4.059    10.209 r  engine/engine/requant_lanes[1].requant/product0/PCOUT[15]
+                         net (fo=1, routed)           0.002    10.211    engine/engine/requant_lanes[1].requant/product0_n_138
+    DSP48_X3Y9           DSP48E1                                      r  engine/engine/requant_lanes[1].requant/product_reg/PCIN[15]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  cop_clk
+                         net (fo=7078, unset)         1.697    11.697    engine/engine/requant_lanes[1].requant/cop_clk
+    DSP48_X3Y9           DSP48E1                                      r  engine/engine/requant_lanes[1].requant/product_reg/CLK
+                         clock pessimism              0.115    11.812    <hidden>
+                         clock uncertainty           -0.035    11.776    <hidden>
+    DSP48_X3Y9           DSP48E1 (Setup_dsp48e1_CLK_PCIN[15])
+                                                     -1.400    10.376    engine/engine/requant_lanes[1].requant/product_reg
+  -------------------------------------------------------------------
+                         required time                         10.376    <hidden>
+                         arrival time                         -10.211    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.165    <hidden>
+
+Slack (MET) :             0.165ns  (required time - arrival time)
+  Source:                 engine/engine/q_send_reg[1]/C
+                            (rising edge-triggered cell FDCE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/engine/requant_lanes[1].requant/product_reg/PCIN[16]
+                            (rising edge-triggered cell DSP48E1 clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cop_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cop_clk rise@10.000ns - cop_clk rise@0.000ns)
+  Data Path Delay:        8.492ns  (logic 5.175ns (60.938%)  route 3.317ns (39.062%))
+  Logic Levels:           4  (DSP48E1=1 LUT2=1 LUT6=1 MUXF7=1)
+  Clock Path Skew:        0.093ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.697ns = ( 11.697 - 10.000 ) 
+    Source Clock Delay      (SCD):    1.719ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  cop_clk
+                         net (fo=7078, unset)         1.719     1.719    engine/engine/cop_clk
+    SLICE_X69Y21         FDCE                                         r  engine/engine/q_send_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X69Y21         FDCE (Prop_fdce_C_Q)         0.456     2.175 r  engine/engine/q_send_reg[1]/Q
+                         net (fo=140, routed)         1.010     3.185    engine/engine/requant_lanes[1].requant/sel0_32[1]
+    SLICE_X73Y21         LUT6 (Prop_lut6_I2_O)        0.124     3.309 r  engine/engine/requant_lanes[1].requant/product0_i_96__0/O
+                         net (fo=1, routed)           0.000     3.309    engine/engine/requant_lanes[1].requant/product0_i_96__0_n_0
+    SLICE_X73Y21         MUXF7 (Prop_muxf7_I0_O)      0.212     3.521 r  engine/engine/requant_lanes[1].requant/product0_i_33__0/O
+                         net (fo=32, routed)          1.131     4.652    engine/engine/requant_lanes[1].requant/product0_i_33__0_n_0
+    SLICE_X73Y23         LUT2 (Prop_lut2_I0_O)        0.324     4.976 r  engine/engine/requant_lanes[1].requant/product0_i_1__0/O
+                         net (fo=20, routed)          1.175     6.150    engine/engine/requant_lanes[1].requant/value[31]
+    DSP48_X3Y8           DSP48E1 (Prop_dsp48e1_B[15]_PCOUT[16])
+                                                      4.059    10.209 r  engine/engine/requant_lanes[1].requant/product0/PCOUT[16]
+                         net (fo=1, routed)           0.002    10.211    engine/engine/requant_lanes[1].requant/product0_n_137
+    DSP48_X3Y9           DSP48E1                                      r  engine/engine/requant_lanes[1].requant/product_reg/PCIN[16]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  cop_clk
+                         net (fo=7078, unset)         1.697    11.697    engine/engine/requant_lanes[1].requant/cop_clk
+    DSP48_X3Y9           DSP48E1                                      r  engine/engine/requant_lanes[1].requant/product_reg/CLK
+                         clock pessimism              0.115    11.812    <hidden>
+                         clock uncertainty           -0.035    11.776    <hidden>
+    DSP48_X3Y9           DSP48E1 (Setup_dsp48e1_CLK_PCIN[16])
+                                                     -1.400    10.376    engine/engine/requant_lanes[1].requant/product_reg
+  -------------------------------------------------------------------
+                         required time                         10.376    <hidden>
+                         arrival time                         -10.211    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.165    <hidden>
+
+Slack (MET) :             0.165ns  (required time - arrival time)
+  Source:                 engine/engine/q_send_reg[1]/C
+                            (rising edge-triggered cell FDCE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/engine/requant_lanes[1].requant/product_reg/PCIN[17]
+                            (rising edge-triggered cell DSP48E1 clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cop_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cop_clk rise@10.000ns - cop_clk rise@0.000ns)
+  Data Path Delay:        8.492ns  (logic 5.175ns (60.938%)  route 3.317ns (39.062%))
+  Logic Levels:           4  (DSP48E1=1 LUT2=1 LUT6=1 MUXF7=1)
+  Clock Path Skew:        0.093ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.697ns = ( 11.697 - 10.000 ) 
+    Source Clock Delay      (SCD):    1.719ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  cop_clk
+                         net (fo=7078, unset)         1.719     1.719    engine/engine/cop_clk
+    SLICE_X69Y21         FDCE                                         r  engine/engine/q_send_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X69Y21         FDCE (Prop_fdce_C_Q)         0.456     2.175 r  engine/engine/q_send_reg[1]/Q
+                         net (fo=140, routed)         1.010     3.185    engine/engine/requant_lanes[1].requant/sel0_32[1]
+    SLICE_X73Y21         LUT6 (Prop_lut6_I2_O)        0.124     3.309 r  engine/engine/requant_lanes[1].requant/product0_i_96__0/O
+                         net (fo=1, routed)           0.000     3.309    engine/engine/requant_lanes[1].requant/product0_i_96__0_n_0
+    SLICE_X73Y21         MUXF7 (Prop_muxf7_I0_O)      0.212     3.521 r  engine/engine/requant_lanes[1].requant/product0_i_33__0/O
+                         net (fo=32, routed)          1.131     4.652    engine/engine/requant_lanes[1].requant/product0_i_33__0_n_0
+    SLICE_X73Y23         LUT2 (Prop_lut2_I0_O)        0.324     4.976 r  engine/engine/requant_lanes[1].requant/product0_i_1__0/O
+                         net (fo=20, routed)          1.175     6.150    engine/engine/requant_lanes[1].requant/value[31]
+    DSP48_X3Y8           DSP48E1 (Prop_dsp48e1_B[15]_PCOUT[17])
+                                                      4.059    10.209 r  engine/engine/requant_lanes[1].requant/product0/PCOUT[17]
+                         net (fo=1, routed)           0.002    10.211    engine/engine/requant_lanes[1].requant/product0_n_136
+    DSP48_X3Y9           DSP48E1                                      r  engine/engine/requant_lanes[1].requant/product_reg/PCIN[17]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  cop_clk
+                         net (fo=7078, unset)         1.697    11.697    engine/engine/requant_lanes[1].requant/cop_clk
+    DSP48_X3Y9           DSP48E1                                      r  engine/engine/requant_lanes[1].requant/product_reg/CLK
+                         clock pessimism              0.115    11.812    <hidden>
+                         clock uncertainty           -0.035    11.776    <hidden>
+    DSP48_X3Y9           DSP48E1 (Setup_dsp48e1_CLK_PCIN[17])
+                                                     -1.400    10.376    engine/engine/requant_lanes[1].requant/product_reg
+  -------------------------------------------------------------------
+                         required time                         10.376    <hidden>
+                         arrival time                         -10.211    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.165    <hidden>
+
+Slack (MET) :             0.165ns  (required time - arrival time)
+  Source:                 engine/engine/q_send_reg[1]/C
+                            (rising edge-triggered cell FDCE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/engine/requant_lanes[1].requant/product_reg/PCIN[18]
+                            (rising edge-triggered cell DSP48E1 clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             cop_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (cop_clk rise@10.000ns - cop_clk rise@0.000ns)
+  Data Path Delay:        8.492ns  (logic 5.175ns (60.938%)  route 3.317ns (39.062%))
+  Logic Levels:           4  (DSP48E1=1 LUT2=1 LUT6=1 MUXF7=1)
+  Clock Path Skew:        0.093ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.697ns = ( 11.697 - 10.000 ) 
+    Source Clock Delay      (SCD):    1.719ns
+    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  cop_clk
+                         net (fo=7078, unset)         1.719     1.719    engine/engine/cop_clk
+    SLICE_X69Y21         FDCE                                         r  engine/engine/q_send_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X69Y21         FDCE (Prop_fdce_C_Q)         0.456     2.175 r  engine/engine/q_send_reg[1]/Q
+                         net (fo=140, routed)         1.010     3.185    engine/engine/requant_lanes[1].requant/sel0_32[1]
+    SLICE_X73Y21         LUT6 (Prop_lut6_I2_O)        0.124     3.309 r  engine/engine/requant_lanes[1].requant/product0_i_96__0/O
+                         net (fo=1, routed)           0.000     3.309    engine/engine/requant_lanes[1].requant/product0_i_96__0_n_0
+    SLICE_X73Y21         MUXF7 (Prop_muxf7_I0_O)      0.212     3.521 r  engine/engine/requant_lanes[1].requant/product0_i_33__0/O
+                         net (fo=32, routed)          1.131     4.652    engine/engine/requant_lanes[1].requant/product0_i_33__0_n_0
+    SLICE_X73Y23         LUT2 (Prop_lut2_I0_O)        0.324     4.976 r  engine/engine/requant_lanes[1].requant/product0_i_1__0/O
+                         net (fo=20, routed)          1.175     6.150    engine/engine/requant_lanes[1].requant/value[31]
+    DSP48_X3Y8           DSP48E1 (Prop_dsp48e1_B[15]_PCOUT[18])
+                                                      4.059    10.209 r  engine/engine/requant_lanes[1].requant/product0/PCOUT[18]
+                         net (fo=1, routed)           0.002    10.211    engine/engine/requant_lanes[1].requant/product0_n_135
+    DSP48_X3Y9           DSP48E1                                      r  engine/engine/requant_lanes[1].requant/product_reg/PCIN[18]
+  -------------------------------------------------------------------    -------------------
+
+                         (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
+                                                      0.000    10.000 r  cop_clk
+                         net (fo=7078, unset)         1.697    11.697    engine/engine/requant_lanes[1].requant/cop_clk
+    DSP48_X3Y9           DSP48E1                                      r  engine/engine/requant_lanes[1].requant/product_reg/CLK
+                         clock pessimism              0.115    11.812    <hidden>
+                         clock uncertainty           -0.035    11.776    <hidden>
+    DSP48_X3Y9           DSP48E1 (Setup_dsp48e1_CLK_PCIN[18])
+                                                     -1.400    10.376    engine/engine/requant_lanes[1].requant/product_reg
+  -------------------------------------------------------------------
+                         required time                         10.376    <hidden>
+                         arrival time                         -10.211    <hidden>
+  -------------------------------------------------------------------
+                         slack                                  0.165    <hidden>
+
+Slack (MET) :             18.570ns  (required time - arrival time)
+  Source:                 mailbox/req_toggle_reg/C
                             (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
   Destination:            mailbox/payload_data_reg[23]/CE
                             (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
   Path Group:             core_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            25.000ns  (core_clk rise@25.000ns - core_clk rise@0.000ns)
-  Data Path Delay:        5.229ns  (logic 0.966ns (18.475%)  route 4.263ns (81.525%))
+  Data Path Delay:        6.050ns  (logic 0.890ns (14.710%)  route 5.160ns (85.290%))
   Logic Levels:           3  (LUT2=1 LUT6=2)
-  Clock Path Skew:        -0.190ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    1.544ns = ( 26.544 - 25.000 ) 
-    Source Clock Delay      (SCD):    1.849ns
-    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Path Skew:        -0.139ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.537ns = ( 26.537 - 25.000 ) 
+    Source Clock Delay      (SCD):    1.690ns
+    Clock Pessimism Removal (CPR):    0.014ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
@@ -798,48 +587,48 @@ Slack (MET) :             19.341ns  (required time - arrival time)
                          (clock core_clk rise edge)
                                                       0.000     0.000 r  <hidden>
                                                       0.000     0.000 r  core_clk
-                         net (fo=308, unset)          1.849     1.849    mailbox/core_clk
-    SLICE_X107Y78        FDCE                                         r  mailbox/ack_sync2_reg/C
+                         net (fo=308, unset)          1.690     1.690    mailbox/core_clk
+    SLICE_X30Y82         FDCE                                         r  mailbox/req_toggle_reg/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X107Y78        FDCE (Prop_fdce_C_Q)         0.419     2.268 r  mailbox/ack_sync2_reg/Q
-                         net (fo=2, routed)           0.918     3.186    mailbox/ack_sync2
-    SLICE_X105Y78        LUT2 (Prop_lut2_I0_O)        0.299     3.485 f  mailbox/core_rdata_o[10]_INST_0_i_3/O
-                         net (fo=2, routed)           0.820     4.305    mailbox/mailbox_pending
-    SLICE_X105Y77        LUT6 (Prop_lut6_I3_O)        0.124     4.429 r  mailbox/req_toggle_i_4/O
-                         net (fo=1, routed)           0.473     4.902    mailbox/req_toggle_i_4_n_0
-    SLICE_X105Y77        LUT6 (Prop_lut6_I2_O)        0.124     5.026 r  mailbox/req_toggle_i_1/O
-                         net (fo=45, routed)          2.052     7.078    mailbox/req_toggle0
-    SLICE_X87Y91         FDCE                                         r  mailbox/payload_data_reg[23]/CE
+    SLICE_X30Y82         FDCE (Prop_fdce_C_Q)         0.518     2.208 r  mailbox/req_toggle_reg/Q
+                         net (fo=4, routed)           0.842     3.050    mailbox/req_toggle
+    SLICE_X30Y81         LUT2 (Prop_lut2_I1_O)        0.124     3.174 f  mailbox/core_rdata_o[10]_INST_0_i_3/O
+                         net (fo=2, routed)           1.005     4.180    mailbox/mailbox_pending
+    SLICE_X30Y79         LUT6 (Prop_lut6_I3_O)        0.124     4.304 r  mailbox/req_toggle_i_4/O
+                         net (fo=1, routed)           0.661     4.965    mailbox/req_toggle_i_4_n_0
+    SLICE_X30Y80         LUT6 (Prop_lut6_I2_O)        0.124     5.089 r  mailbox/req_toggle_i_1/O
+                         net (fo=45, routed)          2.651     7.740    mailbox/req_toggle0
+    SLICE_X61Y89         FDCE                                         r  mailbox/payload_data_reg[23]/CE
   -------------------------------------------------------------------    -------------------
 
                          (clock core_clk rise edge)
                                                      25.000    25.000 r  <hidden>
                                                       0.000    25.000 r  core_clk
-                         net (fo=308, unset)          1.544    26.544    mailbox/core_clk
-    SLICE_X87Y91         FDCE                                         r  mailbox/payload_data_reg[23]/C
-                         clock pessimism              0.115    26.659    <hidden>
-                         clock uncertainty           -0.035    26.624    <hidden>
-    SLICE_X87Y91         FDCE (Setup_fdce_C_CE)      -0.205    26.419    mailbox/payload_data_reg[23]
+                         net (fo=308, unset)          1.537    26.537    mailbox/core_clk
+    SLICE_X61Y89         FDCE                                         r  mailbox/payload_data_reg[23]/C
+                         clock pessimism              0.014    26.551    <hidden>
+                         clock uncertainty           -0.035    26.516    <hidden>
+    SLICE_X61Y89         FDCE (Setup_fdce_C_CE)      -0.205    26.311    mailbox/payload_data_reg[23]
   -------------------------------------------------------------------
-                         required time                         26.419    <hidden>
-                         arrival time                          -7.078    <hidden>
+                         required time                         26.311    <hidden>
+                         arrival time                          -7.740    <hidden>
   -------------------------------------------------------------------
-                         slack                                 19.341    <hidden>
+                         slack                                 18.570    <hidden>
 
-Slack (MET) :             19.341ns  (required time - arrival time)
-  Source:                 mailbox/ack_sync2_reg/C
+Slack (MET) :             18.570ns  (required time - arrival time)
+  Source:                 mailbox/req_toggle_reg/C
                             (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
   Destination:            mailbox/payload_data_reg[24]/CE
                             (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
   Path Group:             core_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            25.000ns  (core_clk rise@25.000ns - core_clk rise@0.000ns)
-  Data Path Delay:        5.229ns  (logic 0.966ns (18.475%)  route 4.263ns (81.525%))
+  Data Path Delay:        6.050ns  (logic 0.890ns (14.710%)  route 5.160ns (85.290%))
   Logic Levels:           3  (LUT2=1 LUT6=2)
-  Clock Path Skew:        -0.190ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    1.544ns = ( 26.544 - 25.000 ) 
-    Source Clock Delay      (SCD):    1.849ns
-    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Path Skew:        -0.139ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.537ns = ( 26.537 - 25.000 ) 
+    Source Clock Delay      (SCD):    1.690ns
+    Clock Pessimism Removal (CPR):    0.014ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
@@ -851,48 +640,48 @@ Slack (MET) :             19.341ns  (required time - arrival time)
                          (clock core_clk rise edge)
                                                       0.000     0.000 r  <hidden>
                                                       0.000     0.000 r  core_clk
-                         net (fo=308, unset)          1.849     1.849    mailbox/core_clk
-    SLICE_X107Y78        FDCE                                         r  mailbox/ack_sync2_reg/C
+                         net (fo=308, unset)          1.690     1.690    mailbox/core_clk
+    SLICE_X30Y82         FDCE                                         r  mailbox/req_toggle_reg/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X107Y78        FDCE (Prop_fdce_C_Q)         0.419     2.268 r  mailbox/ack_sync2_reg/Q
-                         net (fo=2, routed)           0.918     3.186    mailbox/ack_sync2
-    SLICE_X105Y78        LUT2 (Prop_lut2_I0_O)        0.299     3.485 f  mailbox/core_rdata_o[10]_INST_0_i_3/O
-                         net (fo=2, routed)           0.820     4.305    mailbox/mailbox_pending
-    SLICE_X105Y77        LUT6 (Prop_lut6_I3_O)        0.124     4.429 r  mailbox/req_toggle_i_4/O
-                         net (fo=1, routed)           0.473     4.902    mailbox/req_toggle_i_4_n_0
-    SLICE_X105Y77        LUT6 (Prop_lut6_I2_O)        0.124     5.026 r  mailbox/req_toggle_i_1/O
-                         net (fo=45, routed)          2.052     7.078    mailbox/req_toggle0
-    SLICE_X87Y91         FDCE                                         r  mailbox/payload_data_reg[24]/CE
+    SLICE_X30Y82         FDCE (Prop_fdce_C_Q)         0.518     2.208 r  mailbox/req_toggle_reg/Q
+                         net (fo=4, routed)           0.842     3.050    mailbox/req_toggle
+    SLICE_X30Y81         LUT2 (Prop_lut2_I1_O)        0.124     3.174 f  mailbox/core_rdata_o[10]_INST_0_i_3/O
+                         net (fo=2, routed)           1.005     4.180    mailbox/mailbox_pending
+    SLICE_X30Y79         LUT6 (Prop_lut6_I3_O)        0.124     4.304 r  mailbox/req_toggle_i_4/O
+                         net (fo=1, routed)           0.661     4.965    mailbox/req_toggle_i_4_n_0
+    SLICE_X30Y80         LUT6 (Prop_lut6_I2_O)        0.124     5.089 r  mailbox/req_toggle_i_1/O
+                         net (fo=45, routed)          2.651     7.740    mailbox/req_toggle0
+    SLICE_X61Y89         FDCE                                         r  mailbox/payload_data_reg[24]/CE
   -------------------------------------------------------------------    -------------------
 
                          (clock core_clk rise edge)
                                                      25.000    25.000 r  <hidden>
                                                       0.000    25.000 r  core_clk
-                         net (fo=308, unset)          1.544    26.544    mailbox/core_clk
-    SLICE_X87Y91         FDCE                                         r  mailbox/payload_data_reg[24]/C
-                         clock pessimism              0.115    26.659    <hidden>
-                         clock uncertainty           -0.035    26.624    <hidden>
-    SLICE_X87Y91         FDCE (Setup_fdce_C_CE)      -0.205    26.419    mailbox/payload_data_reg[24]
+                         net (fo=308, unset)          1.537    26.537    mailbox/core_clk
+    SLICE_X61Y89         FDCE                                         r  mailbox/payload_data_reg[24]/C
+                         clock pessimism              0.014    26.551    <hidden>
+                         clock uncertainty           -0.035    26.516    <hidden>
+    SLICE_X61Y89         FDCE (Setup_fdce_C_CE)      -0.205    26.311    mailbox/payload_data_reg[24]
   -------------------------------------------------------------------
-                         required time                         26.419    <hidden>
-                         arrival time                          -7.078    <hidden>
+                         required time                         26.311    <hidden>
+                         arrival time                          -7.740    <hidden>
   -------------------------------------------------------------------
-                         slack                                 19.341    <hidden>
+                         slack                                 18.570    <hidden>
 
-Slack (MET) :             19.341ns  (required time - arrival time)
-  Source:                 mailbox/ack_sync2_reg/C
+Slack (MET) :             18.570ns  (required time - arrival time)
+  Source:                 mailbox/req_toggle_reg/C
                             (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
   Destination:            mailbox/payload_data_reg[25]/CE
                             (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
   Path Group:             core_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            25.000ns  (core_clk rise@25.000ns - core_clk rise@0.000ns)
-  Data Path Delay:        5.229ns  (logic 0.966ns (18.475%)  route 4.263ns (81.525%))
+  Data Path Delay:        6.050ns  (logic 0.890ns (14.710%)  route 5.160ns (85.290%))
   Logic Levels:           3  (LUT2=1 LUT6=2)
-  Clock Path Skew:        -0.190ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    1.544ns = ( 26.544 - 25.000 ) 
-    Source Clock Delay      (SCD):    1.849ns
-    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Path Skew:        -0.139ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.537ns = ( 26.537 - 25.000 ) 
+    Source Clock Delay      (SCD):    1.690ns
+    Clock Pessimism Removal (CPR):    0.014ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
@@ -904,48 +693,48 @@ Slack (MET) :             19.341ns  (required time - arrival time)
                          (clock core_clk rise edge)
                                                       0.000     0.000 r  <hidden>
                                                       0.000     0.000 r  core_clk
-                         net (fo=308, unset)          1.849     1.849    mailbox/core_clk
-    SLICE_X107Y78        FDCE                                         r  mailbox/ack_sync2_reg/C
+                         net (fo=308, unset)          1.690     1.690    mailbox/core_clk
+    SLICE_X30Y82         FDCE                                         r  mailbox/req_toggle_reg/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X107Y78        FDCE (Prop_fdce_C_Q)         0.419     2.268 r  mailbox/ack_sync2_reg/Q
-                         net (fo=2, routed)           0.918     3.186    mailbox/ack_sync2
-    SLICE_X105Y78        LUT2 (Prop_lut2_I0_O)        0.299     3.485 f  mailbox/core_rdata_o[10]_INST_0_i_3/O
-                         net (fo=2, routed)           0.820     4.305    mailbox/mailbox_pending
-    SLICE_X105Y77        LUT6 (Prop_lut6_I3_O)        0.124     4.429 r  mailbox/req_toggle_i_4/O
-                         net (fo=1, routed)           0.473     4.902    mailbox/req_toggle_i_4_n_0
-    SLICE_X105Y77        LUT6 (Prop_lut6_I2_O)        0.124     5.026 r  mailbox/req_toggle_i_1/O
-                         net (fo=45, routed)          2.052     7.078    mailbox/req_toggle0
-    SLICE_X87Y91         FDCE                                         r  mailbox/payload_data_reg[25]/CE
+    SLICE_X30Y82         FDCE (Prop_fdce_C_Q)         0.518     2.208 r  mailbox/req_toggle_reg/Q
+                         net (fo=4, routed)           0.842     3.050    mailbox/req_toggle
+    SLICE_X30Y81         LUT2 (Prop_lut2_I1_O)        0.124     3.174 f  mailbox/core_rdata_o[10]_INST_0_i_3/O
+                         net (fo=2, routed)           1.005     4.180    mailbox/mailbox_pending
+    SLICE_X30Y79         LUT6 (Prop_lut6_I3_O)        0.124     4.304 r  mailbox/req_toggle_i_4/O
+                         net (fo=1, routed)           0.661     4.965    mailbox/req_toggle_i_4_n_0
+    SLICE_X30Y80         LUT6 (Prop_lut6_I2_O)        0.124     5.089 r  mailbox/req_toggle_i_1/O
+                         net (fo=45, routed)          2.651     7.740    mailbox/req_toggle0
+    SLICE_X61Y89         FDCE                                         r  mailbox/payload_data_reg[25]/CE
   -------------------------------------------------------------------    -------------------
 
                          (clock core_clk rise edge)
                                                      25.000    25.000 r  <hidden>
                                                       0.000    25.000 r  core_clk
-                         net (fo=308, unset)          1.544    26.544    mailbox/core_clk
-    SLICE_X87Y91         FDCE                                         r  mailbox/payload_data_reg[25]/C
-                         clock pessimism              0.115    26.659    <hidden>
-                         clock uncertainty           -0.035    26.624    <hidden>
-    SLICE_X87Y91         FDCE (Setup_fdce_C_CE)      -0.205    26.419    mailbox/payload_data_reg[25]
+                         net (fo=308, unset)          1.537    26.537    mailbox/core_clk
+    SLICE_X61Y89         FDCE                                         r  mailbox/payload_data_reg[25]/C
+                         clock pessimism              0.014    26.551    <hidden>
+                         clock uncertainty           -0.035    26.516    <hidden>
+    SLICE_X61Y89         FDCE (Setup_fdce_C_CE)      -0.205    26.311    mailbox/payload_data_reg[25]
   -------------------------------------------------------------------
-                         required time                         26.419    <hidden>
-                         arrival time                          -7.078    <hidden>
+                         required time                         26.311    <hidden>
+                         arrival time                          -7.740    <hidden>
   -------------------------------------------------------------------
-                         slack                                 19.341    <hidden>
+                         slack                                 18.570    <hidden>
 
-Slack (MET) :             19.341ns  (required time - arrival time)
-  Source:                 mailbox/ack_sync2_reg/C
+Slack (MET) :             18.570ns  (required time - arrival time)
+  Source:                 mailbox/req_toggle_reg/C
                             (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
   Destination:            mailbox/payload_data_reg[26]/CE
                             (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
   Path Group:             core_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            25.000ns  (core_clk rise@25.000ns - core_clk rise@0.000ns)
-  Data Path Delay:        5.229ns  (logic 0.966ns (18.475%)  route 4.263ns (81.525%))
+  Data Path Delay:        6.050ns  (logic 0.890ns (14.710%)  route 5.160ns (85.290%))
   Logic Levels:           3  (LUT2=1 LUT6=2)
-  Clock Path Skew:        -0.190ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    1.544ns = ( 26.544 - 25.000 ) 
-    Source Clock Delay      (SCD):    1.849ns
-    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Path Skew:        -0.139ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.537ns = ( 26.537 - 25.000 ) 
+    Source Clock Delay      (SCD):    1.690ns
+    Clock Pessimism Removal (CPR):    0.014ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
@@ -957,48 +746,101 @@ Slack (MET) :             19.341ns  (required time - arrival time)
                          (clock core_clk rise edge)
                                                       0.000     0.000 r  <hidden>
                                                       0.000     0.000 r  core_clk
-                         net (fo=308, unset)          1.849     1.849    mailbox/core_clk
-    SLICE_X107Y78        FDCE                                         r  mailbox/ack_sync2_reg/C
+                         net (fo=308, unset)          1.690     1.690    mailbox/core_clk
+    SLICE_X30Y82         FDCE                                         r  mailbox/req_toggle_reg/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X107Y78        FDCE (Prop_fdce_C_Q)         0.419     2.268 r  mailbox/ack_sync2_reg/Q
-                         net (fo=2, routed)           0.918     3.186    mailbox/ack_sync2
-    SLICE_X105Y78        LUT2 (Prop_lut2_I0_O)        0.299     3.485 f  mailbox/core_rdata_o[10]_INST_0_i_3/O
-                         net (fo=2, routed)           0.820     4.305    mailbox/mailbox_pending
-    SLICE_X105Y77        LUT6 (Prop_lut6_I3_O)        0.124     4.429 r  mailbox/req_toggle_i_4/O
-                         net (fo=1, routed)           0.473     4.902    mailbox/req_toggle_i_4_n_0
-    SLICE_X105Y77        LUT6 (Prop_lut6_I2_O)        0.124     5.026 r  mailbox/req_toggle_i_1/O
-                         net (fo=45, routed)          2.052     7.078    mailbox/req_toggle0
-    SLICE_X87Y91         FDCE                                         r  mailbox/payload_data_reg[26]/CE
+    SLICE_X30Y82         FDCE (Prop_fdce_C_Q)         0.518     2.208 r  mailbox/req_toggle_reg/Q
+                         net (fo=4, routed)           0.842     3.050    mailbox/req_toggle
+    SLICE_X30Y81         LUT2 (Prop_lut2_I1_O)        0.124     3.174 f  mailbox/core_rdata_o[10]_INST_0_i_3/O
+                         net (fo=2, routed)           1.005     4.180    mailbox/mailbox_pending
+    SLICE_X30Y79         LUT6 (Prop_lut6_I3_O)        0.124     4.304 r  mailbox/req_toggle_i_4/O
+                         net (fo=1, routed)           0.661     4.965    mailbox/req_toggle_i_4_n_0
+    SLICE_X30Y80         LUT6 (Prop_lut6_I2_O)        0.124     5.089 r  mailbox/req_toggle_i_1/O
+                         net (fo=45, routed)          2.651     7.740    mailbox/req_toggle0
+    SLICE_X61Y89         FDCE                                         r  mailbox/payload_data_reg[26]/CE
   -------------------------------------------------------------------    -------------------
 
                          (clock core_clk rise edge)
                                                      25.000    25.000 r  <hidden>
                                                       0.000    25.000 r  core_clk
-                         net (fo=308, unset)          1.544    26.544    mailbox/core_clk
-    SLICE_X87Y91         FDCE                                         r  mailbox/payload_data_reg[26]/C
-                         clock pessimism              0.115    26.659    <hidden>
-                         clock uncertainty           -0.035    26.624    <hidden>
-    SLICE_X87Y91         FDCE (Setup_fdce_C_CE)      -0.205    26.419    mailbox/payload_data_reg[26]
+                         net (fo=308, unset)          1.537    26.537    mailbox/core_clk
+    SLICE_X61Y89         FDCE                                         r  mailbox/payload_data_reg[26]/C
+                         clock pessimism              0.014    26.551    <hidden>
+                         clock uncertainty           -0.035    26.516    <hidden>
+    SLICE_X61Y89         FDCE (Setup_fdce_C_CE)      -0.205    26.311    mailbox/payload_data_reg[26]
   -------------------------------------------------------------------
-                         required time                         26.419    <hidden>
-                         arrival time                          -7.078    <hidden>
+                         required time                         26.311    <hidden>
+                         arrival time                          -7.740    <hidden>
   -------------------------------------------------------------------
-                         slack                                 19.341    <hidden>
+                         slack                                 18.570    <hidden>
 
-Slack (MET) :             19.341ns  (required time - arrival time)
-  Source:                 mailbox/ack_sync2_reg/C
+Slack (MET) :             18.570ns  (required time - arrival time)
+  Source:                 mailbox/req_toggle_reg/C
+                            (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Destination:            mailbox/payload_data_reg[27]/CE
+                            (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
+  Path Group:             core_clk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            25.000ns  (core_clk rise@25.000ns - core_clk rise@0.000ns)
+  Data Path Delay:        6.050ns  (logic 0.890ns (14.710%)  route 5.160ns (85.290%))
+  Logic Levels:           3  (LUT2=1 LUT6=2)
+  Clock Path Skew:        -0.139ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.537ns = ( 26.537 - 25.000 ) 
+    Source Clock Delay      (SCD):    1.690ns
+    Clock Pessimism Removal (CPR):    0.014ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock core_clk rise edge)
+                                                      0.000     0.000 r  <hidden>
+                                                      0.000     0.000 r  core_clk
+                         net (fo=308, unset)          1.690     1.690    mailbox/core_clk
+    SLICE_X30Y82         FDCE                                         r  mailbox/req_toggle_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X30Y82         FDCE (Prop_fdce_C_Q)         0.518     2.208 r  mailbox/req_toggle_reg/Q
+                         net (fo=4, routed)           0.842     3.050    mailbox/req_toggle
+    SLICE_X30Y81         LUT2 (Prop_lut2_I1_O)        0.124     3.174 f  mailbox/core_rdata_o[10]_INST_0_i_3/O
+                         net (fo=2, routed)           1.005     4.180    mailbox/mailbox_pending
+    SLICE_X30Y79         LUT6 (Prop_lut6_I3_O)        0.124     4.304 r  mailbox/req_toggle_i_4/O
+                         net (fo=1, routed)           0.661     4.965    mailbox/req_toggle_i_4_n_0
+    SLICE_X30Y80         LUT6 (Prop_lut6_I2_O)        0.124     5.089 r  mailbox/req_toggle_i_1/O
+                         net (fo=45, routed)          2.651     7.740    mailbox/req_toggle0
+    SLICE_X61Y89         FDCE                                         r  mailbox/payload_data_reg[27]/CE
+  -------------------------------------------------------------------    -------------------
+
+                         (clock core_clk rise edge)
+                                                     25.000    25.000 r  <hidden>
+                                                      0.000    25.000 r  core_clk
+                         net (fo=308, unset)          1.537    26.537    mailbox/core_clk
+    SLICE_X61Y89         FDCE                                         r  mailbox/payload_data_reg[27]/C
+                         clock pessimism              0.014    26.551    <hidden>
+                         clock uncertainty           -0.035    26.516    <hidden>
+    SLICE_X61Y89         FDCE (Setup_fdce_C_CE)      -0.205    26.311    mailbox/payload_data_reg[27]
+  -------------------------------------------------------------------
+                         required time                         26.311    <hidden>
+                         arrival time                          -7.740    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 18.570    <hidden>
+
+Slack (MET) :             18.570ns  (required time - arrival time)
+  Source:                 mailbox/req_toggle_reg/C
                             (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
   Destination:            mailbox/payload_data_reg[28]/CE
                             (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
   Path Group:             core_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            25.000ns  (core_clk rise@25.000ns - core_clk rise@0.000ns)
-  Data Path Delay:        5.229ns  (logic 0.966ns (18.475%)  route 4.263ns (81.525%))
+  Data Path Delay:        6.050ns  (logic 0.890ns (14.710%)  route 5.160ns (85.290%))
   Logic Levels:           3  (LUT2=1 LUT6=2)
-  Clock Path Skew:        -0.190ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    1.544ns = ( 26.544 - 25.000 ) 
-    Source Clock Delay      (SCD):    1.849ns
-    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Path Skew:        -0.139ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.537ns = ( 26.537 - 25.000 ) 
+    Source Clock Delay      (SCD):    1.690ns
+    Clock Pessimism Removal (CPR):    0.014ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
@@ -1010,48 +852,48 @@ Slack (MET) :             19.341ns  (required time - arrival time)
                          (clock core_clk rise edge)
                                                       0.000     0.000 r  <hidden>
                                                       0.000     0.000 r  core_clk
-                         net (fo=308, unset)          1.849     1.849    mailbox/core_clk
-    SLICE_X107Y78        FDCE                                         r  mailbox/ack_sync2_reg/C
+                         net (fo=308, unset)          1.690     1.690    mailbox/core_clk
+    SLICE_X30Y82         FDCE                                         r  mailbox/req_toggle_reg/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X107Y78        FDCE (Prop_fdce_C_Q)         0.419     2.268 r  mailbox/ack_sync2_reg/Q
-                         net (fo=2, routed)           0.918     3.186    mailbox/ack_sync2
-    SLICE_X105Y78        LUT2 (Prop_lut2_I0_O)        0.299     3.485 f  mailbox/core_rdata_o[10]_INST_0_i_3/O
-                         net (fo=2, routed)           0.820     4.305    mailbox/mailbox_pending
-    SLICE_X105Y77        LUT6 (Prop_lut6_I3_O)        0.124     4.429 r  mailbox/req_toggle_i_4/O
-                         net (fo=1, routed)           0.473     4.902    mailbox/req_toggle_i_4_n_0
-    SLICE_X105Y77        LUT6 (Prop_lut6_I2_O)        0.124     5.026 r  mailbox/req_toggle_i_1/O
-                         net (fo=45, routed)          2.052     7.078    mailbox/req_toggle0
-    SLICE_X87Y91         FDCE                                         r  mailbox/payload_data_reg[28]/CE
+    SLICE_X30Y82         FDCE (Prop_fdce_C_Q)         0.518     2.208 r  mailbox/req_toggle_reg/Q
+                         net (fo=4, routed)           0.842     3.050    mailbox/req_toggle
+    SLICE_X30Y81         LUT2 (Prop_lut2_I1_O)        0.124     3.174 f  mailbox/core_rdata_o[10]_INST_0_i_3/O
+                         net (fo=2, routed)           1.005     4.180    mailbox/mailbox_pending
+    SLICE_X30Y79         LUT6 (Prop_lut6_I3_O)        0.124     4.304 r  mailbox/req_toggle_i_4/O
+                         net (fo=1, routed)           0.661     4.965    mailbox/req_toggle_i_4_n_0
+    SLICE_X30Y80         LUT6 (Prop_lut6_I2_O)        0.124     5.089 r  mailbox/req_toggle_i_1/O
+                         net (fo=45, routed)          2.651     7.740    mailbox/req_toggle0
+    SLICE_X61Y89         FDCE                                         r  mailbox/payload_data_reg[28]/CE
   -------------------------------------------------------------------    -------------------
 
                          (clock core_clk rise edge)
                                                      25.000    25.000 r  <hidden>
                                                       0.000    25.000 r  core_clk
-                         net (fo=308, unset)          1.544    26.544    mailbox/core_clk
-    SLICE_X87Y91         FDCE                                         r  mailbox/payload_data_reg[28]/C
-                         clock pessimism              0.115    26.659    <hidden>
-                         clock uncertainty           -0.035    26.624    <hidden>
-    SLICE_X87Y91         FDCE (Setup_fdce_C_CE)      -0.205    26.419    mailbox/payload_data_reg[28]
+                         net (fo=308, unset)          1.537    26.537    mailbox/core_clk
+    SLICE_X61Y89         FDCE                                         r  mailbox/payload_data_reg[28]/C
+                         clock pessimism              0.014    26.551    <hidden>
+                         clock uncertainty           -0.035    26.516    <hidden>
+    SLICE_X61Y89         FDCE (Setup_fdce_C_CE)      -0.205    26.311    mailbox/payload_data_reg[28]
   -------------------------------------------------------------------
-                         required time                         26.419    <hidden>
-                         arrival time                          -7.078    <hidden>
+                         required time                         26.311    <hidden>
+                         arrival time                          -7.740    <hidden>
   -------------------------------------------------------------------
-                         slack                                 19.341    <hidden>
+                         slack                                 18.570    <hidden>
 
-Slack (MET) :             19.341ns  (required time - arrival time)
-  Source:                 mailbox/ack_sync2_reg/C
+Slack (MET) :             18.570ns  (required time - arrival time)
+  Source:                 mailbox/req_toggle_reg/C
                             (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
   Destination:            mailbox/payload_data_reg[29]/CE
                             (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
   Path Group:             core_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            25.000ns  (core_clk rise@25.000ns - core_clk rise@0.000ns)
-  Data Path Delay:        5.229ns  (logic 0.966ns (18.475%)  route 4.263ns (81.525%))
+  Data Path Delay:        6.050ns  (logic 0.890ns (14.710%)  route 5.160ns (85.290%))
   Logic Levels:           3  (LUT2=1 LUT6=2)
-  Clock Path Skew:        -0.190ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    1.544ns = ( 26.544 - 25.000 ) 
-    Source Clock Delay      (SCD):    1.849ns
-    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Path Skew:        -0.139ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.537ns = ( 26.537 - 25.000 ) 
+    Source Clock Delay      (SCD):    1.690ns
+    Clock Pessimism Removal (CPR):    0.014ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
@@ -1063,48 +905,48 @@ Slack (MET) :             19.341ns  (required time - arrival time)
                          (clock core_clk rise edge)
                                                       0.000     0.000 r  <hidden>
                                                       0.000     0.000 r  core_clk
-                         net (fo=308, unset)          1.849     1.849    mailbox/core_clk
-    SLICE_X107Y78        FDCE                                         r  mailbox/ack_sync2_reg/C
+                         net (fo=308, unset)          1.690     1.690    mailbox/core_clk
+    SLICE_X30Y82         FDCE                                         r  mailbox/req_toggle_reg/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X107Y78        FDCE (Prop_fdce_C_Q)         0.419     2.268 r  mailbox/ack_sync2_reg/Q
-                         net (fo=2, routed)           0.918     3.186    mailbox/ack_sync2
-    SLICE_X105Y78        LUT2 (Prop_lut2_I0_O)        0.299     3.485 f  mailbox/core_rdata_o[10]_INST_0_i_3/O
-                         net (fo=2, routed)           0.820     4.305    mailbox/mailbox_pending
-    SLICE_X105Y77        LUT6 (Prop_lut6_I3_O)        0.124     4.429 r  mailbox/req_toggle_i_4/O
-                         net (fo=1, routed)           0.473     4.902    mailbox/req_toggle_i_4_n_0
-    SLICE_X105Y77        LUT6 (Prop_lut6_I2_O)        0.124     5.026 r  mailbox/req_toggle_i_1/O
-                         net (fo=45, routed)          2.052     7.078    mailbox/req_toggle0
-    SLICE_X87Y91         FDCE                                         r  mailbox/payload_data_reg[29]/CE
+    SLICE_X30Y82         FDCE (Prop_fdce_C_Q)         0.518     2.208 r  mailbox/req_toggle_reg/Q
+                         net (fo=4, routed)           0.842     3.050    mailbox/req_toggle
+    SLICE_X30Y81         LUT2 (Prop_lut2_I1_O)        0.124     3.174 f  mailbox/core_rdata_o[10]_INST_0_i_3/O
+                         net (fo=2, routed)           1.005     4.180    mailbox/mailbox_pending
+    SLICE_X30Y79         LUT6 (Prop_lut6_I3_O)        0.124     4.304 r  mailbox/req_toggle_i_4/O
+                         net (fo=1, routed)           0.661     4.965    mailbox/req_toggle_i_4_n_0
+    SLICE_X30Y80         LUT6 (Prop_lut6_I2_O)        0.124     5.089 r  mailbox/req_toggle_i_1/O
+                         net (fo=45, routed)          2.651     7.740    mailbox/req_toggle0
+    SLICE_X61Y89         FDCE                                         r  mailbox/payload_data_reg[29]/CE
   -------------------------------------------------------------------    -------------------
 
                          (clock core_clk rise edge)
                                                      25.000    25.000 r  <hidden>
                                                       0.000    25.000 r  core_clk
-                         net (fo=308, unset)          1.544    26.544    mailbox/core_clk
-    SLICE_X87Y91         FDCE                                         r  mailbox/payload_data_reg[29]/C
-                         clock pessimism              0.115    26.659    <hidden>
-                         clock uncertainty           -0.035    26.624    <hidden>
-    SLICE_X87Y91         FDCE (Setup_fdce_C_CE)      -0.205    26.419    mailbox/payload_data_reg[29]
+                         net (fo=308, unset)          1.537    26.537    mailbox/core_clk
+    SLICE_X61Y89         FDCE                                         r  mailbox/payload_data_reg[29]/C
+                         clock pessimism              0.014    26.551    <hidden>
+                         clock uncertainty           -0.035    26.516    <hidden>
+    SLICE_X61Y89         FDCE (Setup_fdce_C_CE)      -0.205    26.311    mailbox/payload_data_reg[29]
   -------------------------------------------------------------------
-                         required time                         26.419    <hidden>
-                         arrival time                          -7.078    <hidden>
+                         required time                         26.311    <hidden>
+                         arrival time                          -7.740    <hidden>
   -------------------------------------------------------------------
-                         slack                                 19.341    <hidden>
+                         slack                                 18.570    <hidden>
 
-Slack (MET) :             19.341ns  (required time - arrival time)
-  Source:                 mailbox/ack_sync2_reg/C
+Slack (MET) :             18.570ns  (required time - arrival time)
+  Source:                 mailbox/req_toggle_reg/C
                             (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
   Destination:            mailbox/payload_data_reg[30]/CE
                             (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
   Path Group:             core_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            25.000ns  (core_clk rise@25.000ns - core_clk rise@0.000ns)
-  Data Path Delay:        5.229ns  (logic 0.966ns (18.475%)  route 4.263ns (81.525%))
+  Data Path Delay:        6.050ns  (logic 0.890ns (14.710%)  route 5.160ns (85.290%))
   Logic Levels:           3  (LUT2=1 LUT6=2)
-  Clock Path Skew:        -0.190ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    1.544ns = ( 26.544 - 25.000 ) 
-    Source Clock Delay      (SCD):    1.849ns
-    Clock Pessimism Removal (CPR):    0.115ns
+  Clock Path Skew:        -0.139ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.537ns = ( 26.537 - 25.000 ) 
+    Source Clock Delay      (SCD):    1.690ns
+    Clock Pessimism Removal (CPR):    0.014ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
@@ -1116,48 +958,48 @@ Slack (MET) :             19.341ns  (required time - arrival time)
                          (clock core_clk rise edge)
                                                       0.000     0.000 r  <hidden>
                                                       0.000     0.000 r  core_clk
-                         net (fo=308, unset)          1.849     1.849    mailbox/core_clk
-    SLICE_X107Y78        FDCE                                         r  mailbox/ack_sync2_reg/C
+                         net (fo=308, unset)          1.690     1.690    mailbox/core_clk
+    SLICE_X30Y82         FDCE                                         r  mailbox/req_toggle_reg/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X107Y78        FDCE (Prop_fdce_C_Q)         0.419     2.268 r  mailbox/ack_sync2_reg/Q
-                         net (fo=2, routed)           0.918     3.186    mailbox/ack_sync2
-    SLICE_X105Y78        LUT2 (Prop_lut2_I0_O)        0.299     3.485 f  mailbox/core_rdata_o[10]_INST_0_i_3/O
-                         net (fo=2, routed)           0.820     4.305    mailbox/mailbox_pending
-    SLICE_X105Y77        LUT6 (Prop_lut6_I3_O)        0.124     4.429 r  mailbox/req_toggle_i_4/O
-                         net (fo=1, routed)           0.473     4.902    mailbox/req_toggle_i_4_n_0
-    SLICE_X105Y77        LUT6 (Prop_lut6_I2_O)        0.124     5.026 r  mailbox/req_toggle_i_1/O
-                         net (fo=45, routed)          2.052     7.078    mailbox/req_toggle0
-    SLICE_X87Y91         FDCE                                         r  mailbox/payload_data_reg[30]/CE
+    SLICE_X30Y82         FDCE (Prop_fdce_C_Q)         0.518     2.208 r  mailbox/req_toggle_reg/Q
+                         net (fo=4, routed)           0.842     3.050    mailbox/req_toggle
+    SLICE_X30Y81         LUT2 (Prop_lut2_I1_O)        0.124     3.174 f  mailbox/core_rdata_o[10]_INST_0_i_3/O
+                         net (fo=2, routed)           1.005     4.180    mailbox/mailbox_pending
+    SLICE_X30Y79         LUT6 (Prop_lut6_I3_O)        0.124     4.304 r  mailbox/req_toggle_i_4/O
+                         net (fo=1, routed)           0.661     4.965    mailbox/req_toggle_i_4_n_0
+    SLICE_X30Y80         LUT6 (Prop_lut6_I2_O)        0.124     5.089 r  mailbox/req_toggle_i_1/O
+                         net (fo=45, routed)          2.651     7.740    mailbox/req_toggle0
+    SLICE_X61Y89         FDCE                                         r  mailbox/payload_data_reg[30]/CE
   -------------------------------------------------------------------    -------------------
 
                          (clock core_clk rise edge)
                                                      25.000    25.000 r  <hidden>
                                                       0.000    25.000 r  core_clk
-                         net (fo=308, unset)          1.544    26.544    mailbox/core_clk
-    SLICE_X87Y91         FDCE                                         r  mailbox/payload_data_reg[30]/C
-                         clock pessimism              0.115    26.659    <hidden>
-                         clock uncertainty           -0.035    26.624    <hidden>
-    SLICE_X87Y91         FDCE (Setup_fdce_C_CE)      -0.205    26.419    mailbox/payload_data_reg[30]
+                         net (fo=308, unset)          1.537    26.537    mailbox/core_clk
+    SLICE_X61Y89         FDCE                                         r  mailbox/payload_data_reg[30]/C
+                         clock pessimism              0.014    26.551    <hidden>
+                         clock uncertainty           -0.035    26.516    <hidden>
+    SLICE_X61Y89         FDCE (Setup_fdce_C_CE)      -0.205    26.311    mailbox/payload_data_reg[30]
   -------------------------------------------------------------------
-                         required time                         26.419    <hidden>
-                         arrival time                          -7.078    <hidden>
+                         required time                         26.311    <hidden>
+                         arrival time                          -7.740    <hidden>
   -------------------------------------------------------------------
-                         slack                                 19.341    <hidden>
+                         slack                                 18.570    <hidden>
 
-Slack (MET) :             19.596ns  (required time - arrival time)
-  Source:                 mailbox/ack_sync2_reg/C
+Slack (MET) :             18.851ns  (required time - arrival time)
+  Source:                 mailbox/req_toggle_reg/C
                             (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
-  Destination:            mailbox/payload_offset_reg[11]/CE
+  Destination:            mailbox/payload_data_reg[17]/CE
                             (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
   Path Group:             core_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            25.000ns  (core_clk rise@25.000ns - core_clk rise@0.000ns)
-  Data Path Delay:        5.188ns  (logic 0.966ns (18.621%)  route 4.222ns (81.379%))
+  Data Path Delay:        5.767ns  (logic 0.890ns (15.433%)  route 4.877ns (84.567%))
   Logic Levels:           3  (LUT2=1 LUT6=2)
-  Clock Path Skew:        -0.012ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    1.682ns = ( 26.682 - 25.000 ) 
-    Source Clock Delay      (SCD):    1.849ns
-    Clock Pessimism Removal (CPR):    0.155ns
+  Clock Path Skew:        -0.142ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.534ns = ( 26.534 - 25.000 ) 
+    Source Clock Delay      (SCD):    1.690ns
+    Clock Pessimism Removal (CPR):    0.014ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
@@ -1169,48 +1011,48 @@ Slack (MET) :             19.596ns  (required time - arrival time)
                          (clock core_clk rise edge)
                                                       0.000     0.000 r  <hidden>
                                                       0.000     0.000 r  core_clk
-                         net (fo=308, unset)          1.849     1.849    mailbox/core_clk
-    SLICE_X107Y78        FDCE                                         r  mailbox/ack_sync2_reg/C
+                         net (fo=308, unset)          1.690     1.690    mailbox/core_clk
+    SLICE_X30Y82         FDCE                                         r  mailbox/req_toggle_reg/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X107Y78        FDCE (Prop_fdce_C_Q)         0.419     2.268 r  mailbox/ack_sync2_reg/Q
-                         net (fo=2, routed)           0.918     3.186    mailbox/ack_sync2
-    SLICE_X105Y78        LUT2 (Prop_lut2_I0_O)        0.299     3.485 f  mailbox/core_rdata_o[10]_INST_0_i_3/O
-                         net (fo=2, routed)           0.820     4.305    mailbox/mailbox_pending
-    SLICE_X105Y77        LUT6 (Prop_lut6_I3_O)        0.124     4.429 r  mailbox/req_toggle_i_4/O
-                         net (fo=1, routed)           0.473     4.902    mailbox/req_toggle_i_4_n_0
-    SLICE_X105Y77        LUT6 (Prop_lut6_I2_O)        0.124     5.026 r  mailbox/req_toggle_i_1/O
-                         net (fo=45, routed)          2.011     7.037    mailbox/req_toggle0
-    SLICE_X108Y94        FDCE                                         r  mailbox/payload_offset_reg[11]/CE
+    SLICE_X30Y82         FDCE (Prop_fdce_C_Q)         0.518     2.208 r  mailbox/req_toggle_reg/Q
+                         net (fo=4, routed)           0.842     3.050    mailbox/req_toggle
+    SLICE_X30Y81         LUT2 (Prop_lut2_I1_O)        0.124     3.174 f  mailbox/core_rdata_o[10]_INST_0_i_3/O
+                         net (fo=2, routed)           1.005     4.180    mailbox/mailbox_pending
+    SLICE_X30Y79         LUT6 (Prop_lut6_I3_O)        0.124     4.304 r  mailbox/req_toggle_i_4/O
+                         net (fo=1, routed)           0.661     4.965    mailbox/req_toggle_i_4_n_0
+    SLICE_X30Y80         LUT6 (Prop_lut6_I2_O)        0.124     5.089 r  mailbox/req_toggle_i_1/O
+                         net (fo=45, routed)          2.368     7.457    mailbox/req_toggle0
+    SLICE_X61Y85         FDCE                                         r  mailbox/payload_data_reg[17]/CE
   -------------------------------------------------------------------    -------------------
 
                          (clock core_clk rise edge)
                                                      25.000    25.000 r  <hidden>
                                                       0.000    25.000 r  core_clk
-                         net (fo=308, unset)          1.682    26.682    mailbox/core_clk
-    SLICE_X108Y94        FDCE                                         r  mailbox/payload_offset_reg[11]/C
-                         clock pessimism              0.155    26.837    <hidden>
-                         clock uncertainty           -0.035    26.802    <hidden>
-    SLICE_X108Y94        FDCE (Setup_fdce_C_CE)      -0.169    26.633    mailbox/payload_offset_reg[11]
+                         net (fo=308, unset)          1.534    26.534    mailbox/core_clk
+    SLICE_X61Y85         FDCE                                         r  mailbox/payload_data_reg[17]/C
+                         clock pessimism              0.014    26.548    <hidden>
+                         clock uncertainty           -0.035    26.513    <hidden>
+    SLICE_X61Y85         FDCE (Setup_fdce_C_CE)      -0.205    26.308    mailbox/payload_data_reg[17]
   -------------------------------------------------------------------
-                         required time                         26.633    <hidden>
-                         arrival time                          -7.037    <hidden>
+                         required time                         26.308    <hidden>
+                         arrival time                          -7.457    <hidden>
   -------------------------------------------------------------------
-                         slack                                 19.596    <hidden>
+                         slack                                 18.851    <hidden>
 
-Slack (MET) :             19.596ns  (required time - arrival time)
-  Source:                 mailbox/ack_sync2_reg/C
+Slack (MET) :             18.851ns  (required time - arrival time)
+  Source:                 mailbox/req_toggle_reg/C
                             (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
-  Destination:            mailbox/payload_offset_reg[3]/CE
+  Destination:            mailbox/payload_data_reg[18]/CE
                             (rising edge-triggered cell FDCE clocked by core_clk  {rise@0.000ns fall@12.500ns period=25.000ns})
   Path Group:             core_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            25.000ns  (core_clk rise@25.000ns - core_clk rise@0.000ns)
-  Data Path Delay:        5.188ns  (logic 0.966ns (18.621%)  route 4.222ns (81.379%))
+  Data Path Delay:        5.767ns  (logic 0.890ns (15.433%)  route 4.877ns (84.567%))
   Logic Levels:           3  (LUT2=1 LUT6=2)
-  Clock Path Skew:        -0.012ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    1.682ns = ( 26.682 - 25.000 ) 
-    Source Clock Delay      (SCD):    1.849ns
-    Clock Pessimism Removal (CPR):    0.155ns
+  Clock Path Skew:        -0.142ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    1.534ns = ( 26.534 - 25.000 ) 
+    Source Clock Delay      (SCD):    1.690ns
+    Clock Pessimism Removal (CPR):    0.014ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
@@ -1222,33 +1064,33 @@ Slack (MET) :             19.596ns  (required time - arrival time)
                          (clock core_clk rise edge)
                                                       0.000     0.000 r  <hidden>
                                                       0.000     0.000 r  core_clk
-                         net (fo=308, unset)          1.849     1.849    mailbox/core_clk
-    SLICE_X107Y78        FDCE                                         r  mailbox/ack_sync2_reg/C
+                         net (fo=308, unset)          1.690     1.690    mailbox/core_clk
+    SLICE_X30Y82         FDCE                                         r  mailbox/req_toggle_reg/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X107Y78        FDCE (Prop_fdce_C_Q)         0.419     2.268 r  mailbox/ack_sync2_reg/Q
-                         net (fo=2, routed)           0.918     3.186    mailbox/ack_sync2
-    SLICE_X105Y78        LUT2 (Prop_lut2_I0_O)        0.299     3.485 f  mailbox/core_rdata_o[10]_INST_0_i_3/O
-                         net (fo=2, routed)           0.820     4.305    mailbox/mailbox_pending
-    SLICE_X105Y77        LUT6 (Prop_lut6_I3_O)        0.124     4.429 r  mailbox/req_toggle_i_4/O
-                         net (fo=1, routed)           0.473     4.902    mailbox/req_toggle_i_4_n_0
-    SLICE_X105Y77        LUT6 (Prop_lut6_I2_O)        0.124     5.026 r  mailbox/req_toggle_i_1/O
-                         net (fo=45, routed)          2.011     7.037    mailbox/req_toggle0
-    SLICE_X108Y94        FDCE                                         r  mailbox/payload_offset_reg[3]/CE
+    SLICE_X30Y82         FDCE (Prop_fdce_C_Q)         0.518     2.208 r  mailbox/req_toggle_reg/Q
+                         net (fo=4, routed)           0.842     3.050    mailbox/req_toggle
+    SLICE_X30Y81         LUT2 (Prop_lut2_I1_O)        0.124     3.174 f  mailbox/core_rdata_o[10]_INST_0_i_3/O
+                         net (fo=2, routed)           1.005     4.180    mailbox/mailbox_pending
+    SLICE_X30Y79         LUT6 (Prop_lut6_I3_O)        0.124     4.304 r  mailbox/req_toggle_i_4/O
+                         net (fo=1, routed)           0.661     4.965    mailbox/req_toggle_i_4_n_0
+    SLICE_X30Y80         LUT6 (Prop_lut6_I2_O)        0.124     5.089 r  mailbox/req_toggle_i_1/O
+                         net (fo=45, routed)          2.368     7.457    mailbox/req_toggle0
+    SLICE_X61Y85         FDCE                                         r  mailbox/payload_data_reg[18]/CE
   -------------------------------------------------------------------    -------------------
 
                          (clock core_clk rise edge)
                                                      25.000    25.000 r  <hidden>
                                                       0.000    25.000 r  core_clk
-                         net (fo=308, unset)          1.682    26.682    mailbox/core_clk
-    SLICE_X108Y94        FDCE                                         r  mailbox/payload_offset_reg[3]/C
-                         clock pessimism              0.155    26.837    <hidden>
-                         clock uncertainty           -0.035    26.802    <hidden>
-    SLICE_X108Y94        FDCE (Setup_fdce_C_CE)      -0.169    26.633    mailbox/payload_offset_reg[3]
+                         net (fo=308, unset)          1.534    26.534    mailbox/core_clk
+    SLICE_X61Y85         FDCE                                         r  mailbox/payload_data_reg[18]/C
+                         clock pessimism              0.014    26.548    <hidden>
+                         clock uncertainty           -0.035    26.513    <hidden>
+    SLICE_X61Y85         FDCE (Setup_fdce_C_CE)      -0.205    26.308    mailbox/payload_data_reg[18]
   -------------------------------------------------------------------
-                         required time                         26.633    <hidden>
-                         arrival time                          -7.037    <hidden>
+                         required time                         26.308    <hidden>
+                         arrival time                          -7.457    <hidden>
   -------------------------------------------------------------------
-                         slack                                 19.596    <hidden>
+                         slack                                 18.851    <hidden>
 
 
 

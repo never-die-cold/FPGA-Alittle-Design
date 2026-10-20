@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
-| Date         : Mon Oct 19 20:50:47 2026
+| Date         : Tue Oct 20 14:22:12 2026
 | Host         : never-die-cold running 64-bit major release  (build 9200)
 | Command      : report_timing_summary -file E:/Projects/FPGA-Alittle-Design/build/reports/cop/timing_synth.rpt -delay_type max
 | Design       : cop_top
@@ -138,10 +138,10 @@ Table of Contents
 
     WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
     -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
-     -2.525     -104.921                     64                16272        4.500        0.000                       0                  7313  
+      0.917        0.000                      0                16349        4.500        0.000                       0                  7388  
 
 
-Timing constraints are not met.
+All user specified timing constraints are met.
 
 
 ------------------------------------------------------------------------------------------------
@@ -162,7 +162,7 @@ core_clk  {0.000 12.500}     25.000          40.000
 
 Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
 -----             -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
-cop_clk            -2.525     -104.921                     64                16094        4.500        0.000                       0                  7004  
+cop_clk             0.917        0.000                      0                16171        4.500        0.000                       0                  7079  
 core_clk           21.320        0.000                      0                  178       12.000        0.000                       0                   309  
 
 
@@ -194,7 +194,7 @@ Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing 
 From Clock:  cop_clk
   To Clock:  cop_clk
 
-Setup :           64  Failing Endpoints,  Worst Slack       -2.525ns,  Total Violation     -104.921ns
+Setup :            0  Failing Endpoints,  Worst Slack        0.917ns,  Total Violation        0.000ns
 Hold  :           NA  Failing Endpoints,  Worst Slack           NA  ,  Total Violation           NA
 PW    :            0  Failing Endpoints,  Worst Slack        4.500ns,  Total Violation        0.000ns
 ---------------------------------------------------------------------------------------------------
@@ -202,16 +202,16 @@ PW    :            0  Failing Endpoints,  Worst Slack        4.500ns,  Total Vio
 
 Max Delay Paths
 --------------------------------------------------------------------------------------
-Slack (VIOLATED) :        -2.525ns  (required time - arrival time)
-  Source:                 loader/crc_state_reg[7]/C
-                            (rising edge-triggered cell FDPE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
-  Destination:            loader/crc_state_reg[27]/D
-                            (rising edge-triggered cell FDPE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+Slack (MET) :             0.917ns  (required time - arrival time)
+  Source:                 engine/layer_reg[1]/C
+                            (rising edge-triggered cell FDCE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            engine/engine/state_reg[0]/CE
+                            (rising edge-triggered cell FDCE clocked by cop_clk  {rise@0.000ns fall@5.000ns period=10.000ns})
   Path Group:             cop_clk
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            10.000ns  (cop_clk rise@10.000ns - cop_clk rise@0.000ns)
-  Data Path Delay:        12.392ns  (logic 2.185ns (17.632%)  route 10.207ns (82.368%))
-  Logic Levels:           13  (LUT3=1 LUT4=2 LUT5=2 LUT6=8)
+  Data Path Delay:        8.704ns  (logic 3.428ns (39.384%)  route 5.276ns (60.616%))
+  Logic Levels:           10  (CARRY4=3 LUT3=1 LUT4=1 LUT5=3 LUT6=2)
   Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
     Destination Clock Delay (DCD):    0.924ns = ( 10.924 - 10.000 ) 
     Source Clock Delay      (SCD):    0.973ns
@@ -226,52 +226,49 @@ Slack (VIOLATED) :        -2.525ns  (required time - arrival time)
   -------------------------------------------------------------------    -------------------
                          (clock cop_clk rise edge)    0.000     0.000 r  <hidden>
                                                       0.000     0.000 r  cop_clk
-                         net (fo=7003, unset)         0.973     0.973    loader/cop_clk
-                         FDPE                                         r  loader/crc_state_reg[7]/C
+                         net (fo=7078, unset)         0.973     0.973    engine/cop_clk
+                         FDCE                                         r  engine/layer_reg[1]/C
   -------------------------------------------------------------------    -------------------
-                         FDPE (Prop_fdpe_C_Q)         0.362     1.335 r  loader/crc_state_reg[7]/Q
-                         net (fo=11, unplaced)        0.787     2.122    loader/crc_state_reg_n_0_[7]
-                         LUT4 (Prop_lut4_I1_O)        0.319     2.441 r  loader/crc_state[30]_i_15/O
-                         net (fo=11, unplaced)        0.948     3.389    loader/crc_state[30]_i_15_n_0
-                         LUT6 (Prop_lut6_I0_O)        0.124     3.513 r  loader/crc_state[11]_i_58/O
-                         net (fo=1, unplaced)         0.902     4.415    loader/crc_state[11]_i_58_n_0
-                         LUT6 (Prop_lut6_I3_O)        0.124     4.539 r  loader/crc_state[11]_i_32/O
-                         net (fo=2, unplaced)         0.460     4.999    loader/crc_state[11]_i_32_n_0
-                         LUT6 (Prop_lut6_I5_O)        0.124     5.123 r  loader/crc_state[29]_i_67/O
-                         net (fo=2, unplaced)         0.913     6.036    loader/crc_state[29]_i_67_n_0
-                         LUT6 (Prop_lut6_I0_O)        0.124     6.160 r  loader/crc_state[29]_i_47/O
-                         net (fo=2, unplaced)         0.676     6.836    loader/crc_state[29]_i_47_n_0
-                         LUT6 (Prop_lut6_I0_O)        0.124     6.960 r  loader/crc_state[27]_i_28/O
-                         net (fo=4, unplaced)         0.443     7.403    loader/crc_state[27]_i_28_n_0
-                         LUT5 (Prop_lut5_I3_O)        0.124     7.527 r  loader/crc_state[22]_i_9/O
-                         net (fo=6, unplaced)         0.934     8.461    loader/crc_state[22]_i_9_n_0
-                         LUT6 (Prop_lut6_I0_O)        0.124     8.585 r  loader/crc_state[27]_i_14/O
-                         net (fo=9, unplaced)         1.152     9.737    loader/crc_state[27]_i_14_n_0
-                         LUT6 (Prop_lut6_I0_O)        0.124     9.861 r  loader/crc_state[27]_i_9/O
-                         net (fo=9, unplaced)         0.490    10.351    loader/crc_state[27]_i_9_n_0
-                         LUT3 (Prop_lut3_I1_O)        0.124    10.475 r  loader/crc_state[20]_i_6/O
-                         net (fo=3, unplaced)         0.920    11.395    loader/crc_state[20]_i_6_n_0
-                         LUT5 (Prop_lut5_I1_O)        0.148    11.543 r  loader/crc_state[27]_i_7/O
-                         net (fo=2, unplaced)         0.460    12.003    loader/crc_state[27]_i_7_n_0
-                         LUT4 (Prop_lut4_I3_O)        0.116    12.119 r  loader/crc_state[27]_i_2/O
-                         net (fo=2, unplaced)         1.122    13.241    loader/crc_state[27]_i_2_n_0
-                         LUT6 (Prop_lut6_I0_O)        0.124    13.365 r  loader/crc_state[27]_i_1/O
-                         net (fo=1, unplaced)         0.000    13.365    loader/crc_state[27]_i_1_n_0
-                         FDPE                                         r  loader/crc_state_reg[27]/D
+                         FDCE (Prop_fdce_C_Q)         0.362     1.335 f  engine/layer_reg[1]/Q
+                         net (fo=91, unplaced)        0.838     2.173    engine/engine/oh_reg[0]_1
+                         LUT3 (Prop_lut3_I0_O)        0.321     2.494 r  engine/engine/oh[0]_i_3/O
+                         net (fo=1, unplaced)         0.000     2.494    engine/engine/oh[0]_i_3_n_0
+                         CARRY4 (Prop_carry4_DI[1]_CO[2])
+                                                      0.586     3.080 r  engine/engine/oh_reg[0]_i_2/CO[2]
+                         net (fo=4, unplaced)         0.360     3.440    engine/engine/oh_reg[0]_i_2_n_1
+                         CARRY4 (Prop_carry4_CYINIT_O[2])
+                                                      0.800     4.240 r  engine/engine/oh_reg[6]_i_7/O[2]
+                         net (fo=1, unplaced)         0.452     4.692    engine/engine/oh_reg[6]_i_7_n_5
+                         LUT4 (Prop_lut4_I0_O)        0.301     4.993 r  engine/engine/oh[4]_i_4/O
+                         net (fo=1, unplaced)         0.000     4.993    engine/engine/oh[4]_i_4_n_0
+                         CARRY4 (Prop_carry4_S[3]_O[3])
+                                                      0.255     5.248 f  engine/engine/oh_reg[4]_i_1/O[3]
+                         net (fo=3, unplaced)         0.827     6.075    engine/engine/output_size_return[4]
+                         LUT5 (Prop_lut5_I0_O)        0.307     6.382 f  engine/engine/limit_last[31]_i_19/O
+                         net (fo=1, unplaced)         0.449     6.831    engine/engine/limit_last[31]_i_19_n_0
+                         LUT5 (Prop_lut5_I1_O)        0.124     6.955 f  engine/engine/limit_last[31]_i_11/O
+                         net (fo=3, unplaced)         0.467     7.422    engine/engine/limit_last[31]_i_11_n_0
+                         LUT5 (Prop_lut5_I4_O)        0.124     7.546 r  engine/engine/limit_last[31]_i_3__0/O
+                         net (fo=7, unplaced)         0.484     8.030    engine/engine/array_mac/mac_pending_reg[2]_3
+                         LUT6 (Prop_lut6_I0_O)        0.124     8.154 r  engine/engine/array_mac/state[3]_i_6/O
+                         net (fo=1, unplaced)         0.902     9.056    engine/engine/array_mac/state[3]_i_6_n_0
+                         LUT6 (Prop_lut6_I4_O)        0.124     9.180 r  engine/engine/array_mac/state[3]_i_1/O
+                         net (fo=4, unplaced)         0.497     9.677    engine/engine/array_mac_n_539
+                         FDCE                                         r  engine/engine/state_reg[0]/CE
   -------------------------------------------------------------------    -------------------
 
                          (clock cop_clk rise edge)   10.000    10.000 r  <hidden>
                                                       0.000    10.000 r  cop_clk
-                         net (fo=7003, unset)         0.924    10.924    loader/cop_clk
-                         FDPE                                         r  loader/crc_state_reg[27]/C
+                         net (fo=7078, unset)         0.924    10.924    engine/engine/cop_clk
+                         FDCE                                         r  engine/engine/state_reg[0]/C
                          clock pessimism              0.000    10.924    <hidden>
                          clock uncertainty           -0.035    10.889    <hidden>
-                         FDPE (Setup_fdpe_C_D)       -0.049    10.840    loader/crc_state_reg[27]
+                         FDCE (Setup_fdce_C_CE)      -0.295    10.594    engine/engine/state_reg[0]
   -------------------------------------------------------------------
-                         required time                         10.840    <hidden>
-                         arrival time                         -13.365    <hidden>
+                         required time                         10.594    <hidden>
+                         arrival time                          -9.677    <hidden>
   -------------------------------------------------------------------
-                         slack                                 -2.525    <hidden>
+                         slack                                  0.917    <hidden>
 
 
 
