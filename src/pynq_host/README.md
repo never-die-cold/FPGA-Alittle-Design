@@ -14,7 +14,7 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
 `--archive-every-round` 启用逐轮完整归档。分类器在会话中复用，修改权重后须重启服务。
 非原型后端仍须逐轮保存 C04 Q3 capture 证据；当前真实硬件后端尚未实现。
 它没有真实 HDMI/DDR/MMIO/CNN 后端，`/v1/config` 仅推进软件配置号，不证明 R12 硬件应用；见[整合证据](../../data/logs/2026-10-12-pr-review/README.md)。
-工单由服务启动参数提供，HTTP配置仅接收control；在线工单编辑和请求重试幂等尚未实现。
+工单由服务启动参数提供，HTTP配置仅接收control；在线工单编辑未实现；请求重试幂等已按 C04 §2.4 草案实现（服务 16 条 trigger_ref 回放，待 NC/JL 确认）。
 下列 notebook／通用工具仍是规划，不能由 mock 或训练演练推断已实现。
 
 本轮新增 `roi_preprocess.py`、`inspection_model.py`、`inspection_rules.py`、
@@ -34,7 +34,7 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
 
 后续新增 `dataset_manifest.py`、`dataset_audit.py` 和仓库 CLI：720p 采集清单、
 会话/精确重复像素/实物编号泄漏、覆盖统计和来源声明已用测试夹具验证，理解题及补测已通过。
-这些工具的测试夹具证据见[数据集审计](../../docs/research/fastener-dataset-audit.md)，不验收真实标签或模型精度。10/12 离板证据记录为 14 组（含当时尚未提交的构建输入审计）并退出 0；10/13 记录为 15 组。当前 `run_vision_python.sh` 入口为 **21 组**，`run_inspection_python.sh` 为 **14 组**；新增组以脚本和各自证据为准，不把历史 15 组当当前全量。
+这些工具的测试夹具证据见[数据集审计](../../docs/research/fastener-dataset-audit.md)，不验收真实标签或模型精度。10/12 离板证据记录为 14 组（含当时尚未提交的构建输入审计）并退出 0；10/13 记录为 15 组。当前 `run_vision_python.sh` 入口为 **21 组**，`run_inspection_python.sh` 为 **19 组**；新增组以脚本和各自证据为准，不把历史 15 组当当前全量。
 
 - `demo.ipynb`：板端调试与复现 notebook
 - `benchmark.ipynb`：基线对比与指标采集（CPI、延迟、帧率、加速比）
@@ -57,8 +57,36 @@ N06 诊断包接线（NC 执行；板端脚本提供 overlay 与 read，取帧�
 EXE `--source 0 --endpoint http://<板IP>:8765` 联调。板端需 pynq-venv 的 python3 + OpenCV + torch；
 FP32 软件推理来源记录在产物 `result.json` 的 provenance，不当作 CNN 硬件验收。
 服务失败（无视频/超时/所有权错误）转 HTTP 503 且不产 `packet.json`；离板替身测试
-`test_base_captures.py`、`test_c01_backend.py`（视觉栈现 **21 组**；检查链 **14 组**）；
+`test_base_captures.py`、`test_c01_backend.py`（视觉栈现 **21 组**；检查链 **19 组**）；
 快照核对器 `round_artifacts.py`（C04 §2.3，待 NC 确认）。
+
+## 协处理器 PS 驱动与模拟硬件（2026-10-20）
+
+按 C03 §13 接入 `vision_live_service`，**未上板**：
+
+- `cop_regs.py`：C03 §4 寄存器常量、`cop_judge` 镜像、`FW_DECISION` 编解码；
+- `cop_mmio_sim.py`：镜像 §4/§5 的假寄存器模型（配置原子提交、busy 拒 commit、
+  sticky DONE/ERROR/TIMEOUT + W1C、RESULT_SEQ 最后提交、watchdog、ABORT/SOFT_RESET、
+  CRC/短包/旧结果/目标错误注入）；
+- `cop_driver.py`：PS 驱动。只依赖 `read32/write32` + DMA 面；提交、等终态、结果窗
+  `RESULT_SEQ` 双读、`FW_DECISION` 逐字段复算、PS 判定“不得比固件更宽松”、
+  同 `JOB_ID` 去重、超时/错误清状态重试；`PynqDmaPlane` 故意未实现（J08 数据面）；
+- `cop_engine.py`：定位 → `scene-gray-border-padding-v1` ROI → sim INT8 → 驱动 →
+  `inspection_rules.judge`；每轮写 `cop_trace.json`（帧像素哈希、ROI 字节哈希、
+  cfg/result seq、FW/PS 判定、耗时）；`round_artifacts.load_snapshot` 可核对整条链。
+
+服务入口：
+
+```bash
+python src/pynq_host/vision_live_service.py --root <dir> --capture-dir <png dir> \
+  --order 1 1 1 --min-score 0.8 --engine cop-sim --sim-classes bolt,nut,washer
+```
+
+`/v1/status` 增 `engine` 字段（`FILE`/`COP_SIM`）；`prototype` 仍由捕获后端决定。
+`cop-sim` 是模拟计算，分类器是脚本/图像派生的合成结果，`S_input=1/127` 仅为 sim 量化，
+**不是**识别精度或板上证据。提交/完成/取结果/恢复与 JL 待办见
+[PS 驱动使用档](../../docs/contracts/coprocessor-ps-driver-v0.md)；一轮证据
+`bash sim/scripts/run_cop_sim_round.sh`。
 
 ## 板卡访问
 

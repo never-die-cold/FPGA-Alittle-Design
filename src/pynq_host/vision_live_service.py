@@ -21,6 +21,7 @@ import json
 import threading
 import time
 import uuid
+from collections import OrderedDict
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -96,16 +97,22 @@ class State:
         self.order = dict(order)
         self.archive_every_round = archive_every_round
         self.last_packet = None
+        self.engine_label = getattr(engine, "label", "FILE")
+        self.completed_refs = OrderedDict()  # C04 §2.4 draft: retry key window
         self.lock = threading.Lock()
         self.session_dir = Path(root) / self.session_id[:8]
         self.session_dir.mkdir(parents=True, exist_ok=False)
         atomic_write(self.session_dir / "session.json", json.dumps(
             {"session_id": self.session_id, "started_at": time.time(),
-             "backend": captures.backend, "prototype": captures.prototype,
+             "backend": captures.backend, "engine": self.engine_label,
+             "prototype": captures.prototype,
              "order": self.order, "protocol": VERSION}, sort_keys=True).encode())
 
     def check(self, trigger_ref):
         with self.lock:  # 引擎在锁内执行：检查轮次串行（单板单推理通道的现实约束）
+            if trigger_ref is not None and trigger_ref in self.completed_refs:
+                # 同一次用户触发的网络重试：回原轮报文，不新取帧、不递增 check_id。
+                return self.completed_refs[trigger_ref]
             self.check_id = (self.check_id + 1) & 0xFFFFFFFF
             check = self.check_id
             round_dir = self.session_dir / f"check-{check:06d}"
@@ -136,10 +143,14 @@ class State:
                 atomic_write(round_dir / "packet.json", payload)
             atomic_write(self.session_dir / "latest_packet.json", payload)
             self.last_packet = packet
+            if trigger_ref is not None:
+                self.completed_refs[trigger_ref] = packet
+                while len(self.completed_refs) > 16:
+                    self.completed_refs.popitem(last=False)
             return packet
 
 
-def file_engine(weights, order, min_score, max_targets):
+def file_engine(weights, order, min_score, max_targets, policy_max=None):
     """Cached model; polling inspects memory, manual/diagnostic rounds archive provenance."""
     cached = []
     weight_path = Path(weights)
@@ -161,11 +172,12 @@ def file_engine(weights, order, min_score, max_targets):
         from inspection_run import run as inspect  # 重依赖（cv2/torch）仅真正服务时导入
         result = inspect(source=capture_path, weights=weights, order=order, output=round_dir,
                          request_id=request_id, min_score=min_score, max_targets=max_targets,
-                         classifier=classifier())
+                         policy_max=policy_max, classifier=classifier())
         return fields(result)
     def memory(frame):
         from inspection_replay import inspect_frame
-        result, _ = inspect_frame(frame, classifier(), order, min_score, max_targets)
+        result, _ = inspect_frame(frame, classifier(), order, min_score, max_targets,
+                                  policy_max)
         return fields(result)
     run.inspect_frame = memory
     return run
@@ -194,6 +206,7 @@ def make_server(host="127.0.0.1", port=8765, root=None, captures=None, engine=No
             if self.path == "/v1/status":
                 self.reply(200, {"mode": "LIVE", "session_id": state.session_id,
                                  "hardware_connected": True, "backend": state.captures.backend,
+                                 "engine": state.engine_label,
                                  "prototype": state.captures.prototype})
             elif self.path == "/v1/latest":
                 if state.last_packet is None:
@@ -239,17 +252,48 @@ if __name__ == "__main__":
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--root", required=True, help="artifact root; one dir per session")
     parser.add_argument("--capture-dir", required=True, help="dir of PNG captures (rotated per round)")
-    parser.add_argument("--weights", required=True, type=Path)
+    parser.add_argument("--weights", type=Path,
+                        help="FP32 prototype .pt; required by --engine file")
     parser.add_argument("--order", type=int, nargs=3, required=True, metavar=("BOLT", "NUT", "WASHER"))
     parser.add_argument("--min-score", type=float, required=True)
     parser.add_argument("--max-targets", type=int, default=16)
-    parser.add_argument("--archive-every-round", action="store_true", help="archive automatic rounds as well as manual checks")
+    parser.add_argument("--archive-every-round", action="store_true",
+                        help="archive automatic rounds as well as manual checks")
+    parser.add_argument("--policy-max", type=int, default=None,
+                        help="business cap (default 10); must be <= --max-targets")
+    parser.add_argument("--engine", choices=("file", "cop-sim"), default="file",
+                        help="file = offline FP32 engine; cop-sim = C03 register sim")
+    parser.add_argument("--sim-classes", default="",
+                        help="cop-sim scripted classes, e.g. bolt,nut,washer (empty=image-derived)")
+    parser.add_argument("--sim-delay-ms", type=float, default=0.0,
+                        help="cop-sim per-target delay for BUSY/timeout tests")
+    parser.add_argument("--sim-fault", action="append", default=[],
+                        choices=("timeout", "crc", "short", "stale", "target-error"),
+                        help="persistent cop-sim fault; restart the service to clear")
     args = parser.parse_args()
     order = dict(zip(CLASSES, args.order))
     captures = FileCaptures(args.capture_dir)
-    engine = file_engine(args.weights, order, args.min_score, args.max_targets)
-    print(f"LIVE SERVICE (backend={captures.backend}, prototype={captures.prototype}): "
-          f"http://{args.host}:{args.port}/v1/status", flush=True)
+    if args.engine == "file":
+        if args.weights is None:
+            parser.error("--weights is required by --engine file")
+        engine = file_engine(args.weights, order, args.min_score, args.max_targets,
+                             args.policy_max)
+    else:
+        from cop_engine import cop_engine
+        from cop_mmio_sim import SimFaults
+        faults = SimFaults(timeout="timeout" in args.sim_fault,
+                           crc_mismatch="crc" in args.sim_fault,
+                           short_payload="short" in args.sim_fault,
+                           stale_result="stale" in args.sim_fault,
+                           target_error=0 if "target-error" in args.sim_fault else None)
+        classes = tuple(name.strip() for name in args.sim_classes.split(",") if name.strip())
+        engine = cop_engine(order, args.min_score, args.max_targets, args.policy_max,
+                            classes=classes, faults=faults,
+                            delay_s=args.sim_delay_ms / 1000.0)
+    label = getattr(engine, "label", "FILE")
+    print(f"LIVE SERVICE (backend={captures.backend}, engine={label}, "
+          f"prototype={captures.prototype}): http://{args.host}:{args.port}/v1/status",
+          flush=True)
     make_server(host=args.host, port=args.port, root=args.root,
                 captures=captures, engine=engine, order=order,
                 archive_every_round=args.archive_every_round).serve_forever()

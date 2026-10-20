@@ -149,14 +149,24 @@ def endpoint_state(remote, rec_count, current, age, fps, shape, selected, hover)
                      boxes=[entry[:2] for entry in entries], list=entries)
     else:
         scope["note"] = f"ROUND -- · REC {rec_val}"
-        state.update(status=("WAITING FOR RESULT", AMBER_DEEP, "SemiBold"),
-                     fresh=(1.0, RED), boxes=None, list=[])
+        if getattr(remote, "manual_failed", False):
+            # 手动轮失败立即撤掉旧 PASS；不能等 max_age 超龄后才消失。
+            state.update(status=("NO VALID RESULT | check failed", RED, "SemiBold"),
+                         fresh=(0.0, RED), boxes=None, list=[])
+        elif remote.fails >= 3:
+            state.update(status=("SERVICE OFFLINE | reconnecting", RED, "SemiBold"),
+                         fresh=(0.0, RED), boxes=None, list=[])
+        else:
+            state.update(status=("WAITING FOR RESULT", AMBER_DEEP, "SemiBold"),
+                         fresh=(1.0, RED), boxes=None, list=[])
     return state
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--mock", action="store_true")
+    parser.add_argument("--image", type=Path,
+                        help="static image instead of camera (demo/evidence; implies headless source)")
     parser.add_argument("--replay", type=Path, help="checked file inspection result.json (offline snapshot)")
     parser.add_argument("--endpoint", help="result service URL, e.g. http://127.0.0.1:8765")
     parser.add_argument("--source", type=int, default=0, help="UVC capture device index")
@@ -185,6 +195,8 @@ def main():
         from replay_viewer import show_replay
         show_replay(args, _work_area)
         return
+    if args.image and args.mock:
+        parser.error("--image cannot combine with --mock")
     if args.selftest:
         engine = TextEngine()
         hud = Hud(engine)
@@ -247,7 +259,13 @@ def main():
             pass
 
     scene = None
-    capture = None if args.mock else cv2.VideoCapture(args.source, cv2.CAP_DSHOW)
+    capture = None
+    if args.image:
+        scene = cv2.imread(str(args.image), cv2.IMREAD_COLOR)
+        if scene is None:
+            sys.exit(f"static image is not decodable: {args.image}")
+    elif not args.mock:
+        capture = cv2.VideoCapture(args.source, cv2.CAP_DSHOW)
     if not args.headless:
         cv2.namedWindow(WINDOW, cv2.WINDOW_AUTOSIZE)
         cv2.setMouseCallback(WINDOW, on_mouse)

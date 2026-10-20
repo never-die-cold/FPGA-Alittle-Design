@@ -67,6 +67,11 @@
   - **冲突**：trigger_ref 仅作关联、不携带参数，无参数冲突；重复 ref 且原轮未完成时，按"等待完成回原结果"或"回 409"二选一，由服务实现择一并写入 README。
   - **失败重试**：POST 超时/连接断时服务可能已执行——重试同 ref；已执行回原结果、未执行新轮，两种情况对 EXE 都是"一次采纳"（记录键 (session, check_id) 兜底不重复）。
 - 实现前需 NC/JL 确认窗口大小与"重启后按新轮"的接受度；沿用现有字段，不动报文结构。
+- **2026-10-20 WC 实现（仍待 NC/JL 确认）**：服务对成功轮次按 16 条窗口保留
+  `trigger_ref→packet`，命中不新取帧、不递增 check_id；EXE 手动轮失败后置
+  `manual_failed` 并复用同一 ref 重试，失败期间立即撤掉旧 PASS（不再等 max_age）；
+  记录仍按 `(session_id, check_id)` 去重。证据：`sim/vision/test_cop_service.py`、
+  `sim/scripts/run_inspection_python.sh`。
 
 ## 3. 显示语义：连续视频与检查快照的边界
 
@@ -160,3 +165,4 @@
 | 2026-10-14 | 补充Q1/Q3/Q5源码复核与专项证据；同步C03已冻结10/16分层，登记超限零计数缺口；C04仍待确认 | NC离板续工 |
 | 2026-10-14 | NC本人确认Q1/Q3与Q5原则；Q5继续交JL对齐并在实现修复后验收，未代签完整C04或硬件通过 | NC本人 / Codex记录 |
 | 2026-10-19 | Q5 策略/能力分离落地（`judge` policy_max 默认 `min(10,16)`，超策略不分类）；`target_limit` 轮显示"未完整计数"、CSV 不导出映射差额；快照核对器补 ROI 像素哈希链（NC 10-14 评审三项） | watercopper（离板应用链） |
+| 2026-10-20 | §2.4 草案落地：服务 trigger_ref 16 条回放、EXE 手动失败撤旧 PASS + 同 ref 重试；快照核对器支持 `cop_trace.json` 帧/ROI 哈希链（仍待 NC/JL 确认） | watercopper（离板应用链） |

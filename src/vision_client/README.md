@@ -86,6 +86,11 @@ FILE 原型服务据此保留该轮完整产物；实际 UVC 帧率与板端联�
 离线测试 `py sim/vision/test_vision_rounds.py` 覆盖触发节流、超龄/配置变化/断联撤框、
 服务重启（新会话）自动恢复，已接入 `sim/scripts/run_vision_python.sh` 全量。
 
+2026-10-20 异常语义：手动轮请求失败立即置 `NO VALID RESULT | check failed`（红色）并撤掉
+旧 PASS，不等 `max_age`；同一用户意图的网络重试复用 `trigger_ref`（C04 §2.4 草案，
+服务端 16 条回放）。`--image <PNG>` 可用静态图代替相机，配合 `--headless --endpoint`
+做服务和 EXE 的完整一轮证据（`bash sim/scripts/run_cop_sim_round.sh`）。
+
 ## 离线文件回放（2026-10-10）
 
 新增 `--replay <result.json>`，读取经过哈希检查的 FILE_REPLAY 快照，显示目标框、

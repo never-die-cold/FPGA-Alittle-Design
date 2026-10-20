@@ -93,6 +93,10 @@ class RemoteRounds:
         self.manual_pending = False
         self.last_round_manual = False
         self.last_manual = None
+        self.pending_trigger_ref = None  # C04 §2.4 draft: retry reuses the intent key
+        self.manual_failed = False       # a failed manual round must not leave old PASS on screen
+        self.last_error = None
+        self.last_error_at = None
         self.events = []
         self.last_state = "no_result"
 
@@ -109,6 +113,10 @@ class RemoteRounds:
         self.last_trigger = 0.0
         self.manual_pending = False
         self.last_round_manual = False
+        self.pending_trigger_ref = None
+        self.manual_failed = False
+        self.last_error = None
+        self.last_error_at = None
         self.last_state = "no_result"
         return status
 
@@ -135,12 +143,24 @@ class RemoteRounds:
         self.last_trigger = now
         manual = self.manual_pending
         self.manual_pending = False
+        trigger_ref = None
+        if manual:
+            trigger_ref = self.pending_trigger_ref or uuid.uuid4().hex
+            self.pending_trigger_ref = trigger_ref
         try:
             # 传空 JSON 对象：http_json 以"有无 body"区分 GET/POST，/v1/check 仅接受 POST。
-            body = {"trigger_ref": uuid.uuid4().hex} if manual else {}
+            body = {"trigger_ref": trigger_ref} if manual else {}
             packet = validate_packet(http_json(self.endpoint + "/v1/check", body))
         except (urllib.error.URLError, OSError, ValueError) as error:
             self.fails += 1
+            self.last_error = str(error)
+            self.last_error_at = time.time()
+            if manual:
+                # C04 §2.4 draft: one user intent = one retry key. The next poll
+                # retries with the same trigger_ref; a server-side dedupe returns
+                # the original round if the lost response was already executed.
+                self.manual_failed = True
+                self.manual_pending = True
             print(f"WARN: check failed ({self.fails}/{FAIL_LIMIT}): {error}", flush=True)
             if self.fails >= FAIL_LIMIT:
                 self.rehandshake()
@@ -156,6 +176,10 @@ class RemoteRounds:
         # 采纳点才更新来源标记：失败的手动轮不得让残留旧报文冒充手动结果（D8）。
         self.last_round_manual = manual
         self.fails = 0
+        self.manual_failed = False
+        self.last_error = None
+        self.last_error_at = None
+        self.pending_trigger_ref = None
 
     def _state(self, now):
         """当前叠加状态（D3 判定分解；供 overlay 与异常事件复用）。"""
@@ -163,6 +187,8 @@ class RemoteRounds:
             return "no_result"
         if self.fails >= FAIL_LIMIT:
             return "outage"
+        if self.manual_failed:
+            return "error"
         if self.packet["session_id"] != self.session:
             return "session"
         if self.packet["config_id"] != self.expected_config:
@@ -196,7 +222,8 @@ class AsyncRemoteRounds(RemoteRounds):
     """GUI-owned snapshot; a single worker owns HTTP and its session state."""
 
     SNAPSHOT_FIELDS = ("session", "mode", "hardware_connected", "expected_config", "fails",
-                       "packet", "received_at", "last_round_manual")
+                       "packet", "received_at", "last_round_manual", "manual_failed",
+                       "last_error", "last_error_at")
 
     def __init__(self, endpoint, max_age):
         super().__init__(endpoint, max_age)
@@ -250,7 +277,10 @@ class AsyncRemoteRounds(RemoteRounds):
         if self._in_flight or now - self.last_trigger < interval:
             return
         self.last_trigger = now
-        manual, self.manual_pending = self.manual_pending, False
+        # A failed manual request is re-queued on the network object; keep it in
+        # the next dispatch even though the GUI-side pending flag was consumed.
+        manual, self.manual_pending = (self.manual_pending or self._network.manual_pending,
+                                       False)
         self._in_flight = True
         self.manual_in_flight = manual
         self._thread = threading.Thread(target=self._request, args=(now, manual), daemon=True)
