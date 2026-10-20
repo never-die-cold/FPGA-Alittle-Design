@@ -15,7 +15,9 @@
 
 ## 2. 一次任务的提交序列（PS 侧）
 
-前置：`STATUS.BUSY=0`；旧终态已清（`CTRL=0x18`，即 `CLEAR_DONE|CLEAR_ERROR`）。
+前置：`STATUS.BUSY=0`。**正常轮次 PS 不清终态**；只有上一轮是 ERROR/TIMEOUT、ABORT 后，
+或进程重启发现有遗留终态时，才执行恢复清除（`CTRL=0x18`，即 `CLEAR_DONE|CLEAR_ERROR`）。
+成功的 DONE/RESULT_VALID 留给固件在下一轮 START 前清（C03 §3.2；`cop_job.c` 写 24）。
 PS **不写** `START`、不写 `FW_*`、不写任何结果寄存器。
 
 1. 写 shadow：`MODEL_ID、WEIGHT_CRC32、ROI_COUNT、TIMEOUT_CYCLES、WORK_ORDER、
@@ -29,9 +31,15 @@ PS **不写** `START`、不写 `FW_*`、不写任何结果寄存器。
 3. 写新的非 0 `CFG_SEQ`（单调递增、可回绕），再写 `CFG_COMMIT=1`。
    - busy 时 commit 返回 SLVERR 且**不排队**（C03 §5）；PS 不应在 busy 时提交。
    - 写 `CFG_SEQ` 会立刻撤掉 `CFG_VALID`（OPEN-3 保守默认）。
-4. 轮询 `CFG_APPLIED==CFG_SEQ` 即配置回执；**不要**把“必须看见 READY”作为回执条件——
-   固件可能在 PS 两次读之间已经置 BUSY。
+4. 轮询 `CFG_APPLIED==CFG_SEQ` 即配置回执。**不强制要求同时看见 READY**：JL K1
+   （`docs/coprocessor-wc-interface.md`）写的是 `CFG_APPLIED==CFG_SEQ && READY`，
+   但固件可能在 PS 两次读之间已经置 BUSY，READY 窗口会错过；若作业已结束，
+   READY 也可能因 ERROR/TIMEOUT 一直为 0。PS 以 `CFG_APPLIED` 为硬回执，
+   `READY/DONE/ERROR/TIMEOUT` 出现时直接进入终态处理。此差异待 JL 确认。
 5. 之后只轮询终态：`STATUS.DONE|ERROR|TIMEOUT`。`READY` 是固件启动门，不是 PS 完成门。
+   - 若看到 DONE 但 `RESULT_SEQ` 仍等于上一轮，视为上一轮遗留 DONE：等待固件启动
+     （BUSY 或新序号）；若固件始终没启动，按“旧 DONE”报错，绝不贴旧结果。
+   - 新一轮的结果必须满足 `RESULT_SEQ` 递增，见 §3。
 
 PS 负责的业务门（在提交前短路，不送硬件）：
 
@@ -80,6 +88,12 @@ PS 负责的业务门（在提交前短路，不送硬件）：
 `ERROR_CODE` 当前读 0（OPEN-9）；PS **不**根据它判断原因，也不把它当作版本/能力位。
 驱动在 sim 上可通过 `transport.error_name` 取诊断名，真实硬件不得依赖。
 
+**写权限与“清 DONE”时点（K1 对齐）**：C03 §3.2 把完成/错误清除归 RISC-V。正常轮次 PS
+不写 `CTRL`；成功 DONE/RESULT_VALID 由固件在下一轮 START 前写 `CTRL=24` 清。PS 只在
+ERROR/TIMEOUT/ABORT/进程重启遗留终态时写 `CTRL=0x18`。K1 step 5 写的是“消费结果后由
+RISC-V 写 `CLEAR_DONE=1`”，但当前没有 PS→固件的“已消费”回执；实际固件是在下一轮
+START 前清。请 JL 冻结“消费”如何表达，否则 PS 不能既等 DONE 又让固件知道何时清。
+
 ## 5. 模拟硬件 → 真实硬件：只换两个接缝
 
 驱动只依赖：
@@ -90,8 +104,10 @@ dma.load_model(addr, payload) / load_rois(addr, rois, stride) / load_descriptors
 ```
 
 - 现在：`CopSim` + `SimDmaPlane`（`src/pynq_host/cop_mmio_sim.py`）；
-- 上板：`PynqMmio(mmio)` 包一层 `pynq.lib.MemoryMappedIO`，数据面按 J08 的
-  DataMover/物理 bank 实现 `PynqDmaPlane`（当前**故意** `NotImplementedError`，不假装已实现）；
+- 上板：`PynqMmio(mmio, <Address Editor 分配的 PS AXI base>)` 包一层
+  `pynq.lib.MemoryMappedIO`；**没有默认 base**，核侧本地 `0x8001_0000` 不得当 PS 地址
+  （K1 假硬件约束）。数据面按 J08 的 DataMover/物理 bank 实现 `PynqDmaPlane`
+  （当前**故意** `NotImplementedError`，不假装已实现）；
 - 服务/引擎/报文/EXE 不需要重写；`CopEngine` 继续产出同样的
   `status/targets/decision/width/height`，并写 `cop_trace.json`；
 - 真实链路全部就绪前，`prototype=true` 不得关闭；`/v1/status` 的 `engine`
@@ -103,6 +119,8 @@ dma.load_model(addr, payload) / load_rois(addr, rois, stride) / load_descriptors
 |---|---|---|---|
 | **阻断** | 固件重复作业 | `cop_job.c::main` 只跑一次；C03 §5 要求固件按新 `CFG_APPLIED` 反复起任务 | JL 把固件改成等待新 `CFG_SEQ/applied` 的循环，或在 C03 增加“每作业启动”寄存器并冻结 |
 | **阻断** | 预启动判定的完成通知 | `count==0/>16`、`>10`、`wait_ready` 失败时固件只写 `FW_DECISION`，不置 DONE/RESULT_VALID；PS 无法区分“没跑”和“已判 RECHECK” | 冻结一个完成/有效位（`FW_DECISION_VALID` 或带 `CFG_SEQ` 的 `FW_SEQ`）；PS 暂以本地门短路，超时即报错，不发布 PASS |
+| **阻断** | 清 DONE/“已消费”回执 | K1 step 5 要求 RISC-V 在 PS 消费后清 DONE，但没有 PS→FW 的消费信号；`cop_job.c` 实际在下一轮 START 前写 24 清 | 冻结：由固件下一轮 START 前清（PS 不写），或新增消费回执寄存器；PS 当前按前者实现 |
+| 高 | 配置回执是否要求 READY | K1 step 1 要求 `CFG_APPLIED==CFG_SEQ && READY`；固件可能已进 BUSY，READY 窗口会错过 | JL 确认以 `CFG_APPLIED` 为硬回执、READY/终态均可接受；PS 已按此实现 |
 | 高 | `FW_DECISION` 布局 | OPEN-6 暂定 `[31:16] seq/[15:8] reasons/[7:0] verdict`；PS 只经 `cop_regs.decode_fw_decision` 解析 | JL 冻结后写进共用头文件；任何改动同步 `cop_regs.py` |
 | 高 | `touch_border` | 固件不读描述符；C03 §8 要求 border→RECHECK | 固件加理由位，或书面确认“PS 侧 gate”是 v0 口径 |
 | 高 | `ROI_COUNT=0` 有效空帧 | OPEN-11；PS 本地 CHECK_FAIL，不提交 | 冻结“空帧有效”信号 |
@@ -136,3 +154,4 @@ dma.load_model(addr, payload) / load_rois(addr, rois, stride) / load_descriptors
 | 日期 | 变更 |
 |---|---|
 | 2026-10-20 | WC 初版：按 C03 §13 落 PS 使用档、驱动/模拟硬件/服务引擎/异常矩阵与一轮证据；列出 JL 阻断项 |
+| 2026-10-20 | 并入 JL K1（WC 一页纸）与 K2（片上存储 PLAN）：PS 正常轮次不写 CTRL；`PynqMmio` 强制 Address Editor base、不默认 `0x8001_0000`；登记 READY 窗口与“消费后清 DONE”回执两项待 JL 确认 |

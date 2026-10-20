@@ -7,7 +7,7 @@ freeze their encoding, so the real driver must not depend on them.
 import zlib
 
 CLASSES = ("bolt", "nut", "washer")
-COP_BASE = 0x8001_0000
+COP_BASE = 0x8001_0000  # core-side local MMIO window; PS AXI base is from Address Editor
 IP_ID = 0x434F5030  # ASCII "COP0"
 MAX_TARGETS = 16
 POLICY_MAX = 10

@@ -190,11 +190,15 @@ def make_server(host="127.0.0.1", port=8765, root=None, captures=None, engine=No
     class Handler(BaseHTTPRequestHandler):
         def reply(self, status, body):
             data = json.dumps(body, allow_nan=False).encode()
-            self.send_response(status)
-            self.send_header("Content-Type", "application/json")
-            self.send_header("Content-Length", str(len(data)))
-            self.end_headers()
-            self.wfile.write(data)
+            try:
+                self.send_response(status)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(data)))
+                self.end_headers()
+                self.wfile.write(data)
+            except (BrokenPipeError, ConnectionResetError):
+                # EXE/客户端在请求后关闭连接是正常退出，不是服务故障。
+                pass
 
         def read_body(self):
             length = int(self.headers.get("Content-Length", "0"))

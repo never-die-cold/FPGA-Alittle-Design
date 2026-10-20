@@ -34,6 +34,19 @@
 - 异常：stale 轮 503 且无 packet；同 ref 重试新 check 但只记一条；重复 ref 同 check；
   超时/CRC/ABORT/软复位/重复 JOB_ID 均 PASS。
 
+## K1/K2 拉取与对齐（同日）
+
+- 拉取 JL `5d2f867`（K1 `docs/coprocessor-wc-interface.md`、K2 `docs/coprocessor-storage-plan.md`），
+  合并为 `f540a38`；K1 是 C03 摘录，K2 是 PLAN/UNVERIFIED，不改 WC 数据面接口。
+- 按 K1/C03 §3.2 修正：正常轮 PS **不写 `CTRL`**，成功 DONE/RESULT_VALID 留给固件下一轮
+  START 前清；PS 只在 ERROR/TIMEOUT/ABORT/进程重启遗留终态时写 `CTRL=0x18`。
+- `PynqMmio` 移除 `0x8001_0000` 默认值，强制 Address Editor 的 PS AXI base（K1 mock 约束）。
+- 补“旧 DONE 还在”的竞态：终态轮询只接受 `RESULT_SEQ` 已变化的 DONE；旧 DONE 持续
+  超过宽限即报错，不把上一轮结果贴到新 bbox。
+- 新增测试：正常第二笔任务无 `CTRL` 写；PynqMmio 缺 base 拒绝。两套 gate 仍为 exit 0。
+- 两项待 JL 确认：K1 的 `CFG_APPLIED && READY` 窗口（PS 以 `CFG_APPLIED` 为硬回执）；
+  “消费后 RISC-V 清 DONE”缺少 PS→FW 消费回执（当前固件在下一轮 START 前清）。
+
 ## 明确未做
 
 - 未上板；未验证真实 MMIO/AXI/DataMover/CDC；未实现 `PynqDmaPlane`；

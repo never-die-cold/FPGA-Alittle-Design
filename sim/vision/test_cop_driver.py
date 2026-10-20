@@ -8,7 +8,7 @@ from pathlib import Path
 root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(root / "src/pynq_host"))
 from cop_driver import (CopConfigError, CopDriver, CopProtocolError, CopTimeoutError,
-                        PynqDmaPlane, SimDmaPlane)
+                        PynqDmaPlane, PynqMmio, SimDmaPlane)
 from cop_mmio_sim import CopSim, SimFaults, scripted_compute
 
 ORDER = {"bolt": 1, "nut": 1, "washer": 1}
@@ -50,9 +50,13 @@ def test_happy_and_duplicate():
             raise AssertionError("JOB_ID reuse with different targets accepted")
         except CopProtocolError:
             pass
-        # A new job advances RESULT_SEQ and CFG_SEQ.
+        # A new job advances RESULT_SEQ and CFG_SEQ.  C03 §3.2 gives completion
+        # clearing to the firmware: the PS must not write CTRL on this path.
+        before = len(sim.trace()["ops"])
         second = driver.run(make_job(2, rev=2))
+        new_ops = sim.trace()["ops"][before:]
         assert second["result_seq"] == 2 and second["cfg_seq"] == 2
+        assert all(not (op == "W" and name == "CTRL") for op, name, _ in new_ops), new_ops
         assert sim.jobs == 2
     finally:
         sim.close()
@@ -92,11 +96,12 @@ def test_timeout_then_recovery():
             raise AssertionError("simulated watchdog accepted")
         except CopTimeoutError as error:
             assert error.error_name == "WATCHDOG", error.error_name
+        assert driver._needs_recovery is True
         sim.faults.timeout = False
         sim.faults.delay_s = 0.0
         result = driver.run(make_job(2, rev=2))
         assert result["decision"]["verdict"] == "CHECK_PASS" and result["result_seq"] == 1
-        assert sim.error_name is None
+        assert driver._needs_recovery is False and sim.error_name is None
     finally:
         sim.close()
 
@@ -149,6 +154,30 @@ def test_real_dma_plane_is_not_pretended():
         raise AssertionError("unimplemented J08 data plane constructed")
     except NotImplementedError as error:
         assert "J08" in str(error)
+    # PS AXI base comes from Address Editor; the core-side 0x8001_0000 must not
+    # become a silent default (K1 假硬件 mock 约束).
+    try:
+        PynqMmio(object())
+        raise AssertionError("PynqMmio accepted a default base")
+    except TypeError:
+        pass
+    try:
+        PynqMmio(object(), None)
+        raise AssertionError("PynqMmio accepted a missing base")
+    except ValueError:
+        pass
+    class FakeMmio:
+        def __init__(self):
+            self.calls = []
+        def read(self, addr):
+            self.calls.append(("r", addr))
+            return 0
+        def write(self, addr, value):
+            self.calls.append(("w", addr, value))
+    fake = FakeMmio()
+    transport = PynqMmio(fake, 0x40000000)
+    transport.write32(0x10, 7)
+    assert fake.calls == [("w", 0x40000010, 7)]
 
 
 def main():

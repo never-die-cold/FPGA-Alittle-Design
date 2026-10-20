@@ -5,6 +5,8 @@ Transport-agnostic: the driver only needs ``read32/write32`` and a DMA plane.
 the intended one-line swap for real hardware, but no board path is claimed here.
 
 Safety invariants beyond C03 §5:
+- Normal rounds never write CTRL; sticky DONE/RESULT_VALID is left to the
+  firmware's next START (C03 §3.2).  PS clears only on error/timeout/recovery.
 - RESULT_SEQ must advance and stay unchanged across the indexed result reads.
 - FW_DECISION must describe the same RESULT_SEQ and match the firmware rules.
 - The PS decision may be stricter than the firmware's, never more permissive
@@ -67,9 +69,16 @@ class SimDmaPlane:
 
 
 class PynqMmio:
-    """Adapter for pynq.lib.MemoryMappedIO-like objects; not exercised here."""
+    """Adapter for pynq.lib.MemoryMappedIO-like objects; not exercised here.
 
-    def __init__(self, mmio, base=R.COP_BASE):
+    The PS AXI base is assigned by Vivado Address Editor; it is NOT the
+    core-side local window ``0x8001_0000``.  Requiring it explicitly prevents
+    a sim/mock address from silently becoming the board address.
+    """
+
+    def __init__(self, mmio, base):
+        if type(base) is not int or base < 0:
+            raise ValueError("PS AXI base address is required (Address Editor)")
         self.mmio = mmio
         self.base = base
 
@@ -130,6 +139,8 @@ class CopDriver:
         self.last_result_seq = None
         self._model_loaded = None
         self._cache = None
+        self._needs_recovery = False
+        self._started = False
         self.events = []
 
     # ---- register helpers ------------------------------------------------
@@ -159,8 +170,24 @@ class CopDriver:
 
     # ---- recovery --------------------------------------------------------
     def recover(self):
-        """Stop a resident job and clear sticky terminal state before a new job."""
+        """Recover only when needed; normal rounds leave DONE to the firmware.
+
+        C03 §3.2 gives completion/error clearing to the RISC-V firmware.  A
+        successful DONE/RESULT_VALID is therefore left for the firmware's
+        next START to clear (``cop_job.c`` writes CTRL=24).  PS writes
+        ABORT/CLEAR only for a real error, timeout, or a stale terminal left
+        by a previous process.
+        """
         status = self.status()
+        if not self._needs_recovery:
+            if status & R.STATUS_BUSY or status & (R.STATUS_ERROR | R.STATUS_TIMEOUT):
+                self._needs_recovery = True
+            elif not self._started and status & (R.STATUS_DONE | R.STATUS_RESULT_VALID):
+                self._needs_recovery = True  # do not inherit a previous process's terminal
+            else:
+                self._started = True
+                return status
+        self._started = True
         aborted = bool(status & R.STATUS_BUSY)
         if aborted:
             self.write("CTRL", R.CTRL_ABORT)
@@ -172,13 +199,16 @@ class CopDriver:
                      | R.STATUS_RESULT_VALID):
             raise CopProtocolError(f"terminal state did not clear: 0x{status:08x}")
         self.events.append({"kind": "recover", "aborted": aborted, "status": status})
+        self._needs_recovery = False
         return status
 
     def abort(self):
         self.write("CTRL", R.CTRL_ABORT)
+        self._needs_recovery = True
 
     def soft_reset(self):
         self.write("CTRL", R.CTRL_SOFT_RESET)
+        self._needs_recovery = False
         self.events.append({"kind": "soft_reset"})
 
     # ---- submission ------------------------------------------------------
@@ -316,22 +346,49 @@ class CopDriver:
             return {**self._cache["result"], "duplicate": True}
 
         self.recover()
-        cfg_seq = self._configure(job, count)
+        try:
+            cfg_seq = self._configure(job, count)
+        except CopError:
+            self._needs_recovery = True
+            raise
         started = time.monotonic()
         polls = 0
+        saw_busy = False
+        stale_since = None
         while True:
             status = self.status()
             polls += 1
+            now = time.monotonic()
             if status & (R.STATUS_ERROR | R.STATUS_TIMEOUT):
+                self._needs_recovery = True
                 error_name = self._sim_error()
                 self.write("CTRL", R.CTRL_CLEAR_DONE | R.CTRL_CLEAR_ERROR)
                 self._model_loaded = None  # force a clean reload on retry
                 error_type = CopTimeoutError if status & R.STATUS_TIMEOUT else CopJobError
                 raise error_type("coprocessor terminated without a valid result",
                                  status=status, error_name=error_name)
+            if status & R.STATUS_BUSY:
+                saw_busy = True
+                stale_since = None
             if status & R.STATUS_DONE:
-                break
-            if time.monotonic() - started > self.job_timeout_s:
+                seq = self.read("RESULT_SEQ")
+                fresh = self.last_result_seq is None or seq != self.last_result_seq
+                if fresh:
+                    break
+                if saw_busy:
+                    self._needs_recovery = True
+                    raise CopProtocolError(
+                        f"DONE without a new RESULT_SEQ ({seq} after {self.last_result_seq})")
+                if stale_since is None:
+                    stale_since = now
+                elif now - stale_since > min(0.5, self.job_timeout_s / 2):
+                    self._needs_recovery = True
+                    raise CopProtocolError(
+                        f"old DONE/RESULT_SEQ {seq} persisted; firmware did not start a new job")
+            else:
+                stale_since = None
+            if now - started > self.job_timeout_s:
+                self._needs_recovery = True
                 self.write("CTRL", R.CTRL_ABORT)
                 self._poll(lambda: not (self.status() & R.STATUS_BUSY), 1.0,
                            "BUSY to clear after ABORT")
@@ -339,6 +396,7 @@ class CopDriver:
                                       status=status, error_name=self._sim_error())
             time.sleep(self.poll_s)
 
+        self._needs_recovery = True  # until a complete, checked result is published
         if not status & R.STATUS_RESULT_VALID:
             raise CopProtocolError("DONE without RESULT_VALID")
         seq_before = self.read("RESULT_SEQ")
@@ -410,6 +468,7 @@ class CopDriver:
                   "decision": ps_decision, "trace": trace,
                   "result_seq": seq_before, "cfg_seq": cfg_seq}
         self.last_result_seq = seq_before
+        self._needs_recovery = False
         self.events = []
         self._cache = {"key": key, "fingerprint": fingerprint, "result": result}
         return result
