@@ -134,8 +134,9 @@ def endpoint_state(remote, rec_count, current, age, fps, shape, selected, hover)
         state["badge2"] = ("PROTOTYPE", RED)  # C04 §3.2：离线产物代实时结果，恒显不可关闭
     if current:
         view = live_view(packet)
-        status = (f"{view['verdict']} {view['delta']}".rstrip(),
-                  VERDICT_COLOR.get(view["verdict"], MAIN))
+        status_text = (f"{view['verdict']} 未完整计数" if view["partial"]
+                       else f"{view['verdict']} {view['delta']}".rstrip())
+        status = (status_text, VERDICT_COLOR.get(view["verdict"], MAIN))
         if view["counts"]:
             scope["counts"] = view["counts"]
         scope["note"] = f"ROUND {packet['check_id']} · REC {rec_val}"

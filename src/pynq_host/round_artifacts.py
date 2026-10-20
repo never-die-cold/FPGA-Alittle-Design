@@ -51,8 +51,30 @@ def load_snapshot(root, session_id, check_id):
         source = engine_result.get("provenance", {}).get("source_sha256")
         if source != digest:
             raise SnapshotError("engine source hash mismatch")
+        _verify_rois(engine_path.parent, engine_result)
     return {"capture": capture_path, "packet": packet, "sha256": digest,
             "engine_result": engine_result}
+
+
+def _verify_rois(engine_dir, engine_result):
+    """逐目标 ROI 像素哈希链（NC 10-14 Q3 细则）：文件在引擎目录内、解码像素哈希一致。"""
+    root = engine_dir.resolve()
+    for target in engine_result.get("targets", []):
+        relative = target.get("roi_path")
+        expected = target.get("roi_pixels_sha256")
+        if not relative or not expected:
+            raise SnapshotError("engine target lacks ROI artifact reference")
+        roi_path = (engine_dir / relative).resolve()
+        if not roi_path.is_relative_to(root):
+            raise SnapshotError("ROI path escapes engine artifacts")
+        if not roi_path.is_file():
+            raise SnapshotError("missing ROI artifact")
+        import cv2
+        import numpy as np
+        pixels = cv2.imdecode(np.frombuffer(roi_path.read_bytes(), np.uint8),
+                              cv2.IMREAD_UNCHANGED)
+        if pixels is None or hashlib.sha256(pixels.tobytes()).hexdigest() != expected:
+            raise SnapshotError("ROI hash mismatch")
 
 
 if __name__ == "__main__":

@@ -42,7 +42,8 @@ def live_view(packet):
     返回 verdict（报文 status 原文，判定横幅文本）、delta（缺/多摘要，如 "-washerx1"）、
     targets（"实际/工单" 总数；无 decision 时退化为目标数）、labels（与 targets 对齐的
     (类别显示名, 分数文本)；class=null → unclassified，缺分数 → "--"）、
-    counts（逐类别已分类目标数；LOCATION_ONLY＝无分类语义 → None，显示"--"）。
+    counts（逐类别已分类目标数；LOCATION_ONLY＝无分类语义 → None，显示"--"）、
+    partial（target_limit 轮＝未完整计数：服务端映射的零计数/缺件差额不得当实测展示）。
     """
     labels = [(t.get("class") if t.get("class") in CLASSES else "unclassified",
                f"{t['score']:.2f}" if isinstance(t.get("score"), (int, float)) else "--")
@@ -50,7 +51,12 @@ def live_view(packet):
     decision = packet.get("decision")
     if packet["status"] == "LOCATION_ONLY" or not isinstance(decision, dict):
         return {"verdict": "LOCATION_ONLY", "delta": "",
-                "targets": str(len(labels)), "labels": labels, "counts": None}
+                "targets": str(len(labels)), "labels": labels, "counts": None,
+                "partial": False}
+    if "target_limit" in (decision.get("reasons") or []):
+        return {"verdict": packet["status"], "delta": "",
+                "targets": f"{sum(decision['actual'].values())}/{sum(decision['expected'].values())}",
+                "labels": labels, "counts": None, "partial": True}
     counts = dict.fromkeys(CLASSES, 0)
     for label, _ in labels:
         if label in counts:
@@ -59,7 +65,7 @@ def live_view(packet):
     extra = [f"+{name}x{n}" for name, n in decision["extra"].items() if n]
     return {"verdict": packet["status"], "delta": " ".join(missing + extra),
             "targets": f"{sum(decision['actual'].values())}/{sum(decision['expected'].values())}",
-            "labels": labels, "counts": counts}
+            "labels": labels, "counts": counts, "partial": False}
 
 
 def http_json(url, body=None):

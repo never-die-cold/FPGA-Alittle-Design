@@ -72,7 +72,8 @@ WAITING；连续 3 次 HTTP 失败自动重新握手（D5）。界面为 **HUD v
 高分屏下不被系统拉伸切割。
 
 **LIVE 显示（W06，C04 §3.2）**：`mode=LIVE` 轮次显示判定横幅（CHECK_PASS 绿 / CHECK_FAIL 红 /
-RECHECK 琥珀，附 `-washerx1` 式缺多摘要）、识别范围表计数列显示逐类别数目、对象列表逐行显示
+RECHECK 琥珀，附 `-washerx1` 式缺多摘要；`target_limit` 轮显示 `RECHECK 未完整计数`、计数列 `--`，
+映射零值不当实测）、识别范围表计数列显示逐类别数目、对象列表逐行显示
 类别与分数（`class=null` → unclassified）；报文带 `prototype=true` 时顶栏恒显红色
 `PROTOTYPE` 徽标（离线产物代实时结果，不可关闭）。判定横幅文本与差额由 `rounds.live_view`
 纯函数生成（离板可测）。LIVE 联调替身：`python src/pynq_host/vision_mock_service.py --live`

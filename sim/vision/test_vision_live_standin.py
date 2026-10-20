@@ -66,7 +66,22 @@ def main():
         only = live_view(mock_packet("sess", 1, 0, 1))
         assert only == {"verdict": "LOCATION_ONLY", "delta": "", "targets": "2",
                         "labels": [("unclassified", "--"), ("unclassified", "--")],
-                        "counts": None}
+                        "counts": None, "partial": False}
+        # 超限映射（C03 §8 / NC 10-14 评审）：target_limit 轮＝未完整计数——计数未知、无差额
+        partial = validate_packet({
+            "version": 1, "mode": "LIVE", "session_id": "sess-limit", "frame_id": 1,
+            "config_id": 0, "check_id": 1, "width": 1280, "height": 720,
+            "created_at": time.time(), "status": "RECHECK", "targets": [],
+            "decision": {"verdict": "RECHECK", "expected": {"bolt": 2, "nut": 2, "washer": 2},
+                         "actual": {"bolt": 0, "nut": 0, "washer": 0},
+                         "delta": {"bolt": -2, "nut": -2, "washer": -2},
+                         "missing": {"bolt": 2, "nut": 2, "washer": 2},
+                         "extra": {"bolt": 0, "nut": 0, "washer": 0},
+                         "reasons": ["target_limit"]},
+            "prototype": True})
+        partial_view = live_view(partial)
+        assert partial_view["partial"] is True and partial_view["counts"] is None
+        assert partial_view["delta"] == "" and partial_view["verdict"] == "RECHECK"
     finally:
         server.shutdown()
         server.server_close()

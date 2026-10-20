@@ -43,6 +43,10 @@
   映射为按报文内已列目标重算 actual/delta/missing/extra，verdict/reasons 保持 RECHECK——
   "不截断放行"语义不变，计数口径变化仅此一处，评审通过后回写本条为已冻结。
   10/14复核：FILE引擎超限实际返回空目标列表，映射会产生零计数与缺件差额；这些不是完整实测数量。现有EXE未区分该语义，见[待修项](../archive/c04-nc-review-2026-10-14.md)。
+  2026-10-19 实现（NC 10-14 评审项）：策略/能力分离落地——`judge(..., max_targets=16, policy_max=None)`
+  默认业务策略 `min(10, max_targets)`；目标数或工单总数超策略即 `target_limit`，`inspect_frame` 超策略
+  不启动分类（targets=[]、计数 None）；EXE 对 `target_limit` 轮横幅显示 `未完整计数`、计数列 `--`、
+  CSV 的 missing/extra 留空（reasons 保留 `target_limit`）——映射零值不再展示/导出为实测。
 
 ### 2.3 记录 ↔ 服务产物（W05 实现要求）
 
@@ -50,7 +54,7 @@
 - 2026-10-15 FILE 原型性能策略：自动轮询只保留最新报文，手动携 `trigger_ref` 或
 - EXE 记录（`records.jsonl`）引用：记录键 (session_id, check_id)（D9）+ 上下文截图；快照原帧属服务产物，EXE 按引用展示，不复制冒充自采。
   2026-10-14 NC确认Q3以本轮capture原帧为权威证据；真实LIVE快照读取/查看仍未实现，确认原则不代替功能验收。
-- **快照读取与哈希核对（2026-10-13 实现，待 NC 确认）**：读取方按 (session_id, check_id) 定位轮次目录，依次核对 packet 白名单与绑定（session/check 与请求一致）、`capture.png` 字节哈希 == `capture.sha256`、引擎存在时 `result.json` 的 `provenance.source_sha256` 与 capture 哈希一致；任一不符大声失败。实现 `src/pynq_host/round_artifacts.py`（含 CLI：`py src/pynq_host/round_artifacts.py <root> <session_id> <check_id>`，供 NC 板端核对）。2026-10-13 之前的旧轮次无 `capture.sha256`，核对器按缺件拒绝。
+- **快照读取与哈希核对（2026-10-13 实现，待 NC 确认）**：读取方按 (session_id, check_id) 定位轮次目录，依次核对 packet 白名单与绑定（session/check 与请求一致）、`capture.png` 字节哈希 == `capture.sha256`、引擎存在时 `result.json` 的 `provenance.source_sha256` 与 capture 哈希一致；任一不符大声失败。实现 `src/pynq_host/round_artifacts.py`（含 CLI：`py src/pynq_host/round_artifacts.py <root> <session_id> <check_id>`，供 NC 板端核对）。2026-10-13 之前的旧轮次无 `capture.sha256`，核对器按缺件拒绝。2026-10-19 增补（NC 10-14 Q3 细则）：引擎产物存在时逐目标核对 ROI 像素哈希（`roi_pixels_sha256`，解码像素字节比对），并拒绝越界/缺失/篡改 ROI。
 - **记录重启去重（2026-10-13 实现，NC 点名项）**：`BatchRecords` 启动时从既有 `records.jsonl` 重建去重键与计数（键跨进程有效）；异常事件截图序号同样续编；损坏记录行大声失败。
 
 ### 2.4 请求重试语义（草案，待 NC/JL 确认，2026-10-13）
@@ -155,3 +159,4 @@
 | 2026-10-13 | 服务落 `capture.sha256` 侧车 + `round_artifacts.py` 快照核对器（§2.3，待 NC 确认）；新增 §2.4 请求重试语义草案（待 NC/JL 确认）；记录重启去重落地（§2.3，NC 返场执行单点名项） | watercopper（离板应用链） |
 | 2026-10-14 | 补充Q1/Q3/Q5源码复核与专项证据；同步C03已冻结10/16分层，登记超限零计数缺口；C04仍待确认 | NC离板续工 |
 | 2026-10-14 | NC本人确认Q1/Q3与Q5原则；Q5继续交JL对齐并在实现修复后验收，未代签完整C04或硬件通过 | NC本人 / Codex记录 |
+| 2026-10-19 | Q5 策略/能力分离落地（`judge` policy_max 默认 `min(10,16)`，超策略不分类）；`target_limit` 轮显示"未完整计数"、CSV 不导出映射差额；快照核对器补 ROI 像素哈希链（NC 10-14 评审三项） | watercopper（离板应用链） |

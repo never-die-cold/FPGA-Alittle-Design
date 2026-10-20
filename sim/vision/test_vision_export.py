@@ -28,6 +28,21 @@ def main():
     rec.write(mock_packet("sess-export-0001", 7, 2, 5), None)
     rec.write(mock_packet("sess-export-0001", 8, 2, 6), None)
     rec.write(live_packet("sess-export-0001", 9, 2, 9), None)  # (9+2)%3=2 → RECHECK+prototype
+    # 超限映射轮（target_limit）：映射零计数/缺件差额不得导出为实测数量（NC 10-14 评审）
+    partial_row = {"schema_version": 2, "mode": "LIVE", "session_id": "sess-export-0001",
+                   "check_id": 11, "config_id": 2, "frame_id": 12,
+                   "recorded_at": "2026-10-10T00:00:00", "result_age_s": 0.3, "created_at": 0,
+                   "protocol_version": 1, "target_count": 0, "targets": [], "status": "RECHECK",
+                   "decision": {"verdict": "RECHECK",
+                                "expected": {"bolt": 2, "nut": 2, "washer": 2},
+                                "actual": {"bolt": 0, "nut": 0, "washer": 0},
+                                "delta": {"bolt": -2, "nut": -2, "washer": -2},
+                                "missing": {"bolt": 2, "nut": 2, "washer": 2},
+                                "extra": {"bolt": 0, "nut": 0, "washer": 0},
+                                "reasons": ["target_limit"]},
+                   "prototype": True, "screenshot": "screenshots/proto_x_000011.png"}
+    with (out / "records.jsonl").open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(partial_row) + "\n")
     # v1 旧记录（verdict 预留字段、无 status/decision）：导出必须兼容，不炸不丢
     v1_row = {"schema_version": 1, "mode": "LIVE", "session_id": "sess-export-0001",
               "check_id": 10, "config_id": 2, "frame_id": 11,
@@ -36,11 +51,11 @@ def main():
     with (out / "records.jsonl").open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(v1_row) + "\n")
     csv_path, count = export_records(out)
-    assert count == 4 and csv_path.name == "records.csv"
+    assert count == 5 and csv_path.name == "records.csv"
     assert csv_path.read_bytes().startswith(b"\xef\xbb\xbf"), "missing UTF-8 BOM"
     with csv_path.open(encoding="utf-8-sig", newline="") as handle:
         rows = list(csv.DictReader(handle))
-    assert len(rows) == 4
+    assert len(rows) == 5
     row = rows[0]
     assert row["check_id"] == "5" and row["mode"] == "MOCK" and row["target_count"] == "2"
     assert row["status"] == "LOCATION_ONLY" and row["prototype"] == "0"
@@ -51,7 +66,10 @@ def main():
     assert proto_row["mode"] == "LIVE" and proto_row["prototype"] == "1"
     assert proto_row["status"] == "RECHECK" and proto_row["missing"] == "washer:1"
     assert proto_row["extra"] == "" and proto_row["reasons"] == "low score T5"
-    v1_csv = rows[3]
+    partial_csv = rows[3]
+    assert partial_csv["status"] == "RECHECK" and partial_csv["reasons"] == "target_limit"
+    assert partial_csv["missing"] == "" and partial_csv["extra"] == "", "mapped counts exported as measured"
+    v1_csv = rows[4]
     assert v1_csv["status"] == "LOCATION_ONLY" and v1_csv["prototype"] == "0"
     assert v1_csv["verdict"] == "" and v1_csv["missing"] == "" and v1_csv["reasons"] == ""
     try:
