@@ -7,6 +7,7 @@
 
 - J03 离板计算链已收口：诊断整数参考、算子、Conv→GAP→FC 控制器和逐元素 TB 可复现。
 - J04a（JL 侧实现/冒烟）已交接：`cop_top`、MMIO/CDC、AXI4-Lite、DMA loader、核接入门和工单固件均有仓库内 TB；J04b（完整验证、物理 bank/结果 DMA、CDC/AXI 深测、综合/板验）未完成。详见[实现交接单](../runbooks/coprocessor-j04-handoff.md)。
+- WC 侧 PS 驱动/模拟硬件/服务引擎已按 C03 §13 落库并跑通离板一轮（mock/脚本分类器，非板上）；提交/完成/取结果/恢复口径与 JL 待办见 [PS 驱动使用档](coprocessor-ps-driver-v0.md)。
 - J05/J06 未完成：没有真实审计 ROI 上的正式 INT8 模型、阈值和发布黄金。
 - J07/J08 未完成：没有整机实现、位流或可交 NC 上板的三批正式交付包。
 
@@ -16,6 +17,7 @@
 | --- | --- |
 | 网络、整数算术、张量排布、payload | [C02](../../src/coprocessor/design_v0.md) |
 | MMIO、状态、DMA、结果与 PS/核分工 | [C03](coprocessor-integration-v0.md) |
+| PS 提交/完成/取结果/恢复与 JL 待办 | [PS 驱动使用档](coprocessor-ps-driver-v0.md) |
 | 核现役语义与待确认 SoC 回写 | [design_v1 §17](../../src/riscv/design_v1.md) |
 | J01–J10 状态和 J04 收口边界 | [模块计划](../../src/coprocessor/plan.md) |
 | J04 实现交接与 OPEN-1..12 | [实现交接单](../runbooks/coprocessor-j04-handoff.md) |
