@@ -1,0 +1,6 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+make: 进入目录“/e/Projects/FPGA-Alittle-Design/src/riscv_fw”
+make: “cop_job.elf”已是最新。
+make: 离开目录“/e/Projects/FPGA-Alittle-Design/src/riscv_fw”
+PASS: cop work-order PASS/FAIL/RECHECK, low-confidence and 10/16 policy
+PASS: objdump 失败 → make 非零退出，cop_job.dis 未被改写（sha256 0abcb4ad3da8…）

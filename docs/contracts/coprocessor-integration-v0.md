@@ -1,6 +1,7 @@
 # C03：CNN 协处理器、RISC-V 与 PS 的 v0 接口契约
 
-> 状态：**JL 已于 2026-10-11 定稿冻结，允许进入 J02**；仍不是已实现接口或板端验收证据。
+> 状态：**JL 已于 2026-10-11 定稿冻结**；J04 离板实现与冒烟已落库，
+> 但本文仍不是完整系统仿真、综合或板端验收证据。
 > 初稿日期：2026-10-10。整数/张量契约见
 > [`src/coprocessor/design_v0.md`](../../src/coprocessor/design_v0.md)，核现状见
 > [`src/riscv/design_v1.md`](../../src/riscv/design_v1.md)。
@@ -21,8 +22,8 @@
 v0 在 `soc_top` 增加单周期本地 MMIO 窗口，通过请求/应答 CDC 与协处理器控制域交换；
 PS 侧另用真正的 AXI4-Lite slave 访问同一逻辑寄存器映射。
 
-该方案扩展 SoC 地址译码但不改变 ISA/decode。开始实现前仍须把新增 MMIO 地址和 SoC 行为
-回写 `src/riscv/design_v1.md`；其当前“地址空间/端口不变、无总线等待”条款不能静默绕过。
+该方案扩展 SoC 地址译码但不改变 ISA/decode；新增 MMIO 地址和 SoC 行为
+已回写 `src/riscv/design_v1.md` §17，核数据口仍保持无总线等待。
 
 ## 2. v0 系统分工
 
@@ -315,7 +316,7 @@ decode/ISA 语义，且实现必须验证 busy/done/error/timeout/reset，是不
 
 ## 13. WC（PS 侧）对接注记（2026-10-13，实现前预备）
 
-现状：控制面 RTL（`cop_ctrl_regs`/`cop_top`/`dma_ctrl`）与 PS 驱动均未交付；本节钉住 WC 侧接入面
+现状：J04 控制面 RTL、流式载入器和固件已实现离板冒烟，PS 驱动和目标 Vivado BD 仍未交付；本节钉住 WC 侧接入面
 与 J08 交付要求，**不改变本契约任何冻结项**。
 
 **WC 规划的适配形状**（经 `vision_live_service` 引擎接口）：capture → PS 定位/ROI

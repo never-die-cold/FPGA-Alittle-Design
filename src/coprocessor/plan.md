@@ -17,7 +17,8 @@
 | J01 | 🟡 | C02/C03、预算与交接索引已有；不代替 WC/NC 签收 |
 | J02 | ✅ | 诊断整数参考、逐层黄金、文件/来源 SHA256 与篡改负例可复现；不是 J06 正式模型 |
 | J03 | ✅ | 活跃 Conv→GAP→FC 链逐元素对拍；独立、协处理器 all、全仓 all 退出 0 |
-| J04 | 🟡 | `cop_top`、MMIO/CDC、DMA loader、AXI4-Lite、核接入门和工单固件已离板验证；实体 BRAM 生产地址适配、SoC/视频/板端未验收。证据见 [J04 记录](../../report/llm_log/2026-10-18-j04-closeout.md) |
+| J04a | ✅ | JL 侧实现、模块/顶层冒烟、J02 zero、工单固件与交接单已落库；24 个文件 SHA256 与远端一致 |
+| J04b | 🟡 | 物理 bank/结果 DMA、CDC 异步相位、整机 SoC 时序与板验未完成；`cop_top` OOC 已过 100 MHz（OPEN-12 关闭）；OPEN-1..12 见[交接单](../../docs/runbooks/coprocessor-j04-handoff.md) |
 | J05 | ⬜ | 等真实审计 ROI；训练/PTQ/QAT、混淆矩阵与阈值未完成 |
 | J06 | ⬜ | 正式模型、真实参数/黄金、版本/哈希发布未完成 |
 | J07 | ⬜ | 视频原帧通路+核+CNN 的综合实现和整机回归未完成 |
@@ -35,6 +36,7 @@
 ## J04 收口边界与后续门槛
 
 1. C03 的 `0x8001_0000` 本地 MMIO 窗口和 SoC 行为已回写 `design_v1.md` §17 草案；核数据口无等待语义未改。
-2. J04 已按“寄存器/CDC → 存储/搬运 → `cop_top` → 固件”完成离板验证；OPEN：DataMover payload 到各物理 bank 的生产地址适配、CRC 负例、实体 BRAM/SoC/视频/板端集成。
-3. 后续进入 J07 整机集成前，先按 J05/J06 完成真实数据、正式 INT8 模型/黄金；不得用诊断权重冒充正式模型。
+2. J04a（JL 侧实现/冒烟）已完成：`cop_top`、MMIO/CDC、AXI4-Lite、流载入、核接入门和工单固件有仓库内 TB；24 个文件 SHA256 与远端一致，交接单见 [runbooks/coprocessor-j04-handoff.md](../../docs/runbooks/coprocessor-j04-handoff.md)。
+3. J04b（完整收口）未完成：DataMover payload 到各物理 bank 的生产地址适配、真实 36,032 B payload CRC 负例、CDC 异步相位、实体 BRAM/SoC/视频/板端集成；`cop_top` OOC 综合与实现已做（0 critical，`cop_clk` WNS +0.165 ns），整机 SoC 时序、XSim 回归和 bitstream 未做。`VERSION`/`CAPABILITY`/`ERROR_CODE` 仍读 0（OPEN-9），PS 空闲 ABORT 未按非驻留拒绝处理（OPEN-10）。J04 总体保持 🟡，不写 ✅。
+4. 后续进入 J07 整机集成前，先按 J05/J06 完成真实数据、正式 INT8 模型/黄金；不得用诊断权重冒充正式模型。
 

@@ -8,6 +8,7 @@ CROSS   := riscv32-unknown-elf-
 CC      := $(CROSS)gcc
 OBJDUMP := $(CROSS)objdump
 OBJCOPY := $(CROSS)objcopy
+PYTHON  ?= python3
 
 COMMON  := -mcmodel=medany -mno-relax -O2 -Wall -Wextra -ffreestanding -nostdlib -nostartfiles -Wl,--build-id=none
 ARCH_IM := -march=rv32im -mabi=ilp32
@@ -67,10 +68,13 @@ coremark.elf: $(CM_SRCS) $(CM_LD)
 	$(OBJCOPY) -O binary $< $@
 
 %.hex: %.bin bin2hex.py
-	python bin2hex.py $< $@
+	$(PYTHON) bin2hex.py $< $@
 
 %.dis: %.elf
-	$(OBJDUMP) -d $< > $@
+	$(OBJDUMP) -d $< > $@.tmp
+	tr -d '\r' < $@.tmp > $@
+	@rm -f $@.tmp
 
 clean:
 	-$(RM) $(TARGET).elf $(TARGET).bin $(TARGET).hex $(TARGET).dis $(V0_TARGET).elf $(V0_TARGET).bin $(V0_TARGET).hex $(V0_TARGET).dis $(TS_TARGET).elf $(TS_TARGET).bin $(TS_TARGET).hex $(TS_TARGET).dis $(SOC_TARGET).elf $(SOC_TARGET).bin $(SOC_TARGET).hex $(SOC_TARGET).dis $(BENCH_TARGET).elf $(BENCH_TARGET).bin $(BENCH_TARGET).hex $(BENCH_TARGET).dis coremark.elf coremark.bin coremark.hex coremark.dis
+	-$(RM) $(COP_TARGET).elf $(COP_TARGET).bin $(COP_TARGET).hex $(COP_TARGET).dis

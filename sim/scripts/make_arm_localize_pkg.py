@@ -21,7 +21,7 @@ def build(archive):
              ("arm_localize.py", "arm_localize_selftest.py", "arm_localize_bench.py")}
     files.update({"reference.py": ROOT / "data/golden/vision/localize/reference.py",
                   "two_targets.json": ROOT / "data/evidence/2026-10-03-arm-localize-baseline/two_targets.json",
-                  "README.md": ROOT / "docs/arm-localize-runbook.md"})
+                  "README.md": ROOT / "docs/runbooks/arm-localize-runbook.md"})
     for source in files.values():
         if not source.is_file():
             raise ValueError(f"missing package source: {source}")

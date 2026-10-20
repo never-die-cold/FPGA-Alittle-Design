@@ -80,19 +80,19 @@
 
 ## §2 成员分工与协作规矩
 
-> 2026-10-08 起按功能保留五个分支：`dev/riscv`、`dev/vision`、`dev/model`、`dev/exe`、`main`。开发分支经 PR 合入主干；任何人（含组长）不直接 push `main`。历史三线分支名仅在旧记录中保留。
+> 2026-10-20 起保留主干与三个人的工作分支：`main`、`dev/riscv`（JL）、`dev/vision`（NC）、`dev/exe`（WC）。`dev/model` 与已结束的临时分支在独有提交已合入后退役；模型工作由 JL 按包协调，在 `dev/riscv` 推进。开发分支经 PR 合入主干；任何人（含组长）不直接 push `main`。历史分支名仅在旧记录中保留。
 
 ### 2.1 成员职责
 
 | 成员 | 模块一职责 | 后续职责 | 工作分支 |
 |:---|:---|:---|:---|
 | `jianglibo` | RTL、自测及缺陷修复；核已收口 | 训练/量化/整数参考、CNN RTL、核固件与集成位流 | `dev/riscv`、模型工作按包协调 |
-| `never-die-cold` | 专项验证、综合与问题定位；核已收口 | 全部上板/采集/实测、集成验收与最终提交；视觉离板遗留核对 | `dev/vision`、`dev/model` |
+| `never-die-cold` | 专项验证、综合与问题定位；核已收口 | 全部上板/采集/实测、集成验收与最终提交；视觉离板遗留核对 | `dev/vision` |
 | `watercopper` | arch-test/benchmark、日志与材料；核已收口 | 数据/定位/ROI、PS驱动/服务软件、EXE、发布与材料 | `dev/exe` |
 
 当前执行依赖与N/J/W工作包以[三人清单](docs/project-closeout-three-person-checklist.md)为准；旧“训练NC、板务WC”安排只作历史，不再作为续工分配。
 
-分支用途：`dev/riscv` 管核与协处理器 RTL；`dev/vision` 管视觉链路；`dev/model` 管训练、模型与黄金参考；`dev/exe` 管前端与联调；`main` 管经 PR 审查的集成版本。模型负责人仍按具体工作包协调，本次不改变成员职责。
+分支用途：`dev/riscv` 管核、协处理器、训练、模型与黄金参考；`dev/vision` 管视觉链路和板端验收；`dev/exe` 管前端、服务与联调；`main` 管经 PR 审查的集成版本。三人职责仍按具体工作包协调。
 
 目录分工：
 
@@ -129,7 +129,7 @@
 - 10/13 新增：CNN MAC/卷积寻址/bias/ReLU/requant/GAP/FC 与整网控制器、诊断整数黄金和参数校验；控制器 100 MHz OOC WNS=+0.058 ns、WHS=+0.049 ns、192 DSP，外部存储/SoC 未计入。DDR 单帧所有权适配通过七组离板异常测试，实测两次均在启动 DMA 前失败并恢复。[CNN证据](data/logs/2026-10-13-cnn-arithmetic/README.md)、[DDR证据](data/logs/2026-10-13-ddr-single-frame/README.md)。
 - 10/15–10/17 新增：五组离板独立复核（C01 入口替身 11 条路径、停机期粘滞错误位含桩覆盖、CNN 快批次与几何优化独立复跑一致、N03 包离板 SHA256/配对复算 6/6 OK）；EXE 环在真实网络接通——板端 park 采集后端 + numpy CNN 引擎装入 W05 LIVE 服务骨架，PC 经 192.168.50.99:8765 消费 v1.2 包，/v1/check 两轮 PASS（94–122 s，RECHECK 属实：场景未构图+触边+超限）；板端服务挂掉→OOM 探查→cron 自愈安装全程留档。[10-15证据](data/logs/2026-10-15-c01-entry-surrogate-step2/README.md)、[10-17证据](data/logs/2026-10-17-exe-ring/README.md)。
 - **M3（10/20）卡点报备（10/17，按 §3.4 提前说明）**：已通的是 prototype 六环（真实相机→park 采集→定位→板上 numpy CNN→判定→EXE，PS 过渡路径，一轮 2 分钟级，prototype=true）；**未实现**：C03 硬件 CNN（J02）接入、正式 INT8 模型/生产黄金、正式工位建成与定标采集（N04/N05 等拍摄环境，亚克力工位尚在概念稿阶段）、工业场景矩阵 N10–N12 实测。M3 的硬件闭环与实测项预计顺延；prototype 链按既有口径只作阶段成果，不入验收。裁决与降级范围由 owner 定。
-- 未实现／未接入：正式 INT8 模型/生产黄金、实体缓存与 CNN MMIO/DMA、首网板端输出、custom DDR 完整取帧实测、核工业固件、真实硬件 LIVE 后端及整机发布验收。10/12[文档核对清单](docs/archive/implementation-document-audit-2026-10-12.md)是历史盘点，新实现以上述10/13证据为准。
+- 未实现／未接入：正式 INT8 模型/生产黄金、payload 物理 bank/结果 DMA 适配、首网板端输出、custom DDR 完整取帧实测、真实硬件 LIVE 后端及整机发布验收。CNN MMIO/CDC/流载入/工单固件已有 J04 冒烟交接，不代表完整验证。10/12[文档核对清单](docs/archive/implementation-document-audit-2026-10-12.md)是历史盘点，新实现以对应交接证据为准。
 
 ### 3.2 交付看板
 
@@ -138,7 +138,7 @@
 | RISC-V 核 | 模块一收口完成：PR #60已合并，#20/#21及M1已关闭；全量退出0、四档XSim/arch扩展、BHT2核86.806MHz时序与40MHz真实上板有证据；仅转发收益10.20% | 移交模块三；备考#61独立待办；见 [收口报告](report/module1-closure.md) | JL；NC/WC 复验 |
 | 视频链路 | 25 RTL tb；历史真实相机视频已验证；C01 彩色捕获 RTL/BD/候选位流与显示/状态诊断已有 | 帧槽所有权、DDR BGR/动态对拍；完整 N02/N03 复验 | NC 实机；WC 驱动/软件适配 |
 | 定位与紧固件模型 | 定位/ROI、FP32 原型与 INT8 标量/张量/卷积参考已有；正式模型与实机部署未验收 | 真实数据、FP32/PTQ 对比、正式 INT8 参数/权重/整网黄金 | JL 训练/量化；WC 数据/定位；NC 采图/实测 |
-| CNN 协处理器 | C02/C03 已冻结；算子/整网控制器、诊断整数黄金与控制器 OOC 已有 | 实体缓存、MMIO/DMA、核接入与首网板端输出；正式模型 | JL；依据诊断包先集成，再接正式参数 |
+| CNN 协处理器 | C02/C03、算子/整网、J04 MMIO/CDC/流载入/核窗口/工单固件已实现并冒烟交接 | 物理 bank/结果 DMA、完整验证、首网板端输出与正式模型 | JL 交实现；验证队友/NC 接完整验证与板验 |
 | 板端调度与服务 | 配置诊断、MOCK、FILE/LIVE 骨架与文件工单候选规则已有；核工业调度未实现 | 真实取帧/MMIO/CNN 后端、核工单规则与服务联调 | NC 按 D7 负责实机服务；WC 按 W04/W05 编写适配/服务；JL 核固件 |
 | Windows EXE | UVC/轮次、LIVE 类别/分数/工单横幅、PROTOTYPE、记录 v2、CSV 与离线回放已有 | 检查快照查看、真实硬件结果联调与目标机发布复验 | WC；依赖真实服务与实机证据 |
 | 发布与证据 | 核/视觉已有部分证据；工业闭环证据未完成 | 实机验收、指标、EXE 发布包、操作说明与演示视频 | 全员；WC 主笔材料 |

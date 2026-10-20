@@ -12,7 +12,7 @@ RISC-V 以 load/store 访问且不启用自定义指令。
 
 ## 模块与边界
 
-已实现并离板验证（J04）：`cop_top.v`、`cop_ctrl_regs.v`、`cop_axi_lite_frontend.v`、`cop_cdc_mailbox.v`、`cop_dma_loader.v`、`cop_task_ctrl.v`、`cop_config_regs.v`、`cop_core_mmio_gate.v`，以及 `src/riscv_fw/cop_job.c` 工单固件。J04-13 的 OPEN：DataMover payload 到各物理 bank 的生产地址适配、CRC 负例与 SoC/板端集成。
+J04a 已实现并离板冒烟（JL 侧）：`cop_top.v`、`cop_ctrl_regs.v`、`cop_axi_lite_frontend.v`、`cop_cdc_mailbox.v`、`cop_dma_loader.v`、`cop_task_ctrl.v`、`cop_config_regs.v`、`cop_core_mmio_gate.v`，以及 `src/riscv_fw/cop_job.c` 工单固件。J04b 的 OPEN：DataMover payload 到各物理 bank 的生产地址适配、真实 payload CRC 负例、CDC/AXI 深测与 SoC/板端集成；详见[实现交接单](../../docs/runbooks/coprocessor-j04-handoff.md)。
 
 未实现/未验收：`buffer.v` 实体 BRAM 生产适配、`dma_ctrl.v` 独立描述符顶层、`isa_extension.v`（v0 不例化、不占 opcode）、实体 BRAM/SoC/视频集成与板端输出。
 
@@ -21,7 +21,7 @@ RISC-V 以 load/store 访问且不启用自定义指令。
 - 与 RISC-V 核：`soc_top` 本地 MMIO 窗口，固件以 load/store 启动和轮询；现有核数据口没有等待握手，不能直接冒充 AXI master
 - 与 PS：AXI4-Lite 配置/状态；数据通过 AXI DMA/DataMover 搬运
 - 与存储系统：只搬权重、逐目标 64×64 ROI 与小结果；中间特征默认驻留 BRAM，不默认全分辨率逐帧 DDR 回写
-- C03 已给出寄存器映射；J04 控制面已离板验证，SoC/实体 BRAM/视频与板端集成尚未验收，接入时须同步核/SoC 契约与驱动
+- C03 已给出寄存器映射；J04a 控制面已离板冒烟，J04b 完整验证、SoC/实体 BRAM/视频与板端集成尚未验收，接入时须同步核/SoC 契约与驱动
 
 ## 已实现的离板计算链（2026-10-13）
 
@@ -58,4 +58,4 @@ venv 位于已忽略的 `sim/build`，不作为交付文件；PASS 证据仍来�
 - 算子化验证（CONV/POOL/GEMM 加速比表）与吞吐率指标（每拍采样数/SSR 思路）：[docs/proposal_upgrade.md](../../docs/research/proposal_upgrade.md)
 - 训练/量化侧前期准备与接口对齐点：[docs/runbooks/module3-model-training.md](../../docs/runbooks/module3-model-training.md)
 
-> 未实现：正式 INT8 训练/权重发布、实体 BRAM 生产地址适配、SoC/视频与板端集成；首网板端输出与整机时序/性能尚未验证。J04 控制面/`cop_top`/MMIO/CDC/DMA/工单固件已离板验证。
+> 未实现：正式 INT8 训练/权重发布、实体 BRAM 生产地址适配、SoC/视频与板端集成；首网板端输出与整机时序/性能尚未验证。J04a 控制面/`cop_top`/MMIO/CDC/DMA/工单固件已离板冒烟；J04b 完整验证未完成。

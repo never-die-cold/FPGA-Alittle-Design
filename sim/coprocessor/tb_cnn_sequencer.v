@@ -30,7 +30,7 @@ module tb_cnn_sequencer;
     reg [4095:0] model_folder,folder,filename;
     always #5 clk=~clk;
     always @(negedge clk) begin tb_cycles=tb_cycles+1; ce=!force_pause && (tb_cycles%7)!=3; end
-    cnn_sequencer dut (.clk(clk),.rst_n(rst_n),.ce(ce),.start(start),.min_margin(min_margin),
+    cnn_sequencer dut (.clk(clk),.rst_n(rst_n),.ce(ce),.start(start),.abort(1'b0),.min_margin(min_margin),
         .cycle_limit(cycle_limit),.ready(ready),.busy(busy),.done(done),.error(error),.error_layer(error_layer),
         .cycles(cycles),.result_class(classification),.result_margin(margin),.result_score(score),
         .result_low_conf(low_conf),.result_logits(logits),.memory_enable(memory_enable),.weight_enable(weight_enable),

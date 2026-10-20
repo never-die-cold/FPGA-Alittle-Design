@@ -5,6 +5,13 @@ source "$ROOT/sim/scripts/vision_gate.sh"
 BUILD="$ROOT/sim/build/coprocessor"
 mkdir -p "$BUILD"
 PY="${COPROCESSOR_PYTHON:-${VISION_PYTHON:-python3}}"
+if ! command -v "$PY" >/dev/null 2>&1 || ! "$PY" -c 'import sys' >/dev/null 2>&1; then
+    PY=python
+fi
+CROSS="${RISCV_CROSS:-riscv32-unknown-elf-}"
+if ! command -v "${CROSS}gcc" >/dev/null 2>&1 && command -v riscv64-unknown-elf-gcc >/dev/null 2>&1; then
+    CROSS=riscv64-unknown-elf-
+fi
 VECTORS="$BUILD/arithmetic-vectors"
 "$PY" "$ROOT/sim/coprocessor/generate_arithmetic_vectors.py" --output "$VECTORS"
 run_test() {
@@ -56,9 +63,11 @@ run_top() {
     vision_run_checked "$BUILD/cop_top.log" vvp "$BUILD/cop_top.vvp" "+model=$dir" "+case=$dir/zero"
 }
 run_firmware() {
+    make -C "$ROOT/src/riscv_fw" CROSS="$CROSS" PYTHON="$PY" cop_job.elf
     gcc -std=c99 -Wall -Wextra -Werror -I"$ROOT/src/riscv_fw" \
         "$ROOT/sim/coprocessor/test_cop_work_order.c" -o "$BUILD/test_cop_work_order"
     vision_run_checked "$BUILD/cop_work_order.log" "$BUILD/test_cop_work_order"
+    vision_run_checked "$BUILD/firmware_rules.log" bash "$ROOT/sim/scripts/test_firmware_rules.sh"
 }
 case "${1:-all}" in
     mac_lane) run_test mac_lane ;;

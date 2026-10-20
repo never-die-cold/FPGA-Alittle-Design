@@ -7,6 +7,7 @@ module tb_cop_top;
     reg dma_start=0,dma_valid=0,dma_last=0,dma_kind=0;
     reg [11:0] awaddr,araddr; reg [31:0] axi_wdata;
     wire awready,wready,bvalid,arready,rvalid,dma_ready,store_write; wire [31:0] axi_rdata;
+    wire [1:0] bresp,rresp;
     reg [63:0] memory_data; reg [1023:0] weight_data;
     reg [511:0] bias_data,multiplier_data; reg [95:0] shift_data;
     reg [7:0] roi [0:4095]; reg [63:0] ping [0:4095],pong [0:2047],gap [0:7];
@@ -21,9 +22,9 @@ module tb_cop_top;
         .core_wdata_i(wdata),.core_be_i(be),.core_we_i(we),.core_hit_o(hit),.core_rdata_o(rdata),
         .s_axi_awaddr_i(awaddr),.s_axi_awvalid_i(awvalid),.s_axi_awready_o(awready),
         .s_axi_wdata_i(axi_wdata),.s_axi_wstrb_i(4'hf),.s_axi_wvalid_i(wvalid),
-        .s_axi_wready_o(wready),.s_axi_bvalid_o(bvalid),.s_axi_bready_i(bready),
+        .s_axi_wready_o(wready),.s_axi_bresp_o(bresp),.s_axi_bvalid_o(bvalid),.s_axi_bready_i(bready),
         .s_axi_araddr_i(araddr),.s_axi_arvalid_i(arvalid),.s_axi_arready_o(arready),
-        .s_axi_rdata_o(axi_rdata),.s_axi_rvalid_o(rvalid),.s_axi_rready_i(rready),
+        .s_axi_rdata_o(axi_rdata),.s_axi_rresp_o(rresp),.s_axi_rvalid_o(rvalid),.s_axi_rready_i(rready),
         .dma_start_i(dma_start),.dma_kind_i(dma_kind),.dma_data_i(64'd0),.dma_keep_i(8'hff),
         .dma_valid_i(dma_valid),.dma_last_i(dma_last),.store_ready_i(1'b1),.dma_ready_o(dma_ready),
         .store_write_o(store_write),.target_id_i(16'h1234),.memory_data_i(memory_data),
@@ -57,12 +58,13 @@ module tb_cop_top;
     end
     task ps_wr; input [11:0] a; input [31:0] d;
         begin @(negedge cop_clk); awaddr=a; axi_wdata=d; awvalid=1; wvalid=1;
-            @(negedge cop_clk); awvalid=0; wvalid=0; wait(bvalid); bready=1;
+            @(negedge cop_clk); awvalid=0; wvalid=0; wait(bvalid);
+            if(bresp!=0) $fatal(1); bready=1;
             @(posedge cop_clk); #1; bready=0; end
     endtask
     task ps_rd; input [11:0] a; input [31:0] expected;
         begin @(negedge cop_clk); araddr=a; arvalid=1; @(negedge cop_clk); arvalid=0;
-            wait(rvalid); if(axi_rdata!==expected) $fatal(1); rready=1;
+            wait(rvalid); if(rresp!=0 || axi_rdata!==expected) $fatal(1); rready=1;
             @(posedge cop_clk); #1; rready=0; end
     endtask
     initial begin
@@ -76,18 +78,22 @@ module tb_cop_top;
         memory_data=0; weight_data=0; bias_data=0; multiplier_data=0; shift_data=0;
         repeat(3) @(negedge core_clk); rst_n=1;
         ps_wr(12'h01c,1); ps_wr(12'h024,32'h1234); ps_wr(12'h028,32'h6522df69);
-        ps_wr(12'h02c,1); ps_wr(12'h030,2000000);
+        ps_wr(12'h02c,1); ps_wr(12'h030,2000000); ps_wr(12'h034,32'h0a010000);
         ps_wr(12'h048,32'h1000); ps_wr(12'h04c,8); ps_wr(12'h050,32'h2000);
         ps_wr(12'h054,32'h3000); ps_wr(12'h058,4096); ps_wr(12'h05c,32'h4000);
         ps_wr(12'h060,16); ps_wr(12'h064,5); ps_wr(12'h068,1);
+        // loader 逐字节折 CRC，每拍占多个 cop 拍：按 AXI-Stream 握手驱动，并等置位再断言。
         @(negedge cop_clk); dma_start=1; @(negedge cop_clk); dma_start=0; dma_valid=1; dma_last=1;
-        @(posedge cop_clk); #1; dma_valid=0; dma_last=0;
-        @(posedge cop_clk); #1;
-        if(!dut.model_valid || dut.dma_bytes!=8) $fatal(1);
-        @(negedge cop_clk); dma_kind=1; dma_start=1; @(negedge cop_clk); dma_start=0; dma_valid=1;
-        for(beat=0;beat<512;beat=beat+1) begin dma_last=beat==511; @(posedge cop_clk); #1; end
-        dma_valid=0; dma_last=0; @(posedge cop_clk); #1;
-        if(!dut.roi_valid || dut.dma_bytes!=4096) $fatal(1);
+        @(posedge cop_clk); while(!dma_ready) @(posedge cop_clk); #1; dma_valid=0; dma_last=0;
+        wait(dut.model_valid); #1;
+        if(dut.dma_bytes!=8) $fatal(1);
+        @(negedge cop_clk); dma_kind=1; dma_start=1; @(negedge cop_clk); dma_start=0;
+        for(beat=0;beat<512;beat=beat+1) begin
+            dma_last=(beat==511); dma_valid=1;
+            @(posedge cop_clk); while(!dma_ready) @(posedge cop_clk); #1; dma_valid=0;
+        end
+        wait(dut.roi_valid); #1;
+        if(dut.dma_bytes!=4096) $fatal(1);
         @(negedge core_clk); addr=32'h8001000c; wdata=1; we=1;
         @(negedge core_clk); we=0; wait(starts==1); wait(!dut.mailbox_pending);
         wait(result_seq==1); repeat(2) @(posedge cop_clk); #1;
@@ -95,6 +101,7 @@ module tb_cop_top;
         if(result_data[15:0]!==16'h1234 || result_data[23:16]!==8'd2 || !result_data[25] ||
            result_data[55:32]!==24'h04fd02 || result_data[63:56]!==8'd2 ||
            result_data[78:64]!==15'd258) $fatal(1);
+        ps_wr(12'h06c,0); ps_rd(12'h034,32'h0a010000);
         ps_rd(12'h07c,1); ps_rd(12'h074,32'h0004fd02);
         repeat(3) @(posedge core_clk); addr=32'h80010070; #1;
         if(rdata[15:0]!==16'h1234 || rdata[23:16]!==8'd2 || !rdata[25]) $fatal(1);
@@ -104,7 +111,32 @@ module tb_cop_top;
         @(negedge core_clk); we=0; wait(!dut.mailbox_pending); repeat(2) @(posedge cop_clk);
         addr=32'h80010010; #1;
         if(!hit || starts!=1 || rdata[10] || !rdata[0] || rdata[2] || rdata[7]) $fatal(1);
-        $display("PASS: cop_top AXI config/read, J02 zero result window and DONE W1C smoke"); $finish;
+        @(negedge cop_clk); dma_kind=1; dma_start=1; @(negedge cop_clk); dma_start=0;
+        dma_valid=1; dma_last=1; @(posedge cop_clk); while(!dma_ready) @(posedge cop_clk); #1;
+        dma_valid=0; dma_last=0;
+        wait(status[3]); #1;   // 短包错误在 CRC 折叠完才置位
+        @(negedge core_clk); addr=32'h8001000c; wdata=16; we=1;
+        @(negedge core_clk); we=0; wait(!dut.mailbox_pending); repeat(2) @(posedge cop_clk);
+        if(status[3]) $fatal(1);
+        @(negedge core_clk); wdata=1; we=1; @(negedge core_clk); we=0;
+        wait(!dut.mailbox_pending); wait(dut.task_busy);
+        repeat(20) @(posedge cop_clk); #1;
+        if(!dut.task_busy || dut.u_task.state!=2) begin
+            $display("FAIL second task finished early busy=%b state=%0d seq=%0d",
+                dut.task_busy,dut.u_task.state,result_seq); $fatal(1);
+        end
+        ps_wr(12'h00c,2); repeat(2) @(posedge cop_clk); #1;
+        if(dut.task_busy || !status[3]) begin
+            $display("FAIL abort busy=%b error=%b abort=%b task_error=%b state=%0d",
+                dut.task_busy,status[3],dut.abort_command,dut.task_error,dut.u_task.state); $fatal(1);
+        end
+        ps_wr(12'h00c,4); repeat(2) @(posedge cop_clk); #1;
+        if(status[4:2] || result_seq || !dut.model_valid) $fatal(1);
+        ps_wr(12'h01c,2); repeat(2) @(posedge cop_clk); #1;
+        if(status[5] || !dut.model_valid) $fatal(1);
+        ps_wr(12'h068,1); repeat(2) @(posedge cop_clk); #1;
+        if(!status[5] || status[6] || dut.roi_valid || status[0]) $fatal(1);
+        $display("PASS: cop_top AXI/J02 result, DMA error, ABORT/SOFT_RESET and CFG_VALID revocation"); $finish;
     end
     initial begin #15000000; $display("TRACE starts=%0d pending=%b cfg=%b model=%b roi=%b busy=%b state=%0d",
         starts,dut.mailbox_pending,dut.cfg_valid,dut.model_valid,dut.roi_valid,dut.task_busy,dut.u_task.state);

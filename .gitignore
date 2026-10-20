@@ -75,6 +75,7 @@ build/artifacts/
 *.vvp
 
 # --- 本地缓存 / 临时文件 ---
+/docs/runbooks/board-workorder-2026-10-20.md
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/

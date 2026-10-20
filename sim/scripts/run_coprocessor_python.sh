@@ -4,6 +4,10 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 source "$ROOT/sim/scripts/vision_gate.sh"
 BUILD="$ROOT/sim/build/coprocessor"
 PY="${COPROCESSOR_PYTHON:-${VISION_PYTHON:-python3}}"
+# 与 run_coprocessor_iverilog.sh 同一口径：本机没有 python3 这个名字就退回 python。
+if ! command -v "$PY" >/dev/null 2>&1 || ! "$PY" -c 'import sys' >/dev/null 2>&1; then
+    PY=python
+fi
 mkdir -p "$BUILD"
 run_test() {
     vision_require_tb "$ROOT/sim/coprocessor/test_int8_$1.py"

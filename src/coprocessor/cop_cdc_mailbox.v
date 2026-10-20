@@ -12,7 +12,10 @@ module cop_cdc_mailbox (
     input wire dst_done_i
 );
     reg req_toggle, ack_toggle;
-    reg ack_sync1, ack_sync2, req_sync1, req_sync2, req_seen, dst_busy;
+    // 两级同步链必须标 ASYNC_REG：综合器据此把它们放进同一 slice、并按同步器做时序处理。
+    (* ASYNC_REG = "TRUE" *) reg ack_sync1, ack_sync2;
+    (* ASYNC_REG = "TRUE" *) reg req_sync1, req_sync2;
+    reg req_seen, dst_busy;
     reg [11:0] payload_offset;
     reg [31:0] payload_data;
     assign src_pending_o = req_toggle != ack_sync2;

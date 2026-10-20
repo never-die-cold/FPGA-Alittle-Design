@@ -5,7 +5,10 @@ module cop_config_regs (
     input wire [11:0] write_offset_i,
     input wire [31:0] write_data_i,
     input wire [3:0] write_strb_i,
-    output reg write_done_o, slverr_o, cfg_valid_o,
+    input wire [11:0] read_offset_i,
+    output reg write_done_o, slverr_o,
+    output wire cfg_valid_o,
+    output reg [31:0] read_data_o,
     output reg [31:0] cfg_applied_o, model_id_o, weight_crc32_o, timeout_cycles_o, weight_bytes_o,
     output reg [31:0] work_order_o,
     output reg [4:0] roi_count_o,
@@ -28,9 +31,16 @@ module cop_config_regs (
         shadow[12][5:0]==0 && shadow[13]!=0 && shadow[14][5:0]==0 &&
         shadow[15][5:0]==0 && shadow[16]==4096 && shadow[17][5:0]==0 &&
         shadow[18]==16 && shadow[19]<=254;
+    assign cfg_valid_o = (cfg_applied_o == shadow[1]) && fields_valid;
+    always @* begin
+        read_data_o=0;
+        if(read_offset_i==12'h020) read_data_o=cfg_applied_o;
+        else if(read_offset_i>=12'h018 && read_offset_i<=12'h064 && read_offset_i[1:0]==0)
+            read_data_o=shadow[(read_offset_i-12'h018)>>2];
+    end
     always @(posedge clk or negedge rst_n) begin
         if(!rst_n) begin
-            write_done_o<=0; slverr_o<=0; cfg_valid_o<=0; cfg_applied_o<=0;
+            write_done_o<=0; slverr_o<=0; cfg_applied_o<=0;
             model_id_o<=0; weight_crc32_o<=0; roi_count_o<=0; timeout_cycles_o<=0;
             weight_bytes_o<=0; work_order_o<=0; min_margin_o<=0;
             for(i=0;i<20;i=i+1) shadow[i]<=0;
@@ -45,7 +55,7 @@ module cop_config_regs (
                     cfg_applied_o<=shadow[1]; model_id_o<=shadow[3]; weight_crc32_o<=shadow[4];
                     roi_count_o<=shadow[5][4:0];
                     timeout_cycles_o<=shadow[6]; work_order_o<=shadow[7]; weight_bytes_o<=shadow[13];
-                    min_margin_o<=shadow[19][7:0]; cfg_valid_o<=1;
+                    min_margin_o<=shadow[19][7:0];
                 end else slverr_o<=1;
             end
         end

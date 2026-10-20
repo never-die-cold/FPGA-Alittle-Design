@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-20",
+  "source_commit": "04024d1223c60a0bb053f6a337dc8747aecb19ff",
+  "operation": "Relocate ignored Vivado artifacts; preserve all bytes in workspace",
+  "files": [
+    {
+      "original_path": ".Xil/Vivado-38656-never-die-cold/.lpr",
+      "archived_path": "build/run/root-hygiene-2026-10-20/.Xil/Vivado-38656-never-die-cold/.lpr",
+      "bytes": 425,
+      "sha256": "403296622a09739fb4a9535fad3d3eeabdf20c41d696a666ba7490d04804a20a"
+    },
+    {
+      "original_path": ".Xil/Vivado-38656-never-die-cold/elab.rtd",
+      "archived_path": "build/run/root-hygiene-2026-10-20/.Xil/Vivado-38656-never-die-cold/elab.rtd",
+      "bytes": 1743868,
+      "sha256": "619e265eeaf5e7656fc8658f2dc00470407f7535638aaa449c9464fc534fc7ca"
+    },
+    {
+      "original_path": ".Xil/Vivado-38656-never-die-cold/incrSyn/cop_top.gnd",
+      "archived_path": "build/run/root-hygiene-2026-10-20/.Xil/Vivado-38656-never-die-cold/incrSyn/cop_top.gnd",
+      "bytes": 25,
+      "sha256": "224004f66bf293594ee884524095bdf2efb4fd99e45f185552262e4a8ef6b238"
+    },
+    {
+      "original_path": ".Xil/Vivado-38656-never-die-cold/incrSyn/1437863274/u/e/elab.rtd",
+      "archived_path": "build/run/root-hygiene-2026-10-20/.Xil/Vivado-38656-never-die-cold/incrSyn/1437863274/u/e/elab.rtd",
+      "bytes": 1974430,
+      "sha256": "d98366f9d920dc455f4f3b7211cb941810a9df3f162d0faa17471669a16e564f"
+    },
+    {
+      "original_path": ".Xil/Vivado-38656-never-die-cold/wt/synthesis.wdf",
+      "archived_path": "build/run/root-hygiene-2026-10-20/.Xil/Vivado-38656-never-die-cold/wt/synthesis.wdf",
+      "bytes": 7369,
+      "sha256": "af20ba604c0a6ca2d5a9d152bd31d035b18994c871b607a5a6b4adf4c77bf7ff"
+    },
+    {
+      "original_path": "clockInfo.txt",
+      "archived_path": "build/run/root-hygiene-2026-10-20/clockInfo.txt",
+      "bytes": 386,
+      "sha256": "a16df9272217f2912d76bc720568c2accf630f3af183138b152516aa9e2ad2eb"
+    },
+    {
+      "original_path": "tight_setup_hold_pins.txt",
+      "archived_path": "build/run/root-hygiene-2026-10-20/tight_setup_hold_pins.txt",
+      "bytes": 576,
+      "sha256": "f93ec07e12a40f470f64a0c85b82c99ba23f67a67db9419f20366a90b501ab75"
+    }
+  ]
+}

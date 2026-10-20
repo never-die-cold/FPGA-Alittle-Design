@@ -1,0 +1,19 @@
+Retired refs: dev/model, chore/repo-cleanup
+Original local and remote head: 411d9eebf08bba7cc5f615ad107ca6dc00a2c15f
+git rev-list --count origin/main..dev/model: 0
+git rev-list --count origin/main..chore/repo-cleanup: 0
+
+Remote deletion used exact expected heads:
+git push --force-with-lease=refs/heads/dev/model:411d9eebf08bba7cc5f615ad107ca6dc00a2c15f --force-with-lease=refs/heads/chore/repo-cleanup:411d9eebf08bba7cc5f615ad107ca6dc00a2c15f origin --delete dev/model chore/repo-cleanup
+exit_code=0
+To https://github.com/never-die-cold/FPGA-Alittle-Design.git
+ - [deleted] chore/repo-cleanup
+ - [deleted] dev/model
+
+Local safe deletion:
+git branch -d dev/model chore/repo-cleanup
+exit_code=0
+Deleted branch dev/model (was 411d9ee).
+Deleted branch chore/repo-cleanup (was 411d9ee).
+
+PASS: both retired tips remain reachable from main; no unique commits discarded.

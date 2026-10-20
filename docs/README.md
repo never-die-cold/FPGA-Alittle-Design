@@ -48,6 +48,7 @@
 |:---|:---|
 | 目录/数据流/禁止事项 | [`project-map.md`](project-map.md) |
 | 全项目状态/下一交付物/卡点 | [`plan.md`](../plan.md) §3 |
+| 到收尾还剩什么（无日期待办） | [`closeout-todo.md`](closeout-todo.md) |
 | 指标及原始证据 | [`data/metrics.csv`](../data/metrics.csv) |
 | 仿真/构建/上板原始日志 | [`data/logs/README.md`](../data/logs/README.md) |
 | 源码/bit 溯源与哈希 | [`data/evidence/README.md`](../data/evidence/README.md) |
@@ -57,13 +58,14 @@
 | 视觉契约 | [`src/vision/design_v0.md`](../src/vision/design_v0.md) |
 | CNN 契约 | [`src/coprocessor/design_v0.md`](../src/coprocessor/design_v0.md) |
 | CNN 协处理器状态与交接 | [`contracts/coprocessor-handoff-v0.md`](contracts/coprocessor-handoff-v0.md) |
+| CNN 协处理器 J04 实现交接与 OPEN | [`runbooks/coprocessor-j04-handoff.md`](runbooks/coprocessor-j04-handoff.md) |
 | 仓库卫生规则 | [`repo-hygiene.md`](repo-hygiene.md) |
 | 逐文件索引（按需生成） | `python docs/file-guide/tools/generate.py --scope source --date YYYY-MM-DD` → `build/file-guide/` |
 
 ## 5. 当前入口（按角色）
 
-- 全员：[`workflow.md`](workflow.md)（开工三件事/理解门槛/收尾四件套）、[`onboarding.md`](onboarding.md)。
-- 核/协处理器：[`src/riscv/plan.md`](../src/riscv/plan.md)、[`src/riscv/plan_calendar.md`](../src/riscv/plan_calendar.md)、[`src/coprocessor/README.md`](../src/coprocessor/README.md)。
+- 全员：[`workflow.md`](workflow.md)（开工三件事/理解门槛/收尾四件套）、[`onboarding.md`](onboarding.md)、[`closeout-todo.md`](closeout-todo.md)（本轮之后还剩什么）。
+- 核/协处理器：[`src/riscv/plan.md`](../src/riscv/plan.md)、[`src/riscv/plan_calendar.md`](../src/riscv/plan_calendar.md)、[`src/coprocessor/README.md`](../src/coprocessor/README.md)、[`runbooks/coprocessor-j04-handoff.md`](runbooks/coprocessor-j04-handoff.md)。
 - 视觉/上板：[`src/vision/README.md`](../src/vision/README.md)、[`board/README.md`](../board/README.md)、[`contracts/c01-capture-implementation-baseline.md`](contracts/c01-capture-implementation-baseline.md)。
 - 模型/数据：[`runbooks/module3-model-training.md`](runbooks/module3-model-training.md)、[`outsource/fastener-handoff.md`](outsource/fastener-handoff.md)。
 - EXE/服务：[`src/pynq_host/README.md`](../src/pynq_host/README.md)、[`src/vision_client/README.md`](../src/vision_client/README.md)。
@@ -95,6 +97,7 @@
 
 | 日期 | 变更 |
 |:---|:---|
+| 2026-10-19 | 新增[收口待办](closeout-todo.md)（无日期版，含冻结项与伪通过判据）；J04 状态拆成 J04a/J04b，交接单迁到 `runbooks/` |
 | 2026-10-19 | 仓库整理：重写为 5 分钟导航；docs 分为 contracts/runbooks/research/archive；日志快照去重并加 manifest/恢复脚本；file-guide 生成物改为按需生成；合并 dev/riscv 的 CNN 协处理器交接入口 |
 | 2026-10-18 | 新增 CNN 协处理器 v0 薄交接索引；原 10/13 CNN/DDR 文档保留为历史证据 |
 | 2026-10-12 | 导航同步整数参考、FILE/LIVE 软件与 C01；Q01 标明已修复 |

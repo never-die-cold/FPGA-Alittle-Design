@@ -1,0 +1,45 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+PASS: cop_core_mmio_gate 15 window/alignment/permission/busy/pending checks
+PASS: cop_ctrl_regs normal START/W1C and 6 full-state reject diffs
+PASS: cop_cdc_mailbox rejects pending overwrite and ACKs only after destination done
+/home/jianglibo/FPGA-Alittle-Design/src/coprocessor/cop_config_regs.v:37: warning: @* is sensitive to all 20 words in array 'shadow'.
+PASS: cop_config_regs atomically applies one valid shadow configuration
+PASS: cop_dma_loader normal/backpressure/CRC32 and short-packet error pulse
+PASS: cop_task_ctrl commits result, aborts and soft-resets
+PASS: cop_axi_lite_frontend one write response and one read response
+make: Entering directory '/home/jianglibo/FPGA-Alittle-Design/src/riscv_fw'
+make: 'cop_job.elf' is up to date.
+make: Leaving directory '/home/jianglibo/FPGA-Alittle-Design/src/riscv_fw'
+PASS: cop work-order PASS/FAIL/RECHECK, low-confidence and 10/16 policy
+PASS: full diagnostic integer network golden {'pattern': {'class_id': 0, 'margin_q': 0, 'score_q15': 0, 'low_conf': True}, 'zero': {'class_id': 2, 'margin_q': 2, 'score_q15': 258, 'low_conf': True}}
+/home/jianglibo/FPGA-Alittle-Design/src/coprocessor/cop_config_regs.v:37: warning: @* is sensitive to all 20 words in array 'shadow'.
+/home/jianglibo/FPGA-Alittle-Design/src/coprocessor/cop_top.v:127: warning: @* is sensitive to all 16 words in array 'result_mem'.
+/home/jianglibo/FPGA-Alittle-Design/src/coprocessor/cop_top.v:128: warning: @* is sensitive to all 16 words in array 'result_mem'.
+/home/jianglibo/FPGA-Alittle-Design/src/coprocessor/cop_top.v:129: warning: @* is sensitive to all 16 words in array 'result_mem'.
+/home/jianglibo/FPGA-Alittle-Design/src/coprocessor/cop_top.v:130: warning: @* is sensitive to all 16 words in array 'result_mem'.
+/home/jianglibo/FPGA-Alittle-Design/src/coprocessor/cop_top.v:131: warning: @* is sensitive to all 16 words in array 'result_mem'.
+PASS: cop_top AXI/J02 result, DMA error, ABORT and SOFT_RESET smoke
+PASS: mac_lane signed INT8 products (7 vectors)
+PASS: dot8 balanced signed reduction (6 vectors)
+PASS: int8_mac 65035 vectors; signed product/addition and overflow
+PASS: mac_array 4272 output vectors; O16/I8 packing, signs, overflow
+PASS: int8_requant 8075 Python-golden vectors; rounding, saturation, ReLU, invalid params
+PASS: int8_gap all 32513 legal sums and invalid sums; Python golden
+PASS: int8_logits 2814 Python-golden vectors; ties, all margins, low confidence, invalid INT8
+PASS: MAC pipeline 4272 lane results, streaming, signs, overflow, stalls and abort
+PASS: requant pipeline 8075 Python golden vectors, bubbles, CE stalls, abort
+PASS: full-shape C02 convolution/FC diagnostics ['padding_tail', 'conv1', 'conv2', 'conv3', 'conv4', 'fc']
+PASS: conv_engine case=/home/jianglibo/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/padding_tail words=36 read_transactions=216 parameter_reads=2 cycles=1335; every pixel/lane matches Python
+PASS: conv_engine geometry 528 launch/size/rejection cases; independent integer oracle
+PASS: conv_engine watchdog 82 exact-cycle cases; CE pause, latched budget and terminal strobes
+PASS: conv_engine bad requant/overflow/config/watchdog/reset recovery; ce stalls tested
+PASS: conv_engine case=/home/jianglibo/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/conv1 words=2048 read_transactions=9216 parameter_reads=1 cycles=57347; every pixel/lane matches Python
+PASS: conv_engine case=/home/jianglibo/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/conv2 words=4096 read_transactions=36864 parameter_reads=2 cycles=179205; every pixel/lane matches Python
+PASS: conv_engine case=/home/jianglibo/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/conv3 words=1024 read_transactions=18432 parameter_reads=2 cycles=77061; every pixel/lane matches Python
+PASS: conv_engine case=/home/jianglibo/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/conv4 words=2048 read_transactions=36864 parameter_reads=4 cycles=154122; every pixel/lane matches Python
+PASS: conv_engine case=/home/jianglibo/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/fc words=1 read_transactions=8 parameter_reads=1 cycles=54; every pixel/lane matches Python
+PASS: full diagnostic integer network golden {'pattern': {'class_id': 0, 'margin_q': 0, 'score_q15': 0, 'low_conf': True}, 'zero': {'class_id': 2, 'margin_q': 2, 'score_q15': 258, 'low_conf': True}}
+PASS: cnn_sequencer /home/jianglibo/FPGA-Alittle-Design/sim/build/coprocessor/network-vectors/pattern all 9225 packed words/73795 elements match integer network; logits=01fd01 class=0 margin=0 cycles=472593
+PASS: cnn_sequencer watchdog 82 exact-cycle cases; CE pause, latched budget and terminal strobes
+PASS: cnn_sequencer invalid parameters/watchdog/reset/invalid GAP and successful fresh run; no false DONE
+PASS: cnn_sequencer /home/jianglibo/FPGA-Alittle-Design/sim/build/coprocessor/network-vectors/zero all 9225 packed words/73795 elements match integer network; logits=04fd02 class=2 margin=2 cycles=472593
