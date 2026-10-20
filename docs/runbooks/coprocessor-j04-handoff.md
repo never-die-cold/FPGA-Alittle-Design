@@ -39,7 +39,7 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 63 c5eccd3a95c6c8739fba4ad9bf9f51bb583b6c8743d99b4421ac27157a129cdc src/coprocessor/cop_config_regs.v
 65 caa57cc8bf0fe5ac442847adae18a793532d31c7af4fe47da7468f9f40e50874 src/coprocessor/cop_core_mmio_gate.v
 46 ae0e9a92b9010dbd6d7983012fa5d1458ea6cfbcdaec17e8402236136f6d5bba src/coprocessor/cop_ctrl_regs.v
-61 18db51c0fada9c8d15f42a9d57192b2d3a9a2a81073a2452d6447dcd7335bf28 src/coprocessor/cop_dma_loader.v
+89 04b14ba4fb071e3470a9e06ab0e58d0002a6d34eb94e3e338c979aa074d9f151 src/coprocessor/cop_dma_loader.v
 58 8944b3dedc6ce93c157c4b43f9483ab407a68e82175de4377aafedcdc2af7cc3 src/coprocessor/cop_task_ctrl.v
 194 c5bc93aa605b403a29112a863ba8b0a74c31236881d35057e7c56841b30f4f95 src/coprocessor/cop_top.v
 147 071a4f197a4651b0da26645b46a65c166bccbacc77c88b2b4f21b4abce69a591 src/coprocessor/cnn_sequencer.v
@@ -52,9 +52,9 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 36 829424c336f1e1e638a7fd1fcb58785d0c0aaf4b0e705459e7b20ec85d817fab sim/coprocessor/tb_cop_config_regs.v
 49 50bfb8057e8f87eb90637ab61f0085e88a91a30107a24f789f1b6ef7500a2466 sim/coprocessor/tb_cop_core_mmio_gate.v
 59 208e21301510a4332b7e8afe8eaacedc77f1bb45dd0b0df3e019aeb672469980 sim/coprocessor/tb_cop_ctrl_regs.v
-29 1b57950f2165727cbdbe43172884aa9f4baf15ac7ebce3ff9dca9d58e2705cc2 sim/coprocessor/tb_cop_dma_loader.v
+45 1863da086b8a2c71790ea85c5c675f2a8a51cc3bf02dfc80f9f6755671b0901b sim/coprocessor/tb_cop_dma_loader.v
 52 2c66478b7f327d9405bf03fd0dacc3ed3ae36c06f5a5dd6220f82e7f6c660ee5 sim/coprocessor/tb_cop_task_ctrl.v
-139 cc2eb17bc22a06494ac396969f2ba09cce5037b30cacb9e73b73648f4214faa4 sim/coprocessor/tb_cop_top.v
+144 fb47fd11990a5fcad4b254c1468ac6feb4f4fc87b65ac601bd860887889c59e2 sim/coprocessor/tb_cop_top.v
 163 a66ca4bbad1336f4ab7f2984fb634b92a7b62faec99b11d60a9d641f3c0623e5 sim/coprocessor/tb_cnn_sequencer.v
 19 cbd5a4cb478b01a8668e625602e3e327f2eba4b3c7ae1dcd45cc489f50786e9e sim/coprocessor/test_cop_work_order.c
 95 c028b64633d64b4cab905cf1999bd5f68432cf851f550e794e56b0e638aa5cbc sim/scripts/run_coprocessor_iverilog.sh
@@ -66,6 +66,8 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 - `cop_cdc_mailbox`：源侧至多一笔 pending；稳定 payload + toggle 请求，目标接受后 toggle ACK；ACK 不代表 CNN 完成。
 - `cop_config_regs`：PS 写 shadow，`CFG_COMMIT` 原子复制 applied；运行任务只读 START 时快照。
 - `cop_dma_loader`：valid/ready stream，按 keep 计数并计算 CRC32；短包、超长或 CRC 不符不得置对应 VALID。
+  CRC 逐字节折叠，**一拍 stream 要占 8 个 cop 拍**（含 1 拍接收），消化期间 `stream_ready_o=0`，
+  上游 DataMover 按协议等待；CRC 值与逐拍折叠完全一致（TB 固定 `cecee288` 锚定）。
 - `cop_task_ctrl`：按 target 顺序启动；16-byte 结果项最后提交；ABORT 回 IDLE，SOFT_RESET 清运行态。
   引擎 `done`/`error` 都会保持到下一次 `start` 才清零，因此发出 `start` 的那一拍既不消费 `done`
   （避免复用上一笔结果），也不被 `error` 终止（避免 W1C 后的重试被上一笔错误误杀）。
@@ -84,7 +86,7 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 | AXI4-Lite 深测 | `axi_lite`：AW/W 同拍与 W 先到、B/R 背压不丢响应、写读 SLVERR、未完成时拒收第二笔、复位清 B/R | PASS |
 | 固件构建链自检 | `test_firmware_rules.sh`：`OBJDUMP=false` 必须让 make 非零退出且不改写 `.dis` | PASS |
 | cop_top OOC 综合/实现 | `build/build_cop.tcl`：0 critical DRC、LUT 6,699 / FF 7,181 / DSP 136 / BRAM 0；CDC 45 端点 0 unsafe | 完成 |
-| cop_top OOC 时序 | `cop_clk` 10 ns：WNS **−2.743 ns**（Fmax ≈ 78.5 MHz），关键路径在 `cop_dma_loader` CRC32 | **不达 100 MHz**，见 OPEN-12 |
+| cop_top OOC 时序 | `cop_clk` 10 ns：WNS **+0.165 ns**（Fmax ≈ 101.7 MHz）；CRC 逐字节化之前是 −2.743 ns / 78.5 MHz | PASS（OOC，无 I/O delay） |
 | J02 zero 黄金 | 9225 packed words/73795 elements；logits `04fd02` | 逐元素 PASS |
 | 协处理器集合 | `run_coprocessor_iverilog.sh all`，退出码 0 | PASS |
 | 默认关闭核回归 | `run_iverilog.sh soc`，first=13/1101，second=65/0001 | PASS |
@@ -148,10 +150,12 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 - **OPEN-10 PS 空闲 ABORT**：`CTRL.ABORT` 未加 busy 门禁，空闲时写入会置 `STATUS.ERROR`
   但不产生任务错误脉冲，与 §3.1.1「非驻留拒绝」口径不一致；本轮保留该行为未改，服务停止流程
   需自行按 STATUS 判读。影响停止/恢复流程的错误计数。
-- **OPEN-12 `cop_top` 跑不到 100 MHz**：`build_cop.tcl` 的 OOC 实现给出 `cop_clk` 10 ns WNS **−2.743 ns**
-  （Fmax ≈ 78.5 MHz），前 10 条违例路径都在 `cop_dma_loader` 的 CRC32（`crc_state_reg`→`crc32_o_reg`，
-  13 级 LUT）。修法至少三种（两级流水 / CRC 降频 / 查表），**都要先冻结 loader 吞吐要求**，本轮未改。
-  影响 J04b 的 100 MHz 门槛与整机时序。
+- **OPEN-12 `cop_top` 跑不到 100 MHz（已解决）**：`build_cop.tcl` 的 OOC 实现原本给 `cop_clk` 10 ns
+  WNS **−2.743 ns**（Fmax ≈ 78.5 MHz），前 10 条违例路径都在 `cop_dma_loader` 的 CRC32
+  （`crc_state_reg`→`crc32_o_reg`，13 级 LUT）。已改为**逐字节折叠**（一拍 stream 占 8 个 cop 拍，
+  消化期间拉低 `stream_ready_o`），复跑 WNS **+0.165 ns**（Fmax ≈ 101.7 MHz），LUT 反而降 391 个。
+  代价：36,032 B 权重装载从 ~45 µs 变 ~365 µs，相对一次 4.7 ms 的推理可忽略；C03 只要求背压正确，
+  未锁吞吐。**仍属 OOC 结论，整机时序另算。**
 - **OPEN-11 有效空场景**：C03 §8 要求“有效空场景对非零工单为 `CHECK_FAIL`、actual 三类均为 0”，
   但 v0 没有“本帧有效且零目标”的表达：`ROI_COUNT` 只接受 1–16，0 分不清“未配置/无视频”和
   “有效空帧”。固件因此把 `count==0` 一律按 `RECHECK+CONFIG` 处理，**不把 0 当有效空帧**。

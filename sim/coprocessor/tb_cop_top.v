@@ -82,14 +82,18 @@ module tb_cop_top;
         ps_wr(12'h048,32'h1000); ps_wr(12'h04c,8); ps_wr(12'h050,32'h2000);
         ps_wr(12'h054,32'h3000); ps_wr(12'h058,4096); ps_wr(12'h05c,32'h4000);
         ps_wr(12'h060,16); ps_wr(12'h064,5); ps_wr(12'h068,1);
+        // loader 逐字节折 CRC，每拍占多个 cop 拍：按 AXI-Stream 握手驱动，并等置位再断言。
         @(negedge cop_clk); dma_start=1; @(negedge cop_clk); dma_start=0; dma_valid=1; dma_last=1;
-        @(posedge cop_clk); #1; dma_valid=0; dma_last=0;
-        @(posedge cop_clk); #1;
-        if(!dut.model_valid || dut.dma_bytes!=8) $fatal(1);
-        @(negedge cop_clk); dma_kind=1; dma_start=1; @(negedge cop_clk); dma_start=0; dma_valid=1;
-        for(beat=0;beat<512;beat=beat+1) begin dma_last=beat==511; @(posedge cop_clk); #1; end
-        dma_valid=0; dma_last=0; @(posedge cop_clk); #1;
-        if(!dut.roi_valid || dut.dma_bytes!=4096) $fatal(1);
+        @(posedge cop_clk); while(!dma_ready) @(posedge cop_clk); #1; dma_valid=0; dma_last=0;
+        wait(dut.model_valid); #1;
+        if(dut.dma_bytes!=8) $fatal(1);
+        @(negedge cop_clk); dma_kind=1; dma_start=1; @(negedge cop_clk); dma_start=0;
+        for(beat=0;beat<512;beat=beat+1) begin
+            dma_last=(beat==511); dma_valid=1;
+            @(posedge cop_clk); while(!dma_ready) @(posedge cop_clk); #1; dma_valid=0;
+        end
+        wait(dut.roi_valid); #1;
+        if(dut.dma_bytes!=4096) $fatal(1);
         @(negedge core_clk); addr=32'h8001000c; wdata=1; we=1;
         @(negedge core_clk); we=0; wait(starts==1); wait(!dut.mailbox_pending);
         wait(result_seq==1); repeat(2) @(posedge cop_clk); #1;
@@ -108,8 +112,9 @@ module tb_cop_top;
         addr=32'h80010010; #1;
         if(!hit || starts!=1 || rdata[10] || !rdata[0] || rdata[2] || rdata[7]) $fatal(1);
         @(negedge cop_clk); dma_kind=1; dma_start=1; @(negedge cop_clk); dma_start=0;
-        dma_valid=1; dma_last=1; @(posedge cop_clk); #1; dma_valid=0; dma_last=0;
-        @(posedge cop_clk); #1; if(!status[3]) $fatal(1);
+        dma_valid=1; dma_last=1; @(posedge cop_clk); while(!dma_ready) @(posedge cop_clk); #1;
+        dma_valid=0; dma_last=0;
+        wait(status[3]); #1;   // 短包错误在 CRC 折叠完才置位
         @(negedge core_clk); addr=32'h8001000c; wdata=16; we=1;
         @(negedge core_clk); we=0; wait(!dut.mailbox_pending); repeat(2) @(posedge cop_clk);
         if(status[3]) $fatal(1);

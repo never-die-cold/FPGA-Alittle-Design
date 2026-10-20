@@ -29,14 +29,31 @@ D:/Vivado_downloads/2026.1/Vivado/bin/vivado.bat -mode batch -source build/build
 
 ### 时序（route 后，max delay）
 
-| 时钟 | 周期 | WNS | 结论 |
-|:---|---:|---:|:---|
-| `cop_clk` | 10 ns | **−2.743 ns** | **不满足 100 MHz**，等效 Fmax ≈ 78.5 MHz |
-| `core_clk` | 25 ns | +19.341 ns | 裕量很大（核域基本是寄存器） |
+| 时钟 | 周期 | 修 CRC 前 | 修 CRC 后 | 结论 |
+|:---|---:|---:|---:|:---|
+| `cop_clk` | 10 ns | **−2.743 ns**（78.5 MHz） | **+0.165 ns**（101.7 MHz） | 100 MHz 达标 |
+| `core_clk` | 25 ns | +19.341 ns | +18.570 ns | 裕量很大（核域基本是寄存器） |
 
-**关键路径全部落在 `cop_dma_loader` 的 CRC32**：`loader/crc_state_reg[*]` → `loader/crc32_o_reg[*]`，
+**修前的关键路径全部落在 `cop_dma_loader` 的 CRC32**：`loader/crc_state_reg[*]` → `loader/crc32_o_reg[*]`，
 13 级 LUT（`LUT6=8`），前 10 条违例路径都是这一族。也就是说 **100 MHz 的卡点是逐字节 CRC 的
 单拍组合深度，不是 CNN 阵列**。
+
+### CRC 修复（已实施）
+
+8 字节一拍折完的组合异或树改成**逐字节折叠**：beat 先进 `hold_data/hold_keep` 寄存器，
+每拍只折一个字节，折完才收下一拍（消化期间 `stream_ready_o=0`，上游按 AXI-Stream 等待）。
+
+| 项 | 修前 | 修后 |
+|:---|---:|---:|
+| `cop_clk` WNS | −2.743 ns | **+0.165 ns** |
+| Slice LUTs | 6,699 | **6,308**（少 391，异或树变小） |
+| Slice Registers | 7,181 | 7,256（+75：beat 保持寄存器） |
+| DSP / BRAM | 136 / 0 | 136 / 0 |
+| 权重装载耗时（36,032 B） | ~45 µs | ~365 µs（仍远小于一次 4.7 ms 推理） |
+
+CRC 值不变（同一多项式、同一字节序），TB 用 `cecee288` 锚定；装载变慢按 C03 §9 的背压条款消化，
+契约没有锁吞吐。C03 的相关要求只有一句："施加背压时必须保持 valid/data/last，不得丢字节或重复计数"，
+TB 现在按 AXI-Stream 语义驱动（valid 保持到被接收），并断言消化期间 `ready=0`。
 
 ### CDC
 
@@ -55,21 +72,16 @@ D:/Vivado_downloads/2026.1/Vivado/bin/vivado.bat -mode batch -source build/build
 本次是 `cop_top` 整层 OOC、无 I/O delay。两者顶层、输入假设、时钟数都不同，不能直接对比。
 本次 136 DSP 与历史 192 的差异需要在同一 Tcl 下复跑才能解释，暂记为待核对项。
 
-## 4. 卡点与可选修法（未实施）
+## 4. 卡点处置（已实施，见上）
 
-`cop_dma_loader` 每拍吃 64 bit（8 字节），CRC32 在**一拍内**把这 8 字节折进 32 位状态，因此组合深度是
-8 级字节异或树再叠 32 位状态。可选：
-
-1. **两级流水**：4 字节 + 4 字节，插一拍寄存器；需要 loader 在 CRC 未收敛时对上游施加一拍背压。
-2. **降频跑 CRC**：CRC 单独用低速时钟域，代价是 loader 吞吐要重新算。
-3. **换查表法**：需要 ROM/BRAM，和现在"0 BRAM"的资源画像不同。
-
-三种都要先冻结"loader 必须多少吞吐"，不能顺手改。改完必须重跑本目录的入口并更新本 README。
+三个候选里选了"逐字节折叠"：不新增时钟域、不需要 ROM，资源反而更省，代价只是装载变慢
+（一次性动作，~365 µs）。另外两个被放弃：CRC 降频要加时钟域；查表法一拍仍要 8 次查表，
+深度省不掉。
 
 ## 5. 边界
 
 - 未跑 XSim；未做整机 SoC 时序；未上板。
 - OOC 无 I/O delay，外部端口路径与时钟偏斜仍是估计。
-- "100 MHz 不满足"只说明当前 `cop_top` 内部逻辑在 xc7z020-1 上跑到 ~78.5 MHz，**不改变 J04a 状态**，
-  但它是 J04b 必须解决的门槛之一。
+- 修 CRC 前 `cop_top` 只能跑到 ~78.5 MHz，现在 **OOC 口径下 100 MHz 达标**；这不改变 J04a 状态，
+  也不等于整机 100 MHz——SoC 里还有视频、存储、PS 与真实 I/O。
 - 原始控制台日志：`vivado-console.log`（430 KB），退出码见 `vivado-console.exit.txt`。

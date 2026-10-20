@@ -13,7 +13,7 @@
 |:---|:---|
 | 工作分支 | `dev/riscv` @ `855b433`（PR #86，待评审合并） |
 | 协处理器状态 | J04a ✅ 实现/离板冒烟；J04b 🟡 完整验证/物理 bank/综合/板验（[模块计划](../src/coprocessor/plan.md)） |
-| 未决 OPEN | OPEN-1..12，见[交接单](runbooks/coprocessor-j04-handoff.md) §7 |
+| 未决 OPEN | OPEN-1..11（OPEN-12 的 100 MHz 卡点已关闭），见[交接单](runbooks/coprocessor-j04-handoff.md) §7 |
 | 板卡 | ⛔ 无（`192.168.50.99` 不可达，无 JTAG/USB） |
 | 真实数据 | ⛔ 无（`data/datasets/` 不存在） |
 | 本机工具 | Vivado 2026.1、MSYS2 `riscv32-unknown-elf-gcc` 14.2、Icarus 13.0、Python 3.12.10 |
@@ -49,11 +49,10 @@
       RESULT_SEQ）在真实总线上跑通；这是目前唯一没被行为验证过的固件路径。
 - [ ] **B05 CDC/AXI 深测**（OPEN-4/7）：AXI 面已补 AW/W 乱序、B/R 背压、SLVERR、单笔未完成与复位；
       仍欠 **CDC 异步相位扫描、复位中途、payload 稳定性**。**可离板**，纯仿真。
-- [ ] **B06 综合/实现/时序/DRC/bitstream**：`cop_top` OOC 已跑（`build/build_cop.tcl`），报告在
-      `build/reports/cop/`、证据在 `data/logs/2026-10-19-cop-synth/`：0 critical DRC、LUT 6,699、
-      DSP 136、BRAM 0；**`cop_clk` 10 ns 下 WNS −2.743 ns（≈78.5 MHz），不达 100 MHz**，
-      卡点在 loader CRC32（OPEN-12）。仍欠：整机 SoC 时序、bitstream、XSim 回归。
-      **可离板**（Vivado 2026.1 本机已装），只有 bitstream 之后的板端环节需要板卡。
+- [x] **B06 综合/实现/时序/DRC（cop_top OOC 部分）**：`build/build_cop.tcl` 已跑通，0 critical DRC；
+      LUT 6,308、FF 7,256、DSP 136、BRAM 0；`cop_clk` 10 ns WNS **+0.165 ns**（≈101.7 MHz，达标）。
+      中途发现并修掉 loader CRC32 的 13 级组合树（OPEN-12，证据 `data/logs/2026-10-19-cop-synth/`）。
+      仍欠：整机 SoC 时序、bitstream、XSim 回归——要等 SoC/BD 搭起来。
 - [ ] **B07 上板复验**：位流/固件/模型 SHA256 与源码锚定，NC 执行、JL 不代签。
 
 ## C. 需要真实数据与模型（数据到货后）

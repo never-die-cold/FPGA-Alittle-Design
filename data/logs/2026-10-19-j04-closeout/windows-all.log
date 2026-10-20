@@ -9,7 +9,7 @@ E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_config_regs.v:39: warning: @
 PASS: cop_config_regs applies atomically and revokes CFG_VALID on new CFG_SEQ
 E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_config_regs.v:33: $finish called at 330000 (1ps)
 PASS: cop_dma_loader normal/backpressure/CRC32 and short-packet error pulse
-E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_dma_loader.v:26: $finish called at 96000 (1ps)
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_dma_loader.v:42: $finish called at 346000 (1ps)
 PASS: cop_task_ctrl commits, aborts, soft-resets and ignores stale engine error
 E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_task_ctrl.v:49: $finish called at 266000 (1ps)
 PASS: cop_axi_lite_frontend AW/W order, B/R backpressure, SLVERR, one-outstanding and reset
@@ -27,7 +27,7 @@ E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_top.v:131: warning: @* is se
 E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_top.v:132: warning: @* is sensitive to all 16 words in array 'result_mem'.
 E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_top.v:133: warning: @* is sensitive to all 16 words in array 'result_mem'.
 PASS: cop_top AXI/J02 result, DMA error, ABORT/SOFT_RESET and CFG_VALID revocation
-E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_top.v:134: $finish called at 5680746000 (1ps)
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_top.v:139: $finish called at 5738328000 (1ps)
 PASS: mac_lane signed INT8 products (7 vectors)
 E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_mac_lane.v:39: $finish called at 7000 (1ps)
 PASS: dot8 balanced signed reduction (6 vectors)
