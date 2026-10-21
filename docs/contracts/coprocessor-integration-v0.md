@@ -77,6 +77,9 @@ Editor 分配，但寄存器 offset 必须相同。
 
 ### 3.2 写权限
 
+> **[历史条款，已由增补 A2 修订]** 下列 RISC-V“完成/错误清除”权限仅记录原 v0；
+> 2026-10-21 起终态只由 PS 写 `CONSUME` 消费，固件不得清除。
+
 - PS 独占写：模型/DMA 地址、字节数、ROI 数、来源 ID、量化阈值和 `CFG_COMMIT`。
 - RISC-V 独占写：`START`、完成/错误清除、固件计数和工单判定。
 - PS 仅在服务停止或恢复流程中写 `SOFT_RESET/ABORT`；正常轮次不得与 RISC-V 抢控制。
@@ -130,6 +133,8 @@ RISC-V 读 0/写零副作用拒绝。核侧拒绝不驻留到全局错误状态�
 
 ### 4.1 `CTRL` 位
 
+> **[历史位定义，已由增补 A2 修订]** bit3/bit4 不再作为软件清除入口；保留原文用于追溯。
+
 | 位 | 名称 | 语义 |
 |---:|:---|:---|
 | 0 | `START` | W1S 单拍命令；只由 RISC-V 正常使用 |
@@ -142,6 +147,8 @@ RISC-V 读 0/写零副作用拒绝。核侧拒绝不驻留到全局错误状态�
 命令位读回均为 0。`START` 在 busy 时以零副作用拒绝，不置全局错误且不得中断原任务。
 
 ### 4.2 `STATUS` 位与状态机
+
+> **[历史状态定义，已由增补 A1/A2 修订]** READY、TIMEOUT 与清旧终态的现行语义见 §14。
 
 | 位 | 名称 | 语义 |
 |---:|:---|:---|
@@ -162,6 +169,9 @@ ERROR=`ERROR=1`；TIMEOUT=`ERROR=TIMEOUT=1`。终止状态下 BUSY 必须为 0�
 新 START 前固件显式清旧终止状态；硬件不得因下一任务开始静默抹掉未消费错误。
 
 ## 5. 原子配置与启动
+
+> **[历史启动流程，已由增补 A1/A2 修订]** 下列第 4 步的 READY 联合等待以及“新 START
+> 前固件清终态”不再适用；保留原文用于追溯。
 
 1. PS 写全部 shadow 字段和新的 `CFG_SEQ`；
 2. PS 写 `CFG_COMMIT=1`；硬件仅在 BUSY=0 时校验对齐、长度、数量、阈值和模型 ID；
@@ -316,6 +326,9 @@ decode/ISA 语义，且实现必须验证 busy/done/error/timeout/reset，是不
 
 ## 13. WC（PS 侧）对接注记（2026-10-13，实现前预备）
 
+> **[历史 WC 流程，已由增补 A1/A2 修订]** 本节出现的 READY 联合等待和旧 W1C 分工
+> 不再适用；现行 submit/consume 流程见 §14。
+
 现状：J04 控制面 RTL、流式载入器和固件已实现离板冒烟，PS 驱动和目标 Vivado BD 仍未交付；本节钉住 WC 侧接入面
 与 J08 交付要求，**不改变本契约任何冻结项**。
 
@@ -336,3 +349,35 @@ shadow+`CFG_SEQ`→`CFG_COMMIT`）→ 轮询 `CFG_APPLIED==CFG_SEQ && READY` →
 模型（busy 拒 commit、sticky 错误 W1C、`RESULT_SEQ` 最后提交、watchdog 超时、SLVERR 注入）驱动
 适配器；断言配置回执、结果窗原子读、首错保留与恢复序列。**替身 PASS 不代表硬件接入**——实机由
 NC 执行（§11.2）；适配器实现以 J04 的 `cop_ctrl_regs` 首次可用为门，全量对拍以 J08 首包为门。
+
+## 14. 2026-10-21 兼容性增补（现行）
+
+本增补由 WC 提出、JL 同意，原因是轮询可能错过短暂 READY，且固件提前清 sticky 终态会让 PS
+丢失结果/错误证据。影响面为 C03 状态/控制位、RISC-V 固件、PS 驱动/mock、`design_v1` §17、
+K1 接口页和相关 TB；其它 C02/C03 数据面、权限和核无等待接口保持不变。
+
+### 14.1 增补 A1：READY 语义
+
+- `STATUS[0] READY := !BUSY`，只提示当前是否在计算；DONE/ERROR/TIMEOUT 等 sticky 终态不得压低它。
+- PS 严禁把 READY 用作提交、等待或失败判据；配置回执只看 `CFG_APPLIED==CFG_SEQ`，命令硬回执
+  只看 A2 的 ACCEPTED。PS 必须为等待 ACCEPTED 和等待终态分别设置独立软件超时。
+- 软件超时覆盖硬件完全无回应：等待 ACCEPTED 超时返回 `NO_ACK`；已 ACCEPTED 但终态超时返回
+  `HW_TIMEOUT`。两者都不依赖硬件 timeout 位主动出现。
+
+### 14.2 增补 A2：消费回执与终态
+
+- 最小扩展且不重排旧位：`CTRL[6]=CONSUME`（PS 独占 W1C）；`STATUS[11]=ACCEPTED`
+  （START 被固件/控制域受理时置 1，sticky）；`STATUS[12]=UNCONSUMED`（只读，等于
+  `DONE|ERROR|TIMEOUT`）。bit3/bit4 历史清除命令停用，写入零副作用。
+- PS 的一笔有效 CONSUME 原子清 `DONE/ERROR/TIMEOUT/RESULT_VALID/ACCEPTED/ERROR_CODE`；
+  `RESULT_SEQ` 不清。无终态时 CONSUME 返回 `SLVERR` 且零副作用。
+- DONE、ERROR、TIMEOUT 任意时刻至多一个为 1；同拍事件优先级为 TIMEOUT>ERROR>DONE。
+  TIMEOUT 是独立终态，不再同时置 ERROR；任一终态均要求 BUSY=0。
+- START 仅在 `BUSY=0 && UNCONSUMED=0` 时受理并置 ACCEPTED；busy 或终态未消费时整笔拒绝，
+  不发请求、不改变寄存器、不覆盖结果。固件不得在 START 前清终态。
+- 每轮成功结果最后提交后 `RESULT_SEQ` 单调加 1；CONSUME、软复位均不回退序号。PS 必须校验
+  期望序号；不符即拒绝旧结果。“读结果→校验→落盘成功→CONSUME”是唯一正常消费顺序，
+  落盘失败时禁止清除证据。硬复位仍清控制状态，序号跨硬复位不保证连续。
+- 现行 submit：若 UNCONSUMED 返回 `STALE_RESULT`；写 CMD；等 ACCEPTED 或软件超时返回 `NO_ACK`；
+  等 DONE|ERROR|TIMEOUT 或软件超时返回 `HW_TIMEOUT`；ERROR/TIMEOUT 读 ERROR_CODE 后 CONSUME
+  并返回硬件错误；DONE 读 RESULT_* 与 RESULT_SEQ、校验并落盘，成功后 CONSUME，返回 OK。

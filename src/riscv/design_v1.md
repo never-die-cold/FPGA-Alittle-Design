@@ -937,21 +937,22 @@ BHT2 核 OOC 在 11.520 ns 实跑 WNS>=0，10 ns 为继续提升目标。SoC 单
 - 写在核时钟上升沿进入本地命令/数据邮箱，不能把跨域 ack 反压回核；
 - 核侧写只接受 `we && be==4'b1111`；其它 `be` 整笔拒绝，不修改寄存器或发命令；
 - 所有 offset 为 4 字节对齐；协处理器非法/未对齐读和只写寄存器读均返回 0；
-- 非法写、写只读和 busy 中重复 START 均零副作用拒绝，不置全局错误、不打断当前任务；
+- 非法写、写只读以及 busy 或 `STATUS.UNCONSUMED` 中重复 START 均零副作用拒绝，
+  不置全局错误、不打断当前任务；
 - 未命中协处理器但命中既有 DMEM/计时器的访问仍按原 SoC 语义处理；其它未映射访问
   返回 0 且不得访问存储器。
 
 ### 17.3 权限、CDC 与原子可见性
 
-- RISC-V 正常路径只写 C03 允许的 START、清状态、结果索引、固件计数和工单判定；
+- RISC-V 正常路径只写 C03 允许的 START、结果索引、固件计数和工单判定；终态由 PS 消费；
 - PS 独占模型/DMA/配置提交；硬件必须实施权限，不能只靠软件避免双写；
 - 多位字段通过“稳定 payload + toggle/ack”或异步 FIFO 跨域，禁止逐位同步；
 - 核侧采用单请求邮箱；`STATUS.MBOX_PENDING` 是核域本地精确镜像。pending 时第二笔写
   直接拒绝且不能覆盖第一笔；目标域消费并完成该请求接收动作后才返回 ACK；
 - ACK 只排空邮箱，不表示 CNN 完成；固件轮询 pending 清零后才允许发下一笔写；
 - `CFG_APPLIED` 与 `RESULT_SEQ` 最后跨域；固件只在序号改变后读取相应完整快照；
-- `BUSY/DONE/ERROR/TIMEOUT` 保持 C03 的 sticky/W1C/首错规则；START busy 时零副作用拒绝，
-  不置全局错误且不打断原任务；
+- **[历史语义，已由 §17.5 修订]** 原 sticky/W1C 分工保留用于追溯；现行 START 拒绝与
+  READY/ACCEPTED/CONSUME/互斥终态规则见 §17.5；
 - 硬复位清邮箱、结果与 `MODEL_VALID`；SOFT_RESET 走完整 CDC 握手并保留已验证权重。
 
 ### 17.4 JL 已确认的细化点与实现门禁（2026-10-18）
@@ -965,6 +966,25 @@ J04 第一批 TB 至少覆盖窗口边界、DMEM 写屏蔽、同拍读、完整�
 排空后才 ACK，ACK 后下一笔可写。拒绝 TB 必须对非法 `be`、未对齐、越界、写只读和
 busy 中 START 做访问前后寄存器快照比较，除非驻留握手线外状态 diff 为空。
 任何需要给核增加等待、IRQ 或新端口的方案均视为新契约，必须另行冻结。
+
+### 17.5 C03 A1/A2 状态与寄存器增补（2026-10-21，JL 已确认）
+
+本节同步 C03 §14；不改变核数据口，也不给核增加 ready/valid。READY 不再是握手，核侧仍只
+发单请求邮箱写；PS 通过 AXI4-Lite 消费终态。
+
+| 位置 | 名称 | 现行语义 |
+|---:|:---|:---|
+| `CTRL[6]` | `CONSUME` | PS 独占 W1C；原子清全部终态、RESULT_VALID、ACCEPTED、ERROR_CODE |
+| `CTRL[3:4]` | 历史清除位 | 停用；写入零副作用，固件不得在 START 前清终态 |
+| `STATUS[0]` | `READY` | `!BUSY`，只作建议性诊断，任何软件不得等待它 |
+| `STATUS[11]` | `ACCEPTED` | START 在控制域受理时置 1，sticky，只由 CONSUME 清除 |
+| `STATUS[12]` | `UNCONSUMED` | RO，`DONE|ERROR|TIMEOUT` |
+| `STATUS[2:4]` | 三终态 | 互斥；同拍优先 TIMEOUT>ERROR>DONE，任一终态要求 BUSY=0 |
+| `RESULT_SEQ` | 结果序号 | 每轮成功结果递增；CONSUME/软复位不清，PS 必须校验防旧结果 |
+
+START 只有在 `BUSY=0 && UNCONSUMED=0` 时进入邮箱并置 ACCEPTED；其它 START 整笔拒绝且状态
+diff 为空。PS 必须用独立软件看门狗覆盖未见 ACCEPTED（NO_ACK）和已受理但无终态（HW_TIMEOUT）。
+正常顺序固定为“读结果与序号→校验→落盘成功→CONSUME”；落盘失败时保留所有 sticky 证据。
 
 ## 99. 契约编写状态
 
