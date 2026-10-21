@@ -16,7 +16,7 @@
 | --- | --- | --- |
 | J01 | 🟡 | C02/C03、预算与交接索引已有；不代替 WC/NC 签收 |
 | J02 | ✅ | 诊断整数参考、逐层黄金、文件/来源 SHA256 与篡改负例可复现；不是 J06 正式模型 |
-| J03 | ✅ | 活跃 Conv→GAP→FC 链逐元素对拍；独立、协处理器 all、全仓 all 退出 0 |
+| J03 | ✅ | 活跃 Conv→GAP→FC 链逐元素对拍；显式使用仓库 venv 时，独立、协处理器 all、全仓 all 退出 0；裸系统 Python 缺 NumPy 时不成立 |
 | J04a | ✅ | JL 侧实现、模块/顶层冒烟、J02 zero、工单固件与交接单已落库；24 个文件 SHA256 与远端一致 |
 | J04b | 🟡 | 物理 bank/结果 DMA、CDC 异步相位、整机 SoC 时序与板验未完成；`cop_top` OOC 已过 100 MHz（OPEN-12 关闭）；OPEN-1..12 见[交接单](../../docs/runbooks/coprocessor-j04-handoff.md) |
 | J05 | ⬜ | 等真实审计 ROI；训练/PTQ/QAT、混淆矩阵与阈值未完成 |
@@ -39,4 +39,12 @@
 2. J04a（JL 侧实现/冒烟）已完成：`cop_top`、MMIO/CDC、AXI4-Lite、流载入、核接入门和工单固件有仓库内 TB；24 个文件 SHA256 与远端一致，交接单见 [runbooks/coprocessor-j04-handoff.md](../../docs/runbooks/coprocessor-j04-handoff.md)。
 3. J04b（完整收口）未完成：DataMover payload 到各物理 bank 的生产地址适配、真实 36,032 B payload CRC 负例、CDC 异步相位、实体 BRAM/SoC/视频/板端集成；`cop_top` OOC 综合与实现已做（0 critical，`cop_clk` WNS +0.165 ns），整机 SoC 时序、XSim 回归和 bitstream 未做。`VERSION`/`CAPABILITY`/`ERROR_CODE` 仍读 0（OPEN-9），PS 空闲 ABORT 未按非驻留拒绝处理（OPEN-10）。J04 总体保持 🟡，不写 ✅。
 4. 后续进入 J07 整机集成前，先按 J05/J06 完成真实数据、正式 INT8 模型/黄金；不得用诊断权重冒充正式模型。
+
+## 下一执行点
+
+在 Windows 仓库根目录执行 40 MHz 两档门禁；任一失败都不得产出 bitstream：
+
+```bat
+call "D:\Vivado_downloads\2026.1\Vivado\bin\vivado.bat" -mode batch -source build/build_coprocessor_gate.tcl -tclargs 40 compute && call "D:\Vivado_downloads\2026.1\Vivado\bin\vivado.bat" -mode batch -source build/build_coprocessor_gate.tcl -tclargs 40 storage
+```
 
