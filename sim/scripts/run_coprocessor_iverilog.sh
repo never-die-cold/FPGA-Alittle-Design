@@ -89,6 +89,19 @@ run_firmware() {
     vision_run_checked "$BUILD/cop_work_order.log" "$BUILD/test_cop_work_order"
     vision_run_checked "$BUILD/firmware_rules.log" env RISCV_CROSS="$CROSS" bash "$ROOT/sim/scripts/test_firmware_rules.sh"
 }
+run_firmware_e2e() {
+    if [ "$TOOLCHAIN_AVAILABLE" -eq 0 ]; then
+        echo "SKIP: firmware_e2e requires a RISC-V gcc/objcopy toolchain"
+        return 0
+    fi
+    local dir="$BUILD/network-vectors"
+    make -C "$ROOT/src/riscv_fw" CROSS="$CROSS" PYTHON="$PY" cop_job.hex
+    "$PY" "$ROOT/sim/coprocessor/generate_network_vectors.py" --output "$dir"
+    iverilog -g2001 -Wall -s tb_cop_firmware_e2e -o "$BUILD/firmware_e2e.vvp" \
+        "$ROOT/sim/coprocessor/tb_cop_firmware_e2e.v" "$ROOT"/src/riscv/*.v \
+        "$ROOT/src/coprocessor/cop_core_mmio_gate.v" "$ROOT/src/coprocessor/cop_ctrl_regs.v"
+    (cd "$ROOT" && vision_run_checked "$BUILD/firmware_e2e.log" vvp "$BUILD/firmware_e2e.vvp" "+golden=$dir/zero/result.txt")
+}
 case "${1:-all}" in
     mac_lane) run_test mac_lane ;;
     dot8) run_test dot8 ;;
@@ -102,6 +115,7 @@ case "${1:-all}" in
     cop_top) run_top ;;
     axi_lite) run_test cop_axi_lite_frontend ;;
     firmware) run_firmware ;;
+    firmware_e2e) run_firmware_e2e ;;
     mac) run_test int8_mac ;;
     array) run_test mac_array ;;
     requant) run_test int8_requant ;;
@@ -112,6 +126,6 @@ case "${1:-all}" in
     bram_network) run_test cop_bram_latency; run_network bram ;;
     watchdog) run_convolution watchdog; run_network watchdog ;;
     pipeline) run_test mac_array_pipeline; run_test int8_requant_pipeline ;;
-    all) run_test cop_core_mmio_gate; run_test cop_ctrl_regs; run_test cop_cdc_mailbox; run_test cop_config_regs; run_test cop_dma_loader; run_test cop_task_ctrl; run_test cop_axi_lite_frontend; run_firmware; run_top; run_test mac_lane; run_test dot8; run_test int8_mac; run_test mac_array; run_test int8_requant; run_test int8_gap; run_test int8_logits; run_test mac_array_pipeline; run_test int8_requant_pipeline; run_test cop_bram_latency; run_convolution; run_network ;;
-    *) echo 'usage: run_coprocessor_iverilog.sh [mmio_gate|ctrl_regs|mailbox|config_regs|dma_loader|task_ctrl|decision_ab|axi_lite|firmware|cop_top|mac_lane|dot8|mac|array|requant|gap|logits|pipeline|conv|network|bram_network|watchdog|all]'; exit 2 ;;
+    all) run_test cop_core_mmio_gate; run_test cop_ctrl_regs; run_test cop_cdc_mailbox; run_test cop_config_regs; run_test cop_dma_loader; run_test cop_task_ctrl; run_test cop_axi_lite_frontend; run_firmware; run_firmware_e2e; run_top; run_test mac_lane; run_test dot8; run_test int8_mac; run_test mac_array; run_test int8_requant; run_test int8_gap; run_test int8_logits; run_test mac_array_pipeline; run_test int8_requant_pipeline; run_test cop_bram_latency; run_convolution; run_network ;;
+    *) echo 'usage: run_coprocessor_iverilog.sh [mmio_gate|ctrl_regs|mailbox|config_regs|dma_loader|task_ctrl|decision_ab|axi_lite|firmware|firmware_e2e|cop_top|mac_lane|dot8|mac|array|requant|gap|logits|pipeline|conv|network|bram_network|watchdog|all]'; exit 2 ;;
 esac
