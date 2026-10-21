@@ -1,0 +1,44 @@
+{
+  "outcome": "模拟跑通 (COP_SIM service + EXE)",
+  "session_id": "76d4d652-1769-4ee2-a2fc-b4a130b34c20",
+  "check_id": 1,
+  "status": "CHECK_PASS",
+  "decision": {
+    "verdict": "CHECK_PASS",
+    "expected": {
+      "bolt": 1,
+      "nut": 1,
+      "washer": 1
+    },
+    "actual": {
+      "bolt": 1,
+      "nut": 1,
+      "washer": 1
+    },
+    "delta": {
+      "bolt": 0,
+      "nut": 0,
+      "washer": 0
+    },
+    "missing": {
+      "bolt": 0,
+      "nut": 0,
+      "washer": 0
+    },
+    "extra": {
+      "bolt": 0,
+      "nut": 0,
+      "washer": 0
+    },
+    "reasons": []
+  },
+  "prototype": true,
+  "record": "records/records.jsonl",
+  "screenshot": "screen.png",
+  "record_screenshot": "screenshots/proto_76d4d652_000001.png",
+  "capture_sha256": "bb9e05f3893353de880d310ecdbfbf603b529407a1c503c17e2213358ff0d73b",
+  "trace": "service/76d4d652/check-000001/cop_trace.json",
+  "roi_count": 3,
+  "screen_sha256": "00abd43346f12ba97907dde8fed822b82713c00ea800d7138b632fc13dc070dd",
+  "boundary": "simulated compute/register model; not board recognition"
+}
