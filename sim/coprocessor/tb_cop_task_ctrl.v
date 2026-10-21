@@ -2,7 +2,7 @@
 module tb_cop_task_ctrl;
     reg clk=0,rst_n=0,start=0,abort_cmd=0,soft_reset=0,engine_ready=0,engine_done=0,engine_error=0;
     wire ready,busy,accepted,done,error,timeout,engine_start,result_write; wire [3:0] index;
-    wire [31:0] seq; wire [127:0] result;
+    wire [31:0] seq; wire [127:0] result; reg [31:0] stale_seq;
     always #5 clk=~clk;
     cop_task_ctrl dut(.clk(clk),.rst_n(rst_n),.start_i(start),.abort_i(abort_cmd),
         .soft_reset_i(soft_reset),.cfg_valid_i(1'b1),
@@ -25,6 +25,7 @@ module tb_cop_task_ctrl;
         if(done || result_write || !busy || index!=0) $fatal(1);  // 遗留 done 零副作用
         @(negedge clk); engine_done=1; @(posedge clk); #1; engine_done=0;  // 本笔真正完成
         if(!done || busy || !result_write || seq!=1 || index!=0) $fatal(1);
+        stale_seq=seq;
         if(result[15:0]!==16'h1234 || result[23:16]!==8'd2 || result[55:32]!==24'h04fd02 ||
            result[63:56]!==8'd2 || result[78:64]!==15'd258 || result[127:96]!==32'd472593) $fatal(1);
         @(negedge clk); start=1; engine_ready=1; @(negedge clk); start=0;
@@ -41,6 +42,8 @@ module tb_cop_task_ctrl;
         if(error || !busy) $fatal(1);
         @(negedge clk); engine_done=1; @(posedge clk); #1; engine_done=0;
         if(!done || busy || seq!=2) $fatal(1);                      // 重试任务正常完成
+        if(seq==stale_seq) $fatal(1);
+        $display("PASS T6: RESULT_SEQ increments and a late reader detects stale sequence");
         // 启动之后真正出错：error 脉冲、busy 归零。
         @(negedge clk); start=1; engine_ready=1; @(negedge clk); start=0;
         @(posedge clk); #1; engine_ready=0;

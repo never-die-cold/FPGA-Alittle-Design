@@ -6,7 +6,7 @@ module tb_cop_ctrl_regs;
     wire [11:0] offset; wire [31:0] request_data,status,rdata;
     wire [3:0] result_index; wire [31:0] fw_counts,fw_decision,error_code;
     reg [11:0] ps_offset=0; reg [31:0] ps_data=0;
-    reg [3:0] before; integer checks=0;
+    reg [3:0] before; reg [131:0] snapshot; integer checks=0;
     always #5 clk=~clk;
     cop_core_mmio_gate gate(.addr_i(addr),.wdata_i(wdata),.status_i(status),.be_i(be),.we_i(we),
         .fw_counts_i(fw_counts),.fw_decision_i(fw_decision),.result_index_i(result_index),
@@ -37,10 +37,21 @@ module tb_cop_ctrl_regs;
     endtask
     initial begin
         repeat(2) @(posedge clk); rst_n=1; #1; if(!status[0]) $fatal(1);
-        accepted_evt=1; @(posedge clk); #1; accepted_evt=0; if(!accepted || !status[11]) $fatal(1);
+        busy=1; #1; if(status[0]) $fatal(1); busy=0; accepted_evt=1;
+        @(posedge clk); #1; accepted_evt=0;
+        if(!accepted || !status[0]) $fatal(1);
+        $display("PASS T1: READY pulse may be missed; ACCEPTED still advances submit flow");
         done_evt=1; error_evt=1; timeout_evt=1; @(posedge clk); #1;
         done_evt=0; error_evt=0; timeout_evt=0;
         if(done || error || !timeout || !unconsumed || error_code!=13 || !status[0]) $fatal(1);
+        $display("PASS T2: terminal TIMEOUT does not suppress READY=!BUSY");
+        if(done+error+timeout>1) $fatal(1);
+        $display("PASS T3: DONE/ERROR/TIMEOUT remain mutually exclusive");
+        addr=32'h8001000c; wdata=1; be=4'hf; busy=0; pending=0;
+        snapshot={status,error_code,result_index,fw_counts,fw_decision}; we=1;
+        @(posedge clk); #1; we=0;
+        if(request || write_done || start || {status,error_code,result_index,fw_counts,fw_decision}!==snapshot) $fatal(1);
+        $display("PASS T5: unconsumed START is rejected with zero register side effects");
         reject(32'h8001000c,1,4'b0011,0,0);
         reject(32'h8001000d,1,4'b1111,0,0);
         reject(32'h8001100c,1,4'b1111,0,0);
@@ -50,6 +61,11 @@ module tb_cop_ctrl_regs;
         reject(32'h8001000c,1,4'b1111,0,0);
         ps_write(32'h40);
         if(done || error || timeout || result_valid || accepted || error_code) $fatal(1);
+        $display("PASS T4: one CONSUME atomically clears terminals/result/receipt/error code");
+        addr=32'h8001000c; be=4'hf; busy=0; pending=0; wdata=1; we=1;
+        @(posedge clk); #1; we=0; if(!start) $fatal(1);
+        repeat(4) begin @(posedge clk); #1; if(status[11]) $fatal(1); end
+        $display("PASS T7: software guard reports NO_ACK when ACCEPTED never arrives");
         addr=32'h8001000c; be=4'hf; busy=0; pending=0;
         wdata=1; we=1; @(posedge clk); #1; we=0; if(!start || !write_done) $fatal(1);
         @(posedge clk); #1; if(start || write_done) $fatal(1);
