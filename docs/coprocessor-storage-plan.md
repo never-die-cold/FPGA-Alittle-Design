@@ -3,6 +3,9 @@
 > 状态：**PLAN / UNVERIFIED**。只使用 C02 的形状与排布、32,592×INT8 权重、
 > 147×INT32 折叠 bias、128 MAC/拍和 x7z020 上限（220 DSP、140 BRAM36，约 630 KiB）；
 > 不表示实体 BRAM、综合或板上路径已经实现。
+> 本方案不改变 WC 数据面接口；payload 布局、offset 与对齐只以发布 manifest 为唯一权威。
+> BRAM 实现和整机行为均为 **UNVERIFIED**，只有 K3 逐元素对拍及 Windows 侧 Vivado 均通过后
+> 才能升级状态。
 
 ## 逐层容量与放置
 
