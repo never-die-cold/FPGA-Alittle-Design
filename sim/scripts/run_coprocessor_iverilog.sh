@@ -96,9 +96,9 @@ case "${1:-all}" in
     logits) run_test int8_logits ;;
     conv) run_convolution ;;
     network) run_network ;;
-    bram_network) run_network bram ;;
+    bram_network) run_test cop_bram_latency; run_network bram ;;
     watchdog) run_convolution watchdog; run_network watchdog ;;
     pipeline) run_test mac_array_pipeline; run_test int8_requant_pipeline ;;
-    all) run_test cop_core_mmio_gate; run_test cop_ctrl_regs; run_test cop_cdc_mailbox; run_test cop_config_regs; run_test cop_dma_loader; run_test cop_task_ctrl; run_test cop_axi_lite_frontend; run_firmware; run_top; run_test mac_lane; run_test dot8; run_test int8_mac; run_test mac_array; run_test int8_requant; run_test int8_gap; run_test int8_logits; run_test mac_array_pipeline; run_test int8_requant_pipeline; run_convolution; run_network ;;
+    all) run_test cop_core_mmio_gate; run_test cop_ctrl_regs; run_test cop_cdc_mailbox; run_test cop_config_regs; run_test cop_dma_loader; run_test cop_task_ctrl; run_test cop_axi_lite_frontend; run_firmware; run_top; run_test mac_lane; run_test dot8; run_test int8_mac; run_test mac_array; run_test int8_requant; run_test int8_gap; run_test int8_logits; run_test mac_array_pipeline; run_test int8_requant_pipeline; run_test cop_bram_latency; run_convolution; run_network ;;
     *) echo 'usage: run_coprocessor_iverilog.sh [mmio_gate|ctrl_regs|mailbox|config_regs|dma_loader|task_ctrl|decision_ab|axi_lite|firmware|cop_top|mac_lane|dot8|mac|array|requant|gap|logits|pipeline|conv|network|bram_network|watchdog|all]'; exit 2 ;;
 esac
