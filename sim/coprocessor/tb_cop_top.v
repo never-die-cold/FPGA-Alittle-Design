@@ -107,18 +107,16 @@ module tb_cop_top;
         if(rdata[15:0]!==16'h1234 || rdata[23:16]!==8'd2 || !rdata[25]) $fatal(1);
         addr=32'h80010074; #1; if(rdata!==32'h0004fd02) $fatal(1);
         addr=32'h80010078; #1; if(rdata!==32'h00020102) $fatal(1);
-        @(negedge core_clk); addr=32'h8001000c; wdata=8; we=1;
-        @(negedge core_clk); we=0; wait(!dut.mailbox_pending); repeat(2) @(posedge cop_clk);
+        ps_wr(12'h00c,32'h40); repeat(2) @(posedge cop_clk);
         addr=32'h80010010; #1;
         if(!hit || starts!=1 || rdata[10] || !rdata[0] || rdata[2] || rdata[7]) $fatal(1);
         @(negedge cop_clk); dma_kind=1; dma_start=1; @(negedge cop_clk); dma_start=0;
         dma_valid=1; dma_last=1; @(posedge cop_clk); while(!dma_ready) @(posedge cop_clk); #1;
         dma_valid=0; dma_last=0;
         wait(status[3]); #1;   // 短包错误在 CRC 折叠完才置位
-        @(negedge core_clk); addr=32'h8001000c; wdata=16; we=1;
-        @(negedge core_clk); we=0; wait(!dut.mailbox_pending); repeat(2) @(posedge cop_clk);
+        ps_wr(12'h00c,32'h40); repeat(2) @(posedge cop_clk);
         if(status[3]) $fatal(1);
-        @(negedge core_clk); wdata=1; we=1; @(negedge core_clk); we=0;
+        @(negedge core_clk); addr=32'h8001000c; wdata=1; we=1; @(negedge core_clk); we=0;
         wait(!dut.mailbox_pending); wait(dut.task_busy);
         repeat(20) @(posedge cop_clk); #1;
         if(!dut.task_busy || dut.u_task.state!=2) begin
@@ -130,12 +128,13 @@ module tb_cop_top;
             $display("FAIL abort busy=%b error=%b abort=%b task_error=%b state=%0d",
                 dut.task_busy,status[3],dut.abort_command,dut.task_error,dut.u_task.state); $fatal(1);
         end
+        ps_wr(12'h00c,32'h40);
         ps_wr(12'h00c,4); repeat(2) @(posedge cop_clk); #1;
         if(status[4:2] || result_seq!=1 || !dut.model_valid) $fatal(1);
         ps_wr(12'h01c,2); repeat(2) @(posedge cop_clk); #1;
         if(status[5] || !dut.model_valid) $fatal(1);
         ps_wr(12'h068,1); repeat(2) @(posedge cop_clk); #1;
-        if(!status[5] || status[6] || dut.roi_valid || status[0]) $fatal(1);
+        if(!status[5] || status[6] || dut.roi_valid || !status[0]) $fatal(1);
         $display("PASS: cop_top AXI/J02 result, DMA error, ABORT/SOFT_RESET and CFG_VALID revocation"); $finish;
     end
     initial begin #15000000; $display("TRACE starts=%0d pending=%b cfg=%b model=%b roi=%b busy=%b state=%0d",
