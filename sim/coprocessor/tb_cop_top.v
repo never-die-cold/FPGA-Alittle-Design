@@ -131,7 +131,7 @@ module tb_cop_top;
                 dut.task_busy,status[3],dut.abort_command,dut.task_error,dut.u_task.state); $fatal(1);
         end
         ps_wr(12'h00c,4); repeat(2) @(posedge cop_clk); #1;
-        if(status[4:2] || result_seq || !dut.model_valid) $fatal(1);
+        if(status[4:2] || result_seq!=1 || !dut.model_valid) $fatal(1);
         ps_wr(12'h01c,2); repeat(2) @(posedge cop_clk); #1;
         if(status[5] || !dut.model_valid) $fatal(1);
         ps_wr(12'h068,1); repeat(2) @(posedge cop_clk); #1;

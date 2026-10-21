@@ -13,7 +13,7 @@ module cop_task_ctrl (
     input wire [23:0] result_logits_i,
     input wire [31:0] result_cycles_i,
     output wire ready_o,
-    output reg busy_o, done_pulse_o, error_pulse_o, timeout_pulse_o, engine_start_o,
+    output reg busy_o, accepted_pulse_o, done_pulse_o, error_pulse_o, timeout_pulse_o, engine_start_o,
     output reg result_write_o,
     output reg [3:0] result_index_o,
     output reg [31:0] result_seq_o,
@@ -26,19 +26,20 @@ module cop_task_ctrl (
         result_logits_i,{5'd0,1'b0,result_low_conf_i,1'b1},{6'd0,result_class_i},target_id_i};
     always @(posedge clk or negedge rst_n) begin
         if(!rst_n) begin
-            state<=IDLE; busy_o<=0; done_pulse_o<=0; error_pulse_o<=0;
+            state<=IDLE; busy_o<=0; accepted_pulse_o<=0; done_pulse_o<=0; error_pulse_o<=0;
             timeout_pulse_o<=0; engine_start_o<=0; result_write_o<=0;
             result_index_o<=0; result_seq_o<=0; count_snapshot<=0;
         end else begin
-            done_pulse_o<=0; error_pulse_o<=0; timeout_pulse_o<=0;
+            accepted_pulse_o<=0; done_pulse_o<=0; error_pulse_o<=0; timeout_pulse_o<=0;
             engine_start_o<=0; result_write_o<=0;
             if(soft_reset_i) begin
-                state<=IDLE; busy_o<=0; result_index_o<=0; result_seq_o<=0;
+                state<=IDLE; busy_o<=0; result_index_o<=0;
             end else if(abort_i && busy_o) begin
                 state<=IDLE; busy_o<=0; error_pulse_o<=1;
             end else case(state)
                 IDLE: if(start_i && ready_o && roi_count_i>=1 && roi_count_i<=16) begin
-                    busy_o<=1; result_index_o<=0; count_snapshot<=roi_count_i; state<=LAUNCH;
+                    busy_o<=1; accepted_pulse_o<=1; result_index_o<=0;
+                    count_snapshot<=roi_count_i; state<=LAUNCH;
                 end
                 LAUNCH: if(engine_ready_i) begin engine_start_o<=1; state<=WAIT_ENGINE; end
                 // 引擎的 done 与 error 都会保持到下一次 start 才清零：发出 start 的那一拍如果照读，
@@ -47,8 +48,10 @@ module cop_task_ctrl (
                 WAIT_ENGINE: if(engine_error_i && !engine_start_o) begin
                     busy_o<=0; error_pulse_o<=1; timeout_pulse_o<=engine_timeout_i; state<=IDLE;
                 end else if(engine_done_i && !engine_start_o) begin
-                    result_write_o<=1; result_seq_o<=result_seq_o+1;
-                    if(result_index_o+1==count_snapshot) begin busy_o<=0; done_pulse_o<=1; state<=IDLE; end
+                    result_write_o<=1;
+                    if(result_index_o+1==count_snapshot) begin
+                        result_seq_o<=result_seq_o+1; busy_o<=0; done_pulse_o<=1; state<=IDLE;
+                    end
                     else begin result_index_o<=result_index_o+1'b1; state<=LAUNCH; end
                 end
                 default: begin busy_o<=0; error_pulse_o<=1; state<=IDLE; end
