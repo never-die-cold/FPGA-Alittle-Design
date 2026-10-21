@@ -2,7 +2,7 @@
 
 > 标签：#coprocessor #存储 #BRAM #K3 #回归入口
 > 平台：Codex + OpenCode（VS Code/WSL）｜ 模型：GPT-5 / deepseek-flash
-> 相关 commit：`097fbd7` `45c677f`；本轮 runner/TB 接入见 `git log -1`
+> 相关 commit：`097fbd7` `45c677f` `62168f8`；本轮 runner/TB 接入见 `git log -1`
 
 ## 1. 任务与初始提示词
 
@@ -40,7 +40,8 @@ bias/multiplier/shift 装入 BRAM。runner 新增 `bram_network` 模式，
 ## 5. 最终结论
 
 ```text
-$ bash sim/scripts/run_coprocessor_iverilog.sh bram_network
+$ bash sim/scripts/run_coprocessor_iverilog.sh bram_network   # 62168f8 起先跑延迟边界再跑整网
+PASS: K3-LATENCY nominal one-cycle BRAM read matches; early/late samples mismatch visibly
 PASS: ... pattern all 9225 packed words/73795 elements match integer network;
       logits=01fd01 class=0 margin=0 cycles=472594
 PASS: ... zero all 9225 packed words/73795 elements match integer network;
@@ -48,7 +49,9 @@ PASS: ... zero all 9225 packed words/73795 elements match integer network;
 ```
 
 默认行为级 `network` 仍 PASS（含 fault/watchdog），`pattern`/`zero` 各 73,795 元素匹配，
-`cycles=472593`。实体 BRAM 推断、端口模式、综合/时序与板级仍 **UNVERIFIED**；K4/K5 未完成。
+`cycles=472593`。实体 BRAM 推断、端口模式、综合/时序与板级仍 **UNVERIFIED**；
+K4/K5 的脚本与交接见 `2026-10-21-coprocessor-k4-vivado-gate.md` 与
+`2026-10-21-coprocessor-k5-nc-handoff.md`。
 
 ## 6. 经验沉淀
 
