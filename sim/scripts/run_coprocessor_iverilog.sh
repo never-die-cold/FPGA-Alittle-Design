@@ -39,19 +39,26 @@ run_convolution() {
     done < "$dir/cases.txt"
 }
 run_network() {
-    local dir="$BUILD/network-vectors" name
+    local dir="$BUILD/network-vectors" name mode="${1:-}"
+    local vvp="$BUILD/cnn_sequencer.vvp" prefix="network"
     "$PY" "$ROOT/sim/coprocessor/generate_network_vectors.py" --output "$dir"
-    iverilog -g2001 -Wall -s tb_cnn_sequencer -o "$BUILD/cnn_sequencer.vvp" \
-        "$ROOT/sim/coprocessor/tb_cnn_sequencer.v" "$ROOT"/src/coprocessor/*.v
+    if [ "$mode" = bram ]; then
+        vvp="$BUILD/cnn_bram.vvp"; prefix="network_bram"
+        iverilog -g2001 -Wall -s tb_cnn_sequencer -P tb_cnn_sequencer.USE_BRAM=1 -o "$vvp" \
+            "$ROOT/sim/coprocessor/tb_cnn_sequencer.v" "$ROOT"/src/coprocessor/*.v
+    else
+        iverilog -g2001 -Wall -s tb_cnn_sequencer -o "$vvp" \
+            "$ROOT/sim/coprocessor/tb_cnn_sequencer.v" "$ROOT"/src/coprocessor/*.v
+    fi
     while IFS= read -r name; do
-        if [ "${1:-}" = watchdog ]; then
-            vision_run_checked "$BUILD/watchdog_network.log" vvp "$BUILD/cnn_sequencer.vvp" "+model=$dir" "+case=$dir/$name" +watchdog_only
+        if [ "$mode" = watchdog ]; then
+            vision_run_checked "$BUILD/watchdog_network.log" vvp "$vvp" "+model=$dir" "+case=$dir/$name" +watchdog_only
             break
         fi
-        if [ "$name" = pattern ]; then
-            vision_run_checked "$BUILD/network_$name.log" vvp "$BUILD/cnn_sequencer.vvp" "+model=$dir" "+case=$dir/$name" +fault_tests
+        if [ "$name" = pattern ] && [ "$mode" != bram ]; then
+            vision_run_checked "$BUILD/${prefix}_$name.log" vvp "$vvp" "+model=$dir" "+case=$dir/$name" +fault_tests
         else
-            vision_run_checked "$BUILD/network_$name.log" vvp "$BUILD/cnn_sequencer.vvp" "+model=$dir" "+case=$dir/$name"
+            vision_run_checked "$BUILD/${prefix}_$name.log" vvp "$vvp" "+model=$dir" "+case=$dir/$name"
         fi
     done < "$dir/cases.txt"
 }
@@ -78,6 +85,7 @@ case "${1:-all}" in
     config_regs) run_test cop_config_regs ;;
     dma_loader) run_test cop_dma_loader ;;
     task_ctrl) run_test cop_task_ctrl ;;
+    decision_ab) run_test cop_ctrl_regs; run_test cop_task_ctrl ;;
     cop_top) run_top ;;
     axi_lite) run_test cop_axi_lite_frontend ;;
     firmware) run_firmware ;;
@@ -88,8 +96,9 @@ case "${1:-all}" in
     logits) run_test int8_logits ;;
     conv) run_convolution ;;
     network) run_network ;;
+    bram_network) run_network bram ;;
     watchdog) run_convolution watchdog; run_network watchdog ;;
     pipeline) run_test mac_array_pipeline; run_test int8_requant_pipeline ;;
     all) run_test cop_core_mmio_gate; run_test cop_ctrl_regs; run_test cop_cdc_mailbox; run_test cop_config_regs; run_test cop_dma_loader; run_test cop_task_ctrl; run_test cop_axi_lite_frontend; run_firmware; run_top; run_test mac_lane; run_test dot8; run_test int8_mac; run_test mac_array; run_test int8_requant; run_test int8_gap; run_test int8_logits; run_test mac_array_pipeline; run_test int8_requant_pipeline; run_convolution; run_network ;;
-    *) echo 'usage: run_coprocessor_iverilog.sh [mmio_gate|ctrl_regs|mailbox|config_regs|dma_loader|task_ctrl|axi_lite|firmware|cop_top|mac_lane|dot8|mac|array|requant|gap|logits|pipeline|conv|network|watchdog|all]'; exit 2 ;;
+    *) echo 'usage: run_coprocessor_iverilog.sh [mmio_gate|ctrl_regs|mailbox|config_regs|dma_loader|task_ctrl|decision_ab|axi_lite|firmware|cop_top|mac_lane|dot8|mac|array|requant|gap|logits|pipeline|conv|network|bram_network|watchdog|all]'; exit 2 ;;
 esac
