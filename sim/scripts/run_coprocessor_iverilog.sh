@@ -8,6 +8,9 @@ PY="${COPROCESSOR_PYTHON:-${VISION_PYTHON:-python3}}"
 if ! command -v "$PY" >/dev/null 2>&1 || ! "$PY" -c 'import sys' >/dev/null 2>&1; then
     PY=python
 fi
+if [[ "$PY" == */* ]]; then
+    PY="$(cd "$(dirname "$PY")" && pwd)/$(basename "$PY")"
+fi
 CROSS="${RISCV_CROSS:-riscv32-unknown-elf-}"
 TOOLCHAIN_AVAILABLE=1
 if ! command -v "${CROSS}gcc" >/dev/null 2>&1 ||
