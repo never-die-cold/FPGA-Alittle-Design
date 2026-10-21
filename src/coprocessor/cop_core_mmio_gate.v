@@ -24,7 +24,7 @@ module cop_core_mmio_gate #(
     wire fw_decision_offset = addr_i[11:0] == 12'h08c;
     wire ctrl_bits_valid = (wdata_i & 32'hffff_ffc0) == 0;
     wire ctrl_has_command = |(wdata_i & 32'h0000_003f);
-    wire start_allowed = !(wdata_i[0] && busy_i);
+    wire start_allowed = !(wdata_i[0] && (busy_i || status_i[12]));
     wire abort_allowed = !(wdata_i[1] && !busy_i);
 
     assign cop_hit_o = addr_i[31:12] == COP_BASE[31:12];
