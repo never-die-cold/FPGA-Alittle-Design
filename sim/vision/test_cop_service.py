@@ -18,6 +18,7 @@ root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(root / "src/pynq_host"))
 sys.path.insert(0, str(root / "src/vision_client"))
 import rounds
+import cop_regs as R
 from cop_engine import CopEngine
 from records import BatchRecords
 from round_artifacts import SnapshotError, load_snapshot
@@ -35,6 +36,13 @@ def post(base, ref):
         base + "/v1/check", json.dumps({"trigger_ref": ref}).encode(),
         {"Content-Type": "application/json"})
     return validate_packet(json.loads(urllib.request.urlopen(request, timeout=20).read()))
+
+
+def assert_consumed(engine):
+    status = engine.driver.status()
+    assert not status & (R.STATUS_UNCONSUMED | R.STATUS_ACCEPTED
+                         | R.STATUS_RESULT_VALID), hex(status)
+    assert engine.driver.read("ERROR_CODE") == 0
 
 
 def main():
@@ -71,6 +79,7 @@ def main():
         assert trace["driver"]["fw"]["verdict"] == "CHECK_PASS"
         assert trace["decision"] == packet["decision"]
         assert (round_dir / "capture.sha256").read_text().strip() == snap["sha256"]
+        assert_consumed(engine)
         # Tampered ROI bytes must break the snapshot chain.
         roi_path = round_dir / trace["rois"][0]["path"]
         original = roi_path.read_bytes()
@@ -93,6 +102,7 @@ def main():
         assert first["created_at"] == second["created_at"]
         assert len(list((OUT / "service" / first["session_id"][:8]).glob(
             f"check-{first['check_id']:06d}"))) == 1
+        assert_consumed(engine)
 
         # 3) Stale result: 503, no packet.json, EXE must not keep showing old PASS.
         old = remote.packet
@@ -128,6 +138,7 @@ def main():
             assert remote.last_round_manual and remote.overlay(time.time())[0]
             assert remote.packet["check_id"] == failed_id + 1
             assert remote.packet["status"] == "CHECK_PASS"
+            assert_consumed(engine)
 
         # 5) Records: only the adopted retry is recorded; duplicate key is rejected.
         rec = BatchRecords(OUT / "records",

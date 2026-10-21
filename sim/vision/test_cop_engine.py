@@ -12,6 +12,7 @@ import cv2
 root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(root / "src/pynq_host"))
 import cop_engine
+import cop_regs as R
 from cop_driver import CopDriver, CopProtocolError, SimDmaPlane
 from cop_engine import CopEngine
 from cop_mmio_sim import CopSim, SimFaults
@@ -31,6 +32,13 @@ def make_engine(classes=("bolt", "nut", "washer"), faults=None, order=None):
     return CopEngine(order or ORDER, 0.8, 16, classes=tuple(classes), faults=faults)
 
 
+def finish(engine):
+    """Tests persist the trace, then consume; the service does the same."""
+    engine.consume()
+    status = engine.driver.status()
+    assert not status & (R.STATUS_UNCONSUMED | R.STATUS_ACCEPTED | R.STATUS_RESULT_VALID), hex(status)
+
+
 def test_pass_and_trace():
     engine = make_engine()
     try:
@@ -48,10 +56,12 @@ def test_pass_and_trace():
         assert len(trace["frame"]["pixel_sha256"]) == 64
         assert len(trace["rois"]) == 3
         assert len((round_dir / trace["rois"][0]["path"]).read_bytes()) == 4096
+        finish(engine)
         # Memory rounds use the same driver and produce the same verdict.
         memory = engine.inspect_frame(load_frame())
         assert memory["status"] == fields["status"] and memory["decision"] == fields["decision"]
         assert engine.driver.read("FW_DECISION") != 0
+        finish(engine)
     finally:
         engine.close()
 
@@ -62,6 +72,7 @@ def test_count_mismatch():
         fields = engine(FIXTURE, OUT / "fail", "chk000001")
         assert fields["status"] == "CHECK_FAIL"
         assert fields["decision"]["missing"] == {"bolt": 1, "nut": 0, "washer": 0}
+        finish(engine)
     finally:
         engine.close()
 
@@ -98,6 +109,7 @@ def test_touch_border_is_stricter_than_firmware():
         assert "touches_border" in fields["decision"]["reasons"]
         trace = json.loads((OUT / "border" / "cop_trace.json").read_text(encoding="utf-8"))
         assert trace["driver"]["fw"]["verdict"] == "CHECK_PASS"  # firmware lacks the border rule
+        finish(engine)
     finally:
         cop_engine.detect_boxes = original
         engine.close()
@@ -116,6 +128,7 @@ def test_low_confidence():
         assert fields["status"] == "RECHECK" and "low_score" in fields["decision"]["reasons"]
         trace = json.loads((OUT / "lowconf" / "cop_trace.json").read_text(encoding="utf-8"))
         assert trace["driver"]["fw"]["reasons_names"] == ["low_score"]
+        finish(engine)
     finally:
         sim.close()
 
@@ -129,6 +142,7 @@ def test_target_error():
         assert fields["targets"][0]["score"] == 0.0
         trace = json.loads((OUT / "target-error" / "cop_trace.json").read_text(encoding="utf-8"))
         assert trace["driver"]["fw"]["reasons_names"] == ["low_score"]
+        finish(engine)
     finally:
         engine.close()
 
@@ -146,6 +160,7 @@ def test_failure_trace_and_recovery():
         engine.sim.faults.stale_result = False
         fields = engine(FIXTURE, OUT / "recovered", "chk000002")
         assert fields["status"] == "CHECK_PASS"
+        finish(engine)
     finally:
         engine.close()
 

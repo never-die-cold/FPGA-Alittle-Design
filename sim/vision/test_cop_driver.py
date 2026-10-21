@@ -1,13 +1,17 @@
-"""PS driver tests over the C03 register sim: happy/duplicate/stale/timeout/CRC.
+"""PS driver A1/A2 tests: submit -> ACCEPTED -> terminal -> persist -> CONSUME.
 
-Every failure path asserts that no result is returned as CHECK_PASS.
+Covers NO_ACK/HW_TIMEOUT software watchdogs, mutually exclusive terminals,
+CONSUME atomicity, stale-result rejection, CRC recovery, duplicate jobs, and
+the explicit PS AXI base rule.
 """
 import sys
 from pathlib import Path
 
 root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(root / "src/pynq_host"))
-from cop_driver import (CopConfigError, CopDriver, CopProtocolError, CopTimeoutError,
+import cop_regs as R
+from cop_driver import (CopConfigError, CopDriver, CopHardwareTimeout, CopNoAck,
+                        CopProtocolError, CopStaleResult, CopTimeoutError,
                         PynqDmaPlane, PynqMmio, SimDmaPlane)
 from cop_mmio_sim import CopSim, SimFaults, scripted_compute
 
@@ -21,43 +25,85 @@ def make_job(job_id, rev=1, count=3):
             "source_config_id": 4}
 
 
-def build(faults=None, classes=("bolt", "nut", "washer"), timeout_s=2.0):
+def build(faults=None, classes=("bolt", "nut", "washer"), job_timeout=2.0,
+          accept_timeout=0.5):
     sim = CopSim(scripted_compute(list(classes)), faults)
     driver = CopDriver(sim, SimDmaPlane(sim), dict(ORDER), 0.8, 16, 10,
-                       job_timeout_s=timeout_s, config_timeout_s=0.5)
+                       job_timeout_s=job_timeout, accept_timeout_s=accept_timeout,
+                       config_timeout_s=0.5)
     return sim, driver
 
 
-def test_happy_and_duplicate():
+def clean(driver):
+    status = driver.status()
+    return not status & (R.STATUS_UNCONSUMED | R.STATUS_ACCEPTED
+                         | R.STATUS_RESULT_VALID | R.STATUS_ERROR
+                         | R.STATUS_DONE | R.STATUS_TIMEOUT)
+
+
+def test_happy_consume_duplicate():
     sim, driver = build()
     try:
         result = driver.run(make_job(1))
         assert result["decision"]["verdict"] == "CHECK_PASS"
         assert [t["class"] for t in result["targets"]] == ["bolt", "nut", "washer"]
-        assert result["decision"]["actual"] == dict(ORDER)
         assert result["trace"]["fw"]["verdict"] == "CHECK_PASS"
-        assert result["trace"]["fw"]["reasons_names"] == []
+        assert result["trace"]["accepted"] is True
+        assert result["trace"]["unconsumed"] is True
         assert result["result_seq"] == 1 and result["cfg_seq"] == 1
-        assert sim.jobs == 1 and driver.read("RESULT_SEQ") == 1
-        # Same JOB_ID returns the cached final verdict without a second hardware run.
-        again = driver.run(make_job(1))
-        assert again["duplicate"] is True and again["result_seq"] == 1 and sim.jobs == 1
-        # Reusing the key for different targets is forbidden (C03 §8).
-        changed = make_job(1)
+        assert driver.status() & R.STATUS_UNCONSUMED
+        # A2: a new submit is rejected while the result is unconsumed.
+        try:
+            driver.run(make_job(2, rev=2))
+            raise AssertionError("submit accepted with UNCONSUMED result")
+        except CopStaleResult:
+            pass
+        assert sim.jobs == 1
+        # Persist done -> CONSUME clears receipt/terminal/result, keeps seq.
+        driver.consume(result)
+        assert clean(driver) and driver.read("RESULT_SEQ") == 1
+        assert driver.read("ERROR_CODE") == 0
+        ops = sim.trace()["ops"]
+        assert ("W", "CTRL", R.CTRL_CONSUME) in ops
+        assert not any(op == "W" and name == "CTRL" and value in
+                       (R.CTRL_CLEAR_DONE, R.CTRL_CLEAR_ERROR,
+                        R.CTRL_CLEAR_DONE | R.CTRL_CLEAR_ERROR)
+                       for op, name, value in ops)
+        # Next job advances RESULT_SEQ and is cached by JOB_ID after CONSUME.
+        second = driver.run(make_job(2, rev=2))
+        assert second["result_seq"] == 2 and second["cfg_seq"] == 2
+        driver.consume(second)
+        again = driver.run(make_job(2, rev=2))
+        assert again["duplicate"] is True and again["result_seq"] == 2
+        assert sim.jobs == 2
+        changed = make_job(2, rev=2)
         changed["targets"][0]["roi"] = b"\x7f" * 4096
         try:
             driver.run(changed)
             raise AssertionError("JOB_ID reuse with different targets accepted")
         except CopProtocolError:
             pass
-        # A new job advances RESULT_SEQ and CFG_SEQ.  C03 §3.2 gives completion
-        # clearing to the firmware: the PS must not write CTRL on this path.
-        before = len(sim.trace()["ops"])
-        second = driver.run(make_job(2, rev=2))
-        new_ops = sim.trace()["ops"][before:]
-        assert second["result_seq"] == 2 and second["cfg_seq"] == 2
-        assert all(not (op == "W" and name == "CTRL") for op, name, _ in new_ops), new_ops
-        assert sim.jobs == 2
+    finally:
+        sim.close()
+
+
+def test_consume_validation():
+    sim, driver = build()
+    try:
+        result = driver.run(make_job(1))
+        wrong = {"result_seq": 999}
+        try:
+            driver.consume(wrong)
+            raise AssertionError("CONSUME with a wrong seq accepted")
+        except CopProtocolError:
+            pass
+        assert driver.status() & R.STATUS_UNCONSUMED
+        driver.consume(result)
+        try:
+            driver.consume(result)
+            raise AssertionError("CONSUME without a terminal accepted")
+        except CopProtocolError:
+            pass
     finally:
         sim.close()
 
@@ -65,7 +111,8 @@ def test_happy_and_duplicate():
 def test_safety_gate():
     sim, driver = build()
     try:
-        driver.run(make_job(1))
+        result = driver.run(make_job(1))
+        driver.consume(result)
         ps = {"verdict": "RECHECK", "actual": dict(ORDER), "reasons": ["touches_border"]}
         fw = {"verdict": "CHECK_PASS", "actual": [1, 1, 1], "reasons": 0}
         driver._check_safety(fw, ps, [])
@@ -86,27 +133,61 @@ def test_safety_gate():
         sim.close()
 
 
-def test_timeout_then_recovery():
-    sim, driver = build(SimFaults(delay_s=0.02))
+def test_hardware_timeout_and_recovery():
+    sim, driver = build(SimFaults(delay_s=0.01))
     try:
         job = make_job(1)
-        job["timeout_cycles"] = 1000  # 10 us at 100 MHz; job sleeps ~60 ms
+        job["timeout_cycles"] = 1000  # 10 us; hardware watchdog wins
         try:
             driver.run(job)
-            raise AssertionError("simulated watchdog accepted")
+            raise AssertionError("hardware watchdog accepted")
         except CopTimeoutError as error:
-            assert error.error_name == "WATCHDOG", error.error_name
-        assert driver._needs_recovery is True
+            assert error.error_code == 13 and error.error_name == "WATCHDOG", error
+        assert clean(driver)
         sim.faults.timeout = False
         sim.faults.delay_s = 0.0
         result = driver.run(make_job(2, rev=2))
         assert result["decision"]["verdict"] == "CHECK_PASS" and result["result_seq"] == 1
-        assert driver._needs_recovery is False and sim.error_name is None
+        driver.consume(result)
     finally:
         sim.close()
 
 
-def test_stale_result_never_passes():
+def test_ps_hw_timeout():
+    sim, driver = build(SimFaults(hang=True), job_timeout=0.1, accept_timeout=0.5)
+    try:
+        try:
+            driver.run(make_job(1))
+            raise AssertionError("accepted-but-hung job passed")
+        except CopHardwareTimeout as error:
+            assert error.error_name == "HW_TIMEOUT", error
+        assert clean(driver)
+        sim.faults.hang = False
+        result = driver.run(make_job(2, rev=2))
+        assert result["result_seq"] == 1
+        driver.consume(result)
+    finally:
+        sim.close()
+
+
+def test_no_ack():
+    sim, driver = build(SimFaults(no_ack=True), accept_timeout=0.1)
+    try:
+        try:
+            driver.run(make_job(1))
+            raise AssertionError("missing ACCEPTED passed")
+        except CopNoAck as error:
+            assert error.error_name == "NO_ACK", error
+        assert clean(driver)
+        sim.faults.no_ack = False
+        result = driver.run(make_job(2, rev=2))
+        assert result["result_seq"] == 1
+        driver.consume(result)
+    finally:
+        sim.close()
+
+
+def test_stale_result_and_recovery():
     sim, driver = build(SimFaults(stale_result=True))
     try:
         try:
@@ -114,19 +195,25 @@ def test_stale_result_never_passes():
             raise AssertionError("stale RESULT_SEQ accepted")
         except CopProtocolError as error:
             assert "RESULT_SEQ" in str(error), error
+        assert driver.status() & R.STATUS_UNCONSUMED
+        driver.consume_current("stale")
+        assert clean(driver)
         sim.faults.stale_result = False
         result = driver.run(make_job(2, rev=2))
-        assert result["decision"]["verdict"] == "CHECK_PASS" and result["result_seq"] == 1
-        # Now a *second* job whose seq does not advance is rejected too.
+        assert result["result_seq"] == 1
+        driver.consume(result)
+        # A stale second result is rejected and recoverable.
         sim.faults.stale_result = True
         try:
             driver.run(make_job(3, rev=3))
             raise AssertionError("non-advancing RESULT_SEQ accepted")
         except CopProtocolError:
             pass
+        driver.consume_current("stale")
         sim.faults.stale_result = False
         third = driver.run(make_job(4, rev=4))
         assert third["result_seq"] == 2
+        driver.consume(third)
     finally:
         sim.close()
 
@@ -138,24 +225,23 @@ def test_model_fault_and_reload():
             driver.run(make_job(1))
             raise AssertionError("CRC-mismatched model accepted")
         except CopConfigError as error:
-            assert "BAD_MODEL" in str(error), error
-        assert driver._model_loaded is None  # failed config forces a fresh load
+            assert "error_code=1" in str(error), error
+        assert clean(driver)
         sim.faults.crc_mismatch = False
         result = driver.run(make_job(2, rev=2))
         assert result["decision"]["verdict"] == "CHECK_PASS"
+        driver.consume(result)
         assert sim.jobs == 1
     finally:
         sim.close()
 
 
-def test_real_dma_plane_is_not_pretended():
+def test_real_dma_plane_and_ps_base():
     try:
         PynqDmaPlane()
         raise AssertionError("unimplemented J08 data plane constructed")
     except NotImplementedError as error:
         assert "J08" in str(error)
-    # PS AXI base comes from Address Editor; the core-side 0x8001_0000 must not
-    # become a silent default (K1 假硬件 mock 约束).
     try:
         PynqMmio(object())
         raise AssertionError("PynqMmio accepted a default base")
@@ -181,13 +267,16 @@ def test_real_dma_plane_is_not_pretended():
 
 
 def main():
-    test_happy_and_duplicate()
+    test_happy_consume_duplicate()
+    test_consume_validation()
     test_safety_gate()
-    test_timeout_then_recovery()
-    test_stale_result_never_passes()
+    test_hardware_timeout_and_recovery()
+    test_ps_hw_timeout()
+    test_no_ack()
+    test_stale_result_and_recovery()
     test_model_fault_and_reload()
-    test_real_dma_plane_is_not_pretended()
-    print("PASS: PS driver (submit/done/result window/FW parity/duplicate/stale/timeout/CRC recovery)")
+    test_real_dma_plane_and_ps_base()
+    print("PASS: PS driver A1/A2 (accepted/unconsumed/consume/NO_ACK/HW_TIMEOUT/stale/CRC)")
 
 
 if __name__ == "__main__":

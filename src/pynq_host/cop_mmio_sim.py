@@ -23,7 +23,8 @@ class SimFaults:
     """Fault injection knobs; every one is sim-only."""
 
     def __init__(self, timeout=False, crc_mismatch=False, short_payload=False,
-                 stale_result=False, target_error=None, low_conf=None, delay_s=0.0):
+                 stale_result=False, target_error=None, low_conf=None, delay_s=0.0,
+                 no_ack=False, hang=False):
         self.timeout = timeout
         self.crc_mismatch = crc_mismatch
         self.short_payload = short_payload
@@ -31,6 +32,8 @@ class SimFaults:
         self.target_error = target_error
         self.low_conf = low_conf
         self.delay_s = delay_s
+        self.no_ack = no_ack   # firmware never accepts START -> PS NO_ACK
+        self.hang = hang       # accepted but no terminal -> PS HW_TIMEOUT
 
 
 def scripted_compute(classes):
@@ -84,11 +87,13 @@ class CopSim:
         self._fw_decision = 0
         self._busy = False
         self._dma_busy = False
+        self._accepted = False
         self._done = False
         self._error = False
         self._timeout = False
         self._result_valid = False
         self._error_name = None
+        self._error_code = 0
         self._cfg_seq = 0
         self._cfg_applied = 0
         self._cfg_valid = False
@@ -153,8 +158,10 @@ class CopSim:
     def _read_reg(self, name):
         if name == "IP_ID":
             return R.IP_ID
-        if name in ("VERSION", "CAPABILITY", "ERROR_CODE"):
+        if name in ("VERSION", "CAPABILITY"):
             return 0  # J04/OPEN-9: not implemented, do not infer meaning
+        if name == "ERROR_CODE":
+            return self._error_code  # A2: 1 task, 12 aborted, 13 watchdog
         if name in ("CFG_SEQ",):
             return self._cfg_seq
         if name == "CFG_APPLIED":
@@ -181,9 +188,8 @@ class CopSim:
 
     def _status(self):
         status = 0
-        if not self._busy and self._cfg_valid and self._model_ok \
-                and not self._error and not self._timeout:
-            status |= R.STATUS_READY
+        if not self._busy:
+            status |= R.STATUS_READY  # A1: !BUSY, advisory only
         if self._busy:
             status |= R.STATUS_BUSY
         if self._done:
@@ -191,7 +197,11 @@ class CopSim:
         if self._error:
             status |= R.STATUS_ERROR
         if self._timeout:
-            status |= R.STATUS_ERROR | R.STATUS_TIMEOUT
+            status |= R.STATUS_TIMEOUT
+        if self._accepted:
+            status |= R.STATUS_ACCEPTED
+        if self._done or self._error or self._timeout:
+            status |= R.STATUS_UNCONSUMED
         if self._cfg_valid:
             status |= R.STATUS_CFG_VALID
         if self._model_ok:
@@ -205,35 +215,33 @@ class CopSim:
     def _write_ctrl(self, value):
         if value & R.CTRL_START:
             raise CopBusError("PS may not write START")
+        if value & R.CTRL_CONSUME:
+            if self._busy or not (self._done or self._error or self._timeout):
+                raise CopBusError("CONSUME requires UNCONSUMED && !BUSY")
+            self._accepted = False
+            self._done = False
+            self._error = False
+            self._timeout = False
+            self._result_valid = False
+            self._error_code = 0
+            self._error_name = None
+            # RESULT_SEQ is deliberately preserved (A2).
         if value & R.CTRL_ABORT:
-            if self._busy:
-                self._generation += 1
-                self._busy = False
-                self._done = False
-                self._result_valid = False
-                self._error = True
-                self._error_name = "ABORTED"
-            else:  # OPEN-10: J04 sets ERROR for an idle ABORT
-                self._error = True
-                self._error_name = "ABORTED"
-        if value & R.CTRL_SOFT_RESET:
             self._generation += 1
             self._busy = False
             self._done = False
             self._timeout = False
-            self._error = False
-            self._error_name = None
             self._result_valid = False
-            self._fw_counts = 0
-            self._fw_decision = 0
-            self._results = []  # keep cfg/model per C03-P10
-        if value & R.CTRL_CLEAR_DONE:
-            self._done = False
-            self._result_valid = False
-        if value & R.CTRL_CLEAR_ERROR:
-            self._error = False
-            self._timeout = False
-            self._error_name = None
+            self._error = True
+            self._error_code = 12
+            self._error_name = "ABORTED"
+            # accepted stays sticky until CONSUME (RTL parity).
+        if value & R.CTRL_SOFT_RESET:
+            self._generation += 1
+            self._busy = False
+            # RTL soft reset cancels the task but does not clear sticky
+            # terminals/accepted; PS must still CONSUME.  RESULT_SEQ is kept.
+        # CTRL[3:4] are historical and have zero side effects under A2.
         # IRQ_ACK has no observable source in this model.
 
     def _commit(self):
@@ -243,7 +251,11 @@ class CopSim:
             self._cfg_valid = False
             if not self._error:  # C03 §9: keep the first cause
                 self._error = True
+                self._error_code = 1
                 self._error_name = "BAD_CONFIG"
+                self._done = False
+                self._timeout = False
+                self._result_valid = False
             return
         self._cfg_applied = self._cfg_seq
         self._cfg_valid = True
@@ -309,6 +321,10 @@ class CopSim:
             self._refresh_model_valid()
             if not self._model_ok:
                 self._error = True
+                self._error_code = 1
+                self._done = False
+                self._timeout = False
+                self._result_valid = False
                 self._error_name = ("DMA_SHORT" if len(effective) != self._shadow.get("WEIGHT_BYTES")
                                     else "BAD_MODEL")
             self._dma_busy = False
@@ -357,6 +373,8 @@ class CopSim:
         with self._lock:
             if self._busy:
                 return
+            if self._done or self._error or self._timeout:
+                return  # A2: START is rejected while UNCONSUMED
             count = self._shadow.get("ROI_COUNT", 0)
             if count == 0 or count > R.MAX_TARGETS:
                 self._fw_decision = R.encode_fw_decision(0, R.REASON_CONFIG, "RECHECK")
@@ -364,9 +382,11 @@ class CopSim:
             if count > R.POLICY_MAX:
                 self._fw_decision = R.encode_fw_decision(0, R.REASON_TARGET_LIMIT, "RECHECK")
                 return
-            if not self._cfg_valid or not self._model_ok or self._error or self._timeout:
+            if not self._cfg_valid or not self._model_ok:
                 self._fw_decision = R.encode_fw_decision(0, R.REASON_CONFIG, "RECHECK")
                 return
+            if self.faults.no_ack:
+                return  # firmware never accepts START; PS must time out -> NO_ACK
             order = R.unpack_work_order(self._shadow.get("WORK_ORDER", 0))
             min_margin = self._shadow.get("MIN_MARGIN_Q", 0)
             timeout_s = self._shadow.get("TIMEOUT_CYCLES", 0) / R.COP_HZ
@@ -374,11 +394,22 @@ class CopSim:
             self._generation += 1
             generation = self._generation
             self._busy = True
+            self._accepted = True  # A2 sticky START receipt
             self._done = False
-            self._result_valid = False
+            self._error = False
             self._timeout = False
+            self._result_valid = False
+            self._error_code = 0
+            self._error_name = None
             self._job_started = time.monotonic()
             self._jobs += 1
+
+        if self.faults.hang:
+            while True:
+                with self._lock:
+                    if generation != self._generation or self._closed:
+                        return
+                time.sleep(0.002)
 
         started = time.monotonic()
         targets, timed_out = [], False
@@ -413,8 +444,12 @@ class CopSim:
                 return
             self._busy = False
             if timed_out or time.monotonic() - started > timeout_s:
+                # A2: TIMEOUT is its own terminal, ERROR stays 0.
                 self._timeout = True
-                self._error = True
+                self._error = False
+                self._done = False
+                self._result_valid = False
+                self._error_code = 13
                 self._error_name = "WATCHDOG"
                 self._fw_decision = R.encode_fw_decision(0, R.REASON_INVALID, "RECHECK")
                 self._perf_cycles = int((time.monotonic() - started) * R.COP_HZ)
@@ -430,6 +465,10 @@ class CopSim:
             self._perf_cycles = int((time.monotonic() - started) * R.COP_HZ)
             self._result_valid = True
             self._done = True
+            self._error = False
+            self._timeout = False
+            self._error_code = 0
+            self._error_name = None
 
     # ---- test/inspection helpers -----------------------------------------
     def _result_word(self, kind):
@@ -489,6 +528,9 @@ class CopSim:
         with self._lock:
             return {"status": self._status(), "cfg_seq": self._cfg_seq,
                     "cfg_applied": self._cfg_applied, "result_seq": self._result_seq,
+                    "accepted": self._accepted,
+                    "unconsumed": bool(self._done or self._error or self._timeout),
+                    "error_code": self._error_code,
                     "fw_counts": self._fw_counts, "fw_decision": self._fw_decision,
                     "error_name": self._error_name, "jobs": self._jobs,
                     "ops": list(self._ops)}

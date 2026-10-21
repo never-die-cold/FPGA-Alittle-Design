@@ -19,6 +19,7 @@ import cv2
 root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(root / "src/pynq_host"))
 sys.path.insert(0, str(root / "src/vision_client"))
+import cop_regs as R
 from cop_engine import CopEngine
 from round_artifacts import load_snapshot
 from vision_live_service import FileCaptures, make_server
@@ -74,6 +75,10 @@ def run(out):
         assert trace["driver"]["fw"]["verdict"] == "CHECK_PASS"
         assert trace["decision"] == row["decision"]
         assert len(trace["rois"]) == row["target_count"]
+        status = engine.driver.status()
+        assert not status & (R.STATUS_UNCONSUMED | R.STATUS_ACCEPTED
+                             | R.STATUS_RESULT_VALID), hex(status)
+        assert engine.driver.read("ERROR_CODE") == 0
         round_dir = out / "service" / row["session_id"][:8] / f"check-{row['check_id']:06d}"
         assert (round_dir / "capture.png").read_bytes() == FIXTURE.read_bytes()
         assert (round_dir / "packet.json").is_file()

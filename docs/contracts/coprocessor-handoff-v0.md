@@ -8,7 +8,7 @@
 - J03 离板计算链已收口：诊断整数参考、算子、Conv→GAP→FC 控制器和逐元素 TB 可复现。
 - J04a（JL 侧实现/冒烟）已交接：`cop_top`、MMIO/CDC、AXI4-Lite、DMA loader、核接入门和工单固件均有仓库内 TB；J04b（完整验证、物理 bank/结果 DMA、CDC/AXI 深测、综合/板验）未完成。详见[实现交接单](../runbooks/coprocessor-j04-handoff.md)。
 - WC 侧 PS 驱动/模拟硬件/服务引擎已按 C03 §13 落库并跑通离板一轮（mock/脚本分类器，非板上）；提交/完成/取结果/恢复口径与 JL 待办见 [PS 驱动使用档](coprocessor-ps-driver-v0.md)。
-- JL K1/K2 已并入：K1 是 C03 摘录，K2 是 PLAN/UNVERIFIED 的片上存储方案；WC 驱动已按 K1 修正正常轮 CTRL 写权限与 PS AXI 基址，READY 窗口/消费回执两项待 JL 确认。
+- JL K1/K2 已并入；C03 §14 A1/A2（READY=!BUSY、ACCEPTED/UNCONSUMED/CONSUME、终态互斥、RESULT_SEQ 每轮递增、NO_ACK/HW_TIMEOUT 软件看门狗）已同步到 PS 驱动/mock/服务：有效结果落盘后 PS CONSUME，错误/超时读码后消费。固件重复作业与预启动完成通知仍是阻断项。
 - J05/J06 未完成：没有真实审计 ROI 上的正式 INT8 模型、阈值和发布黄金。
 - J07/J08 未完成：没有整机实现、位流或可交 NC 上板的三批正式交付包。
 

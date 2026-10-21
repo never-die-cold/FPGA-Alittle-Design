@@ -47,6 +47,22 @@
 - 两项待 JL 确认：K1 的 `CFG_APPLIED && READY` 窗口（PS 以 `CFG_APPLIED` 为硬回执）；
   “消费后 RISC-V 清 DONE”缺少 PS→FW 消费回执（当前固件在下一轮 START 前清）。
 
+## 2026-10-21 拉取 JL A1/A2 并实现
+
+- 合并 `origin/dev/riscv` `4a57ef4`（C03 §14 A1/A2、K1 新版、固件回执看门狗、K3 BRAM），
+  合并提交 `17427ce`。
+- A1：READY=`!BUSY` 仅建议；配置回执只认 `CFG_APPLIED`。A2：`CTRL[6]=CONSUME`、
+  `STATUS[11]=ACCEPTED`、`[12]=UNCONSUMED`；终态互斥；`RESULT_SEQ` 每轮 +1；
+  PS 两个软件看门狗（NO_ACK/HW_TIMEOUT）；落盘成功后才 CONSUME。
+- 实现：sim 重写 ACCEPTED/UNCONSUMED/CONSUME/ERROR_CODE；driver 增加 ACCEPTED 等待、
+  CONSUME、期望序号、STALE_RESULT；engine 在服务落盘后 `consume()` 并把 consume
+  状态写回 trace；service 在 packet/latest 写成功后调用 consume。
+- 验证：inspection 19 组、vision 21 组 exit 0；`decision_ab` T1–T7、`cop_top`、
+  `bram_network` exit 0；新证据 `data/logs/2026-10-21-cop-a2-round/`。
+- 发现：本机 MSYS 无 host `gcc`，`run_coprocessor_iverilog.sh firmware` 的主机规则测试
+  无法执行（RISC-V ELF 构建成功）；A2 改了 `cop_job.c` 但 `cop_job.hex/dis` 仍是旧产物，
+  需 JL 重建。固件重复作业/预启动完成通知仍是阻断项。
+
 ## 明确未做
 
 - 未上板；未验证真实 MMIO/AXI/DataMover/CDC；未实现 `PynqDmaPlane`；

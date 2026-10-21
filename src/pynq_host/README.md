@@ -60,20 +60,23 @@ FP32 软件推理来源记录在产物 `result.json` 的 provenance，不当作 
 `test_base_captures.py`、`test_c01_backend.py`（视觉栈现 **21 组**；检查链 **19 组**）；
 快照核对器 `round_artifacts.py`（C04 §2.3，待 NC 确认）。
 
-## 协处理器 PS 驱动与模拟硬件（2026-10-20）
+## 协处理器 PS 驱动与模拟硬件（2026-10-21，C03 A1/A2）
 
-按 C03 §13 接入 `vision_live_service`，**未上板**：
+按 C03 §13/§14 与 K1 接入 `vision_live_service`，**未上板**：
 
-- `cop_regs.py`：C03 §4 寄存器常量、`cop_judge` 镜像、`FW_DECISION` 编解码；
-- `cop_mmio_sim.py`：镜像 §4/§5 的假寄存器模型（配置原子提交、busy 拒 commit、
-  sticky DONE/ERROR/TIMEOUT + W1C、RESULT_SEQ 最后提交、watchdog、ABORT/SOFT_RESET、
-  CRC/短包/旧结果/目标错误注入）；
-- `cop_driver.py`：PS 驱动。只依赖 `read32/write32` + DMA 面；提交、等终态、结果窗
-  `RESULT_SEQ` 双读、`FW_DECISION` 逐字段复算、PS 判定“不得比固件更宽松”、
-  同 `JOB_ID` 去重、超时/错误清状态重试；`PynqDmaPlane` 故意未实现（J08 数据面）；
+- `cop_regs.py`：C03 §4/A1/A2 寄存器常量（`CONSUME`、`ACCEPTED`、`UNCONSUMED`）、
+  `cop_judge` 镜像、`FW_DECISION` 编解码、`ERROR_CODE 1/12/13` 名称；
+- `cop_mmio_sim.py`：镜像 A1/A2 的假寄存器模型（READY=!BUSY、sticky ACCEPTED、
+  终态互斥、PS-only CONSUME 原子清、RESULT_SEQ 每轮递增、`NO_ACK`/`HW_TIMEOUT`
+  前置故障注入、busy 拒 commit、CRC/短包/旧结果）；
+- `cop_driver.py`：PS 驱动。只依赖 `read32/write32` + DMA 面；等 `CFG_APPLIED`、
+  等 sticky `ACCEPTED`（NO_ACK 看门狗）、等互斥终态（HW_TIMEOUT 看门狗）、结果窗
+  `RESULT_SEQ` 双读与期望序号、`FW_DECISION` 逐字段复算、PS 判定“不得比固件更宽松”、
+  同 `JOB_ID` 去重；**有效结果由调用方落盘后 `CONSUME`**，错误/超时由驱动读码后消费；
 - `cop_engine.py`：定位 → `scene-gray-border-padding-v1` ROI → sim INT8 → 驱动 →
   `inspection_rules.judge`；每轮写 `cop_trace.json`（帧像素哈希、ROI 字节哈希、
-  cfg/result seq、FW/PS 判定、耗时）；`round_artifacts.load_snapshot` 可核对整条链。
+  cfg/result seq、FW/PS 判定、耗时）；服务在 packet/latest 落盘后调用 `engine.consume()`；
+  `round_artifacts.load_snapshot` 可核对整条链。
 
 服务入口：
 
@@ -86,7 +89,7 @@ python src/pynq_host/vision_live_service.py --root <dir> --capture-dir <png dir>
 `cop-sim` 是模拟计算，分类器是脚本/图像派生的合成结果，`S_input=1/127` 仅为 sim 量化，
 **不是**识别精度或板上证据。提交/完成/取结果/恢复与 JL 待办见
 [PS 驱动使用档](../../docs/contracts/coprocessor-ps-driver-v0.md)；一轮证据
-`bash sim/scripts/run_cop_sim_round.sh`。
+`bash sim/scripts/run_cop_sim_round.sh <output-dir>`（默认写 `sim/build/`，证据目录显式指定）。
 
 ## 板卡访问
 

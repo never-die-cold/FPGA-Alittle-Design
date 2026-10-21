@@ -72,10 +72,27 @@ class CopEngine:
             (R.crc32(PREPROCESS_VERSION.encode()) & 0xFFFFFFFF)
         self.job_id = 0
         self.last_trace = None
+        self._pending_consume = None
+        self._last_round_dir = None
 
     def close(self):
         if self._owns_sim and self.sim is not None:
             self.sim.close()
+
+    def consume(self):
+        """Called by the service after the packet is persisted (A2 order)."""
+        if self._pending_consume is None:
+            return
+        result = self._pending_consume
+        try:
+            status_after = self.driver.consume(result)
+            if self.last_trace is not None and self.last_trace.get("kind") == "cop_job":
+                self.last_trace["consume"] = {
+                    "result_seq": result["result_seq"], "status_after": status_after,
+                    "unconsumed": bool(status_after & R.STATUS_UNCONSUMED)}
+                self._write_trace(self._last_round_dir, self.last_trace)
+        finally:
+            self._pending_consume = None
 
     def __call__(self, capture_path, round_dir, request_id):
         raw = Path(capture_path).read_bytes()
@@ -96,6 +113,7 @@ class CopEngine:
         if (not isinstance(frame, np.ndarray) or frame.dtype != np.uint8
                 or frame.ndim != 3 or frame.shape[2] != 3 or min(frame.shape[:2]) < 1):
             raise ValueError("frame must be nonempty uint8 BGR")
+        self._last_round_dir = round_dir
         height, width = frame.shape[:2]
         frame_meta = {"width": width, "height": height,
                       "pixel_sha256": hashlib.sha256(frame.tobytes()).hexdigest()}
@@ -142,16 +160,28 @@ class CopEngine:
         try:
             result = self.driver.run(job)
         except CopError as error:
+            try:
+                snapshot = self.driver.terminal_snapshot("engine_failure")
+            except CopError:
+                snapshot = None
             trace = {"kind": "cop_failure", "simulated": True,
                      "compute_backend": self.compute_label,
                      "protocol_check": request_id, "error": str(error),
+                     "error_type": type(error).__name__,
+                     "error_code": getattr(error, "error_code", None),
                      "sim_error": getattr(self.driver.transport, "error_name", None),
                      "frame": frame_meta,
                      "job_id": self.job_id, "capture_id": capture_id,
                      "rois": self._write_rois(round_dir, targets),
-                     "descriptors": descriptors}
+                     "descriptors": descriptors,
+                     "terminal": snapshot, "last_terminal": self.driver.last_terminal}
             self.last_trace = trace
-            self._write_trace(round_dir, trace)
+            self._write_trace(round_dir, trace)  # persist evidence before CONSUME
+            if snapshot and snapshot["status"] & R.STATUS_UNCONSUMED:
+                try:
+                    self.driver.consume_current("engine_failure")
+                except CopError:
+                    pass  # next round sees the stale terminal and recovers it
             raise
 
         packet_targets = []
@@ -179,6 +209,8 @@ class CopEngine:
                  "decision": decision}
         self.last_trace = trace
         self._write_trace(round_dir, trace)
+        self._last_round_dir = round_dir
+        self._pending_consume = result  # service calls consume() after packet persist
         return {"status": decision["verdict"], "targets": packet_targets,
                 "decision": decision, "width": width, "height": height}
 

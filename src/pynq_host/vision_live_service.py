@@ -5,8 +5,10 @@
 FILE 原型自动轮询在内存中检查并更新 latest_packet.json；手动触发保存完整产物。
 --archive-every-round 恢复逐轮归档。分类器复用，权重文件变化后须重启服务。
 - 引擎契约：engine(capture_path, round_dir, request_id) -> {status, targets, decision, width, height}；
-  默认 file_engine（懒加载 inspection_run——cv2/numpy/torch 仅在真正服务时导入，
-  本文件保持 stdlib 可测，接入 run_vision_python.sh）。
+  若引擎带 `consume()`（COP_SIM/真实 MMIO），服务在 packet/latest 原子落盘成功后调用它，
+  再向客户端返回；落盘失败不消费，保留硬件 sticky 证据。默认 file_engine（懒加载
+  inspection_run——cv2/numpy/torch 仅在真正服务时导入，本文件保持 stdlib 可测，
+  接入 run_vision_python.sh）。
 - prototype 由捕获后端结构性决定：FILE 后端恒 true（离线产物代实时，C04 §3.2），无开关；
   真实取帧后端（N03）接入时才允许 false。
 - 超限映射：引擎 decision 计数为 None（target_limit）时，按报文内已列目标重算
@@ -143,6 +145,10 @@ class State:
                 atomic_write(round_dir / "packet.json", payload)
             atomic_write(self.session_dir / "latest_packet.json", payload)
             self.last_packet = packet
+            # A2: persistence (packet.json/latest_packet.json) precedes CONSUME.
+            consume = getattr(self.engine, "consume", None)
+            if consume is not None:
+                consume()
             if trigger_ref is not None:
                 self.completed_refs[trigger_ref] = packet
                 while len(self.completed_refs) > 16:

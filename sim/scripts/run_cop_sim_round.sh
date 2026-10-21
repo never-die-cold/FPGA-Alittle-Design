@@ -15,7 +15,7 @@ else
     echo "ERROR: no Python found; set VISION_PYTHON" >&2
     exit 1
 fi
-OUT="${1:-data/logs/2026-10-20-cop-sim-round/run}"
+OUT="${1:-sim/build/vision/cop-round}"
 case "$OUT" in
     /*) ;;
     *) OUT="$PWD/$OUT" ;;

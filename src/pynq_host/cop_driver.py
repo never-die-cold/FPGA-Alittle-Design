@@ -1,12 +1,17 @@
-"""PS-side driver for the C03/J04 MMIO coprocessor.
+"""PS-side driver for the C03 A1/A2 MMIO coprocessor.
 
 Transport-agnostic: the driver only needs ``read32/write32`` and a DMA plane.
 ``SimDmaPlane`` + ``CopSim`` exercise the whole flow off-board; ``PynqMmio`` is
 the intended one-line swap for real hardware, but no board path is claimed here.
 
-Safety invariants beyond C03 §5:
-- Normal rounds never write CTRL; sticky DONE/RESULT_VALID is left to the
-  firmware's next START (C03 §3.2).  PS clears only on error/timeout/recovery.
+A1/A2 invariants (C03 §14, K1):
+- READY is advisory (!BUSY); config receipt is CFG_APPLIED only.
+- ACCEPTED is the sticky START receipt; PS has NO_ACK and HW_TIMEOUT software
+  watchdogs independent of READY and of the hardware timeout.
+- Terminals are mutually exclusive; only one PS CONSUME clears
+  DONE/ERROR/TIMEOUT/RESULT_VALID/ACCEPTED/ERROR_CODE.  RESULT_SEQ persists.
+- A valid result is read and validated, then persisted by the caller, then
+  consumed.  The driver never consumes a DONE result by itself.
 - RESULT_SEQ must advance and stay unchanged across the indexed result reads.
 - FW_DECISION must describe the same RESULT_SEQ and match the firmware rules.
 - The PS decision may be stricter than the firmware's, never more permissive
@@ -34,13 +39,16 @@ class CopConfigError(CopError):
 
 
 class CopJobError(CopError):
-    def __init__(self, message, status=None, error_name=None, result_seq=None):
+    def __init__(self, message, status=None, error_name=None, result_seq=None,
+                 error_code=None):
         self.status = status
         self.error_name = error_name
         self.result_seq = result_seq
+        self.error_code = error_code
         detail = message
         if status is not None:
             detail += f" (status=0x{status:08x}"
+            detail += f", error_code={error_code}" if error_code is not None else ""
             detail += f", sim_error={error_name}" if error_name else ""
             detail += ")"
         super().__init__(detail)
@@ -48,6 +56,24 @@ class CopJobError(CopError):
 
 class CopTimeoutError(CopJobError):
     pass
+
+
+class CopNoAck(CopJobError):
+    """ACCEPTED never arrived before the PS software watchdog expired."""
+
+
+class CopHardwareTimeout(CopJobError):
+    """ACCEPTED arrived but no terminal arrived before the PS software watchdog."""
+
+
+class CopStaleResult(CopError):
+    """UNCONSUMED terminal from a previous round; consume/persist it first."""
+
+    def __init__(self, message, status=None, result_seq=None, error_code=None):
+        self.status = status
+        self.result_seq = result_seq
+        self.error_code = error_code
+        super().__init__(message)
 
 
 class CopProtocolError(CopError):
@@ -111,7 +137,7 @@ class CopDriver:
     def __init__(self, transport, dma, order, min_score, max_targets=16,
                  policy_max=None, model_payload=b"COP-SIM-PLACEHOLDER-MODEL",
                  model_id=MODEL_ID_DEFAULT, addresses=None, job_timeout_s=5.0,
-                 config_timeout_s=2.0, poll_s=0.002):
+                 accept_timeout_s=1.0, config_timeout_s=2.0, poll_s=0.002):
         judge([], order, min_score, max_targets, policy_max)  # freeze/validate inputs
         if not isinstance(model_payload, (bytes, bytearray)) or not model_payload:
             raise ValueError("model payload must be non-empty bytes")
@@ -133,14 +159,14 @@ class CopDriver:
         # margin >= ceil(min_score*254) => score_q15/32767 >= min_score.
         self.min_margin_q = max(0, min(254, math.ceil(self.min_score * 254)))
         self.job_timeout_s = job_timeout_s
+        self.accept_timeout_s = accept_timeout_s
         self.config_timeout_s = config_timeout_s
         self.poll_s = poll_s
         self.cfg_seq = 0
         self.last_result_seq = None
         self._model_loaded = None
         self._cache = None
-        self._needs_recovery = False
-        self._started = False
+        self.last_terminal = None
         self.events = []
 
     # ---- register helpers ------------------------------------------------
@@ -168,47 +194,109 @@ class CopDriver:
                 raise CopProtocolError(f"timed out waiting for {what}")
             time.sleep(self.poll_s)
 
-    # ---- recovery --------------------------------------------------------
-    def recover(self):
-        """Recover only when needed; normal rounds leave DONE to the firmware.
+    # ---- A1/A2 terminal handling -----------------------------------------
+    @staticmethod
+    def _terminal(status):
+        return status & (R.STATUS_DONE | R.STATUS_ERROR | R.STATUS_TIMEOUT)
 
-        C03 §3.2 gives completion/error clearing to the RISC-V firmware.  A
-        successful DONE/RESULT_VALID is therefore left for the firmware's
-        next START to clear (``cop_job.c`` writes CTRL=24).  PS writes
-        ABORT/CLEAR only for a real error, timeout, or a stale terminal left
-        by a previous process.
+    def consume(self, result=None):
+        """PS-only CONSUME: clear a persisted/known terminal atomically.
+
+        Must be called only after the caller has read and persisted the result
+        (or after capturing an error terminal).  RESULT_SEQ is preserved.
         """
         status = self.status()
-        if not self._needs_recovery:
-            if status & R.STATUS_BUSY or status & (R.STATUS_ERROR | R.STATUS_TIMEOUT):
-                self._needs_recovery = True
-            elif not self._started and status & (R.STATUS_DONE | R.STATUS_RESULT_VALID):
-                self._needs_recovery = True  # do not inherit a previous process's terminal
-            else:
-                self._started = True
-                return status
-        self._started = True
-        aborted = bool(status & R.STATUS_BUSY)
-        if aborted:
+        if not status & R.STATUS_UNCONSUMED:
+            raise CopProtocolError("CONSUME without a terminal")
+        if status & R.STATUS_BUSY:
+            raise CopProtocolError("CONSUME while BUSY")
+        seq = self.read("RESULT_SEQ")
+        if result is not None and result.get("result_seq") != seq:
+            raise CopProtocolError(
+                f"CONSUME seq {seq} does not match result {result.get('result_seq')}")
+        try:
+            self.write("CTRL", R.CTRL_CONSUME)
+        except R.CopBusError as error:
+            raise CopProtocolError(f"CONSUME rejected: {error}") from error
+        after = self.status()
+        if after & (R.STATUS_UNCONSUMED | R.STATUS_ACCEPTED | R.STATUS_RESULT_VALID):
+            raise CopProtocolError(f"CONSUME did not clear terminal: 0x{after:08x}")
+        if self.read("ERROR_CODE") != 0:
+            raise CopProtocolError("CONSUME did not clear ERROR_CODE")
+        if self.read("RESULT_SEQ") != seq:
+            raise CopProtocolError("CONSUME changed RESULT_SEQ")
+        self.last_result_seq = seq
+        self.events.append({"kind": "consume", "result_seq": seq,
+                            "status_before": status, "status_after": after})
+        return after
+
+    def terminal_snapshot(self, reason="terminal"):
+        status = self.status()
+        return {"reason": reason, "status": status,
+                "result_seq": self.read("RESULT_SEQ"),
+                "error_code": self.read("ERROR_CODE"),
+                "fw_decision": self.read("FW_DECISION")}
+
+    def consume_current(self, reason="recover"):
+        """Capture the current terminal metadata, then CONSUME it.
+
+        The caller must persist the returned snapshot before treating the
+        evidence as archived; this helper is for error/stale recovery, not for
+        a valid DONE result (use ``consume(result)`` after persistence).
+        """
+        status = self.status()
+        if status & R.STATUS_BUSY:
             self.write("CTRL", R.CTRL_ABORT)
             self._poll(lambda: not (self.status() & R.STATUS_BUSY), 1.0,
-                       "BUSY to clear after ABORT")
-        self.write("CTRL", R.CTRL_CLEAR_DONE | R.CTRL_CLEAR_ERROR)
+                       "BUSY to clear before CONSUME")
+            status = self.status()
+        if not status & R.STATUS_UNCONSUMED:
+            return None
+        snapshot = self.terminal_snapshot(reason)
+        self.last_terminal = snapshot
+        self.consume(None)
+        return snapshot
+
+    def recover(self):
+        """Consume a leftover terminal (recovery/startup); no normal-path use."""
+        return self.consume_current("recover")
+
+    def ensure_ready(self):
+        """Reach BUSY=0 && UNCONSUMED=0 before submitting a new job."""
         status = self.status()
-        if status & (R.STATUS_BUSY | R.STATUS_DONE | R.STATUS_ERROR | R.STATUS_TIMEOUT
-                     | R.STATUS_RESULT_VALID):
-            raise CopProtocolError(f"terminal state did not clear: 0x{status:08x}")
-        self.events.append({"kind": "recover", "aborted": aborted, "status": status})
-        self._needs_recovery = False
+        if status & R.STATUS_BUSY:
+            self.write("CTRL", R.CTRL_ABORT)
+            self._poll(lambda: not (self.status() & R.STATUS_BUSY), 1.0,
+                       "BUSY to clear before submit")
+            status = self.status()
+        if status & R.STATUS_ACCEPTED and not self._terminal(status):
+            # Abandoned ACCEPTED without a terminal: force ERROR, then consume.
+            self.write("CTRL", R.CTRL_ABORT)
+            self._poll(lambda: not (self.status() & R.STATUS_BUSY), 1.0,
+                       "BUSY to clear after stale ACCEPTED")
+            status = self.status()
+            if status & R.STATUS_UNCONSUMED:
+                self.consume_current("stale_accepted")
+            status = self.status()
+        if status & R.STATUS_UNCONSUMED:
+            raise CopStaleResult(
+                "UNCONSUMED terminal before submit; persist/consume it first",
+                status=status, result_seq=self.read("RESULT_SEQ"),
+                error_code=self.read("ERROR_CODE"))
+        if status & (R.STATUS_ACCEPTED | R.STATUS_RESULT_VALID):
+            raise CopProtocolError(f"pre-submit state not clean: 0x{status:08x}")
         return status
 
     def abort(self):
         self.write("CTRL", R.CTRL_ABORT)
-        self._needs_recovery = True
+        self._poll(lambda: not (self.status() & R.STATUS_BUSY), 1.0,
+                   "BUSY to clear after ABORT")
+        self.events.append({"kind": "abort"})
 
     def soft_reset(self):
         self.write("CTRL", R.CTRL_SOFT_RESET)
-        self._needs_recovery = False
+        self._poll(lambda: not (self.status() & R.STATUS_BUSY), 1.0,
+                   "BUSY to clear after SOFT_RESET")
         self.events.append({"kind": "soft_reset"})
 
     # ---- submission ------------------------------------------------------
@@ -298,12 +386,14 @@ class CopDriver:
             pass
         if self.read("CFG_APPLIED") != self.cfg_seq:
             status = self.status()
+            error_code = self.read("ERROR_CODE")
             error_name = self._sim_error()
-            self.write("CTRL", R.CTRL_CLEAR_DONE | R.CTRL_CLEAR_ERROR)
+            if status & R.STATUS_UNCONSUMED:
+                self.consume_current("config_error")
             self._model_loaded = None
             raise CopConfigError(
                 f"configuration not applied (status=0x{status:08x}, "
-                f"sim_error={error_name})")
+                f"error_code={error_code}, sim_error={error_name})")
         return self.cfg_seq
 
     def _ps_targets(self, hardware, descriptors):
@@ -335,6 +425,18 @@ class CopDriver:
                                    f"FW={sorted(fw_reasons)}")
         return fw_reasons
 
+    def _raise_terminal(self, status):
+        """Read ERROR_CODE, consume the terminal, then raise the hardware error."""
+        error_code = self.read("ERROR_CODE")
+        error_name = self._sim_error() or R.ERROR_CODE_NAMES.get(error_code)
+        snapshot = self.consume_current("terminal")
+        self._model_loaded = None  # a task/model error gets a clean reload on retry
+        error_type = CopTimeoutError if status & R.STATUS_TIMEOUT else CopJobError
+        raise error_type("coprocessor terminal without a valid result",
+                         status=status, error_name=error_name,
+                         result_seq=(snapshot or {}).get("result_seq"),
+                         error_code=error_code)
+
     def run(self, job):
         self._validate_job(job)
         count = len(job["targets"])
@@ -345,68 +447,64 @@ class CopDriver:
                 raise CopProtocolError("same JOB_ID/WORK_ORDER_REV with different targets")
             return {**self._cache["result"], "duplicate": True}
 
-        self.recover()
-        try:
-            cfg_seq = self._configure(job, count)
-        except CopError:
-            self._needs_recovery = True
-            raise
+        self.ensure_ready()
+        cfg_seq = self._configure(job, count)
         started = time.monotonic()
         polls = 0
-        saw_busy = False
-        stale_since = None
-        while True:
-            status = self.status()
+
+        # A2: independent NO_ACK watchdog for the sticky START receipt.
+        deadline = started + self.accept_timeout_s
+        status = self.status()
+        while not status & R.STATUS_ACCEPTED:
             polls += 1
-            now = time.monotonic()
             if status & (R.STATUS_ERROR | R.STATUS_TIMEOUT):
-                self._needs_recovery = True
-                error_name = self._sim_error()
-                self.write("CTRL", R.CTRL_CLEAR_DONE | R.CTRL_CLEAR_ERROR)
-                self._model_loaded = None  # force a clean reload on retry
-                error_type = CopTimeoutError if status & R.STATUS_TIMEOUT else CopJobError
-                raise error_type("coprocessor terminated without a valid result",
-                                 status=status, error_name=error_name)
-            if status & R.STATUS_BUSY:
-                saw_busy = True
-                stale_since = None
-            if status & R.STATUS_DONE:
-                seq = self.read("RESULT_SEQ")
-                fresh = self.last_result_seq is None or seq != self.last_result_seq
-                if fresh:
-                    break
-                if saw_busy:
-                    self._needs_recovery = True
-                    raise CopProtocolError(
-                        f"DONE without a new RESULT_SEQ ({seq} after {self.last_result_seq})")
-                if stale_since is None:
-                    stale_since = now
-                elif now - stale_since > min(0.5, self.job_timeout_s / 2):
-                    self._needs_recovery = True
-                    raise CopProtocolError(
-                        f"old DONE/RESULT_SEQ {seq} persisted; firmware did not start a new job")
-            else:
-                stale_since = None
-            if now - started > self.job_timeout_s:
-                self._needs_recovery = True
+                self._raise_terminal(status)
+            if time.monotonic() > deadline:
                 self.write("CTRL", R.CTRL_ABORT)
                 self._poll(lambda: not (self.status() & R.STATUS_BUSY), 1.0,
-                           "BUSY to clear after ABORT")
-                raise CopTimeoutError("PS wait for DONE/ERROR/TIMEOUT expired",
-                                      status=status, error_name=self._sim_error())
+                           "BUSY to clear after NO_ACK")
+                status = self.status()
+                snapshot = (self.consume_current("no_ack")
+                            if status & R.STATUS_UNCONSUMED else None)
+                raise CopNoAck("ACCEPTED not observed within PS software watchdog",
+                               status=status, error_name="NO_ACK",
+                               result_seq=(snapshot or {}).get("result_seq"),
+                               error_code=(snapshot or {}).get("error_code"))
             time.sleep(self.poll_s)
+            status = self.status()
 
-        self._needs_recovery = True  # until a complete, checked result is published
+        # A2: second independent watchdog; do not rely on hardware TIMEOUT.
+        deadline = time.monotonic() + self.job_timeout_s
+        while not self._terminal(status):
+            polls += 1
+            if time.monotonic() > deadline:
+                self.write("CTRL", R.CTRL_ABORT)
+                self._poll(lambda: not (self.status() & R.STATUS_BUSY), 1.0,
+                           "BUSY to clear after HW_TIMEOUT")
+                status = self.status()
+                snapshot = (self.consume_current("hw_timeout")
+                            if status & R.STATUS_UNCONSUMED else None)
+                raise CopHardwareTimeout(
+                    "terminal not observed within PS software watchdog",
+                    status=status, error_name="HW_TIMEOUT",
+                    result_seq=(snapshot or {}).get("result_seq"),
+                    error_code=(snapshot or {}).get("error_code"))
+            time.sleep(self.poll_s)
+            status = self.status()
+
+        if status & (R.STATUS_ERROR | R.STATUS_TIMEOUT):
+            self._raise_terminal(status)
+        if not status & R.STATUS_DONE:
+            raise CopProtocolError(f"unexpected terminal status 0x{status:08x}")
         if not status & R.STATUS_RESULT_VALID:
             raise CopProtocolError("DONE without RESULT_VALID")
         seq_before = self.read("RESULT_SEQ")
-        if seq_before == 0:
-            raise CopProtocolError("RESULT_SEQ stayed zero")
-        if self.last_result_seq is not None:
-            delta = (seq_before - self.last_result_seq) & 0xFFFFFFFF
-            if delta == 0 or delta > 0x7FFFFFFF:
-                raise CopProtocolError(
-                    f"stale/regressed RESULT_SEQ {seq_before} after {self.last_result_seq}")
+        expected = 1 if self.last_result_seq is None else \
+            ((self.last_result_seq + 1) & 0xFFFFFFFF)
+        if seq_before != expected:
+            raise CopProtocolError(
+                f"unexpected RESULT_SEQ {seq_before}; expected {expected} "
+                f"(last consumed {self.last_result_seq})")
         hardware = []
         for index, descriptor in enumerate(job["targets"]):
             self.write("RESULT_INDEX", index)
@@ -446,7 +544,8 @@ class CopDriver:
         elapsed_ms = (time.monotonic() - started) * 1000
         trace = {
             "backend": "COP_SIM" if hasattr(self.transport, "trace") else "MMIO",
-            "cfg_seq": cfg_seq, "result_seq": seq_before,
+            "cfg_seq": cfg_seq, "result_seq": seq_before, "expected_seq": expected,
+            "accepted": True, "unconsumed": True, "error_code": 0,
             "work_order_rev": job["work_order_rev"], "job_id": job["job_id"],
             "capture_id": job["capture_id"], "source_config_id": job["source_config_id"],
             "status": status_after, "polls": polls, "elapsed_ms": round(elapsed_ms, 3),
@@ -467,8 +566,6 @@ class CopDriver:
                               for descriptor, item, ps in zip(job["targets"], hardware, ps_targets)],
                   "decision": ps_decision, "trace": trace,
                   "result_seq": seq_before, "cfg_seq": cfg_seq}
-        self.last_result_seq = seq_before
-        self._needs_recovery = False
         self.events = []
         self._cache = {"key": key, "fingerprint": fingerprint, "result": result}
         return result

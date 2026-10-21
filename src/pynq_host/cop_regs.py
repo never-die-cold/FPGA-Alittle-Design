@@ -49,7 +49,7 @@ PS_READABLE = frozenset((
     "FW_DECISION",
 ))
 
-STATUS_READY = 1 << 0
+STATUS_READY = 1 << 0  # A1: !BUSY, advisory only; never a wait/failure condition
 STATUS_BUSY = 1 << 1
 STATUS_DONE = 1 << 2
 STATUS_ERROR = 1 << 3
@@ -60,14 +60,17 @@ STATUS_RESULT_VALID = 1 << 7
 STATUS_DMA_BUSY = 1 << 8
 STATUS_IRQ_PENDING = 1 << 9
 STATUS_MBOX_PENDING = 1 << 10
+STATUS_ACCEPTED = 1 << 11   # A2: sticky START receipt, cleared only by CONSUME
+STATUS_UNCONSUMED = 1 << 12  # A2: DONE|ERROR|TIMEOUT
 
 CTRL_START = 1 << 0
 CTRL_ABORT = 1 << 1
 CTRL_SOFT_RESET = 1 << 2
-CTRL_CLEAR_DONE = 1 << 3
-CTRL_CLEAR_ERROR = 1 << 4
+CTRL_CLEAR_DONE = 1 << 3    # historical, disabled by A2 (zero side effects)
+CTRL_CLEAR_ERROR = 1 << 4   # historical, disabled by A2 (zero side effects)
 CTRL_IRQ_ACK = 1 << 5
-CTRL_PS_MASK = CTRL_ABORT | CTRL_SOFT_RESET | CTRL_CLEAR_DONE | CTRL_CLEAR_ERROR | CTRL_IRQ_ACK
+CTRL_CONSUME = 1 << 6       # A2: PS-only W1C of terminals/result/receipt/error code
+CTRL_PS_MASK = CTRL_ABORT | CTRL_SOFT_RESET | CTRL_CONSUME
 
 VERDICT_IDS = {"CHECK_PASS": 1, "CHECK_FAIL": 2, "RECHECK": 3}
 VERDICT_NAMES = {value: name for name, value in VERDICT_IDS.items()}
@@ -89,12 +92,11 @@ FW_TO_PY_REASONS = {
     REASON_CONFIG: "config",
 }
 
-# SIM-ONLY: C03 §6.2 requires flags for touch_border/invalid_roi but does not
-# freeze their bit positions; J04 firmware does not read descriptors at all.
+# SIM-ONLY: descriptor flags are not frozen by C03; A2 did not add a register.
 FLAG_TOUCH_BORDER = 1 << 0
 FLAG_INVALID_ROI = 1 << 1
 
-# SIM-ONLY: C03 §9 names error codes but does not freeze encoding (OPEN-9).
+# SIM-ONLY diagnostic names; ERROR_CODE (1/12/13) is the frozen A2 value.
 SIM_ERROR_CODES = {
     "BAD_STATE": 0xE001, "BAD_ADDR": 0xE002, "BAD_ALIGN": 0xE003,
     "BAD_LENGTH": 0xE004, "BAD_CONFIG": 0xE005, "BAD_MODEL": 0xE006,
@@ -106,6 +108,10 @@ SIM_ERROR_CODES = {
 
 class CopBusError(RuntimeError):
     """AXI4-Lite SLVERR / unmapped / permission violation (non-resident)."""
+
+
+# A2/C03 §14.2: ERROR_CODE now carries the first terminal cause.
+ERROR_CODE_NAMES = {1: "TASK_ERROR", 12: "ABORTED", 13: "WATCHDOG"}
 
 
 def crc32(payload):
