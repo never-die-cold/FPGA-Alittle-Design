@@ -61,6 +61,9 @@ NC 解包后先执行 `sha256sum -c SHA256SUMS`；`VERSION` 中 `VIVADO` 或 `BO
 ## 已知限制与 OPEN
 
 - OPEN-K2-1：16×64 权重 bank、BRAM 数量/端口模式及整机布线须由 Windows Vivado 确认。
+- OPEN-FW-1：固件进入 bitstream/BRAM 初值的通路未验证；本轮只验证仿真加载，需 Windows 侧产出 bitstream。
+- OPEN-ENV-1：`all` 已支持 riscv32/riscv64 前缀回落和无工具链 SKIP，仍需在干净环境复测依赖边界。
+- OPEN-DOC-1（已修复）：`cop_job.hex` 曾陈旧且无引用；现由 Makefile `all` 重建，并由 `firmware_e2e` 加载。
 - 生产 payload→物理 bank 的 manifest 地址适配与完整板级顶层尚未冻结；K3 init 口只用于可复现对拍。
 - `compute` 与 `storage` 当前分开 OOC；两份报告资源相加不能替代整机实现。
 - 本轮没有 Vivado、bitstream 或实板证据，综合实现与板上状态保持 UNVERIFIED。

@@ -59,6 +59,10 @@
 | CNN 契约 | [`src/coprocessor/design_v0.md`](../src/coprocessor/design_v0.md) |
 | CNN 协处理器状态与交接 | [`contracts/coprocessor-handoff-v0.md`](contracts/coprocessor-handoff-v0.md) |
 | CNN 协处理器 J04 实现交接与 OPEN | [`runbooks/coprocessor-j04-handoff.md`](runbooks/coprocessor-j04-handoff.md) |
+| WC 协处理器软件接口 | [`coprocessor-wc-interface.md`](coprocessor-wc-interface.md) |
+| 协处理器存储规划 | [`coprocessor-storage-plan.md`](coprocessor-storage-plan.md) |
+| JL Vivado 检查清单 | [`coprocessor-vivado-checklist.md`](coprocessor-vivado-checklist.md) |
+| NC 协处理器交接 | [`coprocessor-nc-handoff.md`](coprocessor-nc-handoff.md) |
 | 仓库卫生规则 | [`repo-hygiene.md`](repo-hygiene.md) |
 | 逐文件索引（按需生成） | `python docs/file-guide/tools/generate.py --scope source --date YYYY-MM-DD` → `build/file-guide/` |
 
