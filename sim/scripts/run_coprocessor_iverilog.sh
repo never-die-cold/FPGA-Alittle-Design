@@ -9,9 +9,18 @@ if ! command -v "$PY" >/dev/null 2>&1 || ! "$PY" -c 'import sys' >/dev/null 2>&1
     PY=python
 fi
 CROSS="${RISCV_CROSS:-riscv32-unknown-elf-}"
-if ! command -v "${CROSS}gcc" >/dev/null 2>&1 && command -v riscv64-unknown-elf-gcc >/dev/null 2>&1; then
+TOOLCHAIN_AVAILABLE=1
+if ! command -v "${CROSS}gcc" >/dev/null 2>&1 ||
+   ! command -v "${CROSS}objdump" >/dev/null 2>&1 ||
+   ! command -v "${CROSS}objcopy" >/dev/null 2>&1; then
     CROSS=riscv64-unknown-elf-
+    if ! command -v "${CROSS}gcc" >/dev/null 2>&1 ||
+       ! command -v "${CROSS}objdump" >/dev/null 2>&1 ||
+       ! command -v "${CROSS}objcopy" >/dev/null 2>&1; then
+        TOOLCHAIN_AVAILABLE=0
+    fi
 fi
+export RISCV_CROSS="$CROSS"
 VECTORS="$BUILD/arithmetic-vectors"
 "$PY" "$ROOT/sim/coprocessor/generate_arithmetic_vectors.py" --output "$VECTORS"
 run_test() {
@@ -70,11 +79,15 @@ run_top() {
     vision_run_checked "$BUILD/cop_top.log" vvp "$BUILD/cop_top.vvp" "+model=$dir" "+case=$dir/zero"
 }
 run_firmware() {
+    if [ "$TOOLCHAIN_AVAILABLE" -eq 0 ]; then
+        echo "SKIP: firmware tests require riscv32-unknown-elf- or riscv64-unknown-elf- gcc/objdump/objcopy"
+        return 0
+    fi
     make -C "$ROOT/src/riscv_fw" CROSS="$CROSS" PYTHON="$PY" cop_job.elf
     gcc -std=c99 -Wall -Wextra -Werror -I"$ROOT/src/riscv_fw" \
         "$ROOT/sim/coprocessor/test_cop_work_order.c" -o "$BUILD/test_cop_work_order"
     vision_run_checked "$BUILD/cop_work_order.log" "$BUILD/test_cop_work_order"
-    vision_run_checked "$BUILD/firmware_rules.log" bash "$ROOT/sim/scripts/test_firmware_rules.sh"
+    vision_run_checked "$BUILD/firmware_rules.log" env RISCV_CROSS="$CROSS" bash "$ROOT/sim/scripts/test_firmware_rules.sh"
 }
 case "${1:-all}" in
     mac_lane) run_test mac_lane ;;
