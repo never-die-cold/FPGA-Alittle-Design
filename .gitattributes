@@ -8,6 +8,8 @@
 *.xsa  binary
 *.png  binary
 *.jpg  binary
+# Generated BRAM image: review via reproducible build/hash, not line diff.
+src/riscv_fw/cop_job.hex binary
 
 # 上游原样文件与 diff 证据不参与空白检查：
 #   vendor/ 为 EEMBC 官方源码原样入库（禁止改动，含上游自带尾随空格）
