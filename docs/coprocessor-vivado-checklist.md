@@ -1,14 +1,14 @@
 # 协处理器 Vivado 检查清单
 
-> 状态：**UNVERIFIED — 需 Windows 侧 Vivado 执行**。WSL 未安装 Vivado；本文和 Tcl/XDC
-> 不是综合、实现、时序或板级 PASS 证据。默认安全档为 40 MHz。
+> 状态（2026-10-22）：**40 MHz compute/storage OOC VERIFIED**；整机综合实现、bitstream、
+> `.hwh` 与板验仍为 **UNVERIFIED**。默认安全档为 40 MHz。
 
 ## JL 执行命令
 
 从仓库根目录打开 `cmd.exe`，将 Vivado 路径替换为实际安装位置：
 
 ```bat
-set VIVADO=D:\Vivado_downloads\2026.1\Vivado\bin\vivado.bat
+set VIVADO=D:\vivado\2026.1\Vivado\bin\vivado.bat
 call "%VIVADO%" -mode batch -source build/build_coprocessor_gate.tcl -tclargs 40 compute
 call "%VIVADO%" -mode batch -source build/build_coprocessor_gate.tcl -tclargs 40 storage
 ```
@@ -18,9 +18,21 @@ call "%VIVADO%" -mode batch -source build/build_coprocessor_gate.tcl -tclargs 40
 `build/reports/coprocessor/<档位>/<compute|storage>/`，临时 checkpoint 写入
 `build/run/coprocessor/`。这些目录和 `.xpr` 已忽略，不提交生成物。
 
+## 2026-10-22 实测证据（Vivado 2026.1）
+
+| OOC 目标 | 退出码 | LUT / FF / DSP / BRAM Tile | WNS / WHS | check_timing |
+|:---|---:|:---|:---|:---|
+| compute | 0 | 6,299 / 7,261 / 136 / 0 | +7.460 / +0.097 ns | 四项均 0 |
+| storage | 0 | 38,562 / 12,389 / 0 / 28.5 | +18.108 / +0.225 ns | 四项均 0 |
+
+storage 最终映射为 28×RAMB36E1 + 1×RAMB18E1；16 路权重、ROI、ping、pong 均为
+Block RAM。8×64-bit GAP scratch 为小型 distributed RAM；参数的 16 路并读仍落寄存器/LUT。
+两目标 DRC 均无 Error/Critical Warning。报告是本地生成物，不入库。
+
 `coprocessor_board_clock.xdc` 是板级集成约束模板：默认 `core_clk_divide=25`，与
 `pynq_z2_top.CORE_CLK_DIVIDE=25` 同档，125 MHz×8÷25=40 MHz。当前尚无包含协处理器、
-物理 bank 与板级 IO 的生产顶层，因此该派生时钟及整机实现仍为 **UNVERIFIED**。
+物理 bank 与板级 IO 的生产顶层，也无发布模型 payload/manifest；因此该派生时钟、
+整机实现、bitstream 和 `.hwh` 仍为 **UNVERIFIED**。
 
 ## 每个档位必看指标与判定
 
