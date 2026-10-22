@@ -1,6 +1,6 @@
 # CNN 协处理器执行计划
 
-> 状态基线：2026-10-18。契约优先于本计划；计划冲突时先改计划，不静默改契约。
+> 状态基线：2026-10-22。契约优先于本计划；计划冲突时先改计划，不静默改契约。
 
 ## 权威入口
 
@@ -18,7 +18,7 @@
 | J02 | ✅ | 诊断整数参考、逐层黄金、文件/来源 SHA256 与篡改负例可复现；不是 J06 正式模型 |
 | J03 | ✅ | 活跃 Conv→GAP→FC 链逐元素对拍；显式使用仓库 venv 时，独立、协处理器 all、全仓 all 退出 0；裸系统 Python 缺 NumPy 时不成立 |
 | J04a | ✅ | JL 侧实现、模块/顶层冒烟、J02 zero、工单固件与交接单已落库；24 个文件 SHA256 与远端一致 |
-| J04b | 🟡 | 物理 bank/结果 DMA、CDC 异步相位、整机 SoC 时序与板验未完成；`cop_top` OOC 已过 100 MHz（OPEN-12 关闭）；OPEN-1..12 见[交接单](../../docs/runbooks/coprocessor-j04-handoff.md) |
+| J04b | 🟡 | manifest/16 ROI/100→40 MHz 板顶已离板验证；整机 Vivado 40 MHz 门禁 PASS；内容仍 PROVISIONAL，任务描述表与板验未完成 |
 | J05 | ⬜ | 等真实审计 ROI；训练/PTQ/QAT、混淆矩阵与阈值未完成 |
 | J06 | ⬜ | 正式模型、真实参数/黄金、版本/哈希发布未完成 |
 | J07 | ⬜ | 视频原帧通路+核+CNN 的综合实现和整机回归未完成 |
@@ -37,14 +37,22 @@
 
 1. C03 的 `0x8001_0000` 本地 MMIO 窗口和 SoC 行为已回写 `design_v1.md` §17 草案；核数据口无等待语义未改。
 2. J04a（JL 侧实现/冒烟）已完成：`cop_top`、MMIO/CDC、AXI4-Lite、流载入、核接入门和工单固件有仓库内 TB；24 个文件 SHA256 与远端一致，交接单见 [runbooks/coprocessor-j04-handoff.md](../../docs/runbooks/coprocessor-j04-handoff.md)。
-3. J04b（完整收口）未完成：DataMover payload 到各物理 bank 的生产地址适配、真实 36,032 B payload CRC 负例、CDC 异步相位、实体 BRAM/SoC/视频/板端集成；`cop_top` OOC 综合与实现已做（0 critical，`cop_clk` WNS +0.165 ns），整机 SoC 时序、XSim 回归和 bitstream 未做。`VERSION`/`CAPABILITY`/`ERROR_CODE` 仍读 0（OPEN-9），PS 空闲 ABORT 未按非驻留拒绝处理（OPEN-10）。J04 总体保持 🟡，不写 ✅。
-4. 后续进入 J07 整机集成前，先按 J05/J06 完成真实数据、正式 INT8 模型/黄金；不得用诊断权重冒充正式模型。
+3. J04b（完整收口）未完成：40 MHz compute/storage OOC 已于 2026-10-22 分别退出 0，WNS
+   +7.460/+18.108 ns；storage 使用 28.5 BRAM Tile。该证据不含生产地址适配、PS/AXI 板顶、
+   整机布局布线、bitstream/.hwh 或板验，详见本轮[续档](../../report/llm_log/2026-10-22-board-gate-vivado.md)。
+4. manifest v1 固定 offset/length/bank schema；当前 payload 明示 `kind=PROVISIONAL`，只用于结构验证。
+   正式权重到位后只替换 payload 与 manifest，不改 RTL/软件协议；不得把诊断权重称为发布模型。
+5. 生产板顶候选已接入 16×4096 B ROI 槽、权重影子 bank 和 100→40 MHz CDC；当前
+   `target_id == roi_index` 仅支持恒等映射，任意 `TARGET_DESC_ADDR` 描述表尚未接入，不得作为完整契约验收。
 
 ## 下一执行点
 
-在 Windows 仓库根目录执行 40 MHz 两档门禁；任一失败都不得产出 bitstream：
+P0 两档 OOC 已通过，manifest schema 已定且内容仍为 PROVISIONAL。下一执行点：
 
-```bat
-call "D:\Vivado_downloads\2026.1\Vivado\bin\vivado.bat" -mode batch -source build/build_coprocessor_gate.tcl -tclargs 40 compute && call "D:\Vivado_downloads\2026.1\Vivado\bin\vivado.bat" -mode batch -source build/build_coprocessor_gate.tcl -tclargs 40 storage
-```
+1. NC 校验 NC 包 SHA256 后执行
+   `board\scripts\program_soc.bat dist\cop-board-gate-<commit>\payload\pynq_cop_40mhz.bit`，记录下载、读回与现场稳定性。
+2. JL 的 Vivado 2026.1 整机 40 MHz 门禁已 PASS；发布前仍须关闭任务描述表 OPEN，门禁通过不等于板级验收。
+3. J05/J06 正式权重到位后，用同一 schema 换 payload+manifest，重新记录 CRC/SHA256 与黄金证据。
+
+当前 J02 payload 只解锁板级结构与地址通路，不构成 RELEASE、精度或板上验收证据。
 

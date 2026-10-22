@@ -1,5 +1,5 @@
 `timescale 1ns/1ps
-module tb_cnn_sequencer #(parameter USE_BRAM=0);
+module tb_cnn_sequencer #(parameter USE_BRAM=0, parameter USE_PAYLOAD=0);
     reg clk=0,rst_n=0,ce=1,start=0,force_pause=0;
     reg [7:0] min_margin;
     reg [31:0] cycle_limit=2000000;
@@ -20,22 +20,32 @@ module tb_cnn_sequencer #(parameter USE_BRAM=0);
     reg init_we=0; reg [2:0] init_kind=0; reg [15:0] init_address=0; reg [63:0] init_data=0;
     wire [63:0] bram_input; wire [1023:0] bram_weight;
     wire [511:0] bram_bias,bram_multiplier; wire [95:0] bram_shift;
+    wire [1023:0] payload_weight; wire [511:0] payload_bias,payload_multiplier;
+    wire [95:0] payload_shift;
     wire [63:0] selected_input=USE_BRAM ? bram_input : input_data;
-    wire [1023:0] selected_weight=USE_BRAM ? bram_weight : weight_data;
-    wire [511:0] selected_bias=USE_BRAM ? bram_bias : bias_data;
-    wire [511:0] selected_multiplier=USE_BRAM ? bram_multiplier : multiplier_data;
-    wire [95:0] selected_shift=USE_BRAM ? bram_shift : shift_data;
+    wire [1023:0] selected_weight=USE_PAYLOAD ? payload_weight : (USE_BRAM ? bram_weight : weight_data);
+    wire [511:0] selected_bias=USE_PAYLOAD ? payload_bias : (USE_BRAM ? bram_bias : bias_data);
+    wire [511:0] selected_multiplier=USE_PAYLOAD ? payload_multiplier : (USE_BRAM ? bram_multiplier : multiplier_data);
+    wire [95:0] selected_shift=USE_PAYLOAD ? payload_shift : (USE_BRAM ? bram_shift : shift_data);
     reg [7:0] roi [0:4095];
     reg [63:0] ping [0:4095],pong [0:2047],gap [0:7];
     reg [1023:0] weights [0:268];
     reg [31:0] biases [0:159],multipliers [0:159];
     reg [5:0] shifts [0:159];
+    reg [7:0] payload [0:36031];
     reg [63:0] golden [0:16392];
     reg visited [0:16392];
     integer written=0,reads=0,weight_reads=0,parameter_reads=0,tb_cycles=0,fault=0;
     integer lane,index,position,fd,fields,cls_expected,margin_expected,score_expected,low_expected,threshold;
     integer found,faults;
-    reg [4095:0] model_folder,folder,filename;
+    integer payload_count,crc_expected;
+    reg [4095:0] model_folder,folder,filename,payload_filename;
+    reg payload_start=0,stream_valid=0,stream_last=0; reg [63:0] stream_data=0;
+    wire stream_ready,dma_write,dma_done,dma_error,adapter_ready,adapter_init_we,adapter_init_bank;
+    wire adapter_commit,adapter_error,adapter_loading,model_active,model_valid;
+    wire [31:0] dma_addr,dma_bytes,dma_crc; wire [63:0] dma_store_data;
+    wire [7:0] dma_strb; wire [2:0] adapter_init_kind; wire [15:0] adapter_init_address;
+    wire [63:0] adapter_init_data;
     always #5 clk=~clk;
     always @(negedge clk) begin tb_cycles=tb_cycles+1; ce=!force_pause && (tb_cycles%7)!=3; end
     cnn_sequencer dut (.clk(clk),.rst_n(rst_n),.ce(ce),.start(start),.abort(1'b0),.min_margin(min_margin),
@@ -54,6 +64,27 @@ module tb_cnn_sequencer #(parameter USE_BRAM=0);
         .write_address_i(write_address),.write_data_i(write_data),.input_data_o(bram_input),
         .weight_data_o(bram_weight),.bias_data_o(bram_bias),.multiplier_data_o(bram_multiplier),
         .shift_data_o(bram_shift));
+    cop_dma_loader payload_loader(.clk(clk),.rst_n(rst_n),.start_i(payload_start),
+        .expected_bytes_i(32'd36032),.stream_data_i(stream_data),.stream_keep_i(8'hff),
+        .stream_valid_i(stream_valid),.stream_last_i(stream_last),.store_ready_i(adapter_ready),
+        .stream_ready_o(stream_ready),.store_write_o(dma_write),.store_addr_o(dma_addr),
+        .store_data_o(dma_store_data),.store_strb_o(dma_strb),.busy_o(),.done_o(dma_done),
+        .error_o(dma_error),.short_o(),.bytes_received_o(dma_bytes),.crc32_o(dma_crc));
+    cop_payload_adapter payload_adapter(.clk(clk),.rst_n(rst_n),.start_i(payload_start),
+        .commit_i(dma_done && dma_crc==crc_expected),.abort_i(dma_error),
+        .payload_base_i(32'd0),.payload_bytes_i(32'd36032),.store_write_i(dma_write),
+        .store_addr_i(dma_addr),.store_data_i(dma_store_data),.store_strb_i(dma_strb),
+        .active_bank_i(model_active),.store_ready_o(adapter_ready),.init_we_o(adapter_init_we),
+        .init_bank_o(adapter_init_bank),.init_kind_o(adapter_init_kind),
+        .init_address_o(adapter_init_address),.init_data_o(adapter_init_data),.shadow_bank_o(),
+        .commit_o(adapter_commit),.error_o(adapter_error),.loading_o(adapter_loading));
+    cop_model_storage model_store(.clk(clk),.rst_n(rst_n),.init_we_i(adapter_init_we),
+        .init_bank_i(adapter_init_bank),.commit_i(adapter_commit),.commit_bank_i(adapter_init_bank),
+        .init_kind_i(adapter_init_kind),.init_address_i(adapter_init_address),.init_data_i(adapter_init_data),
+        .weight_enable_i(weight_enable),.parameter_enable_i(parameter_enable),
+        .weight_address_i(weight_address),.parameter_address_i(parameter_address),
+        .active_bank_o(model_active),.model_valid_o(model_valid),.weight_data_o(payload_weight),
+        .bias_data_o(payload_bias),.multiplier_data_o(payload_multiplier),.shift_data_o(payload_shift));
     always @(posedge clk or negedge rst_n) begin
         if(!rst_n) begin input_data<=0; weight_data<=0; bias_data<=0; multiplier_data<=0; shift_data<=0; end
         else begin
@@ -116,14 +147,32 @@ module tb_cnn_sequencer #(parameter USE_BRAM=0);
                 for(lane=0;lane<8;lane=lane+1) init_data[lane*8 +: 8]=roi[index*8+lane];
                 put_bram(0,index,init_data);
             end
-            for(index=0;index<269;index=index+1)
-                for(lane=0;lane<16;lane=lane+1)
-                    put_bram(1,index*16+lane,weights[index][lane*64 +: 64]);
-            for(index=0;index<160;index=index+1) begin
-                put_bram(2,index,{32'd0,biases[index]});
-                put_bram(3,index,{32'd0,multipliers[index]}); put_bram(4,index,{58'd0,shifts[index]});
+            if(!USE_PAYLOAD) begin
+                for(index=0;index<269;index=index+1)
+                    for(lane=0;lane<16;lane=lane+1)
+                        put_bram(1,index*16+lane,weights[index][lane*64 +: 64]);
+                for(index=0;index<160;index=index+1) begin
+                    put_bram(2,index,{32'd0,biases[index]});
+                    put_bram(3,index,{32'd0,multipliers[index]}); put_bram(4,index,{58'd0,shifts[index]});
+                end
             end
             @(negedge clk); init_we=0;
+        end
+    endtask
+    task load_payload;
+        begin
+            fd=$fopen(payload_filename,"rb"); if(!fd) $fatal(1);
+            payload_count=$fread(payload,fd); $fclose(fd); if(payload_count!=36032) $fatal(1);
+            @(negedge clk); payload_start=1; @(posedge clk); #1; @(negedge clk); payload_start=0;
+            for(index=0;index<36032;index=index+8) begin
+                while(!stream_ready) @(negedge clk);
+                for(lane=0;lane<8;lane=lane+1) stream_data[lane*8 +: 8]=payload[index+lane];
+                stream_last=index==36024; stream_valid=1;
+                @(posedge clk); #1; @(negedge clk); stream_valid=0; stream_last=0;
+            end
+            while(!model_valid && !dma_error && !adapter_error) @(posedge clk);
+            #1; if(!model_valid || dma_bytes!=36032 || dma_crc!=crc_expected) $fatal(1);
+            $display("PASS: payload_network manifest payload -> DMA -> shadow BRAM -> atomic activate; bytes=36032 crc32=%08x",dma_crc);
         end
     endtask
     task finish_run;
@@ -164,6 +213,10 @@ module tb_cnn_sequencer #(parameter USE_BRAM=0);
     initial begin
         found=$value$plusargs("model=%s",model_folder); if(!found) $fatal(1);
         found=$value$plusargs("case=%s",folder); if(!found) $fatal(1); faults=$test$plusargs("fault_tests");
+        if(USE_PAYLOAD) begin
+            found=$value$plusargs("payload=%s",payload_filename); if(!found) $fatal(1);
+            found=$value$plusargs("crc=%h",crc_expected); if(!found) $fatal(1);
+        end
         $sformat(filename,"%0s/weights.hex",model_folder); $readmemh(filename,weights,0,268);
         $sformat(filename,"%0s/bias.hex",model_folder); $readmemh(filename,biases,0,159);
         $sformat(filename,"%0s/multipliers.hex",model_folder); $readmemh(filename,multipliers,0,159);
@@ -180,6 +233,7 @@ module tb_cnn_sequencer #(parameter USE_BRAM=0);
         $fclose(fd); if(fields!=5) $fatal(1); min_margin=threshold;
         if(USE_BRAM) load_bram;
         repeat(3) @(negedge clk); rst_n=1;
+        if(USE_PAYLOAD) load_payload;
         if($test$plusargs("watchdog_only")) begin check_watchdog; $finish; end
         launch; finish_run(0);
         $display("PASS: cnn_sequencer %0s all 9225 packed words/73795 elements match integer network; logits=%h class=%0d margin=%0d cycles=%0d",

@@ -9,6 +9,7 @@
 | [`c01-capture-status-contract.md`](c01-capture-status-contract.md) | C01 捕获状态接口：实现候选 v0.1 |
 | [`c01-ddr-frame-ownership-v0.md`](c01-ddr-frame-ownership-v0.md) | C01 custom DDR帧槽所有权：NC交接候选 |
 | [`coprocessor-integration-v0.md`](coprocessor-integration-v0.md) | C03：CNN 协处理器、RISC-V 与 PS 的 v0 接口契约 |
+| [`coprocessor-manifest-v1.md`](coprocessor-manifest-v1.md) | payload offset/length 与物理 bank 映射唯一权威；当前仅 PROVISIONAL |
 | [`coremark.md`](coremark.md) | CoreMark 基准契约与工作包计划 |
 | [`inspection-v0-contract.md`](inspection-v0-contract.md) | 检查 V0：取图、ROI 预处理与首次成功检查契约（建议稿） |
 | [`vision-live-semantics.md`](vision-live-semantics.md) | LIVE 检查、显示与来源语义（C04 设计稿） |
