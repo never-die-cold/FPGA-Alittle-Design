@@ -8,23 +8,25 @@
 | 状态 | 结论 | 证据 / 缺口 |
 |:---|:---|:---|
 | 仿真跑通 | **PASS** | 行为级全回归；BRAM 模式 pattern/zero 各 73,795 元素逐项一致；延迟边界 PASS |
-| 综合实现通过 | **UNVERIFIED** | 需 JL 在 Windows 执行 `coprocessor-vivado-checklist.md`；WSL 无 Vivado |
+| 综合实现通过 | **UNVERIFIED** | board-top RTL/TB 已落库；仍需 JL 在 Windows 执行非 OOC 门禁，WSL 无 Vivado |
 | 板上跑通 | **UNVERIFIED** | 无本轮 bitstream 下载、结果读取或稳定性记录；由 NC 现场验证 |
 
-诊断网络不是正式训练模型，`score_q15` 是整数分数而非概率。生产 payload 地址适配、整机
-SoC/BRAM 顶层与板级 IO 尚未验证；没有 JL 门禁通过的 bitstream 时，本包只能做离板交接，
+诊断网络不是正式训练模型，`score_q15` 是整数分数而非概率。PROVISIONAL payload 地址适配
+与整机顶层已仿真，PS7 block design、布局布线和板级 IO 尚未验证；没有 JL 门禁通过的 bitstream 时，本包只能做离板交接，
 不得下载旧 bitstream 冒充本轮结果。
 
 ## 生成与核验交付包
 
 ```bash
 COPROCESSOR_PYTHON=sim/build/vision-venv-full/bin/python \
-  bash sim/scripts/package_coprocessor_nc.sh [JL-verified.bit]
+  bash sim/scripts/package_coprocessor_nc.sh \
+    [JL-verified.bit [JL-verified.hwh build/reports/pynq_cop_40mhz/gate_summary.txt]]
 ```
 
 脚本会重跑 K3、生成 `dist/cop-board-gate-<commit>/` 与 `.tar.gz`，包含 `VERSION`、
 `FILES.txt`、逐文件 `SHA256SUMS`、`EXPECTED_OUTPUTS.tsv`、golden、仿真日志和源码/脚本。
-NC 解包后先执行 `sha256sum -c SHA256SUMS`；`VERSION` 中 `VIVADO` 或 `BOARD` 为
+三个产物参数只能在整机 Tcl 门禁 PASS 后同时提供；此时 `VIVADO=PASS_40MHZ_WHOLE_SYSTEM`，
+`BOARD` 仍为 UNVERIFIED。NC 解包后先执行 `sha256sum -c SHA256SUMS`；`VERSION` 中 `VIVADO` 或 `BOARD` 为
 `UNVERIFIED` 是当前预期，不得手工改为 PASS。
 
 ## 下载、启动与复位
@@ -64,7 +66,7 @@ NC 解包后先执行 `sha256sum -c SHA256SUMS`；`VERSION` 中 `VIVADO` 或 `BO
 - OPEN-FW-1：固件进入 bitstream/BRAM 初值的通路未验证；本轮只验证仿真加载，需 Windows 侧产出 bitstream。
 - OPEN-ENV-1：`all` 已支持 riscv32/riscv64 前缀回落和无工具链 SKIP，仍需在干净环境复测依赖边界。
 - OPEN-DOC-1（已修复）：`cop_job.hex` 曾陈旧且无引用；现由 Makefile `all` 重建，并由 `firmware_e2e` 加载。
-- 生产 payload→物理 bank 的 manifest 地址适配与完整板级顶层尚未冻结；K3 init 口只用于可复现对拍。
+- manifest v1→影子物理 bank 与生产 PL 顶层已仿真；正式 RELEASE 参数、PS7 整机实现和板验未完成。
 - `compute` 与 `storage` 当前分开 OOC；两份报告资源相加不能替代整机实现。
 - 本轮没有 Vivado、bitstream 或实板证据，综合实现与板上状态保持 UNVERIFIED。
 
