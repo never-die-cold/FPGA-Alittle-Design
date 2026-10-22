@@ -110,13 +110,12 @@ module pynq_cop_top #(
         .parameter_address_i(param_addr),.active_bank_o(model_active),.model_valid_o(model_valid),
         .weight_data_o(weight_rdata),.bias_data_o(bias_rdata),.multiplier_data_o(mult_rdata),
         .shift_data_o(shift_rdata));
-    cop_bram_storage activations(.clk(cop_clk_40_i),.rst_n(cop_rst_n_i),
-        .init_we_i(store_write && cop_dma_kind),.init_kind_i(3'd0),.init_address_i(store_addr[18:3]),
-        .init_data_i(store_data),.read_enable_i(memory_read),.read_bank_i(read_bank),.read_address_i(read_addr),
-        .weight_enable_i(1'b0),.weight_address_i(16'd0),.parameter_enable_i(1'b0),.parameter_address_i(8'd0),
+    wire [3:0] task_index;
+    cop_activation_storage activations(.clk(cop_clk_40_i),.rst_n(cop_rst_n_i),
+        .init_we_i(store_write && cop_dma_kind),.init_address_i(store_addr[18:3]),.init_data_i(store_data),
+        .roi_index_i(task_index),.read_enable_i(memory_read),.read_bank_i(read_bank),.read_address_i(read_addr),
         .write_enable_i(memory_write),.write_bank_i(write_bank),.write_address_i(write_addr),
-        .write_data_i(memory_wdata),.input_data_o(memory_rdata),.weight_data_o(),
-        .bias_data_o(),.multiplier_data_o(),.shift_data_o());
+        .write_data_i(memory_wdata),.input_data_o(memory_rdata));
     cop_top cop(.core_clk(cop_clk_40_i),.cop_clk(cop_clk_40_i),.rst_n(cop_rst_n_i),
         .core_addr_i(core_addr),.core_wdata_i(core_wdata),.core_be_i(core_be),.core_we_i(core_we),
         .core_hit_o(),.core_rdata_o(core_read),.s_axi_awaddr_i(cop_awaddr),.s_axi_awvalid_i(cop_awvalid),
@@ -129,12 +128,12 @@ module pynq_cop_top #(
         .dma_keep_i(dma_keep),.dma_valid_i(dma_valid),.dma_last_i(dma_last),
         .store_ready_i(cop_dma_kind ? 1'b1 : adapter_ready),.dma_ready_o(dma_ready),
         .store_write_o(store_write),.store_addr_o(store_addr),.store_data_o(store_data),.store_strb_o(store_strb),
-        .target_id_i(16'd0),.memory_data_i(memory_rdata),.weight_data_i(weight_rdata),
+        .target_id_i({12'd0,task_index}),.memory_data_i(memory_rdata),.weight_data_i(weight_rdata),
         .bias_data_i(bias_rdata),.multiplier_data_i(mult_rdata),.shift_data_i(shift_rdata),
         .memory_enable_o(memory_read),.weight_enable_o(weight_read),.parameter_enable_o(param_read),
         .read_bank_o(read_bank),.write_bank_o(write_bank),.read_address_o(read_addr),
         .weight_address_o(weight_addr),.write_address_o(write_addr),.parameter_address_o(param_addr),
         .memory_write_o(memory_write),.memory_write_data_o(memory_wdata),.irq_pending_i(adapter_error),
-        .engine_start_o(),.result_write_o(),.task_result_index_o(),.result_seq_o(),.result_data_o(),
+        .engine_start_o(),.result_write_o(),.task_result_index_o(task_index),.result_seq_o(),.result_data_o(),
         .status_o(status),.fw_counts_o(),.fw_decision_o(),.result_index_o());
 endmodule
