@@ -10,19 +10,22 @@ if {[catch {
     }
     proc gate_cdc_report {text} {
         set rules [list \
-            [list single_sync CDC-3 Info 11 \
-                {pl/inst/(axil_cdc/(wack_s1|rack_s1|wreq_m1|rreq_m1)_reg|axis_cdc/(rgray_s1|wgray_m1)_reg|dma_(req_c1|kind_c1|ack_s1)_reg)} \
+            [list single_sync CDC-3 Info 12 \
+                {pl/inst/(axil_cdc/(wack_s1|rack_s1|wreq_m1|rreq_m1|bresp_s1|rresp_s1)_reg|axis_cdc/(rgray_s1|wgray_m1)_reg|dma_(req_c1|kind_c1|ack_s1)_reg)} \
                 {named two-stage ASYNC_REG single-bit synchronizers}] \
+            [list gpio_sync CDC-3 Info 1 \
+                {pl/inst/adapter/error_o_reg.*dma_control/U0/gpio_core_1/Dual\.INPUT_DOUBLE_REGS5/syncstages_ff_reg} \
+                {vendor AXI GPIO input two-stage synchronizer}] \
             [list axil_payload CDC-6 Warning 7 \
-                {pl/inst/axil_cdc/(ar_m1|aw_m1|wd_m1|ws_m1)_reg} \
+                {pl/inst/axil_cdc/(ar_m1|aw_m1|wd_m1|ws_m1|rdata_s1)_reg} \
                 {source-held AXI-Lite payload sampled after synchronized toggle}] \
             [list fifo_rgray CDC-6 Warning 5 \
-                {pl/inst/axis_cdc/rgray_s1_reg} \
-                {Gray read pointer two-stage synchronization}] \
+                {pl/inst/axis_cdc/(rgray_s1|wgray_m1)_reg} \
+                {Gray pointer two-stage synchronization}] \
             [list fifo_read CDC-15 Warning 73 \
                 {pl/inst/axis_cdc/mem_reg.*?/C.*pl/inst/axis_cdc/out_data_reg.*?/D} \
                 {73-bit FIFO read port gated by synchronized empty state}]]
-        array set id_max {CDC-3 11 CDC-6 7 CDC-15 73}
+        array set id_max {CDC-3 12 CDC-6 7 CDC-15 73}
         array set id_severity {CDC-3 Info CDC-6 Warning CDC-15 Warning}
         array set summary_count {}; array set summary_severity {}; array set detail_count {}; array set hits {}
         foreach rule $rules {set hits([lindex $rule 0]) 0}
@@ -132,7 +135,7 @@ if {[catch {
     set bad_drc [get_drc_violations -quiet -filter {SEVERITY == Error || SEVERITY == "Critical Warning"}]
     if {[llength $bad_drc]} {error "DRC errors or critical warnings: $bad_drc"}
     set summary [open [file join $rep_dir gate_summary.txt] w]
-    puts $summary "VIVADO=[version -short]\nWNS_NS=$wns\nDSP=$dsp\nBRAM36=$bram36\nLATCHES=0\nCDC_RULE_COUNTS=$cdc_counts\nCDC_ALLOWLIST_ENTRIES=4\nDRC_BLOCKING=0"
+    puts $summary "VIVADO=[version -short]\nWNS_NS=$wns\nDSP=$dsp\nBRAM36=$bram36\nLATCHES=0\nCDC_RULE_COUNTS=$cdc_counts\nCDC_ALLOWLIST_ENTRIES=5\nDRC_BLOCKING=0"
     close $summary
     close_design
     launch_runs impl_1 -to_step write_bitstream -jobs 2
