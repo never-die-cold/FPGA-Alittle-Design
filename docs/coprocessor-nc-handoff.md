@@ -8,11 +8,11 @@
 | 状态 | 结论 | 证据 / 缺口 |
 |:---|:---|:---|
 | 仿真跑通 | **PASS** | 行为级全回归；BRAM 模式 pattern/zero 各 73,795 元素逐项一致；延迟边界 PASS |
-| 综合实现通过 | **UNVERIFIED** | 修复前 Windows 整机门禁因 120 个 CDC LDCE 判 FAIL；修复待 JL 复跑 |
+| 综合实现通过 | **UNVERIFIED** | latch/check_timing/时序/资源/DRC 已过；CDC allowlist 解析与 FIFO 修复待 JL 复跑 |
 | 板上跑通 | **UNVERIFIED** | 无本轮 bitstream 下载、结果读取或稳定性记录；由 NC 现场验证 |
 
 诊断网络不是正式训练模型，`score_q15` 是整数分数而非概率。PROVISIONAL payload 地址适配
-与整机顶层已仿真；PS7 block design 与布局布线在修复前跑到门禁 FAIL，当前修复后未复跑。
+与整机顶层已仿真；最近一次 PS7 布局布线只因 CDC 报告解析器 FAIL，当前修复后未复跑。
 没有 JL 门禁通过的 bitstream 时，本包只能做离板交接，
 不得下载旧 bitstream 冒充本轮结果。
 

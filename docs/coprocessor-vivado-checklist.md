@@ -1,10 +1,10 @@
 # 协处理器 Vivado 检查清单
 
 > 状态（2026-10-22）：**40 MHz compute/storage OOC VERIFIED**；`ENABLE_COP=0` 基线 PASS。
-> 修复前整机门禁因 AXI-Lite CDC 锁存器判 **FAIL**；当前修复待 Windows 复跑，仍为 **UNVERIFIED**。
+> 锁存器修复已经 Windows 复跑确认；当前只剩 CDC allowlist 解析修复待复跑，仍为 **UNVERIFIED**。
 
 board-top 已增加 `pynq_cop_top`、100/40 MHz AXI/AXIS CDC、PS7+AXI DMA block-design Tcl
-与严格整机门禁。WSL 找不到 Vivado，修复后结论必须由 JL 在 Windows 重新产生。
+与严格整机门禁。WSL 找不到 Vivado，CDC 解析/FIFO 修复后结论必须由 JL 在 Windows 重新产生。
 当前板顶只支持 `target_id == roi_index` 恒等映射；任意 `TARGET_DESC_ADDR` 描述表接入
 是发布前 OPEN，即使 Tcl 门禁通过也不代表该功能已验收。
 
@@ -41,11 +41,36 @@ Block RAM。8×64-bit GAP scratch 为小型 distributed RAM；参数的 16 路�
 
 `coprocessor_board_clock.xdc` 是旧 PL 板钟集成约束模板。board-top 的 PS7 直接提供
 100 MHz 与 40 MHz FCLK；`pynq_cop_board.xdc` 校验 10/25 ns 并将两域声明为异步。
-修复前 Windows 整机实测：基线 WNS +6.840 ns 且位流生成；整机 WNS +2.663 ns、
-WHS +0.020 ns、DSP 136/220、BRAM36 69/140、DRC 0，但 `no_clock=360`、
-`unconstrained_internal_endpoints=120`，故门禁正确判 FAIL。120 个 LDCE 均来自
-`pl/inst/axil_cdc` 的 m 侧载荷链。当前修复后整机指标仍 **UNVERIFIED**；
+第二次 Windows 整机实测确认 latch=0、check_timing 四项全 0；WNS +2.607 ns、
+WHS +0.035 ns、LUT 48.32%、FF 33.68%、DSP 136/220、BRAM36 69/140、DRC 0。本次唯一失败
+是旧脚本查找不存在的 `Unsafe/Unknown` 字样；位流在 `write_bitstream` 前被正确阻止。
+当前 CDC 解析/FIFO 修复后整机指标仍 **UNVERIFIED**；
 PROVISIONAL payload 也不是发布模型。
+
+## Vivado 2026.1 CDC 格式与 allowlist
+
+汇总表格式是 `ID Severity Count Description`，实测为 `CDC-3 Info 11`、
+`CDC-6 Warning 7`、`CDC-15 Warning 73`；报告不含 `Unsafe/Unknown` 字段。门禁要求
+汇总与 detail 条数一致，每条 detail 恰好匹配一条 allowlist；Critical、未列 ID、
+路径越界、数量超限或表格无法解析均立即 FAIL。
+
+| 条目 | ID / Severity | 路径正则（摘要） | 单条上限 | 允许理由 |
+|:---|:---|:---|---:|:---|
+| `single_sync` | CDC-3 / Info | `pl/inst/{axil_cdc named toggle sync, axis_cdc gray sync, dma_* sync}` | 11 | 显式命名的两级 `ASYNC_REG` 单比特同步 |
+| `axil_payload` | CDC-6 / Warning | `pl/inst/axil_cdc/(ar_m1\|aw_m1\|wd_m1\|ws_m1)_reg` | 7 | 源载荷在 toggle/ack 完成前保持，目标域两拍采样 |
+| `fifo_rgray` | CDC-6 / Warning | `pl/inst/axis_cdc/rgray_s1_reg` | 5 | Gray 读指针每次只变一位，经两级 `ASYNC_REG` 同步 |
+| `fifo_read` | CDC-15 / Warning | `pl/inst/axis_cdc/mem_reg.*/C -> out_data_reg.*/D` | 73 | 仅 64 data + 8 keep + 1 last 的 FIFO 读口，由注册空状态门控 |
+
+ID 总上限另固定为 CDC-3≤11、CDC-6≤7、CDC-15≤73；两条 CDC-6 不能因分项
+而把总预算放大。CDC-6 在 [AMD UG906 2026.1](https://docs.amd.com/r/en-US/ug906-vivado-design-analysis/CDC-Rules-Precedence)
+中分类为 Unsafe，因此只能通过上述精确路径证据，不是整类忽略。
+
+CDC-15 的结构证据：FIFO 使用带回绕位的 5-bit 二进制指针，跨域前转 Gray 码；
+读/写 Gray 指针均经两级 `ASYNC_REG` 同步；`full`/`mem_empty` 由 next pointer 比较后注册，
+只有 `write_fire` 才写 RAM、只有 `read_load && !mem_empty` 才把 RAM 装入 73-bit 输出寄存器。
+`tb_cop_axis_async_fifo_random` 在 `Ts:Tm=10:26,26:10,14:22,22:14` 四档，每档 257 beat
+随机 valid/ready 背压，逐 beat 断言不重复、不丢失、顺序正确。PASS 行：
+`PASS: axis_fifo_random all ratios no duplicate, loss, or reorder`。
 
 ## 每个档位必看指标与判定
 
@@ -59,7 +84,7 @@ PROVISIONAL payload 也不是发布模型。
 | `vivado_version.txt` | 工具版本 | 记录实际版本，不借用历史版本结论 |
 
 整机报告写入 `build/reports/pynq_cop_40mhz/`。`gate_summary.txt` 必须同时给出
-WNS≥0、DSP≤220、BRAM36≤140、latch=0、CDC unsafe/unknown=0、DRC blocking=0；任一缺失即 FAIL。
+WNS≥0、DSP≤220、BRAM36≤140、latch=0、CDC allowlist 逐条通过、DRC blocking=0；任一缺失即 FAIL。
 只有 Tcl 打印 `PYNQ COP WHOLE-SYSTEM GATE PASSED` 后才会生成
 `build/run/pynq_cop_40mhz/pynq_cop_40mhz.bit/.hwh/.xsa`。
 
