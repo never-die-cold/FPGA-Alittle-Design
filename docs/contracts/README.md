@@ -18,5 +18,9 @@
 
 - [项目地图](../project-map.md)
 - [docs 导航](../README.md)
+- [WC 协处理器软件接口](../coprocessor-wc-interface.md)
+- [协处理器存储规划](../coprocessor-storage-plan.md)
+- [JL Vivado 检查清单](../coprocessor-vivado-checklist.md)
+- [NC 协处理器交接](../coprocessor-nc-handoff.md)
 - 核契约：[`src/riscv/design_v0.md`](../../src/riscv/design_v0.md)、[`src/riscv/design_v1.md`](../../src/riscv/design_v1.md)
 - 视觉契约：[`src/vision/design_v0.md`](../../src/vision/design_v0.md)

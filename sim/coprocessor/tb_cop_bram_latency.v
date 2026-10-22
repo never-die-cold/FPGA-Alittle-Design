@@ -20,7 +20,7 @@ module tb_cop_bram_latency;
         @(negedge clk); read_address=8; @(posedge clk); #1; if(q!==64'h11) $fatal(1);
         @(negedge clk); read_address=16; @(posedge clk); #1;
         if(q===64'h11 || q!==64'h21) $fatal(1,"late sample was not visible");
-        $display("PASS K3-LATENCY: nominal one-cycle BRAM read matches; early/late samples mismatch visibly");
+        $display("PASS: K3-LATENCY nominal one-cycle BRAM read matches; early/late samples mismatch visibly");
         $finish;
     end
 endmodule

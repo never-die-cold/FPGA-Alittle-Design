@@ -41,7 +41,7 @@ RM := rm -f
 endif
 
 .PHONY: all clean
-all: $(TARGET).hex $(TARGET).dis $(V0_TARGET).hex $(V0_TARGET).dis $(TS_TARGET).hex $(TS_TARGET).dis $(SOC_TARGET).hex $(SOC_TARGET).dis $(BENCH_TARGET).hex $(BENCH_TARGET).dis coremark.hex coremark.dis
+all: $(TARGET).hex $(TARGET).dis $(V0_TARGET).hex $(V0_TARGET).dis $(TS_TARGET).hex $(TS_TARGET).dis $(SOC_TARGET).hex $(SOC_TARGET).dis $(BENCH_TARGET).hex $(BENCH_TARGET).dis coremark.hex coremark.dis $(COP_TARGET).hex
 
 $(TARGET).elf: $(SRCS) link.ld
 	$(CC) $(ARCH_IM) $(COMMON) -T link.ld $(SRCS) -o $@
