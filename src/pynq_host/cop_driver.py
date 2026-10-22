@@ -80,6 +80,24 @@ class CopProtocolError(CopError):
     """Hardware/result/decision did not satisfy the contract; never mask as PASS."""
 
 
+def probe(transport):
+    """Read-only control-plane probe for board bring-up (no DMA, no writes)."""
+    ip_id = transport.read32(R.OFFSETS["IP_ID"])
+    if ip_id != R.IP_ID:
+        raise CopProtocolError(f"unexpected IP_ID 0x{ip_id:08x}")
+    status = transport.read32(R.OFFSETS["STATUS"])
+    return {
+        "ip_id": ip_id, "version": transport.read32(R.OFFSETS["VERSION"]),
+        "capability": transport.read32(R.OFFSETS["CAPABILITY"]),
+        "status": status, "error_code": transport.read32(R.OFFSETS["ERROR_CODE"]),
+        "result_seq": transport.read32(R.OFFSETS["RESULT_SEQ"]),
+        "ready": bool(status & R.STATUS_READY),
+        "accepted": bool(status & R.STATUS_ACCEPTED),
+        "unconsumed": bool(status & R.STATUS_UNCONSUMED),
+        "busy": bool(status & R.STATUS_BUSY),
+    }
+
+
 class SimDmaPlane:
     def __init__(self, sim):
         self.sim = sim
@@ -95,11 +113,13 @@ class SimDmaPlane:
 
 
 class PynqMmio:
-    """Adapter for pynq.lib.MemoryMappedIO-like objects; not exercised here.
+    """Adapter for a PYNQ ``MMIO(base, 4 KiB)`` object.
 
-    The PS AXI base is assigned by Vivado Address Editor; it is NOT the
-    core-side local window ``0x8001_0000``.  Requiring it explicitly prevents
-    a sim/mock address from silently becoming the board address.
+    PYNQ's ``MMIO.read(offset)``/``write(offset, value)`` already apply the
+    object's base, so this adapter passes the register offset unchanged.  The
+    explicit ``base`` is recorded for logs/validation; it is NOT added again.
+    The PS base comes from Vivado Address Editor, never the core-side
+    ``0x8001_0000`` local window.
     """
 
     def __init__(self, mmio, base):
@@ -109,10 +129,10 @@ class PynqMmio:
         self.base = base
 
     def read32(self, offset):
-        return int(self.mmio.read(self.base + offset))
+        return int(self.mmio.read(offset))
 
     def write32(self, offset, value):
-        self.mmio.write(self.base + offset, int(value))
+        self.mmio.write(offset, int(value))
 
 
 class PynqDmaPlane:
@@ -178,6 +198,9 @@ class CopDriver:
 
     def status(self):
         return self.read("STATUS")
+
+    def probe(self):
+        return probe(self.transport)
 
     def _sim_error(self):
         return getattr(self.transport, "error_name", None)

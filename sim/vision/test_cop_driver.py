@@ -236,6 +236,34 @@ def test_model_fault_and_reload():
         sim.close()
 
 
+def test_pynq_transport_round():
+    sim = CopSim(scripted_compute(["bolt", "nut", "washer"]))
+    class WindowMmio:
+        def __init__(self, backing, size=0x1000):
+            self.backing, self.size = backing, size
+        def _offset(self, offset):
+            if not 0 <= offset < self.size:
+                raise ValueError(f"MMIO offset 0x{offset:x} outside window")
+            return offset
+        def read(self, offset):
+            return self.backing.read32(self._offset(offset))
+        def write(self, offset, value):
+            self.backing.write32(self._offset(offset), value)
+    base = 0x40000000
+    transport = PynqMmio(WindowMmio(sim), base)
+    driver = CopDriver(transport, SimDmaPlane(sim), dict(ORDER), 0.8, 16, 10,
+                       job_timeout_s=2.0, accept_timeout_s=0.5, config_timeout_s=0.5)
+    try:
+        info = driver.probe()
+        assert info["ip_id"] == R.IP_ID and info["ready"] is True
+        assert info["unconsumed"] is False and info["busy"] is False
+        result = driver.run(make_job(1))
+        driver.consume(result)
+        assert sim.jobs == 1
+    finally:
+        sim.close()
+
+
 def test_real_dma_plane_and_ps_base():
     try:
         PynqDmaPlane()
@@ -263,7 +291,7 @@ def test_real_dma_plane_and_ps_base():
     fake = FakeMmio()
     transport = PynqMmio(fake, 0x40000000)
     transport.write32(0x10, 7)
-    assert fake.calls == [("w", 0x40000010, 7)]
+    assert fake.calls == [("w", 0x10, 7)]  # PYNQ MMIO already applies the base
 
 
 def main():
@@ -275,8 +303,9 @@ def main():
     test_no_ack()
     test_stale_result_and_recovery()
     test_model_fault_and_reload()
+    test_pynq_transport_round()
     test_real_dma_plane_and_ps_base()
-    print("PASS: PS driver A1/A2 (accepted/unconsumed/consume/NO_ACK/HW_TIMEOUT/stale/CRC)")
+    print("PASS: PS driver A1/A2 (accepted/unconsumed/consume/NO_ACK/HW_TIMEOUT/stale/CRC/PynqMmio)")
 
 
 if __name__ == "__main__":

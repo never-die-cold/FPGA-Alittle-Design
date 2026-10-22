@@ -111,9 +111,13 @@ dma.load_model(addr, payload) / load_rois(addr, rois, stride) / load_descriptors
 ```
 
 - 现在：`CopSim` + `SimDmaPlane`（`src/pynq_host/cop_mmio_sim.py`）；
-- 上板：`PynqMmio(mmio, <Address Editor 分配的 PS AXI base>)` 包一层
-  `pynq.lib.MemoryMappedIO`；**没有默认 base**，核侧本地 `0x8001_0000` 不得当 PS 地址
-  （K1 假硬件约束）。数据面按 J08 的 DataMover/物理 bank 实现 `PynqDmaPlane`
+- 上板控制面：`PynqMmio(MMIO(base, 0x1000), base)`。PYNQ 的 `MMIO.read(offset)`/
+  `write(offset)` **已经带 base**，适配器不再二次加 base；base 必须来自 Address Editor，
+  不能是核侧 `0x8001_0000`。离板已用“窗口假 MMIO + 基址翻译”跑通整笔提交/消费
+  （`test_cop_driver.py::test_pynq_transport_round`），但**未上板**。
+- 板上只读预检：`python sim/scripts/cop_board_preflight.py --base <Address Editor base>`
+  只读 `IP_ID/VERSION/CAPABILITY/STATUS/ERROR_CODE/RESULT_SEQ`，不写、不碰 DMA；
+  成功不等于板级验收。数据面 `PynqDmaPlane` 仍按 J08 的 DataMover/物理 bank 实现
   （当前**故意** `NotImplementedError`，不假装已实现）；
 - 服务/引擎/报文/EXE 不需要重写；`CopEngine` 继续产出同样的
   `status/targets/decision/width/height`，并写 `cop_trace.json`；

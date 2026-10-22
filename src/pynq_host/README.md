@@ -91,6 +91,11 @@ python src/pynq_host/vision_live_service.py --root <dir> --capture-dir <png dir>
 [PS 驱动使用档](../../docs/contracts/coprocessor-ps-driver-v0.md)；一轮证据
 `bash sim/scripts/run_cop_sim_round.sh <output-dir>`（默认写 `sim/build/`，证据目录显式指定）。
 
+板上控制面接缝：`PynqMmio(MMIO(base, 0x1000), base)`；PYNQ 的 MMIO 读写参数已是相对
+offset，适配器不再加 base。上板后先跑只读预检
+`python sim/scripts/cop_board_preflight.py --base <Address Editor base>`，再谈数据面；
+`PynqDmaPlane` 仍故意未实现（J08 物理 bank/结果 DMA）。
+
 ## 板卡访问
 
 - 校园网内 SSH：`ssh xilinx@<板卡内网IP>`（2026-09-20 建立，SD 卡已烧录 PYNQ 镜像）；notebook 在板卡 Jupyter（默认端口 9090）上运行

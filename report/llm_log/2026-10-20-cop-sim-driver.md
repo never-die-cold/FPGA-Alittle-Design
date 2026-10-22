@@ -63,6 +63,18 @@
   无法执行（RISC-V ELF 构建成功）；A2 改了 `cop_job.c` 但 `cop_job.hex/dis` 仍是旧产物，
   需 JL 重建。固件重复作业/预启动完成通知仍是阻断项。
 
+## 2026-10-21 board-gate 同步（K4/K5 + 固件 E2E）
+
+- 合并 `origin/dev/riscv` `af53fe2`（合并 `d677c7a`）：K4 Vivado 门禁/检查清单、K5 NC 打包/
+  交接、固件 E2E、`cop_job.hex` 按 A2 重建、K3 BRAM 延迟边界、工具链/Python 路径修复。
+- 修正 `PynqMmio`：PYNQ `MMIO(base, len)` 的 read/write 参数是相对 offset，不再二次加 base；
+  新增 `probe(transport)` / `CopDriver.probe()` 与 `sim/scripts/cop_board_preflight.py`
+  只读板上预检；新增 `test_pynq_transport_round` 证明基址/offset 接缝。
+- 验证：inspection 19、vision 21 exit 0；`firmware_e2e`、`decision_ab`(T1–T7)、`cop_top`、
+  `bram_network`(K3-LATENCY) 均 exit 0；证据 `data/logs/2026-10-21-board-gate-sync/`。
+- 仍缺：host gcc（firmware 主机规则测试未跑）、Vivado 40MHz/bitstream、物理 bank/结果 DMA、
+  板上预检执行；数据面 `PynqDmaPlane` 仍故意未实现。
+
 ## 明确未做
 
 - 未上板；未验证真实 MMIO/AXI/DataMover/CDC；未实现 `PynqDmaPlane`；
