@@ -1,0 +1,185 @@
+PASS: PS configuration staging/commit/ack/busy/timeout/epoch wrap mock protocol
+PASS: localization exact integer distance/threshold parity, empty/multiple/noise/limit/border and ROI metadata
+PASS: Q01 result fields: 3 valid / 12 invalid packets
+PASS: LIVE profile v1.2 status/decision/class/score/prototype rules
+PASS: M2 HTTP mock check/config/status/location + check/config/session/stale/error contract
+WARN: check failed (1/3): <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>
+WARN: check failed (2/3): <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>
+WARN: check failed (3/3): <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>
+WARN: re-handshake failed: <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>
+WARN: service session changed; re-handshaking
+PASS: round overlay trigger/throttle/manual/stale/config-change/outage/session-recovery/events
+PASS: async GUI polling remains responsive, queues manual checks, expires stale overlays and closes
+PASS: batch records v2 (decision/status/prototype/prefixes) + anomaly events (D8-D11) + restart rebuild/corrupt-line
+PASS: records CSV v2 columns (status/missing/extra/prototype) + v1 compat + BOM + errors
+PASS: live stand-in v1.2 packets (PASS/FAIL/RECHECK cycle, prototype=true, D8 manual)
+PASS: live service rounds/artifacts/idempotent-latest/config/over-limit-mapping/400-404
+PASS: prototype memory polling; manual, diagnostic and non-prototype rounds retain archives
+WARN: check failed (1/3): HTTP Error 400: Bad Request
+WARN: check failed (1/3): invalid packet fields
+WARN: check failed (1/3): <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>
+WARN: check failed (2/3): <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>
+WARN: check failed (3/3): <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>
+WARN: re-handshake failed: <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>
+WARN: service session changed; re-handshaking
+PASS: joint service x EXE golden matrix (pass/missing/extra/wrong/recheck, corrupt-packet both sides, stale/config, outage/restart, records)
+PASS: file localization exact boxes/crops, metadata, empty/recheck and invalid input
+PASS: PGM/hex exact row order, hashes, target association and stale manifest isolation
+PASS: ARM portable package D:\Desktop\contests\2026fpga\FPGA-Alittle-Design\sim\build\exe-wt\sim\build\arm-localize-package-test.tar.gz
+PASS: isolated portable package, missing/tampered file gate and retained benchmark samples
+TEST_READY
+PASS: UART file D:\Desktop\contests\2026fpga\FPGA-Alittle-Design\sim\build\exe-wt\sim\build\uart-receiver-ka_z8guv\capture.bit 8192 dc404a613fedaeb54034514bc6505f56b933caa5250299ba7d094377a51caa46
+TEST_READY
+PASS: UART file D:\Desktop\contests\2026fpga\FPGA-Alittle-Design\sim\build\exe-wt\sim\build\uart-receiver-ka_z8guv\fragmented.bit 8192 dc404a613fedaeb54034514bc6505f56b933caa5250299ba7d094377a51caa46
+TEST_READY
+TEST_READY
+TEST_READY
+TEST_READY
+TEST_READY
+PASS: UART receiver binary roundtrip, no overwrite, short/corrupt/length/hash rejection
+STAGE: artifact pair verified; overlay load begins
+STAGE: overlay load returned; address validation begins
+STAGE: VDMA halted-state MMIO reads begin
+VDMA-START: CR=0x00000000 SR=0x00000001
+STAGE: capture identity/geometry MMIO reads begin
+STAGE: capture lock accepted; allow 5 seconds for HDMI reacquisition
+STAGE: HDMI settling finished; pipe smoke begins
+PASS: C01 addresses, identity, geometry, idle DMA and existing vision smoke
+SEQ-START: stream_seq=0
+WINDOW: C01 HDMI direct display active for 20 seconds
+VDMA-END: CR=0x00000000 SR=0x00000001
+STATUS: {'0x0': 1128353841, '0x4': 1, '0x8': 0, '0xc': 0, '0x10': 0, '0x14': 1280, '0x18': 720, '0x1c': 0, '0x20': 0}
+SEQ-END: stream_seq=0 delta=0
+PASS: C01 display/status diagnostic; stream_seq delta = halt-state accept-and-discard handshakes, not DDR writes
+STAGE: original vision restoration begins
+CLEANUP: original vision load and smoke completed
+STAGE: artifact pair verified; overlay load begins
+STAGE: overlay load returned; address validation begins
+STAGE: VDMA halted-state MMIO reads begin
+VDMA-START: CR=0x00000000 SR=0x00000001
+STAGE: capture identity/geometry MMIO reads begin
+STAGE: capture lock accepted; allow 5 seconds for HDMI reacquisition
+STAGE: HDMI settling finished; pipe smoke begins
+PASS: C01 addresses, identity, geometry, idle DMA and existing vision smoke
+SEQ-START: stream_seq=1474
+WINDOW: C01 HDMI direct display active for 20 seconds
+VDMA-END: CR=0x00000000 SR=0x00000001
+STATUS: {'0x0': 1128353841, '0x4': 1, '0x8': 1474, '0xc': 0, '0x10': 0, '0x14': 1280, '0x18': 720, '0x1c': 0, '0x20': 0}
+SEQ-END: stream_seq=1474 delta=0
+PASS: C01 display/status diagnostic; stream_seq delta = halt-state accept-and-discard handshakes, not DDR writes
+STAGE: original vision restoration begins
+CLEANUP: original vision load and smoke completed
+STAGE: artifact pair verified; overlay load begins
+MAIN-FAIL: RuntimeError('load fault')
+STAGE: original vision restoration begins
+CLEANUP: original vision load and smoke completed
+STAGE: artifact pair verified; overlay load begins
+STAGE: overlay load returned; address validation begins
+STAGE: VDMA halted-state MMIO reads begin
+VDMA-START: CR=0x00000000 SR=0x00000001
+STAGE: capture identity/geometry MMIO reads begin
+MAIN-FAIL: RuntimeError('capture identity/geometry mismatch')
+STAGE: original vision restoration begins
+CLEANUP: original vision load and smoke completed
+STAGE: artifact pair verified; overlay load begins
+STAGE: overlay load returned; address validation begins
+STAGE: VDMA halted-state MMIO reads begin
+VDMA-START: CR=0x00000000 SR=0x00000001
+STAGE: capture identity/geometry MMIO reads begin
+MAIN-FAIL: TimeoutError('video lock did not assert')
+STAGE: original vision restoration begins
+CLEANUP: original vision load and smoke completed
+STAGE: artifact pair verified; overlay load begins
+STAGE: overlay load returned; address validation begins
+STAGE: VDMA halted-state MMIO reads begin
+VDMA-START: CR=0x00000000 SR=0x00000001
+STAGE: capture identity/geometry MMIO reads begin
+STAGE: capture lock accepted; allow 5 seconds for HDMI reacquisition
+STAGE: HDMI settling finished; pipe smoke begins
+PASS: C01 addresses, identity, geometry, idle DMA and existing vision smoke
+SEQ-START: stream_seq=0
+WINDOW: C01 HDMI direct display active for 20 seconds
+VDMA-END: CR=0x00000000 SR=0x00000001
+STATUS: {'0x0': 1128353841, '0x4': 9, '0x8': 0, '0xc': 0, '0x10': 0, '0x14': 1280, '0x18': 720, '0x1c': 0, '0x20': 0}
+SEQ-END: stream_seq=0 delta=0
+MAIN-FAIL: RuntimeError('capture fault or error event during window: CSR 0x4=0x9 error_epoch=0')
+STAGE: original vision restoration begins
+CLEANUP: original vision load and smoke completed
+STAGE: artifact pair verified; overlay load begins
+STAGE: overlay load returned; address validation begins
+STAGE: VDMA halted-state MMIO reads begin
+VDMA-START: CR=0x00000000 SR=0x00000001
+STAGE: capture identity/geometry MMIO reads begin
+STAGE: capture lock accepted; allow 5 seconds for HDMI reacquisition
+STAGE: HDMI settling finished; pipe smoke begins
+MAIN-FAIL: RuntimeError('smoke fault')
+STAGE: original vision restoration begins
+CLEANUP: original vision load and smoke completed
+STAGE: artifact pair verified; overlay load begins
+STAGE: overlay load returned; address validation begins
+STAGE: VDMA halted-state MMIO reads begin
+VDMA-START: CR=0x00000001 SR=0x00000000
+MAIN-FAIL: RuntimeError('DMA unexpectedly running; restoration withheld until halted')
+PASS: C01 board probe normal/seq_growth paths, artifact reject, load/identity/lock/error/smoke cleanup and running-DMA protection
+STAGE: HWH metadata parse before programming
+STAGE: HWH layout accepted; candidate download begins
+STAGE: candidate download returned
+STAGE: HWH metadata parse before programming
+STAGE: HWH metadata parse before programming
+STAGE: HWH layout accepted; candidate download begins
+PASS: staged metadata validates addresses before physical download and propagates download failure
+STAGE: original vision loaded; bounded settle before smoke
+STAGE: original vision loaded; bounded settle before smoke
+RECOVERY-RETRY: restore smoke attempt 1 NOVIDEO; settle 5 more seconds
+STAGE: original vision loaded; bounded settle before smoke
+RECOVERY-RETRY: restore smoke attempt 1 NOVIDEO; settle 5 more seconds
+STAGE: original vision loaded; bounded settle before smoke
+PASS: bounded restore settles 5s per attempt, retries one NOVIDEO, propagates other exits
+PASS: C01 reset deassertion accepts hex constants and rejects 8 polarity/net/constant faults
+PASS: C01 exact CRLF recovery, strict recheck, tamper/path/duplicate/overwrite rejection and drift
+test_complete_copy_and_release (__main__.Tests.test_complete_copy_and_release) ... ok
+test_configured_idle_precedes_clean_and_run (__main__.Tests.test_configured_idle_precedes_clean_and_run) ... ok
+test_failures_never_copy (__main__.Tests.test_failures_never_copy) ... ok
+test_persistent_idle_faults_refuse_run_before_start (__main__.Tests.test_persistent_idle_faults_refuse_run_before_start) ... ok
+test_recorded_idle_faults_reach_clean_state_after_geometry (__main__.Tests.test_recorded_idle_faults_reach_clean_state_after_geometry) ... ok
+test_refuse_external_owner (__main__.Tests.test_refuse_external_owner) ... ok
+test_release_failure_attempts_remaining_buffers_once (__main__.Tests.test_release_failure_attempts_remaining_buffers_once) ... ok
+test_source_changes_during_copy_not_published (__main__.Tests.test_source_changes_during_copy_not_published) ... ok
+test_unsafe_stop_keeps_buffers (__main__.Tests.test_unsafe_stop_keeps_buffers) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.013s
+
+OK
+PASS: C01 single-frame ownership, cache, faults and quarantine
+PASS: pre-fix idle ordering reproduces the board 0x4810 failure; sticky-fault test has teeth
+test_active_candidate_dma_is_not_restored_over (__main__.Tests.test_active_candidate_dma_is_not_restored_over) ... ok
+test_boot_change_after_capture_is_rejected (__main__.Tests.test_boot_change_after_capture_is_rejected) ... ok
+test_invalid_capture_mode_refuses_before_hardware (__main__.Tests.test_invalid_capture_mode_refuses_before_hardware) ... ok
+test_novideo_first_attempt_retries_then_captures (__main__.Tests.test_novideo_first_attempt_retries_then_captures) ... ok
+test_novideo_twice_fails_before_any_dma (__main__.Tests.test_novideo_twice_fails_before_any_dma) ... ok
+test_park_mode_selects_park_driver (__main__.Tests.test_park_mode_selects_park_driver) ... ok
+test_png_round_trip_mismatch_refuses_publication (__main__.Tests.test_png_round_trip_mismatch_refuses_publication) ... ok
+test_png_write_failure_refuses_publication (__main__.Tests.test_png_write_failure_refuses_publication) ... ok
+test_restore_failure_is_reported_and_raised (__main__.Tests.test_restore_failure_is_reported_and_raised) ... ok
+test_success_path_publishes_and_restores (__main__.Tests.test_success_path_publishes_and_restores) ... ok
+test_unsafe_stop_holds_buffers_and_never_exits (__main__.Tests.test_unsafe_stop_holds_buffers_and_never_exits) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 9.213s
+
+OK
+PASS: c01_ddr_onboard main: PNG/recovery, NOVIDEO retry, mode guard and UNSAFE-STOP hold
+test_active_errors_never_masked (__main__.Tests.test_active_errors_never_masked) ... ok
+test_persistent_halt_errors_and_slow_copy (__main__.Tests.test_persistent_halt_errors_and_slow_copy) ... ok
+test_second_event_and_pending_refuse_copy (__main__.Tests.test_second_event_and_pending_refuse_copy) ... ok
+test_start_transient_absorbed_once_at_grant (__main__.Tests.test_start_transient_absorbed_once_at_grant) ... ok
+test_unknown_owner_quarantines (__main__.Tests.test_unknown_owner_quarantines) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.038s
+
+OK
+PASS: park candidate captures arm-transient absorption, latched epoch health, repeat W1C warmup, active faults and ownership
+PASS: c01 backend service lease/copy/faults/quarantine/recovery (off-board stand-in)
+PASS: base overlay backend new-frame/fault-503/prototype-false (off-board stand-in)
