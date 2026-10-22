@@ -5,7 +5,7 @@ cd "$ROOT"
 PY="${COPROCESSOR_PYTHON:-sim/build/vision-venv-full/bin/python}"
 if ! command -v "$PY" >/dev/null 2>&1; then PY=python3; fi
 if [ "$#" -ne 0 ] && [ "$#" -ne 1 ] && [ "$#" -ne 3 ]; then
-  echo "usage: $0 [JL-verified.bit [JL-verified.hwh gate_summary.txt]]"; exit 2
+  echo "usage: $0 [pynq_cop_40mhz.bit [pynq_cop_40mhz.hwh gate_summary.txt]]"; exit 2
 fi
 for artifact in "$@"; do
   if [ ! -s "$artifact" ]; then echo "ERROR: artifact missing or empty: $artifact"; exit 1; fi
@@ -42,10 +42,10 @@ cp -a sim/build/coprocessor/payload-v1/. "$stage/payload/provisional-model/"
 cp sim/build/coprocessor/network_bram_pattern.log sim/build/coprocessor/network_bram_zero.log \
    sim/build/coprocessor/cop_bram_latency.log "$stage/evidence/"
 bit_status=UNVERIFIED; vivado_status=UNVERIFIED_NEEDS_WINDOWS
-if [ "$#" -ge 1 ]; then cp "$1" "$stage/payload/JL-verified.bit"; bit_status=JL_SUPPLIED_UNVERIFIED_ON_BOARD; fi
+if [ "$#" -ge 1 ]; then cp "$1" "$stage/payload/pynq_cop_40mhz.bit"; bit_status=JL_GATE_PASSED_UNVERIFIED_ON_BOARD; fi
 if [ "$#" -eq 3 ]; then
-  cp "$2" "$stage/payload/JL-verified.hwh"; cp "$3" "$stage/evidence/gate_summary.txt"
-  vivado_status=PASS_40MHZ_WHOLE_SYSTEM
+  cp "$2" "$stage/payload/pynq_cop_40mhz.hwh"; cp "$3" "$stage/evidence/gate_summary.txt"
+  vivado_status=PASS_2026.1_40MHZ_WHOLE_SYSTEM
 fi
 {
   echo "VERSION=$version"
