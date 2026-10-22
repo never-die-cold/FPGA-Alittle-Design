@@ -75,6 +75,19 @@
 - 仍缺：host gcc（firmware 主机规则测试未跑）、Vivado 40MHz/bitstream、物理 bank/结果 DMA、
   板上预检执行；数据面 `PynqDmaPlane` 仍故意未实现。
 
+## 2026-10-22 board-top 同步（整机门禁/bit/hwh/NC 包）
+
+- 合并 `origin/dev/riscv` `7c6cc40`（合并 `a315537`）：production PL top、AXI-Lite CDC、
+  AXIS FIFO、payload adapter、shadow bank、16 ROI slots、manifest v1、Windows 整机
+  40 MHz 门禁 PASS、bit/hwh 与 NC 包（`dist/cop-board-gate-f856d5861db0`，未入库）。
+- WC 两套门禁仍 19/21 exit 0；新 JL 离板门禁复跑：
+  `payload_adapter`/`activation_storage`/`axis_fifo_random`/`firmware_e2e` PASS；
+  `manifest_v1`/`payload_network` 在 Windows 因 manifest CRLF/sidecar LF 哈希失败；
+  `pynq_top`/`axi_lite_cdc` 在 Icarus 13 因 `w_ack/r_ack` 先用后声明失败。
+- 未改 JL 的 `src/coprocessor/`、`src/riscv/`、`sim/coprocessor/` 文件；在
+  `data/logs/2026-10-22-board-top-sync/` 留了原始日志、哈希对比和建议修复。
+- 板上仍 UNVERIFIED：bit/hwh 已备但 NC 未下载；WC 的只读预检与数据面替换仍等实板/J08。
+
 ## 明确未做
 
 - 未上板；未验证真实 MMIO/AXI/DataMover/CDC；未实现 `PynqDmaPlane`；

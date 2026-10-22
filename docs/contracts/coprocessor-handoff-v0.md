@@ -10,6 +10,7 @@
 - WC 侧 PS 驱动/模拟硬件/服务引擎已按 C03 §13 落库并跑通离板一轮（mock/脚本分类器，非板上）；提交/完成/取结果/恢复口径与 JL 待办见 [PS 驱动使用档](coprocessor-ps-driver-v0.md)。
 - JL K1/K2 已并入；C03 §14 A1/A2（READY=!BUSY、ACCEPTED/UNCONSUMED/CONSUME、终态互斥、RESULT_SEQ 每轮递增、NO_ACK/HW_TIMEOUT 软件看门狗）已同步到 PS 驱动/mock/服务：有效结果落盘后 PS CONSUME，错误/超时读码后消费。固件重复作业与预启动完成通知仍是阻断项。
 - JL K4/K5 与固件 E2E 已并入（`af53fe2`）：`firmware_e2e` 用真实 CPU/固件/MMIO 跑通 START→ACCEPTED→终态→结果/PSCONSUME；K3 BRAM 增加延迟边界。Vivado 40 MHz 门禁、bitstream、`.hwh` 与板上仍 UNVERIFIED；WC 已加只读板上预检 `sim/scripts/cop_board_preflight.py`，数据面等 J08。
+- JL 2026-10-22 board-top（`7c6cc40`）：Windows Vivado 2026.1 整机 40 MHz 门禁 **PASS**（WNS +2.498 ns），bit/hwh 与 NC 包已备；`BOARD` 仍 `UNVERIFIED_NEEDS_NC`。WC 复跑发现 Windows/Icarus 两个可复现性缺口：manifest CRLF/sidecar 哈希、`cop_axi_lite_cdc` 先用后声明；已登记给 JL，未改其 RTL/生成器。详见 [board-top 同步证据](../../data/logs/2026-10-22-board-top-sync/README.md)。
 - J05/J06 未完成：没有真实审计 ROI 上的正式 INT8 模型、阈值和发布黄金。
 - J07/J08 未完成：没有整机实现、位流或可交 NC 上板的三批正式交付包。
 
@@ -21,6 +22,7 @@
 | MMIO、状态、DMA、结果与 PS/核分工 | [C03](coprocessor-integration-v0.md) |
 | PS 一页纸接口（K1 摘录，非契约） | [coprocessor-wc-interface](../coprocessor-wc-interface.md) |
 | 片上存储方案（K2 PLAN/UNVERIFIED） | [coprocessor-storage-plan](../coprocessor-storage-plan.md) |
+| 生产 payload manifest v1（PROVISIONAL） | [coprocessor-manifest-v1](coprocessor-manifest-v1.md) |
 | K4 Windows Vivado 门禁清单（UNVERIFIED） | [coprocessor-vivado-checklist](../coprocessor-vivado-checklist.md) |
 | K5 NC 下载/交接与失败恢复 | [coprocessor-nc-handoff](../coprocessor-nc-handoff.md) |
 | PS 提交/完成/取结果/恢复与 JL 待办 | [PS 驱动使用档](coprocessor-ps-driver-v0.md) |
