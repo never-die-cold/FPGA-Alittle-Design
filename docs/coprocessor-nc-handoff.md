@@ -66,6 +66,8 @@ COPROCESSOR_PYTHON=sim/build/vision-venv-full/bin/python \
 - OPEN-FW-1：固件进入 bitstream/BRAM 初值的通路未验证；本轮只验证仿真加载，需 Windows 侧产出 bitstream。
 - OPEN-ENV-1：`all` 已支持 riscv32/riscv64 前缀回落和无工具链 SKIP，仍需在干净环境复测依赖边界。
 - OPEN-DOC-1（已修复）：`cop_job.hex` 曾陈旧且无引用；现由 Makefile `all` 重建，并由 `firmware_e2e` 加载。
+- OPEN-BT-4：板顶候选的 16 ROI 槽已仿真，但任意 `TARGET_DESC_ADDR` 描述表尚未接入；
+  当前只支持 `target_id == roi_index` 恒等映射，不能据此声称完整契约或板级验收。
 - manifest v1→影子物理 bank 与生产 PL 顶层已仿真；正式 RELEASE 参数、PS7 整机实现和板验未完成。
 - `compute` 与 `storage` 当前分开 OOC；两份报告资源相加不能替代整机实现。
 - 本轮没有 Vivado、bitstream 或实板证据，综合实现与板上状态保持 UNVERIFIED。

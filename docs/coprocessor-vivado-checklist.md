@@ -5,6 +5,8 @@
 
 board-top 已增加 `pynq_cop_top`、100/40 MHz AXI/AXIS CDC、PS7+AXI DMA block-design Tcl
 与严格整机门禁，但当前 WSL 找不到 Vivado，以下整机条目仍为 **UNVERIFIED**。
+当前板顶只支持 `target_id == roi_index` 恒等映射；任意 `TARGET_DESC_ADDR` 描述表接入
+是发布前 OPEN，即使 Tcl 门禁通过也不代表该功能已验收。
 
 ## JL 执行命令
 

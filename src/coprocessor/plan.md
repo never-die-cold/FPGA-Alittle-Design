@@ -18,7 +18,7 @@
 | J02 | ✅ | 诊断整数参考、逐层黄金、文件/来源 SHA256 与篡改负例可复现；不是 J06 正式模型 |
 | J03 | ✅ | 活跃 Conv→GAP→FC 链逐元素对拍；显式使用仓库 venv 时，独立、协处理器 all、全仓 all 退出 0；裸系统 Python 缺 NumPy 时不成立 |
 | J04a | ✅ | JL 侧实现、模块/顶层冒烟、J02 zero、工单固件与交接单已落库；24 个文件 SHA256 与远端一致 |
-| J04b | 🟡 | manifest v1 schema 与影子 bank 地址适配已离板验证；内容仍 PROVISIONAL，板顶、整机时序与板验未完成 |
+| J04b | 🟡 | manifest/16 ROI/100→40 MHz 板顶已离板验证；内容仍 PROVISIONAL，任务描述表与整机 Vivado/板验未完成 |
 | J05 | ⬜ | 等真实审计 ROI；训练/PTQ/QAT、混淆矩阵与阈值未完成 |
 | J06 | ⬜ | 正式模型、真实参数/黄金、版本/哈希发布未完成 |
 | J07 | ⬜ | 视频原帧通路+核+CNN 的综合实现和整机回归未完成 |
@@ -42,14 +42,17 @@
    整机布局布线、bitstream/.hwh 或板验，详见本轮[续档](../../report/llm_log/2026-10-22-board-gate-vivado.md)。
 4. manifest v1 固定 offset/length/bank schema；当前 payload 明示 `kind=PROVISIONAL`，只用于结构验证。
    正式权重到位后只替换 payload 与 manifest，不改 RTL/软件协议；不得把诊断权重称为发布模型。
+5. 生产板顶候选已接入 16×4096 B ROI 槽、权重影子 bank 和 100→40 MHz CDC；当前
+   `target_id == roi_index` 仅支持恒等映射，任意 `TARGET_DESC_ADDR` 描述表尚未接入，不得作为完整契约验收。
 
 ## 下一执行点
 
-P0 两档 OOC 已通过，manifest schema 已定且内容仍为 PROVISIONAL。下一执行点按依赖执行：
+P0 两档 OOC 已通过，manifest schema 已定且内容仍为 PROVISIONAL。下一执行点：
 
-1. JL 将已验证的 DataMover→影子物理 bank 适配接入 Zynq PS/AXI 生产板顶，并补整机约束。
-2. Windows Vivado 40 MHz 整机门禁通过后才产 bitstream/.hwh；随后 NC 下载、WC 真接口联调。
-3. J05/J06 正式权重到位后，用同一 schema 换 payload+manifest；重新记录 CRC/SHA256 与黄金证据。
+1. JL 在 Windows 从仓库根目录执行
+   `powershell -ExecutionPolicy Bypass -File build\run_pynq_cop_gate.ps1 -Vivado "D:\Vivado_downloads\2026.1\Vivado\bin\vivado.bat"`。
+2. 发布前关闭任务描述表 OPEN；整机门禁通过后才可产/发布 bitstream、`.hwh` 与 NC 包。
+3. J05/J06 正式权重到位后，用同一 schema 换 payload+manifest，重新记录 CRC/SHA256 与黄金证据。
 
 当前 J02 payload 只解锁板级结构与地址通路，不构成 RELEASE、精度或板上验收证据。
 
