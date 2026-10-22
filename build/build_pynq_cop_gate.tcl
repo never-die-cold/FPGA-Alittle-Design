@@ -1,6 +1,13 @@
 # Full PYNQ-Z2 PS + AXI DMA + RISC-V/CNN implementation gate. Windows Vivado only.
 # Prerequisite: pinned sim/build/hdmi-source/ps7_config.tcl and freshly rebuilt cop_job.hex.
 if {[catch {
+    proc reject_latches {stage} {
+        set latches [get_cells -quiet -hier -filter \
+            {REF_NAME =~ LDCE || REF_NAME =~ LDPE || REF_NAME =~ LDC || REF_NAME =~ LDP || REF_NAME =~ *LATCH*}]
+        if {[llength $latches] != 0} {
+            error "$stage latch gate failed: count=[llength $latches] sample=[lrange $latches 0 9]"
+        }
+    }
     set script_dir [file normalize [file dirname [info script]]]
     set root [file normalize [file join $script_dir ..]]
     set run_dir [file join $script_dir run pynq_cop_40mhz]
@@ -30,6 +37,7 @@ if {[catch {
     wait_on_run synth_1
     if {[get_property PROGRESS [get_runs synth_1]] ne "100%"} {error "Whole-system synthesis failed"}
     open_run synth_1
+    reject_latches SYNTHESIS
     report_utilization -file [file join $rep_dir utilization_synth.rpt]
     report_cdc -details -file [file join $rep_dir cdc_synth.rpt]
     close_design
@@ -37,6 +45,7 @@ if {[catch {
     wait_on_run impl_1
     if {[get_property PROGRESS [get_runs impl_1]] ne "100%"} {error "Whole-system implementation failed"}
     open_run impl_1
+    reject_latches IMPLEMENTATION
     report_utilization -file [file join $rep_dir utilization_impl.rpt]
     report_clock_utilization -file [file join $rep_dir clock_utilization_impl.rpt]
     set timing [report_timing_summary -delay_type min_max -report_unconstrained \
@@ -72,7 +81,7 @@ if {[catch {
     set bad_drc [get_drc_violations -quiet -filter {SEVERITY == Error || SEVERITY == "Critical Warning"}]
     if {[llength $bad_drc]} {error "DRC errors or critical warnings: $bad_drc"}
     set summary [open [file join $rep_dir gate_summary.txt] w]
-    puts $summary "VIVADO=[version -short]\nWNS_NS=$wns\nDSP=$dsp\nBRAM36=$bram36\nCDC_UNSAFE=$unsafe\nCDC_UNKNOWN=$unknown\nDRC_BLOCKING=0"
+    puts $summary "VIVADO=[version -short]\nWNS_NS=$wns\nDSP=$dsp\nBRAM36=$bram36\nLATCHES=0\nCDC_UNSAFE=$unsafe\nCDC_UNKNOWN=$unknown\nDRC_BLOCKING=0"
     close $summary
     close_design
     launch_runs impl_1 -to_step write_bitstream -jobs 2

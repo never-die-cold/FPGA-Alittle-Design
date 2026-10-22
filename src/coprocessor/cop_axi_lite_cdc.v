@@ -23,6 +23,7 @@ module cop_axi_lite_cdc (
     assign s_arready=!r_busy && !s_rvalid;
     always @(posedge s_clk or negedge s_rst_n) begin
         if(!s_rst_n) begin
+            aw_hold<=0; ar_hold<=0; wd_hold<=0; ws_hold<=0;
             have_aw<=0; have_w<=0; w_busy<=0; r_busy<=0; w_req<=0; r_req<=0;
             w_ack_seen<=0; r_ack_seen<=0; s_bresp<=0; s_bvalid<=0; s_rdata<=0; s_rresp<=0; s_rvalid<=0;
             wack_s1<=0; wack_s2<=0; rack_s1<=0; rack_s2<=0;
@@ -53,6 +54,9 @@ module cop_axi_lite_cdc (
         if(!m_rst_n) begin
             w_ack<=0; r_ack<=0; w_active<=0; r_active<=0; wreq_m1<=0; wreq_m2<=0; wreq_seen<=0;
             rreq_m1<=0; rreq_m2<=0; rreq_seen<=0; m_awvalid<=0; m_wvalid<=0; m_arvalid<=0;
+            aw_m1<=0; aw_m2<=0; ar_m1<=0; ar_m2<=0;
+            wd_m1<=0; wd_m2<=0; ws_m1<=0; ws_m2<=0;
+            m_awaddr<=0; m_wdata<=0; m_wstrb<=0; m_araddr<=0;
             bresp_hold<=0; rdata_hold<=0; rresp_hold<=0;
         end else begin
             wreq_m1<=w_req; wreq_m2<=wreq_m1; rreq_m1<=r_req; rreq_m2<=rreq_m1;
