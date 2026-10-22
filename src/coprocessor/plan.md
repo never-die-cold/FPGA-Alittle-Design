@@ -18,7 +18,7 @@
 | J02 | ✅ | 诊断整数参考、逐层黄金、文件/来源 SHA256 与篡改负例可复现；不是 J06 正式模型 |
 | J03 | ✅ | 活跃 Conv→GAP→FC 链逐元素对拍；显式使用仓库 venv 时，独立、协处理器 all、全仓 all 退出 0；裸系统 Python 缺 NumPy 时不成立 |
 | J04a | ✅ | JL 侧实现、模块/顶层冒烟、J02 zero、工单固件与交接单已落库；24 个文件 SHA256 与远端一致 |
-| J04b | 🟡 | 40 MHz compute/storage OOC 已过；生产 payload 地址适配、板顶、整机时序与板验未完成 |
+| J04b | 🟡 | manifest v1 schema 与影子 bank 地址适配已离板验证；内容仍 PROVISIONAL，板顶、整机时序与板验未完成 |
 | J05 | ⬜ | 等真实审计 ROI；训练/PTQ/QAT、混淆矩阵与阈值未完成 |
 | J06 | ⬜ | 正式模型、真实参数/黄金、版本/哈希发布未完成 |
 | J07 | ⬜ | 视频原帧通路+核+CNN 的综合实现和整机回归未完成 |
@@ -40,15 +40,16 @@
 3. J04b（完整收口）未完成：40 MHz compute/storage OOC 已于 2026-10-22 分别退出 0，WNS
    +7.460/+18.108 ns；storage 使用 28.5 BRAM Tile。该证据不含生产地址适配、PS/AXI 板顶、
    整机布局布线、bitstream/.hwh 或板验，详见本轮[续档](../../report/llm_log/2026-10-22-board-gate-vivado.md)。
-4. 后续进入 J07 整机集成前，先按 J05/J06 完成真实数据、正式 INT8 模型/黄金；不得用诊断权重冒充正式模型。
+4. manifest v1 固定 offset/length/bank schema；当前 payload 明示 `kind=PROVISIONAL`，只用于结构验证。
+   正式权重到位后只替换 payload 与 manifest，不改 RTL/软件协议；不得把诊断权重称为发布模型。
 
 ## 下一执行点
 
-P0 两档 OOC 已通过，但 bitstream/.hwh 被生产前置阻塞。下一执行点按依赖而非旧优先级：
+P0 两档 OOC 已通过，manifest schema 已定且内容仍为 PROVISIONAL。下一执行点按依赖执行：
 
-1. J05/J06 发布正式模型 payload/manifest（含唯一权威 offset/length/CRC/SHA256）。
-2. JL 按 manifest 实现 DataMover→物理 bank 适配及 Zynq PS/AXI 生产板顶，并补整机 TB。
-3. Windows Vivado 整机门禁通过后才产 bitstream/.hwh；随后 NC 下载、WC 真接口联调。
+1. JL 将已验证的 DataMover→影子物理 bank 适配接入 Zynq PS/AXI 生产板顶，并补整机约束。
+2. Windows Vivado 40 MHz 整机门禁通过后才产 bitstream/.hwh；随后 NC 下载、WC 真接口联调。
+3. J05/J06 正式权重到位后，用同一 schema 换 payload+manifest；重新记录 CRC/SHA256 与黄金证据。
 
-未满足第 1 项前无可安全复制执行的 P2 构建命令；不得用 J02 诊断 golden 代替发布模型。
+当前 J02 payload 只解锁板级结构与地址通路，不构成 RELEASE、精度或板上验收证据。
 
