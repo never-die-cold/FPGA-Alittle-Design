@@ -1,10 +1,10 @@
 # 协处理器 Vivado 检查清单
 
-> 状态（2026-10-22）：**40 MHz compute/storage OOC VERIFIED**；整机综合实现、bitstream、
-> `.hwh` 与板验仍为 **UNVERIFIED**。默认安全档为 40 MHz。
+> 状态（2026-10-22）：**40 MHz compute/storage OOC VERIFIED**；`ENABLE_COP=0` 基线 PASS。
+> 修复前整机门禁因 AXI-Lite CDC 锁存器判 **FAIL**；当前修复待 Windows 复跑，仍为 **UNVERIFIED**。
 
 board-top 已增加 `pynq_cop_top`、100/40 MHz AXI/AXIS CDC、PS7+AXI DMA block-design Tcl
-与严格整机门禁，但当前 WSL 找不到 Vivado，以下整机条目仍为 **UNVERIFIED**。
+与严格整机门禁。WSL 找不到 Vivado，修复后结论必须由 JL 在 Windows 重新产生。
 当前板顶只支持 `target_id == roi_index` 恒等映射；任意 `TARGET_DESC_ADDR` 描述表接入
 是发布前 OPEN，即使 Tcl 门禁通过也不代表该功能已验收。
 
@@ -41,7 +41,10 @@ Block RAM。8×64-bit GAP scratch 为小型 distributed RAM；参数的 16 路�
 
 `coprocessor_board_clock.xdc` 是旧 PL 板钟集成约束模板。board-top 的 PS7 直接提供
 100 MHz 与 40 MHz FCLK；`pynq_cop_board.xdc` 校验 10/25 ns 并将两域声明为异步。
-当前没有实际整机报告，因此整机实现、bitstream 和 `.hwh` 仍为 **UNVERIFIED**；
+修复前 Windows 整机实测：基线 WNS +6.840 ns 且位流生成；整机 WNS +2.663 ns、
+WHS +0.020 ns、DSP 136/220、BRAM36 69/140、DRC 0，但 `no_clock=360`、
+`unconstrained_internal_endpoints=120`，故门禁正确判 FAIL。120 个 LDCE 均来自
+`pl/inst/axil_cdc` 的 m 侧载荷链。当前修复后整机指标仍 **UNVERIFIED**；
 PROVISIONAL payload 也不是发布模型。
 
 ## 每个档位必看指标与判定
@@ -56,7 +59,7 @@ PROVISIONAL payload 也不是发布模型。
 | `vivado_version.txt` | 工具版本 | 记录实际版本，不借用历史版本结论 |
 
 整机报告写入 `build/reports/pynq_cop_40mhz/`。`gate_summary.txt` 必须同时给出
-WNS≥0、DSP≤220、BRAM36≤140、CDC unsafe/unknown=0、DRC blocking=0；任一缺失即 FAIL。
+WNS≥0、DSP≤220、BRAM36≤140、latch=0、CDC unsafe/unknown=0、DRC blocking=0；任一缺失即 FAIL。
 只有 Tcl 打印 `PYNQ COP WHOLE-SYSTEM GATE PASSED` 后才会生成
 `build/run/pynq_cop_40mhz/pynq_cop_40mhz.bit/.hwh/.xsa`。
 

@@ -8,11 +8,12 @@
 | 状态 | 结论 | 证据 / 缺口 |
 |:---|:---|:---|
 | 仿真跑通 | **PASS** | 行为级全回归；BRAM 模式 pattern/zero 各 73,795 元素逐项一致；延迟边界 PASS |
-| 综合实现通过 | **UNVERIFIED** | board-top RTL/TB 已落库；仍需 JL 在 Windows 执行非 OOC 门禁，WSL 无 Vivado |
+| 综合实现通过 | **UNVERIFIED** | 修复前 Windows 整机门禁因 120 个 CDC LDCE 判 FAIL；修复待 JL 复跑 |
 | 板上跑通 | **UNVERIFIED** | 无本轮 bitstream 下载、结果读取或稳定性记录；由 NC 现场验证 |
 
 诊断网络不是正式训练模型，`score_q15` 是整数分数而非概率。PROVISIONAL payload 地址适配
-与整机顶层已仿真，PS7 block design、布局布线和板级 IO 尚未验证；没有 JL 门禁通过的 bitstream 时，本包只能做离板交接，
+与整机顶层已仿真；PS7 block design 与布局布线在修复前跑到门禁 FAIL，当前修复后未复跑。
+没有 JL 门禁通过的 bitstream 时，本包只能做离板交接，
 不得下载旧 bitstream 冒充本轮结果。
 
 ## 生成与核验交付包
@@ -70,7 +71,7 @@ COPROCESSOR_PYTHON=sim/build/vision-venv-full/bin/python \
   当前只支持 `target_id == roi_index` 恒等映射，不能据此声称完整契约或板级验收。
 - manifest v1→影子物理 bank 与生产 PL 顶层已仿真；正式 RELEASE 参数、PS7 整机实现和板验未完成。
 - `compute` 与 `storage` 当前分开 OOC；两份报告资源相加不能替代整机实现。
-- 本轮没有 Vivado、bitstream 或实板证据，综合实现与板上状态保持 UNVERIFIED。
+- 本轮没有门禁通过的协处理器 bitstream 或实板证据，当前修复的综合实现与板上状态保持 UNVERIFIED。
 
 ## 本次例外与收尾理解题
 
