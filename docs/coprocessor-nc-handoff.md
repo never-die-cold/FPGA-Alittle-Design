@@ -8,27 +8,31 @@
 | 状态 | 结论 | 证据 / 缺口 |
 |:---|:---|:---|
 | 仿真跑通 | **PASS** | 行为级全回归；BRAM 模式 pattern/zero 各 73,795 元素逐项一致；延迟边界 PASS |
-| 综合实现通过 | **UNVERIFIED** | latch/check_timing/时序/资源/DRC 已过；CDC allowlist 解析与 FIFO 修复待 JL 复跑 |
-| 板上跑通 | **UNVERIFIED** | 无本轮 bitstream 下载、结果读取或稳定性记录；由 NC 现场验证 |
+| 综合实现通过 | **PASS** | Vivado 2026.1 整机 40 MHz 门禁：WNS +2.498 ns、DSP 136/220、BRAM36 69/140、latch/DRC blocking 均 0；CDC allowlist 全命中 |
+| 板上跑通 | **UNVERIFIED** | 尚无本轮 bitstream 下载、结果读取或稳定性记录；由 NC 现场验证 |
 
 诊断网络不是正式训练模型，`score_q15` 是整数分数而非概率。PROVISIONAL payload 地址适配
-与整机顶层已仿真；最近一次 PS7 布局布线只因 CDC 报告解析器 FAIL，当前修复后未复跑。
-没有 JL 门禁通过的 bitstream 时，本包只能做离板交接，
-不得下载旧 bitstream 冒充本轮结果。
+与整机顶层已仿真。JL 已提供本次门禁生成的 bit/hwh；JL 门禁通过不等于板级验收，
+NC 仍须完成下载、读回与现场稳定验证，不得用旧 bitstream 冒充本次产物。
 
 ## 生成与核验交付包
 
 ```bash
 COPROCESSOR_PYTHON=sim/build/vision-venv-full/bin/python \
   bash sim/scripts/package_coprocessor_nc.sh \
-    [JL-verified.bit [JL-verified.hwh build/reports/pynq_cop_40mhz/gate_summary.txt]]
+    build/run/pynq_cop_40mhz/pynq_cop_40mhz.bit \
+    build/run/pynq_cop_40mhz/pynq_cop_40mhz.hwh \
+    build/reports/pynq_cop_40mhz/gate_summary.txt
 ```
 
 脚本会重跑 K3、生成 `dist/cop-board-gate-<commit>/` 与 `.tar.gz`，包含 `VERSION`、
 `FILES.txt`、逐文件 `SHA256SUMS`、`EXPECTED_OUTPUTS.tsv`、golden、仿真日志和源码/脚本。
-三个产物参数只能在整机 Tcl 门禁 PASS 后同时提供；此时 `VIVADO=PASS_40MHZ_WHOLE_SYSTEM`，
-`BOARD` 仍为 UNVERIFIED。NC 解包后先执行 `sha256sum -c SHA256SUMS`；`VERSION` 中 `VIVADO` 或 `BOARD` 为
-`UNVERIFIED` 是当前预期，不得手工改为 PASS。
+三个产物参数只能在整机 Tcl 门禁 PASS 后同时提供；本包应显示
+`VIVADO=PASS_2026.1_40MHZ_WHOLE_SYSTEM`，而 `BOARD=UNVERIFIED_NEEDS_NC`。
+NC 解包后先执行 `sha256sum -c SHA256SUMS`，不得手工修改 VERSION。
+
+本次源产物 SHA256：bit 为 `b499cabe3d9a54274b93c659199336d6bbcceaf4d6fb93ea152ab0f414ef7e0a`，
+hwh 为 `6a0a398b6d95ef940beb0f66c9c105547e82f3dd4f7bdbb967ac0f72564042c6`。
 
 ## 下载、启动与复位
 
@@ -37,7 +41,7 @@ COPROCESSOR_PYTHON=sim/build/vision-venv-full/bin/python \
 2. Windows 执行：
 
    ```bat
-   board\scripts\program_soc.bat dist\cop-board-gate-<commit>\payload\JL-verified.bit
+   board\scripts\program_soc.bat dist\cop-board-gate-<commit>\payload\pynq_cop_40mhz.bit
    ```
 
 3. 看到 `PROGRAM PASSED` 后按 BTN0 复位再释放；等待 MMCM 锁定与软件启动。下载成功本身不算验收。
@@ -63,15 +67,15 @@ COPROCESSOR_PYTHON=sim/build/vision-venv-full/bin/python \
 
 ## 已知限制与 OPEN
 
-- OPEN-K2-1：16×64 权重 bank、BRAM 数量/端口模式及整机布线须由 Windows Vivado 确认。
-- OPEN-FW-1：固件进入 bitstream/BRAM 初值的通路未验证；本轮只验证仿真加载，需 Windows 侧产出 bitstream。
+- OPEN-K2-1（已验证）：Windows 整机门禁已确认 BRAM36 69/140 并完成布局布线。
+- OPEN-FW-1：Windows 已生成包含重建 `cop_job.hex` 的 bitstream；BRAM 初值在实板启动仍待 NC 验证。
 - OPEN-ENV-1：`all` 已支持 riscv32/riscv64 前缀回落和无工具链 SKIP，仍需在干净环境复测依赖边界。
 - OPEN-DOC-1（已修复）：`cop_job.hex` 曾陈旧且无引用；现由 Makefile `all` 重建，并由 `firmware_e2e` 加载。
 - OPEN-BT-4：板顶候选的 16 ROI 槽已仿真，但任意 `TARGET_DESC_ADDR` 描述表尚未接入；
   当前只支持 `target_id == roi_index` 恒等映射，不能据此声称完整契约或板级验收。
-- manifest v1→影子物理 bank 与生产 PL 顶层已仿真；正式 RELEASE 参数、PS7 整机实现和板验未完成。
-- `compute` 与 `storage` 当前分开 OOC；两份报告资源相加不能替代整机实现。
-- 本轮没有门禁通过的协处理器 bitstream 或实板证据，当前修复的综合实现与板上状态保持 UNVERIFIED。
+- manifest v1→影子物理 bank 与生产 PL 顶层已仿真；正式 RELEASE 参数和板验未完成。
+- `compute` 与 `storage` OOC 历史结论保留；本次整机门禁已独立 PASS，不能反推板级通过。
+- 本轮已有门禁通过的协处理器 bitstream，但尚无实板证据；板上状态保持 UNVERIFIED。
 
 ## 本次例外与收尾理解题
 
