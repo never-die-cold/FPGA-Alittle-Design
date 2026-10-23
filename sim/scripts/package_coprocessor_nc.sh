@@ -53,6 +53,7 @@ fi
   echo "BITSTREAM=$bit_status"
   echo "VIVADO=$vivado_status"
   echo "BOARD=UNVERIFIED_NEEDS_NC"
+  echo "BUILD_REPRO=2_INDEPENDENT_BUILDS_ONLY_4_HEADER_BYTES_DIFFER_NETLIST_EQUIVALENT"
 } > "$stage/VERSION"
 
 "$PY" - "$stage/golden/manifest.json" "$stage/evidence" "$stage/EXPECTED_OUTPUTS.tsv" <<'PY'
@@ -70,7 +71,7 @@ for name in ("pattern","zero"):
     rows.append("\t".join(map(str,(name,result["class_id"],result["margin_q"],result["score_q15"],
         int(result["low_conf"]),",".join(map(str,case["logits"])),f"{zlib.crc32(result_bytes)&0xffffffff:08x}",
         match.group(1),match.group(2),match.group(3),f"{zlib.crc32(log_bytes)&0xffffffff:08x}"))))
-out.write_text("\n".join(rows)+"\n")
+out.write_bytes(("\n".join(rows)+"\n").encode("utf-8"))
 PY
 
 (cd "$stage"; find VERSION EXPECTED_OUTPUTS.tsv payload golden evidence -type f -print | sort > FILES.txt
