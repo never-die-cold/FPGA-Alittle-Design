@@ -15,7 +15,7 @@
 7. 当前目录缺 README 的标记为 `PROVENANCE GAP`；补说明时只写能核实的事实，未知处写“待核”。
 
 <!-- RUN-INDEX:START -->
-## 目录索引（123 个运行，自动生成）
+## 目录索引（124 个运行，自动生成）
 
 | 目录 | 日期 | 文件数 | 大小 | 说明 |
 |:---|:---:|---:|---:|:---|
@@ -29,6 +29,7 @@
 | `cnn-ooc-106904d01e0045089b9d1688ddce6e85` | — | 10 | 27 KB | cnn-ooc-106904d01e0045089b9d1688ddce6e85 |
 | `c01-capture-e2a602d6e0da49a2b6da072abca47c70` | — | 82 | 3.3 MB | c01-capture-e2a602d6e0da49a2b6da072abca47c70 |
 | `c01-capture-19af0b2c829447b89d442a6f4f09f8f3` | — | 78 | 2.7 MB | c01-capture-19af0b2c829447b89d442a6f4f09f8f3 |
+| `2026-10-23-cross-platform-fix-verify` | 2026-10-23 | 21 | 37 KB | 2026-10-23 跨平台门禁修复复验：8/8 离板模式全绿 |
 | `2026-10-23-board-bringup` | 2026-10-23 | 1 | 4 KB | 2026-10-23 协处理器 board bring-up：BLOCKED（交接包/板卡缺失） |
 | `2026-10-22-board-top-sync` | 2026-10-22 | 30 | 43 KB | 2026-10-22 board-top 同步：整机门禁 PASS、bit/hwh 与 Windows 复现性缺口 |
 | `2026-10-21-cop-a2-round` | 2026-10-21 | 97 | 647 KB | 2026-10-21 COP_SIM A1/A2：消费握手、一轮与异常矩阵 |

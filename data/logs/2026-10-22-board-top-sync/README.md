@@ -1,5 +1,9 @@
 # 2026-10-22 board-top 同步：整机门禁 PASS、bit/hwh 与 Windows 复现性缺口
 
+> **2026-10-23 更新**：本目录列的两个 Windows/Icarus 缺口已由 JL `23e8aef` 修复
+> （manifest 改 `write_bytes`、CDC 声明前移）；修复后 8/8 离板模式复验见
+> [2026-10-23-cross-platform-fix-verify](../2026-10-23-cross-platform-fix-verify/README.md)。
+
 > 基线：`dev/exe` @ `202c81e` + JL `origin/dev/riscv` `7c6cc40`（合并 `a315537`）。
 > 结论：JL 的 Windows Vivado 2026.1 **整机 40 MHz 门禁 PASS**，bit/hwh 与 NC 包装备好；
 > **板上仍 UNVERIFIED**。WC 复跑新离板门禁时发现 **3 个 Windows/Icarus 可复现性缺口**，

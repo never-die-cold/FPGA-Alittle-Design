@@ -1,0 +1,6 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+PASS: payload_adapter normal 36032-byte path writes 4304/147/147/147 and atomically activates shadow bank
+PASS: payload_adapter misaligned manifest rejected; active-state diff empty
+PASS: payload_adapter length mismatch rejected; active-state diff empty
+PASS: payload_adapter out-of-range write rejected; active-state diff empty; three visible error pulses
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_cop_payload_adapter.v:71: $finish called at 94616000 (1ps)

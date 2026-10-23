@@ -1,0 +1,3 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+PASS: activation_storage keeps 16 ROI slots distinct and preserves ping/pong interface
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_cop_activation_storage.v:29: $finish called at 136000 (1ps)

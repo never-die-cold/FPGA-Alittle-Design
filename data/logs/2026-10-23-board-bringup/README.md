@@ -1,5 +1,10 @@
 # 2026-10-23 协处理器 board bring-up：BLOCKED（交接包/板卡缺失）
 
+> **2026-10-23 更新**：JL 已在 `23e8aef`/`21c4e75` 修复跨平台门禁并重打
+> `cop-board-gate-21c4e751bbe8`；源码已合并到 `dev/exe`。本机仍**没有 tar 包与板卡**，
+> 因此本记录仍是 BLOCKED；复验见
+> [2026-10-23-cross-platform-fix-verify](../2026-10-23-cross-platform-fix-verify/README.md)。
+
 > 状态：**NOT RUN**。本记录只证明“尝试过、缺什么”，不包含任何板级结果；
 > 不伪造 STATUS/ERROR_CODE/RESULT_SEQ/class/margin/score/logits/温度/运行次数。
 

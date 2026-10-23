@@ -88,6 +88,15 @@
   `data/logs/2026-10-22-board-top-sync/` 留了原始日志、哈希对比和建议修复。
 - 板上仍 UNVERIFIED：bit/hwh 已备但 NC 未下载；WC 的只读预检与数据面替换仍等实板/J08。
 
+## 2026-10-23 跨平台门禁修复复验
+
+- 合并 `origin/dev/riscv` `94af6f6`（合并 `a87610c`）：`23e8aef` 把 manifest 改为
+  `write_bytes`、CDC 声明前移；NC 包从 `21c4e75` 重打（bit `7e1e3430…`）。
+- 复跑 `manifest_v1/payload_adapter/payload_network/activation_storage/pynq_top/
+  axi_lite_cdc/axis_fifo_random/firmware_e2e` → **8/8 exit 0**；WC 19/21 exit 0。
+- 证据 `data/logs/2026-10-23-cross-platform-fix-verify/`；上轮两个缺口关闭。
+- 本机仍无交接 tar 与板卡；board bring-up 仍 BLOCKED，硬件清单写进该记录。
+
 ## 明确未做
 
 - 未上板；未验证真实 MMIO/AXI/DataMover/CDC；未实现 `PynqDmaPlane`；
