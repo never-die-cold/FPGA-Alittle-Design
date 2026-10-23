@@ -20,9 +20,10 @@ validate(manifest)
 assert manifest["kind"] == "PROVISIONAL" and len(payload) == 36032
 assert hashlib.sha256(payload).hexdigest() == manifest["payload_sha256"]
 assert f"0x{zlib.crc32(payload):08x}" == manifest["crc32"]
-assert (args.output / "payload.bin.sha256").read_text().split()[0] == manifest["payload_sha256"]
+assert (args.output / "payload.bin.sha256").read_bytes().split()[0].decode() == manifest["payload_sha256"]
 manifest_text = (args.output / "manifest.json").read_bytes()
-assert (args.output / "manifest.json.sha256").read_text().split()[0] == hashlib.sha256(manifest_text).hexdigest()
+assert b"\r\n" not in manifest_text, "manifest must be LF-only on every platform"
+assert (args.output / "manifest.json.sha256").read_bytes().split()[0].decode() == hashlib.sha256(manifest_text).hexdigest()
 
 weights = load_hex(args.network_dir / "weights.hex", 128)
 sources = {"bias": load_hex(args.network_dir / "bias.hex", 4),

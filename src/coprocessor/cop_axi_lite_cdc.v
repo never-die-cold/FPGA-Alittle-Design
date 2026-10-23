@@ -15,6 +15,7 @@ module cop_axi_lite_cdc (
     reg [11:0] aw_hold,ar_hold; reg [31:0] wd_hold; reg [3:0] ws_hold;
     reg have_aw,have_w,w_busy,r_busy,w_req,r_req,w_ack_seen,r_ack_seen;
     reg [1:0] bresp_hold; reg [31:0] rdata_hold; reg [1:0] rresp_hold;
+    reg w_ack,r_ack,w_active,r_active;
     (* ASYNC_REG="TRUE", SHREG_EXTRACT="NO" *) reg wack_s1,wack_s2,rack_s1,rack_s2;
     (* ASYNC_REG="TRUE", SHREG_EXTRACT="NO" *) reg [1:0] bresp_s1,bresp_s2,rresp_s1,rresp_s2;
     (* ASYNC_REG="TRUE", SHREG_EXTRACT="NO" *) reg [31:0] rdata_s1,rdata_s2;
@@ -44,7 +45,6 @@ module cop_axi_lite_cdc (
             end else if(s_rvalid && s_rready) s_rvalid<=0;
         end
     end
-    reg w_ack,r_ack,w_active,r_active;
     (* ASYNC_REG="TRUE", SHREG_EXTRACT="NO" *) reg wreq_m1,wreq_m2,rreq_m1,rreq_m2;
     reg wreq_seen,rreq_seen;
     (* ASYNC_REG="TRUE", SHREG_EXTRACT="NO" *) reg [11:0] aw_m1,aw_m2,ar_m1,ar_m2;
