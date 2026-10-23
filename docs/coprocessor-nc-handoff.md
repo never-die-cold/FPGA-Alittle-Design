@@ -31,8 +31,9 @@ COPROCESSOR_PYTHON=sim/build/vision-venv-full/bin/python \
 `VIVADO=PASS_2026.1_40MHZ_WHOLE_SYSTEM`，而 `BOARD=UNVERIFIED_NEEDS_NC`。
 NC 解包后先执行 `sha256sum -c SHA256SUMS`，不得手工修改 VERSION。
 
-本次源产物 SHA256：bit 为 `b499cabe3d9a54274b93c659199336d6bbcceaf4d6fb93ea152ab0f414ef7e0a`，
-hwh 为 `6a0a398b6d95ef940beb0f66c9c105547e82f3dd4f7bdbb967ac0f72564042c6`。
+本次源产物 SHA256：bit 为 `7e1e34304ef71efdfe86ec3e6dbeead6ab419c741806a3334a71474746aa0b6c`，
+hwh 为 `cba4d12c58213897c0dbdafd327348ce5d4bd9d21dad6d5a469eb44bd03d799d`。
+两次独立构建仅位流文件头 4 B 不同，网表等价且门禁数字一致；旧哈希包禁止继续沿用。
 
 ## 下载、启动与复位
 

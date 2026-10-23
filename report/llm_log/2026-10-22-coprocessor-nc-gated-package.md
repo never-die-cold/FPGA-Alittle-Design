@@ -2,7 +2,9 @@
 
 > 标签：#coprocessor #NC #交付包 #SHA256 #门禁
 > 平台：Codex + JL（Windows Vivado 2026.1）｜ 模型：GPT-5
-> 相关 commit：`db8bcbc` `84f70b8` `5c4463c` `f856d58` `aa47713`
+> 相关 commit：`db8bcbc` `84f70b8` `5c4463c` `f856d58` `aa47713` `23e8aef` `21c4e75`
+
+> 2026-10-23 更新：`f856d5861db0` 包已废止；修复源码的新构建哈希不同，NC 只能使用下述新包。
 
 ## 1. 任务与初始提示词
 
@@ -36,18 +38,19 @@
 
 ## 5. 最终结论
 
-最终包：`dist/cop-board-gate-f856d5861db0/`。
+当前包：`dist/cop-board-gate-21c4e751bbe8/`。
 
-- bit SHA256：`b499cabe3d9a54274b93c659199336d6bbcceaf4d6fb93ea152ab0f414ef7e0a`
-- hwh SHA256：`6a0a398b6d95ef940beb0f66c9c105547e82f3dd4f7bdbb967ac0f72564042c6`
-- tar SHA256：`af1a343afc147bd0bb758d8c002f05e60f212d9447b87197c4102c85fd5809dc`
+- bit SHA256：`7e1e34304ef71efdfe86ec3e6dbeead6ab419c741806a3334a71474746aa0b6c`
+- hwh SHA256：`cba4d12c58213897c0dbdafd327348ce5d4bd9d21dad6d5a469eb44bd03d799d`
+- tar SHA256：`d74189b9e1db2d0b7b0d7256a280ec166be8b35868b9cb01664a277bd8e76046`
 - 包内 `sha256sum -c SHA256SUMS` 全部 OK；预期输出保持 pattern `0/0/0`、zero `2/2/258`。
 - `VERSION`：VIVADO 整机 40 MHz PASS；BOARD 仍 UNVERIFIED；JL 交付 ≠ 板级验收。
+- 两次独立构建仅位流文件头 4 B 不同，网表等价，WNS/DSP/BRAM 完全一致。
 
 NC 下载命令（解包并核验后）：
 
 ```bat
-board\scripts\program_soc.bat dist\cop-board-gate-f856d5861db0\payload\pynq_cop_40mhz.bit
+board\scripts\program_soc.bat dist\cop-board-gate-21c4e751bbe8\payload\pynq_cop_40mhz.bit
 ```
 
 ## 6. 经验沉淀

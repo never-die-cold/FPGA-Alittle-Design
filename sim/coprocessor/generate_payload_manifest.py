@@ -84,14 +84,15 @@ def main():
                 "generation_command": "bash sim/scripts/run_coprocessor_iverilog.sh manifest_v1"}
     validate(manifest)
     text = json.dumps(manifest, indent=2) + "\n"
-    (output / "manifest.json").write_text(text, encoding="utf-8")
-    (output / "payload.bin.sha256").write_text(f"{digest}  payload.bin\n", encoding="ascii")
-    (output / "manifest.json.sha256").write_text(
-        f"{hashlib.sha256(text.encode()).hexdigest()}  manifest.json\n", encoding="ascii")
+    manifest_bytes = text.encode("utf-8")
+    (output / "manifest.json").write_bytes(manifest_bytes)
+    (output / "payload.bin.sha256").write_bytes(f"{digest}  payload.bin\n".encode("ascii"))
+    (output / "manifest.json.sha256").write_bytes(
+        f"{hashlib.sha256(manifest_bytes).hexdigest()}  manifest.json\n".encode("ascii"))
     for filename, mutate in (("manifest.bad-offset.json", lambda m: m["tensors"][1].update(offset=1)),
                              ("manifest.bad-length.json", lambda m: m["tensors"][-1].update(length=36033))):
         bad = copy.deepcopy(manifest); mutate(bad)
-        (output / filename).write_text(json.dumps(bad, indent=2) + "\n", encoding="utf-8")
+        (output / filename).write_bytes((json.dumps(bad, indent=2) + "\n").encode("utf-8"))
     print(f"PASS: manifest_v1 PROVISIONAL payload bytes={len(payload)} sha256={digest} crc32={manifest['crc32']}")
 
 

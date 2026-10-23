@@ -46,12 +46,14 @@ Block RAM。8×64-bit GAP scratch 为小型 distributed RAM；参数的 16 路�
 WHS +0.035 ns、LUT 48.32%、FF 33.68%、DSP 136/220、BRAM36 69/140、DRC 0。本次唯一失败
 是旧脚本查找不存在的 `Unsafe/Unknown` 字样；位流在 `write_bitstream` 前被正确阻止。
 
-最终 Windows 复跑门禁 **PASS**：WNS +2.498 ns、DSP 136/220、BRAM36 69/140、
+修复源码经两次独立 Windows 构建复跑，门禁均 **PASS**：WNS +2.498 ns、DSP 136/220、BRAM36 69/140、
 LATCHES=0、DRC_BLOCKING=0；CDC-3=12、CDC-6=7、CDC-15=73，全部逐条命中 allowlist，
 无 Critical。产物与 SHA256：
 
-- `build/run/pynq_cop_40mhz/pynq_cop_40mhz.bit`：`b499cabe3d9a54274b93c659199336d6bbcceaf4d6fb93ea152ab0f414ef7e0a`
-- `build/run/pynq_cop_40mhz/pynq_cop_40mhz.hwh`：`6a0a398b6d95ef940beb0f66c9c105547e82f3dd4f7bdbb967ac0f72564042c6`
+- `build/run/pynq_cop_40mhz/pynq_cop_40mhz.bit`：`7e1e34304ef71efdfe86ec3e6dbeead6ab419c741806a3334a71474746aa0b6c`
+- `build/run/pynq_cop_40mhz/pynq_cop_40mhz.hwh`：`cba4d12c58213897c0dbdafd327348ce5d4bd9d21dad6d5a469eb44bd03d799d`
+
+两次位流逐字节比较仅文件头 4 B 不同，网表等价，WNS/DSP/BRAM 完全一致；NC 只使用上列新哈希。
 
 `build/reports/pynq_cop_40mhz/gate_summary.txt` 是本次数字的权威报告。JL 门禁通过只证明整机
 综合实现，不等于 NC 下载、现场稳定或板级验收；PROVISIONAL payload 也不是发布模型。
@@ -81,6 +83,10 @@ CDC-15 的结构证据：FIFO 使用带回绕位的 5-bit 二进制指针，跨�
 `tb_cop_axis_async_fifo_random` 在 `Ts:Tm=10:26,26:10,14:22,22:14` 四档，每档 257 beat
 随机 valid/ready 背压，逐 beat 断言不重复、不丢失、顺序正确。PASS 行：
 `PASS: axis_fifo_random all ratios no duplicate, loss, or reorder`。
+
+跨平台可复现规则：凡进入 SHA256/CRC 的文本产物，一律以 `write_bytes` 或等价方式显式写
+UTF-8/ASCII 与 LF，不依赖宿主换行转换；Verilog-2001 的声明必须位于首次使用之前，避免不同
+解析器或综合器产生不一致结果。
 
 ## 每个档位必看指标与判定
 
