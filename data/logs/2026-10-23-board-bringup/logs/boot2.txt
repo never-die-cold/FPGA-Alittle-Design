@@ -1,0 +1,116 @@
+﻿[[0;32m  OK  [0m] Reached target [0;1;39mSwaps[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mColdplug All udev Devices[0m.
+systemd-journald[80]: File /var/log/journal/c82cf5bcd3a14b95935d65bfb529d72d/system.journal corrupted or uncleanly shut down, renaming and replacing.
+         Starting [0;1;39mHelper to synchronize boot up for ifupdown[0m...
+[[0;32m  OK  [0m] Finished [0;1;39mLoad/Save Random Seed[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mApply Kernel Variables[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mCreate System Users[0m.
+         Starting [0;1;39mCreate Static Device Nodes in /dev[0m...
+[[0;32m  OK  [0m] Finished [0;1;39mCreate Static Device Nodes in /dev[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mPreparation for Local File Systems[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mLocal File Systems[0m.
+         Starting [0;1;39mEnable support fo???l executable binary formats[0m...
+         Starting [0;1;39mSet console font and keymap[0m...
+         Starting [0;1;39mRule-based Manage???for Device Events and Files[0m...
+[[0;32m  OK  [0m] Finished [0;1;39mEnable support fo???nal executable binary formats[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mSet console font and keymap[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mFlush Journal to Persistent Storage[0m.
+         Starting [0;1;39mCreate Volatile Files and Directories[0m...
+[[0;32m  OK  [0m] Started [0;1;39mRule-based Manager for Device Events and Files[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mCreate Volatile Files and Directories[0m.
+[[0;32m  OK  [0m] Started [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+         Starting [0;1;39mNetwork Name Resolution[0m...
+         Starting [0;1;39mNetwork Time Synchronization[0m...
+         Starting [0;1;39mRecord System Boot/Shutdown in UTMP[0m...
+[[0;32m  OK  [0m] Found device [0;1;39m/dev/ttyPS0[0m.
+zocl-drm axi:zyxclmm_drm: error -ENXIO: IRQ index 0 not found
+[[0;32m  OK  [0m] Reached target [0;1;39mHardware activated USB gadget[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mRecord System Boot/Shutdown in UTMP[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mHelper to synchronize boot up for ifupdown[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[[0;32m  OK  [0m] Started [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[[0;32m  OK  [0m] Started [0;1;39mifup for eth0[0m.
+         Starting [0;1;39mRaise network interfaces[0m...
+[[0;32m  OK  [0m] Started [0;1;39mNetwork Time Synchronization[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mSystem Initialization[0m.
+[[0;32m  OK  [0m] Started [0;1;39mresolvconf-pull-resolved.path[0m.
+[[0;32m  OK  [0m] Started [0;1;39mTrigger to poll fo???y enabled on GCP LTS non-pro)[0m.
+[[0;32m  OK  [0m] Started [0;1;39mDaily Cleanup of Temporary Directories[0m.
+[[0;32m  OK  [0m] Started [0;1;39mUbuntu Advantage Timer for running repeated jobs[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mPath Units[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mSystem Time Set[0m.
+[[0;32m  OK  [0m] Started [0;1;39mDaily apt download activities[0m.
+[[0;32m  OK  [0m] Started [0;1;39mDaily apt upgrade and clean activities[0m.
+[[0;32m  OK  [0m] Started [0;1;39mDaily dpkg database backup timer[0m.
+[[0;32m  OK  [0m] Started [0;1;39mPeriodic ext4 Onli???ata Check for All Filesystems[0m.
+[[0;32m  OK  [0m] Started [0;1;39mDiscard unused blocks once a week[0m.
+[[0;32m  OK  [0m] Started [0;1;39mDaily rotation of log files[0m.
+[[0;32m  OK  [0m] Started [0;1;39mDaily man-db regeneration[0m.
+[[0;32m  OK  [0m] Started [0;1;39mMessage of the Day[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mTimer Units[0m.
+[[0;32m  OK  [0m] Listening on [0;1;39mD-Bus System Message Bus Socket[0m.
+[[0;32m  OK  [0m] Listening on [0;1;39mUUID daemon activation socket[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mSocket Units[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mBasic System[0m.
+         Starting [0;1;39mLSB: automatic crash report generation[0m...
+         Starting [0;1;39mExecuting boot.py from the boot partition[0m...
+[[0;32m  OK  [0m] Started [0;1;39mRegular background program processing daemon[0m.
+[[0;32m  OK  [0m] Started [0;1;39mD-Bus System Message Bus[0m.
+[[0;32m  OK  [0m] Started [0;1;39mSave initial kernel messages after boot[0m.
+         Starting [0;1;39mRemove Stale Onli???t4 Metadata Check Snapshots[0m...
+         Starting [0;1;39mJupyter Notebook Server[0m...
+         Starting [0;1;39mLSB: Load kernel ???d to enable cpufreq scaling[0m...
+         Starting [0;1;39mDispatcher daemon for systemd-networkd[0m...
+         Starting [0;1;39mResize Filesystem on SD card[0m...
+         Starting [0;1;39mSystem Logging Service[0m...
+         Starting [0;1;39mUser Login Management[0m...
+[[0;32m  OK  [0m] Started [0;1;39mNetwork Name Resolution[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mResize Filesystem on SD card[0m.
+[[0;32m  OK  [0m] Started [0;1;39mSystem Logging Service[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mHost and Network Name Lookups[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[[0;32m  OK  [0m] Started [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+         Starting [0;1;39mresolvconf-pull-resolved.service[0m...
+[[0;32m  OK  [0m] Started [0;1;39mLSB: automatic crash report generation[0m.
+[[0;32m  OK  [0m] Started [0;1;39mUser Login Management[0m.
+[[0;32m  OK  [0m] Started [0;1;39mLSB: Load kernel m???ded to enable cpufreq scaling[0m.
+         Starting [0;1;39mLSB: set CPUFreq kernel parameters[0m...
+[[0;32m  OK  [0m] Finished [0;1;39mRemove Stale Onli???ext4 Metadata Check Snapshots[0m.
+[[0;32m  OK  [0m] Started [0;1;39mLSB: set CPUFreq kernel parameters[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mresolvconf-pull-resolved.service[0m.
+[[0;32m  OK  [0m] Started [0;1;39mDispatcher daemon for systemd-networkd[0m.
+[[0;32m  OK  [0m] Stopped [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[[0;32m  OK  [0m] Started [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[[0m[0;31m*     [0m] (1 of 3) A start job is running for???network interfaces (17s / 5min 8s)
+M[K[[0;32m  OK  [0m] Stopped [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[K[[0;32m  OK  [0m] Started [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[[0;1;31m*[0m[0;31m*    [0m] (1 of 3) A start job is running for???network interfaces (19s / 5min 8s)
+M[K[[0;32m  OK  [0m] Stopped [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[K[[0;32m  OK  [0m] Started [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[[0;31m*[0;1;31m*[0m[0;31m*   [0m] (1 of 3) A start job is running for???network interfaces (21s / 5min 8s)
+M[K[[0;32m  OK  [0m] Stopped [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[K[[0;32m  OK  [0m] Started [0;1;39mEntropy Daemon based on the HAVEGE algorithm[0m.
+[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] (2 of 3) A start job is running for???r Notebook Server (24s / 1min 39s)
+M[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] (2 of 3) A start job is running for???r Notebook Server (24s / 1min 39s)
+M[K[[0;32m  OK  [0m] Finished [0;1;39mRaise network interfaces[0m.
+[K[[0;32m  OK  [0m] Reached target [0;1;39mNetwork[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mNetwork is Online[0m.
+[[0;32m  OK  [0m] Started [0;1;39mISC DHCP IPv4 server[0m.
+[[0;32m  OK  [0m] Started [0;1;39mISC DHCP IPv6 server[0m.
+         Starting [0;1;39mSamba NMB Daemon[0m...
+         Starting [0;1;39mOpenBSD Secure Shell server[0m...
+         Starting [0;1;39mPermit User Sessions[0m...
+[[0;32m  OK  [0m] Started [0;1;39mUnattended Upgrades Shutdown[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mPermit User Sessions[0m.
+[[0;32m  OK  [0m] Started [0;1;39mSerial Getty on ttyPS0[0m.
+         Starting [0;1;39mSet console scheme[0m...
+[[0;32m  OK  [0m] Finished [0;1;39mSet console scheme[0m.
+
+PYNQ Linux, based on Ubuntu 22.04 pynq ttyPS0
+
+pynq login: xilinx (automatic login)
+
+Welcome to PYNQ Linux, based on Ubuntu 22.04 (GNU/Linux 6.6.10-xilinx-v2024.1-gb36799f4e960 armv7l)
+
+Last login: Tue Sep 22 11:17:24 UTC 2026 on ttyPS0
+[?2004hxilinx@pynq:~$ 

@@ -97,6 +97,20 @@
 - 证据 `data/logs/2026-10-23-cross-platform-fix-verify/`；上轮两个缺口关闭。
 - 本机仍无交接 tar 与板卡；board bring-up 仍 BLOCKED，硬件清单写进该记录。
 
+## 2026-10-23 首次上板（包已到）
+
+- 包 `cop-board-gate-21c4e751bbe8`：tar `d74189…e76046`、106/106、bit `7e1e3430…aa0b6c`、
+  hwh `cba4d12c…d799d`；`VERSION` 与 EXPECTED 相符。
+- JTAG（`xc7z020_1`）`PROGRAM PASSED` 两次；HWH 确认 `0x40000000=pl/S_AXI`。
+- 只读预检：`IP_ID=0x434F5030`、`STATUS=0x1`（每组新命令首读偶发 `0x0`）、
+  `ERROR_CODE=0`、`RESULT_SEQ=0`、无 UNCONSUMED；XADC 约 53.5–53.8 °C。
+- 首次烧写后未复位就读 AXI，命令不返回、串口无响应；用 `xsdb rst -system` 恢复，
+  重新 boot 后烧写再预检才成功。
+- 关键阻塞：板卡 boot FSBL 给 **FCLK1=142.857 MHz**（设计门禁 40 MHz），JTAG 不应用
+  bitstream 内 PS7 配置；包内无 PS payload/ROI loader，`PynqDmaPlane` 未实现。
+  因此只有只读预检，没有 pattern/zero 推理，`BOARD=UNVERIFIED`。
+- 证据：`data/logs/2026-10-23-board-bringup/`。
+
 ## 明确未做
 
 - 未上板；未验证真实 MMIO/AXI/DataMover/CDC；未实现 `PynqDmaPlane`；

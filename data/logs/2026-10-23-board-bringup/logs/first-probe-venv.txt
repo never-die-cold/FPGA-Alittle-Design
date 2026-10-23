@@ -1,0 +1,12 @@
+﻿sudo -n /usr/local/share/pynq-venv/bin/python3 -c "import pynq; print('PYNQ',pynq.__version__); from pynq import MMIO; m=MMIO(0x40000000,0x1000); s=m.read(0x10); print('IP_ID',hex(m.read(0)),'STATUS',hex(s),'ERROR_CODE',m.read(0x14),'RESULT_SEQ',m.read(0x7c)); print('ACCEPTED',(s>>11)&1,'UNCONSUMED',(s>>12)&1,'DONE',(s>>2)&1,'ERROR',(s>>3)&1,'TIMEOUT',(s>>4)&1,'BUSY',(s>>1)&1)"
+[?2004lPYNQ 3.1
+/home/xilinx/pynq/pl_server/device.py:56: UserWarning: No devices found, is the XRT environment sourced?
+  warnings.warn(
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/home/xilinx/pynq/mmio.py", line 61, in __init__
+    device = Device.active_device
+  File "/home/xilinx/pynq/pl_server/device.py", line 71, in active_device
+    raise RuntimeError("No Devices Found")
+RuntimeError: No Devices Found
+

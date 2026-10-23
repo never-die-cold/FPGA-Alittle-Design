@@ -1,0 +1,76 @@
+{
+  "sidecar_hash": "d74189b9e1db2d0b7b0d7256a280ec166be8b35868b9cb01664a277bd8e76046",
+  "tar_hash": "d74189b9e1db2d0b7b0d7256a280ec166be8b35868b9cb01664a277bd8e76046",
+  "tar_hash_match": true,
+  "files_checked": 106,
+  "files_ok": 106,
+  "files_failed": [],
+  "memranges": [
+    {
+      "instance": "",
+      "base": "0x00000000",
+      "high": "0x1FFFFFFF",
+      "type": "MEMORY"
+    },
+    {
+      "instance": "",
+      "base": "0x40000000",
+      "high": "0x40000FFF",
+      "type": "REGISTER"
+    },
+    {
+      "instance": "",
+      "base": "0x40010000",
+      "high": "0x4001FFFF",
+      "type": "REGISTER"
+    },
+    {
+      "instance": "",
+      "base": "0x40020000",
+      "high": "0x4002FFFF",
+      "type": "REGISTER"
+    }
+  ],
+  "model_files": [
+    "payload\\provisional-model\\manifest.bad-length.json",
+    "payload\\provisional-model\\manifest.bad-offset.json",
+    "payload\\provisional-model\\manifest.json",
+    "payload\\provisional-model\\manifest.json.sha256",
+    "payload\\provisional-model\\payload.bin",
+    "payload\\provisional-model\\payload.bin.sha256",
+    "payload\\provisional-model\\j02-network\\bias.hex",
+    "payload\\provisional-model\\j02-network\\cases.txt",
+    "payload\\provisional-model\\j02-network\\manifest.json",
+    "payload\\provisional-model\\j02-network\\multipliers.hex",
+    "payload\\provisional-model\\j02-network\\shifts.hex",
+    "payload\\provisional-model\\j02-network\\weights.hex",
+    "payload\\provisional-model\\j02-network\\pattern\\conv1.hex",
+    "payload\\provisional-model\\j02-network\\pattern\\conv2.hex",
+    "payload\\provisional-model\\j02-network\\pattern\\conv3.hex",
+    "payload\\provisional-model\\j02-network\\pattern\\conv4.hex",
+    "payload\\provisional-model\\j02-network\\pattern\\gap.hex",
+    "payload\\provisional-model\\j02-network\\pattern\\input.hex",
+    "payload\\provisional-model\\j02-network\\pattern\\logits.hex",
+    "payload\\provisional-model\\j02-network\\pattern\\result.txt",
+    "payload\\provisional-model\\j02-network\\zero\\conv1.hex",
+    "payload\\provisional-model\\j02-network\\zero\\conv2.hex",
+    "payload\\provisional-model\\j02-network\\zero\\conv3.hex",
+    "payload\\provisional-model\\j02-network\\zero\\conv4.hex",
+    "payload\\provisional-model\\j02-network\\zero\\gap.hex",
+    "payload\\provisional-model\\j02-network\\zero\\input.hex",
+    "payload\\provisional-model\\j02-network\\zero\\logits.hex",
+    "payload\\provisional-model\\j02-network\\zero\\result.txt"
+  ],
+  "board_files": [
+    "payload\\board\\scripts\\program_soc.bat",
+    "payload\\board\\scripts\\program_soc.tcl"
+  ],
+  "version": [
+    "VERSION=cop-board-gate-21c4e751bbe8",
+    "GIT_COMMIT=21c4e751bbe8e011095754ae0aad73b39bb831b2",
+    "BITSTREAM=JL_GATE_PASSED_UNVERIFIED_ON_BOARD",
+    "VIVADO=PASS_2026.1_40MHZ_WHOLE_SYSTEM",
+    "BOARD=UNVERIFIED_NEEDS_NC",
+    "BUILD_REPRO=2_INDEPENDENT_BUILDS_ONLY_4_HEADER_BYTES_DIFFER_NETLIST_EQUIVALENT"
+  ]
+}

@@ -136,8 +136,10 @@ dma.load_model(addr, payload) / load_rois(addr, rois, stride) / load_descriptors
 | 中 | `ERROR_CODE` 数值 | RTL 用 `1=TASK_ERROR/12=ABORTED/13=WATCHDOG`；C03 §14 未逐值列出 | JL 把数值写进 C03/共用头文件；PS 目前只做诊断映射 |
 | 中 | manifest v1 / PROVISIONAL payload | PS 的 `MODEL_ID/WEIGHT_CRC32/WEIGHT_BYTES` 必须来自 [manifest v1](coprocessor-manifest-v1.md)；当前 sim 用占位 payload | J08 把 manifest payload 交给 PS 数据面；正式 RELEASE 参数未到（J05/J06） |
 | 中 | `OPEN-BT-4` 描述表 | 板顶候选只支持 `target_id==roi_index` 恒等映射；本引擎描述符正是 identity，兼容 | 任意 `TARGET_DESC_ADDR` 表未接；关闭前不得声称完整契约 |
-| 中 | Windows Icarus 可复现性 | `manifest_v1` 在 Windows 因 manifest CRLF/sidecar LF 哈希失败；`pynq_top`/`axi_lite_cdc` 因 `w_ack/r_ack` 先用后声明在 Icarus 13 失败（Vivado PASS 不受影响） | JL 修生成器 `newline="\n"` 与 CDC 声明位置；否则 Windows 一键 Icarus/NC 打包失败 |
-| 中 | 板上交付 | Windows 整机 40 MHz 门禁 PASS，bit/hwh 与 NC 包已备；`BOARD=UNVERIFIED` | NC 下载后 WC 先跑 `cop_board_preflight.py`，再换数据面跑一轮 |
+| 中 | Windows Icarus 可复现性 | 已由 JL `23e8aef` 修复（manifest `write_bytes`、CDC 声明前移）；8/8 board-top 模式复验 exit 0 | 无需 WC 动作 |
+| 中 | 板上交付 | 2026-10-23：包 tar/106/bit/hwh 全验、JTAG PROGRAM PASSED、只读预检 `IP_ID=0x434F5030`、`STATUS=0x1`（首读偶发 0x0）、`ERROR_CODE=0`、`RESULT_SEQ=0`、无 UNCONSUMED | 见下两行阻塞；仍未做推理 |
+| **高** | 板上 FCLK/启动镜像 | 板卡 boot FSBL/base overlay 给 **FCLK1=142.857 MHz**，设计门禁要求 **40 MHz**；JTAG 烧 `.bit` 不应用 bitstream 内的 PS7 配置；首读 `STATUS=0x0` 疑与超频/首访问有关 | JL/NC 提供匹配的 `boot.bin`/FSBL 或确认的 FCLK1=40 设置流程；修正前不得称 40 MHz 板级通过 |
+| **高** | payload/ROI loader | 包内有 `payload/provisional-model/{payload.bin,manifest.json,...}` 与 golden，但没有 PS 侧 DMA/GPIO 装载脚本；`PynqDmaPlane` 仍未实现 | J08 loader 或等效工具；否则只能做只读预检，不能产出 pattern/zero 结果 |
 | 中 | `VERSION/CAPABILITY` | 仍读 0（OPEN-9）；PS 不做版本/能力协商 | 冻结取值/位图 |
 | 中 | 描述符 flags 位 | C03 只说“至少含 touch_border/invalid_roi”，未冻结位号；PS/sim 暂用 bit0/bit1（sim-only） | JL 冻结位号并写进 C02/C03 |
 | 中 | 结果 DMA / target_id | OPEN-2：索引窗可读，`RESULT_ADDR` DMA 未实现；索引窗的 target_id 已够 PS 关联 | J08 提供 DMA 后，PS 可切换到 16 B 结果区，仍需 target_id 二次关联 |

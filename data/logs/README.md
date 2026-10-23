@@ -30,7 +30,7 @@
 | `c01-capture-e2a602d6e0da49a2b6da072abca47c70` | — | 82 | 3.3 MB | c01-capture-e2a602d6e0da49a2b6da072abca47c70 |
 | `c01-capture-19af0b2c829447b89d442a6f4f09f8f3` | — | 78 | 2.7 MB | c01-capture-19af0b2c829447b89d442a6f4f09f8f3 |
 | `2026-10-23-cross-platform-fix-verify` | 2026-10-23 | 21 | 37 KB | 2026-10-23 跨平台门禁修复复验：8/8 离板模式全绿 |
-| `2026-10-23-board-bringup` | 2026-10-23 | 4 | 13 KB | 2026-10-23 协处理器 board bring-up：PARTIALLY READY（板卡/串口/JTAG OK；交接包缺失） |
+| `2026-10-23-board-bringup` | 2026-10-23 | 18 | 49 KB | 2026-10-23 协处理器首次上板：包/烧写/只读预检（PARTIAL；FCLK/loader 阻塞） |
 | `2026-10-22-board-top-sync` | 2026-10-22 | 30 | 43 KB | 2026-10-22 board-top 同步：整机门禁 PASS、bit/hwh 与 Windows 复现性缺口 |
 | `2026-10-21-cop-a2-round` | 2026-10-21 | 97 | 647 KB | 2026-10-21 COP_SIM A1/A2：消费握手、一轮与异常矩阵 |
 | `2026-10-21-board-gate-sync` | 2026-10-21 | 21 | 32 KB | 2026-10-21 board-gate 同步：K4/K5、固件 E2E 与真接口控制面 |
