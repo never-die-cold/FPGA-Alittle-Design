@@ -1,0 +1,35 @@
+﻿echo MARK3; dmesg 2>/dev/null | grep -i -E 'fpga|devcfg|bitstream' | tail -15; echo ---FILES---; find /home/xilinx /lib/firmware -maxdepth 3 \( -name '*.bit' -o -name '*.hwh' \) 2>/dev/null | head -30; echo ---TEMP---; cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null; echo ---PYNQ---; python3 -c 'import pynq; print(pynq.__version__)' 2>&1; echo END3
+[?2004lMARK3
+[    1.398070] FPGA manager framework
+[   40.232622] fpga_manager fpga0: Xilinx Zynq FPGA Manager registered
+[   40.370690] of-fpga-region fpga-region: FPGA Region probed
+[   99.400976] fpga_manager fpga0: writing vision.bin to Xilinx Zynq FPGA Manager
+[   99.600252] [drm] bitstream 9101c6be-ee56-2718-e19b-8e5299bf1255 locked, ref=1
+[   99.600593] [drm] bitstream 9101c6be-ee56-2718-e19b-8e5299bf1255 unlocked, ref=0
+[  126.078205] [drm] bitstream 9101c6be-ee56-2718-e19b-8e5299bf1255 locked, ref=1
+[  126.099777] [drm] bitstream 9101c6be-ee56-2718-e19b-8e5299bf1255 unlocked, ref=0
+[  128.151219] [drm] bitstream 9101c6be-ee56-2718-e19b-8e5299bf1255 locked, ref=1
+[  128.152531] [drm] bitstream 9101c6be-ee56-2718-e19b-8e5299bf1255 unlocked, ref=0
+[  133.611124] fpga_manager fpga0: writing base.bin to Xilinx Zynq FPGA Manager
+[  134.039594] [drm] bitstream 5103004d-9ca5-2ab8-4efb-65f89738634b locked, ref=1
+[  134.039927] [drm] bitstream 5103004d-9ca5-2ab8-4efb-65f89738634b unlocked, ref=0
+---FILES---
+/home/xilinx/vision_m2/c01-a2a0452a39f94cfdbb0da5bcb750e5ca/capture.bit
+/home/xilinx/vision_m2/c01-a2a0452a39f94cfdbb0da5bcb750e5ca/capture.hwh
+/home/xilinx/vision_m2/vision.hwh
+/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/capture.bit
+/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/capture.hwh
+/home/xilinx/vision_m2/c01-ab75f5d26f8747418c4b6b0fd83995cd/capture.bit
+/home/xilinx/vision_m2/c01-ab75f5d26f8747418c4b6b0fd83995cd/capture.hwh
+/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/capture.bit
+/home/xilinx/vision_m2/c01-ff610bdae8ef46ce9304e531ebaf9627/capture.hwh
+/home/xilinx/vision_m2/vision.bit
+/home/xilinx/vision_m2/c01-cefc3ffab83448b1ae9e41b345276c4e/capture.bit
+/home/xilinx/vision_m2/c01-cefc3ffab83448b1ae9e41b345276c4e/capture.hwh
+/home/xilinx/vision_m2/c01-8b4d42b3653c4c31a70626bf9a971abf/capture.bit
+/home/xilinx/vision_m2/c01-8b4d42b3653c4c31a70626bf9a971abf/capture.hwh
+/home/xilinx/vision_diag/vision.hwh
+/home/xilinx/vision_diag/vision.bit
+---TEMP---
+---PYNQ---
+

@@ -1,12 +1,13 @@
-# 2026-10-23 协处理器 board bring-up：BLOCKED（交接包/板卡缺失）
+# 2026-10-23 协处理器 board bring-up：PARTIALLY READY（板卡/串口/JTAG OK；交接包缺失）
 
-> **2026-10-23 更新**：JL 已在 `23e8aef`/`21c4e75` 修复跨平台门禁并重打
-> `cop-board-gate-21c4e751bbe8`；源码已合并到 `dev/exe`。本机仍**没有 tar 包与板卡**，
-> 因此本记录仍是 BLOCKED；复验见
-> [2026-10-23-cross-platform-fix-verify](../2026-10-23-cross-platform-fix-verify/README.md)。
+> **2026-10-23 更新**：JL `23e8aef`/`21c4e75` 已修复跨平台门禁并重打
+> `cop-board-gate-21c4e751bbe8`，源码已合并到 `dev/exe`（`a87610c`）。
+> 板卡现已通过 USB PROG/UART 连接：COM4 到 `xilinx@pynq:~$`，Vivado JTAG 只读探测到
+> `xc7z020_1`；当前 PL 是旧 `base.bin`。**交接 tar 仍不在本机**，因此尚未烧写/预检。
+> 修复复验见 [2026-10-23-cross-platform-fix-verify](../2026-10-23-cross-platform-fix-verify/README.md)。
 
-> 状态：**NOT RUN**。本记录只证明“尝试过、缺什么”，不包含任何板级结果；
-> 不伪造 STATUS/ERROR_CODE/RESULT_SEQ/class/margin/score/logits/温度/运行次数。
+> 状态：**板级验证 NOT RUN**；本记录不包含 STATUS/ERROR_CODE/RESULT_SEQ/推理字段，
+> 只记录环境与阻塞点。没有伪造任何板级结果。
 
 ## 1. JL 交接信息（按用户转述）
 
@@ -30,10 +31,29 @@
 | 远端分支 `dev/exe/dev/riscv/dev/vision/main` | 无该包；`dev/riscv=7c6cc40` |
 | Vivado | 已安装：`D:\vivado\2026.1\Vivado\bin\vivado.bat` |
 | `board/scripts/program_soc.bat` 默认 VIVADO | `D:\Vivado_downloads\2026.1\...`（与实机路径不一致，需 `set VIVADO=...`） |
-| 板卡网络 | 无 192.168.50.x 接口；`ping 192.168.50.99` 失败；仅 Wi-Fi 10.54.149.251 |
-| JTAG/USB | 未检测到 Xilinx/Digilent 设备；无 `hw_server`；仅有蓝牙 COM3/COM5 |
+| 板卡网络 | 无 192.168.50.x 接口；`ping 192.168.50.99` 失败；仅 Wi-Fi 10.54.149.251（改用串口 fallback） |
+| JTAG/USB | **已连接**：FTDI COM4（PROG/UART）；Vivado `hw_server` 只读探测 `arm_dap_0` + `xc7z020_1`；`HW_XC7Z020_COUNT=1` |
 
 因此：**包哈希未验、106 文件未验、未解包、未烧写、未只读预检、未提交任务、未读结果。**
+板卡、串口、JTAG 已就绪；唯一缺的是交接 tar（以及完整推理所需的数据面 loader）。
+
+## 2.1 板卡只读实测（2026-10-23，未烧写）
+
+| 项 | 结果 |
+|---|---|
+| 串口 | COM4, 115200-8N1 → `xilinx@pynq:~$`（MobaXterm 关闭后可独占；工具 `sim/scripts/serial_board.ps1`） |
+| OS | Linux `pynq 6.6.10-xilinx-v2024.1-gb36799f4e960`，armv7l |
+| PYNQ | `pynq.__version__ == 3.1` |
+| uptime / 内存 / 根分区 | up 22 min，491 MB RAM（可用 361），15G 根分区 52% |
+| FPGA manager | `operating` |
+| 当前 PL | dmesg 最后写入 `base.bin`；`/home/xilinx`/`/lib/firmware` 只有旧 `vision*.bit/hwh`，无 `pynq_cop*`/`cop-board-gate*` |
+| JTAG | `hw_probe3.tcl`：`HW_DEVICE: arm_dap_0 PART=arm_dap`、`HW_DEVICE: xc7z020_1 PART=xc7z020`；[日志](logs/jtag-probe.log) |
+| 温度 | XADC `in_temp0`：raw 2726 → **≈62.39 °C**；raw 2729 → **≈62.75 °C**（空载、烧写前；`/sys/class/thermal` 不存在） |
+| Vivado | 2026.1，`D:\vivado\2026.1\Vivado\bin\vivado.bat`；`program_soc.bat` 默认路径不符，需 `set VIVADO=...` |
+
+原始记录：[serial-inventory.txt](logs/serial-inventory.txt)、[serial-xadc.txt](logs/serial-xadc.txt)、
+[jtag-probe.log](logs/jtag-probe.log)。串口工具：`sim/scripts/serial_board.ps1`（关闭 MobaXterm 的
+COM4 会话后使用）。
 
 ## 3. 记录表（本次全部 NOT RUN）
 
@@ -41,25 +61,26 @@
 |---|---|
 | 日期 | 2026-10-23 |
 | 操作者 | WC |
-| Vivado 版本 | 2026.1（已安装，未调用） |
+| Vivado 版本 | 2026.1（JTAG 只读探测已调用；未烧写） |
 | bit SHA256 | 交接值 `7e1e3430…aa0b6c`，未在本机复核 |
 | STATUS / ERROR_CODE / RESULT_SEQ | NOT RUN |
 | pattern class/margin/score/logits | NOT RUN |
 | zero class/margin/score/logits | NOT RUN |
 | 与 EXPECTED_OUTPUTS 一致 | NOT RUN |
-| 温度 / 连续运行次数 / 首次失败原文 | NOT RUN（无板） |
+| 温度 | ≈62.4–62.8 °C（XADC 两次空载采样，烧写前） |
+| 连续运行次数 / 首次失败原文 | NOT RUN（未烧写） |
 
-## 4. 恢复条件
+## 4. 恢复条件（板卡/串口/JTAG 已就绪，只差包）
 
-1. 把 `cop-board-gate-21c4e751bbe8.tar.gz` 与 `.sha256` 放到
-   `D:\Desktop\contests\2026fpga\FPGA-Alittle-Design\sim\build\exe-wt\dist\`
-   （或给出可访问的绝对路径/URL）。
-2. 连接并上电板卡：USB JTAG（出现 Xilinx/Digilent 设备）或以太网
-   `192.168.50.99` 可 SSH；确认板卡空闲、允许烧写。
-3. 提供 Address Editor 分配的 PS AXI base（用于只读预检）。
-4. 若要跑完整推理（而不是只读预检），还需要 J08 数据面/`PynqDmaPlane` 或包内
-   等效的 payload/ROI 装载工具；当前 WC 的 `PynqDmaPlane` 仍是
-   `NotImplementedError`，只有控制面/预检就绪。
+1. **交接包**：把 `cop-board-gate-21c4e751bbe8.tar.gz` 与 `.sha256` 放到
+   `sim/build/exe-wt/dist/`，或放到 FAT32 U 盘插到本机；不需要以太网。
+2. **串口**：COM4 已可用；使用我们的脚本时请关闭 MobaXterm 的 COM4 会话（独占）。
+3. **JTAG**：已探测到 `xc7z020_1`；烧写前设
+   `set VIVADO=D:\vivado\2026.1\Vivado\bin\vivado.bat`。
+4. **基址**：解包后从 `pynq_cop_40mhz.hwh` 读 Address Editor 的 PS AXI base；
+   只读预检不猜地址。
+5. **完整推理**：还需 J08 数据面/`PynqDmaPlane` 或包内等效 payload/ROI loader；
+   当前只有控制面/预检就绪。
 
 恢复后执行顺序：
 
@@ -75,8 +96,12 @@ board\scripts\program_soc.bat dist\cop-board-gate-21c4e751bbe8\payload\pynq_cop_
 提交 → 等 ACCEPTED → 等唯一终态 → 读 RESULT_SEQ/RESULT_* → 落盘后 CONSUME；
 记录 STATUS/ERROR_CODE/RESULT_SEQ/class/margin/score/logits/温度/连续次数/首错原文。
 
+烧写后在板卡上按 BTN0 复位；串口 115200 登录 `xilinx@pynq`；用解包 `.hwh` 里的
+PS AXI base 跑只读预检。串口工具：`sim/scripts/serial_board.ps1`（先关闭 MobaXterm 的 COM4）。
+
 ## 5. 边界
 
-- 这不是板级失败，也不是板级通过；是**环境未就绪**（包与板卡均缺失）。
+- 这不是板级失败，也不是板级通过；当前是**交接包未提供 + 完整推理数据面未实现**。
+- 板卡、串口、JTAG 已实测就绪；当前 PL 是旧 `base.bin`，未加载本轮 cop 位流。
 - `BOARD` 仍为 `UNVERIFIED`；PROVISIONAL 诊断模型不是发布模型；下载成功也不等于验收。
 - 未修改任何 RTL/固件/位流；未执行烧写。
