@@ -33,6 +33,10 @@ def main():
     limited, limited_crops = inspect_frame(frame, StubClassifier(), {**order, "bolt": 1}, .8, 1)
     assert limited["decision"]["verdict"] == "RECHECK" and limited_crops == []
     assert limited["decision"]["actual"] is None and limited["target_count"] == 2
+    # 策略与能力分离（C03 §8）：能力 16 下业务策略仍可更小；超策略不分类、不截断
+    policy, policy_crops = inspect_frame(frame, StubClassifier(), {**order, "bolt": 1}, .8, 16, 1)
+    assert policy["decision"]["verdict"] == "RECHECK" and policy["decision"]["actual"] is None
+    assert policy_crops == [] and policy["parameters"]["policy_max"] == 1
     border = np.full_like(frame, 220)
     border[40:75, 0:25] = 40
     checked, _ = inspect_frame(border, StubClassifier(), {**order, "bolt": 1}, .8)

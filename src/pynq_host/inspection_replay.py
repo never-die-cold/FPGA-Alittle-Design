@@ -7,11 +7,12 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "sim/vision"))
 from localization_opencv import detect_boxes
 from roi_preprocess import preprocess, PREPROCESS_VERSION
-from inspection_rules import judge
+from inspection_rules import effective_policy, judge
 
 
-def inspect_frame(frame, classifier, order, min_score, max_targets=16):
-    empty = judge([], order, min_score, max_targets)
+def inspect_frame(frame, classifier, order, min_score, max_targets=16, policy_max=None):
+    empty = judge([], order, min_score, max_targets, policy_max)
+    policy = effective_policy(max_targets, policy_max)
     if (not isinstance(frame, np.ndarray) or frame.dtype != np.uint8
             or frame.ndim != 3 or frame.shape[2] != 3 or min(frame.shape[:2]) < 1):
         raise ValueError("frame must be nonempty uint8 BGR")
@@ -21,9 +22,10 @@ def inspect_frame(frame, classifier, order, min_score, max_targets=16):
               "width": width, "height": height, "bbox_format": "XYXY_HALF_OPEN",
               "preprocess": PREPROCESS_VERSION, "model": classifier.metadata,
               "parameters": {"min_score": min_score, "max_targets": max_targets,
+                             "policy_max": policy,
                              "color_threshold": 22, "min_area_ratio": 0.00008},
               "target_count": len(boxes), "targets": []}
-    if len(boxes) > max_targets:
+    if len(boxes) > policy:  # 策略上限（默认 10）：不启动部分 CNN、不截断放行
         result["decision"] = {**empty, "verdict": "RECHECK", "actual": None,
                               "delta": None, "missing": None, "extra": None,
                               "reasons": ["target_limit"]}
@@ -36,7 +38,7 @@ def inspect_frame(frame, classifier, order, min_score, max_targets=16):
         x0, y0, x1, y1 = box
         result["targets"].append({**prediction, "target_id": identity, "bbox": list(box),
                                   "touches_border": x0 == 0 or y0 == 0 or x1 == width or y1 == height})
-    result["decision"] = judge(result["targets"], order, min_score, max_targets)
+    result["decision"] = judge(result["targets"], order, min_score, max_targets, policy)
     return result, crops
 
 

@@ -1,0 +1,6 @@
+﻿echo POSTBOOT; uptime; cat /sys/class/fpga_manager/fpga0/state 2>/dev/null; if sudo -n true 2>/dev/null; then echo SUDO_CACHED; else echo SUDO_EXPIRED; fi; cat /sys/kernel/debug/clk/clk_summary 2>&1 | grep -E 'fclk|pl_clk' | head -10
+[?2004lPOSTBOOT
+ 12:17:47 up 1 min,  1 user,  load average: 4.43, 1.28, 0.44
+unknown
+SUDO_EXPIRED
+[?2004hxilinx@pynq:~$ 

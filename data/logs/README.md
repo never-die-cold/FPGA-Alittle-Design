@@ -15,7 +15,7 @@
 7. 当前目录缺 README 的标记为 `PROVENANCE GAP`；补说明时只写能核实的事实，未知处写“待核”。
 
 <!-- RUN-INDEX:START -->
-## 目录索引（118 个运行，自动生成）
+## 目录索引（131 个运行，自动生成）
 
 | 目录 | 日期 | 文件数 | 大小 | 说明 |
 |:---|:---:|---:|---:|:---|
@@ -29,8 +29,21 @@
 | `cnn-ooc-106904d01e0045089b9d1688ddce6e85` | — | 10 | 27 KB | cnn-ooc-106904d01e0045089b9d1688ddce6e85 |
 | `c01-capture-e2a602d6e0da49a2b6da072abca47c70` | — | 83 | 3.3 MB | c01-capture-e2a602d6e0da49a2b6da072abca47c70 |
 | `c01-capture-19af0b2c829447b89d442a6f4f09f8f3` | — | 79 | 2.7 MB | c01-capture-19af0b2c829447b89d442a6f4f09f8f3 |
+| `2026-10-24-merge-review` | 2026-10-24 | 20 | 378 KB | PR #87 合并候选复核与 NC 取证归档 |
+| `2026-10-23-cross-platform-fix-verify` | 2026-10-23 | 21 | 37 KB | 2026-10-23 跨平台门禁修复复验：8/8 离板模式全绿 |
+| `2026-10-23-board-bringup` | 2026-10-23 | 18 | 49 KB | 2026-10-23 协处理器首次上板：包/烧写/只读预检（PARTIAL；FCLK/loader 阻塞） |
+| `2026-10-22-board-top-sync` | 2026-10-22 | 30 | 43 KB | 2026-10-22 board-top 同步：整机门禁 PASS、bit/hwh 与 Windows 复现性缺口 |
+| `2026-10-21-cop-a2-round` | 2026-10-21 | 97 | 647 KB | 2026-10-21 COP_SIM A1/A2：消费握手、一轮与异常矩阵 |
+| `2026-10-21-board-gate-sync` | 2026-10-21 | 21 | 32 KB | 2026-10-21 board-gate 同步：K4/K5、固件 E2E 与真接口控制面 |
 | `2026-10-20-repo-hygiene` | 2026-10-20 | 5 | 9 KB | 根目录生成物归位与卫生检查修复 |
 | `2026-10-20-pr-merge-sync` | 2026-10-20 | 9 | 134 KB | PR #86 合并前验证与三人分支同步 |
+| `2026-10-20-nc-ring-prep` | 2026-10-20 | 1 | 6 KB | NC ring / EXE 离板交接卡 |
+| `2026-10-20-nc-preflight` | 2026-10-20 | 1 | 8 KB | NC 离板文件准备核查 |
+| `2026-10-20-nc-n02-prep` | 2026-10-20 | 3 | 18 KB | NC N02 操作卡：离板准备，未签实测 |
+| `2026-10-20-nc-camera-recovery` | 2026-10-20 | 4 | 71 KB | NC Raspberry Pi camera recovery probes |
+| `2026-10-20-nc-camera-recheck` | 2026-10-20 | 4 | 14 KB | 相机多轮重启复查：枚举与独占拍照（2026-10-20） |
+| `2026-10-20-nc-board` | 2026-10-20 | 4 | 412 KB | NC 本轮成果与相机故障记录（2026-10-20） |
+| `2026-10-20-cop-sim-round` | 2026-10-20 | 91 | 642 KB | 2026-10-20 COP_SIM：服务 + EXE 一轮与异常矩阵 |
 | `2026-10-19-worktree-inventory` | 2026-10-19 | 33 | 6.4 MB | Worktree 与大缓存清理前抢救记录（2026-10-19） |
 | `2026-10-19-j04-closeout` | 2026-10-19 | 20 | 124 KB | J04 离板冒烟证据（JL Linux + Windows 复跑） |
 | `2026-10-19-deepseek-independent-review` | 2026-10-19 | 7 | 4 KB | DeepSeek 工作结果独立轻量核查 |

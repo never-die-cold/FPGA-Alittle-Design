@@ -1,0 +1,4 @@
+﻿sudo -n python3 -c "import mmap,os,struct; fd=os.open('/dev/mem',os.O_RDONLY|os.O_SYNC); m=mmap.mmap(fd,0x1000,mmap.MAP_SHARED,mmap.PROT_READ,offset=0x40000000); rd=lambda o: struct.unpack('<I',m[o:o+4])[0]; s=rd(0x10); print('IP_ID',hex(rd(0)),'STATUS',hex(s),'ERROR_CODE',rd(0x14),'RESULT_SEQ',rd(0x7c)); print('ACCEPTED',(s>>11)&1,'UNCONSUMED',(s>>12)&1,'DONE',(s>>2)&1,'ERROR',(s>>3)&1,'TIMEOUT',(s>>4)&1,'BUSY',(s>>1)&1)"
+[?2004lIP_ID 0x434f5030 STATUS 0x1 ERROR_CODE 0 RESULT_SEQ 0
+ACCEPTED 0 UNCONSUMED 0 DONE 0 ERROR 0 TIMEOUT 0 BUSY 0
+[?2004hxilinx@pynq:~$ 

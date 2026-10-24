@@ -47,11 +47,12 @@ module cop_top #(
 );
     wire core_request,mailbox_pending,command_valid,command_done;
     wire [11:0] core_offset,command_offset; wire [31:0] core_data,command_data;
-    wire done_status,error_status,timeout_status,result_valid_status;
+    wire accepted_status,done_status,error_status,timeout_status,result_valid_status,unconsumed_status;
+    wire [31:0] error_code_status;
     wire cfg_valid,loader_done,loader_error,loader_short,dma_busy;
     wire model_crc_error;
     wire start_command,abort_command,soft_reset_command;
-    wire task_ready,task_busy,task_done,task_error,task_timeout;
+    wire task_ready,task_busy,task_accepted,task_done,task_error,task_timeout;
     wire engine_ready,engine_busy,engine_done,engine_error,engine_start;
     wire [2:0] engine_error_layer; wire [31:0] engine_cycles;
     wire [1:0] engine_class; wire [7:0] engine_margin;
@@ -67,7 +68,8 @@ module cop_top #(
     wire [31:0] config_read_data;
     wire ps_ctrl_access=ps_write_offset==12'h00c || ps_write_offset==12'h06c;
     wire ps_ctrl_allowed=(ps_write_offset==12'h00c && ps_write_strb[0] &&
-        |ps_write_data[2:1] && !(ps_write_data[0] || |ps_write_data[7:3])) ||
+        ((|ps_write_data[2:1] && !(ps_write_data[0] || |ps_write_data[31:3])) ||
+         (ps_write_data==32'h40 && unconsumed_status && !task_busy))) ||
         (ps_write_offset==12'h06c && ps_write_strb[0] && ps_write_data[7:4]==0);
     wire ps_ctrl_valid=ps_write_valid && ps_ctrl_access && ps_ctrl_allowed && !command_valid;
     assign ps_write_done=ps_ctrl_access ? ps_write_valid : config_write_done;
@@ -90,13 +92,15 @@ module cop_top #(
     cop_ctrl_regs regs(.clk(cop_clk),.rst_n(rst_n),.write_valid_i(command_valid || ps_ctrl_valid),
         .write_offset_i(command_valid ? command_offset : ps_write_offset),
         .write_data_i(command_valid ? command_data : ps_write_data),.task_busy_i(task_busy),
-        .task_done_i(task_done),.task_error_i(task_error || loader_error || model_crc_error),
+        .task_accepted_i(task_accepted),.task_done_i(task_done),
+        .task_error_i(task_error || loader_error || model_crc_error),
         .task_timeout_i(task_timeout),
-        .ready_i(task_ready),.cfg_valid_i(cfg_valid),.model_valid_i(model_valid),
+        .cfg_valid_i(cfg_valid),.model_valid_i(model_valid),
         .dma_busy_i(dma_busy),.irq_pending_i(irq_pending_i),.start_pulse_o(start_command),
         .abort_pulse_o(abort_command),.soft_reset_pulse_o(soft_reset_command),
-        .write_done_o(command_done),.done_o(done_status),.error_o(error_status),
+        .write_done_o(command_done),.accepted_o(accepted_status),.done_o(done_status),.error_o(error_status),
         .timeout_o(timeout_status),.result_valid_o(result_valid_status),.result_index_o(result_index_o),
+        .error_code_o(error_code_status),.unconsumed_o(unconsumed_status),
         .fw_counts_o(fw_counts_o),.fw_decision_o(fw_decision_o),.status_o(status_o));
     cop_axi_lite_frontend axi(.clk(cop_clk),.rst_n(rst_n),.s_awaddr_i(s_axi_awaddr_i),
         .s_awvalid_i(s_axi_awvalid_i),.s_awready_o(s_axi_awready_o),.s_wdata_i(s_axi_wdata_i),
@@ -121,7 +125,8 @@ module cop_top #(
         ps_read_error=0; ps_read_data=0;
         case(ps_read_offset)
             12'h000: ps_read_data=32'h434f5030; 12'h004: ps_read_data=0;
-            12'h008: ps_read_data=0; 12'h010: ps_read_data=status_o; 12'h014: ps_read_data=0;
+            12'h008: ps_read_data=0; 12'h010: ps_read_data=status_o;
+            12'h014: ps_read_data=error_code_status;
             12'h018,12'h01c,12'h020,12'h024,12'h028,12'h02c,12'h030,12'h034,
             12'h038,12'h03c,12'h040,12'h044,12'h048,12'h04c,12'h050,12'h054,
             12'h058,12'h05c,12'h060,12'h064: ps_read_data=config_read_data;
@@ -150,6 +155,7 @@ module cop_top #(
         .result_class_i(engine_class),.result_margin_i(engine_margin),.result_score_i(engine_score),
         .result_low_conf_i(engine_low_conf),.result_logits_i(engine_logits),
         .result_cycles_i(engine_cycles),.ready_o(task_ready),.busy_o(task_busy),
+        .accepted_pulse_o(task_accepted),
         .done_pulse_o(task_done),.error_pulse_o(task_error),.timeout_pulse_o(task_timeout),
         .engine_start_o(engine_start),.result_write_o(result_write_o),
         .result_index_o(task_result_index_o),.result_seq_o(result_seq_o),.result_data_o(result_data_o));

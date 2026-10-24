@@ -7,6 +7,15 @@ FW="$ROOT/src/riscv_fw"
 OUT="$ROOT/sim/build/firmware-rules"
 CROSS="${RISCV_CROSS:-riscv32-unknown-elf-}"
 PY="${COPROCESSOR_PYTHON:-${VISION_PYTHON:-python}}"
+if ! command -v "${CROSS}gcc" >/dev/null 2>&1 ||
+   ! command -v "${CROSS}objdump" >/dev/null 2>&1; then
+    CROSS=riscv64-unknown-elf-
+    if ! command -v "${CROSS}gcc" >/dev/null 2>&1 ||
+       ! command -v "${CROSS}objdump" >/dev/null 2>&1; then
+        echo "SKIP: firmware rules require riscv32-unknown-elf- or riscv64-unknown-elf- gcc/objdump"
+        exit 0
+    fi
+fi
 mkdir -p "$OUT"
 
 rm -f "$FW/cop_job.dis"   # 先删掉，避免上一轮失败留下的空文件被 make 当成"最新"

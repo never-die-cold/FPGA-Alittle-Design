@@ -1,0 +1,10 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+PASS: full diagnostic integer network golden {'pattern': {'class_id': 0, 'margin_q': 0, 'score_q15': 0, 'low_conf': True}, 'zero': {'class_id': 2, 'margin_q': 2, 'score_q15': 258, 'low_conf': True}}
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/coprocessor/cop_config_regs.v:39: warning: @* is sensitive to all 20 words in array 'shadow'.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/coprocessor/cop_top.v:134: warning: @* is sensitive to all 16 words in array 'result_mem'.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/coprocessor/cop_top.v:135: warning: @* is sensitive to all 16 words in array 'result_mem'.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/coprocessor/cop_top.v:136: warning: @* is sensitive to all 16 words in array 'result_mem'.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/coprocessor/cop_top.v:137: warning: @* is sensitive to all 16 words in array 'result_mem'.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/coprocessor/cop_top.v:138: warning: @* is sensitive to all 16 words in array 'result_mem'.
+PASS: cop_top AXI/J02 result, DMA error, ABORT/SOFT_RESET and CFG_VALID revocation
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_cop_top.v:138: $finish called at 5738314000 (1ps)

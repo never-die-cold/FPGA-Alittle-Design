@@ -8,10 +8,22 @@ PY="${COPROCESSOR_PYTHON:-${VISION_PYTHON:-python3}}"
 if ! command -v "$PY" >/dev/null 2>&1 || ! "$PY" -c 'import sys' >/dev/null 2>&1; then
     PY=python
 fi
-CROSS="${RISCV_CROSS:-riscv32-unknown-elf-}"
-if ! command -v "${CROSS}gcc" >/dev/null 2>&1 && command -v riscv64-unknown-elf-gcc >/dev/null 2>&1; then
-    CROSS=riscv64-unknown-elf-
+if [[ "$PY" == */* ]]; then
+    PY="$(cd "$(dirname "$PY")" && pwd)/$(basename "$PY")"
 fi
+CROSS="${RISCV_CROSS:-riscv32-unknown-elf-}"
+TOOLCHAIN_AVAILABLE=1
+if ! command -v "${CROSS}gcc" >/dev/null 2>&1 ||
+   ! command -v "${CROSS}objdump" >/dev/null 2>&1 ||
+   ! command -v "${CROSS}objcopy" >/dev/null 2>&1; then
+    CROSS=riscv64-unknown-elf-
+    if ! command -v "${CROSS}gcc" >/dev/null 2>&1 ||
+       ! command -v "${CROSS}objdump" >/dev/null 2>&1 ||
+       ! command -v "${CROSS}objcopy" >/dev/null 2>&1; then
+        TOOLCHAIN_AVAILABLE=0
+    fi
+fi
+export RISCV_CROSS="$CROSS"
 VECTORS="$BUILD/arithmetic-vectors"
 "$PY" "$ROOT/sim/coprocessor/generate_arithmetic_vectors.py" --output "$VECTORS"
 run_test() {
@@ -39,21 +51,54 @@ run_convolution() {
     done < "$dir/cases.txt"
 }
 run_network() {
-    local dir="$BUILD/network-vectors" name
+    local dir="$BUILD/network-vectors" name mode="${1:-}"
+    local vvp="$BUILD/cnn_sequencer.vvp" prefix="network"
     "$PY" "$ROOT/sim/coprocessor/generate_network_vectors.py" --output "$dir"
-    iverilog -g2001 -Wall -s tb_cnn_sequencer -o "$BUILD/cnn_sequencer.vvp" \
-        "$ROOT/sim/coprocessor/tb_cnn_sequencer.v" "$ROOT"/src/coprocessor/*.v
+    if [ "$mode" = bram ]; then
+        vvp="$BUILD/cnn_bram.vvp"; prefix="network_bram"
+        iverilog -g2001 -Wall -s tb_cnn_sequencer -P tb_cnn_sequencer.USE_BRAM=1 -o "$vvp" \
+            "$ROOT/sim/coprocessor/tb_cnn_sequencer.v" "$ROOT"/src/coprocessor/*.v
+    else
+        iverilog -g2001 -Wall -s tb_cnn_sequencer -o "$vvp" \
+            "$ROOT/sim/coprocessor/tb_cnn_sequencer.v" "$ROOT"/src/coprocessor/*.v
+    fi
     while IFS= read -r name; do
-        if [ "${1:-}" = watchdog ]; then
-            vision_run_checked "$BUILD/watchdog_network.log" vvp "$BUILD/cnn_sequencer.vvp" "+model=$dir" "+case=$dir/$name" +watchdog_only
+        if [ "$mode" = watchdog ]; then
+            vision_run_checked "$BUILD/watchdog_network.log" vvp "$vvp" "+model=$dir" "+case=$dir/$name" +watchdog_only
             break
         fi
-        if [ "$name" = pattern ]; then
-            vision_run_checked "$BUILD/network_$name.log" vvp "$BUILD/cnn_sequencer.vvp" "+model=$dir" "+case=$dir/$name" +fault_tests
+        if [ "$name" = pattern ] && [ "$mode" != bram ]; then
+            vision_run_checked "$BUILD/${prefix}_$name.log" vvp "$vvp" "+model=$dir" "+case=$dir/$name" +fault_tests
         else
-            vision_run_checked "$BUILD/network_$name.log" vvp "$BUILD/cnn_sequencer.vvp" "+model=$dir" "+case=$dir/$name"
+            vision_run_checked "$BUILD/${prefix}_$name.log" vvp "$vvp" "+model=$dir" "+case=$dir/$name"
         fi
     done < "$dir/cases.txt"
+}
+run_manifest() {
+    local network="$BUILD/network-vectors" output="$BUILD/payload-v1"
+    "$PY" "$ROOT/sim/coprocessor/generate_network_vectors.py" --output "$network"
+    "$PY" "$ROOT/sim/coprocessor/generate_payload_manifest.py" --network-dir "$network" --output "$output"
+    "$PY" "$ROOT/sim/coprocessor/test_payload_manifest.py" --network-dir "$network" --output "$output"
+}
+run_payload_network() {
+    local network="$BUILD/network-vectors" output="$BUILD/payload-v1" crc
+    run_manifest
+    crc="$("$PY" -c 'import json,sys; print(json.load(open(sys.argv[1]))["crc32"][2:])' "$output/manifest.json")"
+    iverilog -g2001 -Wall -s tb_cnn_sequencer -P tb_cnn_sequencer.USE_BRAM=1 \
+        -P tb_cnn_sequencer.USE_PAYLOAD=1 -o "$BUILD/payload_network.vvp" \
+        "$ROOT/sim/coprocessor/tb_cnn_sequencer.v" "$ROOT"/src/coprocessor/*.v
+    vision_run_checked "$BUILD/payload_network.log" vvp "$BUILD/payload_network.vvp" \
+        "+model=$network" "+case=$network/zero" "+payload=$output/payload.bin" "+crc=$crc"
+}
+run_pynq_top() {
+    if [ "$TOOLCHAIN_AVAILABLE" -eq 0 ]; then
+        echo "SKIP: pynq_top requires a RISC-V gcc/objcopy toolchain to refresh cop_job.hex"
+        return 0
+    fi
+    make -B -C "$ROOT/src/riscv_fw" CROSS="$CROSS" PYTHON="$PY" cop_job.hex
+    iverilog -g2001 -Wall -s tb_pynq_cop_top -o "$BUILD/pynq_cop_top.vvp" \
+        "$ROOT/sim/coprocessor/tb_pynq_cop_top.v" "$ROOT"/src/riscv/*.v "$ROOT"/src/coprocessor/*.v
+    (cd "$ROOT" && vision_run_checked "$BUILD/pynq_cop_top.log" vvp "$BUILD/pynq_cop_top.vvp")
 }
 run_top() {
     local dir="$BUILD/network-vectors"
@@ -63,11 +108,28 @@ run_top() {
     vision_run_checked "$BUILD/cop_top.log" vvp "$BUILD/cop_top.vvp" "+model=$dir" "+case=$dir/zero"
 }
 run_firmware() {
+    if [ "$TOOLCHAIN_AVAILABLE" -eq 0 ]; then
+        echo "SKIP: firmware tests require riscv32-unknown-elf- or riscv64-unknown-elf- gcc/objdump/objcopy"
+        return 0
+    fi
     make -C "$ROOT/src/riscv_fw" CROSS="$CROSS" PYTHON="$PY" cop_job.elf
     gcc -std=c99 -Wall -Wextra -Werror -I"$ROOT/src/riscv_fw" \
         "$ROOT/sim/coprocessor/test_cop_work_order.c" -o "$BUILD/test_cop_work_order"
     vision_run_checked "$BUILD/cop_work_order.log" "$BUILD/test_cop_work_order"
-    vision_run_checked "$BUILD/firmware_rules.log" bash "$ROOT/sim/scripts/test_firmware_rules.sh"
+    vision_run_checked "$BUILD/firmware_rules.log" env RISCV_CROSS="$CROSS" bash "$ROOT/sim/scripts/test_firmware_rules.sh"
+}
+run_firmware_e2e() {
+    if [ "$TOOLCHAIN_AVAILABLE" -eq 0 ]; then
+        echo "SKIP: firmware_e2e requires a RISC-V gcc/objcopy toolchain"
+        return 0
+    fi
+    local dir="$BUILD/network-vectors"
+    make -C "$ROOT/src/riscv_fw" CROSS="$CROSS" PYTHON="$PY" cop_job.hex
+    "$PY" "$ROOT/sim/coprocessor/generate_network_vectors.py" --output "$dir"
+    iverilog -g2001 -Wall -s tb_cop_firmware_e2e -o "$BUILD/firmware_e2e.vvp" \
+        "$ROOT/sim/coprocessor/tb_cop_firmware_e2e.v" "$ROOT"/src/riscv/*.v \
+        "$ROOT/src/coprocessor/cop_core_mmio_gate.v" "$ROOT/src/coprocessor/cop_ctrl_regs.v"
+    (cd "$ROOT" && vision_run_checked "$BUILD/firmware_e2e.log" vvp "$BUILD/firmware_e2e.vvp" "+golden=$dir/zero/result.txt")
 }
 case "${1:-all}" in
     mac_lane) run_test mac_lane ;;
@@ -77,10 +139,16 @@ case "${1:-all}" in
     mailbox) run_test cop_cdc_mailbox ;;
     config_regs) run_test cop_config_regs ;;
     dma_loader) run_test cop_dma_loader ;;
+    payload_adapter) run_test cop_payload_adapter ;;
+    activation_storage) run_test cop_activation_storage ;;
     task_ctrl) run_test cop_task_ctrl ;;
+    decision_ab) run_test cop_ctrl_regs; run_test cop_task_ctrl ;;
     cop_top) run_top ;;
     axi_lite) run_test cop_axi_lite_frontend ;;
+    axi_lite_cdc) run_test cop_axi_lite_cdc ;;
+    axis_fifo_random) run_test cop_axis_async_fifo_random ;;
     firmware) run_firmware ;;
+    firmware_e2e) run_firmware_e2e ;;
     mac) run_test int8_mac ;;
     array) run_test mac_array ;;
     requant) run_test int8_requant ;;
@@ -88,8 +156,12 @@ case "${1:-all}" in
     logits) run_test int8_logits ;;
     conv) run_convolution ;;
     network) run_network ;;
+    bram_network) run_test cop_bram_latency; run_network bram ;;
+    manifest_v1) run_manifest ;;
+    payload_network) run_payload_network ;;
+    pynq_top) run_pynq_top ;;
     watchdog) run_convolution watchdog; run_network watchdog ;;
     pipeline) run_test mac_array_pipeline; run_test int8_requant_pipeline ;;
-    all) run_test cop_core_mmio_gate; run_test cop_ctrl_regs; run_test cop_cdc_mailbox; run_test cop_config_regs; run_test cop_dma_loader; run_test cop_task_ctrl; run_test cop_axi_lite_frontend; run_firmware; run_top; run_test mac_lane; run_test dot8; run_test int8_mac; run_test mac_array; run_test int8_requant; run_test int8_gap; run_test int8_logits; run_test mac_array_pipeline; run_test int8_requant_pipeline; run_convolution; run_network ;;
-    *) echo 'usage: run_coprocessor_iverilog.sh [mmio_gate|ctrl_regs|mailbox|config_regs|dma_loader|task_ctrl|axi_lite|firmware|cop_top|mac_lane|dot8|mac|array|requant|gap|logits|pipeline|conv|network|watchdog|all]'; exit 2 ;;
+    all) run_test cop_core_mmio_gate; run_test cop_ctrl_regs; run_test cop_cdc_mailbox; run_test cop_config_regs; run_test cop_dma_loader; run_test cop_payload_adapter; run_test cop_activation_storage; run_test cop_task_ctrl; run_test cop_axi_lite_frontend; run_test cop_axi_lite_cdc; run_test cop_axis_async_fifo_random; run_firmware; run_firmware_e2e; run_top; run_pynq_top; run_test mac_lane; run_test dot8; run_test int8_mac; run_test mac_array; run_test int8_requant; run_test int8_gap; run_test int8_logits; run_test mac_array_pipeline; run_test int8_requant_pipeline; run_test cop_bram_latency; run_payload_network; run_convolution; run_network ;;
+    *) echo 'usage: run_coprocessor_iverilog.sh [mmio_gate|ctrl_regs|mailbox|config_regs|dma_loader|payload_adapter|activation_storage|task_ctrl|decision_ab|axi_lite|axi_lite_cdc|axis_fifo_random|firmware|firmware_e2e|cop_top|pynq_top|mac_lane|dot8|mac|array|requant|gap|logits|pipeline|conv|network|bram_network|manifest_v1|payload_network|watchdog|all]'; exit 2 ;;
 esac

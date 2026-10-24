@@ -12,13 +12,14 @@ import numpy as np
 from inspection_artifacts import digest, save_bytes, save_png, load_existing
 from inspection_model import PrototypeClassifier
 from inspection_replay import inspect_frame, annotate
-from inspection_rules import judge
+from inspection_rules import effective_policy, judge
 
 
-def run(source, weights, order, output, request_id, min_score, max_targets=16, classifier=None):
+def run(source, weights, order, output, request_id, min_score, max_targets=16,
+        policy_max=None, classifier=None):
     if not isinstance(request_id, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", request_id):
         raise ValueError("request ID must contain 1-64 ASCII letters, digits, hyphens or underscores")
-    judge([], order, min_score, max_targets)
+    judge([], order, min_score, max_targets, policy_max)
     source, output = Path(source).resolve(), Path(output).resolve()
     raw = source.read_bytes()
     classifier = classifier if classifier is not None else PrototypeClassifier(weights)
@@ -29,6 +30,7 @@ def run(source, weights, order, output, request_id, min_score, max_targets=16, c
     code_paths += ["sim/vision/localization_opencv.py", "sim/vision/train_fastener_classifier.py"]
     provenance = {"source_sha256": digest(raw), "model": classifier.metadata,
                   "order": order, "min_score": min_score, "max_targets": max_targets,
+                  "policy_max": effective_policy(max_targets, policy_max),
                   "code_sha256": {name: digest((root / name).read_bytes()) for name in code_paths},
                   "runtime": {"python": platform.python_version(), "opencv": cv2.__version__,
                               "numpy": np.__version__, "torch": str(sys.modules["torch"].__version__)}}
@@ -40,7 +42,7 @@ def run(source, weights, order, output, request_id, min_score, max_targets=16, c
     if frame is None:
         raise ValueError("source file is not a decodable color image")
     start = time.perf_counter_ns()
-    result, crops = inspect_frame(frame, classifier, order, min_score, max_targets)
+    result, crops = inspect_frame(frame, classifier, order, min_score, max_targets, policy_max)
     result.update(request_id=request_id, request_fingerprint=fingerprint, provenance=provenance,
                   source_name=source.name, replay_elapsed_ms=(time.perf_counter_ns() - start) / 1e6,
                   timing_scope="localization/ROI/inference/rules; excludes load and file IO")
@@ -68,7 +70,9 @@ def main():
     parser.add_argument("--request-id", required=True)
     parser.add_argument("--order", type=int, nargs=3, required=True, metavar=("BOLT", "NUT", "WASHER"))
     parser.add_argument("--min-score", type=float, required=True, help="candidate threshold, not validated accuracy")
-    parser.add_argument("--max-targets", type=int, default=16)
+    parser.add_argument("--max-targets", type=int, default=16, help="protocol/validated capability cap (1-16)")
+    parser.add_argument("--policy-max", type=int, default=None,
+                        help="business policy cap (default 10 per C03 §8; must be <= --max-targets)")
     args = vars(parser.parse_args())
     args["order"] = dict(zip(("bolt", "nut", "washer"), args["order"]))
     try:

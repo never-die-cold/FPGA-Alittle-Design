@@ -10,9 +10,9 @@ enum {
     REG_FW_COUNTS=0x088/4, REG_FW_DECISION=0x08c/4
 };
 enum {
-    STATUS_READY=1, STATUS_DONE=4, STATUS_ERROR=8, STATUS_TIMEOUT=16,
+    STATUS_DONE=4, STATUS_ERROR=8, STATUS_TIMEOUT=16,
     STATUS_CFG_VALID=32, STATUS_MODEL_VALID=64, STATUS_RESULT_VALID=128,
-    STATUS_PENDING=1024
+    STATUS_PENDING=1024, STATUS_ACCEPTED=2048, STATUS_UNCONSUMED=4096
 };
 #define COP_POLL_LIMIT 1000000u
 
@@ -28,19 +28,6 @@ static int cop_write(unsigned int reg, uint32_t value)
         if(++guard>COP_POLL_LIMIT) return -1;
     }
     return 0;
-}
-
-static int cop_wait_ready(void)
-{
-    uint32_t status;
-    unsigned int guard=0;
-    for(;;) {
-        status=COP[REG_STATUS];
-        if(status&(STATUS_ERROR|STATUS_TIMEOUT)) return -1;
-        if((status&STATUS_READY) && (status&STATUS_CFG_VALID) &&
-           (status&STATUS_MODEL_VALID)) return 0;
-        if(++guard>COP_POLL_LIMIT) return -1;
-    }
 }
 
 int main(void)
@@ -65,11 +52,19 @@ int main(void)
     if(count>10u) {
         judged.reasons=COP_REASON_TARGET_LIMIT; goto finish;
     }
-    if(cop_wait_ready()!=0) {
+    status=COP[REG_STATUS];
+    if((status&STATUS_UNCONSUMED) || !(status&STATUS_CFG_VALID) ||
+       !(status&STATUS_MODEL_VALID)) {
         judged.reasons=COP_REASON_CONFIG; goto finish;
     }
-    if(cop_write(REG_CTRL,24u)!=0 || cop_write(REG_CTRL,1u)!=0) {
+    seq_before=COP[REG_RESULT_SEQ];
+    if(cop_write(REG_CTRL,1u)!=0) {
         judged.reasons=COP_REASON_CONFIG; goto finish;
+    }
+    status=COP[REG_STATUS]; guard=0;
+    while(!(status&STATUS_ACCEPTED)) {
+        if(++guard>COP_POLL_LIMIT) { judged.reasons=COP_REASON_INVALID; goto finish; }
+        status=COP[REG_STATUS];
     }
     status=COP[REG_STATUS]; guard=0;
     while(!(status&(STATUS_DONE|STATUS_ERROR|STATUS_TIMEOUT))) {
@@ -80,7 +75,8 @@ int main(void)
        !(status&STATUS_RESULT_VALID)) {
         judged.reasons=COP_REASON_INVALID; goto finish;
     }
-    seq_before=COP[REG_RESULT_SEQ];
+    seq=COP[REG_RESULT_SEQ];
+    if(seq!=seq_before+1u) { judged.reasons=COP_REASON_INVALID; goto finish; }
     for(index=0;index<count;index++) {
         if(cop_write(REG_RESULT_INDEX,index)!=0) { ok=0; break; }
         word=COP[REG_RESULT_META];
@@ -91,11 +87,10 @@ int main(void)
     }
     seq_after=COP[REG_RESULT_SEQ];
     status=COP[REG_STATUS];
-    if(!ok || seq_before!=seq_after || !(status&STATUS_RESULT_VALID)) {
+    if(!ok || seq!=seq_after || !(status&STATUS_RESULT_VALID)) {
         judged.reasons=COP_REASON_INVALID; goto finish;
     }
     judged=cop_judge(targets,(uint8_t)count,order);
-    seq=seq_before;
 
 finish:
     word=(uint32_t)judged.actual[0]|((uint32_t)judged.actual[1]<<8)|

@@ -59,6 +59,10 @@ NA/
 # --- 核对比 Fmax 跑分产物（正式证据归档 data/logs/2026-10-03-picorv32-compare/） ---
 build/run/
 build/reports/fmax/
+build/reports/coprocessor/
+build/reports/pynq_cop_40mhz/
+/dist/
+*.xpr
 
 # --- 仓库文档索引生成物（按需生成到 build/file-guide/，不入库） ---
 build/file-guide/

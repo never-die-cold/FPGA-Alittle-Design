@@ -1,0 +1,220 @@
+{
+ "compute_backend": "SCRIPTED bolt/nut/washer",
+ "consume": {
+  "result_seq": 1,
+  "status_after": 97,
+  "unconsumed": false
+ },
+ "decision": {
+  "actual": {
+   "bolt": 1,
+   "nut": 1,
+   "washer": 1
+  },
+  "delta": {
+   "bolt": 0,
+   "nut": 0,
+   "washer": 0
+  },
+  "expected": {
+   "bolt": 1,
+   "nut": 1,
+   "washer": 1
+  },
+  "extra": {
+   "bolt": 0,
+   "nut": 0,
+   "washer": 0
+  },
+  "missing": {
+   "bolt": 0,
+   "nut": 0,
+   "washer": 0
+  },
+  "reasons": [],
+  "verdict": "CHECK_PASS"
+ },
+ "descriptors": [
+  {
+   "bbox": [
+    160,
+    180,
+    230,
+    300
+   ],
+   "target_id": 0,
+   "touches_border": false
+  },
+  {
+   "bbox": [
+    586,
+    285,
+    715,
+    416
+   ],
+   "target_id": 1,
+   "touches_border": false
+  },
+  {
+   "bbox": [
+    940,
+    410,
+    1040,
+    490
+   ],
+   "target_id": 2,
+   "touches_border": false
+  }
+ ],
+ "driver": {
+  "accepted": true,
+  "backend": "COP_SIM",
+  "capture_id": 2,
+  "cfg_seq": 2,
+  "dma_bytes": 24603,
+  "elapsed_ms": 2.339,
+  "error_code": 0,
+  "events": [
+   {
+    "bytes": 27,
+    "crc32": 605321733,
+    "kind": "model_load",
+    "sim_reported": {
+     "bytes": 27,
+     "crc32": 605321733
+    }
+   },
+   {
+    "kind": "consume",
+    "result_seq": 0,
+    "status_after": 97,
+    "status_before": 6373
+   }
+  ],
+  "expected_seq": 1,
+  "fw": {
+   "actual": [
+    1,
+    1,
+    1
+   ],
+   "reasons": 0,
+   "reasons_names": [],
+   "result_seq": 1,
+   "verdict": "CHECK_PASS",
+   "verdict_id": 1
+  },
+  "job_id": 2,
+  "perf_cycles": 2559,
+  "polls": 1,
+  "ps_decision": {
+   "actual": {
+    "bolt": 1,
+    "nut": 1,
+    "washer": 1
+   },
+   "delta": {
+    "bolt": 0,
+    "nut": 0,
+    "washer": 0
+   },
+   "expected": {
+    "bolt": 1,
+    "nut": 1,
+    "washer": 1
+   },
+   "extra": {
+    "bolt": 0,
+    "nut": 0,
+    "washer": 0
+   },
+   "missing": {
+    "bolt": 0,
+    "nut": 0,
+    "washer": 0
+   },
+   "reasons": [],
+   "verdict": "CHECK_PASS"
+  },
+  "result_seq": 1,
+  "source_config_id": 967942156,
+  "status": 6373,
+  "targets": [
+   {
+    "class_id": 0,
+    "error": 0,
+    "logits": [
+     127,
+     129,
+     129
+    ],
+    "low_conf": 0,
+    "margin_q": 254,
+    "score_q15": 32767,
+    "valid": 1
+   },
+   {
+    "class_id": 1,
+    "error": 0,
+    "logits": [
+     129,
+     127,
+     129
+    ],
+    "low_conf": 0,
+    "margin_q": 254,
+    "score_q15": 32767,
+    "valid": 1
+   },
+   {
+    "class_id": 2,
+    "error": 0,
+    "logits": [
+     129,
+     129,
+     127
+    ],
+    "low_conf": 0,
+    "margin_q": 254,
+    "score_q15": 32767,
+    "valid": 1
+   }
+  ],
+  "unconsumed": true,
+  "work_order_rev": 2
+ },
+ "frame": {
+  "height": 720,
+  "pixel_sha256": "a60bc06a3148c33a8537f92bb56a4227cb9e62e6027b6b4a4754f994be045ac2",
+  "width": 1280
+ },
+ "kind": "cop_job",
+ "min_score": 0.8,
+ "policy_max": 10,
+ "preprocess": "scene-gray-border-padding-v1",
+ "protocol_check": "chk000002",
+ "roi_quantization": "SIM_ONLY S_input=0.0078740157",
+ "rois": [
+  {
+   "bytes_sha256": "5facf3f3fc3cb9c9f9084538295bfbd6adc3fba2a4594fad8a230be3d3933b41",
+   "index": 0,
+   "path": "cop/roi_000.bin"
+  },
+  {
+   "bytes_sha256": "380c6b13c649f9fab9680eb67ff1e5cbfb9c2441c100873852823a3ef01bf23e",
+   "index": 1,
+   "path": "cop/roi_001.bin"
+  },
+  {
+   "bytes_sha256": "46e4e5b3fe2549da0ecfcf8d067ac060b3b8fd132981043eeb66c7c3be875848",
+   "index": 2,
+   "path": "cop/roi_002.bin"
+  }
+ ],
+ "simulated": true,
+ "work_order": {
+  "bolt": 1,
+  "nut": 1,
+  "washer": 1
+ }
+}
