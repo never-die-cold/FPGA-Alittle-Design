@@ -9,11 +9,15 @@
 |:---|:---|:---|
 | 仿真跑通 | **PASS** | 行为级全回归；BRAM 模式 pattern/zero 各 73,795 元素逐项一致；延迟边界 PASS |
 | 综合实现通过 | **PASS** | Vivado 2026.1 整机 40 MHz 门禁：WNS +2.498 ns、DSP 136/220、BRAM36 69/140、latch/DRC blocking 均 0；CDC allowlist 全命中 |
-| 板上跑通 | **UNVERIFIED** | 尚无本轮 bitstream 下载、结果读取或稳定性记录；由 NC 现场验证 |
+| 板上跑通 | **UNVERIFIED** | NC 已完成 JTAG 下载和只读预检；实际 FCLK1=142.857 MHz，尚无 40 MHz 结果或稳定性证据 |
 
 诊断网络不是正式训练模型，`score_q15` 是整数分数而非概率。PROVISIONAL payload 地址适配
 与整机顶层已仿真。JL 已提供本次门禁生成的 bit/hwh；JL 门禁通过不等于板级验收，
 NC 仍须完成下载、读回与现场稳定验证，不得用旧 bitstream 冒充本次产物。
+
+继续操作前先按 [`coprocessor-board-clock-runbook.md`](coprocessor-board-clock-runbook.md)
+确认 FCLK1 实测 40 MHz；payload/GPIO/DMA 序列见
+[`coprocessor-payload-loader.md`](coprocessor-payload-loader.md)。JTAG 只配置 PL，不应用 PS7 时钟。
 
 ## 生成与核验交付包
 
@@ -22,12 +26,13 @@ COPROCESSOR_PYTHON=sim/build/vision-venv-full/bin/python \
   bash sim/scripts/package_coprocessor_nc.sh \
     build/run/pynq_cop_40mhz/pynq_cop_40mhz.bit \
     build/run/pynq_cop_40mhz/pynq_cop_40mhz.hwh \
+    build/run/pynq_cop_40mhz/pynq_cop_40mhz.xsa \
     build/reports/pynq_cop_40mhz/gate_summary.txt
 ```
 
 脚本会重跑 K3、生成 `dist/cop-board-gate-<commit>/` 与 `.tar.gz`，包含 `VERSION`、
 `FILES.txt`、逐文件 `SHA256SUMS`、`EXPECTED_OUTPUTS.tsv`、golden、仿真日志和源码/脚本。
-三个产物参数只能在整机 Tcl 门禁 PASS 后同时提供；本包应显示
+四个产物参数只能在整机 Tcl 门禁 PASS 后同时提供；本包应显示
 `VIVADO=PASS_2026.1_40MHZ_WHOLE_SYSTEM`，而 `BOARD=UNVERIFIED_NEEDS_NC`。
 NC 解包后先执行 `sha256sum -c SHA256SUMS`，不得手工修改 VERSION。
 
@@ -77,6 +82,12 @@ hwh 为 `cba4d12c58213897c0dbdafd327348ce5d4bd9d21dad6d5a469eb44bd03d799d`。
 - manifest v1→影子物理 bank 与生产 PL 顶层已仿真；正式 RELEASE 参数和板验未完成。
 - `compute` 与 `storage` OOC 历史结论保留；本次整机门禁已独立 PASS，不能反推板级通过。
 - 本轮已有门禁通过的协处理器 bitstream，但尚无实板证据；板上状态保持 UNVERIFIED。
+- OPEN-BOARD-CLK-1：NC 实测 FCLK1=142.857 MHz；40 MHz 回读及连续 20 次 STATUS 首读 `0x1`
+  尚未执行。当前把首读 `0x0` 归因于超频只是待验证假设，40 MHz 仍复现时转查复位同步。
+- OPEN-LOADER-1：当前 AXI DMA `C_SG_LENGTH_WIDTH=14`，单包上限 16,383 B，装不下
+  36,032 B payload；分包会提前 TLAST，loader 必须在 MMIO 前 fail-closed。
+- OPEN-LOADER-2：当前一次性 `cop_job` 可能在 PS 配置前以 RECHECK 退出；需兼容固件/位流提供等待
+  或可控重启后才能获得 ACCEPTED 与终态。未修前不得由 PS 越权写 START。
 
 ## 本次例外与收尾理解题
 

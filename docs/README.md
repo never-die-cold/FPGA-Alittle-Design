@@ -63,6 +63,8 @@
 | 协处理器存储规划 | [`coprocessor-storage-plan.md`](coprocessor-storage-plan.md) |
 | JL Vivado 检查清单 | [`coprocessor-vivado-checklist.md`](coprocessor-vivado-checklist.md) |
 | NC 协处理器交接 | [`coprocessor-nc-handoff.md`](coprocessor-nc-handoff.md) |
+| 协处理器板端 40 MHz 时钟 | [`coprocessor-board-clock-runbook.md`](coprocessor-board-clock-runbook.md) |
+| 协处理器最小 payload loader | [`coprocessor-payload-loader.md`](coprocessor-payload-loader.md) |
 | 仓库卫生规则 | [`repo-hygiene.md`](repo-hygiene.md) |
 | 逐文件索引（按需生成） | `python docs/file-guide/tools/generate.py --scope source --date YYYY-MM-DD` → `build/file-guide/` |
 

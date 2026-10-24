@@ -4,8 +4,8 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT"
 PY="${COPROCESSOR_PYTHON:-sim/build/vision-venv-full/bin/python}"
 if ! command -v "$PY" >/dev/null 2>&1; then PY=python3; fi
-if [ "$#" -ne 0 ] && [ "$#" -ne 1 ] && [ "$#" -ne 3 ]; then
-  echo "usage: $0 [pynq_cop_40mhz.bit [pynq_cop_40mhz.hwh gate_summary.txt]]"; exit 2
+if [ "$#" -ne 0 ] && [ "$#" -ne 1 ] && [ "$#" -ne 3 ] && [ "$#" -ne 4 ]; then
+  echo "usage: $0 [bit [hwh [xsa] gate_summary.txt]]"; exit 2
 fi
 for artifact in "$@"; do
   if [ ! -s "$artifact" ]; then echo "ERROR: artifact missing or empty: $artifact"; exit 1; fi
@@ -13,7 +13,7 @@ done
 
 # Package evidence is regenerated, never copied from an unverified handwritten table.
 COPROCESSOR_PYTHON="$PY" bash sim/scripts/run_coprocessor_iverilog.sh bram_network
-COPROCESSOR_PYTHON="$PY" bash sim/scripts/run_coprocessor_iverilog.sh manifest_v1
+COPROCESSOR_PYTHON="$PY" bash sim/scripts/run_coprocessor_iverilog.sh payload_loader
 commit="$(git rev-parse HEAD)"
 short="$(git rev-parse --short=12 HEAD)"
 version="cop-board-gate-$short"
@@ -26,9 +26,11 @@ files=(
   docs/contracts/coprocessor-integration-v0.md docs/coprocessor-wc-interface.md
   docs/contracts/coprocessor-manifest-v1.md
   docs/coprocessor-storage-plan.md docs/coprocessor-vivado-checklist.md docs/coprocessor-nc-handoff.md
+  docs/coprocessor-board-clock-runbook.md docs/coprocessor-payload-loader.md tools/cop_payload_loader.py
   src/riscv/design_v1.md src/riscv_fw/cop_job.c src/coprocessor/*.v
   sim/coprocessor/tb_cnn_sequencer.v sim/coprocessor/tb_cop_bram_latency.v
   sim/coprocessor/generate_network_vectors.py sim/scripts/run_coprocessor_iverilog.sh
+  sim/coprocessor/test_cop_payload_loader.py
   build/build_coprocessor_gate.tcl build/constraints/coprocessor_ooc.xdc
   build/constraints/coprocessor_storage_ooc.xdc build/constraints/coprocessor_board_clock.xdc
   build/build_pynq_cop_gate.tcl build/create_pynq_cop_bd.tcl build/run_pynq_cop_gate.ps1
@@ -41,10 +43,14 @@ mkdir -p "$stage/payload/provisional-model"
 cp -a sim/build/coprocessor/payload-v1/. "$stage/payload/provisional-model/"
 cp sim/build/coprocessor/network_bram_pattern.log sim/build/coprocessor/network_bram_zero.log \
    sim/build/coprocessor/cop_bram_latency.log "$stage/evidence/"
-bit_status=UNVERIFIED; vivado_status=UNVERIFIED_NEEDS_WINDOWS
+bit_status=UNVERIFIED; vivado_status=UNVERIFIED_NEEDS_WINDOWS; xsa_status=UNVERIFIED
 if [ "$#" -ge 1 ]; then cp "$1" "$stage/payload/pynq_cop_40mhz.bit"; bit_status=JL_GATE_PASSED_UNVERIFIED_ON_BOARD; fi
 if [ "$#" -eq 3 ]; then
   cp "$2" "$stage/payload/pynq_cop_40mhz.hwh"; cp "$3" "$stage/evidence/gate_summary.txt"
+  vivado_status=PASS_2026.1_40MHZ_WHOLE_SYSTEM
+elif [ "$#" -eq 4 ]; then
+  cp "$2" "$stage/payload/pynq_cop_40mhz.hwh"; cp "$3" "$stage/payload/pynq_cop_40mhz.xsa"
+  cp "$4" "$stage/evidence/gate_summary.txt"; xsa_status=JL_GATE_ARTIFACT_UNVERIFIED_ON_BOARD
   vivado_status=PASS_2026.1_40MHZ_WHOLE_SYSTEM
 fi
 {
@@ -53,6 +59,9 @@ fi
   echo "BITSTREAM=$bit_status"
   echo "VIVADO=$vivado_status"
   echo "BOARD=UNVERIFIED_NEEDS_NC"
+  echo "BOARD_CLOCK=UNVERIFIED_NEEDS_40MHZ_READBACK"
+  echo "LOADER=BLOCKED_DMA_LENGTH14_AND_FIRMWARE_BOOT_ORDER"
+  echo "XSA=$xsa_status"
   echo "BUILD_REPRO=2_INDEPENDENT_BUILDS_ONLY_4_HEADER_BYTES_DIFFER_NETLIST_EQUIVALENT"
 } > "$stage/VERSION"
 
