@@ -33,16 +33,17 @@ bit0=`start_ready`，bit1=`payload_error`。`dma_start_ps_i` 是电平采样：r
 PS 不写 `CTRL.START`；当前冻结协议规定 START 由 RISC-V 固件发起。脚本有独立 NO_ACK 与终态
 超时。pattern 预期 class/margin/score=`0/0/0`，zero 为 `2/2/258`，数值保持 J02 锚点。
 
-## 当前位流的 fail-closed 阻塞
+## 16 位 Direct Register 长度门禁
 
-当前 HWH 明示 `C_SG_LENGTH_WIDTH=14`，Direct Register MM2S 单包最大 16,383 B，小于权重
-payload 的 36,032 B。不能简单分三笔：每笔 DMA 都产生 TLAST，而 loader 会把第一笔判为短包。
-因此脚本在任何 MMIO 写之前报 `DMA_LENGTH_BLOCKED`。这是当前包不能跑 pattern/zero 的独立阻塞，
-不是 payload/CRC 错误；按本轮要求先不改 RTL/BD。
+BD 源码固定 `C_SG_LENGTH_WIDTH=16`，Direct Register MM2S 的 `MM2S_LENGTH[15:0]` 单包上限
+65,535 B，可容纳 36,032 B payload；软件只在校验 HWH 同样为 16 后，才把长度按 16 位写入
+`DMA_BASE+0x28`。旧 bit/hwh 仍是 14 位，在 Windows 整机门禁生成新产物前继续 fail-closed。
+不能分包绕过：每笔 DMA 都产生 TLAST，而 loader 会把第一笔判为短包。
 
-第二个待处理点是当前 `cop_job` 上电只检查一次配置：Python 建立 MMIO 前配置尚未就绪时，固件会
-以 RECHECK 退出，不会等待后续 payload。即使未来把 DMA 单包长度调大，也要先由 JL 提供可等待任务
-或可控重启的固件/位流；否则 loader 会如实报 `NO_ACK`，不得由 PS 越权写 START 绕过。
+`cop_job` 源码现驻留等待：`CFG_APPLIED!=0` 且 CFG_VALID（即 `CFG_APPLIED==CFG_SEQ`）、
+MODEL_VALID、DMA 空闲，并用 `DMA_BYTES==ROI_COUNT*4096` 区分 ROI 完成与前一笔权重完成；等待超时
+仍按既有 CONFIG/RECHECK 退出。旧 bit 中仍是一次性固件，必须经 Windows 门禁重建后才可升级状态；
+不得由 PS 越权写 START 绕过。
 
 ## 命令
 
@@ -52,17 +53,18 @@ sudo -E python3 payload/tools/cop_payload_loader.py run --package . --case zero 
   --measurement ./zero-measured.json --timeout 10
 ```
 
-当前第二条命令预期在零副作用预检阶段报告上述 DMA 能力阻塞。兼容位流到位后，同一 schema、
-payload 和命令继续使用；pattern 将 `--case zero` 改为 `--case pattern`。
+旧 14 位 HWH 的第二条命令会在零副作用预检阶段报宽度不符；新 16 位门禁产物到位后，同一
+schema、payload 和命令继续使用；pattern 将 `--case zero` 改为 `--case pattern`。
 
 ## 失败排查
 
 | 现象 | 含义 / 下一证据 |
 |:---|:---|
-| `DMA_LENGTH_BLOCKED` | HWH 单包长度不足；禁止分包，记录 `C_SG_LENGTH_WIDTH`，交 JL 改 BD 后重走整机门禁 |
+| `DMA_LENGTH_WIDTH_MISMATCH` | HWH 不是固定 16 位；禁止分包，核对是否仍加载旧 bit/hwh |
+| `DMA_LENGTH_BLOCKED` | 单包超过 65,535 B；禁止分包，先评审协议与 BD，不得绕过 TLAST |
 | `payload_error=1` | 提前/延后 TLAST、keep、长度或 manifest bank 适配拒绝；保存 STATUS、DMA status、DMA_BYTES |
 | `start_ready` 不置或不返回 | 请求 CDC 未受理/未应答或 start 电平未及时拉低；记录 GPIO 两通道与 DMA_BUSY 波形 |
-| `NO_ACK` | 固件没有发 START/ACCEPTED；先查固件是否在配置就绪前已退出，再查核复位与 mailbox |
+| `NO_ACK` | 固件没有发 START/ACCEPTED；核对 bit 是否含驻留固件，再查 CFG/MODEL/DMA_BYTES、核复位与 mailbox |
 | 终态软件超时 | ACCEPTED 后无 DONE/ERROR/TIMEOUT；保留 STATUS、ERROR_CODE、RESULT_SEQ，不写 CONSUME |
 | CRC/SHA256/字节数不符 | 包或传输损坏；失败发生在预检时保证零硬件副作用，重新解包并核对 `SHA256SUMS` |
 | 40 MHz 下首读仍有 `0x0` | 否定“仅超频”假设；采集连续读数与 ILA，转查复位释放/首次 AXI 访问同步延迟，暂不改 RTL |

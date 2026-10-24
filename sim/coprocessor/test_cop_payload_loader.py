@@ -64,14 +64,22 @@ def main():
     write_hwh(hwh, 14)
     try:
         loader.preflight(args.output, "zero")
-        raise AssertionError("14-bit DMA length did not reject 36,032 bytes")
+        raise AssertionError("14-bit DMA length capability was accepted")
     except loader.LoaderError as error:
-        assert "DMA_LENGTH_BLOCKED" in str(error) and "16383" in str(error)
+        assert "DMA_LENGTH_WIDTH_MISMATCH" in str(error) and "16383" in str(error)
 
     write_hwh(hwh, 16)
     manifest, payload, roi, expected, caps = loader.preflight(args.output, "zero")
     assert manifest["kind"] == "PROVISIONAL" and len(payload) == 36032 and len(roi) == 4096
     assert expected["score_q15"] == "258" and caps["stream_bits"] == 64
+    class NoMMIO:
+        def read(self, offset): raise AssertionError("oversize check touched MMIO")
+        def write(self, offset, value): raise AssertionError("oversize check touched MMIO")
+    try:
+        loader.dma_send(NoMMIO(), NoMMIO(), NoMMIO(), object(), 65536, 0, 0.01)
+        raise AssertionError("17-bit DMA length was accepted")
+    except loader.LoaderError as error:
+        assert "16-bit" in str(error)
 
     measured = loader.read_result(FakeMMIO(), expected, 8, 0.01)
     assert measured["matches_expected"] and measured["result_seq"] == 9
@@ -96,8 +104,8 @@ def main():
     sys.modules["pynq"] = fake_pynq
     loader.set_and_measure_clock(3)
     assert Clocks.fclk1_mhz == 40.0
-    print("PASS: payload_loader manifest/SHA256/CRC/HWH/address/result/clock guards; "
-          "14-bit DMA rejects 36032 before MMIO")
+    print("PASS: payload_loader requires 16-bit/65535-byte Direct MM2S length; "
+          "14-bit HWH rejects before MMIO and 36032-byte payload preflight passes at 16-bit")
 
 
 if __name__ == "__main__": main()

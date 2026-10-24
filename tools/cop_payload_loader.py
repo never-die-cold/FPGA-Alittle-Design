@@ -28,6 +28,7 @@ STATUS = {"READY": 1 << 0, "BUSY": 1 << 1, "DONE": 1 << 2,
           "RESULT_VALID": 1 << 7, "DMA_BUSY": 1 << 8,
           "ACCEPTED": 1 << 11, "UNCONSUMED": 1 << 12}
 DMA_DMACR, DMA_DMASR, DMA_SA, DMA_LENGTH = 0x00, 0x04, 0x18, 0x28
+DMA_LENGTH_BITS, DMA_LENGTH_MAX = 16, (1 << 16) - 1
 GPIO_DATA, GPIO_TRI, GPIO2_DATA, GPIO2_TRI = 0x00, 0x04, 0x08, 0x0C
 
 
@@ -88,10 +89,12 @@ def preflight(root, case):
     caps = hwh_capabilities(hwh)
     if caps["stream_bits"] != 64:
         raise LoaderError("DMA MM2S stream is not 64-bit")
-    maximum = (1 << caps["length_bits"]) - 1
-    if len(payload) > maximum:
-        raise LoaderError(f"DMA_LENGTH_BLOCKED: payload={len(payload)} max_single_packet={maximum} "
-                          f"(C_SG_LENGTH_WIDTH={caps['length_bits']}); do not split because TLAST ends a load")
+    if caps["length_bits"] != DMA_LENGTH_BITS:
+        maximum = (1 << caps["length_bits"]) - 1
+        raise LoaderError(f"DMA_LENGTH_WIDTH_MISMATCH: HWH={caps['length_bits']} expected=16 "
+                          f"max_single_packet={maximum}; do not split because TLAST ends a load")
+    if len(payload) > DMA_LENGTH_MAX:
+        raise LoaderError(f"DMA_LENGTH_BLOCKED: payload={len(payload)} max_single_packet={DMA_LENGTH_MAX}")
     return manifest, payload, roi, expected, caps
 
 
@@ -125,6 +128,8 @@ def read_mask(mmio, offset, mask, asserted=True):
 
 
 def dma_send(dma, gpio, cop, buffer, length, kind, timeout):
+    if length < 1 or length > DMA_LENGTH_MAX:
+        raise LoaderError(f"DMA length {length} does not fit the 16-bit Direct Register field")
     control = (kind << 1)
     if not gpio.read(GPIO2_DATA) & 1:
         raise LoaderError("start_ready is 0 before dma_start")
@@ -139,7 +144,7 @@ def dma_send(dma, gpio, cop, buffer, length, kind, timeout):
     wait_for(lambda: 1 if not dma.read(DMA_DMACR) & 4 else None, timeout, "AXI DMA reset timeout")
     dma.write(DMA_DMACR, 1)
     dma.write(DMA_SA, int(buffer.physical_address))
-    dma.write(DMA_LENGTH, length)
+    dma.write(DMA_LENGTH, length & DMA_LENGTH_MAX)
     seen_payload_error = False
     def transfer_done():
         nonlocal seen_payload_error
