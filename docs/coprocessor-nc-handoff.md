@@ -84,10 +84,10 @@ hwh 为 `cba4d12c58213897c0dbdafd327348ce5d4bd9d21dad6d5a469eb44bd03d799d`。
 - 本轮已有门禁通过的协处理器 bitstream，但尚无实板证据；板上状态保持 UNVERIFIED。
 - OPEN-BOARD-CLK-1：NC 实测 FCLK1=142.857 MHz；40 MHz 回读及连续 20 次 STATUS 首读 `0x1`
   尚未执行。当前把首读 `0x0` 归因于超频只是待验证假设，40 MHz 仍复现时转查复位同步。
-- OPEN-LOADER-1：当前 AXI DMA `C_SG_LENGTH_WIDTH=14`，单包上限 16,383 B，装不下
-  36,032 B payload；分包会提前 TLAST，loader 必须在 MMIO 前 fail-closed。
-- OPEN-LOADER-2：当前一次性 `cop_job` 可能在 PS 配置前以 RECHECK 退出；需兼容固件/位流提供等待
-  或可控重启后才能获得 ACCEPTED 与终态。未修前不得由 PS 越权写 START。
+- OPEN-LOADER-1（源码已修/产物待验证）：BD 固定 `C_SG_LENGTH_WIDTH=16`，loader 要求 HWH 精确
+  匹配且禁止分包；当前已交付 bit/hwh 仍为 14 位，需 Windows 整机门禁生成新产物。
+- OPEN-LOADER-2（源码已修/产物待验证）：`cop_job` 已驻留等 CFG/MODEL/ROI，firmware_e2e 延迟配置
+  用例 PASS；当前板上旧 bit 尚未包含该固件。PS 仍不得越权写 START。
 
 ## 本次例外与收尾理解题
 

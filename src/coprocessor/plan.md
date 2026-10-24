@@ -52,8 +52,9 @@ P0 两档 OOC 已通过，manifest schema 已定且内容仍为 PROVISIONAL。�
 1. NC 已完成 JTAG 下载和只读预检；JTAG 不应用 PS7 时钟。先运行
    `sudo -E python3 payload/tools/cop_payload_loader.py clock --reads 20`，要求读回 40 MHz 且
    20 次 STATUS 首读全为 `0x1`，再判断 142.857 MHz 下首读 `0x0` 的假设。
-2. 当前 HWH 的 DMA 单包上限 16,383 B，小于 36,032 B payload；当前一次性固件也可能早于
-   PS 配置退出。两项由 JL 修复并重走整机门禁前，loader 必须 fail-closed，BOARD 保持 UNVERIFIED。
+2. BD 源码已把 DMA 长度固定为 16 位，固件源码已驻留等待 CFG/MODEL/ROI；离板门禁已覆盖旧
+   14 位 HWH 拒绝和延迟 PS 配置。新 bit/hwh 仍须 JL 重走 Windows 整机门禁，完成前旧包继续
+   fail-closed，BOARD 保持 UNVERIFIED。
 3. JL 的 Vivado 2026.1 整机 40 MHz 门禁已 PASS；发布前仍须关闭任务描述表 OPEN，门禁通过不等于板级验收。
 4. J05/J06 正式权重到位后，用同一 schema 换 payload+manifest，重新记录 CRC/SHA256 与黄金证据。
 
