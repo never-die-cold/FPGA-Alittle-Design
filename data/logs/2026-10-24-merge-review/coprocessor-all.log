@@ -1,0 +1,197 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+PASS: cop_core_mmio_gate 15 window/alignment/permission/busy/pending checks
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_core_mmio_gate.v:47: $finish called at 15000 (1ps)
+PASS T1: READY pulse may be missed; ACCEPTED still advances submit flow
+PASS T2: terminal TIMEOUT does not suppress READY=!BUSY
+PASS T3: DONE/ERROR/TIMEOUT remain mutually exclusive
+PASS T5: unconsumed START is rejected with zero register side effects
+PASS T4: one CONSUME atomically clears terminals/result/receipt/error code
+PASS T7: software guard reports NO_ACK when ACCEPTED never arrives
+PASS: cop_ctrl_regs READY/ACCEPTED/terminal/CONSUME and 7 reject diffs
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_ctrl_regs.v:87: $finish called at 297000 (1ps)
+PASS: cop_cdc_mailbox rejects pending overwrite and ACKs only after destination done
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_cdc_mailbox.v:31: $finish called at 265000 (1ps)
+E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_config_regs.v:39: warning: @* is sensitive to all 20 words in array 'shadow'.
+PASS: cop_config_regs applies atomically and revokes CFG_VALID on new CFG_SEQ
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_config_regs.v:33: $finish called at 330000 (1ps)
+PASS: cop_dma_loader normal/backpressure/CRC32 and short-packet error pulse
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_dma_loader.v:42: $finish called at 346000 (1ps)
+PASS: payload_adapter normal 36032-byte path writes 4304/147/147/147 and atomically activates shadow bank
+PASS: payload_adapter misaligned manifest rejected; active-state diff empty
+PASS: payload_adapter length mismatch rejected; active-state diff empty
+PASS: payload_adapter out-of-range write rejected; active-state diff empty; three visible error pulses
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_payload_adapter.v:71: $finish called at 94616000 (1ps)
+PASS: activation_storage keeps 16 ROI slots distinct and preserves ping/pong interface
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_activation_storage.v:29: $finish called at 136000 (1ps)
+PASS T6: RESULT_SEQ increments and a late reader detects stale sequence
+PASS: cop_task_ctrl commits, aborts, soft-resets and ignores stale engine error
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_task_ctrl.v:53: $finish called at 266000 (1ps)
+PASS: cop_axi_lite_frontend AW/W order, B/R backpressure, SLVERR, one-outstanding and reset
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_axi_lite_frontend.v:57: $finish called at 351000 (1ps)
+PASS: axi_lite_cdc reset plus write/read payload cross intact; no all-ones folding
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_axi_lite_cdc.v:54: $finish called at 470000 (1ps)
+PASS: axis_fifo_random ratio0 Ts:Tm=10:26 preserves 257 beats
+PASS: axis_fifo_random ratio1 Ts:Tm=26:10 preserves 257 beats
+PASS: axis_fifo_random ratio2 Ts:Tm=14:22 preserves 257 beats
+PASS: axis_fifo_random ratio3 Ts:Tm=22:14 preserves 257 beats
+PASS: axis_fifo_random all ratios no duplicate, loss, or reorder
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_axis_async_fifo_random.v:46: $finish called at 49498000 (1ps)
+make: Entering directory '/e/Projects/FPGA-Alittle-Design/src/riscv_fw'
+riscv32-unknown-elf-gcc -march=rv32i  -mabi=ilp32 -mcmodel=medany -mno-relax -O2 -Wall -Wextra -ffreestanding -nostdlib -nostartfiles -Wl,--build-id=none -T link.ld start.S cop_job.c -o cop_job.elf
+make: Leaving directory '/e/Projects/FPGA-Alittle-Design/src/riscv_fw'
+PASS: cop work-order PASS/FAIL/RECHECK, low-confidence and 10/16 policy
+PASS: objdump 失败 → make 非零退出，cop_job.dis 未被改写（sha256 36014a987242…）
+make: Entering directory '/e/Projects/FPGA-Alittle-Design/src/riscv_fw'
+riscv32-unknown-elf-objcopy -O binary cop_job.elf cop_job.bin
+/c/Users/ASUS/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe bin2hex.py cop_job.bin cop_job.hex
+cop_job.bin -> cop_job.hex: 16376 bytes, 4094 words (32-bit little-endian)
+rm cop_job.bin
+make: Leaving directory '/e/Projects/FPGA-Alittle-Design/src/riscv_fw'
+PASS: full diagnostic integer network golden {'pattern': {'class_id': 0, 'margin_q': 0, 'score_q15': 0, 'low_conf': True}, 'zero': {'class_id': 2, 'margin_q': 2, 'score_q15': 258, 'low_conf': True}}
+E:/Projects/FPGA-Alittle-Design/src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_firmware_e2e.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_firmware_e2e.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_firmware_e2e.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_firmware_e2e.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_firmware_e2e.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_firmware_e2e.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_firmware_e2e.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_firmware_e2e.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_firmware_e2e.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_firmware_e2e.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_firmware_e2e.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_firmware_e2e.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_firmware_e2e.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/pynq_cop_top.v:2: warning: timescale for pynq_cop_top inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_firmware_e2e.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_firmware_e2e.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_firmware_e2e.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_firmware_e2e.v:1: ...: The inherited timescale is here.
+WARNING: E:/Projects/FPGA-Alittle-Design/src/riscv/imem.v:19: $readmemh(src/riscv_fw/cop_job.hex): Not enough words in the file for the requested range [0:8191].
+WARNING: E:/Projects/FPGA-Alittle-Design/src/riscv/dmem.v:21: $readmemh(src/riscv_fw/cop_job.hex): Not enough words in the file for the requested range [0:8191].
+PASS: firmware_e2e CPU START/ACCEPTED/DONE/RESULT_META/RESULT_SEQ/FW writes + PS CONSUME; J02 zero=2/2/258/1
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_firmware_e2e.v:72: $finish called at 3147000 (1ps)
+PASS: full diagnostic integer network golden {'pattern': {'class_id': 0, 'margin_q': 0, 'score_q15': 0, 'low_conf': True}, 'zero': {'class_id': 2, 'margin_q': 2, 'score_q15': 258, 'low_conf': True}}
+E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_config_regs.v:39: warning: @* is sensitive to all 20 words in array 'shadow'.
+E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_top.v:134: warning: @* is sensitive to all 16 words in array 'result_mem'.
+E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_top.v:135: warning: @* is sensitive to all 16 words in array 'result_mem'.
+E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_top.v:136: warning: @* is sensitive to all 16 words in array 'result_mem'.
+E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_top.v:137: warning: @* is sensitive to all 16 words in array 'result_mem'.
+E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_top.v:138: warning: @* is sensitive to all 16 words in array 'result_mem'.
+PASS: cop_top AXI/J02 result, DMA error, ABORT/SOFT_RESET and CFG_VALID revocation
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_top.v:138: $finish called at 5738314000 (1ps)
+make: Entering directory '/e/Projects/FPGA-Alittle-Design/src/riscv_fw'
+riscv32-unknown-elf-gcc -march=rv32i  -mabi=ilp32 -mcmodel=medany -mno-relax -O2 -Wall -Wextra -ffreestanding -nostdlib -nostartfiles -Wl,--build-id=none -T link.ld start.S cop_job.c -o cop_job.elf
+riscv32-unknown-elf-objcopy -O binary cop_job.elf cop_job.bin
+/c/Users/ASUS/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe bin2hex.py cop_job.bin cop_job.hex
+cop_job.bin -> cop_job.hex: 16376 bytes, 4094 words (32-bit little-endian)
+rm cop_job.bin
+make: Leaving directory '/e/Projects/FPGA-Alittle-Design/src/riscv_fw'
+E:/Projects/FPGA-Alittle-Design/src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/pynq_cop_top.v:2: warning: timescale for pynq_cop_top inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_config_regs.v:39: warning: @* is sensitive to all 20 words in array 'shadow'.
+E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_top.v:134: warning: @* is sensitive to all 16 words in array 'result_mem'.
+E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_top.v:135: warning: @* is sensitive to all 16 words in array 'result_mem'.
+E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_top.v:136: warning: @* is sensitive to all 16 words in array 'result_mem'.
+E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_top.v:137: warning: @* is sensitive to all 16 words in array 'result_mem'.
+E:/Projects/FPGA-Alittle-Design/src/coprocessor/cop_top.v:138: warning: @* is sensitive to all 16 words in array 'result_mem'.
+WARNING: E:/Projects/FPGA-Alittle-Design/src/riscv/imem.v:19: $readmemh(src/riscv_fw/cop_job.hex): Not enough words in the file for the requested range [0:8191].
+WARNING: E:/Projects/FPGA-Alittle-Design/src/riscv/dmem.v:21: $readmemh(src/riscv_fw/cop_job.hex): Not enough words in the file for the requested range [0:8191].
+PASS: pynq_cop_top 100/40MHz AXI-Lite reads COP_ID and AXIS FIFO preserves 73-bit beat; cop_job.hex elaborated
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_pynq_cop_top.v:41: $finish called at 425000 (1ps)
+PASS: mac_lane signed INT8 products (7 vectors)
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_mac_lane.v:39: $finish called at 7000 (1ps)
+PASS: dot8 balanced signed reduction (6 vectors)
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_dot8.v:53: $finish called at 6000 (1ps)
+PASS: int8_mac 65035 vectors; signed product/addition and overflow
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_int8_mac.v:41: $finish called at 65035000 (1ps)
+PASS: mac_array 4272 output vectors; O16/I8 packing, signs, overflow
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_mac_array.v:54: $finish called at 275000 (1ps)
+PASS: int8_requant 8075 Python-golden vectors; rounding, saturation, ReLU, invalid params
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_int8_requant.v:30: $finish called at 8075000 (1ps)
+PASS: int8_gap all 32513 legal sums and invalid sums; Python golden
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_int8_gap.v:23: $finish called at 32515000 (1ps)
+PASS: int8_logits 2814 Python-golden vectors; ties, all margins, low confidence, invalid INT8
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_int8_logits.v:30: $finish called at 2814000 (1ps)
+PASS: MAC pipeline 4272 lane results, streaming, signs, overflow, stalls and abort
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_mac_array_pipeline.v:68: $finish called at 3770000 (1ps)
+PASS: requant pipeline 8075 Python golden vectors, bubbles, CE stalls, abort
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_int8_requant_pipeline.v:53: $finish called at 242370000 (1ps)
+PASS: K3-LATENCY nominal one-cycle BRAM read matches; early/late samples mismatch visibly
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cop_bram_latency.v:24: $finish called at 66000 (1ps)
+PASS: full diagnostic integer network golden {'pattern': {'class_id': 0, 'margin_q': 0, 'score_q15': 0, 'low_conf': True}, 'zero': {'class_id': 2, 'margin_q': 2, 'score_q15': 258, 'low_conf': True}}
+PASS: manifest_v1 PROVISIONAL payload bytes=36032 sha256=14a1993336c67c83c115b7e6a1e67b198b487b99f325569f693ea0e4d67f1393 crc32=0x2f760211
+PASS: manifest_v1 20 tensors preserve J02 bytes; SHA256/CRC/padding valid; offset and OOB negatives rejected
+PASS: payload_network manifest payload -> DMA -> shadow BRAM -> atomic activate; bytes=36032 crc32=2f760211
+PASS: cnn_sequencer E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/network-vectors/zero all 9225 packed words/73795 elements match integer network; logits=04fd02 class=2 margin=2 cycles=472594
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cnn_sequencer.v:252: $finish called at 5136516000 (1ps)
+PASS: full-shape C02 convolution/FC diagnostics ['padding_tail', 'conv1', 'conv2', 'conv3', 'conv4', 'fc']
+PASS: conv_engine case=E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/padding_tail words=36 read_transactions=216 parameter_reads=2 cycles=1335; every pixel/lane matches Python
+PASS: conv_engine geometry 528 launch/size/rejection cases; independent integer oracle
+PASS: conv_engine watchdog 82 exact-cycle cases; CE pause, latched budget and terminal strobes
+PASS: conv_engine bad requant/overflow/config/watchdog/reset recovery; ce stalls tested
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_conv_engine.v:168: $finish called at 63446000 (1ps)
+PASS: conv_engine case=E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/conv1 words=2048 read_transactions=9216 parameter_reads=1 cycles=57347; every pixel/lane matches Python
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_conv_engine.v:168: $finish called at 573516000 (1ps)
+PASS: conv_engine case=E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/conv2 words=4096 read_transactions=36864 parameter_reads=2 cycles=179205; every pixel/lane matches Python
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_conv_engine.v:168: $finish called at 1792096000 (1ps)
+PASS: conv_engine case=E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/conv3 words=1024 read_transactions=18432 parameter_reads=2 cycles=77061; every pixel/lane matches Python
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_conv_engine.v:168: $finish called at 770656000 (1ps)
+PASS: conv_engine case=E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/conv4 words=2048 read_transactions=36864 parameter_reads=4 cycles=154122; every pixel/lane matches Python
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_conv_engine.v:168: $finish called at 1541266000 (1ps)
+PASS: conv_engine case=E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/conv-vectors/fc words=1 read_transactions=8 parameter_reads=1 cycles=54; every pixel/lane matches Python
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_conv_engine.v:168: $finish called at 586000 (1ps)
+PASS: full diagnostic integer network golden {'pattern': {'class_id': 0, 'margin_q': 0, 'score_q15': 0, 'low_conf': True}, 'zero': {'class_id': 2, 'margin_q': 2, 'score_q15': 258, 'low_conf': True}}
+PASS: cnn_sequencer E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/network-vectors/pattern all 9225 packed words/73795 elements match integer network; logits=01fd01 class=0 margin=0 cycles=472593
+PASS: cnn_sequencer watchdog 82 exact-cycle cases; CE pause, latched budget and terminal strobes
+PASS: cnn_sequencer invalid parameters/watchdog/reset/invalid GAP and successful fresh run; no false DONE
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cnn_sequencer.v:252: $finish called at 14147396000 (1ps)
+PASS: cnn_sequencer E:/Projects/FPGA-Alittle-Design/sim/build/coprocessor/network-vectors/zero all 9225 packed words/73795 elements match integer network; logits=04fd02 class=2 margin=2 cycles=472593
+E:/Projects/FPGA-Alittle-Design/sim/coprocessor/tb_cnn_sequencer.v:252: $finish called at 4725976000 (1ps)
