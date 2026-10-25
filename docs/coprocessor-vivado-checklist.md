@@ -46,14 +46,15 @@ Block RAM。8×64-bit GAP scratch 为小型 distributed RAM；参数的 16 路�
 WHS +0.035 ns、LUT 48.32%、FF 33.68%、DSP 136/220、BRAM36 69/140、DRC 0。本次唯一失败
 是旧脚本查找不存在的 `Unsafe/Unknown` 字样；位流在 `write_bitstream` 前被正确阻止。
 
-修复源码经两次独立 Windows 构建复跑，门禁均 **PASS**：WNS +2.498 ns、DSP 136/220、BRAM36 69/140、
+2026-10-25 仓库干净后 Windows 复跑门禁 **PASS**：WNS +2.771 ns、DSP 136/220、BRAM36 69/140、
 LATCHES=0、DRC_BLOCKING=0；CDC-3=12、CDC-6=7、CDC-15=73，全部逐条命中 allowlist，
 无 Critical。产物与 SHA256：
 
-- `build/run/pynq_cop_40mhz/pynq_cop_40mhz.bit`：`7e1e34304ef71efdfe86ec3e6dbeead6ab419c741806a3334a71474746aa0b6c`
-- `build/run/pynq_cop_40mhz/pynq_cop_40mhz.hwh`：`cba4d12c58213897c0dbdafd327348ce5d4bd9d21dad6d5a469eb44bd03d799d`
+- `build/run/pynq_cop_40mhz/pynq_cop_40mhz.bit`：`d14a4bd037b1809c74fe511f1c7667edbc6bd6ecac8a8712a423946f5f1e2a1a`
+- `build/run/pynq_cop_40mhz/pynq_cop_40mhz.hwh`：`928f0d594ccbb83c8bd17e5ed284a6f2849e1b598c28073c779afb1ff9849107`
+- `build/run/pynq_cop_40mhz/pynq_cop_40mhz.xsa`：`755f70337bdc5a06da0dcaa715c512806b7011efa09f95128314cb78a2ad96ec`
 
-两次位流逐字节比较仅文件头 4 B 不同，网表等价，WNS/DSP/BRAM 完全一致；NC 只使用上列新哈希。
+同日首构 `9e1b24e2…` 与固件提交并发，已经作废；NC 只使用仓库干净后生成的上列哈希。
 
 `build/reports/pynq_cop_40mhz/gate_summary.txt` 是本次数字的权威报告。JL 门禁通过只证明整机
 综合实现，不等于 NC 下载、现场稳定或板级验收；PROVISIONAL payload 也不是发布模型。

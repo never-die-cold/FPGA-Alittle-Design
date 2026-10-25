@@ -37,13 +37,13 @@ PS 不写 `CTRL.START`；当前冻结协议规定 START 由 RISC-V 固件发起�
 
 BD 源码固定 `C_SG_LENGTH_WIDTH=16`，Direct Register MM2S 的 `MM2S_LENGTH[15:0]` 单包上限
 65,535 B，可容纳 36,032 B payload；软件只在校验 HWH 同样为 16 后，才把长度按 16 位写入
-`DMA_BASE+0x28`。旧 bit/hwh 仍是 14 位，在 Windows 整机门禁生成新产物前继续 fail-closed。
-不能分包绕过：每笔 DMA 都产生 TLAST，而 loader 会把第一笔判为短包。
+`DMA_BASE+0x28`。当前实现保持单次 MM2S 传完整 payload，不执行分包；长度为 0 或超过
+65,535 B 时在触碰 MMIO 前 fail-closed。2026-10-25 干净整机门禁产出的 HWH 已确认该字段为 16 位。
 
 `cop_job` 源码现驻留等待：`CFG_APPLIED!=0` 且 CFG_VALID（即 `CFG_APPLIED==CFG_SEQ`）、
 MODEL_VALID、DMA 空闲，并用 `DMA_BYTES==ROI_COUNT*4096` 区分 ROI 完成与前一笔权重完成；等待超时
-仍按既有 CONFIG/RECHECK 退出。旧 bit 中仍是一次性固件，必须经 Windows 门禁重建后才可升级状态；
-不得由 PS 越权写 START 绕过。
+仍按既有 CONFIG/RECHECK 退出。2026-10-25 干净门禁位流已包含该驻留固件；板上等待路径仍待
+NC 验证，不得由 PS 越权写 START 绕过。
 
 ## 命令
 
@@ -53,15 +53,15 @@ sudo -E python3 payload/tools/cop_payload_loader.py run --package . --case zero 
   --measurement ./zero-measured.json --timeout 10
 ```
 
-旧 14 位 HWH 的第二条命令会在零副作用预检阶段报宽度不符；新 16 位门禁产物到位后，同一
-schema、payload 和命令继续使用；pattern 将 `--case zero` 改为 `--case pattern`。
+loader 会在零副作用预检阶段拒绝非 16 位 HWH；当前门禁包使用同一 schema、payload 和命令；
+pattern 将 `--case zero` 改为 `--case pattern`。
 
 ## 失败排查
 
 | 现象 | 含义 / 下一证据 |
 |:---|:---|
-| `DMA_LENGTH_WIDTH_MISMATCH` | HWH 不是固定 16 位；禁止分包，核对是否仍加载旧 bit/hwh |
-| `DMA_LENGTH_BLOCKED` | 单包超过 65,535 B；禁止分包，先评审协议与 BD，不得绕过 TLAST |
+| `DMA_LENGTH_WIDTH_MISMATCH` | HWH 不是固定 16 位；核对是否仍加载旧 bit/hwh |
+| `DMA_LENGTH_BLOCKED` | 当前单次传输实现的长度不在 1..65,535 B；先评审协议与 BD |
 | `payload_error=1` | 提前/延后 TLAST、keep、长度或 manifest bank 适配拒绝；保存 STATUS、DMA status、DMA_BYTES |
 | `start_ready` 不置或不返回 | 请求 CDC 未受理/未应答或 start 电平未及时拉低；记录 GPIO 两通道与 DMA_BUSY 波形 |
 | `NO_ACK` | 固件没有发 START/ACCEPTED；核对 bit 是否含驻留固件，再查 CFG/MODEL/DMA_BYTES、核复位与 mailbox |

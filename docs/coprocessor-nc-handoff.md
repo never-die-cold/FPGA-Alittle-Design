@@ -8,7 +8,7 @@
 | 状态 | 结论 | 证据 / 缺口 |
 |:---|:---|:---|
 | 仿真跑通 | **PASS** | 行为级全回归；BRAM 模式 pattern/zero 各 73,795 元素逐项一致；延迟边界 PASS |
-| 综合实现通过 | **PASS** | Vivado 2026.1 整机 40 MHz 门禁：WNS +2.498 ns、DSP 136/220、BRAM36 69/140、latch/DRC blocking 均 0；CDC allowlist 全命中 |
+| 综合实现通过 | **PASS** | Vivado 2026.1 干净整机 40 MHz 门禁：WNS +2.771 ns、DSP 136/220、BRAM36 69/140、latch/DRC blocking 均 0；CDC allowlist 全命中 |
 | 板上跑通 | **UNVERIFIED** | NC 已完成 JTAG 下载和只读预检；实际 FCLK1=142.857 MHz，尚无 40 MHz 结果或稳定性证据 |
 
 诊断网络不是正式训练模型，`score_q15` 是整数分数而非概率。PROVISIONAL payload 地址适配
@@ -36,9 +36,10 @@ COPROCESSOR_PYTHON=sim/build/vision-venv-full/bin/python \
 `VIVADO=PASS_2026.1_40MHZ_WHOLE_SYSTEM`，而 `BOARD=UNVERIFIED_NEEDS_NC`。
 NC 解包后先执行 `sha256sum -c SHA256SUMS`，不得手工修改 VERSION。
 
-本次源产物 SHA256：bit 为 `7e1e34304ef71efdfe86ec3e6dbeead6ab419c741806a3334a71474746aa0b6c`，
-hwh 为 `cba4d12c58213897c0dbdafd327348ce5d4bd9d21dad6d5a469eb44bd03d799d`。
-两次独立构建仅位流文件头 4 B 不同，网表等价且门禁数字一致；旧哈希包禁止继续沿用。
+本次源产物 SHA256：bit 为 `d14a4bd037b1809c74fe511f1c7667edbc6bd6ecac8a8712a423946f5f1e2a1a`，
+hwh 为 `928f0d594ccbb83c8bd17e5ed284a6f2849e1b598c28073c779afb1ff9849107`，xsa 为
+`755f70337bdc5a06da0dcaa715c512806b7011efa09f95128314cb78a2ad96ec`。同日首构 `9e1b24e2…`
+与固件提交并发，已经作废；只采用仓库干净后生成的上述产物，旧哈希包禁止继续沿用。
 
 ## 下载、启动与复位
 
@@ -84,10 +85,10 @@ hwh 为 `cba4d12c58213897c0dbdafd327348ce5d4bd9d21dad6d5a469eb44bd03d799d`。
 - 本轮已有门禁通过的协处理器 bitstream，但尚无实板证据；板上状态保持 UNVERIFIED。
 - OPEN-BOARD-CLK-1：NC 实测 FCLK1=142.857 MHz；40 MHz 回读及连续 20 次 STATUS 首读 `0x1`
   尚未执行。当前把首读 `0x0` 归因于超频只是待验证假设，40 MHz 仍复现时转查复位同步。
-- OPEN-LOADER-1（源码已修/产物待验证）：BD 固定 `C_SG_LENGTH_WIDTH=16`，loader 要求 HWH 精确
-  匹配且禁止分包；当前已交付 bit/hwh 仍为 14 位，需 Windows 整机门禁生成新产物。
-- OPEN-LOADER-2（源码已修/产物待验证）：`cop_job` 已驻留等 CFG/MODEL/ROI，firmware_e2e 延迟配置
-  用例 PASS；当前板上旧 bit 尚未包含该固件。PS 仍不得越权写 START。
+- OPEN-LOADER-1（离板已修/板上待验证）：BD 与 HWH 均确认 `C_SG_LENGTH_WIDTH=16`，loader 保持
+  36,032 B 单次传输；新 bit/hwh 已过整机门禁，NC 尚未实测 payload 装载。
+- OPEN-LOADER-2（离板已修/板上待验证）：`cop_job` 已驻留等 CFG/MODEL/ROI，firmware_e2e 延迟配置
+  用例 PASS，干净门禁位流已包含重建固件；NC 尚未验证板上等待路径。PS 仍不得越权写 START。
 
 ## 本次例外与收尾理解题
 
