@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Capture one lossless BGR frame from the named USB Video DirectShow device."""
+"""Capture lossless BGR evidence from the named USB Video DirectShow device."""
 
 import argparse
 import hashlib
@@ -17,6 +17,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--frames", type=int, default=24)
+    parser.add_argument("--save-all", action="store_true",
+                        help="save and verify every frame, with per-frame pixel hashes")
     args = parser.parse_args()
     if args.frames < 1:
         parser.error("--frames must be positive")
@@ -41,6 +43,7 @@ def main():
         raise RuntimeError(f"USB Video at DirectShow index {index} did not open")
     frame = None
     read_ms = []
+    frame_records = []
     try:
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
@@ -58,6 +61,21 @@ def main():
             read_ms.append(round((time.perf_counter() - started) * 1000, 3))
             if not ok:
                 raise RuntimeError(f"USB Video read failed at frame {count + 1}")
+            if frame.shape != (720, 1280, 3) or frame.dtype != np.uint8:
+                raise RuntimeError(f"unexpected frame {count + 1}: {frame.shape}/{frame.dtype}")
+            if args.save_all:
+                frame_path = output / f"frame-{count + 1:03d}.png"
+                if not cv2.imwrite(str(frame_path), frame):
+                    raise RuntimeError(f"could not save {frame_path}")
+                decoded_frame = cv2.imread(str(frame_path), cv2.IMREAD_UNCHANGED)
+                if decoded_frame is None or not np.array_equal(frame, decoded_frame):
+                    raise RuntimeError(f"pixel roundtrip failed: {frame_path}")
+                frame_records.append({
+                    "index": count + 1, "path": frame_path.name,
+                    "elapsed_s": round(time.perf_counter() - capture_started, 6),
+                    "pixels_sha256": hashlib.sha256(frame.tobytes()).hexdigest(),
+                    "png_sha256": hashlib.sha256(frame_path.read_bytes()).hexdigest(),
+                })
         capture_elapsed_s = round(time.perf_counter() - capture_started, 3)
     finally:
         cap.release()
@@ -74,6 +92,8 @@ def main():
               "device_index": index, "frames_read": args.frames,
               "shape": list(frame.shape), "dtype": str(frame.dtype), "mode": mode,
               "read_ms": read_ms, "capture_elapsed_s": capture_elapsed_s,
+              "channel_order": "BGR", "saved_frames": frame_records,
+              "save_all": args.save_all,
               "read_calls_per_second": round(args.frames / capture_elapsed_s, 2),
               "pixels_sha256": hashlib.sha256(frame.tobytes()).hexdigest(),
               "png_sha256": hashlib.sha256(png.read_bytes()).hexdigest()}

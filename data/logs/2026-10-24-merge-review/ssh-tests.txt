@@ -1,0 +1,8 @@
+PASS: SSH missing status remains unconfirmed; remote nonzero remains a failure
+test_disconnect_has_no_confirmed_remote_status (__main__.CompletionTests.test_disconnect_has_no_confirmed_remote_status) ... ok
+test_invalid_requests_do_not_open_a_channel (__main__.CompletionTests.test_invalid_requests_do_not_open_a_channel) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+OK

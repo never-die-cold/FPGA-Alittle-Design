@@ -49,10 +49,14 @@
 
 P0 两档 OOC 已通过，manifest schema 已定且内容仍为 PROVISIONAL。下一执行点：
 
-1. NC 校验 NC 包 SHA256 后执行
-   `board\scripts\program_soc.bat dist\cop-board-gate-<commit>\payload\pynq_cop_40mhz.bit`，记录下载、读回与现场稳定性。
-2. JL 的 Vivado 2026.1 整机 40 MHz 门禁已 PASS；发布前仍须关闭任务描述表 OPEN，门禁通过不等于板级验收。
-3. J05/J06 正式权重到位后，用同一 schema 换 payload+manifest，重新记录 CRC/SHA256 与黄金证据。
+1. NC 已完成 JTAG 下载和只读预检；JTAG 不应用 PS7 时钟。先运行
+   `sudo -E python3 payload/tools/cop_payload_loader.py clock --reads 20`，要求读回 40 MHz 且
+   20 次 STATUS 首读全为 `0x1`，再判断 142.857 MHz 下首读 `0x0` 的假设。
+2. BD/HWH 已确认 DMA 长度为 16 位，驻留等待 CFG/MODEL/ROI 的固件已进入 2026-10-25 干净
+   整机门禁位流；loader 两项离板阻塞已解除。下一步由 NC 在 40 MHz 回读后实测 payload 与等待
+   路径，BOARD 保持 UNVERIFIED。
+3. JL 的 Vivado 2026.1 整机 40 MHz 门禁已 PASS；发布前仍须关闭任务描述表 OPEN，门禁通过不等于板级验收。
+4. J05/J06 正式权重到位后，用同一 schema 换 payload+manifest，重新记录 CRC/SHA256 与黄金证据。
 
 当前 J02 payload 只解锁板级结构与地址通路，不构成 RELEASE、精度或板上验收证据。
 

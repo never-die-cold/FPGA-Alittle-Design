@@ -1,0 +1,11 @@
+bash sim/scripts/run_iverilog.sh all: exit=0 (172 PASS lines; 9 expected fault-injection failures; 0 unexpected)
+bash sim/scripts/run_inspection_python.sh: exit=0 (19 groups)
+bash sim/scripts/run_vision_python.sh: exit=0 (21 groups)
+bash sim/scripts/run_iverilog.sh coprocessor all: exit=0
+python sim/scripts/test_nc_ssh_session.py: exit=0 (2 tests)
+Shell syntax: 5 scripts PASS
+python sim/scripts/index_runs.py --check (after evidence capture): exit=1 (STALE; regenerated)
+python sim/scripts/check_repo_hygiene.py: exit=0; errors=0; warnings=14; budget debt remains
+git diff --check: exit=0 (no output)
+git diff --cached --check: exit=0 (no output)
+python sim/scripts/index_runs.py --check (final after regeneration): exit=0
