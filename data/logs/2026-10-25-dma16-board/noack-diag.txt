@@ -1,0 +1,5 @@
+﻿sudo -n python3 -c "import mmap,os,struct; fd=os.open('/dev/mem',os.O_RDONLY|os.O_SYNC); m=mmap.mmap(fd,0x1000,mmap.MAP_SHARED,mmap.PROT_READ,offset=0x40000000); rd=lambda o: struct.unpack('<I',m[o:o+4])[0]; s=rd(0x10); print('STATUS',hex(s)); print('READY',s&1,'BUSY',(s>>1)&1,'DONE',(s>>2)&1,'ERROR',(s>>3)&1,'TIMEOUT',(s>>4)&1,'CFG_VALID',(s>>5)&1,'MODEL_VALID',(s>>6)&1,'RESULT_VALID',(s>>7)&1,'DMA_BUSY',(s>>8)&1,'ACCEPTED',(s>>11)&1,'UNCONSUMED',(s>>12)&1); print('ERROR_CODE',hex(rd(0x14)),'CFG_SEQ',rd(0x1c),'CFG_APPLIED',rd(0x20),'ROI_COUNT',rd(0x2c),'DMA_BYTES',rd(0x84),'FW_DECISION',hex(rd(0x8c)),'RESULT_SEQ',rd(0x7c))"
+[?2004lSTATUS 0x61
+READY 1 BUSY 0 DONE 0 ERROR 0 TIMEOUT 0 CFG_VALID 1 MODEL_VALID 1 RESULT_VALID 0 DMA_BUSY 0 ACCEPTED 0 UNCONSUMED 0
+ERROR_CODE 0x0 CFG_SEQ 1790099252 CFG_APPLIED 1790099252 ROI_COUNT 1 DMA_BYTES 4096 FW_DECISION 0x0 RESULT_SEQ 0
+[?2004hxilinx@pynq:~/cop-pkg$ 

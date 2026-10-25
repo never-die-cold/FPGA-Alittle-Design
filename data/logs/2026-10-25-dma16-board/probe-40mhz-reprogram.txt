@@ -1,0 +1,6 @@
+﻿sudo -n python3 -c "import mmap,os,struct; fd=os.open('/dev/mem',os.O_RDONLY|os.O_SYNC); m=mmap.mmap(fd,0x1000,mmap.MAP_SHARED,mmap.PROT_READ,offset=0x40000000); rd=lambda o: struct.unpack('<I',m[o:o+4])[0]; print('IP_ID',hex(rd(0))); print('STATUS x5',[hex(rd(0x10)) for _ in range(5)]); print('ERROR_CODE',rd(0x14),'RESULT_SEQ',rd(0x7c))"; cat /sys/bus/iio/devices/iio:device0/in_temp0_raw
+[?2004lIP_ID 0x434f5030
+STATUS x5 ['0x1', '0x1', '0x1', '0x1', '0x1']
+ERROR_CODE 0 RESULT_SEQ 0
+2676
+[?2004hxilinx@pynq:~/cop-pkg$ 

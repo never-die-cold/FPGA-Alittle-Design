@@ -12,6 +12,7 @@
 - JL K4/K5 与固件 E2E 已并入（`af53fe2`）：`firmware_e2e` 用真实 CPU/固件/MMIO 跑通 START→ACCEPTED→终态→结果/PSCONSUME；K3 BRAM 增加延迟边界。Vivado 40 MHz 门禁、bitstream、`.hwh` 与板上仍 UNVERIFIED；WC 已加只读板上预检 `sim/scripts/cop_board_preflight.py`，数据面等 J08。
 - JL 2026-10-22 board-top（`7c6cc40`）：Windows Vivado 2026.1 整机 40 MHz 门禁 **PASS**（WNS +2.498 ns），bit/hwh 与 NC 包已备；`BOARD` 仍 `UNVERIFIED_NEEDS_NC`。WC 复跑发现 Windows/Icarus 两个可复现性缺口：manifest CRLF/sidecar 哈希、`cop_axi_lite_cdc` 先用后声明；已登记给 JL，未改其 RTL/生成器。详见 [board-top 同步证据](../../data/logs/2026-10-22-board-top-sync/README.md)。
 - 2026-10-23 首次上板：包 `21c4e751bbe8` tar/106/bit/hwh 全验，JTAG 烧写 **PROGRAM PASSED**；只读预检 `IP_ID=0x434F5030`、`ERROR_CODE=0`、`RESULT_SEQ=0`、无 UNCONSUMED。**阻塞**：板卡 boot FSBL 给 FCLK1=142.857 MHz（设计 40 MHz），且包内无 payload/ROI loader；未做推理，`BOARD` 仍 UNVERIFIED。详见 [首次上板记录](../../data/logs/2026-10-23-board-bringup/README.md)。
+- 2026-10-25 DMA16 上板：新包 `759744b99891`（111/111、bit/hwh/xsa 全对）；**40 MHz 时钟门禁板上 PASS**（`measured_fclk1_mhz=40.000000` + 20 次首读 `0x1`；前提是改钟后重新配置 PL）；loader 预检/DMA 全过但 `NO_ACK`——时间序列证明 **CPU 未执行固件**（疑 IMEM `$readmemh` 相对路径在 Vivado 综合未命中），已交 JL。`BOARD` 仍 UNVERIFIED。详见 [DMA16 上板记录](../../data/logs/2026-10-25-dma16-board/README.md)。
 - J05/J06 未完成：没有真实审计 ROI 上的正式 INT8 模型、阈值和发布黄金。
 - J07/J08 未完成：没有整机实现、位流或可交 NC 上板的三批正式交付包。
 

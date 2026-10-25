@@ -1,0 +1,4 @@
+﻿cd ~/cop-pkg && printf 'xilinx\n' | sudo -S bash -c 'source /etc/profile.d/xrt_setup.sh; exec /usr/local/share/pynq-venv/bin/python3 payload/tools/cop_payload_loader.py clock --reads 20' 2>&1 | grep -v 'password for'
+[?2004lmeasured_fclk1_mhz=40.000000
+status_first_reads=0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000,0x00000000
+[?2004hxilinx@pynq:~/cop-pkg$ 
