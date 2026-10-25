@@ -27,10 +27,14 @@ def _derive(row):
     """
     decision = row.get("decision") or {}
     status = decision.get("verdict") or row.get("status") or row.get("verdict") or "LOCATION_ONLY"
-    missing = ";".join(f"{name}:{n}" for name, n in decision.get("missing", {}).items() if n)
-    extra = ";".join(f"{name}:{n}" for name, n in decision.get("extra", {}).items() if n)
-    reasons = ";".join(decision.get("reasons", []) or [])
-    return status, missing, extra, reasons
+    reasons_list = decision.get("reasons", []) or []
+    partial = "target_limit" in reasons_list
+    # 超限轮的服务端映射零计数/缺件差额不是完整实测（NC 10-14 评审）：不导出为数量
+    missing = "" if partial else ";".join(
+        f"{name}:{n}" for name, n in decision.get("missing", {}).items() if n)
+    extra = "" if partial else ";".join(
+        f"{name}:{n}" for name, n in decision.get("extra", {}).items() if n)
+    return status, missing, extra, ";".join(reasons_list)
 
 
 def load_records(records_dir):

@@ -1,0 +1,18 @@
+﻿sudo -n cat /sys/kernel/debug/clk/clk_summary 2>/dev/null | grep -E 'fclk|pl_clk' | head -20
+[?2004l          fclk3_mux                   1        1        0  1000000000          0     0  50000         Y
+             fclk3_div0               1        1        0   333333334          0     0  50000         Y
+                fclk3_div1            1        1        0   166666667          0     0  50000         Y
+                   fclk3              1        1        0   166666667          0     0  50000         Y
+          fclk2_mux                   1        1        0  1000000000          0     0  50000         Y
+             fclk2_div0               1        1        0   200000000          0     0  50000         Y
+                fclk2_div1            1        1        0   200000000          0     0  50000         Y
+                   fclk2              1        1        0   200000000          0     0  50000         Y
+          fclk1_mux                   1        1        0  1000000000          0     0  50000         Y
+             fclk1_div0               1        1        0   142857143          0     0  50000         Y
+                fclk1_div1            1        1        0   142857143          0     0  50000         Y
+                   fclk1              1        1        0   142857143          0     0  50000         Y
+          fclk0_mux                   1        1        0  1000000000          0     0  50000         Y
+             fclk0_div0               1        1        0   200000000          0     0  50000         Y
+                fclk0_div1            1        1        0   100000000          0     0  50000         Y
+                   fclk0              1        1        0   100000000          0     0  50000         Y
+[?2004hxilinx@pynq:~$ 

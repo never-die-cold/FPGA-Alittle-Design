@@ -1,0 +1,7 @@
+﻿for i in 1 2 3 4 5; do sudo -n python3 -c "import mmap,os,struct; fd=os.open('/dev/mem',os.O_RDONLY|os.O_SYNC); m=mmap.mmap(fd,0x1000,mmap.MAP_SHARED,mmap.PROT_READ,offset=0x40000000); rd=lambda o: struct.unpack('<I',m[o:o+4])[0]; print('RUN',rd(0x10),rd(0x14),rd(0x7c))"; sleep 0.3; done
+[?2004lRUN 0 0 0
+RUN 1 0 0
+RUN 1 0 0
+RUN 1 0 0
+RUN 1 0 0
+[?2004hxilinx@pynq:~$ 

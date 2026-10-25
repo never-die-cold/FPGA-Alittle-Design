@@ -72,7 +72,8 @@ WAITING；连续 3 次 HTTP 失败自动重新握手（D5）。界面为 **HUD v
 高分屏下不被系统拉伸切割。
 
 **LIVE 显示（W06，C04 §3.2）**：`mode=LIVE` 轮次显示判定横幅（CHECK_PASS 绿 / CHECK_FAIL 红 /
-RECHECK 琥珀，附 `-washerx1` 式缺多摘要）、识别范围表计数列显示逐类别数目、对象列表逐行显示
+RECHECK 琥珀，附 `-washerx1` 式缺多摘要；`target_limit` 轮显示 `RECHECK 未完整计数`、计数列 `--`，
+映射零值不当实测）、识别范围表计数列显示逐类别数目、对象列表逐行显示
 类别与分数（`class=null` → unclassified）；报文带 `prototype=true` 时顶栏恒显红色
 `PROTOTYPE` 徽标（离线产物代实时结果，不可关闭）。判定横幅文本与差额由 `rounds.live_view`
 纯函数生成（离板可测）。LIVE 联调替身：`python src/pynq_host/vision_mock_service.py --live`
@@ -84,6 +85,11 @@ RECHECK 琥珀，附 `-washerx1` 式缺多摘要）、识别范围表计数列�
 FILE 原型服务据此保留该轮完整产物；实际 UVC 帧率与板端联调仍待实测。
 离线测试 `py sim/vision/test_vision_rounds.py` 覆盖触发节流、超龄/配置变化/断联撤框、
 服务重启（新会话）自动恢复，已接入 `sim/scripts/run_vision_python.sh` 全量。
+
+2026-10-20 异常语义：手动轮请求失败立即置 `NO VALID RESULT | check failed`（红色）并撤掉
+旧 PASS，不等 `max_age`；同一用户意图的网络重试复用 `trigger_ref`（C04 §2.4 草案，
+服务端 16 条回放）。`--image <PNG>` 可用静态图代替相机，配合 `--headless --endpoint`
+做服务和 EXE 的完整一轮证据（`bash sim/scripts/run_cop_sim_round.sh`）。
 
 ## 离线文件回放（2026-10-10）
 

@@ -1,0 +1,12 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+PASS T1: READY pulse may be missed; ACCEPTED still advances submit flow
+PASS T2: terminal TIMEOUT does not suppress READY=!BUSY
+PASS T3: DONE/ERROR/TIMEOUT remain mutually exclusive
+PASS T5: unconsumed START is rejected with zero register side effects
+PASS T4: one CONSUME atomically clears terminals/result/receipt/error code
+PASS T7: software guard reports NO_ACK when ACCEPTED never arrives
+PASS: cop_ctrl_regs READY/ACCEPTED/terminal/CONSUME and 7 reject diffs
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_cop_ctrl_regs.v:87: $finish called at 297000 (1ps)
+PASS T6: RESULT_SEQ increments and a late reader detects stale sequence
+PASS: cop_task_ctrl commits, aborts, soft-resets and ignores stale engine error
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_cop_task_ctrl.v:53: $finish called at 266000 (1ps)

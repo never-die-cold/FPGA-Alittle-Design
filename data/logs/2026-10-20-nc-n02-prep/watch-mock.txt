@@ -1,0 +1,12 @@
+# watch-mock 离板自测原始输出（2026-10-20）
+# 命令：$env:PYTHONIOENCODING='utf-8'; python src/pynq_host/onboard_smoke.py watch-mock
+# 工作区：dev/riscv@5f8abe2；未打开串口/相机/板卡
+# 宿主退出码：0
+
+EVENT(0.0s): STREAM
+EVENT(3.0s): STALL
+EVENT(3.5s): BUSY
+EVENT(4.1s): STREAM
+WATCH-SUMMARY: saw_stream=True saw_stall=True saw_busy=True end_stream=STREAM
+PASS(W): 观测 6s 完成（断流后已恢复）
+EXIT=0

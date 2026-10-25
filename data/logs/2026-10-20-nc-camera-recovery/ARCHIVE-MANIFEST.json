@@ -1,0 +1,417 @@
+{
+  "date": "2026-10-24",
+  "source_base": "5f8abe25906d918f15809c888a7d3c1182aa3e08 + NC dirty evidence",
+  "archive_sha256": "2768234c94ea4e11cab12b787256b2da321477ec31215b4d3cc96816cd21c587",
+  "files": [
+    {
+      "path": "pi-probes/2026-10-20-camera-matrix-normal/boot_id.txt",
+      "bytes": 37,
+      "sha256": "7e4fa1e22d94596caa73a69372600eea0fe64f75e2abb81a8f3fef06136fa1da"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-matrix-normal/raw-1536-864-10-P.command",
+      "bytes": 183,
+      "sha256": "750c96c94fe16b4bd6b19fa012f367ca7359770a74539cd4ec3a802a7aef43a4"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-matrix-normal/raw-1536-864-10-P.log",
+      "bytes": 3206,
+      "sha256": "a7d24258fbe0fa0da8d04b53623206ec4dac3941a5034c382eb46209f205ce91"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-matrix-normal/raw-2304-1296-10-P.command",
+      "bytes": 185,
+      "sha256": "6a02d63ed85478914a3d378b2666a25562d775f58690ef26b6dbba99be74f138"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-matrix-normal/raw-2304-1296-10-P.log",
+      "bytes": 3210,
+      "sha256": "8140f987383f476b0ebfdf37aec4e1813c5fc20fd030831840bde1fc34fc6c0c"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-matrix-normal/raw-4608-2592-10-P.command",
+      "bytes": 185,
+      "sha256": "416d4f98e43640d3d5a0ea577b84d432a6eb5e5421c0368d9efd6b760764effe"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-matrix-normal/raw-4608-2592-10-P.log",
+      "bytes": 3211,
+      "sha256": "61a8088a01345d5cad455d8b84d797700c2cab9018205445125065f0692c3dcd"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-matrix-normal/results.csv",
+      "bytes": 114,
+      "sha256": "89b677fa0b3dc6e28dc9b9a9c0fbc6fef41119160fe3c6f150915dba5852759e"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-matrix-normal/still-manual.command",
+      "bytes": 291,
+      "sha256": "417b0abea1ba4362521cc0aaeda9b9c428a0510bbdacf116070ef655dc966abc"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-matrix-normal/still-manual.log",
+      "bytes": 6275,
+      "sha256": "b320974ed019cea8654c6b4769211218f2270f074ecfa288866e6a984f7558a2"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-matrix-normal/versions.txt",
+      "bytes": 135,
+      "sha256": "dc9b80ca301919700376af9deafa340d2eabf30c3e640fed7299661c7ca276ce"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-native/capture.log",
+      "bytes": 412,
+      "sha256": "7e01e3a03897ac8ac49e290aab7493db682eac20d11e76402f5db302513643b4"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-native/diagnostic.raw",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-native/format.txt",
+      "bytes": 383,
+      "sha256": "7354127e022b2656d67d388bab55a4a9a1a8d576c353fdb42f499d01268635d7"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-native/interrupts-after.txt",
+      "bytes": 88,
+      "sha256": "dde3e804865d13d65ddaa1823a4fb8332915288c922e56b3ef35536b8e484406"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-native/interrupts-before.txt",
+      "bytes": 88,
+      "sha256": "dde3e804865d13d65ddaa1823a4fb8332915288c922e56b3ef35536b8e484406"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-native/kernel.txt",
+      "bytes": 1355,
+      "sha256": "8d462dc30efa4be0dd6bc8120ca56d2fc3945e493eaf95037ac058e99407ec2e"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-native/media-graph.txt",
+      "bytes": 1288,
+      "sha256": "d0e479e8351dd3176bb2dfaa3ec6eefc572e55a27e897024beee2cbccc7563cd"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-native/pattern-after.txt",
+      "bytes": 30,
+      "sha256": "e7cbb908084fe8137e7c9488643490bad32839257129e362426af1a3b1d8b84f"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-native/pattern-before.txt",
+      "bytes": 30,
+      "sha256": "e7cbb908084fe8137e7c9488643490bad32839257129e362426af1a3b1d8b84f"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-native-live/capture.log",
+      "bytes": 412,
+      "sha256": "7e01e3a03897ac8ac49e290aab7493db682eac20d11e76402f5db302513643b4"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-native-live/diagnostic.raw",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-native-live/format.txt",
+      "bytes": 385,
+      "sha256": "25050b038bad97c2cd61c416dd04f642a14962bf4185b86897ea7f64bd828990"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-native-live/interrupts-after.txt",
+      "bytes": 88,
+      "sha256": "dde3e804865d13d65ddaa1823a4fb8332915288c922e56b3ef35536b8e484406"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-native-live/interrupts-before.txt",
+      "bytes": 88,
+      "sha256": "dde3e804865d13d65ddaa1823a4fb8332915288c922e56b3ef35536b8e484406"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-native-live/kernel.txt",
+      "bytes": 1300,
+      "sha256": "dcfe6433a743e3493a87148fa36952db1e59bc458111afa1b33cf6625467012f"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-native-live/live-status.txt",
+      "bytes": 788,
+      "sha256": "22b761930810e87d14fa1bda953becde00d6a65955b70c86b75cab171efdf18b"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-native-live/media-graph.txt",
+      "bytes": 1285,
+      "sha256": "a379c3b3f0310988174331f262773f209223acd37208d9f013b1aa9bfc8dc407"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-native-live/pattern-after.txt",
+      "bytes": 30,
+      "sha256": "e7cbb908084fe8137e7c9488643490bad32839257129e362426af1a3b1d8b84f"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-native-live/pattern-before.txt",
+      "bytes": 30,
+      "sha256": "e7cbb908084fe8137e7c9488643490bad32839257129e362426af1a3b1d8b84f"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-recovery/interrupts-after.txt",
+      "bytes": 88,
+      "sha256": "dde3e804865d13d65ddaa1823a4fb8332915288c922e56b3ef35536b8e484406"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-recovery/interrupts-before.txt",
+      "bytes": 88,
+      "sha256": "dde3e804865d13d65ddaa1823a4fb8332915288c922e56b3ef35536b8e484406"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-recovery/kernel-after.txt",
+      "bytes": 2596,
+      "sha256": "0aa641fa41692ee1dbd89cce80d8cc1fd57be05cd98eb9d88816b904e5c1549f"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-recovery/media-graph.txt",
+      "bytes": 1288,
+      "sha256": "d0e479e8351dd3176bb2dfaa3ec6eefc572e55a27e897024beee2cbccc7563cd"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-recovery/power-on.command",
+      "bytes": 228,
+      "sha256": "22a1228819631c0be99d6bfd19afa8377cb060e04d18552a7cb702ff67418368"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-recovery/power-on.log",
+      "bytes": 5770,
+      "sha256": "4dc332014c51f40c859dcd296c19f1a160c9c093da3d82aec76e144542f4e329"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-recovery/raw30.command",
+      "bytes": 225,
+      "sha256": "2a411a366241ebffd38a1e11aac7fcb8a1cb974baeeed48ec020c9ff9b606d93"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-recovery/raw30.log",
+      "bytes": 5258,
+      "sha256": "78dcc907e81f6c5879e106edac29df4bef849fe6d0d6913df96d564ce5779318"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-recovery/test-pattern.command",
+      "bytes": 232,
+      "sha256": "cde6fa4bbd4ab2af3aadf0c5d71137e4027e5c2237eab57567782d86a2f91b4d"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-recovery/test-pattern.log",
+      "bytes": 5770,
+      "sha256": "c0e5a8390b4d3b9a94625ae8ee5f89af1670eb1ca32f234754a7fc56698a3059"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-recovery/v4l-direct.command",
+      "bytes": 172,
+      "sha256": "04a0f7fff1cc730eda2aa82df9f3a69a506034a36d591ed9f9d25d436a9f1536"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-recovery/v4l-direct.log",
+      "bytes": 15,
+      "sha256": "0f9b650a1d9125c78c7af57789690ef2ac75a86c24d6e2bec61eaba0a1af4df3"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-recovery/v4l-direct.raw",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pi-probes/2026-10-20-camera-recovery/v4l-format.txt",
+      "bytes": 383,
+      "sha256": "7354127e022b2656d67d388bab55a4a9a1a8d576c353fdb42f499d01268635d7"
+    },
+    {
+      "path": "pi-probes.tar.gz",
+      "bytes": 7482,
+      "sha256": "e59b4a2669fe505ac08da693adab2cb921cc71311a413190acd4dd1b8d06d931"
+    },
+    {
+      "path": "reboot-49493451/ssh/0001.request.json",
+      "bytes": 417,
+      "sha256": "743ee45f45b8b0369e80eacf10953afa7eb95ded2557befbf5815714d236c0c1"
+    },
+    {
+      "path": "reboot-49493451/ssh/0001.response.json",
+      "bytes": 1796,
+      "sha256": "2379790b2bbf53dfdeb863b7cc6b6445e1aa4b68db1d0143d5abb1099b34ded6"
+    },
+    {
+      "path": "reboot-49493451/ssh/0002.request.json",
+      "bytes": 255,
+      "sha256": "dd61071c3998ca7055c0dbb8a3dd2976704f86270862b570fec11d41e508e755"
+    },
+    {
+      "path": "reboot-49493451/ssh/0002.response.json",
+      "bytes": 3048,
+      "sha256": "fc5838977f0e4420c37a778852aa037128d95b07373b1d195c6514549f8750e7"
+    },
+    {
+      "path": "reboot-49493451/ssh/0003.request.json",
+      "bytes": 750,
+      "sha256": "fcc4dea02f991234c960c8cc6dd4ec254d194bf4d98db0b5818b7ce899195f15"
+    },
+    {
+      "path": "reboot-49493451/ssh/0003.response.json",
+      "bytes": 1045,
+      "sha256": "fbbf2fb181a687036d19754e42247a207a08d221adb3ef66e06fdf95974acb3c"
+    },
+    {
+      "path": "reboot-49493451/ssh/0004.request.json",
+      "bytes": 76,
+      "sha256": "877b295c65e0f1864a7a78d2af16d1f5a9c9a2b8a9ce446de1ba0e1f8ef6b82a"
+    },
+    {
+      "path": "reboot-49493451/ssh/0004.response.json",
+      "bytes": 39556,
+      "sha256": "cc1ec9d1254bf559be999f94ca76b9ae3150739e64763c389bf2a2bb12306e0d"
+    },
+    {
+      "path": "reboot-49493451/ssh/0005.request.json",
+      "bytes": 414,
+      "sha256": "96ea4c16b693052a5af2d1c053d275f908b12d4fd621c13326636f065ecef542"
+    },
+    {
+      "path": "reboot-49493451/ssh/0005.response.json",
+      "bytes": 2882,
+      "sha256": "82e2e568dbbb8d53281337ce6b6f05d3e368c5c3fe015dc62ffa4a8f45bb9a00"
+    },
+    {
+      "path": "reboot-49493451/ssh/0006.request.json",
+      "bytes": 3967,
+      "sha256": "ef6c534f9ad54ae2c0774c1af8373690578d72ef50957ae6b711ef22ce451027"
+    },
+    {
+      "path": "reboot-49493451/ssh/0006.response.json",
+      "bytes": 8067,
+      "sha256": "701c13c8a452820910390743f05a973bb5863578d33cb029c9599d68ae9372df"
+    },
+    {
+      "path": "reboot-49493451/ssh/0008.request.json",
+      "bytes": 122,
+      "sha256": "649289ed4562910e6ee7e887d9687599f694451f32bd58809d20e814f95bb413"
+    },
+    {
+      "path": "reboot-49493451/ssh/0008.response.json",
+      "bytes": 296,
+      "sha256": "95254c11f01b95da03a39fdd68d37d1de414ebce881908b6d20dc034e575370b"
+    },
+    {
+      "path": "reboot-49493451/uvc/devices.txt",
+      "bytes": 54,
+      "sha256": "d0cd0a7cad7fd772f9ea804cb80369f4cd84cf97bad2e8307e2e0d5e53e3d7ef"
+    },
+    {
+      "path": "ssh/0004.request.json",
+      "bytes": 842,
+      "sha256": "c342508d5612a700c56b77b493861a14ea2f2fb3c391a3b6fb66ec2073bd3f2d"
+    },
+    {
+      "path": "ssh/0004.response.json",
+      "bytes": 8654,
+      "sha256": "05ccbd70d7ae00ad02fbea283b17addd4071886207d034ba813338d5339fe52e"
+    },
+    {
+      "path": "ssh/0005.request.json",
+      "bytes": 3144,
+      "sha256": "ba440f747041710a2c32c608ef9dad3b2b3efaccde1c29e28dc0810e8a7985d3"
+    },
+    {
+      "path": "ssh/0005.response.json",
+      "bytes": 256,
+      "sha256": "e24717bdbf3635e3542deff4691e7375d720ff4c681eea724602306eec7890a9"
+    },
+    {
+      "path": "ssh/0006.request.json",
+      "bytes": 257,
+      "sha256": "31152d3a029647c6c4403fb639708f58d270ecd54d1fc660489f03a0dcc68fc1"
+    },
+    {
+      "path": "ssh/0006.response.json",
+      "bytes": 1541,
+      "sha256": "e9fb4d6f51b92761498e54db8d7529687552a045926ad341cfa91d703fb4d309"
+    },
+    {
+      "path": "ssh/0007.request.json",
+      "bytes": 4280,
+      "sha256": "77e2b5c4c7890f7a2a4e511ec850bbf3390576556eb627babe56e9eea781e6bc"
+    },
+    {
+      "path": "ssh/0007.response.json",
+      "bytes": 258,
+      "sha256": "a501e3dcd12a6b25ce5805c23a41d0a291dd33e12a13307bf5925b55c883575c"
+    },
+    {
+      "path": "ssh/0008.request.json",
+      "bytes": 256,
+      "sha256": "e90bec21ddde61019de099ae6ff85b160e0ac0240e43a791cad1ceb686dcfa49"
+    },
+    {
+      "path": "ssh/0008.response.json",
+      "bytes": 1644,
+      "sha256": "399d3000001f8046dc13dbecd57f73978f5d9a1db3e4460791dad27a6633ccfa"
+    },
+    {
+      "path": "ssh/0009.request.json",
+      "bytes": 339,
+      "sha256": "ee7c9706e2249192d3f717fb4f015915b2c5acd131be0711bc5b649da68f295c"
+    },
+    {
+      "path": "ssh/0009.response.json",
+      "bytes": 4880,
+      "sha256": "8c0cc9a113dc8c5afa80b513e9e6c7d69e8402c7aa444fa6c725f4e530fea201"
+    },
+    {
+      "path": "ssh/0010.request.json",
+      "bytes": 3366,
+      "sha256": "1ca3100f8f1b3f9b2c1029d8db004113a09ad3ba1eb13fc841da4aa4f1507aab"
+    },
+    {
+      "path": "ssh/0010.response.json",
+      "bytes": 1347,
+      "sha256": "5747c9c9542f02274b37c963822f663414f394962d60a0d8de62ddacb69ea4d6"
+    },
+    {
+      "path": "ssh/0011.request.json",
+      "bytes": 437,
+      "sha256": "4e6e75f5facf9b12c26ff1318942ac5458997893a0dcaa22b43ada2ca5b9bddd"
+    },
+    {
+      "path": "ssh/0011.response.json",
+      "bytes": 3376,
+      "sha256": "a05678e0f9170628883f68330b38b9bafc86ad2d3796694dc518c6dbcc056894"
+    },
+    {
+      "path": "ssh/0012.request.json",
+      "bytes": 2554,
+      "sha256": "9e6ac3ee5c4a523da2f4fd3a9058255aff3e53d2cef61c790d21486662b63a20"
+    },
+    {
+      "path": "ssh/0012.response.json",
+      "bytes": 739,
+      "sha256": "a5069c9ed72d8c777a19c9a0b1f262705c426b0f0832f44d00c50f8fa875a8ea"
+    },
+    {
+      "path": "ssh/0013.request.json",
+      "bytes": 539,
+      "sha256": "a7b166375eba9ac3b3576243fcfd660ab5c6d7c322fad494ac63b2adcabecd18"
+    },
+    {
+      "path": "ssh/0013.response.json",
+      "bytes": 3832,
+      "sha256": "a3835d795606c9a0086a84e4c603a6a4be5ccbf48b23ff810591fafe65ae5a44"
+    },
+    {
+      "path": "ssh/0014.request.json",
+      "bytes": 341,
+      "sha256": "7e8917bec6490ee20d715efb9d622e59e8ca005c597ea576df9524d6b69bac5f"
+    },
+    {
+      "path": "ssh/0014.response.json",
+      "bytes": 113,
+      "sha256": "cd3c75e82cc5038ca1641725fe1e697a3b0143b017739208bdef943acd0c1441"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+PASS: full diagnostic integer network golden {'pattern': {'class_id': 0, 'margin_q': 0, 'score_q15': 0, 'low_conf': True}, 'zero': {'class_id': 2, 'margin_q': 2, 'score_q15': 258, 'low_conf': True}}
+PASS: manifest_v1 PROVISIONAL payload bytes=36032 sha256=14a1993336c67c83c115b7e6a1e67b198b487b99f325569f693ea0e4d67f1393 crc32=0x2f760211
+Traceback (most recent call last):
+  File "D:\Desktop\contests\2026fpga\FPGA-Alittle-Design\sim\build\exe-wt\sim\coprocessor\test_payload_manifest.py", line 25, in <module>
+    assert (args.output / "manifest.json.sha256").read_text().split()[0] == hashlib.sha256(manifest_text).hexdigest()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

@@ -1,0 +1,28 @@
+    25	        if(!s_rst_n) begin
+    26	            aw_hold<=0; ar_hold<=0; wd_hold<=0; ws_hold<=0;
+    27	            have_aw<=0; have_w<=0; w_busy<=0; r_busy<=0; w_req<=0; r_req<=0;
+    28	            w_ack_seen<=0; r_ack_seen<=0; s_bresp<=0; s_bvalid<=0; s_rdata<=0; s_rresp<=0; s_rvalid<=0;
+    29	            wack_s1<=0; wack_s2<=0; rack_s1<=0; rack_s2<=0;
+    30	            bresp_s1<=0; bresp_s2<=0; rdata_s1<=0; rdata_s2<=0; rresp_s1<=0; rresp_s2<=0;
+    31	        end else begin
+    32	            wack_s1<=w_ack; wack_s2<=wack_s1; rack_s1<=r_ack; rack_s2<=rack_s1;
+    33	            bresp_s1<=bresp_hold; bresp_s2<=bresp_s1;
+    34	            rdata_s1<=rdata_hold; rdata_s2<=rdata_s1; rresp_s1<=rresp_hold; rresp_s2<=rresp_s1;
+    35	            if(s_awvalid && s_awready) begin aw_hold<=s_awaddr; have_aw<=1; end
+    36	            if(s_wvalid && s_wready) begin wd_hold<=s_wdata; ws_hold<=s_wstrb; have_w<=1; end
+    37	            if(!w_busy && have_aw && have_w) begin w_req<=!w_req; w_busy<=1; have_aw<=0; have_w<=0; end
+    38	            if(w_busy && wack_s2!=w_ack_seen) begin
+    39	                w_ack_seen<=wack_s2; w_busy<=0; s_bresp<=bresp_s2; s_bvalid<=1;
+    40	            end else if(s_bvalid && s_bready) s_bvalid<=0;
+    41	            if(s_arvalid && s_arready) begin ar_hold<=s_araddr; r_req<=!r_req; r_busy<=1; end
+    42	            if(r_busy && rack_s2!=r_ack_seen) begin
+    43	                r_ack_seen<=rack_s2; r_busy<=0; s_rdata<=rdata_s2; s_rresp<=rresp_s2; s_rvalid<=1;
+    44	            end else if(s_rvalid && s_rready) s_rvalid<=0;
+    45	        end
+    46	    end
+    47	    reg w_ack,r_ack,w_active,r_active;
+    48	    (* ASYNC_REG="TRUE", SHREG_EXTRACT="NO" *) reg wreq_m1,wreq_m2,rreq_m1,rreq_m2;
+    49	    reg wreq_seen,rreq_seen;
+    50	    (* ASYNC_REG="TRUE", SHREG_EXTRACT="NO" *) reg [11:0] aw_m1,aw_m2,ar_m1,ar_m2;
+    51	    (* ASYNC_REG="TRUE", SHREG_EXTRACT="NO" *) reg [31:0] wd_m1,wd_m2;
+    52	    (* ASYNC_REG="TRUE", SHREG_EXTRACT="NO" *) reg [3:0] ws_m1,ws_m2;

@@ -1,0 +1,11 @@
+﻿echo ALIVE; date; python3 -c "from pynq import MMIO; m=MMIO(0x40000000,0x1000); s=m.read(0x10); print('IP_ID',hex(m.read(0)),'STATUS',hex(s),'ERROR_CODE',m.read(0x14),'RESULT_SEQ',m.read(0x7c)); print('ACCEPTED',(s>>11)&1,'UNCONSUMED',(s>>12)&1,'DONE',(s>>2)&1,'ERROR',(s>>3)&1,'TIMEOUT',(s>>4)&1,'BUSY',(s>>1)&1)"
+[?2004lALIVE
+Tue Sep 22 12:18:49 PM UTC 2026
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/home/xilinx/pynq/mmio.py", line 73, in __init__
+    self.array = self.device.mmap(base_addr, length)
+  File "/home/xilinx/pynq/pl_server/embedded_device.py", line 583, in mmap
+    raise EnvironmentError("Root permissions required.")
+OSError: Root permissions required.
+

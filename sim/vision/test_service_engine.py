@@ -74,6 +74,23 @@ def main():
             assert (run_dir / name).exists(), name
         assert result["targets"] and all((run_dir / t["roi_path"]).exists()
                                          for t in result["targets"])
+        # 快照核对器（C04 §2.3 + NC Q3 细则）：绑定/源哈希/ROI 像素哈希链；ROI 篡改必须拒绝
+        from round_artifacts import SnapshotError, load_snapshot
+        service_root = out / "service"
+        snap = load_snapshot(service_root, packet["session_id"], packet["check_id"])
+        assert snap["sha256"] == hashlib.sha256(FIXTURE.read_bytes()).hexdigest()
+        assert snap["engine_result"] is not None and snap["engine_result"]["targets"]
+        roi = run_dir / snap["engine_result"]["targets"][0]["roi_path"]
+        original_roi = roi.read_bytes()
+        roi.write_bytes(b"\x89PNG-tampered-roi")
+        try:
+            load_snapshot(service_root, packet["session_id"], packet["check_id"])
+            raise AssertionError("tampered ROI accepted")
+        except SnapshotError:
+            pass
+        roi.write_bytes(original_roi)
+        assert load_snapshot(service_root, packet["session_id"],
+                             packet["check_id"])["sha256"] == snap["sha256"]
         # The same loaded model serves automatic memory rounds with identical predictions.
         for expected_id in (2, 3):
             request = urllib.request.Request(

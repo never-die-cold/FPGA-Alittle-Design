@@ -1,0 +1,53 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+make: Entering directory '/d/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/riscv_fw'
+riscv32-unknown-elf-gcc -march=rv32i  -mabi=ilp32 -mcmodel=medany -mno-relax -O2 -Wall -Wextra -ffreestanding -nostdlib -nostartfiles -Wl,--build-id=none -T link.ld start.S cop_job.c -o cop_job.elf
+riscv32-unknown-elf-objcopy -O binary cop_job.elf cop_job.bin
+/d/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/build/vision-venv/Scripts/python.exe bin2hex.py cop_job.bin cop_job.hex
+cop_job.bin -> cop_job.hex: 16376 bytes, 4094 words (32-bit little-endian)
+rm cop_job.bin
+make: Leaving directory '/d/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/riscv_fw'
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/riscv/alu.v:3: warning: timescale for alu inherited from another file.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/riscv/branch_predict.v:1: warning: timescale for branch_predict inherited from another file.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/riscv/core_top.v:3: warning: timescale for core_top inherited from another file.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/riscv/decode.v:3: warning: timescale for decode inherited from another file.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/riscv/dmem.v:3: warning: timescale for dmem inherited from another file.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/riscv/forwarding.v:2: warning: timescale for forwarding inherited from another file.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/riscv/hazard.v:2: warning: timescale for hazard inherited from another file.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/riscv/id_ex_stage.v:2: warning: timescale for id_ex_stage inherited from another file.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/riscv/if_stage.v:4: warning: timescale for if_stage inherited from another file.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/riscv/imem.v:3: warning: timescale for imem inherited from another file.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/riscv/mem_wb_stage.v:2: warning: timescale for mem_wb_stage inherited from another file.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/riscv/muldiv.v:3: warning: timescale for muldiv inherited from another file.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/riscv/pc.v:3: warning: timescale for pc inherited from another file.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/riscv/pynq_cop_top.v:2: warning: timescale for pynq_cop_top inherited from another file.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/riscv/pynq_z2_top.v:3: warning: timescale for pynq_z2_top inherited from another file.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/riscv/regfile.v:3: warning: timescale for regfile inherited from another file.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/riscv/soc_top.v:3: warning: timescale for soc_top inherited from another file.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_pynq_cop_top.v:1: ...: The inherited timescale is here.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/coprocessor/cop_axi_lite_cdc.v:32: error: Unable to bind wire/reg/memory `w_ack' in `tb_pynq_cop_top.dut.axil_cdc'
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/coprocessor/cop_axi_lite_cdc.v:47:      : A symbol with that name was declared here. Check for declaration after use.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/coprocessor/cop_axi_lite_cdc.v:32: error: Unable to bind wire/reg/memory `r_ack' in `tb_pynq_cop_top.dut.axil_cdc'
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/coprocessor/cop_axi_lite_cdc.v:47:      : A symbol with that name was declared here. Check for declaration after use.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/coprocessor/cop_config_regs.v:39: warning: @* is sensitive to all 20 words in array 'shadow'.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/coprocessor/cop_top.v:134: warning: @* is sensitive to all 16 words in array 'result_mem'.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/coprocessor/cop_top.v:135: warning: @* is sensitive to all 16 words in array 'result_mem'.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/coprocessor/cop_top.v:136: warning: @* is sensitive to all 16 words in array 'result_mem'.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/coprocessor/cop_top.v:137: warning: @* is sensitive to all 16 words in array 'result_mem'.
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/src/coprocessor/cop_top.v:138: warning: @* is sensitive to all 16 words in array 'result_mem'.
+2 error(s) during elaboration.

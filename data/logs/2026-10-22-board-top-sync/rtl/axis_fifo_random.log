@@ -1,0 +1,7 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+PASS: axis_fifo_random ratio0 Ts:Tm=10:26 preserves 257 beats
+PASS: axis_fifo_random ratio1 Ts:Tm=26:10 preserves 257 beats
+PASS: axis_fifo_random ratio2 Ts:Tm=14:22 preserves 257 beats
+PASS: axis_fifo_random ratio3 Ts:Tm=22:14 preserves 257 beats
+PASS: axis_fifo_random all ratios no duplicate, loss, or reorder
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_cop_axis_async_fifo_random.v:46: $finish called at 49498000 (1ps)

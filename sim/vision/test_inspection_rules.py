@@ -22,6 +22,27 @@ def main():
         result = judge([{**targets[0], field: value}], order, 0.8)
         assert result["verdict"] == "RECHECK" and reason in result["reasons"]
     assert judge(targets * 6, order, 0.8)["reasons"] == ["target_limit"]
+    # C03 §8 分层（NC 10-14 评审）：业务策略 10 / 协议能力 16 分离，边界全覆盖
+    ten = [{"class": "bolt", "score": 0.9} for _ in range(10)]
+    ten_order = {"bolt": 10, "nut": 0, "washer": 0}
+    ten_result = judge(ten, ten_order, 0.8)
+    assert ten_result["verdict"] == "CHECK_PASS" and "target_limit" not in ten_result["reasons"]
+    for count in (11, 16, 17):
+        limited = judge([{"class": "bolt", "score": 0.9} for _ in range(count)], order, 0.8)
+        assert limited["verdict"] == "RECHECK" and "target_limit" in limited["reasons"]
+    try:
+        judge(ten, {"bolt": 11, "nut": 0, "washer": 0}, 0.8)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("work order above policy accepted")
+    for bad_policy in (0, 17):
+        try:
+            judge(targets, order, 0.8, 16, bad_policy)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("invalid policy max accepted")
     invalid = [(targets, {**order, "bolt": True}, 0.8), (targets, dict.fromkeys(order, 0), 0.8),
                (targets, {**order, "nut": -1}, 0.8), (targets, order, float("nan")),
                ([{**targets[0], "score": float("nan")}], order, 0.8)]

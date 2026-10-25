@@ -1,0 +1,8 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+PASS: K3-LATENCY nominal one-cycle BRAM read matches; early/late samples mismatch visibly
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_cop_bram_latency.v:24: $finish called at 66000 (1ps)
+PASS: full diagnostic integer network golden {'pattern': {'class_id': 0, 'margin_q': 0, 'score_q15': 0, 'low_conf': True}, 'zero': {'class_id': 2, 'margin_q': 2, 'score_q15': 258, 'low_conf': True}}
+PASS: cnn_sequencer D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/build/coprocessor/network-vectors/pattern all 9225 packed words/73795 elements match integer network; logits=01fd01 class=0 margin=0 cycles=472594
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_cnn_sequencer.v:198: $finish called at 4778956000 (1ps)
+PASS: cnn_sequencer D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/build/coprocessor/network-vectors/zero all 9225 packed words/73795 elements match integer network; logits=04fd02 class=2 margin=2 cycles=472594
+D:/Desktop/contests/2026fpga/FPGA-Alittle-Design/sim/build/exe-wt/sim/coprocessor/tb_cnn_sequencer.v:198: $finish called at 4778956000 (1ps)

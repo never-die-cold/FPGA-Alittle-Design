@@ -74,7 +74,8 @@ sim/build/vision-client/dist/vision_preview/vision_preview.exe --replay data/evi
 1→16→32→32→64，第 1/3 层步长为 2，输出三类概率。
 这是交付 FP32 原型，不是正式 INT8 网络；现已完成[实际逐层 MAC 审计](module3-prototype-reference.md)，不能把理想预算当作板端性能。
 
-工单固定含 bolt/nut/washer 三个非负整数，期望总数为 1 到 max_targets。
+工单固定含 bolt/nut/washer 三个非负整数，期望总数为 1 到**业务策略上限**（默认 10，C03 §8）；
+协议/硬件能力上限仍为 16，二者不互替（超策略即 RECHECK 且不分类，未完整计数不得展示/导出为实测）。
 delta=实际−工单，missing=max(-delta,0)，extra=max(delta,0)。
 低分、未知类别、触边或超目标上限优先 `RECHECK`；无不确定项时，数量一致为
 `CHECK_PASS`，否则 `CHECK_FAIL`。超上限不做截断推理，实际数量字段为 null，避免部分结果放行。
