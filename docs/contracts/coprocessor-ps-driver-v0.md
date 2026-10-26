@@ -147,6 +147,15 @@ dma.load_model(addr, payload) / load_rois(addr, rois, stride) / load_descriptors
 | 低 | IRQ | OPEN-5；PS 轮询 STATUS | 若启用中断，冻结 `IRQ_ENABLE/IRQ_PENDING/IRQ_ACK` 语义 |
 | 低 | CDC/复位深测 | OPEN-4/7；PS 已用 `RESULT_SEQ` 双读/期望序号兜底 | 验证队友扩展 TB；PS 不改协议 |
 
+### 6.1 2026-10-25 板端证据勘误（不改接口）
+
+上表“首读 `STATUS=0x0` 疑与超频/首访问有关”的原因判断已由现场复测否定：FCLK1 已读回
+40.000000 MHz 时，改钟后的旧 PL 连续 20 次仍为 `0x0`；时钟不变、fresh Overlay 重配后
+20 次均为 `0x1`。因此 `0x0` 只表示 cop 域未就绪/已失效，不能判成超频。强制恢复顺序为
+改钟 → 重配 PL → 等稳定 → FCLKRESETN1 脉冲 → 首读校验，详见
+[`coprocessor-board-clock-runbook.md`](../coprocessor-board-clock-runbook.md)。本勘误不改变任何寄存器、
+握手或 PS 软件接口语义。
+
 ## 7. 证据与边界
 
 - 寄存器模型：`src/pynq_host/cop_mmio_sim.py`；PS 驱动：`src/pynq_host/cop_driver.py`；

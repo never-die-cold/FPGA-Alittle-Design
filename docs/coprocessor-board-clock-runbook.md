@@ -1,7 +1,7 @@
 # 协处理器板端 40 MHz 时钟 runbook
 
-> 当前板级功能状态仍为 **UNVERIFIED**。Windows Vivado 2026.1 的 40 MHz 整机门禁 PASS，
-> 不等于 PYNQ 板上 FCLK1 已运行在 40 MHz，也不等于板级验收。
+> 当前板级功能状态仍为 **UNVERIFIED**。旧源码的 Windows Vivado 2026.1 整机门禁曾 PASS；
+> 加入 IMEM 初始化门禁后的新源码尚待重跑，旧结论不等于新 bit 或板级验收。
 
 ## 为什么 JTAG 后仍是 142.857 MHz
 
@@ -9,26 +9,31 @@ JTAG 下载 `.bit` 只配置 PL，不执行 XSA 中的 PS7 初始化，因此不
 设计门禁使用的 40 MHz。NC 已实测 JTAG 成功且只读预检可用，但 FCLK1 为 142.857 MHz；
 在读回确认 40 MHz 前，禁止写“40 MHz 板级通过”。
 
-当前待验证假设是：142.857 MHz 超过本设计 40 MHz 门禁条件，时序违例使每组命令首次 STATUS
-读到复位值 `0x00000000`，后续才读到 `0x00000001`。判据不是“后一次正常”，而是切到 40 MHz
-后连续 20 次重新映射并首次读取 STATUS 均为 `0x00000001`（READY=1、BUSY=0）。若 40 MHz
-仍出现 `0x0`，不要改 RTL；先沿“复位释放到首次 AXI 访问的同步延迟”采集连续读数和 ILA 波形。
+NC 已复现：FCLK1 改成 40 MHz 后，旧 PL 上连续 20 次 STATUS 仍为 `0x00000000`；保持时钟不变
+重新配置 PL 后，20 次全部为 `0x00000001`。因此 `0x0` 只表示 cop 域未就绪、处于复位态或已因
+改钟失效，**不能**再解释成“超频”。唯一允许的运行时顺序是：改 FCLK1 → 重新配置 PL → 等
+PL done/时钟稳定 → 脉冲 FCLKRESETN1 → 首读校验；任一步未完成都禁止访问 COP MMIO。
 
 ## 路径 A：PYNQ Linux 运行时改钟（本轮首选）
 
 解包新 NC 包、核验 `SHA256SUMS`，在板上包目录执行：
 
 ```bash
-sudo -E python3 payload/tools/cop_payload_loader.py clock --reads 20
+sudo -E python3 payload/tools/cop_payload_loader.py clock --package . --reads 20
 ```
 
-该命令执行等价于 `Clocks.fclk1_mhz = 40.0`，随后读回 `Clocks.fclk1_mhz`，并为每个样本
-重新建立 COP MMIO 映射后读取一次 STATUS。合格证据必须同时包含：
+该命令先写 `Clocks.fclk1_mhz = 40.0`，再用包内相邻的 `.bit/.hwh` 创建 fresh `Overlay`，确认
+`is_loaded()` 后等待稳定；随后按 UG585 对 SLCR `FPGA_RST_CTRL` bit1 先置 1 再清 0，复位
+`cop_rst_n_i` 对应的 FCLKRESETN1。只有此后脚本才建立 COP MMIO。合格证据必须同时包含：
 
+- `board_sequence=set_fclk,reconfigure_pl,wait_stable,pulse_fclkreset1,status_check`；
 - `measured_fclk1_mhz=40.000000`；
-- `status_first_reads=` 后 20 项全部为 `0x00000001`。
+- `status_first_reads=` 后 20 项全部为 `0x00000001`；
+- 两秒内出现 `firmware_smoke=PASS`；否则输出 `firmware_smoke_timeout_dump` 并失败。
 
-命令只打印实测值，不宣告板级 PASS。掉电或 PS 重启可能恢复启动镜像的时钟配置，届时必须重做。
+`run` 命令也会在任何 COP MMIO 前完整重做同一序列，避免人工停顿耗尽固件等待期限。仅改钟而
+未重配时，状态守卫报 `CLOCK_SEQUENCE_INCOMPLETE`；若重配后仍读到 `0x0`，报 `COP_NOT_READY`，
+不得继续 DMA/START。命令只打印实测值，不宣告板级 PASS；掉电或 PS 重启后必须重做。
 
 ## 路径 B：由 XSA 生成 FSBL + bit 的 BOOT.BIN
 
