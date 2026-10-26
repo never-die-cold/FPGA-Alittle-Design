@@ -9,11 +9,18 @@
 - xsa E4FE5D35973699F62EE483188E7DFE4264D04E271602910728B29130D7A4AB77
 - 包内 SHA256SUMS 12/12；tools 含 cop_payload_loader.py、cop_fclk.py、cop_board_fast_run.py。
 
-## B4 时钟（JTAG 前）
+## B4 冷启动顺序（修正）
 
-    sudo -E /usr/local/share/pynq-venv/bin/python3 payload/tools/cop_fclk.py set --clk 1 --mhz 40
+冷板/无 PL 时不要先跑 cop_fclk.py：PYNQ Clocks 找不到 device，会报 No Devices Found
+（B 的 b4-fclk-set-40.txt 已复现）。
 
-期望 after_mhz=40.0、in_spec=true。JTAG 烧写由用户/队友执行；B 不启动 Vivado。
+正确顺序：
+1. 由用户/队友 JTAG 烧一次 edge bit（PL 配置，PYNQ device 出现）。
+2. 运行包内 loader 的 clock（它做 FCLK1=40 -> 重载 PL -> FCLKRESET1 -> 20 次首读）：
+
+    sudo -E /usr/local/share/pynq-venv/bin/python3 payload/tools/cop_payload_loader.py clock --package . --reads 20 --smoke-timeout 2
+
+3. 若坚持用 cop_fclk.py：必须在已有 PL/device 后 set，再 JTAG 重载 bit，再跑 loader clock。
 
 ## B4 烧写后活性
 
@@ -47,3 +54,9 @@
 - NO_ACK：记录 PL 配置到 CFG/DMA 的时间；查固件 guard。
 - 结果不符：先核对包 SHA、EXPECTED 行、MODEL_ID；不要放宽黄金。
 - 旧 566b 包保留 fallback，但最终证据优先用 edge-fix bit 9341...。
+
+## 板卡健康（22:27/22:31）
+
+- serial-state-1.txt / serial-netfix-1.txt 显示 mmc0 Timeout、SDHCI ADMA Err、
+  I/O error mmcblk0p2，串口命令多次超时（HOST_EXIT_CODE=124）。
+- 若持续：断电、重插 SD 或换备份卡后再跑；不要在 mmc 错误下强行烧写/跑 loader。

@@ -26,10 +26,11 @@ IMEM_FIRST_WORD=00008117、READMEM_WARNINGS=0。
 ## B 的执行顺序
 
 1. 校验包内 SHA256SUMS；上传 edge 诊断包到板上新目录，不覆盖旧包。
-2. set FCLK1=40 -> 用户/队友 JTAG 烧 9341... -> loader clock --reads 20 --smoke-timeout 2。
+2. 冷启动：先由用户/队友 JTAG 烧 9341...（PL 配置、PYNQ device 出现）-> 跑 loader clock --package . --reads 20 --smoke-timeout 2（内含 FCLK1=40、重载 PL、FCLKRESET1、20 次首读）。不要先跑 cop_fclk.py（无 device 会 No Devices Found；B 的 b4-fclk-set-40.txt 已复现）。
 3. 正常 loader 跑 zero/pattern；若仍异常再用 fast-run。
 4. 训练包跑 roi_001/frame；期望 logits -12,-30,41 与 34,-41,5；MODEL_ID=0x4A303251。
 5. 结果写 data/logs/2026-10-26-board/；把包/bit SHA 与 JSON 回给 A。
+6. 若 serial-state-1/serial-netfix-1 的 mmc0/ADMA 错误持续，先断电/重插 SD/换备份卡，再继续。
 
 ## 期望结果
 
