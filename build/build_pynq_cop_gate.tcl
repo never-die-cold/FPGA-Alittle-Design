@@ -71,6 +71,8 @@ if {[catch {
         return [join $result ,]
     }
     proc find_gate_python {} {
+        unset -nocomplain ::env(PYTHONHOME)
+        unset -nocomplain ::env(PYTHONPATH)
         if {[info exists ::env(COP_PYTHON)] && [file isfile $::env(COP_PYTHON)]} {
             return $::env(COP_PYTHON)
         }

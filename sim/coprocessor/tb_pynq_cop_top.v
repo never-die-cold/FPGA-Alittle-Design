@@ -7,9 +7,11 @@ module tb_pynq_cop_top;
     reg [63:0] tdata=0; reg [7:0] tkeep=0; reg tlast=0,tvalid=0,dma_start=0,dma_kind=0;
     wire tready,dma_start_ready,payload_error; wire [3:0] led;
     integer cycles=0;
+    integer starts=0;
     always #5 ps_clk=~ps_clk;
     always #12.5 cop_clk=~cop_clk;
     always @(posedge ps_clk) cycles=cycles+1;
+    always @(posedge cop_clk) if(dut.cop_dma_start) starts=starts+1;
     pynq_cop_top dut(.ps_clk_100_i(ps_clk),.ps_rst_n_i(ps_rst_n),.cop_clk_40_i(cop_clk),
         .cop_rst_n_i(cop_rst_n),.s_axi_awaddr_i(awaddr),.s_axi_awvalid_i(awvalid),
         .s_axi_awready_o(awready),.s_axi_wdata_i(wdata),.s_axi_wstrb_i(wstrb),
@@ -37,7 +39,19 @@ module tb_pynq_cop_top;
         while(!dut.dma_valid) @(negedge cop_clk);
         if(dut.dma_data!==64'h0123_4567_89ab_cdef || dut.dma_keep!==8'hff || !dut.dma_last) $fatal(1);
         if(payload_error) $fatal(1);
-        $display("PASS: pynq_cop_top 100/40MHz AXI-Lite reads COP_ID and AXIS FIFO preserves 73-bit beat; cop_job.hex elaborated");
+        // DMA start is level-sampled on PS side; holding it high must not retrigger.
+        while(!dma_start_ready) @(negedge ps_clk);
+        dma_kind=0; dma_start=1;
+        repeat(400) @(negedge ps_clk);
+        if(starts!==1) $fatal(1);
+        dma_start=0;
+        repeat(4) @(negedge ps_clk);
+        dma_start=1;
+        while(starts<2) @(negedge ps_clk);
+        repeat(200) @(negedge ps_clk);
+        dma_start=0;
+        if(starts!==2) $fatal(1);
+        $display("PASS: pynq_cop_top 100/40MHz AXI-Lite reads COP_ID, AXIS FIFO preserves 73-bit beat, and DMA start edge holds one request per level; cop_job.hex elaborated");
         $finish;
     end
     initial begin #200000; $display("FAIL: pynq_cop_top timeout cycles=%0d",cycles); $fatal(1); end
