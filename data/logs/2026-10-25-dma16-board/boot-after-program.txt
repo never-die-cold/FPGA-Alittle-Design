@@ -1,0 +1,22 @@
+﻿[   [0;31m*[0;1;31m*[0m[0;31m*[0m] (2 of 3) A start job is running for???he boot partition (25s / no limit)
+M[K[[0;32m  OK  [0m] Finished [0;1;39mRaise network interfaces[0m.
+[K[[0;32m  OK  [0m] Reached target [0;1;39mNetwork[0m.
+[[0;32m  OK  [0m] Reached target [0;1;39mNetwork is Online[0m.
+[[0;32m  OK  [0m] Started [0;1;39mISC DHCP IPv4 server[0m.
+[[0;32m  OK  [0m] Started [0;1;39mISC DHCP IPv6 server[0m.
+         Starting [0;1;39mSamba NMB Daemon[0m...
+         Starting [0;1;39mOpenBSD Secure Shell server[0m...
+         Starting [0;1;39mPermit User Sessions[0m...
+[[0;32m  OK  [0m] Started [0;1;39mUnattended Upgrades Shutdown[0m.
+[[0;32m  OK  [0m] Finished [0;1;39mPermit User Sessions[0m.
+[[0;32m  OK  [0m] Started [0;1;39mSerial Getty on ttyPS0[0m.
+         Starting [0;1;39mSet console scheme[0m...
+
+PYNQ Linux, based on Ubuntu 22.04 pynq ttyPS0
+
+pynq login: xilinx (automatic login)
+
+Welcome to PYNQ Linux, based on Ubuntu 22.04 (GNU/Linux 6.6.10-xilinx-v2024.1-gb36799f4e960 armv7l)
+
+Last login: Tue Sep 22 17:17:24 UTC 2026 on ttyPS0
+[?2004hxilinx@pynq:~$ 

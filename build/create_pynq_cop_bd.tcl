@@ -22,7 +22,8 @@ set control [cop_ip control_ic xilinx.com:ip:axi_interconnect:2.1]
 set_property -dict [list CONFIG.NUM_SI 1 CONFIG.NUM_MI 3] $control
 set dma [cop_ip dma xilinx.com:ip:axi_dma:7.1]
 set_property -dict [list CONFIG.c_include_sg 0 CONFIG.c_include_mm2s 1 \
-    CONFIG.c_include_s2mm 0 CONFIG.c_m_axis_mm2s_tdata_width 64] $dma
+    CONFIG.c_include_s2mm 0 CONFIG.c_m_axis_mm2s_tdata_width 64 \
+    CONFIG.c_sg_length_width 16] $dma
 set memory [cop_ip memory_ic xilinx.com:ip:axi_interconnect:2.1]
 set_property -dict [list CONFIG.NUM_SI 1 CONFIG.NUM_MI 1] $memory
 set gpio [cop_ip dma_control xilinx.com:ip:axi_gpio:2.0]
