@@ -59,6 +59,11 @@ LATCHES=0、DRC_BLOCKING=0；CDC-3=12、CDC-6=7、CDC-15=73，全部逐条命中
 `build/reports/pynq_cop_40mhz/gate_summary.txt` 是本次数字的权威报告。JL 门禁通过只证明整机
 综合实现，不等于 NC 下载、现场稳定或板级验收；PROVISIONAL payload 也不是发布模型。
 
+上述 `d14a4bd0…` 是加入 IMEM 初始化门禁前的历史产物。NC 已证明其中 CPU 无固件活动，因此
+不得继续用于 loader 验收。修改后的源码必须重新运行整机门禁；在新报告同时出现
+`IMEM_FIRST_WORD=00008117`、`IMEM_INIT_NONZERO=1`、`READMEM_WARNINGS=0` 前，新 bit 状态为
+**UNVERIFIED**。检查细节见 [`coprocessor-imem-init-gate.md`](coprocessor-imem-init-gate.md)。
+
 ## Vivado 2026.1 CDC 格式与 allowlist
 
 汇总表格式是 `ID Severity Count Description`，最终实测为 `CDC-3 Info 12`、
@@ -97,11 +102,14 @@ UTF-8/ASCII 与 LF，不依赖宿主换行转换；Verilog-2001 的声明必须�
 | `timing_impl.rpt` | setup/hold、WNS | WNS≥0，且报告不得有失败的 setup/hold 路径 |
 | `check_timing.rpt` | no_clock、constant_clock、unconstrained endpoints、generated clocks | 四项计数全部为 0 |
 | `drc_impl.rpt` | Error / Critical Warning | 0 |
+| `imem_precheck.txt` / `imem_init_synth.rpt` | 源 hex 前缀、RAMB INIT、地址 0 首字 | 首字 `00008117` 且 INIT 非全零 |
+| `readmem_synth_diagnostics.txt` | `$readmemh` / `cop_job.hex` 相关消息 | warning/error 为 0；原始匹配行必须留存 |
 | `cdc_impl.rpt` | core/cop 跨域 | 不得有未解释、未豁免的 unsafe CDC；邮箱以外的新跨域一律失败 |
 | `vivado_version.txt` | 工具版本 | 记录实际版本，不借用历史版本结论 |
 
 整机报告写入 `build/reports/pynq_cop_40mhz/`。`gate_summary.txt` 必须同时给出
-WNS≥0、DSP≤220、BRAM36≤140、latch=0、CDC allowlist 逐条通过、DRC blocking=0；任一缺失即 FAIL。
+WNS≥0、DSP≤220、BRAM36≤140、latch=0、IMEM 首字/非零/日志门禁、CDC allowlist 逐条通过、
+DRC blocking=0；任一缺失即 FAIL。
 只有 Tcl 打印 `PYNQ COP WHOLE-SYSTEM GATE PASSED` 后才会生成
 `build/run/pynq_cop_40mhz/pynq_cop_40mhz.bit/.hwh/.xsa`。
 
