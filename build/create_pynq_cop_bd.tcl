@@ -18,6 +18,12 @@ set_property -dict [list CONFIG.PCW_USE_M_AXI_GP0 1 CONFIG.PCW_USE_S_AXI_HP0 1 \
 cop_ext_intf ps7/DDR DDR
 cop_ext_intf ps7/FIXED_IO FIXED_IO
 set pl [create_bd_cell -type module -reference pynq_cop_top pl]
+if {![info exists cop_imem_hex] || ![info exists cop_dmem_hex] ||
+    ![file isfile $cop_imem_hex] || ![file isfile $cop_dmem_hex]} {
+    error "parent build Tcl must supply complete absolute IMEM/DMEM images"
+}
+set_property -dict [list CONFIG.IMEM_INIT_FILE $cop_imem_hex \
+    CONFIG.DMEM_INIT_FILE $cop_dmem_hex] $pl
 set control [cop_ip control_ic xilinx.com:ip:axi_interconnect:2.1]
 set_property -dict [list CONFIG.NUM_SI 1 CONFIG.NUM_MI 3] $control
 set dma [cop_ip dma xilinx.com:ip:axi_dma:7.1]

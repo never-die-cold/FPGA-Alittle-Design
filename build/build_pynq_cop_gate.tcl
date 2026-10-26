@@ -70,12 +70,80 @@ if {[catch {
         set result {}; foreach id [lsort [array names summary_count]] {lappend result "$id=$summary_count($id)"}
         return [join $result ,]
     }
+    proc find_gate_python {} {
+        if {[info exists ::env(COP_PYTHON)] && [file isfile $::env(COP_PYTHON)]} {
+            return $::env(COP_PYTHON)
+        }
+        foreach name {python3 python} {
+            set command [auto_execok $name]
+            if {$command ne ""} {return [lindex $command 0]}
+        }
+        error "Python is required for the cop_job pre-synthesis gate"
+    }
+    proc init_hex_digits {raw} {
+        set value [string trim $raw]
+        if {[regexp -nocase {'h([0-9a-f_]+)$} $value -> digits]} {
+            return [string map {_ ""} $digits]
+        }
+        if {[regexp -nocase {^0x([0-9a-f_]+)$} $value -> digits] ||
+            [regexp -nocase {^([0-9a-f_]+)$} $value -> digits]} {
+            return [string map {_ ""} $digits]
+        }
+        error "unrecognized BRAM INIT value: $raw"
+    }
+    proc gate_imem_init {expected report} {
+        set cells [get_cells -quiet -hier -filter \
+            {REF_NAME == RAMB36E1 && NAME =~ */soc/u_imem/rdata_reg_*}]
+        array set lane_cell {}
+        foreach cell $cells {
+            if {[regexp {rdata_reg_([0-7])$} [get_property NAME $cell] -> lane]} {
+                set lane_cell($lane) $cell
+            }
+        }
+        if {[array size lane_cell] != 8} {
+            error "IMEM INIT gate expected eight 4-bit RAMB36 lanes, found [array size lane_cell]"
+        }
+        set first ""; set nonzero 0; set details {}
+        for {set lane 0} {$lane < 8} {incr lane} {
+            set cell $lane_cell($lane)
+            set width [get_property READ_WIDTH_A $cell]
+            if {$width != 4} {error "IMEM lane $lane READ_WIDTH_A=$width, expected 4"}
+            for {set index 0} {$index < 128} {incr index} {
+                set digits [init_hex_digits [get_property [format INIT_%02X $index] $cell]]
+                if {[regexp -nocase {[1-9a-f]} $digits]} {set nonzero 1}
+            }
+            set init0 [init_hex_digits [get_property INIT_00 $cell]]
+            set first "[string index $init0 end]$first"
+            lappend details "lane=$lane cell=[get_property NAME $cell] init00=$init0"
+        }
+        set out [open $report w]
+        puts $out "IMEM_FIRST_WORD=$first\nIMEM_INIT_NONZERO=$nonzero\n[join $details \n]"
+        close $out
+        if {!$nonzero} {error "synthesized IMEM INIT_* properties are all zero"}
+        if {![string equal -nocase $first $expected]} {
+            error "synthesized IMEM first word $first differs from cop_job $expected"
+        }
+        puts "IMEM POST-SYNTH GATE PASSED: first_word=$first nonzero=1 cells=8"
+        return $first
+    }
     set script_dir [file normalize [file dirname [info script]]]
     set root [file normalize [file join $script_dir ..]]
     set run_dir [file join $script_dir run pynq_cop_40mhz]
     set rep_dir [file join $script_dir reports pynq_cop_40mhz]
     set project_dir [file join $run_dir project]
     file mkdir $run_dir; file mkdir $rep_dir; cd $root
+    set cop_job_hex [file normalize [file join $root src riscv_fw cop_job.hex]]
+    set cop_job_first 00008117
+    set gate_python [find_gate_python]
+    set imem_gate [file join $root tools cop_imem_gate.py]
+    puts [exec $gate_python $imem_gate precheck $cop_job_hex \
+        [file join $rep_dir imem_precheck.txt] 2>@1]
+    set firmware_dir [file join $run_dir firmware]
+    file mkdir $firmware_dir
+    set cop_imem_hex [file join $firmware_dir cop_job.imem.hex]
+    set cop_dmem_hex [file join $firmware_dir cop_job.dmem.hex]
+    puts [exec $gate_python $imem_gate materialize $cop_job_hex $cop_imem_hex $cop_dmem_hex \
+        --depth 8192 2>@1]
     if {![file isfile sim/build/hdmi-source/ps7_config.tcl]} {
         error "Missing pinned PYNQ PS preset; run sim/scripts/prepare_hdmi_sources.py first"
     }
@@ -87,6 +155,7 @@ if {[catch {
     create_project -force pynq_cop_40mhz $project_dir -part xc7z020clg400-1
     set_property target_language Verilog [current_project]
     add_files [concat [glob src/riscv/*.v] [glob src/coprocessor/*.v]]
+    add_files -norecurse [list $cop_job_hex $cop_imem_hex $cop_dmem_hex]
     source build/create_pynq_cop_bd.tcl
     set bd [get_files */cop_system.bd]
     generate_target all $bd
@@ -98,7 +167,11 @@ if {[catch {
     launch_runs synth_1 -jobs 2
     wait_on_run synth_1
     if {[get_property PROGRESS [get_runs synth_1]] ne "100%"} {error "Whole-system synthesis failed"}
+    set synth_log [file join [get_property DIRECTORY [get_runs synth_1]] runme.log]
+    puts [exec $gate_python $imem_gate scan-log $synth_log \
+        [file join $rep_dir readmem_synth_diagnostics.txt] 2>@1]
     open_run synth_1
+    set imem_first [gate_imem_init $cop_job_first [file join $rep_dir imem_init_synth.rpt]]
     reject_latches SYNTHESIS
     report_utilization -file [file join $rep_dir utilization_synth.rpt]
     report_cdc -details -file [file join $rep_dir cdc_synth.rpt]
@@ -135,7 +208,7 @@ if {[catch {
     set bad_drc [get_drc_violations -quiet -filter {SEVERITY == Error || SEVERITY == "Critical Warning"}]
     if {[llength $bad_drc]} {error "DRC errors or critical warnings: $bad_drc"}
     set summary [open [file join $rep_dir gate_summary.txt] w]
-    puts $summary "VIVADO=[version -short]\nWNS_NS=$wns\nDSP=$dsp\nBRAM36=$bram36\nLATCHES=0\nCDC_RULE_COUNTS=$cdc_counts\nCDC_ALLOWLIST_ENTRIES=5\nDRC_BLOCKING=0"
+    puts $summary "VIVADO=[version -short]\nWNS_NS=$wns\nDSP=$dsp\nBRAM36=$bram36\nLATCHES=0\nIMEM_FIRST_WORD=$imem_first\nIMEM_INIT_NONZERO=1\nREADMEM_WARNINGS=0\nCDC_RULE_COUNTS=$cdc_counts\nCDC_ALLOWLIST_ENTRIES=5\nDRC_BLOCKING=0"
     close $summary
     close_design
     launch_runs impl_1 -to_step write_bitstream -jobs 2
