@@ -3,6 +3,41 @@
 > 交付边界：**JL 交付 ≠ 板级验收**。JL 负责 RTL、Windows Vivado 产物与可追溯包；
 > NC 负责下载和现场稳定性；WC 负责软件接入、独立软件看门狗及消费式 W1C 流程。
 
+## 2026-10-26 现场更新：edge-fix bit 与板卡阻塞
+
+> 本节更新于 2026-10-26 22:43，优先于下方旧状态表；旧表保留历史。
+
+| 项 | 结论 | 证据 |
+|:---|:---|:---|
+| edge-fix 综合实现 | PASS | bit 9341F7FA...；WNS +3.062 ns、DSP 136、BRAM36 69、DRC 0、IMEM_FIRST_WORD=00008117 |
+| edge-fix 包 | PASS | build/board-package-edge-fix（pattern,zero）、build/board-package-edge-fix-trained（roi_001,frame）；SHA 12/12 |
+| 板上诊断网 | 旧 bit PASS | 旧 IMEM bit 59c2c918... 上 zero/pattern 6/6；不是 edge-fix bit |
+| edge-fix 板上 | UNVERIFIED | edge-fix bit/trained 尚未上板；板卡 SD/mmc 故障待恢复 |
+| 连续作业 | 未实现 | 固件单作业，每 case 需重新 Overlay |
+
+冷启动顺序（2026-10-26 修正）：
+
+1. 冷板无 PL 时不要先跑 cop_fclk.py（PYNQ Clocks 会报 No Devices Found）。
+2. 先由用户/队友 JTAG 烧 edge-fix bit，让 PL/PYNQ device 出现。
+3. 再跑 loader clock：
+
+~~~bash
+sudo -E /usr/local/share/pynq-venv/bin/python3 payload/tools/cop_payload_loader.py clock --package . --reads 20 --smoke-timeout 2
+~~~
+
+4. 然后 normal loader 跑 zero/pattern，再跑 roi_001/frame。
+
+期望：zero 2/2/258 logits 2,-3,4；pattern 0/0/0 logits 1,-3,1；
+roi_001 2/53/6837 logits -12,-30,41；frame 0/29/3741 logits 34,-41,5。
+MODEL_ID：诊断 0x4A303250，训练 0x4A303251。
+
+板卡当前阻塞：mmc0/SDHCI I/O 错误、串口命令超时、冷启动 No Devices；
+现场操作见 data/logs/2026-10-26-board/USER-ACTIONS.md；
+构建/包/测试证据见 data/logs/2026-10-26-build/README.md；
+B 交接见 data/logs/2026-10-26-build/B-QUICKSTART.md 与 HANDOFF-A-to-B.md。
+
+边界：BOARD 仍 UNVERIFIED；全链相机→板→EXE、正式 INT8/精度、M2/M3/M4 未完成。
+
 ## 当前真实状态
 
 | 状态 | 结论 | 证据 / 缺口 |
