@@ -8,8 +8,8 @@
 | 状态 | 结论 | 证据 / 缺口 |
 |:---|:---|:---|
 | 仿真跑通 | **PASS** | 行为级全回归；BRAM 模式 pattern/zero 各 73,795 元素逐项一致；延迟边界 PASS |
-| 综合实现通过 | **历史 PASS / 当前 UNVERIFIED** | 旧源码门禁 WNS +2.771 ns、DSP 136/220、BRAM36 69/140；加入 IMEM INIT 门禁后的新源码待 Windows clean build |
-| 板上跑通 | **UNVERIFIED / BLOCKED** | 40 MHz 下 fresh Overlay 后 STATUS 20/20 为 `0x1`；但 FW_DECISION/ACCEPTED 均无活动，bit 内 IMEM 初值尚未验证 |
+| 综合实现通过 | **PASS** | Vivado 2026.1：WNS +3.071 ns、DSP 136/220、BRAM36 69/140、latch/DRC=0，IMEM INIT 三项通过 |
+| 板上跑通 | **UNVERIFIED** | 新 bit 尚待 NC 在 40 MHz 下验证 STATUS、FW_DECISION/ACCEPTED 与真实 DMA/result |
 
 诊断网络不是正式训练模型，`score_q15` 是整数分数而非概率。PROVISIONAL payload 地址适配
 与整机顶层已仿真。JL 已提供本次门禁生成的 bit/hwh；JL 门禁通过不等于板级验收，
@@ -36,10 +36,10 @@ COPROCESSOR_PYTHON=sim/build/vision-venv-full/bin/python \
 `VIVADO=PASS_2026.1_40MHZ_WHOLE_SYSTEM`，而 `BOARD=UNVERIFIED_NEEDS_NC`。
 NC 解包后先执行 `sha256sum -c SHA256SUMS`，不得手工修改 VERSION。
 
-本次源产物 SHA256：bit 为 `d14a4bd037b1809c74fe511f1c7667edbc6bd6ecac8a8712a423946f5f1e2a1a`，
-hwh 为 `928f0d594ccbb83c8bd17e5ed284a6f2849e1b598c28073c779afb1ff9849107`，xsa 为
-`755f70337bdc5a06da0dcaa715c512806b7011efa09f95128314cb78a2ad96ec`。同日首构 `9e1b24e2…`
-与固件提交并发，已经作废；只采用仓库干净后生成的上述产物，旧哈希包禁止继续沿用。
+本次源产物 SHA256：bit 为 `1232769fdeabe59c962dae62a75bc1a5ebca07b1985898b6961fd574878f05db`，
+hwh 为 `dce025d3db119824126d4af6915983971ca9eaf98ccdbf726f2d66a9c7c73070`，xsa 为
+`255794ec8f07488dbe8b5feec3a6b1a3e8048f9a689777333fa0b639f0c23d28`。旧包
+`cop-board-gate-759744b99891` 已作废，不得上传或用于本轮板验。
 
 ## 下载、启动与复位
 
@@ -85,8 +85,8 @@ hwh 为 `928f0d594ccbb83c8bd17e5ed284a6f2849e1b598c28073c779afb1ff9849107`，xsa
 - 本轮已有门禁通过的协处理器 bitstream，但尚无实板证据；板上状态保持 UNVERIFIED。
 - OPEN-BOARD-CLK-1（顺序根因已复现）：改成 40 MHz 会使旧 cop 域失效；必须重配 PL、等待稳定并
   脉冲 FCLKRESETN1。`0x0` 表示域未就绪/无效，不能作为超频结论；板级功能仍未验收。
-- OPEN-IMEM-1：fresh Overlay 后固件两秒内 FW_DECISION/ACCEPTED 均无活动；旧门禁未证明
-  `$readmemh` 内容进入 bit。新 Tcl 已加绝对路径、显式依赖、日志与 INIT 门禁，待 Windows 复跑。
+- OPEN-IMEM-1（综合证据已关闭/板上待验证）：Windows 已确认首字 `00008117`、INIT 非全零且
+  readmem warning 为 0；NC 仍须验证新 bit 上 FW_DECISION/ACCEPTED 活性。
 - OPEN-LOADER-1（离板已修/板上待验证）：BD 与 HWH 均确认 `C_SG_LENGTH_WIDTH=16`，loader 保持
   36,032 B 单次传输；新 bit/hwh 已过整机门禁，NC 尚未实测 payload 装载。
 - OPEN-LOADER-2（离板已修/板上待验证）：`cop_job` 已驻留等 CFG/MODEL/ROI，firmware_e2e 延迟配置

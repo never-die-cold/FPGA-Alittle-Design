@@ -53,12 +53,16 @@ readmem/cop_job warning/error 都令门禁失败。
 当前 RTL 在调用 `$readmemh` 前把 IMEM 填成 NOP，所以“文件没载入”在 RTL 语义上趋向
 `0x00000013`，不是全零；器件若出现全零，`0x00000000` 是非法指令。新门禁同时拒绝两种空载状态。
 
-## Windows clean-build 命令与预期
+## Windows clean-build 命令与实测
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File build\run_pynq_cop_gate.ps1 `
-  -Vivado "D:\Vivado_downloads\2026.1\Vivado\bin\vivado.bat"
+$env:COP_PYTHON="C:\Microsoft VS Code\anaconda\python.exe"
+& "D:\vivado\2026.1\Vivado\bin\vivado.bat" -mode batch `
+  -source build\build_pynq_cop_gate.tcl
 ```
+
+JL 主机没有 Windows RISC-V 工具链，故不运行会重建固件的 `run_pynq_cop_gate.ps1`。必须显式设置
+`COP_PYTHON`，否则 Tcl 可能选到 WindowsApps 的 `python3.EXE` 占位符。
 
 预期关键行：
 
@@ -69,5 +73,6 @@ IMEM POST-SYNTH GATE PASSED: first_word=00008117 nonzero=1 cells=8
 PYNQ COP WHOLE-SYSTEM GATE PASSED: ...
 ```
 
-本机 `vivado -version` 返回 `command not found`，所以 clean synth、INIT 回读与新 bit 均为
-**UNVERIFIED**；只能由 JL 的 Windows Vivado 2026.1 执行上面命令后升级状态。
+2026-10-26 JL 用 Vivado 2026.1 实测三项均通过：`IMEM_FIRST_WORD=00008117`、
+`IMEM_INIT_NONZERO=1`、`READMEM_WARNINGS=0`。报告中的 `D:\boardtop\...` 是同一仓库内容的
+Windows 暂存路径，不是硬编码提交路径。该结论只覆盖综合后 IMEM 初始化，不代表板级验收。
