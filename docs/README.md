@@ -67,6 +67,7 @@
 | 协处理器最小 payload loader | [`coprocessor-payload-loader.md`](coprocessor-payload-loader.md) |
 | cop_job IMEM/DMEM 初始化门禁 | [`coprocessor-imem-init-gate.md`](coprocessor-imem-init-gate.md) |
 | J07 视频与协处理器集成摸底 | [`coprocessor-video-integration-plan.md`](coprocessor-video-integration-plan.md) |
+| J05 ROI 数据集交接与结构审计 | [`roi-dataset-handoff.md`](roi-dataset-handoff.md) |
 | 仓库卫生规则 | [`repo-hygiene.md`](repo-hygiene.md) |
 | 逐文件索引（按需生成） | `python docs/file-guide/tools/generate.py --scope source --date YYYY-MM-DD` → `build/file-guide/` |
 
