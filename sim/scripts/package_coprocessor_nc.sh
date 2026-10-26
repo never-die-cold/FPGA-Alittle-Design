@@ -26,11 +26,12 @@ files=(
   docs/contracts/coprocessor-integration-v0.md docs/coprocessor-wc-interface.md
   docs/contracts/coprocessor-manifest-v1.md
   docs/coprocessor-storage-plan.md docs/coprocessor-vivado-checklist.md docs/coprocessor-nc-handoff.md
-  docs/coprocessor-board-clock-runbook.md docs/coprocessor-payload-loader.md tools/cop_payload_loader.py
+  docs/coprocessor-board-clock-runbook.md docs/coprocessor-payload-loader.md
+  docs/coprocessor-imem-init-gate.md tools/cop_payload_loader.py tools/cop_imem_gate.py
   src/riscv/design_v1.md src/riscv_fw/cop_job.c src/coprocessor/*.v
   sim/coprocessor/tb_cnn_sequencer.v sim/coprocessor/tb_cop_bram_latency.v
   sim/coprocessor/generate_network_vectors.py sim/scripts/run_coprocessor_iverilog.sh
-  sim/coprocessor/test_cop_payload_loader.py
+  sim/coprocessor/test_cop_payload_loader.py sim/coprocessor/test_cop_imem_gate.py
   build/build_coprocessor_gate.tcl build/constraints/coprocessor_ooc.xdc
   build/constraints/coprocessor_storage_ooc.xdc build/constraints/coprocessor_board_clock.xdc
   build/build_pynq_cop_gate.tcl build/create_pynq_cop_bd.tcl build/run_pynq_cop_gate.ps1
