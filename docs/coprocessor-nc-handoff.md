@@ -38,8 +38,13 @@ NC 解包后先执行 `sha256sum -c SHA256SUMS`，不得手工修改 VERSION。
 
 本次源产物 SHA256：bit 为 `1232769fdeabe59c962dae62a75bc1a5ebca07b1985898b6961fd574878f05db`，
 hwh 为 `dce025d3db119824126d4af6915983971ca9eaf98ccdbf726f2d66a9c7c73070`，xsa 为
-`255794ec8f07488dbe8b5feec3a6b1a3e8048f9a689777333fa0b639f0c23d28`。旧包
-`cop-board-gate-759744b99891` 已作废，不得上传或用于本轮板验。
+`255794ec8f07488dbe8b5feec3a6b1a3e8048f9a689777333fa0b639f0c23d28`。
+
+| 包 | 台账状态 |
+|:---|:---|
+| `cop-board-gate-5653d5911b76` | **唯一有效**；PROVISIONAL 诊断包，板上仍 UNVERIFIED |
+| `759744b99891` / `d66916c49b80` / `21c4e751bbe8` / `f856d5861db0` | **已作废**，不得上传或板验 |
+| `b821aa1d0c1f` / `c4839f39be2d` | **已作废**的 UNVERIFIED 中间包，不得交付 |
 
 ## 下载、启动与复位
 
@@ -74,12 +79,14 @@ hwh 为 `dce025d3db119824126d4af6915983971ca9eaf98ccdbf726f2d66a9c7c73070`，xsa
 
 ## 已知限制与 OPEN
 
-- OPEN-K2-1（已验证）：Windows 整机门禁已确认 BRAM36 69/140 并完成布局布线。
+- OPEN-K2-1（**已关闭**）：`build/reports/pynq_cop_40mhz/utilization_impl.rpt` 记录
+  Block RAM Tile 69/140，Windows 整机门禁已完成布局布线。
 - OPEN-FW-1：Windows 已生成包含重建 `cop_job.hex` 的 bitstream；BRAM 初值在实板启动仍待 NC 验证。
 - OPEN-ENV-1：`all` 已支持 riscv32/riscv64 前缀回落和无工具链 SKIP，仍需在干净环境复测依赖边界。
 - OPEN-DOC-1（已修复）：`cop_job.hex` 曾陈旧且无引用；现由 Makefile `all` 重建，并由 `firmware_e2e` 加载。
 - OPEN-BT-4：板顶候选的 16 ROI 槽已仿真，但任意 `TARGET_DESC_ADDR` 描述表尚未接入；
-  当前只支持 `target_id == roi_index` 恒等映射，不能据此声称完整契约或板级验收。
+  当前只支持 `target_id == roi_index` 恒等映射。影响面是非恒等目标编号下的
+  ROI/结果关联可能错配，因而阻断完整契约与发布验收，但不影响当前恒等映射诊断。
 - manifest v1→影子物理 bank 与生产 PL 顶层已仿真；正式 RELEASE 参数和板验未完成。
 - `compute` 与 `storage` OOC 历史结论保留；本次整机门禁已独立 PASS，不能反推板级通过。
 - 本轮已有门禁通过的协处理器 bitstream，但尚无实板证据；板上状态保持 UNVERIFIED。
