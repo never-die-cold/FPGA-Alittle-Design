@@ -111,6 +111,22 @@
   因此只有只读预检，没有 pattern/zero 推理，`BOARD=UNVERIFIED`。
 - 证据：`data/logs/2026-10-23-board-bringup/`。
 
+## 2026-10-25 DMA16 上板：时钟门禁 PASS、CPU 未执行固件
+
+- 合并 JL `0aecf97`（`70bdec6`）：DMA 16 位、驻留固件、`tools/cop_payload_loader.py`、
+  干净门禁包；离板 6 模式复验 exit 0（`data/logs/2026-10-25-dma16-merge-gates/`）。
+- 新包 `759744b99891`：tar/111 文件/bit/hwh/xsa 全验；8 个 loader 依赖文件经串口
+  base64 上板，板上 sha256 与包内 SHA256SUMS 逐项一致（含 4 MB bit）。
+- **时钟门禁 PASS**：`measured_fclk1_mhz=40.000000` + 20 次 STATUS 首读全 `0x1`——
+  前提是"改钟后重新配置 PL"；改钟后不重配则旧 cop 域全 0x0（JL"超频致 0x0"假设被否）。
+- **NO_ACK 根因**：配置回执/两次 DMA/DMA_BYTES 全 GO 但 ACCEPTED 不到；fresh 下载后
+  6.5 s 内 FW_DECISION 恒 0（固件 guard 0.4–1.5 s 必超时）→ **CPU 未执行固件**；
+  最可能 IMEM `$readmemh` 相对路径在 Vivado 综合未命中（sim 的 firmware_e2e 由 TB 载入，
+  不能证明 bit 带 IMEM 初值；门禁不查该告警）。交 JL，证据 `data/logs/2026-10-25-dma16-board/`。
+- 工程教训：交互 shell 的 heredoc 逐行 readline 撑不住 115200 连续灌入（丢字节/卡死），
+  `cat > f` + Ctrl+D 块读取可靠（`serial_send_v2.ps1`）；`pynq.allocate` 需 PYNQ
+  Overlay 下载（bit 须在板上，仅 JTAG 配置不够）。
+
 ## 明确未做
 
 - 未上板；未验证真实 MMIO/AXI/DataMover/CDC；未实现 `PynqDmaPlane`；

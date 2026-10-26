@@ -138,8 +138,9 @@ dma.load_model(addr, payload) / load_rois(addr, rois, stride) / load_descriptors
 | 中 | `OPEN-BT-4` 描述表 | 板顶候选只支持 `target_id==roi_index` 恒等映射；本引擎描述符正是 identity，兼容 | 任意 `TARGET_DESC_ADDR` 表未接；关闭前不得声称完整契约 |
 | 中 | Windows Icarus 可复现性 | 已由 JL `23e8aef` 修复（manifest `write_bytes`、CDC 声明前移）；8/8 board-top 模式复验 exit 0 | 无需 WC 动作 |
 | 中 | 板上交付 | 2026-10-23：包 tar/106/bit/hwh 全验、JTAG PROGRAM PASSED、只读预检 `IP_ID=0x434F5030`、`STATUS=0x1`（首读偶发 0x0）、`ERROR_CODE=0`、`RESULT_SEQ=0`、无 UNCONSUMED | 见下两行阻塞；仍未做推理 |
-| **高** | 板上 FCLK/启动镜像 | 板卡 boot FSBL/base overlay 给 **FCLK1=142.857 MHz**，设计门禁要求 **40 MHz**；JTAG 烧 `.bit` 不应用 bitstream 内的 PS7 配置；首读 `STATUS=0x0` 疑与超频/首访问有关 | JL/NC 提供匹配的 `boot.bin`/FSBL 或确认的 FCLK1=40 设置流程；修正前不得称 40 MHz 板级通过 |
-| **高** | payload/ROI loader | 包内有 `payload/provisional-model/{payload.bin,manifest.json,...}` 与 golden，但没有 PS 侧 DMA/GPIO 装载脚本；`PynqDmaPlane` 仍未实现 | J08 loader 或等效工具；否则只能做只读预检，不能产出 pattern/zero 结果 |
+| **高** | 板上 FCLK/启动镜像 | **2026-10-25 实测**：`Clocks.fclk1_mhz=40` 读回 40.000000；但**改钟后必须重新配置 PL**，否则旧 cop 域 20 次首读全 0x0（非超频问题）；重配后 20 次首读全 `0x1`，判据 PASS | JL 把“改钟→重配 PL→测 20 首读”顺序写进 runbook/VERSION 判据 |
+| **高** | CPU 未执行固件（新，JL） | 40 MHz 下配置回执/两次 DMA/`DMA_BYTES=4096` 全 GO，但 `ACCEPTED` 永不到来；fresh 下载后 6.5 s `FW_DECISION` 恒 0（guard 0.4–1.5 s 必超时）→ CPU 未执行 cop_job；最可能 IMEM `$readmemh` 相对路径在 Vivado 综合未命中（warning 不挡门禁），bit 内无固件初值 | JL 查综合日志/改为绝对路径或 readback 校验；门禁 Tcl 对 readmemh 告警 fail-closed；修复后重跑 `clock`→`run zero/pattern` |
+| **高** | payload/ROI loader | JL `tools/cop_payload_loader.py` 已 fail-closed 全链（manifest/SHA/CRC/HWH/16 位 DMA/结果字段）；板上实测：预检与 DMA 全过，卡在 NO_ACK（CPU 未跑） | CPU 修复后 `run zero/pattern` 出结果；`allocate` 需 PYNQ Overlay 下载（bit 须在板上） |
 | 中 | `VERSION/CAPABILITY` | 仍读 0（OPEN-9）；PS 不做版本/能力协商 | 冻结取值/位图 |
 | 中 | 描述符 flags 位 | C03 只说“至少含 touch_border/invalid_roi”，未冻结位号；PS/sim 暂用 bit0/bit1（sim-only） | JL 冻结位号并写进 C02/C03 |
 | 中 | 结果 DMA / target_id | OPEN-2：索引窗可读，`RESULT_ADDR` DMA 未实现；索引窗的 target_id 已够 PS 关联 | J08 提供 DMA 后，PS 可切换到 16 B 结果区，仍需 target_id 二次关联 |

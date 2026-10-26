@@ -36,6 +36,7 @@ ROOT_ALLOWED_DIRS = {
     "skill",
     "models",
     "results",
+    "tools",
 }
 GENERATED_PATTERNS = (
     re.compile(r"(^|/)\.vvp$"),

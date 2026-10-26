@@ -1,0 +1,4 @@
+﻿cd /home/xilinx/cop-pkg && printf 'xilinx\n' | sudo -S bash -c 'source /etc/profile.d/xrt_setup.sh; exec /usr/local/share/pynq-venv/bin/python3 /home/xilinx/cop-pkg/driver_run.py zero' 2>&1 | grep -v 'password for'
+[?2004lBLOCKED: NO_ACK: firmware did not assert ACCEPTED
+OVERLAY_DOWNLOADED
+[?2004hxilinx@pynq:~/cop-pkg$ 

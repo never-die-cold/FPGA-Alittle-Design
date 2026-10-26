@@ -1,0 +1,22 @@
+SEND payload/tools/cop_payload_loader.py bytes=14531
+[?2004ld396307007b4dc8a24af6247bf3bb8cc64ba38a68d393809f4b34d02374132d0  /home/xilinx/cop-pkg/payload/tools/cop_payload_loader.py
+[?2004hxilinx@pynq:~/cop-pkg$ 
+SEND payload/provisional-model/manifest.json bytes=3970
+[?2004l4a414729fb37921be974b54fb22ac8b83b03477f339e88c0614f44b0fe59e4bd  /home/xilinx/cop-pkg/payload/provisional-model/manifest.json
+[?2004hxilinx@pynq:~/cop-pkg$ 
+SEND payload/provisional-model/payload.bin bytes=36032
+[?2004l14a1993336c67c83c115b7e6a1e67b198b487b99f325569f693ea0e4d67f1393  /home/xilinx/cop-pkg/payload/provisional-model/payload.bin
+[?2004hxilinx@pynq:~/cop-pkg$ 
+SEND payload/pynq_cop_40mhz.hwh bytes=324325
+[?2004l928f0d594ccbb83c8bd17e5ed284a6f2849e1b598c28073c779afb1ff9849107  /home/xilinx/cop-pkg/payload/pynq_cop_40mhz.hwh
+[?2004hxilinx@pynq:~/cop-pkg$ 
+SEND golden/zero/input.hex bytes=12288
+[?2004l9b5ee346b05d90d1d624ecfcfb8a45471128a2734fd684cadee0f03a33439cc5  /home/xilinx/cop-pkg/golden/zero/input.hex
+[?2004hxilinx@pynq:~/cop-pkg$ 
+SEND golden/pattern/input.hex bytes=12288
+[?2004l9bee293aefe4242b30b8b4717d0161a37610e268dcb30f01ef99ea86b00f959e  /home/xilinx/cop-pkg/golden/pattern/input.hex
+[?2004hxilinx@pynq:~/cop-pkg$ 
+SEND EXPECTED_OUTPUTS.tsv bytes=222
+[?2004l256f10a6b2c6ff1f521ec6d3aacaac4e6cb90168a20a61fa0a67a8be95755abe  /home/xilinx/cop-pkg/EXPECTED_OUTPUTS.tsv
+[?2004hxilinx@pynq:~/cop-pkg$ 
+[?2004l[?2004hxilinx@pynq:~/cop-pkg$ 

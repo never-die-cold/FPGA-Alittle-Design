@@ -1,0 +1,6 @@
+﻿cd /home/xilinx/cop-pkg && printf 'xilinx\n' | sudo -S bash -c 'source /etc/profile.d/xrt_setup.sh; source /etc/profile.d/pynq_venv.sh; exec /usr/local/share/pynq-venv/bin/python3 -c "import pynq; d=pynq.Device.active_device; print(\"DEVICE\",d); d.load_xclbin(\"/home/xilinx/loaded.xclbin\"); print(\"XCLBIN_LOADED\"); import pynq; b=pynq.allocate(shape=(64,),dtype=\"u1\"); print(\"ALLOC_OK\",b.physical_address)"' 2>&1 | grep -v 'password for'
+[?2004lTraceback (most recent call last):
+  File "<string>", line 1, in <module>
+AttributeError: 'EmbeddedDevice' object has no attribute 'load_xclbin'
+DEVICE <pynq.pl_server.embedded_device.EmbeddedDevice object at 0xb6549ac0>
+[?2004hxilinx@pynq:~/cop-pkg$ 
