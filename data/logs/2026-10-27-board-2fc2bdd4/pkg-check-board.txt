@@ -1,0 +1,28 @@
+﻿mkdir -p ~/pkg-2fc2bdd4a8f8; tar -xzf ~/cop-pkg/cop-board-gate-2fc2bdd4a8f8.tar.gz -C ~/pkg-2fc2bdd4a8f8; cd ~/pkg-2fc2bdd4a8f8/cop-board-gate-2fc2bdd4a8f8; sha256sum -c SHA256SUMS > /tmp/pkg-check-2fc2.txt 2>&1; echo PKG_EXIT=$?; grep -c ": OK$" /tmp/pkg-check-2fc2.txt; grep -v ": OK$" /tmp/pkg-check-2fc2.txt | head; sudo -n true; echo SUDO_N=$?
+[?2004ltar: cop-board-gate-2fc2bdd4a8f8/payload/tools/cop_imem_gate.py: time stamp 2026-10-27 13:19:12 is 2990522.224178466 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/tools/cop_payload_loader.py: time stamp 2026-10-27 13:19:12 is 2990522.223065494 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/tools: time stamp 2026-10-27 13:19:12 is 2990522.222798294 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/sim/scripts/run_coprocessor_iverilog.sh: time stamp 2026-10-27 13:19:12 is 2990522.22125094 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/sim/scripts: time stamp 2026-10-27 13:19:12 is 2990522.220986977 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/sim/coprocessor/tb_cnn_sequencer.v: time stamp 2026-10-27 13:19:12 is 2990522.219844036 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/sim/coprocessor/generate_network_vectors.py: time stamp 2026-10-27 13:19:12 is 2990522.219275672 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/sim/coprocessor/test_cop_imem_gate.py: time stamp 2026-10-27 13:19:12 is 2990522.218685999 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/sim/coprocessor/test_cop_payload_loader.py: time stamp 2026-10-27 13:19:12 is 2990522.218018097 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/sim/coprocessor/tb_cop_bram_latency.v: time stamp 2026-10-27 13:19:12 is 2990522.217516737 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/sim/coprocessor: time stamp 2026-10-27 13:19:12 is 2990522.21729662 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/sim: time stamp 2026-10-27 13:19:12 is 2990522.21713014 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/src/riscv/design_v1.md: time stamp 2026-10-27 13:19:12 is 2990522.214807439 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/src/riscv: time stamp 2026-10-27 13:19:12 is 2990522.214523316 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/src/riscv_fw/cop_job.c: time stamp 2026-10-27 13:19:12 is 2990522.213399574 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/src/riscv_fw: time stamp 2026-10-27 13:19:12 is 2990522.213145205 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/src/coprocessor/cop_axi_lite_frontend.v: time stamp 2026-10-27 13:19:12 is 2990522.212125919 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/src/coprocessor/int8_requant.v: time stamp 2026-10-27 13:19:12 is 2990522.211603106 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/src/coprocessor/cop_activation_storage.v: time stamp 2026-10-27 13:19:12 is 2990522.211125328 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/src/coprocessor/cnn_sequencer.v: time stamp 2026-10-27 13:19:12 is 2990522.210525765 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/src/coprocessor/cop_dma_loader.v: time stamp 2026-10-27 13:19:12 is 2990522.209974411 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/src/coprocessor/cop_top.v: time stamp 2026-10-27 13:19:12 is 2990522.209243845 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/src/coprocessor/mac_array_pipeline.v: time stamp 2026-10-27 13:19:12 is 2990522.208709562 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/src/coprocessor/cop_core_mmio_gate.v: time stamp 2026-10-27 13:19:12 is 2990522.208227303 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/src/coprocessor/cop_axis_async_fifo.v: time stamp 2026-10-27 13:19:12 is 2990522.207651168 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/src/coprocessor/mac_lane.v: time stamp 2026-10-27 13:19:12 is 2990522.207146565 s in the future
+tar: cop-board-gate-2fc2bdd4a8f8/payload/src/coprocessor/i

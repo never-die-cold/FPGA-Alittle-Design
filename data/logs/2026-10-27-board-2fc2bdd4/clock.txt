@@ -1,0 +1,9 @@
+﻿cd ~/pkg-2fc2bdd4a8f8/cop-board-gate-2fc2bdd4a8f8; sudo -n -E python3 payload/tools/cop_payload_loader.py clock --package . --reads 20 --smoke-timeout 2 > /tmp/clock-2fc2.txt 2>&1; echo CLOCK_EXIT=$?; tail -40 /tmp/clock-2fc2.txt
+[?2004lCLOCK_EXIT=1
+BLOCKED: FIRMWARE_NO_ACTIVITY: FW_DECISION and ACCEPTED stayed zero
+board_sequence=hwh_clocks,reconfigure_pl,wait_stable,status_check
+clock_topology=mmcm expected_cop_mhz=40.000000
+measured_fclk1_mhz=142.857143
+status_first_reads=0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001
+firmware_smoke_timeout_dump={"CFG_APPLIED": "0x00000000", "CFG_SEQ": "0x00000000", "DMA_BYTES": "0x00000000", "ERROR_CODE": "0x00000000", "FW_DECISION": "0x00000000", "MODEL_ID": "0x00000000", "RESULT_SEQ": "0x00000000", "ROI_COUNT": "0x00000000", "STATUS": "0x00000001"}
+[?2004hxilinx@pynq:~/pkg-2fc2bdd4a8f8/cop-board-gate-2fc2bdd4a8f8$ 
