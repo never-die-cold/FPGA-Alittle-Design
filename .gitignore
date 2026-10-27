@@ -89,3 +89,10 @@ build/artifacts/
 *.tmp
 *.bak
 *~
+
+# YOLO experiments are local only; the product uses the FPGA-compatible CNN.
+/models/*yolo*
+/sim/scripts/*yolo*.py
+/sim/vision/train_localization_cnn.py
+/results/*yolo*.json
+/data/logs/*yolo*/

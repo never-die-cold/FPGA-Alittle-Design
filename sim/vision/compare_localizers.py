@@ -1,4 +1,4 @@
-"""Compare class-agnostic localization on the same YOLO-labeled split."""
+"""Evaluate OpenCV localization using normalized center/size bbox labels."""
 
 import argparse
 import sys
@@ -21,19 +21,11 @@ def truth_boxes(label_path, width, height):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dataset", type=Path, required=True, help="split folder with images/ and labels/")
-    parser.add_argument("--engine", choices=("opencv", "yolo"), default="opencv")
-    parser.add_argument("--weights", help="Ultralytics detector weights; required for yolo")
-    parser.add_argument("--confidence", type=float, default=0.25, help="YOLO score cutoff")
+    parser.add_argument("--engine", choices=("opencv",), default="opencv")
     parser.add_argument("--color-threshold", type=float, default=22, help="OpenCV Lab distance")
     parser.add_argument("--min-area-ratio", type=float, default=0.00008)
     parser.add_argument("--limit", type=int, default=0, help="evaluate first N images; 0 means all")
     args = parser.parse_args()
-    model = None
-    if args.engine == "yolo":
-        if not args.weights:
-            parser.error("--weights is required for --engine yolo")
-        from ultralytics import YOLO
-        model = YOLO(args.weights)
 
     totals, elapsed, images = {"tp": 0, "fp": 0, "fn": 0, "iou_sum": 0.0}, 0.0, 0
     paths = sorted((args.dataset / "images").glob("*.png"))
@@ -46,11 +38,7 @@ def main():
         height, width = image.shape[:2]
         truth = truth_boxes(args.dataset / "labels" / f"{path.stem}.txt", width, height)
         start = time.perf_counter()
-        if model is None:
-            predicted = detect_boxes(image, args.color_threshold, args.min_area_ratio)
-        else:
-            result = model.predict(image, verbose=False, conf=args.confidence)[0]
-            predicted = [tuple(map(int, box)) for box in result.boxes.xyxy.cpu().tolist()]
+        predicted = detect_boxes(image, args.color_threshold, args.min_area_ratio)
         elapsed += time.perf_counter() - start
         score = score_boxes(predicted, truth)
         for key in ("tp", "fp", "fn"):
