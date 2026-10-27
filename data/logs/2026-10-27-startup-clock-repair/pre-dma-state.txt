@@ -1,0 +1,17 @@
+===STARTUP===
+Result=exit-code
+ActiveState=failed
+SubState=failed
+===ORDER===
+[  119.048996] fpga_manager fpga0: writing base.bin to Xilinx Zynq FPGA Manager
+[  143.228333] fpga_manager fpga0: writing vision.bin to Xilinx Zynq FPGA Manager
+===CLOCK_RESET===
+{
+  "FPGA0_CLK_CTRL": "0x00200500",
+  "FPGA1_CLK_CTRL": "0x00100700",
+  "FPGA2_CLK_CTRL": "0x00100500",
+  "FPGA3_CLK_CTRL": "0x00200500",
+  "FPGA_RST_CTRL": "0x00000000",
+  "LVL_SHFTR_EN": "0x0000000f"
+}
+===OLD_SERVICES===

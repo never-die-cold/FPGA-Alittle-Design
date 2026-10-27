@@ -1,7 +1,7 @@
 # 协处理器 Vivado 检查清单
 
-> 状态（2026-10-22）：**40 MHz compute/storage OOC VERIFIED**；`ENABLE_COP=0` 基线 PASS；
-> Vivado 2026.1 整机 40 MHz 门禁 **PASS**。这不等于板级验收。
+> 状态（2026-10-26）：**40 MHz compute/storage OOC VERIFIED**；`ENABLE_COP=0` 基线 PASS；
+> 含 IMEM INIT 门禁的 Vivado 2026.1 整机 40 MHz 门禁 **PASS**。这不等于板级验收。
 
 board-top 已增加 `pynq_cop_top`、100/40 MHz AXI/AXIS CDC、PS7+AXI DMA block-design Tcl
 与严格整机门禁。JL 已在 Windows Vivado 2026.1 完成 CDC 解析/FIFO 修复后的复跑；
@@ -11,19 +11,19 @@ WSL 仍不具备 Vivado，不能在此重现综合实现。
 
 ## JL 执行命令
 
-从仓库根目录打开 `cmd.exe`，将 Vivado 路径替换为实际安装位置：
+JL 的 Windows 主机没有 RISC-V 工具链，因此本次不使用 `run_pynq_cop_gate.ps1`。从仓库根目录
+打开 PowerShell，先显式指定真实 Python，避免 `find_gate_python` 误选 WindowsApps 的
+`python3.EXE` 占位符，再直接运行整机 Tcl：
 
-```bat
-set VIVADO=D:\vivado\2026.1\Vivado\bin\vivado.bat
-call "%VIVADO%" -mode batch -source build/build_coprocessor_gate.tcl -tclargs 40 compute
-call "%VIVADO%" -mode batch -source build/build_coprocessor_gate.tcl -tclargs 40 storage
-powershell -ExecutionPolicy Bypass -File build\run_pynq_cop_gate.ps1 -Vivado "%VIVADO%"
+```powershell
+$env:COP_PYTHON="C:\Microsoft VS Code\anaconda\python.exe"
+& "D:\vivado\2026.1\Vivado\bin\vivado.bat" -mode batch `
+  -source build\build_pynq_cop_gate.tcl
 ```
 
-只有两个 40 MHz 命令均通过后，才可选择性尝试 `-tclargs 100 compute` 与
-`-tclargs 100 storage`；100 MHz 失败不覆盖 40 MHz 目录。报告分别写入
-`build/reports/coprocessor/<档位>/<compute|storage>/`，临时 checkpoint 写入
-`build/run/coprocessor/`。这些目录和 `.xpr` 已忽略，不提交生成物。
+`run_pynq_cop_gate.ps1` 会先用 Windows RISC-V GCC/make 重建固件；仅在这些工具存在时使用。
+无工具链时必须确认仓库内 `cop_job.hex` 已由受控构建生成，再走上述 Tcl 的前置首字/字数检查，
+不得跳过门禁。Vivado 的实际路径是 `D:\vivado\2026.1\Vivado\bin\vivado.bat`。
 
 整机 PowerShell 入口先以所选 riscv32/riscv64 工具链强制重建 `cop_job.hex`，再跑
 `build_soc.tcl 40 fwd` 的 `ENABLE_COP=0` 基线，最后跑 PS7+DMA+`pynq_cop_top` 非 OOC 门禁。
@@ -58,6 +58,22 @@ LATCHES=0、DRC_BLOCKING=0；CDC-3=12、CDC-6=7、CDC-15=73，全部逐条命中
 
 `build/reports/pynq_cop_40mhz/gate_summary.txt` 是本次数字的权威报告。JL 门禁通过只证明整机
 综合实现，不等于 NC 下载、现场稳定或板级验收；PROVISIONAL payload 也不是发布模型。
+
+上述 `d14a4bd0…` 是加入 IMEM 初始化门禁前的历史产物。NC 已证明其中 CPU 无固件活动，因此
+不得继续用于 loader 验收。修改后的源码必须重新运行整机门禁；在新报告同时出现
+`IMEM_FIRST_WORD=00008117`、`IMEM_INIT_NONZERO=1`、`READMEM_WARNINGS=0` 前，新 bit 状态为
+**UNVERIFIED**。检查细节见 [`coprocessor-imem-init-gate.md`](coprocessor-imem-init-gate.md)。
+
+2026-10-26 JL 按上述直接 Tcl 流程复跑 **PASS**：WNS +3.071 ns、DSP 136/220、BRAM36 69/140、
+LATCHES=0、DRC_BLOCKING=0；CDC-15=73、CDC-3=12、CDC-6=7，均命中 allowlist；
+`IMEM_FIRST_WORD=00008117`、`IMEM_INIT_NONZERO=1`、`READMEM_WARNINGS=0`。产物 SHA256：
+
+- bit：`1232769fdeabe59c962dae62a75bc1a5ebca07b1985898b6961fd574878f05db`
+- hwh：`dce025d3db119824126d4af6915983971ca9eaf98ccdbf726f2d66a9c7c73070`
+- xsa：`255794ec8f07488dbe8b5feec3a6b1a3e8048f9a689777333fa0b639f0c23d28`
+
+`imem_precheck.txt` 中的 `IMEM_HEX=D:\boardtop\...` 是 JL 对同一仓库内容的 Windows 暂存路径，
+不是提交文件中的机器路径；可复现性由首三字、4094 words、INIT 回读与上述产物哈希共同锚定。
 
 ## Vivado 2026.1 CDC 格式与 allowlist
 
@@ -97,11 +113,14 @@ UTF-8/ASCII 与 LF，不依赖宿主换行转换；Verilog-2001 的声明必须�
 | `timing_impl.rpt` | setup/hold、WNS | WNS≥0，且报告不得有失败的 setup/hold 路径 |
 | `check_timing.rpt` | no_clock、constant_clock、unconstrained endpoints、generated clocks | 四项计数全部为 0 |
 | `drc_impl.rpt` | Error / Critical Warning | 0 |
+| `imem_precheck.txt` / `imem_init_synth.rpt` | 源 hex 前缀、RAMB INIT、地址 0 首字 | 首字 `00008117` 且 INIT 非全零 |
+| `readmem_synth_diagnostics.txt` | `$readmemh` / `cop_job.hex` 相关消息 | warning/error 为 0；原始匹配行必须留存 |
 | `cdc_impl.rpt` | core/cop 跨域 | 不得有未解释、未豁免的 unsafe CDC；邮箱以外的新跨域一律失败 |
 | `vivado_version.txt` | 工具版本 | 记录实际版本，不借用历史版本结论 |
 
 整机报告写入 `build/reports/pynq_cop_40mhz/`。`gate_summary.txt` 必须同时给出
-WNS≥0、DSP≤220、BRAM36≤140、latch=0、CDC allowlist 逐条通过、DRC blocking=0；任一缺失即 FAIL。
+WNS≥0、DSP≤220、BRAM36≤140、latch=0、IMEM 首字/非零/日志门禁、CDC allowlist 逐条通过、
+DRC blocking=0；任一缺失即 FAIL。
 只有 Tcl 打印 `PYNQ COP WHOLE-SYSTEM GATE PASSED` 后才会生成
 `build/run/pynq_cop_40mhz/pynq_cop_40mhz.bit/.hwh/.xsa`。
 

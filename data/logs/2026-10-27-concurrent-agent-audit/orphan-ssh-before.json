@@ -1,0 +1,7 @@
+{
+  "ProcessId": 46240,
+  "ParentProcessId": 7340,
+  "CreationDate": "2026-10-27T12:22:33.478191+08:00",
+  "Name": "ssh.exe",
+  "CommandLine": "E:\\Git\\usr\\bin\\ssh.exe -i /c/Users/ASUS/.ssh/pynq_m2 -o StrictHostKeyChecking=no xilinx@192.168.50.99 \"echo xilinx | bash -lc 'cd /home/xilinx/cop-pkg-mmcm-oldtool && sudo -E -S -p \\\"\\\" /usr/local/share/pynq-venv/bin/python3 remote-tools/run_board.py payload/tools/cop_board_fast_run.py --package . --case zero --measurement /tmp/zero-final.json --timeout 20'\""
+}

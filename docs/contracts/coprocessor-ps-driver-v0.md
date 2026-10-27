@@ -117,8 +117,11 @@ dma.load_model(addr, payload) / load_rois(addr, rois, stride) / load_descriptors
   （`test_cop_driver.py::test_pynq_transport_round`），但**未上板**。
 - 板上只读预检：`python sim/scripts/cop_board_preflight.py --base <Address Editor base>`
   只读 `IP_ID/VERSION/CAPABILITY/STATUS/ERROR_CODE/RESULT_SEQ`，不写、不碰 DMA；
-  成功不等于板级验收。数据面 `PynqDmaPlane` 仍按 J08 的 DataMover/物理 bank 实现
-  （当前**故意** `NotImplementedError`，不假装已实现）；
+  成功不等于板级验收。数据面 `PynqDmaPlane` 已按门禁装载器的 MM2S 路径实现
+  （每 kind 一包、GPIO 启动、`DMA_BUSY`/`DMA_BYTES` 对账、buffer 地址即 PS 地址），
+  10/27 已在共存旧包接到真实帧，发现多目标结果槽错位；修复 RTL 尚未上板，完整验收未完成。
+  硬件路径显式选 `dma_after_commit=True`，每次配置提交后重新装载模型以恢复 MODEL_VALID；
+  DONE 后等当前 RESULT_SEQ 的固件判定写回再读取计数。描述符表仍保持清零语义，J08 物理排布未冻结；
 - 服务/引擎/报文/EXE 不需要重写；`CopEngine` 继续产出同样的
   `status/targets/decision/width/height`，并写 `cop_trace.json`；
 - 真实链路全部就绪前，`prototype=true` 不得关闭；`/v1/status` 的 `engine`
@@ -147,6 +150,15 @@ dma.load_model(addr, payload) / load_rois(addr, rois, stride) / load_descriptors
 | 中 | 物理 bank/地址 | OPEN-1；PS 用占位 DDR 地址 | J08 发布权重/ROI/描述符/结果的实际地址与对齐 |
 | 低 | IRQ | OPEN-5；PS 轮询 STATUS | 若启用中断，冻结 `IRQ_ENABLE/IRQ_PENDING/IRQ_ACK` 语义 |
 | 低 | CDC/复位深测 | OPEN-4/7；PS 已用 `RESULT_SEQ` 双读/期望序号兜底 | 验证队友扩展 TB；PS 不改协议 |
+
+### 6.1 2026-10-25 板端证据勘误（不改接口）
+
+上表“首读 `STATUS=0x0` 疑与超频/首访问有关”的原因判断已由现场复测否定：FCLK1 已读回
+40.000000 MHz 时，改钟后的旧 PL 连续 20 次仍为 `0x0`；时钟不变、fresh Overlay 重配后
+20 次均为 `0x1`。因此 `0x0` 只表示 cop 域未就绪/已失效，不能判成超频。强制恢复顺序为
+改钟 → 重配 PL → 等稳定 → FCLKRESETN1 脉冲 → 首读校验，详见
+[`coprocessor-board-clock-runbook.md`](../coprocessor-board-clock-runbook.md)。本勘误不改变任何寄存器、
+握手或 PS 软件接口语义。
 
 ## 7. 证据与边界
 

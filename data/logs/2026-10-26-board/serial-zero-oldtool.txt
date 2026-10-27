@@ -1,0 +1,271 @@
+HOST_STARTED_UTC=2026-10-26T19:06:29.9306975Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=cd /home/xilinx/cop-pkg-mmcm-oldtool && echo xilinx | sudo -S -p '' /usr/local/share/pynq-venv/bin/python3 remote-tools/run_board.py payload/tools/cop_board_fast_run.py --package . --case zero --measurement /tmp/zero-mmcm-oldtool.json --timeout 20
+cd /home/xilinx/cop-pkg-mmcm-oldtool && echo xilinx | sudo -S -p '' /usr/local/share/pynq-venv/bin/python3 remote-tools/run_board.py payload/tools/cop_board_fast_run.py --package . --case zero --measurement /tmp/zero-mmcm-oldtool.json --timeout 20; printf '\n__PYNQ_RC_8733f5fdb4b14752943c59f05e613199=%d\n' $?
+[?2004lmmc0: Timeout waiting for hardware interrupt.
+mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
+mmc0: sdhci: Blk size:  0x00007200 | Blk cnt:  0x00000001
+mmc0: sdhci: Argument:  0x0083da97 | Trn mode: 0x00000013
+mmc0: sdhci: Present:   0x01ff0202 | Host ctl: 0x00000011
+mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
+mmc0: sdhci: Timeout:   0x0000000a | Int stat: 0x00000000
+mmc0: sdhci: Int enab:  0x02ff008b | Sig enab: 0x02ff008b
+mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
+mmc0: sdhci: Cmd:       0x0000113a | Max curr: 0x00000001
+mmc0: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x00000000
+mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+mmc0: sdhci: Host ctl2: 0x00000000
+mmc0: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x15845200
+mmc0: sdhci: ============================================
+I/O error, dev mmcblk0, sector 8641175 op 0x0:(READ) flags 0x80700 phys_seg 2 prio class 2
+mmc0: Timeout waiting for hardware interrupt.
+mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
+mmc0: sdhci: Blk size:  0x00007200 | Blk cnt:  0x00000001
+mmc0: sdhci: Argument:  0x0083da98 | Trn mode: 0x00000013
+mmc0: sdhci: Present:   0x01ff0202 | Host ctl: 0x00000011
+mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
+mmc0: sdhci: Timeout:   0x0000000a | Int stat: 0x00000000
+mmc0: sdhci: Int enab:  0x02ff008b | Sig enab: 0x02ff008b
+mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
+mmc0: sdhci: Cmd:       0x0000113a | Max curr: 0x00000001
+mmc0: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x00000000
+mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+mmc0: sdhci: Host ctl2: 0x00000000
+mmc0: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x15845200
+mmc0: sdhci: ============================================
+I/O error, dev mmcblk0, sector 8641176 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 2
+mmc0: Timeout waiting for hardware interrupt.
+mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
+mmc0: sdhci: Blk size:  0x00007200 | Blk cnt:  0x00000001
+mmc0: sdhci: Argument:  0x0083da99 | Trn mode: 0x00000013
+mmc0: sdhci: Present:   0x01ff0202 | Host ctl: 0x00000011
+mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
+mmc0: sdhci: Timeout:   0x0000000a | Int stat: 0x00000000
+mmc0: sdhci: Int enab:  0x02ff008b | Sig enab: 0x02ff008b
+mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
+mmc0: sdhci: Cmd:       0x0000113a | Max curr: 0x00000001
+mmc0: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x00000000
+mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+mmc0: sdhci: Host ctl2: 0x00000000
+mmc0: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x15845200
+mmc0: sdhci: ============================================
+I/O error, dev mmcblk0, sector 8641177 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 2
+mmc0: Timeout waiting for hardware interrupt.
+mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
+mmc0: sdhci: Blk size:  0x00007200 | Blk cnt:  0x00000001
+mmc0: sdhci: Argument:  0x0083da9a | Trn mode: 0x00000013
+mmc0: sdhci: Present:   0x01ff0202 | Host ctl: 0x00000011
+mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
+mmc0: sdhci: Timeout:   0x0000000a | Int stat: 0x00000000
+mmc0: sdhci: Int enab:  0x02ff008b | Sig enab: 0x02ff008b
+mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
+mmc0: sdhci: Cmd:       0x0000113a | Max curr: 0x00000001
+mmc0: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x00000000
+mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+mmc0: sdhci: Host ctl2: 0x00000000
+mmc0: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x15845200
+mmc0: sdhci: ============================================
+I/O error, dev mmcblk0, sector 8641178 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 2
+mmc0: Timeout waiting for hardware interrupt.
+mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
+mmc0: sdhci: Blk size:  0x00007200 | Blk cnt:  0x00000001
+mmc0: sdhci: Argument:  0x0083da9b | Trn mode: 0x00000013
+mmc0: sdhci: Present:   0x01ff0202 | Host ctl: 0x00000011
+mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
+mmc0: sdhci: Timeout:   0x0000000a | Int stat: 0x00000000
+mmc0: sdhci: Int enab:  0x02ff008b | Sig enab: 0x02ff008b
+mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
+mmc0: sdhci: Cmd:       0x0000113a | Max curr: 0x00000001
+mmc0: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x00000000
+mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+mmc0: sdhci: Host ctl2: 0x00000000
+mmc0: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x15845200
+mmc0: sdhci: ============================================
+I/O error, dev mmcblk0, sector 8641179 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 2
+mmc0: Timeout waiting for hardware interrupt.
+mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
+mmc0: sdhci: Blk size:  0x00007200 | Blk cnt:  0x00000001
+mmc0: sdhci: Argument:  0x0083da9c | Trn mode: 0x00000013
+mmc0: sdhci: Present:   0x01ff0202 | Host ctl: 0x00000011
+mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
+mmc0: sdhci: Timeout:   0x0000000a | Int stat: 0x00000000
+mmc0: sdhci: Int enab:  0x02ff008b | Sig enab: 0x02ff008b
+mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
+mmc0: sdhci: Cmd:       0x0000113a | Max curr: 0x00000001
+mmc0: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x00000000
+mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+mmc0: sdhci: Host ctl2: 0x00000000
+mmc0: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x15845200
+mmc0: sdhci: ============================================
+I/O error, dev mmcblk0, sector 8641180 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 2
+mmc0: Timeout waiting for hardware interrupt.
+mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
+mmc0: sdhci: Blk size:  0x00007200 | Blk cnt:  0x00000001
+mmc0: sdhci: Argument:  0x0083da9d | Trn mode: 0x00000013
+mmc0: sdhci: Present:   0x01ff0202 | Host ctl: 0x00000011
+mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
+mmc0: sdhci: Timeout:   0x0000000a | Int stat: 0x00000000
+mmc0: sdhci: Int enab:  0x02ff008b | Sig enab: 0x02ff008b
+mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
+mmc0: sdhci: Cmd:       0x0000113a | Max curr: 0x00000001
+mmc0: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x00000000
+mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+mmc0: sdhci: Host ctl2: 0x00000000
+mmc0: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x15845200
+mmc0: sdhci: ============================================
+I/O error, dev mmcblk0, sector 8641181 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 2
+mmc0: Timeout waiting for hardware interrupt.
+mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
+mmc0: sdhci: Blk size:  0x00007200 | Blk cnt:  0x00000001
+mmc0: sdhci: Argument:  0x0083da9e | Trn mode: 0x00000013
+mmc0: sdhci: Present:   0x01ff0202 | Host ctl: 0x00000011
+mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
+mmc0: sdhci: Timeout:   0x0000000a | Int stat: 0x00000000
+mmc0: sdhci: Int enab:  0x02ff008b | Sig enab: 0x02ff008b
+mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
+mmc0: sdhci: Cmd:       0x0000113a | Max curr: 0x00000001
+mmc0: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x00000000
+mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+mmc0: sdhci: Host ctl2: 0x00000000
+mmc0: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x15845200
+mmc0: sdhci: ============================================
+I/O error, dev mmcblk0, sector 8641182 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 2
+mmc0: Timeout waiting for hardware interrupt.
+mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
+mmc0: sdhci: Blk size:  0x00007200 | Blk cnt:  0x00000001
+mmc0: sdhci: Argument:  0x0083da9f | Trn mode: 0x00000013
+mmc0: sdhci: Present:   0x01ff0202 | Host ctl: 0x00000011
+mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
+mmc0: sdhci: Timeout:   0x0000000a | Int stat: 0x00000000
+mmc0: sdhci: Int enab:  0x02ff008b | Sig enab: 0x02ff008b
+mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
+mmc0: sdhci: Cmd:       0x0000113a | Max curr: 0x00000001
+mmc0: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x00000000
+mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+mmc0: sdhci: Host ctl2: 0x00000000
+mmc0: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x15845200
+mmc0: sdhci: ============================================
+I/O error, dev mmcblk0, sector 8641183 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 2
+mmc0: Timeout waiting for hardware interrupt.
+mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
+mmc0: sdhci: Blk size:  0x00007200 | Blk cnt:  0x00000008
+mmc0: sdhci: Argument:  0x01d41998 | Trn mode: 0x00000023
+mmc0: sdhci: Present:   0x01ff0106 | Host ctl: 0x00000011
+mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
+mmc0: sdhci: Timeout:   0x0000000e | Int stat: 0x00000000
+mmc0: sdhci: Int enab:  0x02ff008b | Sig enab: 0x02ff008b
+mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
+mmc0: sdhci: Cmd:       0x0000193a | Max curr: 0x00000001
+mmc0: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x00000000
+mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+mmc0: sdhci: Host ctl2: 0x00000000
+mmc0: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x15845200
+mmc0: sdhci: ============================================
+mmc0: Timeout waiting for hardware interrupt.
+mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
+mmc0: sdhci: Blk size:  0x00007004 | Blk cnt:  0x00000001
+mmc0: sdhci: Argument:  0x00000000 | Trn mode: 0x00000013
+mmc0: sdhci: Present:   0x01ff0202 | Host ctl: 0x00000011
+mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
+mmc0: sdhci: Timeout:   0x0000000a | Int stat: 0x00000000
+mmc0: sdhci: Int enab:  0x02ff008b | Sig enab: 0x02ff008b
+mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
+mmc0: sdhci: Cmd:       0x0000163a | Max curr: 0x00000001
+mmc0: sdhci: Resp[0]:   0x00000920 | Resp[1]:  0x00000000
+mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+mmc0: sdhci: Host ctl2: 0x00000000
+mmc0: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x15845200
+mmc0: sdhci: ============================================
+I/O error, dev mmcblk0, sector 30677400 op 0x1:(WRITE) flags 0x103000 phys_seg 1 prio class 2
+Buffer I/O error on dev mmcblk0p2, logical block 3801139, lost async page write
+mmc0: Timeout waiting for hardware interrupt.
+mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
+mmc0: sdhci: Blk size:  0x00007200 | Blk cnt:  0x00000008
+mmc0: sdhci: Argument:  0x01b95800 | Trn mode: 0x00000023
+mmc0: sdhci: Present:   0x01ff0106 | Host ctl: 0x00000011
+mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
+mmc0: sdhci: Timeout:   0x0000000e | Int stat: 0x00000000
+mmc0: sdhci: Int enab:  0x02ff008b | Sig enab: 0x02ff008b
+mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
+mmc0: sdhci: Cmd:       0x0000193a | Max curr: 0x00000001
+mmc0: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x00000000
+mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+mmc0: sdhci: Host ctl2: 0x00000000
+mmc0: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x15845200
+mmc0: sdhci: ============================================
+mmc0: Timeout waiting for hardware interrupt.
+mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
+mmc0: sdhci: Blk size:  0x00007004 | Blk cnt:  0x00000001
+mmc0: sdhci: Argument:  0x00000000 | Trn mode: 0x00000013
+mmc0: sdhci: Present:   0x01ff0202 | Host ctl: 0x00000011
+mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
+mmc0: sdhci: Timeout:   0x0000000a | Int stat: 0x00000000
+mmc0: sdhci: Int enab:  0x02ff008b | Sig enab: 0x02ff008b
+mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
+mmc0: sdhci: Cmd:       0x0000163a | Max curr: 0x00000001
+mmc0: sdhci: Resp[0]:   0x00000920 | Resp[1]:  0x00000000
+mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+mmc0: sdhci: Host ctl2: 0x00000000
+mmc0: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x15845200
+mmc0: sdhci: ============================================
+mmc0: Timeout waiting for hardware interrupt.
+mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
+mmc0: sdhci: Blk size:  0x00007200 | Blk cnt:  0x00000008
+mmc0: sdhci: Argument:  0x01b959a8 | Trn mode: 0x00000023
+mmc0: sdhci: Present:   0x01ff0106 | Host ctl: 0x00000011
+mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
+mmc0: sdhci: Timeout:   0x0000000e | Int stat: 0x00000000
+mmc0: sdhci: Int enab:  0x02ff008b | Sig enab: 0x02ff008b
+mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
+mmc0: sdhci: Cmd:       0x0000193a | Max curr: 0x00000001
+mmc0: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x00000000
+mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+mmc0: sdhci: Host ctl2: 0x00000000
+mmc0: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x15845200
+mmc0: sdhci: ============================================
+
+ERROR: timeout; remote completion unconfirmed; no interrupt sent
+
+HOST_EXIT_CODE=124

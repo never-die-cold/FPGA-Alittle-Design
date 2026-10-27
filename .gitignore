@@ -74,6 +74,9 @@ docs/file-guide/validation.json
 
 # --- 本地发布物（不提交；发布包/构建产物放这里） ---
 build/artifacts/
+/build/board-package*/
+/build/board-app-*/
+/build/reports/pynq_*/
 
 # --- Icarus 编译产物（.vvp 可重建；源码与日志证据仍入库） ---
 *.vvp

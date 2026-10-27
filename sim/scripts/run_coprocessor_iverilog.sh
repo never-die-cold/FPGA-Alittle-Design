@@ -24,6 +24,10 @@ if ! command -v "${CROSS}gcc" >/dev/null 2>&1 ||
     fi
 fi
 export RISCV_CROSS="$CROSS"
+if ! command -v make >/dev/null 2>&1 && command -v mingw32-make >/dev/null 2>&1; then
+    make() { command mingw32-make "$@"; }
+    export -f make
+fi
 VECTORS="$BUILD/arithmetic-vectors"
 "$PY" "$ROOT/sim/coprocessor/generate_arithmetic_vectors.py" --output "$VECTORS"
 run_test() {
@@ -83,8 +87,12 @@ run_manifest() {
 run_payload_loader() {
     local network="$BUILD/network-vectors" output="$BUILD/payload-v1"
     run_manifest
-    "$PY" "$ROOT/sim/coprocessor/test_cop_payload_loader.py" \
+    vision_run_checked "$BUILD/payload_loader.log" "$PY" "$ROOT/sim/coprocessor/test_cop_payload_loader.py" \
         --generated "$output" --network "$network" --output "$BUILD/payload-loader-package"
+}
+run_imem_gate() {
+    vision_run_checked "$BUILD/imem_gate.log" "$PY" "$ROOT/sim/coprocessor/test_cop_imem_gate.py" \
+        --output "$BUILD/imem-gate-test"
 }
 run_payload_network() {
     local network="$BUILD/network-vectors" output="$BUILD/payload-v1" crc
@@ -165,10 +173,11 @@ case "${1:-all}" in
     bram_network) run_test cop_bram_latency; run_network bram ;;
     manifest_v1) run_manifest ;;
     payload_loader) run_payload_loader ;;
+    imem_gate) run_imem_gate ;;
     payload_network) run_payload_network ;;
     pynq_top) run_pynq_top ;;
     watchdog) run_convolution watchdog; run_network watchdog ;;
     pipeline) run_test mac_array_pipeline; run_test int8_requant_pipeline ;;
-    all) run_test cop_core_mmio_gate; run_test cop_ctrl_regs; run_test cop_cdc_mailbox; run_test cop_config_regs; run_test cop_dma_loader; run_test cop_payload_adapter; run_test cop_activation_storage; run_test cop_task_ctrl; run_test cop_axi_lite_frontend; run_test cop_axi_lite_cdc; run_test cop_axis_async_fifo_random; run_firmware; run_firmware_e2e; run_top; run_pynq_top; run_test mac_lane; run_test dot8; run_test int8_mac; run_test mac_array; run_test int8_requant; run_test int8_gap; run_test int8_logits; run_test mac_array_pipeline; run_test int8_requant_pipeline; run_test cop_bram_latency; run_payload_loader; run_payload_network; run_convolution; run_network ;;
-    *) echo 'usage: run_coprocessor_iverilog.sh [mmio_gate|ctrl_regs|mailbox|config_regs|dma_loader|payload_adapter|payload_loader|activation_storage|task_ctrl|decision_ab|axi_lite|axi_lite_cdc|axis_fifo_random|firmware|firmware_e2e|cop_top|pynq_top|mac_lane|dot8|mac|array|requant|gap|logits|pipeline|conv|network|bram_network|manifest_v1|payload_network|watchdog|all]'; exit 2 ;;
+    all) run_test cop_core_mmio_gate; run_test cop_ctrl_regs; run_test cop_cdc_mailbox; run_test cop_config_regs; run_test cop_dma_loader; run_test cop_payload_adapter; run_test cop_activation_storage; run_test cop_task_ctrl; run_test cop_axi_lite_frontend; run_test cop_axi_lite_cdc; run_test cop_axis_async_fifo_random; run_firmware; run_firmware_e2e; run_top; run_pynq_top; run_test mac_lane; run_test dot8; run_test int8_mac; run_test mac_array; run_test int8_requant; run_test int8_gap; run_test int8_logits; run_test mac_array_pipeline; run_test int8_requant_pipeline; run_test cop_bram_latency; run_imem_gate; run_payload_loader; run_payload_network; run_convolution; run_network ;;
+    *) echo 'usage: run_coprocessor_iverilog.sh [mmio_gate|ctrl_regs|mailbox|config_regs|dma_loader|payload_adapter|payload_loader|imem_gate|activation_storage|task_ctrl|decision_ab|axi_lite|axi_lite_cdc|axis_fifo_random|firmware|firmware_e2e|cop_top|pynq_top|mac_lane|dot8|mac|array|requant|gap|logits|pipeline|conv|network|bram_network|manifest_v1|payload_network|watchdog|all]'; exit 2 ;;
 esac

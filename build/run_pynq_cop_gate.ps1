@@ -8,7 +8,10 @@ $cross = @("riscv32-unknown-elf-", "riscv64-unknown-elf-") | Where-Object {
 if (-not $cross) { throw "Missing riscv32/riscv64 gcc; cop_job.hex was not refreshed" }
 $make = Get-Command mingw32-make.exe, make.exe -ErrorAction SilentlyContinue | Select-Object -First 1
 if (-not $make) { throw "Missing mingw32-make/make" }
-& $make.Source -B -C src/riscv_fw "CROSS=$cross" cop_job.hex
+$python = Get-Command python3.exe, python.exe -ErrorAction SilentlyContinue | Select-Object -First 1
+if (-not $python) { throw "Missing python3/python for firmware and IMEM gates" }
+$env:COP_PYTHON = $python.Source
+& $make.Source -B -C src/riscv_fw "CROSS=$cross" "PYTHON=$($python.Source)" cop_job.hex
 if ($LASTEXITCODE -ne 0) { throw "cop_job.hex rebuild failed" }
 & $Vivado -mode batch -source build/build_soc.tcl -tclargs 40 fwd
 if ($LASTEXITCODE -ne 0) { throw "ENABLE_COP=0 baseline failed; production build not started" }

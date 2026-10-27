@@ -40,6 +40,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--network-dir", type=Path)
+    parser.add_argument("--model-id", type=lambda text: int(text, 0), default=0x4A303250,
+                        help="manifest model_id; keeps the diagnostic default unless pinned")
     args = parser.parse_args()
     output = args.output.resolve()
     if ROOT not in output.parents:
@@ -77,7 +79,7 @@ def main():
     payload_path = output / "payload.bin"
     payload_path.write_bytes(payload)
     digest = hashlib.sha256(payload).hexdigest()
-    manifest = {"version": "coprocessor-manifest-v1", "model_id": 0x4A303250,
+    manifest = {"version": "coprocessor-manifest-v1", "model_id": args.model_id,
                 "kind": "PROVISIONAL", "payload_file": payload_path.name,
                 "payload_sha256": digest, "crc32": f"0x{zlib.crc32(payload):08x}",
                 "total_bytes": len(payload), "tensors": tensors,

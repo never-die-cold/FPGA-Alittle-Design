@@ -1,0 +1,5 @@
+enabled
+active
+STARTUP_INSTALL_PASS backup=/home/xilinx/fpga-startup-backups/2026-10-27-startup-clock-repair
+Created symlink /etc/systemd/system/multi-user.target.wants/fpga-vision-boot.service → /etc/systemd/system/fpga-vision-boot.service.
+SSH_EXIT=0

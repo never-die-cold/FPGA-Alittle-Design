@@ -1,0 +1,22 @@
+===BOOT===
+ 20:40:40 up 1 min,  1 user,  load average: 2.65, 0.77, 0.27
+262586ac-0a30-4383-87df-f2538721a20a
+===SERVICE===
+Result=success
+ExecMainStatus=0
+ActiveState=inactive
+SubState=dead
+JOB UNIT                                 TYPE  STATE
+70  clear_pl_statefile.service           start waiting
+1   multi-user.target                    start waiting
+109 fpga-vision-boot.service             start waiting
+121 systemd-update-utmp-runlevel.service start waiting
+72  bootpy.service                       start running
+71  jupyter.service                      start running
+
+6 jobs listed.
+===PROGRAM_ORDER===
+===PROCESSES===
+  288   229 R    python3 /boot/boot.py
+===JOURNAL===
+-- No entries --

@@ -1,0 +1,7 @@
+HOST_STARTED_UTC=2026-10-26T16:21:57.3908276Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=uptime; dmesg | grep -cE 'mmc0: Timeout'; ip -4 addr show eth0 | grep inet
+
+ERROR: timeout; remote completion unconfirmed; no interrupt sent
+
+HOST_EXIT_CODE=124

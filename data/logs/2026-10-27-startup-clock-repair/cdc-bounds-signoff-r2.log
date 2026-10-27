@@ -1,0 +1,98 @@
+INFO: [Common 17-3922] A valid Vivado Design Suite BASIC license has been detected. Your current license is active and will expire on 14-sep-2027.
+#-----------------------------------------------------------
+# Vivado v2026.1 (64-bit)
+# SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+# IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+# SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+# Start of session at: Tue Oct 27 13:44:14 2026
+# Process ID         : 60552
+# Current directory  : E:/Projects/FPGA-Alittle-Design
+# Command line       : vivado.exe -mode batch -log data/logs/2026-10-27-startup-clock-repair/cdc-bounds-signoff-r2.log -journal data/logs/2026-10-27-startup-clock-repair/cdc-bounds-signoff-r2.jou -source sim/scripts/check_cop_cdc_bounds.tcl -tclargs build/run/pynq_cop_cdc_20261027_r1/project/pynq_cop_40mhz.runs/impl_1/cop_system_wrapper_routed.dcp data/logs/2026-10-27-startup-clock-repair
+# Log file           : E:/Projects/FPGA-Alittle-Design/data/logs/2026-10-27-startup-clock-repair/cdc-bounds-signoff-r2.log
+# Journal file       : E:/Projects/FPGA-Alittle-Design\data/logs/2026-10-27-startup-clock-repair/cdc-bounds-signoff-r2.jou
+# Running On         : never-die-cold
+# Platform           : Windows 11
+# Operating System   : 26200
+# Processor Detail   : Intel(R) Core(TM) Ultra 7 255HX
+# CPU Frequency      : 2880 MHz
+# CPU Physical cores : 20
+# CPU Logical cores  : 20
+# Host memory        : 16496 MB
+# Swap memory        : 32111 MB
+# Total Virtual      : 48607 MB
+# Available Virtual  : 9716 MB
+#-----------------------------------------------------------
+source sim/scripts/check_cop_cdc_bounds.tcl
+# if {[catch {
+#     if {$argc != 2} {error "usage: checkpoint.dcp report-directory"}
+#     open_checkpoint [lindex $argv 0]
+#     set reports [file normalize [lindex $argv 1]]
+#     file mkdir $reports
+#     set report [open [file join $reports cdc_bounds.txt] w]
+#     foreach {source destination budget} {
+#         aw_hold aw_m1 25.0 wd_hold wd_m1 25.0 ws_hold ws_m1 25.0 ar_hold ar_m1 25.0
+#         rdata_hold rdata_s1 10.0 bresp_hold bresp_s1 10.0 rresp_hold rresp_s1 10.0
+#     } {
+#         set from [get_cells -quiet -hier -regexp ".*pl/inst/axil_cdc/${source}_reg.*"]
+#         set to [get_cells -quiet -hier -regexp ".*pl/inst/axil_cdc/${destination}_reg.*"]
+#         if {![llength $from] || ![llength $to]} {error "Missing held payload $source/$destination"}
+#         set path [get_timing_paths -from $from -to $to -max_paths 1]
+#         if {[llength $path] != 1} {error "Held payload is falsely cut: $source/$destination"}
+#         set requirement [get_property REQUIREMENT $path]
+#         set slack [get_property SLACK $path]
+#         if {$requirement > $budget+0.001 || $slack < 0} {
+#             error "Held payload timing failed: $source req=$requirement budget=$budget slack=$slack"
+#         }
+#         puts $report "$source->$destination requirement=$requirement budget=$budget slack=$slack"
+#     }
+#     close $report
+#     set skew [report_bus_skew -return_string -file [file join $reports cdc_bus_skew.rpt]]
+#     if {[regexp {VIOLATED} $skew]} {error "CDC bus skew requirement violated"}
+#     if {![regexp {MET} $skew]} {error "CDC bus skew report contains no passing path"}
+#     puts "CDC BOUNDS SIGNOFF PASSED: seven held payload groups timed; bus skew MET"
+#     close_design
+# } reason]} {puts stderr "CDC BOUNDS SIGNOFF FAILED: $reason"; exit 1}
+Command: open_checkpoint build/run/pynq_cop_cdc_20261027_r1/project/pynq_cop_40mhz.runs/impl_1/cop_system_wrapper_routed.dcp
+
+Starting open_checkpoint Task
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.033 . Memory (MB): peak = 357.719 ; gain = 5.566
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+Netlist sorting complete. Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.230 . Memory (MB): peak = 933.195 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 3529 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 1 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2026.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+WARNING: [Constraints 18-550] Could not create 'IBUF_LOW_PWR' constraint because net 'cop_system_i/cop_mmcm/clk_in1' is not directly connected to top level port. 'IBUF_LOW_PWR' is ignored for synthesis but preserved for implementation.
+Read ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.115 . Memory (MB): peak = 1079.805 ; gain = 9.230
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Project 1-853] Binary constraint restore complete.
+INFO: [Designutils 20-5722] Start Reading Physical Databases.
+Reading placement.
+Read Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.085 . Memory (MB): peak = 1769.754 ; gain = 0.000
+Reading placer database...
+Read Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.015 . Memory (MB): peak = 1769.754 ; gain = 0.000
+Read PlaceDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1769.754 ; gain = 0.000
+Read placeStorage: Time (s): cpu = 00:00:02 ; elapsed = 00:00:01 . Memory (MB): peak = 1829.066 ; gain = 59.312
+Read PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1829.066 ; gain = 0.000
+Reading routing.
+Read RouteStorage: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.658 . Memory (MB): peak = 1836.848 ; gain = 7.781
+Read Physdb Files: Time (s): cpu = 00:00:03 ; elapsed = 00:00:02 . Memory (MB): peak = 1836.848 ; gain = 67.094
+Restored from archive | CPU: 3.000000 secs | Memory: 0.000000 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:03 ; elapsed = 00:00:02 . Memory (MB): peak = 1836.848 ; gain = 67.094
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.021 . Memory (MB): peak = 1890.785 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 1039 instances were transformed.
+  RAM256X1S => RAM256X1S (MUXF7(x2), MUXF8, RAMS64E(x4)): 1024 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 10 instances
+  RAM32X1D => RAM32X1D (RAMD32(x2)): 5 instances
+
+INFO: [Project 1-604] Checkpoint was created with Vivado v2026.1 (64-bit) build 6511674
+WARNING: [Vivado 12-23575] Critical violations of the methodology design rules detected. Critical violations may contribute to timing failures or cause functional issues in hardware. Run report_methodology for more information.
+open_checkpoint: Time (s): cpu = 00:00:30 ; elapsed = 00:00:32 . Memory (MB): peak = 1895.840 ; gain = 1551.992
+get_timing_paths: Time (s): cpu = 00:00:25 ; elapsed = 00:00:13 . Memory (MB): peak = 2033.957 ; gain = 138.117
+CDC BOUNDS SIGNOFF PASSED: seven held payload groups timed; bus skew MET
+# exit 0
+INFO: [Common 17-206] Exiting Vivado at Tue Oct 27 13:45:18 2026...

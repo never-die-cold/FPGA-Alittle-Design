@@ -1,0 +1,26 @@
+{
+  "cop": {
+    "CFG_APPLIED": "0x6ab2e956",
+    "CFG_SEQ": "0x6ab2e956",
+    "DMA_BYTES": "0x00001000",
+    "ERROR_CODE": "0x00000000",
+    "FW_DECISION": "0x00010403",
+    "MODEL_ID": "0x4a303250",
+    "RESULT_SEQ": "0x00000001",
+    "ROI_COUNT": "0x00000001",
+    "STATUS": "0x00000000"
+  },
+  "dma": {
+    "DMACR": "0x00010003",
+    "DMASR": "0x00001002",
+    "LENGTH": "0x00001000",
+    "SA": "0x15849000"
+  },
+  "gpio": {
+    "DATA": "0x00000002",
+    "DATA2": "0x00000001",
+    "TRI": "0xffffffff",
+    "TRI2": "0xffffffff"
+  }
+}
+SNAPSHOT_EXIT=0

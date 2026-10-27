@@ -1,14 +1,12 @@
-"""LIVE service engine backed by the PS MMIO driver (sim now, real MMIO later).
+"""LIVE service engine backed by an explicit simulated or real MMIO driver.
 
 Flow per round: capture frame -> localization -> scene-gray-border-padding-v1 ROI
 -> SIM INT8 quantization -> C03 config/data/submit -> result window -> PS rules.
 Every hardware round writes ``cop_trace.json`` next to packet.json for audit.
 
-Honesty boundary: the compute backend is a simulated register model and a
-scripted/image-derived classifier.  ``prototype`` remains true in the service;
-this path is 模拟跑通, never 板上跑通 and never a validated recognition result.
-The ROI quantization uses S_input=1/127 only because the sim needs bytes; C02
-requires S_input from a formal manifest, which J05/J06 has not produced.
+The default engine uses simulated registers and SIM-only quantization. Hardware
+callers must supply a real driver, simulated=False, and the model's quantizer.
+COP_HW proves the compute source, not recognition accuracy or model acceptance.
 """
 import hashlib
 import json
@@ -38,6 +36,12 @@ def quantize_roi(canvas):
     return np.clip(scaled, -127, 127).astype(np.int8).tobytes()
 
 
+def trained_quantize_roi(canvas):
+    """Same input quantization as export_trained_payload.quantized_input."""
+    scaled = np.rint(canvas.astype(np.float64) * 127.0 / 255.0)
+    return np.clip(scaled, -127, 127).astype(np.int8).tobytes()
+
+
 def atomic_json(path, payload):
     pending = path.with_name(path.name + ".pending")
     pending.write_bytes(json.dumps(payload, sort_keys=True, ensure_ascii=False,
@@ -50,8 +54,21 @@ class CopEngine:
 
     def __init__(self, order, min_score, max_targets=16, policy_max=None,
                  classes=("bolt", "nut", "washer"), faults=None, delay_s=0.0,
-                 driver=None, sim=None, compute_label=None, source_config_id=None):
+                 driver=None, sim=None, compute_label=None, source_config_id=None,
+                 color_threshold=22, min_area_ratio=0.00008, simulated=True,
+                 quantizer=None, quantization_label=None, background_mode="corners"):
+        if not simulated and driver is None:
+            raise ValueError("real hardware engine requires an explicit driver")
+        self.simulated = bool(simulated)
+        self.label = "COP_SIM" if self.simulated else "COP_HW"
+        self.quantizer = quantizer or quantize_roi
+        self.quantization_label = quantization_label or f"SIM_ONLY S_input={SIM_S_INPUT:.10f}"
         self.order = dict(order)
+        # Localization tuning is scene-specific (C04 leaves the thresholds to the
+        # station setup); defaults keep the previous behaviour.
+        self.color_threshold = float(color_threshold)
+        self.min_area_ratio = float(min_area_ratio)
+        self.background_mode = background_mode
         self.min_score = float(min_score)
         self.max_targets = max_targets
         self.policy = effective_policy(max_targets, policy_max)
@@ -117,12 +134,12 @@ class CopEngine:
         height, width = frame.shape[:2]
         frame_meta = {"width": width, "height": height,
                       "pixel_sha256": hashlib.sha256(frame.tobytes()).hexdigest()}
-        boxes = detect_boxes(frame)
+        boxes = detect_boxes(frame, self.color_threshold, self.min_area_ratio, self.background_mode)
         empty = judge([], self.order, self.min_score, self.max_targets, self.policy)
         if len(boxes) > self.policy:
             decision = {**empty, "verdict": "RECHECK", "actual": None, "delta": None,
                         "missing": None, "extra": None, "reasons": ["target_limit"]}
-            trace = {"kind": "target_limit", "simulated": True, "frame": frame_meta,
+            trace = {"kind": "target_limit", "simulated": self.simulated, "frame": frame_meta,
                      "target_count": len(boxes), "policy_max": self.policy}
             self.last_trace = trace
             self._write_trace(round_dir, trace)
@@ -133,7 +150,7 @@ class CopEngine:
         if not boxes:
             # C03 §8 wants CHECK_FAIL with zero actuals for a valid empty scene.
             # v0 hardware cannot express empty (OPEN-11), so this is a PS-side gate.
-            trace = {"kind": "empty_scene_ps_gate", "simulated": True, "frame": frame_meta,
+            trace = {"kind": "empty_scene_ps_gate", "simulated": self.simulated, "frame": frame_meta,
                      "open": "OPEN-11", "target_count": 0}
             self.last_trace = trace
             self._write_trace(round_dir, trace)
@@ -145,7 +162,7 @@ class CopEngine:
         for index, (box, crop) in enumerate(zip(boxes, crops)):
             x0, y0, x1, y1 = box
             border = x0 == 0 or y0 == 0 or x1 == width or y1 == height
-            targets.append({"target_id": index, "roi": quantize_roi(crop),
+            targets.append({"target_id": index, "roi": self.quantizer(crop),
                             "flags": R.FLAG_TOUCH_BORDER if border else 0})
             descriptors.append({"target_id": index, "bbox": list(box),
                                 "touches_border": border})
@@ -164,7 +181,7 @@ class CopEngine:
                 snapshot = self.driver.terminal_snapshot("engine_failure")
             except CopError:
                 snapshot = None
-            trace = {"kind": "cop_failure", "simulated": True,
+            trace = {"kind": "cop_failure", "simulated": self.simulated,
                      "compute_backend": self.compute_label,
                      "protocol_check": request_id, "error": str(error),
                      "error_type": type(error).__name__,
@@ -196,10 +213,10 @@ class CopEngine:
                          self.max_targets, self.policy)
         if decision != result["decision"]:
             raise CopProtocolError("engine decision differs from driver's checked decision")
-        trace = {"kind": "cop_job", "simulated": True,
+        trace = {"kind": "cop_job", "simulated": self.simulated,
                  "compute_backend": self.compute_label,
                  "preprocess": PREPROCESS_VERSION,
-                 "roi_quantization": f"SIM_ONLY S_input={SIM_S_INPUT:.10f}",
+                 "roi_quantization": self.quantization_label,
                  "protocol_check": request_id,
                  "frame": frame_meta,
                  "work_order": dict(self.order), "policy_max": self.policy,
@@ -235,6 +252,9 @@ class CopEngine:
         return metadata
 
     def _write_trace(self, round_dir, trace):
+        trace["localization"] = {"background_mode": self.background_mode,
+                                 "color_threshold": self.color_threshold,
+                                 "min_area_ratio": self.min_area_ratio}
         if round_dir is None:
             return
         round_dir.mkdir(parents=True, exist_ok=True)

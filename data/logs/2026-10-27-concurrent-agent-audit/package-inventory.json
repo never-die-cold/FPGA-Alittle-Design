@@ -1,0 +1,122 @@
+[
+  {
+    "path": "build\\board-package-edge-fix",
+    "files": {
+      "payload\\pynq_cop_40mhz.bit": {
+        "sha256": "43ac4f446cd24e11b29453585d3e31a2722a574bcd7626423b2d4cbdff87ed1e",
+        "bytes": 4045773
+      },
+      "payload\\pynq_cop_40mhz.hwh": {
+        "sha256": "ec5de273f2e53c432c317648419d0da64d00b96e66c95c081ced885d4044475d",
+        "bytes": 360502
+      },
+      "xsa\\pynq_cop_40mhz.xsa": {
+        "sha256": "a76b4ed0d1d606447f69444bf8ff70d4bdef58dcbdad9019ee1e367a589a7971",
+        "bytes": 1383476
+      }
+    },
+    "VERSION": "VERSION=cop-board-edge-fix-8884046\nPAYLOAD_KIND=DIAGNOSTIC_INTEGER_NETWORK_NOT_TRAINED\nMODEL_ID=0x4a303250\nBOARD=UNVERIFIED_NEEDS_NC\nBOARD_CLOCK=UNVERIFIED_NEEDS_40MHZ_READBACK\n",
+    "EXPECTED_OUTPUTS.tsv": "case\tclass_id\tmargin_q\tscore_q15\tlow_conf\tlogits\tresult_crc32\npattern\t0\t0\t0\t1\t1,-3,1\tb47dd829\nzero\t2\t2\t258\t1\t2,-3,4\tcdc9b738\n"
+  },
+  {
+    "path": "build\\board-package-edge-fix-trained",
+    "files": {
+      "payload\\pynq_cop_40mhz.bit": {
+        "sha256": "43ac4f446cd24e11b29453585d3e31a2722a574bcd7626423b2d4cbdff87ed1e",
+        "bytes": 4045773
+      },
+      "payload\\pynq_cop_40mhz.hwh": {
+        "sha256": "ec5de273f2e53c432c317648419d0da64d00b96e66c95c081ced885d4044475d",
+        "bytes": 360502
+      },
+      "xsa\\pynq_cop_40mhz.xsa": {
+        "sha256": "a76b4ed0d1d606447f69444bf8ff70d4bdef58dcbdad9019ee1e367a589a7971",
+        "bytes": 1383476
+      }
+    },
+    "VERSION": "VERSION=cop-board-edge-fix-trained-8884046\nPAYLOAD_KIND=TRAINED_PTQ_NETWORK\nMODEL_ID=0x4a303251\nBOARD=UNVERIFIED_NEEDS_NC\nBOARD_CLOCK=UNVERIFIED_NEEDS_40MHZ_READBACK\n",
+    "EXPECTED_OUTPUTS.tsv": "case\tclass_id\tmargin_q\tscore_q15\tlow_conf\tlogits\tresult_crc32\nroi_001\t2\t53\t6837\t0\t-12,-30,41\t9a961e55\nframe\t0\t29\t3741\t0\t34,-41,5\t6d86e183\n"
+  },
+  {
+    "path": "build\\board-package-j02",
+    "files": {
+      "payload\\pynq_cop_40mhz.bit": {
+        "sha256": "566b512abd63140fc9137e3c49c3d2a74b46520cf323139e914672aa35379032",
+        "bytes": 4045773
+      },
+      "payload\\pynq_cop_40mhz.hwh": {
+        "sha256": "d069db4fa760ccb0e49a0ccc566311829fcd9421e0cdddbea8c626e4ee65c6bb",
+        "bytes": 324441
+      },
+      "xsa\\pynq_cop_40mhz.xsa": {
+        "sha256": "382ef5ed1d5a0fef27e62f7c8a65ef8c33d672c2e2e422f426c25d245483ebe6",
+        "bytes": 1382035
+      }
+    },
+    "VERSION": "VERSION=imem-gate-local-566b512a\nPAYLOAD_KIND=DIAGNOSTIC_INTEGER_NETWORK_NOT_TRAINED\nMODEL_ID=0x4a303250\nBOARD=UNVERIFIED_NEEDS_NC\nBOARD_CLOCK=UNVERIFIED_NEEDS_40MHZ_READBACK\n",
+    "EXPECTED_OUTPUTS.tsv": "case\tclass_id\tmargin_q\tscore_q15\tlow_conf\tlogits\tresult_crc32\npattern\t0\t0\t0\t1\t1,-3,1\tb47dd829\nzero\t2\t2\t258\t1\t2,-3,4\tcdc9b738\n"
+  },
+  {
+    "path": "build\\board-package-trained",
+    "files": {
+      "payload\\pynq_cop_40mhz.bit": {
+        "sha256": "566b512abd63140fc9137e3c49c3d2a74b46520cf323139e914672aa35379032",
+        "bytes": 4045773
+      },
+      "payload\\pynq_cop_40mhz.hwh": {
+        "sha256": "d069db4fa760ccb0e49a0ccc566311829fcd9421e0cdddbea8c626e4ee65c6bb",
+        "bytes": 324441
+      },
+      "xsa\\pynq_cop_40mhz.xsa": {
+        "sha256": "382ef5ed1d5a0fef27e62f7c8a65ef8c33d672c2e2e422f426c25d245483ebe6",
+        "bytes": 1382035
+      }
+    },
+    "VERSION": "VERSION=trained-ptq-4a303251\nPAYLOAD_KIND=TRAINED_PTQ_NETWORK\nMODEL_ID=0x4a303251\nBOARD=UNVERIFIED_NEEDS_NC\nBOARD_CLOCK=UNVERIFIED_NEEDS_40MHZ_READBACK\n",
+    "EXPECTED_OUTPUTS.tsv": "case\tclass_id\tmargin_q\tscore_q15\tlow_conf\tlogits\tresult_crc32\nroi_001\t2\t53\t6837\t0\t-12,-30,41\t9a961e55\nframe\t0\t29\t3741\t0\t34,-41,5\t6d86e183\n"
+  },
+  {
+    "path": "build\\board-packages\\diagnostic",
+    "files": {
+      "payload\\pynq_cop_40mhz.bit": {
+        "sha256": "566b512abd63140fc9137e3c49c3d2a74b46520cf323139e914672aa35379032",
+        "bytes": 4045773
+      },
+      "payload\\pynq_cop_40mhz.hwh": {
+        "sha256": "d069db4fa760ccb0e49a0ccc566311829fcd9421e0cdddbea8c626e4ee65c6bb",
+        "bytes": 324441
+      },
+      "payload\\pynq_cop_40mhz.xsa": {
+        "sha256": "382ef5ed1d5a0fef27e62f7c8a65ef8c33d672c2e2e422f426c25d245483ebe6",
+        "bytes": 1382035
+      }
+    },
+    "VERSION": "VERSION=cop-board-imem-gate-8884046\nPAYLOAD_KIND=DIAGNOSTIC_INTEGER_NETWORK_NOT_TRAINED\nMODEL_ID=0x4a303250\nBOARD=UNVERIFIED_NEEDS_NC\nBOARD_CLOCK=UNVERIFIED_NEEDS_40MHZ_READBACK\n",
+    "EXPECTED_OUTPUTS.tsv": "case\tclass_id\tmargin_q\tscore_q15\tlow_conf\tlogits\tresult_crc32\npattern\t0\t0\t0\t1\t1,-3,1\tb47dd829\nzero\t2\t2\t258\t1\t2,-3,4\tcdc9b738\n"
+  },
+  {
+    "path": "build\\run\\pynq_cop_40mhz",
+    "files": {
+      "pynq_cop_40mhz.bit": {
+        "sha256": "43ac4f446cd24e11b29453585d3e31a2722a574bcd7626423b2d4cbdff87ed1e",
+        "bytes": 4045773
+      },
+      "pynq_cop_40mhz.hwh": {
+        "sha256": "ec5de273f2e53c432c317648419d0da64d00b96e66c95c081ced885d4044475d",
+        "bytes": 360502
+      },
+      "pynq_cop_40mhz.xsa": {
+        "sha256": "a76b4ed0d1d606447f69444bf8ff70d4bdef58dcbdad9019ee1e367a589a7971",
+        "bytes": 1383476
+      },
+      "project\\pynq_cop_40mhz.gen\\sources_1\\bd\\cop_system\\hw_handoff\\cop_system.hwh": {
+        "sha256": "ec5de273f2e53c432c317648419d0da64d00b96e66c95c081ced885d4044475d",
+        "bytes": 360502
+      },
+      "project\\pynq_cop_40mhz.runs\\impl_1\\cop_system_wrapper.bit": {
+        "sha256": "43ac4f446cd24e11b29453585d3e31a2722a574bcd7626423b2d4cbdff87ed1e",
+        "bytes": 4045773
+      }
+    }
+  }
+]

@@ -4,7 +4,7 @@
 
 **目标形态**：在 AMD PYNQ-Z2（Zynq-7020）上，用**自研 RISC-V 核、HDMI 视觉流水线与 INT8 CNN 协处理器**分析相机拍到的螺栓、螺母、垫圈等紧固件。板卡 HDMI 视频经 USB 采集卡进入 Windows **EXE 前端**，识别结果经网口同步到前端；统一展示物体矩形框、类别标签、数量统计、工单缺件/错料提示和异常记录，并与 ARM 软件基线对比。
 
-> **当前进度（2026-10-17）**：模块一核＋最小 SoC 已收口；模块二 HDMI RTL／链路级、CNN 诊断整数与 EXE LIVE prototype 已有证据；**全项目 M2/M3 未验收**，硬件 CNN、正式 INT8、工业闭环未完成。
+> **当前进度（2026-10-26）**：模块一核＋最小 SoC 已收口；模块二 HDMI RTL／链路级、CNN 诊断整数与 EXE LIVE prototype 已有证据；板上旧 IMEM bit 诊断网 zero/pattern 6/6 PASS，edge-fix bit（含 DMA start 边沿修复）与训练权重包已构建并通过门禁，但板卡因 SD/mmc I/O 故障待恢复，edge bit/trained 尚未上板；**全项目 M2/M3/M4 未验收**，硬件 CNN 全链、正式 INT8、工业闭环未完成。详见[最终状态](report/project-final-status-2026-10-26.md)。
 > 状态、下一交付物与 M3 卡点只维护在[项目主计划 §3.1](plan.md)；目录与“找东西”规则见 [docs/project-map.md](docs/project-map.md)。
 
 > 👋 新队友请先阅读 [docs/README.md](docs/README.md)（人读入口：5 分钟搞清目录与"找东西"规则），再读 [docs/onboarding.md](docs/onboarding.md)（Git / Markdown / Agent 上手指南）

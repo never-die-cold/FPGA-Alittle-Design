@@ -1,0 +1,981 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Tue Oct 27 19:18:05 2026
+| Host         : never-die-cold running 64-bit major release  (build 9200)
+| Command      : report_bus_skew -file build/run/pynq_product_resume_20261027_r1/bus_skew.rpt
+| Design       : cop_system_wrapper
+| Device       : 7z020-clg400
+| Speed File   : -1  PRODUCTION 1.12 2019-11-22
+| Design State : Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Bus Skew Report
+
+Table of Contents
+-----------------
+1. Bus Skew Report Summary
+2. Bus Skew Report Per Constraint
+
+1. Bus Skew Report Summary
+--------------------------
+
+Id  Position  From                            To                              Corner  Requirement(ns)  Actual(ns)  Slack(ns)
+--  --------  ------------------------------  ------------------------------  ------  ---------------  ----------  ---------
+1   29        [get_cells [list {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[0]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[1]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[2]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[3]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[4]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[5]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[6]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[7]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[8]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[9]}]]
+                                              [get_cells [list {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][0]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][1]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][2]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][3]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][4]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][5]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][6]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][7]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][8]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][9]}]]
+                                                                              Slow             10.000       1.035      8.965
+2   31        [get_cells [list {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[0]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[1]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[2]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[3]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[4]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[5]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[6]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[7]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[8]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[9]}]]
+                                              [get_cells [list {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][0]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][1]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][2]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][3]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][4]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][5]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][6]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][7]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][8]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][9]}]]
+                                                                              Slow             10.000       0.947      9.053
+3   50        [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/aw_hold_reg.*]
+                                              [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/aw_m1_reg.*]
+                                                                              Slow             25.000       0.889     24.111
+4   52        [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/wd_hold_reg.*]
+                                              [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/wd_m1_reg.*]
+                                                                              Slow             25.000       1.136     23.864
+5   54        [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/ws_hold_reg.*]
+                                              [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/ws_m1_reg.*]
+                                                                              Slow             25.000       0.847     24.153
+6   56        [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/ar_hold_reg.*]
+                                              [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/ar_m1_reg.*]
+                                                                              Slow             25.000       1.010     23.990
+7   58        [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/rdata_hold_reg.*]
+                                              [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/rdata_s1_reg.*]
+                                                                              Slow             10.000       1.314      8.686
+8   60        [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/bresp_hold_reg.*]
+                                              [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/bresp_s1_reg.*]
+                                                                              NA               10.000          NA         NA
+9   62        [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/rresp_hold_reg.*]
+                                              [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/rresp_s1_reg.*]
+                                                                              NA               10.000          NA         NA
+10  64        [get_cells -quiet -hier -regexp .*pl/inst/axis_cdc/wgray_reg.*]
+                                              [get_cells -quiet -hier -regexp .*pl/inst/axis_cdc/wgray_m1_reg.*]
+                                                                              Slow             10.000       0.832      9.168
+11  66        [get_cells -quiet -hier -regexp .*pl/inst/axis_cdc/rgray_reg.*]
+                                              [get_cells -quiet -hier -regexp .*pl/inst/axis_cdc/rgray_s1_reg.*]
+                                                                              Slow             10.000       0.827      9.173
+
+
+2. Bus Skew Report Per Constraint
+---------------------------------
+
+Id: 1
+set_bus_skew -from [get_cells [list {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[0]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[1]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[2]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[3]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[4]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[5]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[6]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[7]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[8]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[9]}]] -to [get_cells [list {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][0]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][1]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][2]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][3]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][4]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][5]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][6]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][7]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][8]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][9]}]] 10.000
+Requirement: 10.000ns
+Endpoints: 10
+
+From Clock            To Clock              Endpoint Pin                    Reference Pin                   Corner  Actual(ns)  Slack(ns)
+--------------------  --------------------  ------------------------------  ------------------------------  ------  ----------  ---------
+clk_fpga_0            PixelClk_int          cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][1]/D
+                                                                            cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][4]/D
+                                                                                                            Slow         1.035      8.965
+
+
+Slack (MET) :             8.965ns  (requirement - actual skew)
+  Endpoint Source:        cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0)
+  Endpoint Destination:   cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][1]/D
+                            (rising edge-triggered cell FDRE clocked by PixelClk_int)
+  Reference Source:       cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[4]/C
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0)
+  Reference Destination:  cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][4]/D
+                            (rising edge-triggered cell FDRE clocked by PixelClk_int)
+  Path Type:              Bus Skew (Max at Slow Process Corner)
+  Requirement:            10.000ns
+  Endpoint Relative Delay:   -1.954ns
+  Reference Relative Delay:  -3.817ns
+  Relative CRPR:              0.828ns
+  Actual Bus Skew:            1.035ns  (Endpoint Relative Delay - Reference Relative Delay - Relative CRPR)
+
+Endpoint path:
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    PS7_X0Y0             PS7                          0.000     0.000 r  cop_system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    cop_system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  cop_system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=6979, routed)        1.781     3.075    cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_clk
+    SLICE_X91Y96         FDRE                                         r  cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X91Y96         FDRE (Prop_fdre_C_Q)         0.419     3.494 r  cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[1]/Q
+                         net (fo=1, routed)           0.849     4.343    cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/async_path[1]
+    SLICE_X91Y97         FDRE                                         r  cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][1]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock PixelClk_int rise edge)
+                                                      0.000     0.000 r  <hidden>
+    N18                                               0.000     0.000 r  hdmi_in_clk_p
+                         net (fo=0)                   0.000     0.000    cop_system_i/rx/U0/TMDS_ClockingX/TMDS_Clk_p
+    N18                  IBUFDS (Prop_ibufds_I_O)     0.887     0.887 r  cop_system_i/rx/U0/TMDS_ClockingX/InputBuffer/O
+                         net (fo=1, routed)           1.162     2.049    cop_system_i/rx/U0/TMDS_ClockingX/CLK_IN_hdmi_clk
+    MMCME2_ADV_X1Y1      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                      0.084     2.133 r  cop_system_i/rx/U0/TMDS_ClockingX/DVI_ClkGenerator/CLKOUT0
+                         net (fo=2, routed)           0.960     3.093    cop_system_i/rx/U0/TMDS_ClockingX/CLK_OUT_5x_hdmi_clk
+    BUFR_X1Y5            BUFR (Prop_bufr_I_O)         0.918     4.011 r  cop_system_i/rx/U0/TMDS_ClockingX/PixelClkBuffer/O
+                         net (fo=367, routed)         0.858     4.869    cop_system_i/rx/U0/GenerateBUFG.ResyncToBUFG_X/InstBUFG_0
+    BUFGCTRL_X0Y18       BUFG (Prop_bufg_I_O)         0.091     4.960 r  cop_system_i/rx/U0/GenerateBUFG.ResyncToBUFG_X/InstBUFG/O
+                         net (fo=404, routed)         1.606     6.565    cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_clk
+    SLICE_X91Y97         FDRE                                         r  cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][1]/C
+                         clock pessimism              0.000     6.565    <hidden>
+    SLICE_X91Y97         FDRE (Setup_fdre_C_D)       -0.268     6.297    cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][1]
+  -------------------------------------------------------------------
+                         data arrival                           4.343    <hidden>
+                         clock arrival                          6.297    <hidden>
+  -------------------------------------------------------------------
+                         relative delay                        -1.954    <hidden>
+
+Reference path:
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    PS7_X0Y0             PS7                          0.000     0.000 r  cop_system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     1.088    cop_system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     1.179 r  cop_system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=6979, routed)        1.546     2.725    cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_clk
+    SLICE_X86Y96         FDRE                                         r  cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[4]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X86Y96         FDRE (Prop_fdre_C_Q)         0.418     3.143 r  cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/src_gray_ff_reg[4]/Q
+                         net (fo=1, routed)           0.376     3.518    cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/async_path[4]
+    SLICE_X85Y97         FDRE                                         r  cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][4]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock PixelClk_int rise edge)
+                                                      0.000     0.000 r  <hidden>
+    N18                                               0.000     0.000 r  hdmi_in_clk_p
+                         net (fo=0)                   0.000     0.000    cop_system_i/rx/U0/TMDS_ClockingX/TMDS_Clk_p
+    N18                  IBUFDS (Prop_ibufds_I_O)     0.930     0.930 r  cop_system_i/rx/U0/TMDS_ClockingX/InputBuffer/O
+                         net (fo=1, routed)           1.285     2.215    cop_system_i/rx/U0/TMDS_ClockingX/CLK_IN_hdmi_clk
+    MMCME2_ADV_X1Y1      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                      0.089     2.304 r  cop_system_i/rx/U0/TMDS_ClockingX/DVI_ClkGenerator/CLKOUT0
+                         net (fo=2, routed)           1.063     3.367    cop_system_i/rx/U0/TMDS_ClockingX/CLK_OUT_5x_hdmi_clk
+    BUFR_X1Y5            BUFR (Prop_bufr_I_O)         1.031     4.398 r  cop_system_i/rx/U0/TMDS_ClockingX/PixelClkBuffer/O
+                         net (fo=367, routed)         0.945     5.343    cop_system_i/rx/U0/GenerateBUFG.ResyncToBUFG_X/InstBUFG_0
+    BUFGCTRL_X0Y18       BUFG (Prop_bufg_I_O)         0.101     5.444 r  cop_system_i/rx/U0/GenerateBUFG.ResyncToBUFG_X/InstBUFG/O
+                         net (fo=404, routed)         1.722     7.166    cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_clk
+    SLICE_X85Y97         FDRE                                         r  cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][4]/C
+                         clock pessimism              0.000     7.166    <hidden>
+    SLICE_X85Y97         FDRE (Hold_fdre_C_D)         0.169     7.335    cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.rd_pntr_cdc_inst/dest_graysync_ff_reg[0][4]
+  -------------------------------------------------------------------
+                         data arrival                           3.518    <hidden>
+                         clock arrival                          7.335    <hidden>
+  -------------------------------------------------------------------
+                         relative delay                        -3.817    <hidden>
+
+
+
+Id: 2
+set_bus_skew -from [get_cells [list {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[0]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[1]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[2]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[3]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[4]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[5]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[6]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[7]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[8]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[9]}]] -to [get_cells [list {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][0]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][1]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][2]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][3]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][4]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][5]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][6]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][7]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][8]} {cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][9]}]] 10.000
+Requirement: 10.000ns
+Endpoints: 10
+
+From Clock            To Clock              Endpoint Pin                    Reference Pin                   Corner  Actual(ns)  Slack(ns)
+--------------------  --------------------  ------------------------------  ------------------------------  ------  ----------  ---------
+PixelClk_int          clk_fpga_0            cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][1]/D
+                                                                            cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][8]/D
+                                                                                                            Slow         0.947      9.053
+
+
+Slack (MET) :             9.053ns  (requirement - actual skew)
+  Endpoint Source:        cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by PixelClk_int)
+  Endpoint Destination:   cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][1]/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0)
+  Reference Source:       cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[8]/C
+                            (rising edge-triggered cell FDRE clocked by PixelClk_int)
+  Reference Destination:  cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][8]/D
+                            (rising edge-triggered cell FDRE clocked by clk_fpga_0)
+  Path Type:              Bus Skew (Max at Slow Process Corner)
+  Requirement:            10.000ns
+  Endpoint Relative Delay:    5.950ns
+  Reference Relative Delay:   4.175ns
+  Relative CRPR:              0.828ns
+  Actual Bus Skew:            0.947ns  (Endpoint Relative Delay - Reference Relative Delay - Relative CRPR)
+
+Endpoint path:
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock PixelClk_int rise edge)
+                                                      0.000     0.000 r  <hidden>
+    N18                                               0.000     0.000 r  hdmi_in_clk_p
+                         net (fo=0)                   0.000     0.000    cop_system_i/rx/U0/TMDS_ClockingX/TMDS_Clk_p
+    N18                  IBUFDS (Prop_ibufds_I_O)     0.930     0.930 r  cop_system_i/rx/U0/TMDS_ClockingX/InputBuffer/O
+                         net (fo=1, routed)           1.285     2.215    cop_system_i/rx/U0/TMDS_ClockingX/CLK_IN_hdmi_clk
+    MMCME2_ADV_X1Y1      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                      0.089     2.304 r  cop_system_i/rx/U0/TMDS_ClockingX/DVI_ClkGenerator/CLKOUT0
+                         net (fo=2, routed)           1.063     3.367    cop_system_i/rx/U0/TMDS_ClockingX/CLK_OUT_5x_hdmi_clk
+    BUFR_X1Y5            BUFR (Prop_bufr_I_O)         1.031     4.398 r  cop_system_i/rx/U0/TMDS_ClockingX/PixelClkBuffer/O
+                         net (fo=367, routed)         0.945     5.343    cop_system_i/rx/U0/GenerateBUFG.ResyncToBUFG_X/InstBUFG_0
+    BUFGCTRL_X0Y18       BUFG (Prop_bufg_I_O)         0.101     5.444 r  cop_system_i/rx/U0/GenerateBUFG.ResyncToBUFG_X/InstBUFG/O
+                         net (fo=404, routed)         1.781     7.225    cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_clk
+    SLICE_X91Y95         FDRE                                         r  cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X91Y95         FDRE (Prop_fdre_C_Q)         0.419     7.644 r  cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[1]/Q
+                         net (fo=1, routed)           0.810     8.454    cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/async_path[1]
+    SLICE_X91Y93         FDRE                                         r  cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][1]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    PS7_X0Y0             PS7                          0.000     0.000 r  cop_system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     1.088    cop_system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     1.179 r  cop_system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=6979, routed)        1.605     2.784    cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_clk
+    SLICE_X91Y93         FDRE                                         r  cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][1]/C
+                         clock pessimism              0.000     2.784    <hidden>
+    SLICE_X91Y93         FDRE (Setup_fdre_C_D)       -0.280     2.504    cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][1]
+  -------------------------------------------------------------------
+                         data arrival                           8.454    <hidden>
+                         clock arrival                          2.504    <hidden>
+  -------------------------------------------------------------------
+                         relative delay                         5.950    <hidden>
+
+Reference path:
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock PixelClk_int rise edge)
+                                                      0.000     0.000 r  <hidden>
+    N18                                               0.000     0.000 r  hdmi_in_clk_p
+                         net (fo=0)                   0.000     0.000    cop_system_i/rx/U0/TMDS_ClockingX/TMDS_Clk_p
+    N18                  IBUFDS (Prop_ibufds_I_O)     0.887     0.887 r  cop_system_i/rx/U0/TMDS_ClockingX/InputBuffer/O
+                         net (fo=1, routed)           1.162     2.049    cop_system_i/rx/U0/TMDS_ClockingX/CLK_IN_hdmi_clk
+    MMCME2_ADV_X1Y1      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                      0.084     2.133 r  cop_system_i/rx/U0/TMDS_ClockingX/DVI_ClkGenerator/CLKOUT0
+                         net (fo=2, routed)           0.960     3.093    cop_system_i/rx/U0/TMDS_ClockingX/CLK_OUT_5x_hdmi_clk
+    BUFR_X1Y5            BUFR (Prop_bufr_I_O)         0.918     4.011 r  cop_system_i/rx/U0/TMDS_ClockingX/PixelClkBuffer/O
+                         net (fo=367, routed)         0.858     4.869    cop_system_i/rx/U0/GenerateBUFG.ResyncToBUFG_X/InstBUFG_0
+    BUFGCTRL_X0Y18       BUFG (Prop_bufg_I_O)         0.091     4.960 r  cop_system_i/rx/U0/GenerateBUFG.ResyncToBUFG_X/InstBUFG/O
+                         net (fo=404, routed)         1.547     6.506    cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_clk
+    SLICE_X89Y97         FDRE                                         r  cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[8]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X89Y97         FDRE (Prop_fdre_C_Q)         0.367     6.873 r  cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/src_gray_ff_reg[8]/Q
+                         net (fo=1, routed)           0.488     7.361    cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/async_path[8]
+    SLICE_X89Y95         FDRE                                         r  cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][8]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    PS7_X0Y0             PS7                          0.000     0.000 r  cop_system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    cop_system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  cop_system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=6979, routed)        1.722     3.016    cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_clk
+    SLICE_X89Y95         FDRE                                         r  cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][8]/C
+                         clock pessimism              0.000     3.016    <hidden>
+    SLICE_X89Y95         FDRE (Hold_fdre_C_D)         0.170     3.186    cop_system_i/capture_input/inst/COUPLER_INST/generate_async_fifo.FIFO_INST/XPM_FIFO_ASYNC_INST/gnuram_async_fifo.xpm_fifo_base_inst/gen_cdc_pntr.wr_pntr_cdc_inst/dest_graysync_ff_reg[0][8]
+  -------------------------------------------------------------------
+                         data arrival                           7.361    <hidden>
+                         clock arrival                          3.186    <hidden>
+  -------------------------------------------------------------------
+                         relative delay                         4.175    <hidden>
+
+
+
+Id: 3
+set_bus_skew -from [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/aw_hold_reg.*] -to [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/aw_m1_reg.*] 25.000
+Requirement: 25.000ns
+Endpoints: 12
+
+From Clock            To Clock              Endpoint Pin                    Reference Pin                   Corner  Actual(ns)  Slack(ns)
+--------------------  --------------------  ------------------------------  ------------------------------  ------  ----------  ---------
+clk_fpga_0            clk_out1_cop_system_cop_mmcm_0
+                                            cop_system_i/pl/inst/axil_cdc/aw_m1_reg[8]/D
+                                                                            cop_system_i/pl/inst/axil_cdc/aw_m1_reg[3]/D
+                                                                                                            Slow         0.889     24.111
+
+
+Slack (MET) :             24.111ns  (requirement - actual skew)
+  Endpoint Source:        cop_system_i/pl/inst/axil_cdc/aw_hold_reg[8]/C
+                            (rising edge-triggered cell FDCE clocked by clk_fpga_0)
+  Endpoint Destination:   cop_system_i/pl/inst/axil_cdc/aw_m1_reg[8]/D
+                            (rising edge-triggered cell FDCE clocked by clk_out1_cop_system_cop_mmcm_0)
+  Reference Source:       cop_system_i/pl/inst/axil_cdc/aw_hold_reg[3]/C
+                            (rising edge-triggered cell FDCE clocked by clk_fpga_0)
+  Reference Destination:  cop_system_i/pl/inst/axil_cdc/aw_m1_reg[3]/D
+                            (rising edge-triggered cell FDCE clocked by clk_out1_cop_system_cop_mmcm_0)
+  Path Type:              Bus Skew (Max at Slow Process Corner)
+  Requirement:            25.000ns
+  Endpoint Relative Delay:    2.945ns
+  Reference Relative Delay:   1.677ns
+  Relative CRPR:              0.379ns
+  Actual Bus Skew:            0.889ns  (Endpoint Relative Delay - Reference Relative Delay - Relative CRPR)
+
+Endpoint path:
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    PS7_X0Y0             PS7                          0.000     0.000 r  cop_system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    cop_system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  cop_system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=6979, routed)        1.832     3.126    cop_system_i/pl/inst/axil_cdc/ps_clk_100_i
+    SLICE_X44Y118        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/aw_hold_reg[8]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X44Y118        FDCE (Prop_fdce_C_Q)         0.419     3.545 r  cop_system_i/pl/inst/axil_cdc/aw_hold_reg[8]/Q
+                         net (fo=1, routed)           0.781     4.326    cop_system_i/pl/inst/axil_cdc/aw_hold[8]
+    SLICE_X48Y119        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/aw_m1_reg[8]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_out1_cop_system_cop_mmcm_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    BUFGCTRL_X0Y19       BUFG                         0.000     0.000 r  cop_system_i/ps7/inst/buffer_fclk_clk_1.FCLK_CLK_1_BUFG/O
+                         net (fo=1, routed)           1.612     1.612    cop_system_i/cop_mmcm/inst/clk_in1
+    MMCME2_ADV_X1Y0      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -3.425    -1.813 r  cop_system_i/cop_mmcm/inst/mmcm_adv_inst/CLKOUT0
+                         net (fo=1, routed)           1.725    -0.088    cop_system_i/cop_mmcm/inst/clk_out1_cop_system_cop_mmcm_0
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.091     0.003 r  cop_system_i/cop_mmcm/inst/clkout1_buf/O
+                         net (fo=37287, routed)       1.643     1.646    cop_system_i/pl/inst/axil_cdc/cop_clk_40_i
+    SLICE_X48Y119        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/aw_m1_reg[8]/C
+                         clock pessimism              0.000     1.646    <hidden>
+    SLICE_X48Y119        FDCE (Setup_fdce_C_D)       -0.266     1.380    cop_system_i/pl/inst/axil_cdc/aw_m1_reg[8]
+  -------------------------------------------------------------------
+                         data arrival                           4.326    <hidden>
+                         clock arrival                          1.380    <hidden>
+  -------------------------------------------------------------------
+                         relative delay                         2.945    <hidden>
+
+Reference path:
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    PS7_X0Y0             PS7                          0.000     0.000 r  cop_system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     1.088    cop_system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     1.179 r  cop_system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=6979, routed)        1.642     2.821    cop_system_i/pl/inst/axil_cdc/ps_clk_100_i
+    SLICE_X43Y119        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/aw_hold_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X43Y119        FDCE (Prop_fdce_C_Q)         0.367     3.188 r  cop_system_i/pl/inst/axil_cdc/aw_hold_reg[3]/Q
+                         net (fo=1, routed)           0.496     3.684    cop_system_i/pl/inst/axil_cdc/aw_hold[3]
+    SLICE_X47Y119        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/aw_m1_reg[3]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_out1_cop_system_cop_mmcm_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    BUFGCTRL_X0Y19       BUFG                         0.000     0.000 r  cop_system_i/ps7/inst/buffer_fclk_clk_1.FCLK_CLK_1_BUFG/O
+                         net (fo=1, routed)           1.806     1.806    cop_system_i/cop_mmcm/inst/clk_in1
+    MMCME2_ADV_X1Y0      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -3.793    -1.987 r  cop_system_i/cop_mmcm/inst/mmcm_adv_inst/CLKOUT0
+                         net (fo=1, routed)           1.889    -0.098    cop_system_i/cop_mmcm/inst/clk_out1_cop_system_cop_mmcm_0
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.101     0.003 r  cop_system_i/cop_mmcm/inst/clkout1_buf/O
+                         net (fo=37287, routed)       1.834     1.837    cop_system_i/pl/inst/axil_cdc/cop_clk_40_i
+    SLICE_X47Y119        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/aw_m1_reg[3]/C
+                         clock pessimism              0.000     1.837    <hidden>
+    SLICE_X47Y119        FDCE (Hold_fdce_C_D)         0.170     2.007    cop_system_i/pl/inst/axil_cdc/aw_m1_reg[3]
+  -------------------------------------------------------------------
+                         data arrival                           3.684    <hidden>
+                         clock arrival                          2.007    <hidden>
+  -------------------------------------------------------------------
+                         relative delay                         1.677    <hidden>
+
+
+
+Id: 4
+set_bus_skew -from [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/wd_hold_reg.*] -to [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/wd_m1_reg.*] 25.000
+Requirement: 25.000ns
+Endpoints: 32
+
+From Clock            To Clock              Endpoint Pin                    Reference Pin                   Corner  Actual(ns)  Slack(ns)
+--------------------  --------------------  ------------------------------  ------------------------------  ------  ----------  ---------
+clk_fpga_0            clk_out1_cop_system_cop_mmcm_0
+                                            cop_system_i/pl/inst/axil_cdc/wd_m1_reg[5]/D
+                                                                            cop_system_i/pl/inst/axil_cdc/wd_m1_reg[14]/D
+                                                                                                            Slow         1.136     23.864
+
+
+Slack (MET) :             23.864ns  (requirement - actual skew)
+  Endpoint Source:        cop_system_i/pl/inst/axil_cdc/wd_hold_reg[5]/C
+                            (rising edge-triggered cell FDCE clocked by clk_fpga_0)
+  Endpoint Destination:   cop_system_i/pl/inst/axil_cdc/wd_m1_reg[5]/D
+                            (rising edge-triggered cell FDCE clocked by clk_out1_cop_system_cop_mmcm_0)
+  Reference Source:       cop_system_i/pl/inst/axil_cdc/wd_hold_reg[14]/C
+                            (rising edge-triggered cell FDCE clocked by clk_fpga_0)
+  Reference Destination:  cop_system_i/pl/inst/axil_cdc/wd_m1_reg[14]/D
+                            (rising edge-triggered cell FDCE clocked by clk_out1_cop_system_cop_mmcm_0)
+  Path Type:              Bus Skew (Max at Slow Process Corner)
+  Requirement:            25.000ns
+  Endpoint Relative Delay:    2.972ns
+  Reference Relative Delay:   1.557ns
+  Relative CRPR:              0.278ns
+  Actual Bus Skew:            1.136ns  (Endpoint Relative Delay - Reference Relative Delay - Relative CRPR)
+
+Endpoint path:
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    PS7_X0Y0             PS7                          0.000     0.000 r  cop_system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    cop_system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  cop_system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=6979, routed)        1.836     3.130    cop_system_i/pl/inst/axil_cdc/ps_clk_100_i
+    SLICE_X47Y115        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/wd_hold_reg[5]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X47Y115        FDCE (Prop_fdce_C_Q)         0.456     3.586 r  cop_system_i/pl/inst/axil_cdc/wd_hold_reg[5]/Q
+                         net (fo=1, routed)           0.925     4.511    cop_system_i/pl/inst/axil_cdc/wd_hold[5]
+    SLICE_X52Y122        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/wd_m1_reg[5]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_out1_cop_system_cop_mmcm_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    BUFGCTRL_X0Y19       BUFG                         0.000     0.000 r  cop_system_i/ps7/inst/buffer_fclk_clk_1.FCLK_CLK_1_BUFG/O
+                         net (fo=1, routed)           1.612     1.612    cop_system_i/cop_mmcm/inst/clk_in1
+    MMCME2_ADV_X1Y0      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -3.425    -1.813 r  cop_system_i/cop_mmcm/inst/mmcm_adv_inst/CLKOUT0
+                         net (fo=1, routed)           1.725    -0.088    cop_system_i/cop_mmcm/inst/clk_out1_cop_system_cop_mmcm_0
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.091     0.003 r  cop_system_i/cop_mmcm/inst/clkout1_buf/O
+                         net (fo=37287, routed)       1.629     1.632    cop_system_i/pl/inst/axil_cdc/cop_clk_40_i
+    SLICE_X52Y122        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/wd_m1_reg[5]/C
+                         clock pessimism              0.000     1.632    <hidden>
+    SLICE_X52Y122        FDCE (Setup_fdce_C_D)       -0.093     1.539    cop_system_i/pl/inst/axil_cdc/wd_m1_reg[5]
+  -------------------------------------------------------------------
+                         data arrival                           4.511    <hidden>
+                         clock arrival                          1.539    <hidden>
+  -------------------------------------------------------------------
+                         relative delay                         2.972    <hidden>
+
+Reference path:
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    PS7_X0Y0             PS7                          0.000     0.000 r  cop_system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     1.088    cop_system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     1.179 r  cop_system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=6979, routed)        1.637     2.816    cop_system_i/pl/inst/axil_cdc/ps_clk_100_i
+    SLICE_X48Y122        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/wd_hold_reg[14]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X48Y122        FDCE (Prop_fdce_C_Q)         0.367     3.183 r  cop_system_i/pl/inst/axil_cdc/wd_hold_reg[14]/Q
+                         net (fo=1, routed)           0.398     3.581    cop_system_i/pl/inst/axil_cdc/wd_hold[14]
+    SLICE_X48Y124        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/wd_m1_reg[14]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_out1_cop_system_cop_mmcm_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    BUFGCTRL_X0Y19       BUFG                         0.000     0.000 r  cop_system_i/ps7/inst/buffer_fclk_clk_1.FCLK_CLK_1_BUFG/O
+                         net (fo=1, routed)           1.806     1.806    cop_system_i/cop_mmcm/inst/clk_in1
+    MMCME2_ADV_X1Y0      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -3.793    -1.987 r  cop_system_i/cop_mmcm/inst/mmcm_adv_inst/CLKOUT0
+                         net (fo=1, routed)           1.889    -0.098    cop_system_i/cop_mmcm/inst/clk_out1_cop_system_cop_mmcm_0
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.101     0.003 r  cop_system_i/cop_mmcm/inst/clkout1_buf/O
+                         net (fo=37287, routed)       1.825     1.828    cop_system_i/pl/inst/axil_cdc/cop_clk_40_i
+    SLICE_X48Y124        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/wd_m1_reg[14]/C
+                         clock pessimism              0.000     1.828    <hidden>
+    SLICE_X48Y124        FDCE (Hold_fdce_C_D)         0.196     2.024    cop_system_i/pl/inst/axil_cdc/wd_m1_reg[14]
+  -------------------------------------------------------------------
+                         data arrival                           3.581    <hidden>
+                         clock arrival                          2.024    <hidden>
+  -------------------------------------------------------------------
+                         relative delay                         1.557    <hidden>
+
+
+
+Id: 5
+set_bus_skew -from [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/ws_hold_reg.*] -to [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/ws_m1_reg.*] 25.000
+Requirement: 25.000ns
+Endpoints: 4
+
+From Clock            To Clock              Endpoint Pin                    Reference Pin                   Corner  Actual(ns)  Slack(ns)
+--------------------  --------------------  ------------------------------  ------------------------------  ------  ----------  ---------
+clk_fpga_0            clk_out1_cop_system_cop_mmcm_0
+                                            cop_system_i/pl/inst/axil_cdc/ws_m1_reg[0]/D
+                                                                            cop_system_i/pl/inst/axil_cdc/ws_m1_reg[3]/D
+                                                                                                            Slow         0.847     24.153
+
+
+Slack (MET) :             24.153ns  (requirement - actual skew)
+  Endpoint Source:        cop_system_i/pl/inst/axil_cdc/ws_hold_reg[0]/C
+                            (rising edge-triggered cell FDCE clocked by clk_fpga_0)
+  Endpoint Destination:   cop_system_i/pl/inst/axil_cdc/ws_m1_reg[0]/D
+                            (rising edge-triggered cell FDCE clocked by clk_out1_cop_system_cop_mmcm_0)
+  Reference Source:       cop_system_i/pl/inst/axil_cdc/ws_hold_reg[3]/C
+                            (rising edge-triggered cell FDCE clocked by clk_fpga_0)
+  Reference Destination:  cop_system_i/pl/inst/axil_cdc/ws_m1_reg[3]/D
+                            (rising edge-triggered cell FDCE clocked by clk_out1_cop_system_cop_mmcm_0)
+  Path Type:              Bus Skew (Max at Slow Process Corner)
+  Requirement:            25.000ns
+  Endpoint Relative Delay:    2.790ns
+  Reference Relative Delay:   1.564ns
+  Relative CRPR:              0.379ns
+  Actual Bus Skew:            0.847ns  (Endpoint Relative Delay - Reference Relative Delay - Relative CRPR)
+
+Endpoint path:
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    PS7_X0Y0             PS7                          0.000     0.000 r  cop_system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    cop_system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  cop_system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=6979, routed)        1.830     3.124    cop_system_i/pl/inst/axil_cdc/ps_clk_100_i
+    SLICE_X44Y120        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/ws_hold_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X44Y120        FDCE (Prop_fdce_C_Q)         0.419     3.543 r  cop_system_i/pl/inst/axil_cdc/ws_hold_reg[0]/Q
+                         net (fo=1, routed)           0.625     4.168    cop_system_i/pl/inst/axil_cdc/ws_hold[0]
+    SLICE_X45Y121        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/ws_m1_reg[0]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_out1_cop_system_cop_mmcm_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    BUFGCTRL_X0Y19       BUFG                         0.000     0.000 r  cop_system_i/ps7/inst/buffer_fclk_clk_1.FCLK_CLK_1_BUFG/O
+                         net (fo=1, routed)           1.612     1.612    cop_system_i/cop_mmcm/inst/clk_in1
+    MMCME2_ADV_X1Y0      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -3.425    -1.813 r  cop_system_i/cop_mmcm/inst/mmcm_adv_inst/CLKOUT0
+                         net (fo=1, routed)           1.725    -0.088    cop_system_i/cop_mmcm/inst/clk_out1_cop_system_cop_mmcm_0
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.091     0.003 r  cop_system_i/cop_mmcm/inst/clkout1_buf/O
+                         net (fo=37287, routed)       1.643     1.646    cop_system_i/pl/inst/axil_cdc/cop_clk_40_i
+    SLICE_X45Y121        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/ws_m1_reg[0]/C
+                         clock pessimism              0.000     1.646    <hidden>
+    SLICE_X45Y121        FDCE (Setup_fdce_C_D)       -0.268     1.378    cop_system_i/pl/inst/axil_cdc/ws_m1_reg[0]
+  -------------------------------------------------------------------
+                         data arrival                           4.168    <hidden>
+                         clock arrival                          1.378    <hidden>
+  -------------------------------------------------------------------
+                         relative delay                         2.790    <hidden>
+
+Reference path:
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    PS7_X0Y0             PS7                          0.000     0.000 r  cop_system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     1.088    cop_system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     1.179 r  cop_system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=6979, routed)        1.636     2.815    cop_system_i/pl/inst/axil_cdc/ps_clk_100_i
+    SLICE_X33Y125        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/ws_hold_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X33Y125        FDCE (Prop_fdce_C_Q)         0.367     3.182 r  cop_system_i/pl/inst/axil_cdc/ws_hold_reg[3]/Q
+                         net (fo=1, routed)           0.382     3.564    cop_system_i/pl/inst/axil_cdc/ws_hold[3]
+    SLICE_X37Y125        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/ws_m1_reg[3]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_out1_cop_system_cop_mmcm_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    BUFGCTRL_X0Y19       BUFG                         0.000     0.000 r  cop_system_i/ps7/inst/buffer_fclk_clk_1.FCLK_CLK_1_BUFG/O
+                         net (fo=1, routed)           1.806     1.806    cop_system_i/cop_mmcm/inst/clk_in1
+    MMCME2_ADV_X1Y0      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -3.793    -1.987 r  cop_system_i/cop_mmcm/inst/mmcm_adv_inst/CLKOUT0
+                         net (fo=1, routed)           1.889    -0.098    cop_system_i/cop_mmcm/inst/clk_out1_cop_system_cop_mmcm_0
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.101     0.003 r  cop_system_i/cop_mmcm/inst/clkout1_buf/O
+                         net (fo=37287, routed)       1.827     1.830    cop_system_i/pl/inst/axil_cdc/cop_clk_40_i
+    SLICE_X37Y125        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/ws_m1_reg[3]/C
+                         clock pessimism              0.000     1.830    <hidden>
+    SLICE_X37Y125        FDCE (Hold_fdce_C_D)         0.170     2.000    cop_system_i/pl/inst/axil_cdc/ws_m1_reg[3]
+  -------------------------------------------------------------------
+                         data arrival                           3.564    <hidden>
+                         clock arrival                          2.000    <hidden>
+  -------------------------------------------------------------------
+                         relative delay                         1.564    <hidden>
+
+
+
+Id: 6
+set_bus_skew -from [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/ar_hold_reg.*] -to [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/ar_m1_reg.*] 25.000
+Requirement: 25.000ns
+Endpoints: 12
+
+From Clock            To Clock              Endpoint Pin                    Reference Pin                   Corner  Actual(ns)  Slack(ns)
+--------------------  --------------------  ------------------------------  ------------------------------  ------  ----------  ---------
+clk_fpga_0            clk_out1_cop_system_cop_mmcm_0
+                                            cop_system_i/pl/inst/axil_cdc/ar_m1_reg[1]/D
+                                                                            cop_system_i/pl/inst/axil_cdc/ar_m1_reg[7]/D
+                                                                                                            Slow         1.010     23.990
+
+
+Slack (MET) :             23.990ns  (requirement - actual skew)
+  Endpoint Source:        cop_system_i/pl/inst/axil_cdc/ar_hold_reg[1]/C
+                            (rising edge-triggered cell FDCE clocked by clk_fpga_0)
+  Endpoint Destination:   cop_system_i/pl/inst/axil_cdc/ar_m1_reg[1]/D
+                            (rising edge-triggered cell FDCE clocked by clk_out1_cop_system_cop_mmcm_0)
+  Reference Source:       cop_system_i/pl/inst/axil_cdc/ar_hold_reg[7]/C
+                            (rising edge-triggered cell FDCE clocked by clk_fpga_0)
+  Reference Destination:  cop_system_i/pl/inst/axil_cdc/ar_m1_reg[7]/D
+                            (rising edge-triggered cell FDCE clocked by clk_out1_cop_system_cop_mmcm_0)
+  Path Type:              Bus Skew (Max at Slow Process Corner)
+  Requirement:            25.000ns
+  Endpoint Relative Delay:    2.784ns
+  Reference Relative Delay:   1.596ns
+  Relative CRPR:              0.178ns
+  Actual Bus Skew:            1.010ns  (Endpoint Relative Delay - Reference Relative Delay - Relative CRPR)
+
+Endpoint path:
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    PS7_X0Y0             PS7                          0.000     0.000 r  cop_system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    cop_system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  cop_system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=6979, routed)        1.832     3.126    cop_system_i/pl/inst/axil_cdc/ps_clk_100_i
+    SLICE_X47Y118        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/ar_hold_reg[1]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X47Y118        FDCE (Prop_fdce_C_Q)         0.419     3.545 r  cop_system_i/pl/inst/axil_cdc/ar_hold_reg[1]/Q
+                         net (fo=1, routed)           0.616     4.161    cop_system_i/pl/inst/axil_cdc/ar_hold[1]
+    SLICE_X47Y120        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/ar_m1_reg[1]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_out1_cop_system_cop_mmcm_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    BUFGCTRL_X0Y19       BUFG                         0.000     0.000 r  cop_system_i/ps7/inst/buffer_fclk_clk_1.FCLK_CLK_1_BUFG/O
+                         net (fo=1, routed)           1.612     1.612    cop_system_i/cop_mmcm/inst/clk_in1
+    MMCME2_ADV_X1Y0      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -3.425    -1.813 r  cop_system_i/cop_mmcm/inst/mmcm_adv_inst/CLKOUT0
+                         net (fo=1, routed)           1.725    -0.088    cop_system_i/cop_mmcm/inst/clk_out1_cop_system_cop_mmcm_0
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.091     0.003 r  cop_system_i/cop_mmcm/inst/clkout1_buf/O
+                         net (fo=37287, routed)       1.644     1.647    cop_system_i/pl/inst/axil_cdc/cop_clk_40_i
+    SLICE_X47Y120        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/ar_m1_reg[1]/C
+                         clock pessimism              0.000     1.647    <hidden>
+    SLICE_X47Y120        FDCE (Setup_fdce_C_D)       -0.270     1.377    cop_system_i/pl/inst/axil_cdc/ar_m1_reg[1]
+  -------------------------------------------------------------------
+                         data arrival                           4.161    <hidden>
+                         clock arrival                          1.377    <hidden>
+  -------------------------------------------------------------------
+                         relative delay                         2.784    <hidden>
+
+Reference path:
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    PS7_X0Y0             PS7                          0.000     0.000 r  cop_system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     1.088    cop_system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     1.179 r  cop_system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=6979, routed)        1.629     2.808    cop_system_i/pl/inst/axil_cdc/ps_clk_100_i
+    SLICE_X52Y119        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/ar_hold_reg[7]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X52Y119        FDCE (Prop_fdce_C_Q)         0.367     3.175 r  cop_system_i/pl/inst/axil_cdc/ar_hold_reg[7]/Q
+                         net (fo=1, routed)           0.416     3.591    cop_system_i/pl/inst/axil_cdc/ar_hold[7]
+    SLICE_X52Y120        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/ar_m1_reg[7]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_out1_cop_system_cop_mmcm_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    BUFGCTRL_X0Y19       BUFG                         0.000     0.000 r  cop_system_i/ps7/inst/buffer_fclk_clk_1.FCLK_CLK_1_BUFG/O
+                         net (fo=1, routed)           1.806     1.806    cop_system_i/cop_mmcm/inst/clk_in1
+    MMCME2_ADV_X1Y0      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -3.793    -1.987 r  cop_system_i/cop_mmcm/inst/mmcm_adv_inst/CLKOUT0
+                         net (fo=1, routed)           1.889    -0.098    cop_system_i/cop_mmcm/inst/clk_out1_cop_system_cop_mmcm_0
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.101     0.003 r  cop_system_i/cop_mmcm/inst/clkout1_buf/O
+                         net (fo=37287, routed)       1.821     1.824    cop_system_i/pl/inst/axil_cdc/cop_clk_40_i
+    SLICE_X52Y120        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/ar_m1_reg[7]/C
+                         clock pessimism              0.000     1.824    <hidden>
+    SLICE_X52Y120        FDCE (Hold_fdce_C_D)         0.171     1.995    cop_system_i/pl/inst/axil_cdc/ar_m1_reg[7]
+  -------------------------------------------------------------------
+                         data arrival                           3.591    <hidden>
+                         clock arrival                          1.995    <hidden>
+  -------------------------------------------------------------------
+                         relative delay                         1.596    <hidden>
+
+
+
+Id: 7
+set_bus_skew -from [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/rdata_hold_reg.*] -to [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/rdata_s1_reg.*] 10.000
+Requirement: 10.000ns
+Endpoints: 32
+
+From Clock            To Clock              Endpoint Pin                    Reference Pin                   Corner  Actual(ns)  Slack(ns)
+--------------------  --------------------  ------------------------------  ------------------------------  ------  ----------  ---------
+clk_out1_cop_system_cop_mmcm_0
+                      clk_fpga_0            cop_system_i/pl/inst/axil_cdc/rdata_s1_reg[3]/D
+                                                                            cop_system_i/pl/inst/axil_cdc/rdata_s1_reg[12]/D
+                                                                                                            Slow         1.314      8.686
+
+
+Slack (MET) :             8.686ns  (requirement - actual skew)
+  Endpoint Source:        cop_system_i/pl/inst/axil_cdc/rdata_hold_reg[3]/C
+                            (rising edge-triggered cell FDCE clocked by clk_out1_cop_system_cop_mmcm_0)
+  Endpoint Destination:   cop_system_i/pl/inst/axil_cdc/rdata_s1_reg[3]/D
+                            (rising edge-triggered cell FDCE clocked by clk_fpga_0)
+  Reference Source:       cop_system_i/pl/inst/axil_cdc/rdata_hold_reg[12]/C
+                            (rising edge-triggered cell FDCE clocked by clk_out1_cop_system_cop_mmcm_0)
+  Reference Destination:  cop_system_i/pl/inst/axil_cdc/rdata_s1_reg[12]/D
+                            (rising edge-triggered cell FDCE clocked by clk_fpga_0)
+  Path Type:              Bus Skew (Max at Slow Process Corner)
+  Requirement:            10.000ns
+  Endpoint Relative Delay:    0.571ns
+  Reference Relative Delay:  -0.921ns
+  Relative CRPR:              0.178ns
+  Actual Bus Skew:            1.314ns  (Endpoint Relative Delay - Reference Relative Delay - Relative CRPR)
+
+Endpoint path:
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_out1_cop_system_cop_mmcm_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    BUFGCTRL_X0Y19       BUFG                         0.000     0.000 r  cop_system_i/ps7/inst/buffer_fclk_clk_1.FCLK_CLK_1_BUFG/O
+                         net (fo=1, routed)           1.806     1.806    cop_system_i/cop_mmcm/inst/clk_in1
+    MMCME2_ADV_X1Y0      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -3.793    -1.987 r  cop_system_i/cop_mmcm/inst/mmcm_adv_inst/CLKOUT0
+                         net (fo=1, routed)           1.889    -0.098    cop_system_i/cop_mmcm/inst/clk_out1_cop_system_cop_mmcm_0
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.101     0.003 r  cop_system_i/cop_mmcm/inst/clkout1_buf/O
+                         net (fo=37287, routed)       1.836     1.839    cop_system_i/pl/inst/axil_cdc/cop_clk_40_i
+    SLICE_X49Y117        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/rdata_hold_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X49Y117        FDCE (Prop_fdce_C_Q)         0.419     2.258 r  cop_system_i/pl/inst/axil_cdc/rdata_hold_reg[3]/Q
+                         net (fo=1, routed)           0.869     3.127    cop_system_i/pl/inst/axil_cdc/rdata_hold[3]
+    SLICE_X49Y116        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/rdata_s1_reg[3]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    PS7_X0Y0             PS7                          0.000     0.000 r  cop_system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     1.088    cop_system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     1.179 r  cop_system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=6979, routed)        1.644     2.823    cop_system_i/pl/inst/axil_cdc/ps_clk_100_i
+    SLICE_X49Y116        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/rdata_s1_reg[3]/C
+                         clock pessimism              0.000     2.823    <hidden>
+    SLICE_X49Y116        FDCE (Setup_fdce_C_D)       -0.268     2.555    cop_system_i/pl/inst/axil_cdc/rdata_s1_reg[3]
+  -------------------------------------------------------------------
+                         data arrival                           3.127    <hidden>
+                         clock arrival                          2.555    <hidden>
+  -------------------------------------------------------------------
+                         relative delay                         0.571    <hidden>
+
+Reference path:
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_out1_cop_system_cop_mmcm_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    BUFGCTRL_X0Y19       BUFG                         0.000     0.000 r  cop_system_i/ps7/inst/buffer_fclk_clk_1.FCLK_CLK_1_BUFG/O
+                         net (fo=1, routed)           1.612     1.612    cop_system_i/cop_mmcm/inst/clk_in1
+    MMCME2_ADV_X1Y0      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -3.425    -1.813 r  cop_system_i/cop_mmcm/inst/mmcm_adv_inst/CLKOUT0
+                         net (fo=1, routed)           1.725    -0.088    cop_system_i/cop_mmcm/inst/clk_out1_cop_system_cop_mmcm_0
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.091     0.003 r  cop_system_i/cop_mmcm/inst/clkout1_buf/O
+                         net (fo=37287, routed)       1.633     1.636    cop_system_i/pl/inst/axil_cdc/cop_clk_40_i
+    SLICE_X51Y118        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/rdata_hold_reg[12]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X51Y118        FDCE (Prop_fdce_C_Q)         0.367     2.003 r  cop_system_i/pl/inst/axil_cdc/rdata_hold_reg[12]/Q
+                         net (fo=1, routed)           0.363     2.366    cop_system_i/pl/inst/axil_cdc/rdata_hold[12]
+    SLICE_X51Y116        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/rdata_s1_reg[12]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    PS7_X0Y0             PS7                          0.000     0.000 r  cop_system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    cop_system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  cop_system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=6979, routed)        1.823     3.117    cop_system_i/pl/inst/axil_cdc/ps_clk_100_i
+    SLICE_X51Y116        FDCE                                         r  cop_system_i/pl/inst/axil_cdc/rdata_s1_reg[12]/C
+                         clock pessimism              0.000     3.117    <hidden>
+    SLICE_X51Y116        FDCE (Hold_fdce_C_D)         0.170     3.287    cop_system_i/pl/inst/axil_cdc/rdata_s1_reg[12]
+  -------------------------------------------------------------------
+                         data arrival                           2.366    <hidden>
+                         clock arrival                          3.287    <hidden>
+  -------------------------------------------------------------------
+                         relative delay                        -0.921    <hidden>
+
+
+
+Id: 8
+set_bus_skew -from [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/bresp_hold_reg.*] -to [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/bresp_s1_reg.*] 10.000
+Requirement: 10.000ns
+Endpoints: 1
+No bus skew paths found.
+
+
+Id: 9
+set_bus_skew -from [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/rresp_hold_reg.*] -to [get_cells -quiet -hier -regexp .*pl/inst/axil_cdc/rresp_s1_reg.*] 10.000
+Requirement: 10.000ns
+Endpoints: 1
+No bus skew paths found.
+
+
+Id: 10
+set_bus_skew -from [get_cells -quiet -hier -regexp .*pl/inst/axis_cdc/wgray_reg.*] -to [get_cells -quiet -hier -regexp .*pl/inst/axis_cdc/wgray_m1_reg.*] 10.000
+Requirement: 10.000ns
+Endpoints: 4
+
+From Clock            To Clock              Endpoint Pin                    Reference Pin                   Corner  Actual(ns)  Slack(ns)
+--------------------  --------------------  ------------------------------  ------------------------------  ------  ----------  ---------
+clk_fpga_0            clk_out1_cop_system_cop_mmcm_0
+                                            cop_system_i/pl/inst/axis_cdc/wgray_m1_reg[2]/D
+                                                                            cop_system_i/pl/inst/axis_cdc/wgray_m1_reg[3]/D
+                                                                                                            Slow         0.832      9.168
+
+
+Slack (MET) :             9.168ns  (requirement - actual skew)
+  Endpoint Source:        cop_system_i/pl/inst/axis_cdc/wgray_reg[2]/C
+                            (rising edge-triggered cell FDCE clocked by clk_fpga_0)
+  Endpoint Destination:   cop_system_i/pl/inst/axis_cdc/wgray_m1_reg[2]/D
+                            (rising edge-triggered cell FDCE clocked by clk_out1_cop_system_cop_mmcm_0)
+  Reference Source:       cop_system_i/pl/inst/axis_cdc/wgray_reg[3]/C
+                            (rising edge-triggered cell FDCE clocked by clk_fpga_0)
+  Reference Destination:  cop_system_i/pl/inst/axis_cdc/wgray_m1_reg[3]/D
+                            (rising edge-triggered cell FDCE clocked by clk_out1_cop_system_cop_mmcm_0)
+  Path Type:              Bus Skew (Max at Slow Process Corner)
+  Requirement:            10.000ns
+  Endpoint Relative Delay:    2.747ns
+  Reference Relative Delay:   1.572ns
+  Relative CRPR:              0.343ns
+  Actual Bus Skew:            0.832ns  (Endpoint Relative Delay - Reference Relative Delay - Relative CRPR)
+
+Endpoint path:
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    PS7_X0Y0             PS7                          0.000     0.000 r  cop_system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    cop_system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  cop_system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=6979, routed)        1.702     2.996    cop_system_i/pl/inst/axis_cdc/ps_clk_100_i
+    SLICE_X67Y70         FDCE                                         r  cop_system_i/pl/inst/axis_cdc/wgray_reg[2]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X67Y70         FDCE (Prop_fdce_C_Q)         0.456     3.452 r  cop_system_i/pl/inst/axis_cdc/wgray_reg[2]/Q
+                         net (fo=1, routed)           0.749     4.201    cop_system_i/pl/inst/axis_cdc/wgray[2]
+    SLICE_X64Y71         FDCE                                         r  cop_system_i/pl/inst/axis_cdc/wgray_m1_reg[2]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_out1_cop_system_cop_mmcm_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    BUFGCTRL_X0Y19       BUFG                         0.000     0.000 r  cop_system_i/ps7/inst/buffer_fclk_clk_1.FCLK_CLK_1_BUFG/O
+                         net (fo=1, routed)           1.612     1.612    cop_system_i/cop_mmcm/inst/clk_in1
+    MMCME2_ADV_X1Y0      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -3.425    -1.813 r  cop_system_i/cop_mmcm/inst/mmcm_adv_inst/CLKOUT0
+                         net (fo=1, routed)           1.725    -0.088    cop_system_i/cop_mmcm/inst/clk_out1_cop_system_cop_mmcm_0
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.091     0.003 r  cop_system_i/cop_mmcm/inst/clkout1_buf/O
+                         net (fo=37287, routed)       1.532     1.535    cop_system_i/pl/inst/axis_cdc/cop_clk_40_i
+    SLICE_X64Y71         FDCE                                         r  cop_system_i/pl/inst/axis_cdc/wgray_m1_reg[2]/C
+                         clock pessimism              0.000     1.535    <hidden>
+    SLICE_X64Y71         FDCE (Setup_fdce_C_D)       -0.081     1.454    cop_system_i/pl/inst/axis_cdc/wgray_m1_reg[2]
+  -------------------------------------------------------------------
+                         data arrival                           4.201    <hidden>
+                         clock arrival                          1.454    <hidden>
+  -------------------------------------------------------------------
+                         relative delay                         2.747    <hidden>
+
+Reference path:
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    PS7_X0Y0             PS7                          0.000     0.000 r  cop_system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     1.088    cop_system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     1.179 r  cop_system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=6979, routed)        1.529     2.708    cop_system_i/pl/inst/axis_cdc/ps_clk_100_i
+    SLICE_X63Y70         FDCE                                         r  cop_system_i/pl/inst/axis_cdc/wgray_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X63Y70         FDCE (Prop_fdce_C_Q)         0.367     3.075 r  cop_system_i/pl/inst/axis_cdc/wgray_reg[3]/Q
+                         net (fo=1, routed)           0.373     3.448    cop_system_i/pl/inst/axis_cdc/wgray[3]
+    SLICE_X63Y71         FDCE                                         r  cop_system_i/pl/inst/axis_cdc/wgray_m1_reg[3]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_out1_cop_system_cop_mmcm_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    BUFGCTRL_X0Y19       BUFG                         0.000     0.000 r  cop_system_i/ps7/inst/buffer_fclk_clk_1.FCLK_CLK_1_BUFG/O
+                         net (fo=1, routed)           1.806     1.806    cop_system_i/cop_mmcm/inst/clk_in1
+    MMCME2_ADV_X1Y0      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -3.793    -1.987 r  cop_system_i/cop_mmcm/inst/mmcm_adv_inst/CLKOUT0
+                         net (fo=1, routed)           1.889    -0.098    cop_system_i/cop_mmcm/inst/clk_out1_cop_system_cop_mmcm_0
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.101     0.003 r  cop_system_i/cop_mmcm/inst/clkout1_buf/O
+                         net (fo=37287, routed)       1.703     1.706    cop_system_i/pl/inst/axis_cdc/cop_clk_40_i
+    SLICE_X63Y71         FDCE                                         r  cop_system_i/pl/inst/axis_cdc/wgray_m1_reg[3]/C
+                         clock pessimism              0.000     1.706    <hidden>
+    SLICE_X63Y71         FDCE (Hold_fdce_C_D)         0.170     1.876    cop_system_i/pl/inst/axis_cdc/wgray_m1_reg[3]
+  -------------------------------------------------------------------
+                         data arrival                           3.448    <hidden>
+                         clock arrival                          1.876    <hidden>
+  -------------------------------------------------------------------
+                         relative delay                         1.572    <hidden>
+
+
+
+Id: 11
+set_bus_skew -from [get_cells -quiet -hier -regexp .*pl/inst/axis_cdc/rgray_reg.*] -to [get_cells -quiet -hier -regexp .*pl/inst/axis_cdc/rgray_s1_reg.*] 10.000
+Requirement: 10.000ns
+Endpoints: 4
+
+From Clock            To Clock              Endpoint Pin                    Reference Pin                   Corner  Actual(ns)  Slack(ns)
+--------------------  --------------------  ------------------------------  ------------------------------  ------  ----------  ---------
+clk_out1_cop_system_cop_mmcm_0
+                      clk_fpga_0            cop_system_i/pl/inst/axis_cdc/rgray_s1_reg[3]/D
+                                                                            cop_system_i/pl/inst/axis_cdc/rgray_s1_reg[0]/D
+                                                                                                            Slow         0.827      9.173
+
+
+Slack (MET) :             9.173ns  (requirement - actual skew)
+  Endpoint Source:        cop_system_i/pl/inst/axis_cdc/rgray_reg[3]/C
+                            (rising edge-triggered cell FDCE clocked by clk_out1_cop_system_cop_mmcm_0)
+  Endpoint Destination:   cop_system_i/pl/inst/axis_cdc/rgray_s1_reg[3]/D
+                            (rising edge-triggered cell FDCE clocked by clk_fpga_0)
+  Reference Source:       cop_system_i/pl/inst/axis_cdc/rgray_reg[0]/C
+                            (rising edge-triggered cell FDCE clocked by clk_out1_cop_system_cop_mmcm_0)
+  Reference Destination:  cop_system_i/pl/inst/axis_cdc/rgray_s1_reg[0]/D
+                            (rising edge-triggered cell FDCE clocked by clk_fpga_0)
+  Path Type:              Bus Skew (Max at Slow Process Corner)
+  Requirement:            10.000ns
+  Endpoint Relative Delay:    0.403ns
+  Reference Relative Delay:  -0.767ns
+  Relative CRPR:              0.343ns
+  Actual Bus Skew:            0.827ns  (Endpoint Relative Delay - Reference Relative Delay - Relative CRPR)
+
+Endpoint path:
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_out1_cop_system_cop_mmcm_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    BUFGCTRL_X0Y19       BUFG                         0.000     0.000 r  cop_system_i/ps7/inst/buffer_fclk_clk_1.FCLK_CLK_1_BUFG/O
+                         net (fo=1, routed)           1.806     1.806    cop_system_i/cop_mmcm/inst/clk_in1
+    MMCME2_ADV_X1Y0      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -3.793    -1.987 r  cop_system_i/cop_mmcm/inst/mmcm_adv_inst/CLKOUT0
+                         net (fo=1, routed)           1.889    -0.098    cop_system_i/cop_mmcm/inst/clk_out1_cop_system_cop_mmcm_0
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.101     0.003 r  cop_system_i/cop_mmcm/inst/clkout1_buf/O
+                         net (fo=37287, routed)       1.703     1.706    cop_system_i/pl/inst/axis_cdc/cop_clk_40_i
+    SLICE_X61Y71         FDCE                                         r  cop_system_i/pl/inst/axis_cdc/rgray_reg[3]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X61Y71         FDCE (Prop_fdce_C_Q)         0.456     2.162 r  cop_system_i/pl/inst/axis_cdc/rgray_reg[3]/Q
+                         net (fo=1, routed)           0.856     3.018    cop_system_i/pl/inst/axis_cdc/rgray[3]
+    SLICE_X61Y70         FDCE                                         r  cop_system_i/pl/inst/axis_cdc/rgray_s1_reg[3]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    PS7_X0Y0             PS7                          0.000     0.000 r  cop_system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.088     1.088    cop_system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.091     1.179 r  cop_system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=6979, routed)        1.529     2.708    cop_system_i/pl/inst/axis_cdc/ps_clk_100_i
+    SLICE_X61Y70         FDCE                                         r  cop_system_i/pl/inst/axis_cdc/rgray_s1_reg[3]/C
+                         clock pessimism              0.000     2.708    <hidden>
+    SLICE_X61Y70         FDCE (Setup_fdce_C_D)       -0.093     2.615    cop_system_i/pl/inst/axis_cdc/rgray_s1_reg[3]
+  -------------------------------------------------------------------
+                         data arrival                           3.018    <hidden>
+                         clock arrival                          2.615    <hidden>
+  -------------------------------------------------------------------
+                         relative delay                         0.403    <hidden>
+
+Reference path:
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_out1_cop_system_cop_mmcm_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    BUFGCTRL_X0Y19       BUFG                         0.000     0.000 r  cop_system_i/ps7/inst/buffer_fclk_clk_1.FCLK_CLK_1_BUFG/O
+                         net (fo=1, routed)           1.612     1.612    cop_system_i/cop_mmcm/inst/clk_in1
+    MMCME2_ADV_X1Y0      MMCME2_ADV (Prop_mmcme2_adv_CLKIN1_CLKOUT0)
+                                                     -3.425    -1.813 r  cop_system_i/cop_mmcm/inst/mmcm_adv_inst/CLKOUT0
+                         net (fo=1, routed)           1.725    -0.088    cop_system_i/cop_mmcm/inst/clk_out1_cop_system_cop_mmcm_0
+    BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.091     0.003 r  cop_system_i/cop_mmcm/inst/clkout1_buf/O
+                         net (fo=37287, routed)       1.532     1.535    cop_system_i/pl/inst/axis_cdc/cop_clk_40_i
+    SLICE_X64Y71         FDCE                                         r  cop_system_i/pl/inst/axis_cdc/rgray_reg[0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X64Y71         FDCE (Prop_fdce_C_Q)         0.367     1.902 r  cop_system_i/pl/inst/axis_cdc/rgray_reg[0]/Q
+                         net (fo=1, routed)           0.496     2.398    cop_system_i/pl/inst/axis_cdc/rgray[0]
+    SLICE_X65Y70         FDCE                                         r  cop_system_i/pl/inst/axis_cdc/rgray_s1_reg[0]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_fpga_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+    PS7_X0Y0             PS7                          0.000     0.000 r  cop_system_i/ps7/inst/PS7_i/FCLKCLK[0]
+                         net (fo=1, routed)           1.193     1.193    cop_system_i/ps7/inst/FCLK_CLK_unbuffered[0]
+    BUFGCTRL_X0Y16       BUFG (Prop_bufg_I_O)         0.101     1.294 r  cop_system_i/ps7/inst/buffer_fclk_clk_0.FCLK_CLK_0_BUFG/O
+                         net (fo=6979, routed)        1.702     2.996    cop_system_i/pl/inst/axis_cdc/ps_clk_100_i
+    SLICE_X65Y70         FDCE                                         r  cop_system_i/pl/inst/axis_cdc/rgray_s1_reg[0]/C
+                         clock pessimism              0.000     2.996    <hidden>
+    SLICE_X65Y70         FDCE (Hold_fdce_C_D)         0.169     3.165    cop_system_i/pl/inst/axis_cdc/rgray_s1_reg[0]
+  -------------------------------------------------------------------
+                         data arrival                           2.398    <hidden>
+                         clock arrival                          3.165    <hidden>
+  -------------------------------------------------------------------
+                         relative delay                        -0.767    <hidden>
+
+
+

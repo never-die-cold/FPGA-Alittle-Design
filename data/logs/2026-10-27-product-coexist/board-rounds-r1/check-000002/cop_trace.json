@@ -1,0 +1,418 @@
+{
+ "compute_backend": "PL_CNN_FASTENER",
+ "consume": {
+  "result_seq": 1,
+  "status_after": 97,
+  "unconsumed": false
+ },
+ "decision": {
+  "actual": {
+   "bolt": 4,
+   "nut": 6,
+   "washer": 0
+  },
+  "delta": {
+   "bolt": 2,
+   "nut": 3,
+   "washer": -4
+  },
+  "expected": {
+   "bolt": 2,
+   "nut": 3,
+   "washer": 4
+  },
+  "extra": {
+   "bolt": 2,
+   "nut": 3,
+   "washer": 0
+  },
+  "missing": {
+   "bolt": 0,
+   "nut": 0,
+   "washer": 4
+  },
+  "reasons": [
+   "low_score"
+  ],
+  "verdict": "RECHECK"
+ },
+ "descriptors": [
+  {
+   "bbox": [
+    816,
+    59,
+    839,
+    84
+   ],
+   "target_id": 0,
+   "touches_border": false
+  },
+  {
+   "bbox": [
+    666,
+    115,
+    681,
+    134
+   ],
+   "target_id": 1,
+   "touches_border": false
+  },
+  {
+   "bbox": [
+    549,
+    205,
+    573,
+    228
+   ],
+   "target_id": 2,
+   "touches_border": false
+  },
+  {
+   "bbox": [
+    850,
+    209,
+    891,
+    250
+   ],
+   "target_id": 3,
+   "touches_border": false
+  },
+  {
+   "bbox": [
+    634,
+    266,
+    689,
+    333
+   ],
+   "target_id": 4,
+   "touches_border": false
+  },
+  {
+   "bbox": [
+    551,
+    354,
+    574,
+    379
+   ],
+   "target_id": 5,
+   "touches_border": false
+  },
+  {
+   "bbox": [
+    910,
+    386,
+    982,
+    556
+   ],
+   "target_id": 6,
+   "touches_border": false
+  },
+  {
+   "bbox": [
+    514,
+    519,
+    583,
+    685
+   ],
+   "target_id": 7,
+   "touches_border": false
+  },
+  {
+   "bbox": [
+    711,
+    533,
+    736,
+    564
+   ],
+   "target_id": 8,
+   "touches_border": false
+  },
+  {
+   "bbox": [
+    661,
+    543,
+    700,
+    574
+   ],
+   "target_id": 9,
+   "touches_border": false
+  }
+ ],
+ "driver": {
+  "accepted": true,
+  "backend": "MMIO",
+  "capture_id": 2,
+  "cfg_seq": 1,
+  "dma_bytes": 40960,
+  "elapsed_ms": 95.857,
+  "error_code": 0,
+  "events": [
+   {
+    "bytes": 36032,
+    "crc32": 95876656,
+    "kind": "model_load",
+    "sim_reported": null
+   }
+  ],
+  "expected_seq": 1,
+  "fw": {
+   "actual": [
+    4,
+    6,
+    0
+   ],
+   "reasons": 6,
+   "reasons_names": [
+    "low_score"
+   ],
+   "result_seq": 1,
+   "verdict": "RECHECK",
+   "verdict_id": 3
+  },
+  "job_id": 1,
+  "perf_cycles": 405080,
+  "polls": 43,
+  "ps_decision": {
+   "actual": {
+    "bolt": 4,
+    "nut": 6,
+    "washer": 0
+   },
+   "delta": {
+    "bolt": 2,
+    "nut": 3,
+    "washer": -4
+   },
+   "expected": {
+    "bolt": 2,
+    "nut": 3,
+    "washer": 4
+   },
+   "extra": {
+    "bolt": 2,
+    "nut": 3,
+    "washer": 0
+   },
+   "missing": {
+    "bolt": 0,
+    "nut": 0,
+    "washer": 4
+   },
+   "reasons": [
+    "low_score"
+   ],
+   "verdict": "RECHECK"
+  },
+  "result_seq": 1,
+  "source_config_id": 967942156,
+  "status": 6373,
+  "targets": [
+   {
+    "class_id": 0,
+    "error": 0,
+    "logits": [
+     0,
+     0,
+     0
+    ],
+    "low_conf": 0,
+    "margin_q": 0,
+    "score_q15": 0,
+    "valid": 0
+   },
+   {
+    "class_id": 1,
+    "error": 0,
+    "logits": [
+     246,
+     48,
+     204
+    ],
+    "low_conf": 1,
+    "margin_q": 58,
+    "score_q15": 7482,
+    "valid": 1
+   },
+   {
+    "class_id": 1,
+    "error": 0,
+    "logits": [
+     249,
+     45,
+     204
+    ],
+    "low_conf": 1,
+    "margin_q": 52,
+    "score_q15": 6708,
+    "valid": 1
+   },
+   {
+    "class_id": 1,
+    "error": 0,
+    "logits": [
+     235,
+     64,
+     198
+    ],
+    "low_conf": 1,
+    "margin_q": 85,
+    "score_q15": 10965,
+    "valid": 1
+   },
+   {
+    "class_id": 1,
+    "error": 0,
+    "logits": [
+     234,
+     50,
+     217
+    ],
+    "low_conf": 1,
+    "margin_q": 72,
+    "score_q15": 9288,
+    "valid": 1
+   },
+   {
+    "class_id": 0,
+    "error": 0,
+    "logits": [
+     17,
+     15,
+     214
+    ],
+    "low_conf": 1,
+    "margin_q": 2,
+    "score_q15": 258,
+    "valid": 1
+   },
+   {
+    "class_id": 1,
+    "error": 0,
+    "logits": [
+     243,
+     73,
+     177
+    ],
+    "low_conf": 1,
+    "margin_q": 86,
+    "score_q15": 11094,
+    "valid": 1
+   },
+   {
+    "class_id": 0,
+    "error": 0,
+    "logits": [
+     49,
+     28,
+     160
+    ],
+    "low_conf": 1,
+    "margin_q": 21,
+    "score_q15": 2709,
+    "valid": 1
+   },
+   {
+    "class_id": 0,
+    "error": 0,
+    "logits": [
+     23,
+     23,
+     197
+    ],
+    "low_conf": 1,
+    "margin_q": 0,
+    "score_q15": 0,
+    "valid": 1
+   },
+   {
+    "class_id": 1,
+    "error": 0,
+    "logits": [
+     14,
+     37,
+     192
+    ],
+    "low_conf": 1,
+    "margin_q": 23,
+    "score_q15": 2967,
+    "valid": 1
+   }
+  ],
+  "unconsumed": true,
+  "work_order_rev": 1
+ },
+ "frame": {
+  "height": 720,
+  "pixel_sha256": "926573b2e9b66ad64257aee511555add76e04568fdb54e5e3eb37657c3e3c7de",
+  "width": 1280
+ },
+ "kind": "cop_job",
+ "localization": {
+  "background_mode": "local",
+  "color_threshold": 20.0,
+  "min_area_ratio": 8e-05
+ },
+ "min_score": 0.8,
+ "policy_max": 10,
+ "preprocess": "scene-gray-border-padding-v1",
+ "protocol_check": "chk000002",
+ "roi_quantization": "TRAINED_PTQ round_even(pixel*127/255); S_input=1/127",
+ "rois": [
+  {
+   "bytes_sha256": "76941c42e4499ccad1752f5f8fc6bf8ba56f96b3627bb0edb0d5920ff9502e61",
+   "index": 0,
+   "path": "cop/roi_000.bin"
+  },
+  {
+   "bytes_sha256": "92934889d0a5a95b067b635d3c211df6f057b520698729c72a642d15d69ef4cf",
+   "index": 1,
+   "path": "cop/roi_001.bin"
+  },
+  {
+   "bytes_sha256": "9f095c65ab6f8cc40e70bbd0de5fa9abfdd6057a7ab8a912be148475f451f662",
+   "index": 2,
+   "path": "cop/roi_002.bin"
+  },
+  {
+   "bytes_sha256": "974e1c043c945a5c14e4e650b2b8ae97177084bde76f6048205514dfd22d91ee",
+   "index": 3,
+   "path": "cop/roi_003.bin"
+  },
+  {
+   "bytes_sha256": "2932e7e1109c263e93b49fd5250acd41e31d050b9b4159446c56cce0f2fcee19",
+   "index": 4,
+   "path": "cop/roi_004.bin"
+  },
+  {
+   "bytes_sha256": "972537cdd45bd816e0d5868440d8bb6751d357530c62804b1fed20e5ef69c5c0",
+   "index": 5,
+   "path": "cop/roi_005.bin"
+  },
+  {
+   "bytes_sha256": "b1194133e3654ab4467f0df890a8a8e14a1abd3485bd510faea2f0b516397cfc",
+   "index": 6,
+   "path": "cop/roi_006.bin"
+  },
+  {
+   "bytes_sha256": "e1a4003d834b65968889ec9de94eb224d8e75fb9473d887fae2aaac33d1984fb",
+   "index": 7,
+   "path": "cop/roi_007.bin"
+  },
+  {
+   "bytes_sha256": "1d46135c340f4de7a556d08ce8bc6ed9587810f8589fcc1e21adf5a913ba3d1d",
+   "index": 8,
+   "path": "cop/roi_008.bin"
+  },
+  {
+   "bytes_sha256": "53da0405993dd0979e1d0a320b9d6c0ee7556c2b6f177bedb2dcfb813bd23554",
+   "index": 9,
+   "path": "cop/roi_009.bin"
+  }
+ ],
+ "simulated": false,
+ "work_order": {
+  "bolt": 2,
+  "nut": 3,
+  "washer": 4
+ }
+}

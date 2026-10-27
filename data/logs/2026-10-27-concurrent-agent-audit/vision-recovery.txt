@@ -1,0 +1,38 @@
+===STOP_OLD_SERVICE===
+  PID  PPID COMMAND
+  659     1 bash -c sleep 25; source /etc/profile.d/xrt_setup.sh; source /etc/profile.d/pynq_venv.sh; cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && nohup python3 -u park_live_server_v7.py --host 0.0.0.0 --port 8765 --root /home/xilinx/vision_m2/live-artifacts --order 2 2 2 --min-score 0.8 >> /home/xilinx/vision_m2/live-server.log 2>&1 &
+  PID  PPID COMMAND
+  661     1 python3 -u park_live_server_v7.py --host 0.0.0.0 --port 8765 --root /home/xilinx/vision_m2/live-artifacts --order 2 2 2 --min-score 0.8
+===RELOAD_VISION===
+ip_dict:
+  pipe @ 0x40000000 range 0x10000
+  ps7 @ 0x00000000 range 0x0
+axi_regs 段: pipe @ 0x40000000
+PASS: load
+R11 busy=0 R12 applied=0
+commit 配置号=1 status={'busy': False, 'applied_config_id': 1}
+PASS: smoke（视频在位，帧首整组应用已确认）
+VISION_COMMAND_RC=0
+===POST===
+ 20:20:04 up 3 min,  1 user,  load average: 1.44, 1.30, 0.57
+operating
+[  218.846590] [drm] skip kind 8(IP_LAYOUT) return code: -22
+[  218.846608] [drm] skip kind 9(DEBUG_IP_LAYOUT) return code: -22
+[  218.846622] [drm] skip kind 25(AIE_METADATA) return code: -22
+[  218.846636] [drm] skip kind 7(CONNECTIVITY) return code: -22
+[  218.846650] [drm] found kind 6(MEM_TOPOLOGY)
+[  218.846797] [drm] Memory 0 is not reserved in device tree. Will allocate memory from CMA
+[  218.846857] [drm] zocl_xclbin_read_axlf cf5dc739-b8e5-f53c-cb31-4ee1167eed25 ret: 0
+[  218.872032] [drm] bitstream cf5dc739-b8e5-f53c-cb31-4ee1167eed25 locked, ref=1
+[  218.872139] zocl-drm axi:zyxclmm_drm:  ffffffffc157c810 kds_add_context: Client pid(1239) add context Domain(65535) CU(0xffff) shared(true)
+[  218.872239] zocl-drm axi:zyxclmm_drm:  ffffffffc157c810 kds_del_context: Client pid(1239) del context Domain(65535) CU(0xffff)
+[  218.872288] [drm] bitstream cf5dc739-b8e5-f53c-cb31-4ee1167eed25 unlocked, ref=0
+[  219.466837] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(1239)
+[  228.885550] zocl-drm axi:zyxclmm_drm: zocl_create_client: created KDS client for pid(1262), ret: 0
+[  228.885668] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(1262)
+[  228.886277] zocl-drm axi:zyxclmm_drm: zocl_create_client: created KDS client for pid(1262), ret: 0
+[  228.889436] [drm] bitstream cf5dc739-b8e5-f53c-cb31-4ee1167eed25 locked, ref=1
+[  228.889530] zocl-drm axi:zyxclmm_drm:  ffffffffc157c810 kds_add_context: Client pid(1262) add context Domain(65535) CU(0xffff) shared(true)
+[  228.890550] zocl-drm axi:zyxclmm_drm:  ffffffffc157c810 kds_del_context: Client pid(1262) del context Domain(65535) CU(0xffff)
+[  228.890614] [drm] bitstream cf5dc739-b8e5-f53c-cb31-4ee1167eed25 unlocked, ref=0
+[  229.418275] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(1262)

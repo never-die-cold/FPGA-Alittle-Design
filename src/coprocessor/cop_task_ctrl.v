@@ -19,7 +19,7 @@ module cop_task_ctrl (
     output reg [31:0] result_seq_o,
     output wire [127:0] result_data_o
 );
-    localparam IDLE=0, LAUNCH=1, WAIT_ENGINE=2;
+    localparam IDLE=0, LAUNCH=1, WAIT_ENGINE=2, COMMIT_RESULT=3;
     reg [1:0] state; reg [4:0] count_snapshot;
     assign ready_o = !busy_o && cfg_valid_i && model_valid_i && roi_valid_i;
     assign result_data_o = {result_cycles_i,16'd0,1'b0,result_score_i,result_margin_i,
@@ -52,8 +52,11 @@ module cop_task_ctrl (
                     if(result_index_o+1==count_snapshot) begin
                         result_seq_o<=result_seq_o+1; busy_o<=0; done_pulse_o<=1; state<=IDLE;
                     end
-                    else begin result_index_o<=result_index_o+1'b1; state<=LAUNCH; end
+                    else state<=COMMIT_RESULT;
                 end
+                // cop_top consumes the registered write pulse on this edge.
+                // Hold index/target ID until that synchronous memory write ends.
+                COMMIT_RESULT: begin result_index_o<=result_index_o+1'b1; state<=LAUNCH; end
                 default: begin busy_o<=0; error_pulse_o<=1; state<=IDLE; end
             endcase
         end

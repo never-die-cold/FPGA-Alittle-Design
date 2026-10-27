@@ -1,0 +1,14 @@
+===FINAL_BASELINE===
+ 20:21:45 up 5 min,  1 user,  load average: 0.33, 0.93, 0.51
+operating
+===IO_ERRORS===
+===LOAD_HISTORY===
+[   96.280210] fpga_manager fpga0: writing vision.bin to Xilinx Zynq FPGA Manager
+[  134.844721] fpga_manager fpga0: writing base.bin to Xilinx Zynq FPGA Manager
+[  218.730013] fpga_manager fpga0: writing vision.bin to Xilinx Zynq FPGA Manager
+===OLD_PROCESSES===
+===KERNEL_END==
+[  228.889530] zocl-drm axi:zyxclmm_drm:  ffffffffc157c810 kds_add_context: Client pid(1262) add context Domain(65535) CU(0xffff) shared(true)
+[  228.890550] zocl-drm axi:zyxclmm_drm:  ffffffffc157c810 kds_del_context: Client pid(1262) del context Domain(65535) CU(0xffff)
+[  228.890614] [drm] bitstream cf5dc739-b8e5-f53c-cb31-4ee1167eed25 unlocked, ref=0
+[  229.418275] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(1262)

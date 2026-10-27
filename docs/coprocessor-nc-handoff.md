@@ -3,13 +3,48 @@
 > 交付边界：**JL 交付 ≠ 板级验收**。JL 负责 RTL、Windows Vivado 产物与可追溯包；
 > NC 负责下载和现场稳定性；WC 负责软件接入、独立软件看门狗及消费式 W1C 流程。
 
+## 2026-10-26 现场更新：edge-fix bit 与板卡阻塞
+
+> 本节更新于 2026-10-26 22:43，优先于下方旧状态表；旧表保留历史。
+
+| 项 | 结论 | 证据 |
+|:---|:---|:---|
+| edge-fix 综合实现 | PASS | bit 9341F7FA...；WNS +3.062 ns、DSP 136、BRAM36 69、DRC 0、IMEM_FIRST_WORD=00008117 |
+| edge-fix 包 | PASS | build/board-package-edge-fix（pattern,zero）、build/board-package-edge-fix-trained（roi_001,frame）；SHA 12/12 |
+| 板上诊断网 | 旧 bit PASS | 旧 IMEM bit 59c2c918... 上 zero/pattern 6/6；不是 edge-fix bit |
+| edge-fix 板上 | UNVERIFIED | edge-fix bit/trained 尚未上板；板卡 SD/mmc 故障待恢复 |
+| 连续作业 | 未实现 | 固件单作业，每 case 需重新 Overlay |
+
+冷启动顺序（2026-10-26 修正）：
+
+1. 冷板无 PL 时不要先跑 cop_fclk.py（PYNQ Clocks 会报 No Devices Found）。
+2. 先由用户/队友 JTAG 烧 edge-fix bit，让 PL/PYNQ device 出现。
+3. 再跑 loader clock：
+
+~~~bash
+sudo -E /usr/local/share/pynq-venv/bin/python3 payload/tools/cop_payload_loader.py clock --package . --reads 20 --smoke-timeout 2
+~~~
+
+4. 然后 normal loader 跑 zero/pattern，再跑 roi_001/frame。
+
+期望：zero 2/2/258 logits 2,-3,4；pattern 0/0/0 logits 1,-3,1；
+roi_001 2/53/6837 logits -12,-30,41；frame 0/29/3741 logits 34,-41,5。
+MODEL_ID：诊断 0x4A303250，训练 0x4A303251。
+
+板卡当前阻塞：mmc0/SDHCI I/O 错误、串口命令超时、冷启动 No Devices；
+现场操作见 data/logs/2026-10-26-board/USER-ACTIONS.md；
+构建/包/测试证据见 data/logs/2026-10-26-build/README.md；
+B 交接见 data/logs/2026-10-26-build/B-QUICKSTART.md 与 HANDOFF-A-to-B.md。
+
+边界：BOARD 仍 UNVERIFIED；全链相机→板→EXE、正式 INT8/精度、M2/M3/M4 未完成。
+
 ## 当前真实状态
 
 | 状态 | 结论 | 证据 / 缺口 |
 |:---|:---|:---|
 | 仿真跑通 | **PASS** | 行为级全回归；BRAM 模式 pattern/zero 各 73,795 元素逐项一致；延迟边界 PASS |
-| 综合实现通过 | **PASS** | Vivado 2026.1 干净整机 40 MHz 门禁：WNS +2.771 ns、DSP 136/220、BRAM36 69/140、latch/DRC blocking 均 0；CDC allowlist 全命中 |
-| 板上跑通 | **UNVERIFIED** | NC 已完成 JTAG 下载和只读预检；实际 FCLK1=142.857 MHz，尚无 40 MHz 结果或稳定性证据 |
+| 综合实现通过 | **PASS** | Vivado 2026.1：WNS +3.071 ns、DSP 136/220、BRAM36 69/140、latch/DRC=0，IMEM INIT 三项通过 |
+| 板上跑通 | **UNVERIFIED** | 新 bit 尚待 NC 在 40 MHz 下验证 STATUS、FW_DECISION/ACCEPTED 与真实 DMA/result |
 
 诊断网络不是正式训练模型，`score_q15` 是整数分数而非概率。PROVISIONAL payload 地址适配
 与整机顶层已仿真。JL 已提供本次门禁生成的 bit/hwh；JL 门禁通过不等于板级验收，
@@ -36,10 +71,10 @@ COPROCESSOR_PYTHON=sim/build/vision-venv-full/bin/python \
 `VIVADO=PASS_2026.1_40MHZ_WHOLE_SYSTEM`，而 `BOARD=UNVERIFIED_NEEDS_NC`。
 NC 解包后先执行 `sha256sum -c SHA256SUMS`，不得手工修改 VERSION。
 
-本次源产物 SHA256：bit 为 `d14a4bd037b1809c74fe511f1c7667edbc6bd6ecac8a8712a423946f5f1e2a1a`，
-hwh 为 `928f0d594ccbb83c8bd17e5ed284a6f2849e1b598c28073c779afb1ff9849107`，xsa 为
-`755f70337bdc5a06da0dcaa715c512806b7011efa09f95128314cb78a2ad96ec`。同日首构 `9e1b24e2…`
-与固件提交并发，已经作废；只采用仓库干净后生成的上述产物，旧哈希包禁止继续沿用。
+本次源产物 SHA256：bit 为 `1232769fdeabe59c962dae62a75bc1a5ebca07b1985898b6961fd574878f05db`，
+hwh 为 `dce025d3db119824126d4af6915983971ca9eaf98ccdbf726f2d66a9c7c73070`，xsa 为
+`255794ec8f07488dbe8b5feec3a6b1a3e8048f9a689777333fa0b639f0c23d28`。旧包
+`cop-board-gate-759744b99891` 已作废，不得上传或用于本轮板验。
 
 ## 下载、启动与复位
 
@@ -83,8 +118,10 @@ hwh 为 `928f0d594ccbb83c8bd17e5ed284a6f2849e1b598c28073c779afb1ff9849107`，xsa
 - manifest v1→影子物理 bank 与生产 PL 顶层已仿真；正式 RELEASE 参数和板验未完成。
 - `compute` 与 `storage` OOC 历史结论保留；本次整机门禁已独立 PASS，不能反推板级通过。
 - 本轮已有门禁通过的协处理器 bitstream，但尚无实板证据；板上状态保持 UNVERIFIED。
-- OPEN-BOARD-CLK-1：NC 实测 FCLK1=142.857 MHz；40 MHz 回读及连续 20 次 STATUS 首读 `0x1`
-  尚未执行。当前把首读 `0x0` 归因于超频只是待验证假设，40 MHz 仍复现时转查复位同步。
+- OPEN-BOARD-CLK-1（顺序根因已复现）：改成 40 MHz 会使旧 cop 域失效；必须重配 PL、等待稳定并
+  脉冲 FCLKRESETN1。`0x0` 表示域未就绪/无效，不能作为超频结论；板级功能仍未验收。
+- OPEN-IMEM-1（综合证据已关闭/板上待验证）：Windows 已确认首字 `00008117`、INIT 非全零且
+  readmem warning 为 0；NC 仍须验证新 bit 上 FW_DECISION/ACCEPTED 活性。
 - OPEN-LOADER-1（离板已修/板上待验证）：BD 与 HWH 均确认 `C_SG_LENGTH_WIDTH=16`，loader 保持
   36,032 B 单次传输；新 bit/hwh 已过整机门禁，NC 尚未实测 payload 装载。
 - OPEN-LOADER-2（离板已修/板上待验证）：`cop_job` 已驻留等 CFG/MODEL/ROI，firmware_e2e 延迟配置

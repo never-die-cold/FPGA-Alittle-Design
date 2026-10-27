@@ -1,0 +1,209 @@
+===ROOT_CRON===
+===BOOTPY===
+#! /usr/bin/env python3
+
+# example #1 - WiFi connection at boot
+#from pynq.lib import Wifi
+#
+#port = Wifi()
+#port.connect('your_ssid', 'your_password', auto=True)
+
+# example #2 - Change hostname
+#import subprocess
+#subprocess.call('pynq_hostname.sh aNewHostName'.split())
+
+# example #3 - blink LEDs (PYNQ-Z1, PYNQ-Z2, ZCU104)
+#from pynq import Overlay
+#from time import sleep
+#
+#ol = Overlay('base.bit')
+#leds = ol.leds
+#
+#for _ in range(8):
+#    leds[0:4].off()
+#    sleep(0.2)
+#    leds[0:4].on()
+#    sleep(0.2)#!/bin/env python3.10
+
+from time import sleep
+from pynq.overlays.base import BaseOverlay
+
+base = BaseOverlay("base.bit")
+
+rgbleds = [base.rgbleds[i] for i in range(4, 6)]
+leds = [base.leds[i] for i in range(4)]
+
+# Toggle board LEDs leaving small LEDs lit
+for i in range(8):
+    [l.off() for l in leds]
+    [rgbled.off() for rgbled in rgbleds]
+    sleep(.2)
+    [l.on() for l in leds]
+    [rgbled.on(1) for rgbled in rgbleds]
+    sleep(.2)
+
+[rgbled.off() for rgbled in rgbleds]
+===STARTUP===
+===M2_HEAD===
+#!/usr/bin/env python3
+"""m2_onboard —— 模块二上板分步自检（板端运行，PC 上仅语法检查）
+
+用法（板端，vision.bit / vision.hwh / vision_regs.py 同目录）：
+    python3 m2_onboard.py env      # 环境与文件检查
+    python3 m2_onboard.py load     # 下载 overlay，打印 ip_dict 与基址核对
+    python3 m2_onboard.py smoke    # R11/R12 读回 + 短超时 commit（兼测视频在位）
+    python3 m2_onboard.py demo     # vision_demo 演示序列（需 HDMI IN 有视频）
+
+判据：PASS = 该步通过；NOVIDEO = overlay/寄存器正常但无输入视频（exit 3）；
+FAIL = 实际错误（exit 1）。上板日志与离板日志同一门禁口径归档。
+"""
+import os
+import sys
+
+AXI_REGS_BASE = 0x40000000  # create_hdmi_bd.tcl: assign_bd_address 0x40000000/64K
+
+
+def _fail(msg):
+    print(f"FAIL: {msg}")
+    sys.exit(1)
+
+
+def cmd_env():
+    print(f"python={sys.version.split()[0]}")
+    try:
+        import pynq
+        print(f"pynq={pynq.__version__}")
+    except Exception as e:
+        _fail(f"pynq import: {e}")
+    here = os.path.dirname(os.path.abspath(__file__))
+    for f in ("vision.bit", "vision.hwh", "vision_regs.py"):
+        p = os.path.join(here, f)
+        print(f"{f}: {'OK' if os.path.isfile(p) else 'MISSING'} "
+              f"({os.path.getsize(p) if os.path.isfile(p) else 0} B)")
+    print("PASS: env")
+
+
+def cmd_load():
+    from pynq import Overlay
+    here = os.path.dirname(os.path.abspath(__file__))
+    ol = Overlay(os.path.join(here, "vision.bit"))
+    print("ip_dict:")
+    for name, meta in ol.ip_dict.items():
+        base = meta.get("phys_addr", meta.get("base_addr", 0))
+        rng = meta.get("addr_range", meta.get("size", 0))
+        print(f"  {name} @ 0x{base:08X} range 0x{rng:X}")
+    segs = [n for n, m in ol.ip_dict.items()
+            if m.get("phys_addr", m.get("base_addr")) == AXI_REGS_BASE]
+    if not segs:
+        _fail(f"ip_dict 中无 0x{AXI_REGS_BASE:08X} 段——布局与预期不符")
+    print(f"axi_regs 段: {segs[0]} @ 0x{AXI_REGS_BASE:08X}")
+    print("PASS: load")
+
+
+def cmd_smoke():
+    from vision_regs import VisionRegs
+    v = VisionRegs(base=AXI_REGS_BASE)
+    print(f"R11 busy={v.read_reg(11) & 1} R12 applied={v.read_reg(12)}")
+    v.apply_preset("GRAY")
+    try:
+        cfg = v.commit(timeout=1.0)
+    except TimeoutError:
+        print("NOVIDEO: commit 未在帧首确认——寄存器通路 OK 但无输入视频"
+              "（查 HDMI IN 源/线材）")
+        sys.exit(3)
+    st = v.status()
+    print(f"commit 配置号={cfg} status={st}")
+    if st["applied_config_id"] != cfg:
+        _fail(f"R12={st['applied_config_id']} != 提交号 {cfg}")
+    print("PASS: smoke（视频在位，帧首整组应用已确认）")
+
+
+def cmd_demo():
+    import vision_demo
+    vision_demo.main()
+    print("PASS: demo 序列完成")
+
+
+if __name__ == "__main__":
+    cmds = {"env": cmd_env, "load": cmd_load,
+            "smoke": cmd_smoke, "demo": cmd_demo}
+    if len(sys.argv) != 2 or sys.argv[1] not in cmds:
+        print(__doc__)
+        sys.exit(2)
+    cmds[sys.argv[1]]()
+===CURRENT===
+root       258   188 Ss         01:09 /bin/sh -c bash -c 'sleep 15; source /etc/profile.d/xrt_setup.sh; source /etc/profile.d/pynq_venv.sh; python3 -u /home/xilinx/vision_m2/m2_onboard.py load; sleep 3; python3 -u /home/xilinx/vision_m2/m2_onboard.py smoke || true'
+root       267   258 S          01:09 bash -c sleep 15; source /etc/profile.d/xrt_setup.sh; source /etc/profile.d/pynq_venv.sh; python3 -u /home/xilinx/vision_m2/m2_onboard.py load; sleep 3; python3 -u /home/xilinx/vision_m2/m2_onboard.py smoke || true
+root       292   184 R          01:08 python3 /boot/boot.py
+root       659     1 S          00:44 bash -c sleep 25; source /etc/profile.d/xrt_setup.sh; source /etc/profile.d/pynq_venv.sh; cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && nohup python3 -u park_live_server_v7.py --host 0.0.0.0 --port 8765 --root /home/xilinx/vision_m2/live-artifacts --order 2 2 2 --min-score 0.8 >> /home/xilinx/vision_m2/live-server.log 2>&1 &
+root       661   659 Sl         00:44 python3 -u park_live_server_v7.py --host 0.0.0.0 --port 8765 --root /home/xilinx/vision_m2/live-artifacts --order 2 2 2 --min-score 0.8
+root       824   267 R          00:20 python3 -u /home/xilinx/vision_m2/m2_onboard.py smoke
+===DMESG===
+[   49.500630] [drm] Probing for xlnx,zocl
+[   49.500684] zocl-drm axi:zyxclmm_drm: error -ENXIO: IRQ index 0 not found
+[   49.506297] [drm] PR[0] Isolation addr 0x0
+[   49.551240] [drm] Initialized zocl 0.0.0  for axi:zyxclmm_drm on minor 0
+[   53.139902] FAT-fs (mmcblk0p1): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+[   54.464380] macb e000b000.ethernet eth0: PHY [e000b000.ethernet-ffffffff:00] driver [RTL8211E Gigabit Ethernet] (irq=POLL)
+[   54.464440] macb e000b000.ethernet eth0: configuring for phy/rgmii-id link mode
+[   58.663062] macb e000b000.ethernet eth0: Link is Up - 1Gbps/Full - flow control tx
+[   70.588375] systemd[598]: memfd_create() called without MFD_EXEC or MFD_NOEXEC_SEAL set
+[   87.644120] zocl-drm axi:zyxclmm_drm: zocl_create_client: created KDS client for pid(292), ret: 0
+[   87.644253] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(292)
+[   87.645062] zocl-drm axi:zyxclmm_drm: zocl_create_client: created KDS client for pid(292), ret: 0
+[   89.077782] zocl-drm axi:zyxclmm_drm: zocl_create_client: created KDS client for pid(573), ret: 0
+[   89.077923] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(573)
+[   89.078937] zocl-drm axi:zyxclmm_drm: zocl_create_client: created KDS client for pid(573), ret: 0
+[   96.280210] fpga_manager fpga0: writing vision.bin to Xilinx Zynq FPGA Manager
+[   96.430880] [drm] Loading xclbin 14a4ee2c-3f81-f96f-21fa-8cbab424bff4 to slot 0
+[   96.430922] [drm] skip kind 29(AIE_RESOURCES) return code: -22
+[   96.430944] [drm] skip kind 8(IP_LAYOUT) return code: -22
+[   96.430960] [drm] skip kind 9(DEBUG_IP_LAYOUT) return code: -22
+[   96.430974] [drm] skip kind 25(AIE_METADATA) return code: -22
+[   96.430988] [drm] skip kind 7(CONNECTIVITY) return code: -22
+[   96.431002] [drm] found kind 6(MEM_TOPOLOGY)
+[   96.431133] [drm] Memory 0 is not reserved in device tree. Will allocate memory from CMA
+[   96.431209] [drm] zocl_xclbin_read_axlf 14a4ee2c-3f81-f96f-21fa-8cbab424bff4 ret: 0
+[   96.494784] [drm] bitstream 14a4ee2c-3f81-f96f-21fa-8cbab424bff4 locked, ref=1
+[   96.494914] zocl-drm axi:zyxclmm_drm:  ffffffffc157c810 kds_add_context: Client pid(573) add context Domain(65535) CU(0xffff) shared(true)
+[   96.495033] zocl-drm axi:zyxclmm_drm:  ffffffffc157c810 kds_del_context: Client pid(573) del context Domain(65535) CU(0xffff)
+[   96.495087] [drm] bitstream 14a4ee2c-3f81-f96f-21fa-8cbab424bff4 unlocked, ref=0
+[   97.944287] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(573)
+===LIVE_LOG===
+  File "/usr/lib/python3.10/socketserver.py", line 232 in serve_forever
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 216 in main
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 220 in <module>
+Timeout (0:02:30)!
+Thread 0xb6fd7020 (most recent call first):
+  File "/usr/lib/python3.10/selectors.py", line 416 in select
+  File "/usr/lib/python3.10/socketserver.py", line 232 in serve_forever
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 216 in main
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 220 in <module>
+Timeout (0:02:30)!
+Thread 0xb6fd7020 (most recent call first):
+  File "/usr/lib/python3.10/selectors.py", line 416 in select
+  File "/usr/lib/python3.10/socketserver.py", line 232 in serve_forever
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 216 in main
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 220 in <module>
+Timeout (0:02:30)!
+Thread 0xb6fd7020 (most recent call first):
+  File "/usr/lib/python3.10/selectors.py", line 416 in select
+  File "/usr/lib/python3.10/socketserver.py", line 232 in serve_forever
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 216 in main
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 220 in <module>
+Timeout (0:02:30)!
+Thread 0xb6fd7020 (most recent call first):
+  File "/usr/lib/python3.10/selectors.py", line 416 in select
+  File "/usr/lib/python3.10/socketserver.py", line 232 in serve_forever
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 216 in main
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 220 in <module>
+Timeout (0:02:30)!
+Thread 0xb6fd7020 (most recent call first):
+  File "/usr/lib/python3.10/selectors.py", line 416 in select
+  File "/usr/lib/python3.10/socketserver.py", line 232 in serve_forever
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 216 in main
+  File "/home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py", line 220 in <module>
+LIVE SERVICE (backend=PARK, prototype=True): http://0.0.0.0:8765/v1/status
+LIVE SERVICE (backend=PARK, prototype=True): http://0.0.0.0:8765/v1/status
+no crontab for root
+cat: /etc/rc.local: No such file or directory

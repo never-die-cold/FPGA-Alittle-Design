@@ -1,0 +1,306 @@
+{
+  "date": "2026-10-27",
+  "purpose": "Selected reproducible evidence; full transient run retained locally",
+  "files": [
+    {
+      "path": "cdc-bounds-signoff-r2.log",
+      "bytes": 6907,
+      "sha256": "a51b596eb59c4e69aff6e96ec647b7f3cec6741a301b2588bada5e62e8af5700"
+    },
+    {
+      "path": "cdc-build-r1.log",
+      "bytes": 316832,
+      "sha256": "29fec214b423157f68a1173421b3e1267ea64cbcdc38c4c5f29c4a2a50c5dc1b"
+    },
+    {
+      "path": "cdc-existing-after.txt",
+      "bytes": 268,
+      "sha256": "90f3e6d4c56f53588f92032eac93901f37ad52e845c6b9003588b5786ba93e6c"
+    },
+    {
+      "path": "cdc-frame-01.json",
+      "bytes": 314,
+      "sha256": "39329dc2a855cd14b42e7de3358509c5b577c33f8b7437bbf83a27bc5bbd988f"
+    },
+    {
+      "path": "cdc-pattern-01.json",
+      "bytes": 310,
+      "sha256": "002824f252b6667746560e6a41d1aa6902b369c9ac6d817639b45ab15418b5d7"
+    },
+    {
+      "path": "cdc-remaining-cases.txt",
+      "bytes": 2041,
+      "sha256": "3d072c08863bbf992f7cb24852a99fe73588f79d658b98a87326bbdda88de2e5"
+    },
+    {
+      "path": "cdc-roi_001-01.json",
+      "bytes": 318,
+      "sha256": "d1262ccedae0e96a40765036b0ae375273751a09b61acd9374e532f1e1420696"
+    },
+    {
+      "path": "cdc-skew-after.txt",
+      "bytes": 2867,
+      "sha256": "98189792a601955fb78ade9dc654d61d975070e24dfa942f2c17b7a5008e1336"
+    },
+    {
+      "path": "cdc-skew-before.txt",
+      "bytes": 2860,
+      "sha256": "c2155af7dc00f923fcd47c52afcab158b84627da6e4e2198427e10814f737c13"
+    },
+    {
+      "path": "cdc-zero-01.json",
+      "bytes": 309,
+      "sha256": "33d1118e31a2de4b4a01340b34719ce91105b69d20cdb3598b785dffbf9e5a42"
+    },
+    {
+      "path": "cdc-zero-01.txt",
+      "bytes": 826,
+      "sha256": "bcf60fc18b06fdc307c414801200703485a4d4f367b16a45bde20cfe7ca872df"
+    },
+    {
+      "path": "cdc_bounds.txt",
+      "bytes": 435,
+      "sha256": "30fa6f76ee7b1fd56bdaab64a955024488f95e44d8a2e202822ee46785dd9f25"
+    },
+    {
+      "path": "cdc_bus_skew.rpt",
+      "bytes": 62803,
+      "sha256": "f380b39da40ef3cef0529fb848896f090b271680eee4e076e2ef48301be922fd"
+    },
+    {
+      "path": "dma-zero-01.txt",
+      "bytes": 1949,
+      "sha256": "d10899d984e2eb587c6c343a18493fe129175668dee52a09b2c455e65aa1313b"
+    },
+    {
+      "path": "firmware-refresh.txt",
+      "bytes": 558,
+      "sha256": "1cbf32c674c31b543896220d1d2211d96536ad1ba33de241ac759d92980f2ab3"
+    },
+    {
+      "path": "firmware-repeat-after.txt",
+      "bytes": 5281,
+      "sha256": "cf385c01bf98dad046961d90c2cd4ed61d8733fa4f0a803c89caafac79c93e7f"
+    },
+    {
+      "path": "firmware-repeat-before.txt",
+      "bytes": 4906,
+      "sha256": "506e892fd9178ecf7d695bb49598f8c7056764ca6417c99116cf724341a7fcd7"
+    },
+    {
+      "path": "firmware-runner-fixed.txt",
+      "bytes": 455,
+      "sha256": "80c016188d0c54e01ed7ac5a3a2925cd10b6f35b19c5684a14a46f1294d4c9d3"
+    },
+    {
+      "path": "install-startup-v2.txt",
+      "bytes": 27,
+      "sha256": "257ace05c85bf66c44026b7f24f8f7c2dd8f03c3bcd7011d8f1bcea104283baf"
+    },
+    {
+      "path": "install-startup.txt",
+      "bytes": 260,
+      "sha256": "0e2f9451d05d36fc0e8febad99fd14cf5844bc0598d00359042daf6109598349"
+    },
+    {
+      "path": "loader-after-fix.txt",
+      "bytes": 1030,
+      "sha256": "d110fb17522b15902376e46a67327d1ecea359d6436ade0921a7c111cb5aed02"
+    },
+    {
+      "path": "loader-before-fix.txt",
+      "bytes": 1358,
+      "sha256": "2db2d580bb7a778f459d3497795bd69e9c73b2e1873ddaacc3d7f42853940bc5"
+    },
+    {
+      "path": "package-no-overwrite.txt",
+      "bytes": 114,
+      "sha256": "eaeba3f28d98bf27ad9b790d66a395e39e515dd9a31881eb5a74810ad37e0b07"
+    },
+    {
+      "path": "packages.json",
+      "bytes": 1381,
+      "sha256": "13f7de54f92fa3458eab398676f13ef5143a105cd0638a24f9d1009abd6fd1e6"
+    },
+    {
+      "path": "pre-dma-state.txt",
+      "bytes": 498,
+      "sha256": "c6fa5c0f74c6c74c4be5de8ae1e64a2ba089b9676efe1f4bda5000ca45d5349f"
+    },
+    {
+      "path": "product-build-r1-console.txt",
+      "bytes": 71432,
+      "sha256": "013898708af38bedb785baa7bdb8f64af078046d4416add7517ca3514bbbdfa0"
+    },
+    {
+      "path": "product-build-r1.log",
+      "bytes": 71007,
+      "sha256": "18411832bcc8009c8406b8801aa96d9ca2578a743876163e6c4ed7bb67f903a0"
+    },
+    {
+      "path": "pynq-clock-source.txt",
+      "bytes": 18425,
+      "sha256": "9e31fd54c9d18a0a098fd456d16592da0332c7a46fff54fa76530f1590a4dd87"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6171,
+      "sha256": "77c0109ebb307ec296cb61fec89ed019a7ee74bd5a1ba261fb452b4f5c9fcf6a"
+    },
+    {
+      "path": "reboot-health.txt",
+      "bytes": 717,
+      "sha256": "9692d76291f80c349a01dc2af460e6cc59556b99e2d7b1688f7297152f086a73"
+    },
+    {
+      "path": "result-register-repeat.txt",
+      "bytes": 1089,
+      "sha256": "819fd66236e42dd50e406a21bf1e7d6cb9abc1ef6eeaa91480e3893981cd7c55"
+    },
+    {
+      "path": "rtl-all-make-fixed.txt",
+      "bytes": 109558,
+      "sha256": "8162b9541c659b00d5cb3d724f31463b89fc0d291f54358b8b0a5f44028f3f11"
+    },
+    {
+      "path": "rtl-all.txt",
+      "bytes": 63593,
+      "sha256": "593c37d655e53eb50458b0674625bf2b7ad6ce2449dcc1a4a2272acf3c674cea"
+    },
+    {
+      "path": "serial-cdc-board-tests.txt",
+      "bytes": 48,
+      "sha256": "c64855f1f011576d060d8eefe7ad6b1bf3a9a538f20df0b7fae52cef2c6063fd"
+    },
+    {
+      "path": "serial-dma-zero.txt",
+      "bytes": 48,
+      "sha256": "99df12026f1b886998d79bac5d70707f70761cd4390fc6196177c6fe59a87dcd"
+    },
+    {
+      "path": "serial-reboot-v2.txt",
+      "bytes": 37363,
+      "sha256": "7e7735351b9aa374d6e13ab9494628992f69eb4a6f4eed71280fdc178cbaadfb"
+    },
+    {
+      "path": "serial-reboot.txt",
+      "bytes": 37253,
+      "sha256": "a7576506f0dfa450cf779b870ec110e4a08a867870407957c920dc142f73fd7b"
+    },
+    {
+      "path": "startup-backup-bootpy.service.txt.txt",
+      "bytes": 207,
+      "sha256": "4c152ab3349e52f691f60f5b7d3bdce0f9ed43776d8ec4c24915dd5a3e6feeee"
+    },
+    {
+      "path": "startup-backup-pynq-live.filtered.txt",
+      "bytes": 51,
+      "sha256": "ab47ab166590f07003ea3635ea59170cc8ec1a328a69a408e38e253c7d42c16d"
+    },
+    {
+      "path": "startup-backup-pynq-live.txt",
+      "bytes": 643,
+      "sha256": "9756af7fc968882a2792796203340345bcf307014ed89be47d0abc39866bcde0"
+    },
+    {
+      "path": "startup-backup-SHA256SUMS.after.txt",
+      "bytes": 199,
+      "sha256": "748c55ea0621bce8e208c4a8525b9aeedd982db471617260dfd377a4435ad573"
+    },
+    {
+      "path": "startup-first-reboot-post-timeout.txt",
+      "bytes": 1364,
+      "sha256": "df3c0223fc7c45f294264f5d304ca2e7849e8d8c485a35389b638dd0a0357a08"
+    },
+    {
+      "path": "startup-installed-status.txt",
+      "bytes": 975,
+      "sha256": "1aa57a7b3d01986289702491a6046210153388758e843dbec4761d8171b6b94b"
+    },
+    {
+      "path": "startup-v2-reboot-final.txt",
+      "bytes": 803,
+      "sha256": "a7f38f8b5a9b48c3acdd5a9219f2e81479997c24bb12b49bba5368e32c4034a1"
+    },
+    {
+      "path": "startup-v2-reboot-health.txt",
+      "bytes": 171,
+      "sha256": "aee7fb9d1dbad0943b2441e16b0be51b3a04f5f5ea376b77918d544cec7822ce"
+    },
+    {
+      "path": "startup-v2-status.txt",
+      "bytes": 994,
+      "sha256": "07a7d0eb8f19b1ab75b396bdb2f8d6541f021b0d7a7bf29ebe34ff3ecf379dd4"
+    },
+    {
+      "path": "upload-cdc-packages.txt",
+      "bytes": 879,
+      "sha256": "e1a532dca2174237fc55e2587a7d290680a6186682ce4c7d19bf87c6e5678be6"
+    },
+    {
+      "path": "upload-diagnostic.txt",
+      "bytes": 629,
+      "sha256": "7cfaa52396057421f87005286455b1e1faefd5c932053e52c34b88b63bee3279"
+    },
+    {
+      "path": "uvc-after-reboot/devices.txt",
+      "bytes": 115,
+      "sha256": "3589679453e58570d1726c94349a33a510fd4cba9c3c67545802596d8e566f05"
+    },
+    {
+      "path": "uvc-after-reboot/metadata.json",
+      "bytes": 941,
+      "sha256": "b105361ee1eb16f47c5ae426428ba82e8c37be3a4ed1b052331310ae0f04796b"
+    },
+    {
+      "path": "uvc-after-reboot/pixel-stats.json",
+      "bytes": 94,
+      "sha256": "0ddbf4f51d1d8a916eb947f71493b69937502b1d856b733e98953db5e295dfa2"
+    },
+    {
+      "path": "uvc-after-reboot-v2/devices.txt",
+      "bytes": 115,
+      "sha256": "3589679453e58570d1726c94349a33a510fd4cba9c3c67545802596d8e566f05"
+    },
+    {
+      "path": "uvc-after-reboot-v2/metadata.json",
+      "bytes": 941,
+      "sha256": "df10d244c46269d5097d50097587f3fa7d8a0e985352f761fdaee8bf326fca38"
+    },
+    {
+      "path": "uvc-after-reboot-v2/raw.png",
+      "bytes": 1711698,
+      "sha256": "e530e95092633d9431318b1caa10d7ac87bbb763b0e57634dd434f4f2ff09c37"
+    },
+    {
+      "path": "uvc-after-service/devices.txt",
+      "bytes": 115,
+      "sha256": "3589679453e58570d1726c94349a33a510fd4cba9c3c67545802596d8e566f05"
+    },
+    {
+      "path": "uvc-after-service/metadata.json",
+      "bytes": 785,
+      "sha256": "c211d38380f05c30bbf8fdd1f8c996d92157e8d68a52f4c7f28929ec1d2d1f93"
+    },
+    {
+      "path": "video-restored-during-build.txt",
+      "bytes": 116,
+      "sha256": "6d031be0dbc9044474720b513b9718deb77b000b09589f35c46cff1a5f45dcc3"
+    },
+    {
+      "path": "vision-restore-before-product.txt",
+      "bytes": 8,
+      "sha256": "87a22800f55490262969ca8239f60cad450780c0adbb31e0f7e42ad026036cb1"
+    },
+    {
+      "path": "zero-01-snapshot.txt",
+      "bytes": 580,
+      "sha256": "fa3ffa38b689bad4efa79cfdec5c836c1eb2a232f2eb37249e3eca7ee25bac1d"
+    },
+    {
+      "path": "zero-01.json",
+      "bytes": 310,
+      "sha256": "92a10a88ba0abf801289f694943b2da7bdb3f43688e7d9b2406ccc70448a4b83"
+    }
+  ]
+}

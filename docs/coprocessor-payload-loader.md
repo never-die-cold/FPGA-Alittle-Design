@@ -20,7 +20,7 @@ bit0=`start_ready`，bit1=`payload_error`。`dma_start_ps_i` 是电平采样：r
 
 ```text
 校验包 SHA256/CRC/HWH/地址/单包长度（尚未触碰 MMIO）
-  -> 确认 FCLK1 读回 40 MHz
+  -> FCLK1=40 MHz -> fresh Overlay 重配 PL -> 等稳定 -> 脉冲 FCLKRESETN1 -> STATUS=0x1
   -> 写 shadow + CFG_SEQ，写 CFG_COMMIT，核对 CFG_APPLIED
   -> GPIO kind=0,start=1 -> 立即 start=0 -> 等 DMA_BUSY
   -> AXI DMA MM2S payload.bin -> 等 DMA idle、DMA_BUSY 清、start_ready 回来
@@ -48,18 +48,21 @@ NC 验证，不得由 PS 越权写 START 绕过。
 ## 命令
 
 ```bash
-sudo -E python3 payload/tools/cop_payload_loader.py clock --reads 20
+sudo -E python3 payload/tools/cop_payload_loader.py clock --package . --reads 20
 sudo -E python3 payload/tools/cop_payload_loader.py run --package . --case zero \
   --measurement ./zero-measured.json --timeout 10
 ```
 
-loader 会在零副作用预检阶段拒绝非 16 位 HWH；当前门禁包使用同一 schema、payload 和命令；
-pattern 将 `--case zero` 改为 `--case pattern`。
+loader 会在零副作用预检阶段拒绝非 16 位 HWH；`clock` 与每次 `run` 都强制执行改钟、重配、
+稳定等待、cop 域复位与首读检查。pattern 将 `--case zero` 改为 `--case pattern`。
 
 ## 失败排查
 
 | 现象 | 含义 / 下一证据 |
 |:---|:---|
+| `CLOCK_SEQUENCE_INCOMPLETE` | 改钟后没有完成 PL 重配/cop 复位；脚本在 COP MMIO 前拒绝 |
+| `COP_NOT_READY` | `0x0` 表示 cop 域无效或仍在复位，不是超频诊断；先重配 PL，不得继续 DMA |
+| `FIRMWARE_NO_ACTIVITY` | 两秒内 FW_DECISION/ACCEPTED 均未变化；保存自动 dump，优先核查 bit 内 IMEM INIT |
 | `DMA_LENGTH_WIDTH_MISMATCH` | HWH 不是固定 16 位；核对是否仍加载旧 bit/hwh |
 | `DMA_LENGTH_BLOCKED` | 当前单次传输实现的长度不在 1..65,535 B；先评审协议与 BD |
 | `payload_error=1` | 提前/延后 TLAST、keep、长度或 manifest bank 适配拒绝；保存 STATUS、DMA status、DMA_BYTES |
@@ -67,4 +70,4 @@ pattern 将 `--case zero` 改为 `--case pattern`。
 | `NO_ACK` | 固件没有发 START/ACCEPTED；核对 bit 是否含驻留固件，再查 CFG/MODEL/DMA_BYTES、核复位与 mailbox |
 | 终态软件超时 | ACCEPTED 后无 DONE/ERROR/TIMEOUT；保留 STATUS、ERROR_CODE、RESULT_SEQ，不写 CONSUME |
 | CRC/SHA256/字节数不符 | 包或传输损坏；失败发生在预检时保证零硬件副作用，重新解包并核对 `SHA256SUMS` |
-| 40 MHz 下首读仍有 `0x0` | 否定“仅超频”假设；采集连续读数与 ILA，转查复位释放/首次 AXI 访问同步延迟，暂不改 RTL |
+| 40 MHz 下首读仍有 `0x0` | cop 域未就绪/已失效；确认 fresh Overlay、PL done 与 FCLKRESETN1 脉冲，禁止归因于超频 |

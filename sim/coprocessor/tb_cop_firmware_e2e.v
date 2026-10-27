@@ -78,7 +78,18 @@ module tb_cop_firmware_e2e;
         end
         consume(); #1;
         if(accepted || done || error || timeout || result_valid || unconsumed || error_code || seq!=1) $fatal(1);
-        $display("PASS: firmware_e2e waits for delayed CFG/model/ROI then CPU START/ACCEPTED/DONE/RESULT_SEQ/FW + PS CONSUME; J02 zero=2/2/258/1");
+        repeat(1000) @(posedge clk);
+        if(seq!=1 || unconsumed) $fatal(1,"consumed configuration was run again");
+        cfg_applied=8;
+        cycles=0;
+        while(fw_decision!==32'h00020403 && cycles<200000) begin
+            @(posedge clk); cycles=cycles+1;
+        end
+        if(cycles>=200000 || seq!=2 || fw_counts!==32'h00010000 || !unconsumed)
+            $fatal(1,"firmware did not process a second configuration without reset");
+        consume(); #1;
+        if(unconsumed || result_valid || seq!=2) $fatal(1,"second consume failed");
+        $display("PASS: firmware_e2e delayed CFG/model/ROI; two CPU jobs + PS CONSUME without reset; no duplicate configuration");
         $finish;
     end
 endmodule

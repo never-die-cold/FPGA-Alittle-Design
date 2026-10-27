@@ -1,0 +1,18 @@
+EXPECTED_OUTPUTS.tsv: OK
+VERSION: OK
+golden/pattern/input.hex: OK
+golden/zero/input.hex: OK
+payload/provisional-model/manifest.json: OK
+payload/provisional-model/payload.bin: OK
+payload/pynq_cop_40mhz.bit: OK
+payload/pynq_cop_40mhz.hwh: OK
+payload/tools/cop_board_fast_run.py: OK
+payload/tools/cop_fclk.py: OK
+payload/tools/cop_payload_loader.py: OK
+xsa/pynq_cop_40mhz.xsa: OK
+===STARTUP===
+Result=success
+ActiveState=activating
+SubState=start-post
+[  119.048996] fpga_manager fpga0: writing base.bin to Xilinx Zynq FPGA Manager
+[  143.228333] fpga_manager fpga0: writing vision.bin to Xilinx Zynq FPGA Manager

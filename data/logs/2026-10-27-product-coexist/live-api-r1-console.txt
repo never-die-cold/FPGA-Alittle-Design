@@ -1,0 +1,90 @@
+{
+  "status": {
+    "mode": "LIVE",
+    "session_id": "f901ed63-2fba-4c48-b0ef-ea6e32cde415",
+    "hardware_connected": true,
+    "backend": "C01",
+    "engine": "COP_HW",
+    "prototype": false
+  },
+  "seconds": {
+    "status": 0.172,
+    "config": 0.032,
+    "check1": 5.796,
+    "retry1": 0.032,
+    "check2": 2.781
+  },
+  "checks": [
+    {
+      "id": 1,
+      "targets": 12,
+      "decision": {
+        "verdict": "RECHECK",
+        "expected": {
+          "bolt": 2,
+          "nut": 3,
+          "washer": 4
+        },
+        "actual": {
+          "bolt": 0,
+          "nut": 0,
+          "washer": 0
+        },
+        "delta": {
+          "bolt": -2,
+          "nut": -3,
+          "washer": -4
+        },
+        "missing": {
+          "bolt": 2,
+          "nut": 3,
+          "washer": 4
+        },
+        "extra": {
+          "bolt": 0,
+          "nut": 0,
+          "washer": 0
+        },
+        "reasons": [
+          "target_limit"
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "targets": 10,
+      "decision": {
+        "verdict": "RECHECK",
+        "expected": {
+          "bolt": 2,
+          "nut": 3,
+          "washer": 4
+        },
+        "actual": {
+          "bolt": 4,
+          "nut": 6,
+          "washer": 0
+        },
+        "delta": {
+          "bolt": 2,
+          "nut": 3,
+          "washer": -4
+        },
+        "missing": {
+          "bolt": 0,
+          "nut": 0,
+          "washer": 4
+        },
+        "extra": {
+          "bolt": 2,
+          "nut": 3,
+          "washer": 0
+        },
+        "reasons": [
+          "low_score"
+        ]
+      }
+    }
+  ]
+}
+PASS: two real capture/hardware rounds and idempotent retry

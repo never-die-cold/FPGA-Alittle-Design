@@ -1,0 +1,10 @@
+HOST_STARTED_UTC=2026-10-26T19:14:20.4696007Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=uptime; ls /tmp/zero-mmcm-oldtool.json 2>/dev/null && echo TMP-JSON-EXISTS || echo TMP-JSON-ABSENT
+uptime; ls /tmp/zero-mmcm-oldtool.json 2>/dev/null && echo TMP-JSON-EXISTS || echo TMP-JSON-ABSENT; printf '\n__PYNQ_RC_70a5794b34724840a1c10dfcfe6f6691=%d\n' $?
+[?2004l-bash: /usr/bin/uptime: Input/output error
+TMP-JSON-ABSENT
+
+__PYNQ_RC_70a5794b34724840a1c10dfcfe6f6691=0
+[?2004hxilinx@pynq:~/cop-pkg-mmcm-oldtool$ 
+HOST_EXIT_CODE=0

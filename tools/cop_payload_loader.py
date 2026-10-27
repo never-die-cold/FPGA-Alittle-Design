@@ -30,6 +30,8 @@ STATUS = {"READY": 1 << 0, "BUSY": 1 << 1, "DONE": 1 << 2,
 DMA_DMACR, DMA_DMASR, DMA_SA, DMA_LENGTH = 0x00, 0x04, 0x18, 0x28
 DMA_LENGTH_BITS, DMA_LENGTH_MAX = 16, (1 << 16) - 1
 GPIO_DATA, GPIO_TRI, GPIO2_DATA, GPIO2_TRI = 0x00, 0x04, 0x08, 0x0C
+SLCR_BASE, SLCR_LOCK, SLCR_UNLOCK, FPGA_RST_CTRL = 0xF8000000, 0x04, 0x08, 0x240
+BOARD_READY_TOKEN = object()
 
 
 class LoaderError(RuntimeError):
@@ -66,6 +68,8 @@ def package_inputs(root, case):
         raise LoaderError("ROI must contain exactly 4096 bytes")
     with (root / "EXPECTED_OUTPUTS.tsv").open(newline="", encoding="utf-8") as stream:
         rows = {row["case"]: row for row in csv.DictReader(stream, delimiter="\t")}
+    if case not in rows:
+        raise LoaderError(f"case {case} is missing from EXPECTED_OUTPUTS.tsv")
     return manifest, payload, roi, rows[case], hwh
 
 
@@ -98,19 +102,99 @@ def preflight(root, case):
     return manifest, payload, roi, expected, caps
 
 
-def set_and_measure_clock(reads):
-    from pynq import Clocks, MMIO
+def cop_mmio_after_reconfigure(mmio_type, token):
+    if token is not BOARD_READY_TOKEN:
+        raise LoaderError("CLOCK_SEQUENCE_INCOMPLETE: set FCLK, reconfigure PL, and reset cop before MMIO")
+    return mmio_type(COP_BASE, 0x1000)
+
+
+def pulse_cop_reset(mmio_type, sleeper=time.sleep):
+    slcr = mmio_type(SLCR_BASE, 0x1000)
+    slcr.write(SLCR_UNLOCK, 0xDF0D)
+    resets = slcr.read(FPGA_RST_CTRL) & 0xF
+    try:
+        slcr.write(FPGA_RST_CTRL, resets | (1 << 1))
+        sleeper(0.001)
+        slcr.write(FPGA_RST_CTRL, resets & ~(1 << 1))
+    finally:
+        slcr.write(SLCR_LOCK, 0x767B)
+
+
+def firmware_snapshot(cop):
+    names = ("STATUS", "ERROR_CODE", "CFG_SEQ", "CFG_APPLIED", "MODEL_ID", "ROI_COUNT",
+             "RESULT_SEQ", "DMA_BYTES", "FW_DECISION")
+    return {name: f"0x{cop.read(REG[name]):08x}" for name in names}
+
+
+def firmware_smoke(cop, timeout, sleeper=time.sleep):
+    deadline = time.monotonic() + timeout
+    while True:
+        status = cop.read(REG["STATUS"])
+        decision = cop.read(REG["FW_DECISION"])
+        if decision != 0 or status & STATUS["ACCEPTED"]:
+            print(f"firmware_smoke=PASS status=0x{status:08x} fw_decision=0x{decision:08x}")
+            return
+        if time.monotonic() >= deadline:
+            snapshot = firmware_snapshot(cop)
+            print("firmware_smoke_timeout_dump=" + json.dumps(snapshot, sort_keys=True))
+            raise LoaderError("FIRMWARE_NO_ACTIVITY: FW_DECISION and ACCEPTED stayed zero")
+        sleeper(0.05)
+
+
+def hwh_clock_plan(path):
+    module = next((m for m in ET.parse(path).getroot().iter("MODULE")
+                   if m.get("INSTANCE") == "cop_mmcm"), None)
+    if module is None:
+        return "direct", 40.0
+    params = {p.get("NAME"): p.get("VALUE") for p in module.iter("PARAMETER")}
+    source = float(params["PRIM_IN_FREQ"])
+    if source <= 0 or abs(float(params["CLKOUT1_REQUESTED_OUT_FREQ"]) - 40.0) > 0.001:
+        raise LoaderError("MMCM HWH must declare a positive input and 40 MHz output")
+    return "mmcm", source
+
+
+def prepare_board(root, reads, smoke_timeout=None, api=None, sleeper=time.sleep):
+    if api is None:
+        import pynq.pl_server.embedded_device  # register the board device
+        import pynq as api
     if reads < 1:
         raise LoaderError("--reads must be positive")
-    Clocks.fclk1_mhz = 40.0
-    actual = float(Clocks.fclk1_mhz)
-    values = [MMIO(COP_BASE, 0x1000).read(REG["STATUS"]) for _ in range(reads)]
+    payload_dir = Path(root).resolve() / "payload"
+    bit = payload_dir / "pynq_cop_40mhz.bit"
+    hwh = payload_dir / "pynq_cop_40mhz.hwh"
+    if not bit.is_file() or not hwh.is_file():
+        raise LoaderError("package lacks adjacent pynq_cop_40mhz.bit/.hwh")
+    topology, expected_input = hwh_clock_plan(hwh)
+    if topology == "direct":
+        api.Clocks.fclk1_mhz = 40.0
+        if abs(float(api.Clocks.fclk1_mhz) - 40.0) > 0.001:
+            raise LoaderError("FCLK1 readback is not 40 MHz before PL reconfiguration")
+    overlay = api.Overlay(str(bit), download=True)
+    if not overlay.is_loaded():
+        raise LoaderError("PL reconfiguration did not reach loaded/done state")
+    sleeper(0.05)
+    actual = float(api.Clocks.fclk1_mhz)
+    if abs(actual - expected_input) > 0.001:
+        raise LoaderError(f"FCLK1={actual:.6f} differs from HWH input={expected_input:.6f} MHz")
+    if topology == "direct":
+        pulse_cop_reset(api.MMIO, sleeper)
+    sleeper(0.01)
+    cop = cop_mmio_after_reconfigure(api.MMIO, BOARD_READY_TOKEN)
+    values = [cop.read(REG["STATUS"]) for _ in range(reads)]
+    print("board_sequence=" + ("hwh_clocks,reconfigure_pl,wait_stable,status_check" if topology == "mmcm"
+          else "set_fclk,reconfigure_pl,wait_stable,pulse_fclkreset1,status_check"))
+    print(f"clock_topology={topology} expected_cop_mhz=40.000000")
     print(f"measured_fclk1_mhz={actual:.6f}")
     print("status_first_reads=" + ",".join(f"0x{value:08x}" for value in values))
-    if abs(actual - 40.0) > 0.001:
-        raise LoaderError("FCLK1 readback is not 40 MHz")
     if any(value != STATUS["READY"] for value in values):
-        raise LoaderError("STATUS first-read criterion not met: every sample must be 0x00000001")
+        raise LoaderError("COP_NOT_READY: 0x0 is an invalid/reset cop domain; reconfigure PL before access")
+    if smoke_timeout is not None:
+        firmware_smoke(cop, smoke_timeout, sleeper)
+    return cop, actual
+
+
+def set_and_measure_clock(root, reads, smoke_timeout=2.0, api=None, sleeper=time.sleep):
+    prepare_board(root, reads, smoke_timeout, api, sleeper)
 
 
 def wait_for(predicate, timeout, message):
@@ -166,8 +250,10 @@ def dma_send(dma, gpio, cop, buffer, length, kind, timeout):
     return transfer_status
 
 
-def write_configuration(cop, manifest, case, buffers, sequence):
-    expected_class = 0 if case == "pattern" else 2
+def write_configuration(cop, manifest, expected, buffers, sequence):
+    expected_class = int(expected["class_id"])
+    if not 0 <= expected_class <= 2:
+        raise LoaderError(f"expected class_id {expected_class} is outside the three classes")
     work_order = (10 << 24) | (1 << (8 * expected_class))
     values = {"CFG_SEQ": sequence, "MODEL_ID": manifest["model_id"],
               "WEIGHT_CRC32": int(manifest["crc32"], 0), "ROI_COUNT": 1,
@@ -231,11 +317,9 @@ def read_result(cop, expected, sequence_before, timeout):
 
 def run_board(args):
     manifest, payload, roi, expected, caps = preflight(args.package, args.case)
-    from pynq import Clocks, MMIO, allocate
-    actual = float(Clocks.fclk1_mhz)
-    if abs(actual - 40.0) > 0.001:
-        raise LoaderError(f"FCLK1 is {actual:.6f} MHz, not 40 MHz")
-    cop, dma, gpio = MMIO(COP_BASE, 0x1000), MMIO(DMA_BASE, 0x10000), MMIO(GPIO_BASE, 0x10000)
+    from pynq import MMIO, allocate
+    cop, actual = prepare_board(args.package, 1)
+    dma, gpio = MMIO(DMA_BASE, 0x10000), MMIO(GPIO_BASE, 0x10000)
     initial_status = cop.read(REG["STATUS"])
     if initial_status & STATUS["UNCONSUMED"]:
         raise LoaderError(f"STALE_RESULT: consume or preserve prior terminal evidence, status=0x{initial_status:08x}")
@@ -246,9 +330,10 @@ def run_board(args):
         buffers["targets"][:] = 0; buffers["results"][:] = 0
         result_sequence_before = cop.read(REG["RESULT_SEQ"])
         sequence = int(time.time()) & 0xffffffff or 1
-        write_configuration(cop, manifest, args.case, buffers, sequence)
+        write_configuration(cop, manifest, expected, buffers, sequence)
         dma_send(dma, gpio, cop, buffers["payload"], len(payload), 0, args.timeout)
         dma_send(dma, gpio, cop, buffers["roi"], len(roi), 1, args.timeout)
+        firmware_smoke(cop, min(args.timeout, 2.0))
         measured = read_result(cop, expected, result_sequence_before, args.timeout)
         measured.update({"case": args.case, "fclk1_mhz": actual,
                          "payload_bytes": len(payload), "payload_crc32": manifest["crc32"],
@@ -272,14 +357,17 @@ def run_board(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
-    clock = sub.add_parser("clock", help="set FCLK1=40 MHz and measure STATUS first reads")
+    clock = sub.add_parser("clock", help="apply HWH clock topology and check STATUS first reads")
     clock.add_argument("--reads", type=int, default=20)
+    clock.add_argument("--package", default=".")
+    clock.add_argument("--smoke-timeout", type=float, default=2.0)
     run = sub.add_parser("run", help="load one diagnostic case and print measured fields")
-    run.add_argument("--package", required=True); run.add_argument("--case", choices=("pattern", "zero"), required=True)
+    run.add_argument("--package", required=True)
+    run.add_argument("--case", required=True, help="row name in EXPECTED_OUTPUTS.tsv")
     run.add_argument("--timeout", type=float, default=10.0); run.add_argument("--measurement", required=True)
     args = parser.parse_args()
     try:
-        if args.command == "clock": set_and_measure_clock(args.reads)
+        if args.command == "clock": set_and_measure_clock(args.package, args.reads, args.smoke_timeout)
         else: run_board(args)
     except (LoaderError, FileNotFoundError, KeyError, ValueError) as error:
         parser.exit(1, "BLOCKED: " + str(error) + "\n")

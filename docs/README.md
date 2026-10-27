@@ -65,6 +65,7 @@
 | NC 协处理器交接 | [`coprocessor-nc-handoff.md`](coprocessor-nc-handoff.md) |
 | 协处理器板端 40 MHz 时钟 | [`coprocessor-board-clock-runbook.md`](coprocessor-board-clock-runbook.md) |
 | 协处理器最小 payload loader | [`coprocessor-payload-loader.md`](coprocessor-payload-loader.md) |
+| cop_job IMEM/DMEM 初始化门禁 | [`coprocessor-imem-init-gate.md`](coprocessor-imem-init-gate.md) |
 | 仓库卫生规则 | [`repo-hygiene.md`](repo-hygiene.md) |
 | 逐文件索引（按需生成） | `python docs/file-guide/tools/generate.py --scope source --date YYYY-MM-DD` → `build/file-guide/` |
 
