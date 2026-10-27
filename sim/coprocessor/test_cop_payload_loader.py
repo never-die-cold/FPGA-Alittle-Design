@@ -136,6 +136,33 @@ def main():
         raise AssertionError("silent firmware was accepted")
     except loader.LoaderError as error:
         assert "FIRMWARE_NO_ACTIVITY" in str(error)
+    # A regenerated clock needs its HWH input rate; touching FCLK1=40 is wrong.
+    hwh.write_text(hwh.read_text().replace("</MODULES>", """<MODULE INSTANCE="cop_mmcm">
+<PARAMETERS><PARAMETER NAME="PRIM_IN_FREQ" VALUE="142.857132"/>
+<PARAMETER NAME="CLKOUT1_REQUESTED_OUT_FREQ" VALUE="40.000000"/>
+</PARAMETERS></MODULE></MODULES>"""), encoding="ascii")
+    class MmcmClocks: fclk1_mhz = 142.857132
+    class MmcmOverlay:
+        def __init__(self, bit, download):
+            assert download and MmcmClocks.fclk1_mhz == 142.857132
+        def is_loaded(self): return True
+    class MmcmMMIO:
+        def __init__(self, base, size):
+            assert base == loader.COP_BASE, "MMCM path must not pulse SLCR reset"
+        def read(self, offset):
+            return loader.STATUS["READY"] if offset == loader.REG["STATUS"] else 1
+    fake_pynq.Clocks, fake_pynq.Overlay, fake_pynq.MMIO = MmcmClocks, MmcmOverlay, MmcmMMIO
+    loader.prepare_board(args.output, 3, 0.1, api=fake_pynq, sleeper=lambda _: None)
+    class WrongInputOverlay(MmcmOverlay):
+        def __init__(self, bit, download): MmcmClocks.fclk1_mhz = 40.0
+    fake_pynq.Overlay = WrongInputOverlay
+    fake_pynq.MMIO = NoAccess
+    try:
+        loader.prepare_board(args.output, 1, api=fake_pynq, sleeper=lambda _: None)
+        raise AssertionError("MMCM input mismatch reached cop MMIO")
+    except loader.LoaderError as error:
+        assert "FCLK1" in str(error)
+    print("PASS: MMCM preserves input clock, skips SLCR reset, rejects wrong input before MMIO")
     print("PASS: payload_loader DMA16 plus clock->PL reload->FCLKRESET1->STATUS ordering; "
           "unreconfigured access and silent firmware fail closed")
 

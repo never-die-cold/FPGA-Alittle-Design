@@ -68,6 +68,8 @@ def package_inputs(root, case):
         raise LoaderError("ROI must contain exactly 4096 bytes")
     with (root / "EXPECTED_OUTPUTS.tsv").open(newline="", encoding="utf-8") as stream:
         rows = {row["case"]: row for row in csv.DictReader(stream, delimiter="\t")}
+    if case not in rows:
+        raise LoaderError(f"case {case} is missing from EXPECTED_OUTPUTS.tsv")
     return manifest, payload, roi, rows[case], hwh
 
 
@@ -139,8 +141,21 @@ def firmware_smoke(cop, timeout, sleeper=time.sleep):
         sleeper(0.05)
 
 
+def hwh_clock_plan(path):
+    module = next((m for m in ET.parse(path).getroot().iter("MODULE")
+                   if m.get("INSTANCE") == "cop_mmcm"), None)
+    if module is None:
+        return "direct", 40.0
+    params = {p.get("NAME"): p.get("VALUE") for p in module.iter("PARAMETER")}
+    source = float(params["PRIM_IN_FREQ"])
+    if source <= 0 or abs(float(params["CLKOUT1_REQUESTED_OUT_FREQ"]) - 40.0) > 0.001:
+        raise LoaderError("MMCM HWH must declare a positive input and 40 MHz output")
+    return "mmcm", source
+
+
 def prepare_board(root, reads, smoke_timeout=None, api=None, sleeper=time.sleep):
     if api is None:
+        import pynq.pl_server.embedded_device  # register the board device
         import pynq as api
     if reads < 1:
         raise LoaderError("--reads must be positive")
@@ -149,21 +164,26 @@ def prepare_board(root, reads, smoke_timeout=None, api=None, sleeper=time.sleep)
     hwh = payload_dir / "pynq_cop_40mhz.hwh"
     if not bit.is_file() or not hwh.is_file():
         raise LoaderError("package lacks adjacent pynq_cop_40mhz.bit/.hwh")
-    api.Clocks.fclk1_mhz = 40.0
-    if abs(float(api.Clocks.fclk1_mhz) - 40.0) > 0.001:
-        raise LoaderError("FCLK1 readback is not 40 MHz before PL reconfiguration")
+    topology, expected_input = hwh_clock_plan(hwh)
+    if topology == "direct":
+        api.Clocks.fclk1_mhz = 40.0
+        if abs(float(api.Clocks.fclk1_mhz) - 40.0) > 0.001:
+            raise LoaderError("FCLK1 readback is not 40 MHz before PL reconfiguration")
     overlay = api.Overlay(str(bit), download=True)
     if not overlay.is_loaded():
         raise LoaderError("PL reconfiguration did not reach loaded/done state")
     sleeper(0.05)
     actual = float(api.Clocks.fclk1_mhz)
-    if abs(actual - 40.0) > 0.001:
-        raise LoaderError("FCLK1 changed away from 40 MHz during PL reconfiguration")
-    pulse_cop_reset(api.MMIO, sleeper)
+    if abs(actual - expected_input) > 0.001:
+        raise LoaderError(f"FCLK1={actual:.6f} differs from HWH input={expected_input:.6f} MHz")
+    if topology == "direct":
+        pulse_cop_reset(api.MMIO, sleeper)
     sleeper(0.01)
     cop = cop_mmio_after_reconfigure(api.MMIO, BOARD_READY_TOKEN)
     values = [cop.read(REG["STATUS"]) for _ in range(reads)]
-    print("board_sequence=set_fclk,reconfigure_pl,wait_stable,pulse_fclkreset1,status_check")
+    print("board_sequence=" + ("hwh_clocks,reconfigure_pl,wait_stable,status_check" if topology == "mmcm"
+          else "set_fclk,reconfigure_pl,wait_stable,pulse_fclkreset1,status_check"))
+    print(f"clock_topology={topology} expected_cop_mhz=40.000000")
     print(f"measured_fclk1_mhz={actual:.6f}")
     print("status_first_reads=" + ",".join(f"0x{value:08x}" for value in values))
     if any(value != STATUS["READY"] for value in values):
@@ -230,8 +250,10 @@ def dma_send(dma, gpio, cop, buffer, length, kind, timeout):
     return transfer_status
 
 
-def write_configuration(cop, manifest, case, buffers, sequence):
-    expected_class = 0 if case == "pattern" else 2
+def write_configuration(cop, manifest, expected, buffers, sequence):
+    expected_class = int(expected["class_id"])
+    if not 0 <= expected_class <= 2:
+        raise LoaderError(f"expected class_id {expected_class} is outside the three classes")
     work_order = (10 << 24) | (1 << (8 * expected_class))
     values = {"CFG_SEQ": sequence, "MODEL_ID": manifest["model_id"],
               "WEIGHT_CRC32": int(manifest["crc32"], 0), "ROI_COUNT": 1,
@@ -308,7 +330,7 @@ def run_board(args):
         buffers["targets"][:] = 0; buffers["results"][:] = 0
         result_sequence_before = cop.read(REG["RESULT_SEQ"])
         sequence = int(time.time()) & 0xffffffff or 1
-        write_configuration(cop, manifest, args.case, buffers, sequence)
+        write_configuration(cop, manifest, expected, buffers, sequence)
         dma_send(dma, gpio, cop, buffers["payload"], len(payload), 0, args.timeout)
         dma_send(dma, gpio, cop, buffers["roi"], len(roi), 1, args.timeout)
         firmware_smoke(cop, min(args.timeout, 2.0))
@@ -335,12 +357,13 @@ def run_board(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
-    clock = sub.add_parser("clock", help="set FCLK1=40 MHz and measure STATUS first reads")
+    clock = sub.add_parser("clock", help="apply HWH clock topology and check STATUS first reads")
     clock.add_argument("--reads", type=int, default=20)
     clock.add_argument("--package", default=".")
     clock.add_argument("--smoke-timeout", type=float, default=2.0)
     run = sub.add_parser("run", help="load one diagnostic case and print measured fields")
-    run.add_argument("--package", required=True); run.add_argument("--case", choices=("pattern", "zero"), required=True)
+    run.add_argument("--package", required=True)
+    run.add_argument("--case", required=True, help="row name in EXPECTED_OUTPUTS.tsv")
     run.add_argument("--timeout", type=float, default=10.0); run.add_argument("--measurement", required=True)
     args = parser.parse_args()
     try:
