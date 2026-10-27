@@ -3,6 +3,10 @@
 > 交付边界：**JL 交付 ≠ 板级验收**。JL 负责 RTL、Windows Vivado 产物与可追溯包；
 > NC 负责下载和现场稳定性；WC 负责软件接入、独立软件看门狗及消费式 W1C 流程。
 
+> **2026-10-27 当前优先状态**：CDC 控制同步与多目标结果提交 RTL 已合并，历史包
+> `f856d5861db0`、`759744b99891`、`5653d5911b76` 全部作废。当前没有可交 NC 的有效 A 包；
+> 必须等 JL 用不含视频文件的 A 变体重跑 Windows 门禁后再打包。B 视频变体不得混入 A 包。
+
 ## 2026-10-26 现场更新：edge-fix bit 与板卡阻塞
 
 > 本节更新于 2026-10-26 22:43，优先于下方旧状态表；旧表保留历史。
@@ -43,12 +47,12 @@ B 交接见 data/logs/2026-10-26-build/B-QUICKSTART.md 与 HANDOFF-A-to-B.md。
 | 状态 | 结论 | 证据 / 缺口 |
 |:---|:---|:---|
 | 仿真跑通 | **PASS** | 行为级全回归；BRAM 模式 pattern/zero 各 73,795 元素逐项一致；延迟边界 PASS |
-| 综合实现通过 | **PASS** | Vivado 2026.1：WNS +3.071 ns、DSP 136/220、BRAM36 69/140、latch/DRC=0，IMEM INIT 三项通过 |
+| 综合实现通过 | **UNVERIFIED（当前源码）** | +3.071 ns 等仅是合并前历史证据；A 变体等待 Windows 重跑 |
 | 板上跑通 | **UNVERIFIED** | 新 bit 尚待 NC 在 40 MHz 下验证 STATUS、FW_DECISION/ACCEPTED 与真实 DMA/result |
 
 诊断网络不是正式训练模型，`score_q15` 是整数分数而非概率。PROVISIONAL payload 地址适配
-与整机顶层已仿真。JL 已提供本次门禁生成的 bit/hwh；JL 门禁通过不等于板级验收，
-NC 仍须完成下载、读回与现场稳定验证，不得用旧 bitstream 冒充本次产物。
+与整机顶层已仿真。当前没有与合并后源码匹配的 bit/hwh；JL 门禁通过也不等于板级验收，
+NC 须等待新 A 包，再完成下载、读回与现场稳定验证，不得用旧 bitstream 冒充本次产物。
 
 继续操作前先按 [`coprocessor-board-clock-runbook.md`](coprocessor-board-clock-runbook.md)
 确认 FCLK1 实测 40 MHz；payload/GPIO/DMA 序列见
@@ -59,10 +63,10 @@ NC 仍须完成下载、读回与现场稳定验证，不得用旧 bitstream 冒
 ```bash
 COPROCESSOR_PYTHON=sim/build/vision-venv-full/bin/python \
   bash sim/scripts/package_coprocessor_nc.sh \
-    build/run/pynq_cop_40mhz/pynq_cop_40mhz.bit \
-    build/run/pynq_cop_40mhz/pynq_cop_40mhz.hwh \
-    build/run/pynq_cop_40mhz/pynq_cop_40mhz.xsa \
-    build/reports/pynq_cop_40mhz/gate_summary.txt
+    build/run/<A_BUILD_NAME>/pynq_cop_40mhz.bit \
+    build/run/<A_BUILD_NAME>/pynq_cop_40mhz.hwh \
+    build/run/<A_BUILD_NAME>/pynq_cop_40mhz.xsa \
+    build/reports/<A_BUILD_NAME>/gate_summary.txt
 ```
 
 脚本会重跑 K3、生成 `dist/cop-board-gate-<commit>/` 与 `.tar.gz`，包含 `VERSION`、
@@ -71,14 +75,15 @@ COPROCESSOR_PYTHON=sim/build/vision-venv-full/bin/python \
 `VIVADO=PASS_2026.1_40MHZ_WHOLE_SYSTEM`，而 `BOARD=UNVERIFIED_NEEDS_NC`。
 NC 解包后先执行 `sha256sum -c SHA256SUMS`，不得手工修改 VERSION。
 
-本次源产物 SHA256：bit 为 `1232769fdeabe59c962dae62a75bc1a5ebca07b1985898b6961fd574878f05db`，
+以下仅为合并前历史产物 SHA256：bit 为 `1232769fdeabe59c962dae62a75bc1a5ebca07b1985898b6961fd574878f05db`，
 hwh 为 `dce025d3db119824126d4af6915983971ca9eaf98ccdbf726f2d66a9c7c73070`，xsa 为
 `255794ec8f07488dbe8b5feec3a6b1a3e8048f9a689777333fa0b639f0c23d28`。
 
 | 包 | 台账状态 |
 |:---|:---|
-| `cop-board-gate-5653d5911b76` | **唯一有效**；PROVISIONAL 诊断包，板上仍 UNVERIFIED |
-| `759744b99891` / `d66916c49b80` / `21c4e751bbe8` / `f856d5861db0` | **已作废**，不得上传或板验 |
+| 当前有效 A 包 | **无**；等待合并后源码重跑 Windows 门禁 |
+| `5653d5911b76` / `759744b99891` / `f856d5861db0` | **本轮明确作废**，不得上传或板验 |
+| `d66916c49b80` / `21c4e751bbe8` | **历史已作废**，不得上传或板验 |
 | `b821aa1d0c1f` / `c4839f39be2d` | **已作废**的 UNVERIFIED 中间包，不得交付 |
 
 ## 下载、启动与复位

@@ -18,11 +18,11 @@
 | J02 | ✅ | 诊断整数参考、逐层黄金、文件/来源 SHA256 与篡改负例可复现；不是 J06 正式模型 |
 | J03 | ✅ | 活跃 Conv→GAP→FC 链逐元素对拍；显式使用仓库 venv 时，独立、协处理器 all、全仓 all 退出 0；裸系统 Python 缺 NumPy 时不成立 |
 | J04a | ✅ | JL 侧实现、模块/顶层冒烟、J02 zero、工单固件与交接单已落库；24 个文件 SHA256 与远端一致 |
-| J04b | 🟡 | manifest/16 ROI/100→40 MHz 板顶已离板验证；整机 40 MHz 门禁 PASS；剩任意任务描述表接入、NC 板上固件/payload/结果验收，内容仍 PROVISIONAL |
+| J04b | 🟡 | manifest/16 ROI 板顶已离板验证；CDC/结果提交 RTL 合并后，A 变体须重跑整机门禁；仍缺描述表与 NC 固件/payload/结果验收 |
 | J05 | ⬜ | 等真实审计 ROI；训练/PTQ/QAT、混淆矩阵与阈值未完成 |
 | J06 | ⬜ | 正式模型、真实参数/黄金、版本/哈希发布未完成 |
-| J07 | 🟡 | 已启动视频集成摸底；取帧/DDR/ROI 通路、综合实现和整机回归均未实现 |
-| J08 | 🟡 | PROVISIONAL 诊断首包 `5653d5911b76` 已交，待 NC 验收；正式首网/视频整机包未交 |
+| J07 | 🟡 | 视频取帧/VDMA/HP1 离板集成已进入 B 变体；综合、实现与板上均 UNVERIFIED |
+| J08 | 🟡 | 首包待验收；`f856d5861db0`/`759744b99891`/`5653d5911b76` 已作废，等待 A 新构建 |
 | J09 | ⬜ | 等 NC 板端反馈后离板复现；不得预先声称完成 |
 | J10 | 🟡 | 模块 OOC/周期数据已有；整机性能、既有核待办和答辩材料未收口 |
 
@@ -37,9 +37,9 @@
 
 1. C03 的 `0x8001_0000` 本地 MMIO 窗口和 SoC 行为已回写 `design_v1.md` §17 草案；核数据口无等待语义未改。
 2. J04a（JL 侧实现/冒烟）已完成：`cop_top`、MMIO/CDC、AXI4-Lite、流载入、核接入门和工单固件有仓库内 TB；24 个文件 SHA256 与远端一致，交接单见 [runbooks/coprocessor-j04-handoff.md](../../docs/runbooks/coprocessor-j04-handoff.md)。
-3. J04b 整机 40 MHz 门禁已 PASS（WNS +3.071 ns、DSP 136/220、BRAM36 69/140），
-   IMEM 综合初值门禁也已关闭。仍缺任意 `TARGET_DESC_ADDR` 任务描述表、NC 板上
-   固件活性/payload/结果验收，且正式模型未到；不得用 Vivado PASS 代替板验。
+3. J04b 的 2026-10-26 整机门禁是合并前历史证据；新 CDC 三级控制同步与结果提交状态进入后，
+   A 变体综合/实现重新变为 UNVERIFIED。仍缺任意 `TARGET_DESC_ADDR` 描述表、NC 板上
+   固件活性/payload/结果验收，且正式模型未到；不得沿用旧数字或用 Vivado PASS 代替板验。
 4. manifest v1 固定 offset/length/bank schema；当前 payload 明示 `kind=PROVISIONAL`，只用于结构验证。
    正式权重到位后只替换 payload 与 manifest，不改 RTL/软件协议；不得把诊断权重称为发布模型。
 5. 生产板顶候选已接入 16×4096 B ROI 槽、权重影子 bank 和 100→40 MHz CDC；当前
@@ -49,13 +49,11 @@
 
 P0 两档 OOC 已通过，manifest schema 已定且内容仍为 PROVISIONAL。下一执行点：
 
-1. NC 已证明改钟会使旧 cop 域失效；`0x0` 不是超频结论。下一步用新 loader 强制执行
-   FCLK1=40 → fresh Overlay → 稳定等待 → FCLKRESETN1 脉冲 → STATUS 20/20 为 `0x1`。
-2. BD/HWH 已确认 DMA 长度为 16 位，驻留等待 CFG/MODEL/ROI 的固件已进入 2026-10-25 干净
-   整机门禁位流；loader 两项离板阻塞已解除。下一步由 NC 在 40 MHz 回读后实测 payload 与等待
-   路径，BOARD 保持 UNVERIFIED。
-3. IMEM 综合门禁已验证 `READMEM_WARNINGS=0`、首字 `00008117` 且 INIT 非全零；
-   这关闭综合侧根因，但新 bit 上 FW_DECISION/ACCEPTED 活性仍待 NC 实板验证。
+1. JL 用全新 `COP_BUILD_NAME`、不设置 `COP_WITH_VIDEO` 重跑 A 变体整机门禁；门禁前不打新包。
+2. A 通过后再打 PROVISIONAL 首包给 NC；loader 按 HWH 区分 direct 40 MHz 与
+   MMCM 输入→40 MHz cop 输出，STATUS 首读仍须为 `0x1`，BOARD 保持 UNVERIFIED。
+3. IMEM 历史门禁已验证首字/非零/零 warning；新 A 构建必须重新给出同三项，随后再由 NC
+   验证 FW_DECISION/ACCEPTED 活性。B 变体不得混入 A 包或借用 A 报告。
 4. J05/J06 正式权重到位后，用同一 schema 换 payload+manifest，重新记录 CRC/SHA256 与黄金证据。
 
 当前 J02 payload 只解锁板级结构与地址通路，不构成 RELEASE、精度或板上验收证据。
