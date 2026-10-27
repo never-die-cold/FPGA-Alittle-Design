@@ -3,8 +3,9 @@
 > 2026-10-27 现况：本页下方为旧直连时钟方案；同名 edge 包现已替换成 MMCM 版，不能原样执行其中的改钟/上板命令。
 > 先阅读[并发会话审计](runbooks/concurrent-agent-audit-2026-10-27.md)，核对 bit 哈希、时钟拓扑和 loader 配套关系。
 
-> 当前板级功能状态仍为 **UNVERIFIED**。旧源码的 Windows Vivado 2026.1 整机门禁曾 PASS；
-> 加入 IMEM 初始化门禁后的新源码尚待重跑，旧结论不等于新 bit 或板级验收。
+> 当前板级功能状态仍为 **UNVERIFIED**。Windows Vivado 2026.1 整机门禁已随新源码于 2026-10-26 复跑
+> PASS（edge-fix bit `9341F7FA…`，WNS +3.062 ns，见 `data/logs/2026-10-26-build/README.md`）；
+> 门禁通过不等于板级验收。
 
 ## 2026-10-26 冷启动补充（edge-fix）
 
