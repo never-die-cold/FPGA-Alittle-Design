@@ -1,8 +1,29 @@
 # Structural assertions belong in Tcl, not the restricted XDC command set.
-proc vision_check_cdc {with_capture} {
+proc vision_check_cdc {with_capture {profile full}} {
+    if {$profile ni {full raw_capture}} {error "unknown vision CDC profile: $profile"}
     set config_first [get_pins -hier -filter {NAME =~ *req_meta_reg/D || NAME =~ *ack_meta_reg/D}]
     if {[llength $config_first] != 2} {error "expected two config handshake first-stage inputs"}
-    foreach pattern {*u_config/hold_data_reg* *u_config/hold_id_reg* *u_config/dst_data_reg* *u_config/dst_id_reg*} {
+    set patterns {*u_config/hold_data_reg* *u_config/hold_id_reg* *u_config/dst_data_reg* *u_config/dst_id_reg*}
+    if {$profile eq "raw_capture"} {
+        # This profile has no consumer for analysis/snapshot or destination ID.
+        # hold_id and src_applied remain entirely in the source clock domain.
+        foreach pattern {*u_config/hold_data_reg* *u_config/dst_data_reg* *u_config/dst_id_reg* \
+                         *u_gauss/* *u_sobel/* *u_scaler/* *u_copbuf/*} {
+            if {[llength [get_cells -quiet -hier -filter "NAME =~ $pattern"]]} {
+                error "raw_capture profile unexpectedly retains analysis cells: $pattern"
+            }
+        }
+        set patterns {*u_config/hold_id_reg* *u_config/src_applied_reg* \
+                      *u_config/req_meta_reg* *u_config/req_sync_reg* \
+                      *u_config/ack_meta_reg* *u_config/ack_sync_reg*}
+        foreach pin $config_first {
+            if {![get_property ASYNC_REG [get_cells -of_objects $pin]]} {
+                error "config handshake lacks ASYNC_REG: $pin"
+            }
+        }
+        puts "VISION PROFILE raw_capture: source ID counter retained; request/ACK cross; analysis payload pruned"
+    }
+    foreach pattern $patterns {
         if {![llength [get_cells -hier -filter "NAME =~ $pattern"]]} {error "missing config CDC bundle: $pattern"}
     }
     if {$with_capture} {

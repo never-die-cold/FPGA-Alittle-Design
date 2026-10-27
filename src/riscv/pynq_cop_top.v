@@ -7,7 +7,7 @@ module pynq_cop_top #(
     input wire ps_clk_100_i,
     (* X_INTERFACE_INFO="xilinx.com:signal:reset:1.0 PS_RST RST", X_INTERFACE_PARAMETER="POLARITY ACTIVE_LOW" *)
     input wire ps_rst_n_i,
-    (* X_INTERFACE_INFO="xilinx.com:signal:clock:1.0 COP_CLK CLK", X_INTERFACE_PARAMETER="ASSOCIATED_RESET cop_rst_n_i, FREQ_HZ 40000000" *)
+    (* X_INTERFACE_INFO="xilinx.com:signal:clock:1.0 COP_CLK CLK", X_INTERFACE_PARAMETER="ASSOCIATED_RESET cop_rst_n_i, FREQ_HZ 39999996" *)
     input wire cop_clk_40_i,
     (* X_INTERFACE_INFO="xilinx.com:signal:reset:1.0 COP_RST RST", X_INTERFACE_PARAMETER="POLARITY ACTIVE_LOW" *)
     input wire cop_rst_n_i,
