@@ -12,7 +12,7 @@ if {[catch {
         set rules [list \
             [list single_sync CDC-3 Info 12 \
                 {pl/inst/(axil_cdc/(wack_s1|rack_s1|wreq_m1|rreq_m1|bresp_s1|rresp_s1)_reg|axis_cdc/(rgray_s1|wgray_m1)_reg|dma_(req_c1|kind_c1|ack_s1)_reg)} \
-                {named two-stage ASYNC_REG single-bit synchronizers}] \
+                {named AXI toggle three-stage and FIFO/DMA response synchronizer first stages}] \
             [list gpio_sync CDC-3 Info 1 \
                 {pl/inst/adapter/error_o_reg.*dma_control/U0/gpio_core_1/Dual\.INPUT_DOUBLE_REGS5/syncstages_ff_reg} \
                 {vendor AXI GPIO input two-stage synchronizer}] \
