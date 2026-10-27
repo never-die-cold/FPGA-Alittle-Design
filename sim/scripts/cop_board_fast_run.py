@@ -187,7 +187,7 @@ def main():
     helper = build_helper(helper_path)
     fast_send = make_fast_send(loader, helper)
 
-    _, actual = loader.prepare_board(package, 1)
+    _, actual = loader.prepare_board(package, 1)[:2]
     run_one(loader, package, args.case, args.measurement, args.timeout, pre, fast_send)
     return actual
 

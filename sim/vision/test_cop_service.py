@@ -151,6 +151,20 @@ def main():
         assert row["decision"] == remote.packet["decision"]
         kinds = {event["kind"] for event in remote.drain_events()}
         assert "overlay_error" in kinds and "overlay_ok" in kinds, kinds
+
+        # Overflow is a completed RECHECK, not a malformed HTTP 400 response.
+        for count in (22, 16, 17):
+            boxes = [(10 + 40 * i, 10, 40 + 40 * i, 60) for i in range(count)]
+            with patch("cop_engine.detect_boxes", return_value=boxes), patch.object(
+                    engine.driver, "run", side_effect=AssertionError("overflow started CNN")):
+                limited = post(base, f"overflow-{count}")
+            assert limited["status"] == "RECHECK"
+            assert limited["decision"]["reasons"] == ["target_limit"]
+            assert len(limited["targets"]) == (count if count <= 16 else 0)
+            trace_path = (OUT / "service" / limited["session_id"][:8]
+                          / f"check-{limited['check_id']:06d}" / "cop_trace.json")
+            overflow = json.loads(trace_path.read_text(encoding="utf-8"))
+            assert overflow["target_count"] == count and overflow["boxes"] == [list(b) for b in boxes]
         print("PASS: cop service x EXE (round/trace/duplicate-ref/stale-failure/same-ref retry/record)")
     finally:
         server.shutdown()

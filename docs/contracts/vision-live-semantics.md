@@ -47,6 +47,9 @@
   默认业务策略 `min(10, max_targets)`；目标数或工单总数超策略即 `target_limit`，`inspect_frame` 超策略
   不启动分类（targets=[]、计数 None）；EXE 对 `target_limit` 轮横幅显示 `未完整计数`、计数列 `--`、
   CSV 的 missing/extra 留空（reasons 保留 `target_limit`）——映射零值不再展示/导出为实测。
+  2026-10-27 COP 超协议上限修复：候选框超过 16 时返回空 targets 的 RECHECK/target_limit，
+  全部候选坐标及数量保存于本轮 cop_trace.json，不发截断列表、不启动 CNN；16 以内超业务
+  策略的未分类框仍可展示。沿用上述未知计数显示/导出规则，不新增协议字段。
 
 ### 2.3 记录 ↔ 服务产物（W05 实现要求）
 
