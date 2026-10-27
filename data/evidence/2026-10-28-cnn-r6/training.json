@@ -1,0 +1,673 @@
+{
+  "kind": "DEVELOPMENT_ADAPTATION",
+  "formal_validation": false,
+  "seed": 20261028,
+  "epochs": 80,
+  "lr": 5e-05,
+  "bn_statistics": "FROZEN",
+  "class_counts": [
+    6,
+    11,
+    16
+  ],
+  "balanced_classes": true,
+  "min_logit_margin": 2.0,
+  "camera_augmentation": false,
+  "selected_epoch": 70,
+  "selection": "TRAIN_FIT",
+  "last_epoch_training_fit": {
+    "correct": 32,
+    "total": 33,
+    "predictions": [
+      0,
+      0,
+      2,
+      1,
+      2,
+      2,
+      1,
+      0,
+      1,
+      1,
+      0,
+      0,
+      2,
+      1,
+      0,
+      1,
+      1,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "cross_entropy": 0.09174925088882446
+  },
+  "annotations_sha256": "acd4a804eb58e699b8059288d608419e2e3f8b2432289485deab8fb80e5160d0",
+  "initial_weights_sha256": "85e2b51bc3ef2264232d8db4c1314c18ef045a1f783104abd5bf795c2ae7471e",
+  "samples": [
+    {
+      "roi": "data/logs/2026-10-27-fresh-board-start/model-comparison-r1/roi-00.png",
+      "class": "bolt"
+    },
+    {
+      "roi": "data/logs/2026-10-27-fresh-board-start/model-comparison-r1/roi-01.png",
+      "class": "bolt"
+    },
+    {
+      "roi": "data/logs/2026-10-27-fresh-board-start/model-comparison-r1/roi-02.png",
+      "class": "washer"
+    },
+    {
+      "roi": "data/logs/2026-10-27-fresh-board-start/model-comparison-r1/roi-03.png",
+      "class": "nut"
+    },
+    {
+      "roi": "data/logs/2026-10-27-fresh-board-start/model-comparison-r1/roi-04.png",
+      "class": "washer"
+    },
+    {
+      "roi": "data/logs/2026-10-27-fresh-board-start/model-comparison-r1/roi-05.png",
+      "class": "washer"
+    },
+    {
+      "roi": "data/logs/2026-10-27-fresh-board-start/model-comparison-r1/roi-06.png",
+      "class": "nut"
+    },
+    {
+      "roi": "data/logs/2026-10-27-fresh-board-start/model-comparison-r1/roi-07.png",
+      "class": "bolt"
+    },
+    {
+      "roi": "data/logs/2026-10-27-fresh-board-start/model-comparison-r1/roi-08.png",
+      "class": "nut"
+    },
+    {
+      "roi": "data/logs/2026-10-27-real-data-layout-02/comparison/roi-00.png",
+      "class": "nut"
+    },
+    {
+      "roi": "data/logs/2026-10-27-real-data-layout-02/comparison/roi-01.png",
+      "class": "bolt"
+    },
+    {
+      "roi": "data/logs/2026-10-27-real-data-layout-02/comparison/roi-02.png",
+      "class": "bolt"
+    },
+    {
+      "roi": "data/logs/2026-10-27-real-data-layout-02/comparison/roi-03.png",
+      "class": "washer"
+    },
+    {
+      "roi": "data/logs/2026-10-27-real-data-layout-02/comparison/roi-04.png",
+      "class": "nut"
+    },
+    {
+      "roi": "data/logs/2026-10-27-real-data-layout-02/comparison/roi-05.png",
+      "class": "bolt"
+    },
+    {
+      "roi": "data/logs/2026-10-27-real-data-layout-02/comparison/roi-06.png",
+      "class": "nut"
+    },
+    {
+      "roi": "data/logs/2026-10-27-real-data-layout-02/comparison/roi-07.png",
+      "class": "washer"
+    },
+    {
+      "roi": "data/logs/2026-10-27-real-data-layout-02/comparison/roi-08.png",
+      "class": "washer"
+    },
+    {
+      "roi": "data/logs/2026-10-28-washer-collection/initial/roi-00.png",
+      "class": "washer"
+    },
+    {
+      "roi": "data/logs/2026-10-28-washer-collection/initial/roi-01.png",
+      "class": "washer"
+    },
+    {
+      "roi": "data/logs/2026-10-28-washer-collection/initial/roi-02.png",
+      "class": "washer"
+    },
+    {
+      "roi": "data/logs/2026-10-28-washer-collection/initial/roi-03.png",
+      "class": "washer"
+    },
+    {
+      "roi": "data/logs/2026-10-28-washer-collection/initial/roi-04.png",
+      "class": "washer"
+    },
+    {
+      "roi": "data/logs/2026-10-28-washer-collection/series-r2/pose-001/roi-00.png",
+      "class": "washer"
+    },
+    {
+      "roi": "data/logs/2026-10-28-washer-collection/series-r2/pose-001/roi-01.png",
+      "class": "washer"
+    },
+    {
+      "roi": "data/logs/2026-10-28-washer-collection/series-r2/pose-001/roi-02.png",
+      "class": "washer"
+    },
+    {
+      "roi": "data/logs/2026-10-28-washer-collection/series-r2/pose-001/roi-03.png",
+      "class": "washer"
+    },
+    {
+      "roi": "data/logs/2026-10-28-washer-collection/series-r2/pose-001/roi-04.png",
+      "class": "washer"
+    },
+    {
+      "roi": "data/logs/2026-10-28-standing-nut/train-pose-before/roi-01.png",
+      "class": "nut"
+    },
+    {
+      "roi": "data/logs/2026-10-28-standing-nut/train-pose-before/roi-02.png",
+      "class": "nut"
+    },
+    {
+      "roi": "data/logs/2026-10-28-standing-nut/train-pose-before/roi-03.png",
+      "class": "nut"
+    },
+    {
+      "roi": "data/logs/2026-10-28-standing-nut/train-pose-before/roi-04.png",
+      "class": "nut"
+    },
+    {
+      "roi": "data/logs/2026-10-28-standing-nut/train-pose-before/roi-05.png",
+      "class": "nut"
+    }
+  ],
+  "before": {
+    "correct": 31,
+    "total": 33,
+    "predictions": [
+      0,
+      0,
+      2,
+      1,
+      2,
+      2,
+      1,
+      0,
+      1,
+      1,
+      0,
+      0,
+      2,
+      1,
+      0,
+      1,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      1,
+      0,
+      0,
+      1,
+      1
+    ],
+    "cross_entropy": 0.27572959661483765
+  },
+  "after": {
+    "correct": 33,
+    "total": 33,
+    "predictions": [
+      0,
+      0,
+      2,
+      1,
+      2,
+      2,
+      1,
+      0,
+      1,
+      1,
+      0,
+      0,
+      2,
+      1,
+      0,
+      1,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "cross_entropy": 0.06881815195083618
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "loss": 0.523645281791687,
+      "training_fit": {
+        "correct": 30,
+        "total": 33,
+        "predictions": [
+          0,
+          0,
+          2,
+          1,
+          2,
+          2,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          2,
+          1,
+          0,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "cross_entropy": 0.22432419657707214
+      }
+    },
+    {
+      "epoch": 10,
+      "loss": 0.39103949069976807,
+      "training_fit": {
+        "correct": 31,
+        "total": 33,
+        "predictions": [
+          0,
+          0,
+          2,
+          1,
+          2,
+          2,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          2,
+          1,
+          0,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          0,
+          0,
+          1,
+          1
+        ],
+        "cross_entropy": 0.17335544526576996
+      }
+    },
+    {
+      "epoch": 20,
+      "loss": 0.40395498275756836,
+      "training_fit": {
+        "correct": 32,
+        "total": 33,
+        "predictions": [
+          0,
+          0,
+          2,
+          1,
+          2,
+          2,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          2,
+          1,
+          0,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1,
+          0,
+          1,
+          1
+        ],
+        "cross_entropy": 0.1304432898759842
+      }
+    },
+    {
+      "epoch": 30,
+      "loss": 0.44491326808929443,
+      "training_fit": {
+        "correct": 32,
+        "total": 33,
+        "predictions": [
+          0,
+          0,
+          2,
+          1,
+          2,
+          2,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          2,
+          1,
+          0,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1,
+          0,
+          1,
+          1
+        ],
+        "cross_entropy": 0.09932858496904373
+      }
+    },
+    {
+      "epoch": 40,
+      "loss": 0.3997598886489868,
+      "training_fit": {
+        "correct": 32,
+        "total": 33,
+        "predictions": [
+          0,
+          0,
+          2,
+          1,
+          2,
+          2,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          2,
+          1,
+          0,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1,
+          0,
+          1,
+          1
+        ],
+        "cross_entropy": 0.09457904100418091
+      }
+    },
+    {
+      "epoch": 50,
+      "loss": 0.28015875816345215,
+      "training_fit": {
+        "correct": 32,
+        "total": 33,
+        "predictions": [
+          0,
+          0,
+          2,
+          1,
+          2,
+          2,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          2,
+          1,
+          0,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1,
+          0,
+          1,
+          1
+        ],
+        "cross_entropy": 0.11028742045164108
+      }
+    },
+    {
+      "epoch": 60,
+      "loss": 0.24328070878982544,
+      "training_fit": {
+        "correct": 32,
+        "total": 33,
+        "predictions": [
+          0,
+          0,
+          2,
+          1,
+          2,
+          2,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          2,
+          1,
+          0,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1,
+          0,
+          1,
+          1
+        ],
+        "cross_entropy": 0.09174317866563797
+      }
+    },
+    {
+      "epoch": 70,
+      "loss": 0.3447384834289551,
+      "training_fit": {
+        "correct": 33,
+        "total": 33,
+        "predictions": [
+          0,
+          0,
+          2,
+          1,
+          2,
+          2,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          2,
+          1,
+          0,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "cross_entropy": 0.06881815195083618
+      }
+    },
+    {
+      "epoch": 80,
+      "loss": 0.29812872409820557,
+      "training_fit": {
+        "correct": 32,
+        "total": 33,
+        "predictions": [
+          0,
+          0,
+          2,
+          1,
+          2,
+          2,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0,
+          2,
+          1,
+          0,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "cross_entropy": 0.09174925088882446
+      }
+    }
+  ],
+  "weights_sha256": "f37c688b44ad96d87cf8a07560deb44af31ca465c71aab285847a1ba0d846bc0"
+}

@@ -1,0 +1,141 @@
+{
+  "rtl_source_head": "cfbded8",
+  "runtime_base_head": "0430257",
+  "files": [
+    {
+      "path": "tools/cop_payload_loader.py",
+      "sha256": "863426d8b803df6d4b1b2ed2ff35f0a22b7946a246bd7c5ea9d30080cbeaedab",
+      "bytes": 19475
+    },
+    {
+      "path": "sim/scripts/cop_board_fast_run.py",
+      "sha256": "6a3d0b37de7bdb2adc071f8c4be0724a9f23bc7c29922e46d0cad4c54c6f1eb4",
+      "bytes": 8029
+    },
+    {
+      "path": "sim/scripts/check_cnn_board_vectors.py",
+      "sha256": "7e307000ae32e137fb87951413e25fba1d75625d45dca2cd3910357954f6efda",
+      "bytes": 5281
+    },
+    {
+      "path": "sim/scripts/prepare_cnn_board_vectors.py",
+      "sha256": "dff42680075fc032b2c4035838ece9dfe75d74405924d10fa34ffae176dcaab1",
+      "bytes": 3036
+    },
+    {
+      "path": "sim/scripts/compare_cop_rois.py",
+      "sha256": "48b1db3ae3339fa5b4de234ecdd15b5ac92d06f74f37443057ca2e489e798e63",
+      "bytes": 4634
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/EXPECTED_OUTPUTS.tsv",
+      "sha256": "c76f6d75e466c9520d2ef63ca34dc84718a6a6fb544de5e6670a157adabf47f2",
+      "bytes": 506
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/FILES.txt",
+      "sha256": "49958f5139808d0366a1b97d92824d0614752140a9de1c49ebe87dc61336ce75",
+      "bytes": 544
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/golden/roi_001/input.hex",
+      "sha256": "fde4d2d9c9d284f53049edd80c05608a350ca175ab643ca42342fb2c097c7785",
+      "bytes": 16384
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/golden/scene_00/input.hex",
+      "sha256": "b301760dd53c07db5c1de5d638d252118e8ae5684f5a490a630d1128540d87c4",
+      "bytes": 16384
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/golden/scene_01/input.hex",
+      "sha256": "cf3f1b73b0421d49d085e3d1936b1d7afe5a84ac60fc7aad8111d80973162a60",
+      "bytes": 16384
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/golden/scene_02/input.hex",
+      "sha256": "f43ec3c37a25cba224275a8148ed5e38e68ace64c9212ce956778780f7bff35b",
+      "bytes": 16384
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/golden/scene_03/input.hex",
+      "sha256": "71b77cd94e6bd38a51b4968cd5d8c7cf749290598f826c4ecc638b73436011c1",
+      "bytes": 16384
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/golden/scene_04/input.hex",
+      "sha256": "cbd731bdcfd7401fdec3c442c858f9c63711b8a37ca6e7f0e307c6326fff6683",
+      "bytes": 16384
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/golden/scene_05/input.hex",
+      "sha256": "79ee65d48935bc778578bdb5da0c9184daa66574211d3ddd1d6e08a0beba5987",
+      "bytes": 16384
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/golden/scene_06/input.hex",
+      "sha256": "36f50a9998ac533fb97876299ba757ea6baf6e3223e4a6ec4e7a2a9e0b9c0ce4",
+      "bytes": 16384
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/golden/scene_07/input.hex",
+      "sha256": "793c2ea8f6669743310578f52154b7c19746bb08e5eb131a4e065faa2591b784",
+      "bytes": 16384
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/golden/scene_08/input.hex",
+      "sha256": "bedeb6d282ccd238f279c4d112b1f0147ad60c7b29641a4f42783c52edbed871",
+      "bytes": 16384
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/golden/scene_09/input.hex",
+      "sha256": "bf0923b7739b3c85afbee5863da49e78b896629d25b1580d4aea936a3d00deb0",
+      "bytes": 16384
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/payload/provisional-model/manifest.json",
+      "sha256": "e323e54d0c6c3ce1c01cb2c4721502fdacebc56ffca00ef170c5a620f6bc5a89",
+      "bytes": 4392
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/payload/provisional-model/payload.bin",
+      "sha256": "ffc2620df59ab0292a4130d6741fb71b73d972696198a992a21a63877d2b12fa",
+      "bytes": 36032
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/payload/pynq_cop_40mhz.bit",
+      "sha256": "a929904866213f4133a6c12ee1a3dada0538ea99da6db89ab6f3fb6316807ce9",
+      "bytes": 4045773
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/payload/pynq_cop_40mhz.hwh",
+      "sha256": "f01b96a3f9435b369595ef7bcdaaa32980213130df6b4e9a0f0ff622cd8c3527",
+      "bytes": 596837
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/payload/tools/cop_board_fast_run.py",
+      "sha256": "6a3d0b37de7bdb2adc071f8c4be0724a9f23bc7c29922e46d0cad4c54c6f1eb4",
+      "bytes": 8029
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/payload/tools/cop_fclk.py",
+      "sha256": "e4389ee2264b1afcb61a67d361e7512c50d23a415d4ee1efcd9df86aef911ff8",
+      "bytes": 3421
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/payload/tools/cop_payload_loader.py",
+      "sha256": "863426d8b803df6d4b1b2ed2ff35f0a22b7946a246bd7c5ea9d30080cbeaedab",
+      "bytes": 19475
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/SHA256SUMS",
+      "sha256": "40fc4537381c20a3f81b62e2a7947f00f782f34b5f3ecc6a139fa6ab7e76ce94",
+      "bytes": 1864
+    },
+    {
+      "path": "build/board-package-r6-multitarget-20261028-r1/VERSION",
+      "sha256": "7ccb93fd39a34e2896ac321afc3abbf891ac026db9c4798e96e06b989a966933",
+      "bytes": 404
+    }
+  ]
+}

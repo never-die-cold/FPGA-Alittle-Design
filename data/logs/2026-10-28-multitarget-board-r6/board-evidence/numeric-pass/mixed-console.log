@@ -1,0 +1,11 @@
+board_sequence=hwh_clocks,reconfigure_pl,wait_stable,status_check
+clock_topology=mmcm expected_cop_mhz=40.000000
+measured_fclk1_mhz=142.857143
+status_first_reads=0x00000001
+BOARD_JOB job=1 count=1 seq=1 pass=True
+BOARD_JOB job=2 count=3 seq=2 pass=True
+BOARD_JOB job=3 count=10 seq=3 pass=True
+BOARD_JOB job=4 count=10 seq=4 pass=True
+BOARD_JOB job=5 count=10 seq=5 pass=True
+BOARD_JOB job=6 count=10 seq=6 pass=True
+{"pass": true, "jobs": 6, "targets": 44, "boot_id": "30d6fc34-e372-4b0e-b9de-e8f4617b40d6", "fclk1_mhz": 142.857143, "payload_sha256": "ffc2620df59ab0292a4130d6741fb71b73d972696198a992a21a63877d2b12fa", "bit_sha256": "a929904866213f4133a6c12ee1a3dada0538ea99da6db89ab6f3fb6316807ce9", "result_sequences": [1, 2, 3, 4, 5, 6]}

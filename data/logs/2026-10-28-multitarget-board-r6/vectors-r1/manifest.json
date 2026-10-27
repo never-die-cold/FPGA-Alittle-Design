@@ -1,0 +1,262 @@
+{
+  "kind": "DEVELOPMENT_BOARD_NUMERIC_VECTORS",
+  "payload_sha256": "ffc2620df59ab0292a4130d6741fb71b73d972696198a992a21a63877d2b12fa",
+  "comparison": "data\\logs\\2026-10-28-mixed-standing-r6\\comparison",
+  "cases": {
+    "roi_001": {
+      "result": {
+        "class_id": 0,
+        "margin_q": 80,
+        "score_q15": 10320,
+        "low_conf": false
+      },
+      "logits": [
+        67,
+        -60,
+        -13
+      ]
+    },
+    "scene_00": {
+      "result": {
+        "class_id": 0,
+        "margin_q": 60,
+        "score_q15": 7740,
+        "low_conf": false
+      },
+      "logits": [
+        46,
+        -14,
+        -42
+      ]
+    },
+    "scene_01": {
+      "result": {
+        "class_id": 1,
+        "margin_q": 47,
+        "score_q15": 6063,
+        "low_conf": false
+      },
+      "logits": [
+        -54,
+        43,
+        -4
+      ]
+    },
+    "scene_02": {
+      "result": {
+        "class_id": 2,
+        "margin_q": 95,
+        "score_q15": 12255,
+        "low_conf": false
+      },
+      "logits": [
+        -96,
+        -2,
+        93
+      ]
+    },
+    "scene_03": {
+      "result": {
+        "class_id": 2,
+        "margin_q": 45,
+        "score_q15": 5805,
+        "low_conf": false
+      },
+      "logits": [
+        -88,
+        17,
+        62
+      ]
+    },
+    "scene_04": {
+      "result": {
+        "class_id": 1,
+        "margin_q": 24,
+        "score_q15": 3096,
+        "low_conf": false
+      },
+      "logits": [
+        -26,
+        20,
+        -4
+      ]
+    },
+    "scene_05": {
+      "result": {
+        "class_id": 1,
+        "margin_q": 24,
+        "score_q15": 3096,
+        "low_conf": false
+      },
+      "logits": [
+        -1,
+        23,
+        -36
+      ]
+    },
+    "scene_06": {
+      "result": {
+        "class_id": 0,
+        "margin_q": 53,
+        "score_q15": 6837,
+        "low_conf": false
+      },
+      "logits": [
+        39,
+        -14,
+        -37
+      ]
+    },
+    "scene_07": {
+      "result": {
+        "class_id": 2,
+        "margin_q": 68,
+        "score_q15": 8772,
+        "low_conf": false
+      },
+      "logits": [
+        -60,
+        -7,
+        61
+      ]
+    },
+    "scene_08": {
+      "result": {
+        "class_id": 0,
+        "margin_q": 14,
+        "score_q15": 1806,
+        "low_conf": false
+      },
+      "logits": [
+        11,
+        -17,
+        -3
+      ]
+    },
+    "scene_09": {
+      "result": {
+        "class_id": 1,
+        "margin_q": 41,
+        "score_q15": 5289,
+        "low_conf": false
+      },
+      "logits": [
+        -38,
+        33,
+        -8
+      ]
+    }
+  },
+  "rois": [
+    {
+      "name": "roi_001",
+      "path": "roi_001/input.bin",
+      "logits": [
+        67,
+        -60,
+        -13
+      ],
+      "roi_sha256": "d95c42ac5c2fead30e311f2fe0b6140ddc9f2fd82f8102a50640b7ba460e64cd"
+    },
+    {
+      "name": "scene_00",
+      "path": "scene_00/input.bin",
+      "logits": [
+        46,
+        -14,
+        -42
+      ],
+      "roi_sha256": "4c9d6f000ddb84deda9789860f29d2eec002fa2071b0c1253e6a49a7448aa2b9"
+    },
+    {
+      "name": "scene_01",
+      "path": "scene_01/input.bin",
+      "logits": [
+        -54,
+        43,
+        -4
+      ],
+      "roi_sha256": "347e7257fce53520ebbb79aafc5057a3a1646edb84a1b9ef0d82e30e538903cd"
+    },
+    {
+      "name": "scene_02",
+      "path": "scene_02/input.bin",
+      "logits": [
+        -96,
+        -2,
+        93
+      ],
+      "roi_sha256": "2f6fc511923abd01c4a19291cd9bfec7f7b287ea2f760724dfbf8758eaeb6d98"
+    },
+    {
+      "name": "scene_03",
+      "path": "scene_03/input.bin",
+      "logits": [
+        -88,
+        17,
+        62
+      ],
+      "roi_sha256": "34d2b260daf39b9537b48ce2c01d9a2a4255f0497a787bac3b5c99fbab0c6a5f"
+    },
+    {
+      "name": "scene_04",
+      "path": "scene_04/input.bin",
+      "logits": [
+        -26,
+        20,
+        -4
+      ],
+      "roi_sha256": "aa591f8c231ab8abf87c33530534280e28db1ab45dc3b5222b4afe62071d4f25"
+    },
+    {
+      "name": "scene_05",
+      "path": "scene_05/input.bin",
+      "logits": [
+        -1,
+        23,
+        -36
+      ],
+      "roi_sha256": "38f3b5688080a64d1f54737070bb40d8684e05557c2e0fa9d162dc77b609766c"
+    },
+    {
+      "name": "scene_06",
+      "path": "scene_06/input.bin",
+      "logits": [
+        39,
+        -14,
+        -37
+      ],
+      "roi_sha256": "35b2025e6546ab7ac6d38e296e4daae4a8d7aa75d9ad9c1fa8d472488cea05f9"
+    },
+    {
+      "name": "scene_07",
+      "path": "scene_07/input.bin",
+      "logits": [
+        -60,
+        -7,
+        61
+      ],
+      "roi_sha256": "424583010517a06022a37785fe916d65b26e6ba65204287bee288b2076763d69"
+    },
+    {
+      "name": "scene_08",
+      "path": "scene_08/input.bin",
+      "logits": [
+        11,
+        -17,
+        -3
+      ],
+      "roi_sha256": "9a3e2aa0808c678eb3b4ed36d3eb368dff6933ef0f1706dd731b6ad70b8977eb"
+    },
+    {
+      "name": "scene_09",
+      "path": "scene_09/input.bin",
+      "logits": [
+        -38,
+        33,
+        -8
+      ],
+      "roi_sha256": "8991b70201b0793e3544f6b22bfe8ee2afd18da3d8d8252a8e2a10a279afae02"
+    }
+  ]
+}

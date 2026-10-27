@@ -1,0 +1,73 @@
+{
+  "commit": "cfbded8",
+  "worktree_modified": true,
+  "model_status": "DEVELOPMENT_PROVISIONAL_NOT_BOARD_TESTED",
+  "files": [
+    {
+      "path": "calibration.json",
+      "sha256": "44b3175bec43378cd3479cd786a79fd794b7edf655dd903fd24277486a8b4d60",
+      "bytes": 4211
+    },
+    {
+      "path": "fp32.pt",
+      "sha256": "f37c688b44ad96d87cf8a07560deb44af31ca465c71aab285847a1ba0d846bc0",
+      "bytes": 146229
+    },
+    {
+      "path": "payload/provisional-model/manifest.json",
+      "sha256": "e323e54d0c6c3ce1c01cb2c4721502fdacebc56ffca00ef170c5a620f6bc5a89",
+      "bytes": 4392
+    },
+    {
+      "path": "payload/provisional-model/manifest.json.sha256",
+      "sha256": "0d6b0c3f93e655c4c294c8268d3a61705d6496bbedd1b601dc9a04302dcb35e2",
+      "bytes": 81
+    },
+    {
+      "path": "payload/provisional-model/payload.bin",
+      "sha256": "ffc2620df59ab0292a4130d6741fb71b73d972696198a992a21a63877d2b12fa",
+      "bytes": 36032
+    },
+    {
+      "path": "payload/provisional-model/payload.bin.sha256",
+      "sha256": "57b32c07ed595a2b312b9b73f5f9aa8d9ca690892c953b2d256c68569c1a6335",
+      "bytes": 78
+    },
+    {
+      "path": "quantization.json",
+      "sha256": "1a69b03181858b6821f93af4ed6a6537dafadf7eecff15ddfdd95cbd4131a89f",
+      "bytes": 8828
+    },
+    {
+      "path": "README.md",
+      "sha256": "1b8e0cc6f8426028e03de4b6ddcb66f413a347c1115ddcaf6f7ac7c26a3b54c6",
+      "bytes": 3943
+    },
+    {
+      "path": "reference/golden/roi_001/input.hex",
+      "sha256": "8182050d5175bed9deb19a61c696cad8507c8030399822110bbf800fae3b4e7a",
+      "bytes": 12288
+    },
+    {
+      "path": "reference/payload/provisional-model/manifest.json",
+      "sha256": "7b373365e95c50fddb3a1709c6a02c5619abdf658d97ad7ca82fb9cd5c139694",
+      "bytes": 3970
+    },
+    {
+      "path": "reference/payload/provisional-model/payload.bin",
+      "sha256": "a31a26f734796aa9867507ae5fea68581b314e2c8eb3aed1aee26075cdbd8736",
+      "bytes": 36032
+    },
+    {
+      "path": "training.json",
+      "sha256": "3a169b6bf004e61fa28d85123e359caa9aff8483c63bd047343576abf88dc6cc",
+      "bytes": 12311
+    }
+  ],
+  "sources": {
+    "sim/scripts/fine_tune_real_rois.py": "65bae9b8ee9138bc4d985183a3a48bbcf756515c8e81ddc62d752c1c5347edfc",
+    "sim/scripts/quantize_real_rois.py": "9d6343d4dff26ff6db7962db36ee22b849e2d9fb875532e796082768411de0b2",
+    "sim/scripts/calibrate_real_rois.py": "23074fbeaed1a0d04dde6c1ea0eddbb9803fb13428447699374ea23e3b08a696",
+    "sim/scripts/check_real_scene_models.py": "37c4d03b5e1396407168e88aa7051eea0e8827c2b9264de788b34b643d0ec334"
+  }
+}

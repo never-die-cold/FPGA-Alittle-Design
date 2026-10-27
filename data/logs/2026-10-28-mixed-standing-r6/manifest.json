@@ -1,0 +1,154 @@
+{
+  "source_commit": "cfbded8",
+  "worktree_modified": true,
+  "date": "2026-10-28",
+  "files": [
+    {
+      "path": "comparison/comparison.json",
+      "sha256": "b60cd2d6f2ea94a0f27eed463aaeec318bffac61e87e069d19245d374efad6ba",
+      "bytes": 5372
+    },
+    {
+      "path": "comparison/numbered.png",
+      "sha256": "ba1fbd559d8c5dcec7c6e28e585a3ec105de9292f06252b6da0b219452173d14",
+      "bytes": 669388
+    },
+    {
+      "path": "comparison/roi-00.bin",
+      "sha256": "4c9d6f000ddb84deda9789860f29d2eec002fa2071b0c1253e6a49a7448aa2b9",
+      "bytes": 4096
+    },
+    {
+      "path": "comparison/roi-00.png",
+      "sha256": "0691a93224c76facb5fed52642256f3644da018e28ed8f019d3f86b3a8963068",
+      "bytes": 902
+    },
+    {
+      "path": "comparison/roi-01.bin",
+      "sha256": "347e7257fce53520ebbb79aafc5057a3a1646edb84a1b9ef0d82e30e538903cd",
+      "bytes": 4096
+    },
+    {
+      "path": "comparison/roi-01.png",
+      "sha256": "1962fe1f39bb32bf924bb62a68be41e244ad9d44e9c1f4d9725d0f8d72a6b181",
+      "bytes": 1639
+    },
+    {
+      "path": "comparison/roi-02.bin",
+      "sha256": "2f6fc511923abd01c4a19291cd9bfec7f7b287ea2f760724dfbf8758eaeb6d98",
+      "bytes": 4096
+    },
+    {
+      "path": "comparison/roi-02.png",
+      "sha256": "6ee921365812508bf2783dd4a5d947bf672bb1a139abf35aa711971836226d09",
+      "bytes": 1502
+    },
+    {
+      "path": "comparison/roi-03.bin",
+      "sha256": "34d2b260daf39b9537b48ce2c01d9a2a4255f0497a787bac3b5c99fbab0c6a5f",
+      "bytes": 4096
+    },
+    {
+      "path": "comparison/roi-03.png",
+      "sha256": "1a0d30a25ade05fbc51fe8c97e943bb304ff1813e0cba6f90293bef1e64fe267",
+      "bytes": 1596
+    },
+    {
+      "path": "comparison/roi-04.bin",
+      "sha256": "aa591f8c231ab8abf87c33530534280e28db1ab45dc3b5222b4afe62071d4f25",
+      "bytes": 4096
+    },
+    {
+      "path": "comparison/roi-04.png",
+      "sha256": "61a8a40b3fab1e00057f2e11e0ed4de8b5fba214d2e1a85944ad37843bbabb59",
+      "bytes": 1166
+    },
+    {
+      "path": "comparison/roi-05.bin",
+      "sha256": "38f3b5688080a64d1f54737070bb40d8684e05557c2e0fa9d162dc77b609766c",
+      "bytes": 4096
+    },
+    {
+      "path": "comparison/roi-05.png",
+      "sha256": "586be86dc709dd9b128e3efbc50f28fae76e74ab16de85b54bdecf3612b37738",
+      "bytes": 1149
+    },
+    {
+      "path": "comparison/roi-06.bin",
+      "sha256": "35b2025e6546ab7ac6d38e296e4daae4a8d7aa75d9ad9c1fa8d472488cea05f9",
+      "bytes": 4096
+    },
+    {
+      "path": "comparison/roi-06.png",
+      "sha256": "04018811f314d775a3e721b872d9cf6ee68cf6010d7d58834a99a854c9628028",
+      "bytes": 1104
+    },
+    {
+      "path": "comparison/roi-07.bin",
+      "sha256": "424583010517a06022a37785fe916d65b26e6ba65204287bee288b2076763d69",
+      "bytes": 4096
+    },
+    {
+      "path": "comparison/roi-07.png",
+      "sha256": "613434c5b593736469a6ba96ce3bf307cb7966a862784159aab4bfd38a127d16",
+      "bytes": 1361
+    },
+    {
+      "path": "comparison/roi-08.bin",
+      "sha256": "9a3e2aa0808c678eb3b4ed36d3eb368dff6933ef0f1706dd731b6ad70b8977eb",
+      "bytes": 4096
+    },
+    {
+      "path": "comparison/roi-08.png",
+      "sha256": "747d804436b3ea196d7a4821bcc820be894f969679ec760408f2434dd4a7bf4e",
+      "bytes": 1102
+    },
+    {
+      "path": "comparison/roi-09.bin",
+      "sha256": "8991b70201b0793e3544f6b22bfe8ee2afd18da3d8d8252a8e2a10a279afae02",
+      "bytes": 4096
+    },
+    {
+      "path": "comparison/roi-09.png",
+      "sha256": "d0c7de9b52788ffe079cf84ff2337ee5d87ddf12aaee736564e683f0eef9fc2e",
+      "bytes": 1318
+    },
+    {
+      "path": "comparison/roi-grid.png",
+      "sha256": "2739343317faefc372319ada354f1d5d5cd35a45fdee23043ed34920fc02a44e",
+      "bytes": 136790
+    },
+    {
+      "path": "comparison.log",
+      "sha256": "7881abc2bdd6f431fe23c779a6f6b92b0d066608479a713a4a90bd84c624129a",
+      "bytes": 2990
+    },
+    {
+      "path": "README.md",
+      "sha256": "81fd533e171bdd29c973f013103f9efdbb67699f2b3a9a06a4b890869e0ec4e2",
+      "bytes": 2535
+    },
+    {
+      "path": "reviewed-result.json",
+      "sha256": "83dc4029bfbe4661f3c25a9dc21b9b2844b16e999a1c878e1fdd53a5603e2599",
+      "bytes": 5846
+    },
+    {
+      "path": "uvc/devices.txt",
+      "sha256": "18afe4716e06d200a9faa582d312cb7d1e4f3089f9665a5d3efe1bc1e66f0b7a",
+      "bytes": 119
+    },
+    {
+      "path": "uvc/metadata.json",
+      "sha256": "5a4799bf8a5eaeb7a73f32634293d0dadcbcbe511f218829df5fbd5722026599",
+      "bytes": 1551
+    },
+    {
+      "path": "uvc/raw.png",
+      "sha256": "7f34fb94915196dd36898ba72d029fdb4fee64e0bf81cfb7161e7cc523f7ff46",
+      "bytes": 664271
+    }
+  ],
+  "weights_sha256": "f37c688b44ad96d87cf8a07560deb44af31ca465c71aab285847a1ba0d846bc0",
+  "payload_sha256": "ffc2620df59ab0292a4130d6741fb71b73d972696198a992a21a63877d2b12fa"
+}

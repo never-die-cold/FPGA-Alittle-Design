@@ -1,0 +1,17 @@
+{
+  "task1": "CORRECTED_BIT_DEPLOYED_AND_MULTI_TARGET_VERIFIED",
+  "task2": "FROZEN_R6_EXACT_HARDWARE_INTEGER_PASS",
+  "task3": "NEW_LAYOUT_HOLDOUT_DONE_UNSEEN_SPECIMENS_UNAVAILABLE",
+  "jobs": 12,
+  "exact_target_results": 85,
+  "holdout_count": 9,
+  "holdout_fp32_correct": 8,
+  "holdout_int8_correct": 8,
+  "live_status": "RECHECK",
+  "live_reasons": [
+    "target_limit"
+  ],
+  "live_candidates": 11,
+  "production_acceptance_complete": false,
+  "boot_autostart_changed": false
+}

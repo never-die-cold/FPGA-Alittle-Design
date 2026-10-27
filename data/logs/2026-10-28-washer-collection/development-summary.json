@@ -1,0 +1,41 @@
+{
+  "formal_validation": false,
+  "source": "user-confirmed layout-03, reused development comparison",
+  "results": [
+    {
+      "candidate": "original",
+      "total": 9,
+      "fp32_correct": 6,
+      "int8_correct": 6,
+      "agreement": 9
+    },
+    {
+      "candidate": "r1",
+      "total": 9,
+      "fp32_correct": 8,
+      "int8_correct": 8,
+      "agreement": 9
+    },
+    {
+      "candidate": "r2",
+      "total": 9,
+      "fp32_correct": 8,
+      "int8_correct": 8,
+      "agreement": 9
+    },
+    {
+      "candidate": "r3",
+      "total": 9,
+      "fp32_correct": 8,
+      "int8_correct": 8,
+      "agreement": 9
+    },
+    {
+      "candidate": "r4",
+      "total": 9,
+      "fp32_correct": 7,
+      "int8_correct": 7,
+      "agreement": 7
+    }
+  ]
+}

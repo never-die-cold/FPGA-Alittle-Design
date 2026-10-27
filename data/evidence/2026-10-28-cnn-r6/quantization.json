@@ -1,0 +1,448 @@
+{
+  "kind": "DEVELOPMENT_PTQ",
+  "formal_validation": false,
+  "calibration_count": 33,
+  "calibration_only_training_rois": true,
+  "weights_sha256": "f37c688b44ad96d87cf8a07560deb44af31ca465c71aab285847a1ba0d846bc0",
+  "annotations_sha256": "acd4a804eb58e699b8059288d608419e2e3f8b2432289485deab8fb80e5160d0",
+  "activation_peaks": {
+    "conv1": 13.166680335998535,
+    "conv2": 11.078936576843262,
+    "conv3": 7.9343156814575195,
+    "conv4": 13.25731372833252
+  },
+  "logits_scale": 0.05702361910361943,
+  "activation_headroom": 1.0,
+  "agreement_count": 33,
+  "rows": [
+    {
+      "layout": "layout-01",
+      "index": 0,
+      "label": "bolt",
+      "fp32_class": "bolt",
+      "int8_class": "bolt",
+      "int8_logits": [
+        67,
+        -60,
+        -13
+      ],
+      "agree": true
+    },
+    {
+      "layout": "layout-01",
+      "index": 1,
+      "label": "bolt",
+      "fp32_class": "bolt",
+      "int8_class": "bolt",
+      "int8_logits": [
+        55,
+        -42,
+        -20
+      ],
+      "agree": true
+    },
+    {
+      "layout": "layout-01",
+      "index": 2,
+      "label": "washer",
+      "fp32_class": "washer",
+      "int8_class": "washer",
+      "int8_logits": [
+        -119,
+        -4,
+        120
+      ],
+      "agree": true
+    },
+    {
+      "layout": "layout-01",
+      "index": 3,
+      "label": "nut",
+      "fp32_class": "nut",
+      "int8_class": "nut",
+      "int8_logits": [
+        -70,
+        57,
+        -2
+      ],
+      "agree": true
+    },
+    {
+      "layout": "layout-01",
+      "index": 4,
+      "label": "washer",
+      "fp32_class": "washer",
+      "int8_class": "washer",
+      "int8_logits": [
+        -52,
+        -2,
+        47
+      ],
+      "agree": true
+    },
+    {
+      "layout": "layout-01",
+      "index": 5,
+      "label": "washer",
+      "fp32_class": "washer",
+      "int8_class": "washer",
+      "int8_logits": [
+        -57,
+        -14,
+        66
+      ],
+      "agree": true
+    },
+    {
+      "layout": "layout-01",
+      "index": 6,
+      "label": "nut",
+      "fp32_class": "nut",
+      "int8_class": "nut",
+      "int8_logits": [
+        -44,
+        44,
+        -15
+      ],
+      "agree": true
+    },
+    {
+      "layout": "layout-01",
+      "index": 7,
+      "label": "bolt",
+      "fp32_class": "bolt",
+      "int8_class": "bolt",
+      "int8_logits": [
+        20,
+        -5,
+        -26
+      ],
+      "agree": true
+    },
+    {
+      "layout": "layout-01",
+      "index": 8,
+      "label": "nut",
+      "fp32_class": "nut",
+      "int8_class": "nut",
+      "int8_logits": [
+        -40,
+        27,
+        1
+      ],
+      "agree": true
+    },
+    {
+      "layout": "layout-02",
+      "index": 0,
+      "label": "nut",
+      "fp32_class": "nut",
+      "int8_class": "nut",
+      "int8_logits": [
+        -100,
+        84,
+        -3
+      ],
+      "agree": true
+    },
+    {
+      "layout": "layout-02",
+      "index": 1,
+      "label": "bolt",
+      "fp32_class": "bolt",
+      "int8_class": "bolt",
+      "int8_logits": [
+        26,
+        -7,
+        -30
+      ],
+      "agree": true
+    },
+    {
+      "layout": "layout-02",
+      "index": 2,
+      "label": "bolt",
+      "fp32_class": "bolt",
+      "int8_class": "bolt",
+      "int8_logits": [
+        61,
+        -48,
+        -20
+      ],
+      "agree": true
+    },
+    {
+      "layout": "layout-02",
+      "index": 3,
+      "label": "washer",
+      "fp32_class": "washer",
+      "int8_class": "washer",
+      "int8_logits": [
+        -116,
+        -4,
+        116
+      ],
+      "agree": true
+    },
+    {
+      "layout": "layout-02",
+      "index": 4,
+      "label": "nut",
+      "fp32_class": "nut",
+      "int8_class": "nut",
+      "int8_logits": [
+        -86,
+        52,
+        20
+      ],
+      "agree": true
+    },
+    {
+      "layout": "layout-02",
+      "index": 5,
+      "label": "bolt",
+      "fp32_class": "bolt",
+      "int8_class": "bolt",
+      "int8_logits": [
+        46,
+        -16,
+        -40
+      ],
+      "agree": true
+    },
+    {
+      "layout": "layout-02",
+      "index": 6,
+      "label": "nut",
+      "fp32_class": "nut",
+      "int8_class": "nut",
+      "int8_logits": [
+        -47,
+        45,
+        -11
+      ],
+      "agree": true
+    },
+    {
+      "layout": "layout-02",
+      "index": 7,
+      "label": "washer",
+      "fp32_class": "washer",
+      "int8_class": "washer",
+      "int8_logits": [
+        -67,
+        18,
+        39
+      ],
+      "agree": true
+    },
+    {
+      "layout": "layout-02",
+      "index": 8,
+      "label": "washer",
+      "fp32_class": "washer",
+      "int8_class": "washer",
+      "int8_logits": [
+        -104,
+        4,
+        95
+      ],
+      "agree": true
+    },
+    {
+      "layout": "washer-20261028-initial",
+      "index": 0,
+      "label": "washer",
+      "fp32_class": "washer",
+      "int8_class": "washer",
+      "int8_logits": [
+        -63,
+        2,
+        55
+      ],
+      "agree": true
+    },
+    {
+      "layout": "washer-20261028-initial",
+      "index": 1,
+      "label": "washer",
+      "fp32_class": "washer",
+      "int8_class": "washer",
+      "int8_logits": [
+        -81,
+        14,
+        59
+      ],
+      "agree": true
+    },
+    {
+      "layout": "washer-20261028-initial",
+      "index": 2,
+      "label": "washer",
+      "fp32_class": "washer",
+      "int8_class": "washer",
+      "int8_logits": [
+        -72,
+        8,
+        56
+      ],
+      "agree": true
+    },
+    {
+      "layout": "washer-20261028-initial",
+      "index": 3,
+      "label": "washer",
+      "fp32_class": "washer",
+      "int8_class": "washer",
+      "int8_logits": [
+        -87,
+        -5,
+        88
+      ],
+      "agree": true
+    },
+    {
+      "layout": "washer-20261028-initial",
+      "index": 4,
+      "label": "washer",
+      "fp32_class": "washer",
+      "int8_class": "washer",
+      "int8_logits": [
+        -105,
+        27,
+        70
+      ],
+      "agree": true
+    },
+    {
+      "layout": "washer-20261028-pose-001",
+      "index": 0,
+      "label": "washer",
+      "fp32_class": "washer",
+      "int8_class": "washer",
+      "int8_logits": [
+        -63,
+        -15,
+        73
+      ],
+      "agree": true
+    },
+    {
+      "layout": "washer-20261028-pose-001",
+      "index": 1,
+      "label": "washer",
+      "fp32_class": "washer",
+      "int8_class": "washer",
+      "int8_logits": [
+        -89,
+        9,
+        73
+      ],
+      "agree": true
+    },
+    {
+      "layout": "washer-20261028-pose-001",
+      "index": 2,
+      "label": "washer",
+      "fp32_class": "washer",
+      "int8_class": "washer",
+      "int8_logits": [
+        -112,
+        3,
+        105
+      ],
+      "agree": true
+    },
+    {
+      "layout": "washer-20261028-pose-001",
+      "index": 3,
+      "label": "washer",
+      "fp32_class": "washer",
+      "int8_class": "washer",
+      "int8_logits": [
+        -70,
+        8,
+        55
+      ],
+      "agree": true
+    },
+    {
+      "layout": "washer-20261028-pose-001",
+      "index": 4,
+      "label": "washer",
+      "fp32_class": "washer",
+      "int8_class": "washer",
+      "int8_logits": [
+        -105,
+        4,
+        96
+      ],
+      "agree": true
+    },
+    {
+      "layout": "standing-nut-train-20261028",
+      "index": 1,
+      "label": "nut",
+      "fp32_class": "nut",
+      "int8_class": "nut",
+      "int8_logits": [
+        -76,
+        70,
+        -12
+      ],
+      "agree": true
+    },
+    {
+      "layout": "standing-nut-train-20261028",
+      "index": 2,
+      "label": "nut",
+      "fp32_class": "nut",
+      "int8_class": "nut",
+      "int8_logits": [
+        -2,
+        26,
+        -36
+      ],
+      "agree": true
+    },
+    {
+      "layout": "standing-nut-train-20261028",
+      "index": 3,
+      "label": "nut",
+      "fp32_class": "nut",
+      "int8_class": "nut",
+      "int8_logits": [
+        0,
+        16,
+        -29
+      ],
+      "agree": true
+    },
+    {
+      "layout": "standing-nut-train-20261028",
+      "index": 4,
+      "label": "nut",
+      "fp32_class": "nut",
+      "int8_class": "nut",
+      "int8_logits": [
+        -25,
+        37,
+        -27
+      ],
+      "agree": true
+    },
+    {
+      "layout": "standing-nut-train-20261028",
+      "index": 5,
+      "label": "nut",
+      "fp32_class": "nut",
+      "int8_class": "nut",
+      "int8_logits": [
+        -83,
+        71,
+        -5
+      ],
+      "agree": true
+    }
+  ]
+}

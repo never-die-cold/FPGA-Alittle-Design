@@ -1,0 +1,60 @@
+{
+  "frame_sha256": "d66eb4026641f206450a9e1e4e9c00c53bbfac37ca4092f3c9b9f611bbe49ac2",
+  "rois": [
+    {
+      "index": 0,
+      "bbox": [
+        533,
+        176,
+        560,
+        203
+      ],
+      "class_label": "washer",
+      "roi_sha256": "ea4c9bece0d69497e1f9f480b843b8bd232cf2216c4d286a853c4c064d867397"
+    },
+    {
+      "index": 1,
+      "bbox": [
+        646,
+        270,
+        702,
+        327
+      ],
+      "class_label": "washer",
+      "roi_sha256": "854089b9cda13c6a20275ad5ecd43b8662b88b8ce76b84a72b9db5439e51b324"
+    },
+    {
+      "index": 2,
+      "bbox": [
+        545,
+        354,
+        601,
+        411
+      ],
+      "class_label": "washer",
+      "roi_sha256": "89da02df83afbd9e98e84e487bf1b13fb5ddfeeff00782c19b69eea7bd2023af"
+    },
+    {
+      "index": 3,
+      "bbox": [
+        421,
+        361,
+        456,
+        395
+      ],
+      "class_label": "washer",
+      "roi_sha256": "dd0a02156a569a4f807a8a54bafbfa234ce1ddd076cf1d4f06fd259c023363ba"
+    },
+    {
+      "index": 4,
+      "bbox": [
+        803,
+        504,
+        844,
+        545
+      ],
+      "class_label": "washer",
+      "roi_sha256": "e81be766a0605cf051fe55c5b311113af0809b1c5cae9535b8e9fd813b60e3e3"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "bit_sha256": "a929904866213f4133a6c12ee1a3dada0538ea99da6db89ab6f3fb6316807ce9",
+  "payload_sha256": "ffc2620df59ab0292a4130d6741fb71b73d972696198a992a21a63877d2b12fa",
+  "model_id": 1244672599,
+  "model_status": "PROVISIONAL",
+  "order": {
+    "bolt": 3,
+    "nut": 3,
+    "washer": 3
+  },
+  "localization": {
+    "package": "/home/xilinx/cop-pkg-r6-multitarget-20261028-r1",
+    "root": "/home/xilinx/cop-live-r6-20261028",
+    "order": "3,3,3",
+    "min_score": 0.8,
+    "color_threshold": 25.0,
+    "min_area_ratio": 8e-05,
+    "background_mode": "local",
+    "host": "0.0.0.0",
+    "port": 8765
+  }
+}

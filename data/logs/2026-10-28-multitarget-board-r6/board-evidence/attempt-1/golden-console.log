@@ -1,0 +1,6 @@
+board_sequence=hwh_clocks,reconfigure_pl,wait_stable,status_check
+clock_topology=mmcm expected_cop_mhz=40.000000
+measured_fclk1_mhz=142.857143
+status_first_reads=0x00000001
+{"accepted_snapshot": 2146, "case": "roi_001", "class_id": 0, "dma_stream_bits": 64, "fclk1_mhz": 142.857143, "fw_decision": 65537, "logits": [67, -60, -13], "low_conf": 0, "margin_q": 80, "matches_expected": true, "payload_bytes": 36032, "payload_crc32": "0xa73ee0d9", "result_seq": 1, "score_q15": 10320, "valid": 1}
+measurement_file=/home/xilinx/cop-board-r6-20261028-r1/golden-roi_001.json

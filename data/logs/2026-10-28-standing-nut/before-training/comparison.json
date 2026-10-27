@@ -1,0 +1,159 @@
+{
+  "kind": "REAL_SCENE_DEVELOPMENT",
+  "accuracy_evaluated": false,
+  "frame_sha256": "e672a1cd2dedf6c38b5a2ed1a3068db1a468dd122d10016518e30ad75f97d2bb",
+  "weights_sha256": "85e2b51bc3ef2264232d8db4c1314c18ef045a1f783104abd5bf795c2ae7471e",
+  "payload_sha256": "664bade3fb543a585b5a44bb909dae878f699bb4ad94574b04a0d31f8e041e0f",
+  "localization": {
+    "mode": "local",
+    "threshold": 25,
+    "min_area_ratio": 8e-05
+  },
+  "human_scene_counts": {
+    "bolt": 0,
+    "nut": 5,
+    "washer": 0
+  },
+  "roi_count": 6,
+  "agreement_count": 6,
+  "rois": [
+    {
+      "index": 0,
+      "bbox": [
+        656,
+        0,
+        670,
+        104
+      ],
+      "fp32_class": "bolt",
+      "fp32_logits": [
+        7.081088542938232,
+        -2.201702117919922,
+        -5.684234619140625
+      ],
+      "int8_class": "bolt",
+      "int8_logits": [
+        98,
+        -16,
+        -97
+      ],
+      "agree": true,
+      "roi_sha256": "e181903e64faeb5e6140407f309d3d72764fc59295a6b0724686e47f9eedef8f"
+    },
+    {
+      "index": 1,
+      "bbox": [
+        818,
+        311,
+        850,
+        353
+      ],
+      "fp32_class": "bolt",
+      "fp32_logits": [
+        7.305062770843506,
+        -3.2117295265197754,
+        -4.685371398925781
+      ],
+      "int8_class": "bolt",
+      "int8_logits": [
+        110,
+        -32,
+        -90
+      ],
+      "agree": true,
+      "roi_sha256": "8640146647bbe92739154af81aa01bc8c7298e93a73f862763f931b4c59cc5b9"
+    },
+    {
+      "index": 2,
+      "bbox": [
+        453,
+        334,
+        493,
+        370
+      ],
+      "fp32_class": "bolt",
+      "fp32_logits": [
+        7.123475551605225,
+        -1.6955138444900513,
+        -6.27455997467041
+      ],
+      "int8_class": "bolt",
+      "int8_logits": [
+        83,
+        2,
+        -101
+      ],
+      "agree": true,
+      "roi_sha256": "a6dd3b0fe0b2566ba92aee4603ec9639781ecec39cc0aacc8afb06fdd9dc3b24"
+    },
+    {
+      "index": 3,
+      "bbox": [
+        679,
+        395,
+        708,
+        422
+      ],
+      "fp32_class": "bolt",
+      "fp32_logits": [
+        6.382583141326904,
+        -2.1539738178253174,
+        -4.9280853271484375
+      ],
+      "int8_class": "bolt",
+      "int8_logits": [
+        86,
+        -15,
+        -84
+      ],
+      "agree": true,
+      "roi_sha256": "0b8edaedbab43d0aac338d8108208ca258bffff702cc776ef381a4e1bed05d92"
+    },
+    {
+      "index": 4,
+      "bbox": [
+        600,
+        457,
+        632,
+        490
+      ],
+      "fp32_class": "bolt",
+      "fp32_logits": [
+        4.248130798339844,
+        -0.6958990097045898,
+        -4.2618231773376465
+      ],
+      "int8_class": "bolt",
+      "int8_logits": [
+        47,
+        9,
+        -69
+      ],
+      "agree": true,
+      "roi_sha256": "b58e0975bb1de3133acafafa9cd996278f3be9d7b9b7aac17ed4b7e912a072c0"
+    },
+    {
+      "index": 5,
+      "bbox": [
+        522,
+        523,
+        565,
+        567
+      ],
+      "fp32_class": "bolt",
+      "fp32_logits": [
+        5.734338283538818,
+        -1.3971091508865356,
+        -5.057599067687988
+      ],
+      "int8_class": "bolt",
+      "int8_logits": [
+        65,
+        -1,
+        -77
+      ],
+      "agree": true,
+      "roi_sha256": "4cfc6097c3b6a4e4e9b3d6037abb1dcd9b511419b06a44b9d1a2dfb0f1c4c64a"
+    }
+  ]
+}
