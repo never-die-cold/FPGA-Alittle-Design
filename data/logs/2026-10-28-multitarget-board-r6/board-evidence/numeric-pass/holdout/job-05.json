@@ -1,0 +1,673 @@
+{
+  "job": 5,
+  "count": 10,
+  "checks": [
+    {
+      "target_id": 0,
+      "case": "scene_00",
+      "expected_logits": [
+        -75,
+        52,
+        8
+      ],
+      "actual": {
+        "target_id": 0,
+        "class": "nut",
+        "score": 0.17322305978576005,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          181,
+          52,
+          8
+        ],
+        "margin_q": 44,
+        "score_q15": 5676
+      },
+      "match": true
+    },
+    {
+      "target_id": 1,
+      "case": "scene_01",
+      "expected_logits": [
+        61,
+        -39,
+        -30
+      ],
+      "actual": {
+        "target_id": 1,
+        "class": "bolt",
+        "score": 0.358256782738731,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          61,
+          217,
+          226
+        ],
+        "margin_q": 91,
+        "score_q15": 11739
+      },
+      "match": true
+    },
+    {
+      "target_id": 2,
+      "case": "scene_02",
+      "expected_logits": [
+        -83,
+        7,
+        70
+      ],
+      "actual": {
+        "target_id": 2,
+        "class": "washer",
+        "score": 0.24802392651142918,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          173,
+          7,
+          70
+        ],
+        "margin_q": 63,
+        "score_q15": 8127
+      },
+      "match": true
+    },
+    {
+      "target_id": 3,
+      "case": "scene_03",
+      "expected_logits": [
+        -83,
+        39,
+        31
+      ],
+      "actual": {
+        "target_id": 3,
+        "class": "nut",
+        "score": 0.0314951017792291,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          173,
+          39,
+          31
+        ],
+        "margin_q": 8,
+        "score_q15": 1032
+      },
+      "match": true
+    },
+    {
+      "target_id": 4,
+      "case": "scene_04",
+      "expected_logits": [
+        -12,
+        21,
+        -23
+      ],
+      "actual": {
+        "target_id": 4,
+        "class": "nut",
+        "score": 0.12991729483932005,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          244,
+          21,
+          233
+        ],
+        "margin_q": 33,
+        "score_q15": 4257
+      },
+      "match": true
+    },
+    {
+      "target_id": 5,
+      "case": "scene_05",
+      "expected_logits": [
+        -44,
+        0,
+        36
+      ],
+      "actual": {
+        "target_id": 5,
+        "class": "washer",
+        "score": 0.14172795800653096,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          212,
+          0,
+          36
+        ],
+        "margin_q": 36,
+        "score_q15": 4644
+      },
+      "match": true
+    },
+    {
+      "target_id": 6,
+      "case": "scene_06",
+      "expected_logits": [
+        41,
+        -22,
+        -28
+      ],
+      "actual": {
+        "target_id": 6,
+        "class": "bolt",
+        "score": 0.24802392651142918,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          41,
+          234,
+          228
+        ],
+        "margin_q": 63,
+        "score_q15": 8127
+      },
+      "match": true
+    },
+    {
+      "target_id": 7,
+      "case": "scene_07",
+      "expected_logits": [
+        23,
+        -16,
+        -17
+      ],
+      "actual": {
+        "target_id": 7,
+        "class": "bolt",
+        "score": 0.15353862117374187,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          23,
+          240,
+          239
+        ],
+        "margin_q": 39,
+        "score_q15": 5031
+      },
+      "match": true
+    },
+    {
+      "target_id": 8,
+      "case": "scene_08",
+      "expected_logits": [
+        -35,
+        29,
+        -7
+      ],
+      "actual": {
+        "target_id": 8,
+        "class": "nut",
+        "score": 0.14172795800653096,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          221,
+          29,
+          249
+        ],
+        "margin_q": 36,
+        "score_q15": 4644
+      },
+      "match": true
+    },
+    {
+      "target_id": 9,
+      "case": "scene_00",
+      "expected_logits": [
+        -75,
+        52,
+        8
+      ],
+      "actual": {
+        "target_id": 9,
+        "class": "nut",
+        "score": 0.17322305978576005,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          181,
+          52,
+          8
+        ],
+        "margin_q": 44,
+        "score_q15": 5676
+      },
+      "match": true
+    }
+  ],
+  "result": {
+    "targets": [
+      {
+        "target_id": 0,
+        "class": "nut",
+        "score": 0.17322305978576005,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          181,
+          52,
+          8
+        ],
+        "margin_q": 44,
+        "score_q15": 5676
+      },
+      {
+        "target_id": 1,
+        "class": "bolt",
+        "score": 0.358256782738731,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          61,
+          217,
+          226
+        ],
+        "margin_q": 91,
+        "score_q15": 11739
+      },
+      {
+        "target_id": 2,
+        "class": "washer",
+        "score": 0.24802392651142918,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          173,
+          7,
+          70
+        ],
+        "margin_q": 63,
+        "score_q15": 8127
+      },
+      {
+        "target_id": 3,
+        "class": "nut",
+        "score": 0.0314951017792291,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          173,
+          39,
+          31
+        ],
+        "margin_q": 8,
+        "score_q15": 1032
+      },
+      {
+        "target_id": 4,
+        "class": "nut",
+        "score": 0.12991729483932005,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          244,
+          21,
+          233
+        ],
+        "margin_q": 33,
+        "score_q15": 4257
+      },
+      {
+        "target_id": 5,
+        "class": "washer",
+        "score": 0.14172795800653096,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          212,
+          0,
+          36
+        ],
+        "margin_q": 36,
+        "score_q15": 4644
+      },
+      {
+        "target_id": 6,
+        "class": "bolt",
+        "score": 0.24802392651142918,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          41,
+          234,
+          228
+        ],
+        "margin_q": 63,
+        "score_q15": 8127
+      },
+      {
+        "target_id": 7,
+        "class": "bolt",
+        "score": 0.15353862117374187,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          23,
+          240,
+          239
+        ],
+        "margin_q": 39,
+        "score_q15": 5031
+      },
+      {
+        "target_id": 8,
+        "class": "nut",
+        "score": 0.14172795800653096,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          221,
+          29,
+          249
+        ],
+        "margin_q": 36,
+        "score_q15": 4644
+      },
+      {
+        "target_id": 9,
+        "class": "nut",
+        "score": 0.17322305978576005,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          181,
+          52,
+          8
+        ],
+        "margin_q": 44,
+        "score_q15": 5676
+      }
+    ],
+    "decision": {
+      "verdict": "RECHECK",
+      "expected": {
+        "bolt": 3,
+        "nut": 3,
+        "washer": 3
+      },
+      "actual": {
+        "bolt": 3,
+        "nut": 5,
+        "washer": 2
+      },
+      "delta": {
+        "bolt": 0,
+        "nut": 2,
+        "washer": -1
+      },
+      "missing": {
+        "bolt": 0,
+        "nut": 0,
+        "washer": 1
+      },
+      "extra": {
+        "bolt": 0,
+        "nut": 2,
+        "washer": 0
+      },
+      "reasons": [
+        "low_score"
+      ]
+    },
+    "trace": {
+      "backend": "MMIO",
+      "cfg_seq": 5,
+      "result_seq": 5,
+      "expected_seq": 5,
+      "accepted": true,
+      "unconsumed": true,
+      "error_code": 0,
+      "work_order_rev": 1,
+      "job_id": 5,
+      "capture_id": 5,
+      "source_config_id": 1,
+      "status": 6373,
+      "polls": 43,
+      "elapsed_ms": 95.473,
+      "fw": {
+        "result_seq": 5,
+        "reasons": 4,
+        "verdict_id": 3,
+        "verdict": "RECHECK",
+        "actual": [
+          3,
+          5,
+          2
+        ],
+        "reasons_names": [
+          "low_score"
+        ]
+      },
+      "ps_decision": {
+        "verdict": "RECHECK",
+        "expected": {
+          "bolt": 3,
+          "nut": 3,
+          "washer": 3
+        },
+        "actual": {
+          "bolt": 3,
+          "nut": 5,
+          "washer": 2
+        },
+        "delta": {
+          "bolt": 0,
+          "nut": 2,
+          "washer": -1
+        },
+        "missing": {
+          "bolt": 0,
+          "nut": 0,
+          "washer": 1
+        },
+        "extra": {
+          "bolt": 0,
+          "nut": 2,
+          "washer": 0
+        },
+        "reasons": [
+          "low_score"
+        ]
+      },
+      "targets": [
+        {
+          "class_id": 1,
+          "valid": 1,
+          "low_conf": 1,
+          "error": 0,
+          "logits": [
+            181,
+            52,
+            8
+          ],
+          "score_q15": 5676,
+          "margin_q": 44
+        },
+        {
+          "class_id": 0,
+          "valid": 1,
+          "low_conf": 1,
+          "error": 0,
+          "logits": [
+            61,
+            217,
+            226
+          ],
+          "score_q15": 11739,
+          "margin_q": 91
+        },
+        {
+          "class_id": 2,
+          "valid": 1,
+          "low_conf": 1,
+          "error": 0,
+          "logits": [
+            173,
+            7,
+            70
+          ],
+          "score_q15": 8127,
+          "margin_q": 63
+        },
+        {
+          "class_id": 1,
+          "valid": 1,
+          "low_conf": 1,
+          "error": 0,
+          "logits": [
+            173,
+            39,
+            31
+          ],
+          "score_q15": 1032,
+          "margin_q": 8
+        },
+        {
+          "class_id": 1,
+          "valid": 1,
+          "low_conf": 1,
+          "error": 0,
+          "logits": [
+            244,
+            21,
+            233
+          ],
+          "score_q15": 4257,
+          "margin_q": 33
+        },
+        {
+          "class_id": 2,
+          "valid": 1,
+          "low_conf": 1,
+          "error": 0,
+          "logits": [
+            212,
+            0,
+            36
+          ],
+          "score_q15": 4644,
+          "margin_q": 36
+        },
+        {
+          "class_id": 0,
+          "valid": 1,
+          "low_conf": 1,
+          "error": 0,
+          "logits": [
+            41,
+            234,
+            228
+          ],
+          "score_q15": 8127,
+          "margin_q": 63
+        },
+        {
+          "class_id": 0,
+          "valid": 1,
+          "low_conf": 1,
+          "error": 0,
+          "logits": [
+            23,
+            240,
+            239
+          ],
+          "score_q15": 5031,
+          "margin_q": 39
+        },
+        {
+          "class_id": 1,
+          "valid": 1,
+          "low_conf": 1,
+          "error": 0,
+          "logits": [
+            221,
+            29,
+            249
+          ],
+          "score_q15": 4644,
+          "margin_q": 36
+        },
+        {
+          "class_id": 1,
+          "valid": 1,
+          "low_conf": 1,
+          "error": 0,
+          "logits": [
+            181,
+            52,
+            8
+          ],
+          "score_q15": 5676,
+          "margin_q": 44
+        }
+      ],
+      "perf_cycles": 405080,
+      "dma_bytes": 40960,
+      "events": [
+        {
+          "kind": "consume",
+          "result_seq": 4,
+          "status_before": 6373,
+          "status_after": 97
+        },
+        {
+          "kind": "model_load",
+          "crc32": 2805915865,
+          "bytes": 36032,
+          "sim_reported": null
+        }
+      ]
+    },
+    "result_seq": 5,
+    "cfg_seq": 5
+  },
+  "pass": true
+}

@@ -1,0 +1,268 @@
+{
+  "files": [
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028/golden-console.log",
+      "path": "board-evidence/attempt-0/golden-console.log",
+      "bytes": 541,
+      "sha256": "d07159514564a84ee7c138ccfd5e0605ed49645de4e24fdc921a615b9d1ddeb5"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028/previous-service.txt",
+      "path": "board-evidence/attempt-0/previous-service.txt",
+      "bytes": 259,
+      "sha256": "2cb487068ef9cdbce5f455a06ec459628c16bbf6a3fb8986cfd7d8af5e3e5b26"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028/previous-status.json",
+      "path": "board-evidence/attempt-0/previous-status.json",
+      "bytes": 156,
+      "sha256": "a18f4ba2f742989aa96a8c71ab3e9f2c602e8a8381a6d1161fb0767c8f294e27"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r1/mixed/job-03.json",
+      "path": "board-evidence/attempt-1/mixed/job-03.json",
+      "bytes": 12888,
+      "sha256": "381f4e93de24a4842782e35244f258e5f7d03f49d59493825ffba1b9df6a360a"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r1/mixed/failure.json",
+      "path": "board-evidence/attempt-1/mixed/failure.json",
+      "bytes": 260,
+      "sha256": "7750a3634a39cdf5a4c0f76f9260479d7dc9f153df1394232155b9a4fa65af74"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r1/mixed/job-01.json",
+      "path": "board-evidence/attempt-1/mixed/job-01.json",
+      "bytes": 3174,
+      "sha256": "db79126482496a3d70a4299dd093335c08628be048d1329772aa01c497c5b658"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r1/mixed/job-02.json",
+      "path": "board-evidence/attempt-1/mixed/job-02.json",
+      "bytes": 5449,
+      "sha256": "3601d3e16091464462a478f1fdac2df2c9d9af5d21919cbcd6f93c1b3821f305"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r1/mixed/job-04.json",
+      "path": "board-evidence/attempt-1/mixed/job-04.json",
+      "bytes": 12888,
+      "sha256": "eb5b451c96e92b1439efb075ca506849d7152b0daf5f904c68f15990bb96b994"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r1/golden-roi_001.json",
+      "path": "board-evidence/attempt-1/golden-roi_001.json",
+      "bytes": 319,
+      "sha256": "7805d7526e091b3f3816ed22aa62c650f12f4570131a3839463bc56eb976250a"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r1/golden-console.log",
+      "path": "board-evidence/attempt-1/golden-console.log",
+      "bytes": 567,
+      "sha256": "9d00a998535884b55f4ad5e06c1b03b64d6d9f10f5547a6072d67c08f1239be5"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r1/mixed-console.log",
+      "path": "board-evidence/attempt-1/mixed-console.log",
+      "bytes": 951,
+      "sha256": "22f09334828f69fd993322ecccc26ab8fd4416e7ef1e831ee406175848bc421c"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r2/mixed/job-05.json",
+      "path": "board-evidence/numeric-pass/mixed/job-05.json",
+      "bytes": 12888,
+      "sha256": "ffd4a33366c49eef80f08fd976de29708cea88848ec4c742774892419eb9d9c5"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r2/mixed/job-03.json",
+      "path": "board-evidence/numeric-pass/mixed/job-03.json",
+      "bytes": 12887,
+      "sha256": "d8996a153642a32f81fcc010002737cc9953de0d1d66521781cb1233ca4b2584"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r2/mixed/job-06.json",
+      "path": "board-evidence/numeric-pass/mixed/job-06.json",
+      "bytes": 12888,
+      "sha256": "fc9878c4c3ee6e6d5ab40d7b89071d604ba420ee19d7180517fd02b9795dbbd0"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r2/mixed/summary.json",
+      "path": "board-evidence/numeric-pass/mixed/summary.json",
+      "bytes": 371,
+      "sha256": "4e630a1318d50c63258c34367b84e4fa95aad38dc91e51b0e7bebbe2f48bd076"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r2/mixed/job-01.json",
+      "path": "board-evidence/numeric-pass/mixed/job-01.json",
+      "bytes": 3174,
+      "sha256": "0c2737755399c0a778ddd3f477b0af79f6919a7ac29b45d0a2bcabf9383eceb0"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r2/mixed/job-02.json",
+      "path": "board-evidence/numeric-pass/mixed/job-02.json",
+      "bytes": 5449,
+      "sha256": "0201b0b872dcf037a882e6989c0e2f156045f750edc93912e384092580039093"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r2/mixed/job-04.json",
+      "path": "board-evidence/numeric-pass/mixed/job-04.json",
+      "bytes": 12888,
+      "sha256": "105e62ae4b4b261e79c5eff029182ce2e4b46f0d15159c496ba593dd0cd30133"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r2/holdout/job-05.json",
+      "path": "board-evidence/numeric-pass/holdout/job-05.json",
+      "bytes": 12853,
+      "sha256": "c76e6ff6ae0c4056e63b4ede1da44a6b5be3ccae7b9c83c7bd17244bd4f855eb"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r2/holdout/job-03.json",
+      "path": "board-evidence/numeric-pass/holdout/job-03.json",
+      "bytes": 11797,
+      "sha256": "ff901e4451ec705b3c115a61ae7a041f3ac340ed6e75de6c6edd5aa7bffc5615"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r2/holdout/job-06.json",
+      "path": "board-evidence/numeric-pass/holdout/job-06.json",
+      "bytes": 11797,
+      "sha256": "dfd967e57d3990eee6b865378a542769d660b349def33eea8ff3507ce1b9e2a8"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r2/holdout/summary.json",
+      "path": "board-evidence/numeric-pass/holdout/summary.json",
+      "bytes": 371,
+      "sha256": "d57ae34d8dd942b29b9e4040aa1dc83c156ff176a1362575e56ac1b174c0d8b0"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r2/holdout/job-01.json",
+      "path": "board-evidence/numeric-pass/holdout/job-01.json",
+      "bytes": 3164,
+      "sha256": "1074b8e13e48c501a02fbd7bc7476624cceecd3d99db96cf42ea53990631aa7b"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r2/holdout/job-02.json",
+      "path": "board-evidence/numeric-pass/holdout/job-02.json",
+      "bytes": 5431,
+      "sha256": "7f0b2542cac34b6dd4fb5a1389c957a2f091f11c1b0985e87ac6e8429dcfda2f"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r2/holdout/job-04.json",
+      "path": "board-evidence/numeric-pass/holdout/job-04.json",
+      "bytes": 11797,
+      "sha256": "bb6396d3c2ca9cd989a9311da2b2345f8005a32c8e2d24b36b2b3b2d8abcac18"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r2/mixed-console.log",
+      "path": "board-evidence/numeric-pass/mixed-console.log",
+      "bytes": 742,
+      "sha256": "1c390b4fdf92be0e8abfef2fec902645a4d0dc833542c2961df69279bbaeafc6"
+    },
+    {
+      "source": "/home/xilinx/cop-board-r6-20261028-r2/holdout-console.log",
+      "path": "board-evidence/numeric-pass/holdout-console.log",
+      "bytes": 739,
+      "sha256": "949aab3f968d6cf412a3b55cdb9cba9d269cddee22712059ba1f9cc33c4ac708"
+    },
+    {
+      "source": "/home/xilinx/cop-live-r6-20261028/hardware.json",
+      "path": "board-evidence/live/hardware.json",
+      "bytes": 610,
+      "sha256": "6959a4c2611a95821192880586eeb8a0e8cf63bd62a0fe6301e6404567d3515b"
+    },
+    {
+      "source": "/home/xilinx/cop-live-r6-20261028/service.log",
+      "path": "board-evidence/live/service.log",
+      "bytes": 298,
+      "sha256": "cf8fb5faa8a2d9ccaf43e94300d3dbb0d1f80ecbe5bef56cb2e9d5212a45f050"
+    },
+    {
+      "source": "/home/xilinx/cop-live-r6-20261028/1960f427/check-000001/capture.png",
+      "path": "board-evidence/live/1960f427/check-000001/capture.png",
+      "bytes": 901076,
+      "sha256": "358ec85dde182945afd9b00e70aa854885ca3acd480fe72d2fcd28eaa7921a1d"
+    },
+    {
+      "source": "/home/xilinx/cop-live-r6-20261028/1960f427/check-000001/packet.json",
+      "path": "board-evidence/live/1960f427/check-000001/packet.json",
+      "bytes": 1394,
+      "sha256": "28a5896972a61aa8f014e21e862f126901e8f5665e8acd1936be8d162fe1ba4e"
+    },
+    {
+      "source": "/home/xilinx/cop-live-r6-20261028/1960f427/check-000001/capture-dma.json",
+      "path": "board-evidence/live/1960f427/check-000001/capture-dma.json",
+      "bytes": 2704,
+      "sha256": "1c11c2713c20e25f411a90a4a200cf27a9984a131f81d0c4f1f361cfcc97229a"
+    },
+    {
+      "source": "/home/xilinx/cop-live-r6-20261028/1960f427/check-000001/cop_trace.json",
+      "path": "board-evidence/live/1960f427/check-000001/cop_trace.json",
+      "bytes": 783,
+      "sha256": "b8e8923c7ab971bd6ee26fd350ac4dfe515d9c93f24030da88bf5148908932d3"
+    },
+    {
+      "source": "/home/xilinx/cop-live-r6-20261028/1960f427/check-000001/capture.sha256",
+      "path": "board-evidence/live/1960f427/check-000001/capture.sha256",
+      "bytes": 65,
+      "sha256": "33ef29128060b5b5d0d2f2fcdb33c38c13ebbc843448ab22989fbe32e224f9c3"
+    },
+    {
+      "source": "/home/xilinx/cop-live-r6-20261028/1960f427/session.json",
+      "path": "board-evidence/live/1960f427/session.json",
+      "bytes": 205,
+      "sha256": "24b9ab9f1182b1bf36cf0384103d30ac7849d2989c0592f2cb4f4665139158f6"
+    },
+    {
+      "source": "/home/xilinx/cop-live-r6-20261028/1960f427/latest_packet.json",
+      "path": "board-evidence/live/1960f427/latest_packet.json",
+      "bytes": 1394,
+      "sha256": "79ff5e79cf0fff050d3d41539a6f9647114705735e7b9b3e32cc2c91d9e599a1"
+    },
+    {
+      "source": "/home/xilinx/cop-live-r6-20261028/1960f427/check-000002/capture.png",
+      "path": "board-evidence/live/1960f427/check-000002/capture.png",
+      "bytes": 900929,
+      "sha256": "0c1989218711bed63c4d7f5ed85289530062cb56d5c4415518ec036eb8ef8a7c"
+    },
+    {
+      "source": "/home/xilinx/cop-live-r6-20261028/1960f427/check-000002/packet.json",
+      "path": "board-evidence/live/1960f427/check-000002/packet.json",
+      "bytes": 1394,
+      "sha256": "79ff5e79cf0fff050d3d41539a6f9647114705735e7b9b3e32cc2c91d9e599a1"
+    },
+    {
+      "source": "/home/xilinx/cop-live-r6-20261028/1960f427/check-000002/capture-dma.json",
+      "path": "board-evidence/live/1960f427/check-000002/capture-dma.json",
+      "bytes": 2736,
+      "sha256": "60e9a008d827212f57c7fdf0258619bea42cb034d2c5e1e3cbbafad7333308bf"
+    },
+    {
+      "source": "/home/xilinx/cop-live-r6-20261028/1960f427/check-000002/cop_trace.json",
+      "path": "board-evidence/live/1960f427/check-000002/cop_trace.json",
+      "bytes": 783,
+      "sha256": "6359ab0819254a07d76ef257a780fe13a4d74ce826df0bfc01f77857e2142366"
+    },
+    {
+      "source": "/home/xilinx/cop-live-r6-20261028/1960f427/check-000002/capture.sha256",
+      "path": "board-evidence/live/1960f427/check-000002/capture.sha256",
+      "bytes": 65,
+      "sha256": "aaba7d4f80c5d685826640b2477161a3b55747605b384a7d2e9b9a5ef4174441"
+    },
+    {
+      "source": "/home/xilinx/cop-live-r6-20261028/service.pid",
+      "path": "board-evidence/live/service.pid",
+      "bytes": 6,
+      "sha256": "0978c4a2eb5d842fb6a9919e70ee21421c96f099dd786010d73aa99d9833e178"
+    },
+    {
+      "source": "/home/xilinx/cop-live-r6-20261028/manual-check.json",
+      "path": "board-evidence/live/manual-check.json",
+      "bytes": 1394,
+      "sha256": "7ca898129ebcb15e209a0aa0e80027da80bdf155512fdd62f8a2ca439d44d04d"
+    },
+    {
+      "source": "/home/xilinx/cop-live-r6-20261028/status.json",
+      "path": "board-evidence/live/status.json",
+      "bytes": 156,
+      "sha256": "518ee1240f73d83fb4d60a96f149f41dd8fdc607689d4305df244e4ec7c832d2"
+    }
+  ]
+}

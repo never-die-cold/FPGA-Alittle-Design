@@ -29,15 +29,19 @@ def main():
     listing = subprocess.run(
         ["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File",
          str(Path(__file__).with_name("list_dshow_video.ps1"))],
-        text=True, capture_output=True, check=True,
+        capture_output=True, check=True,
     )
-    matches = [int(line.split("\t", 1)[0]) for line in listing.stdout.splitlines()
+    try:
+        listing_stdout = listing.stdout.decode("utf-8")
+    except UnicodeDecodeError:
+        listing_stdout = listing.stdout.decode("gbk", errors="replace")
+    matches = [int(line.split("\t", 1)[0]) for line in listing_stdout.splitlines()
                if line.split("\t", 1)[-1] == "USB Video"]
     if len(matches) != 1:
-        raise RuntimeError(f"USB Video enumeration was ambiguous: {listing.stdout!r}")
+        raise RuntimeError(f"USB Video enumeration was ambiguous: {listing_stdout!r}")
     index = matches[0]
     output.mkdir(parents=True)
-    (output / "devices.txt").write_text(listing.stdout, encoding="utf-8")
+    (output / "devices.txt").write_text(listing_stdout, encoding="utf-8")
     cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
     if not cap.isOpened():
         raise RuntimeError(f"USB Video at DirectShow index {index} did not open")

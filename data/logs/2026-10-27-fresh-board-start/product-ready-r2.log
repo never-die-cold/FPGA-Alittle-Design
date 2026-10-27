@@ -1,0 +1,30 @@
+30d6fc34-e372-4b0e-b9de-e8f4617b40d6
+board_sequence=hwh_clocks,reconfigure_pl,wait_stable,status_check
+clock_topology=mmcm expected_cop_mhz=40.000000
+measured_fclk1_mhz=142.857143
+status_first_reads=0x00000001
+PRODUCT_SERVICE_READY {"engine": "COP_HW", "capture": "C01_PARK", "port": 8765, "order": {"bolt": 2, "nut": 4, "washer": 4}}
+{
+  "bit_sha256": "b2690b0aa69df36c1638b5b652ce8bcf0c97f2799d302b332f5bcd432c3313b3",
+  "payload_sha256": "a31a26f734796aa9867507ae5fea68581b314e2c8eb3aed1aee26075cdbd8736",
+  "model_id": 1244672593,
+  "model_status": "PROVISIONAL",
+  "order": {
+    "bolt": 2,
+    "nut": 4,
+    "washer": 4
+  },
+  "localization": {
+    "package": "/home/xilinx/cop-pkg-product-20261027-r1",
+    "root": "/home/xilinx/cop-live-fresh-20261027-r2",
+    "order": "2,4,4",
+    "min_score": 0.8,
+    "color_threshold": 20.0,
+    "min_area_ratio": 8e-05,
+    "background_mode": "local",
+    "host": "0.0.0.0",
+    "port": 8765
+  }
+}  PID STAT ELAPSED COMMAND
+ 1407 SL        33 python3 -u /home/xilinx/cop-app-product-20261027-r1/src/pynq_host/cop_product_service.py --package /home/xilinx/cop-pkg-product-20261027-r1 --root /home/xilinx/cop-live-fresh-20261027-r2 --order 2,4,4 --background-mode local --color-threshold 20 --min-score 0.8
+LISTEN 0      5            0.0.0.0:8765      0.0.0.0:*          

@@ -1,0 +1,37 @@
+INFO: [Common 17-3922] A valid Vivado Design Suite BASIC license has been detected. Your current license is active and will expire on 14-sep-2027.
+
+****** Vivado v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Wed Oct 28 01:51:12 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source sim/scripts/probe_vivado_project_init.tcl
+# puts "PROBE_VERSION=[version -short]"
+PROBE_VERSION=2026.1
+# puts "PROBE_PWD=[pwd]"
+PROBE_PWD=E:/Projects/FPGA-Alittle-Design
+# foreach name {TCLLIBPATH TCL_LIBRARY PYTHONHOME PYTHONPATH XILINX_LOCAL_USER_DATA APPDATA LOCALAPPDATA TEMP} {
+#     if {[info exists ::env($name)]} {puts "PROBE_ENV_$name=$::env($name)"}
+# }
+PROBE_ENV_TCL_LIBRARY=D:/Vivado_downloads/2026.1/Vivado/tps/tcl/tcl8.6
+PROBE_ENV_PYTHONHOME=D:/Vivado_downloads/2026.1/Vivado\tps\win64\python-3.13.0
+PROBE_ENV_PYTHONPATH=D:/Vivado_downloads/2026.1/Vivado\tps\win64\python-3.13.0;D:/Vivado_downloads/2026.1/Vivado\tps\win64\python-3.13.0\bin;D:/Vivado_downloads/2026.1/Vivado\tps\win64\python-3.13.0\lib;D:/Vivado_downloads/2026.1/Vivado\tps\win64\python-3.13.0\lib\site-packages;D:/Vivado_downloads/2026.1/Vivado/lib/win64.o;
+PROBE_ENV_APPDATA=C:\Users\ASUS\AppData\Roaming
+PROBE_ENV_LOCALAPPDATA=C:\Users\ASUS\AppData\Local
+PROBE_ENV_TEMP=C:\Users\ASUS\AppData\Local\Temp
+# if {[catch {create_project -in_memory -part xc7z020clg400-1} message options]} {
+#     puts stderr "PROJECT_INIT_FAILED=$message"
+#     puts stderr [dict get $options -errorinfo]
+#     if {[llength [info procs ::tclapp::load_apps]]} {puts [info body ::tclapp::load_apps]}
+#     exit 1
+# }
+create_project: Time (s): cpu = 00:00:09 ; elapsed = 00:00:08 . Memory (MB): peak = 612.895 ; gain = 269.477
+# puts "PROJECT_INIT_PASS"
+PROJECT_INIT_PASS
+# if {[llength [info procs ::tclapp::load_apps]]} {puts [info body ::tclapp::load_apps]}
+# close_project
+# exit 0
+INFO: [Common 17-206] Exiting Vivado at Wed Oct 28 01:51:28 2026...

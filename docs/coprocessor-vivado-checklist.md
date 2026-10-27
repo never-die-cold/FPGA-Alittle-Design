@@ -9,7 +9,11 @@ WSL 仍不具备 Vivado，不能在此重现综合实现。
 当前板顶只支持 `target_id == roi_index` 恒等映射；任意 `TARGET_DESC_ADDR` 描述表接入
 是发布前 OPEN，即使 Tcl 门禁通过也不代表该功能已验收。
 
-## JL 执行命令
+## JL 执行命令与变体
+
+合并后的源码必须使用全新 `COP_BUILD_NAME` 重跑；不得用旧目录名回放历史报告。A/B 文件归属、
+隔离和命令见 [`coprocessor-build-variants.md`](coprocessor-build-variants.md)。不设置
+`COP_WITH_VIDEO` 是 A（首网包）；只有精确设置 `COP_WITH_VIDEO=1` 才是 B（J07 实验变体）。
 
 JL 的 Windows 主机没有 RISC-V 工具链，因此本次不使用 `run_pynq_cop_gate.ps1`。从仓库根目录
 打开 PowerShell，先显式指定真实 Python，避免 `find_gate_python` 误选 WindowsApps 的
@@ -17,9 +21,14 @@ JL 的 Windows 主机没有 RISC-V 工具链，因此本次不使用 `run_pynq_c
 
 ```powershell
 $env:COP_PYTHON="C:\Microsoft VS Code\anaconda\python.exe"
+$env:COP_BUILD_NAME="pynq_cop_a_20261027_r1"
+Remove-Item Env:COP_WITH_VIDEO -ErrorAction SilentlyContinue
 & "D:\vivado\2026.1\Vivado\bin\vivado.bat" -mode batch `
   -source build\build_pynq_cop_gate.tcl
 ```
+
+本轮只准备命令：A 的新 WNS/资源/CDC/DRC 和 bit/hwh 均为 **UNVERIFIED**，必须等 JL 实跑；
+B 不进入当前 NC 包，也不得借用 A 的报告或历史数字。
 
 `run_pynq_cop_gate.ps1` 会先用 Windows RISC-V GCC/make 重建固件；仅在这些工具存在时使用。
 无工具链时必须确认仓库内 `cop_job.hex` 已由受控构建生成，再走上述 Tcl 的前置首字/字数检查，
@@ -84,7 +93,7 @@ LATCHES=0、DRC_BLOCKING=0；CDC-15=73、CDC-3=12、CDC-6=7，均命中 allowlis
 
 | 条目 | ID / Severity | 路径正则（摘要） | 单条上限 | 允许理由 |
 |:---|:---|:---|---:|:---|
-| `single_sync` | CDC-3 / Info | `pl/inst/{axil_cdc named toggle/response sync, axis_cdc gray sync, dma_* sync}` | 12 | 显式命名的两级 `ASYNC_REG` 单比特同步 |
+| `single_sync` | CDC-3 / Info | `pl/inst/{axil_cdc named toggle/response sync, axis_cdc gray sync, dma_* sync}` | 12 | AXI toggle 控制为三级；其余为两级；报告路径均落首级且名称受限 |
 | `gpio_sync` | CDC-3 / Info | `adapter/error_o_reg -> dma_control/.../INPUT_DOUBLE_REGS5/syncstages_ff_reg` | 1 | 厂商 AXI GPIO 内置两级同步器 |
 | `axil_payload` | CDC-6 / Warning | `pl/inst/axil_cdc/(ar_m1\|aw_m1\|wd_m1\|ws_m1\|rdata_s1)_reg` | 7 | 源载荷在 toggle/ack 完成前保持，目标域两拍采样 |
 | `fifo_rgray` | CDC-6 / Warning | `pl/inst/axis_cdc/(rgray_s1\|wgray_m1)_reg` | 5 | Gray 指针每次只变一位，经两级 `ASYNC_REG` 同步 |

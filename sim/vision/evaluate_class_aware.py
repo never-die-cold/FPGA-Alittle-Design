@@ -1,4 +1,4 @@
-"""Class-aware test of YOLO or OpenCV localization plus the small crop CNN."""
+"""Class-aware evaluation of OpenCV localization with crop CNN or HOG."""
 
 import argparse
 import json
@@ -50,9 +50,8 @@ def count_matches(predicted, actual, classes, threshold=0.5):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dataset", type=Path, required=True)
-    parser.add_argument("--engine", choices=("hybrid", "hog", "yolo"), required=True)
+    parser.add_argument("--engine", choices=("hybrid", "hog"), required=True)
     parser.add_argument("--weights", type=Path, required=True)
-    parser.add_argument("--confidence", type=float, default=0.55)
     parser.add_argument("--class-confidence", type=float, default=0.0,
                         help="reject hybrid crop classes below this softmax score")
     parser.add_argument("--color-threshold", type=float, default=22)
@@ -61,10 +60,7 @@ def main():
     args = parser.parse_args()
     torch.set_num_threads(4)
     cv2.setNumThreads(1)
-    if args.engine == "yolo":
-        from ultralytics import YOLO
-        model = YOLO(str(args.weights))
-    elif args.engine == "hog":
+    if args.engine == "hog":
         model = cv2.ml.SVM_load(str(args.weights))
         hog = cv2.HOGDescriptor((64,64), (16,16), (8,8), (8,8), 9)
     else:
@@ -78,11 +74,7 @@ def main():
         image = cv2.imread(str(path)); height, width = image.shape[:2]
         actual = truths(args.dataset / "labels" / f"{path.stem}.txt", width, height)
         start = time.perf_counter()
-        if args.engine == "yolo":
-            result = model.predict(image, verbose=False, conf=args.confidence)[0]
-            predicted = [(int(label), tuple(map(int, box))) for box, label in
-                         zip(result.boxes.xyxy.cpu().tolist(), result.boxes.cls.cpu().tolist())]
-        elif args.engine == "hybrid":
+        if args.engine == "hybrid":
             boxes = detect_boxes(image, args.color_threshold, args.min_area_ratio)
             tensors = [crop_tensor(image, box, input_size, state.get('preprocess_mode', 'opposite')) for box in boxes]
             if tensors:

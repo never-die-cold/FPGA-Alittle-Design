@@ -122,6 +122,13 @@ def main():
     loader.set_and_measure_clock(args.output, 3, api=fake_pynq, sleeper=lambda _: None)
     assert Clocks.fclk1_mhz == 40.0
     assert events.index("overlay") < events.index("reset_assert") < events.index("reset_release")
+    for actual, statuses, marker in ((40.000001, [1], "FCLK1_MISMATCH"),
+                                     (40.0, [0, 1], "FIRST_STATUS_INVALID")):
+        try:
+            loader.validate_clock_status(actual, statuses)
+            raise AssertionError("invalid clock/status evidence was accepted")
+        except loader.LoaderError as error:
+            assert marker in str(error) and "next=" in str(error)
     class NoAccess:
         def __init__(self, *args): raise AssertionError("guard failure touched cop MMIO")
     try:

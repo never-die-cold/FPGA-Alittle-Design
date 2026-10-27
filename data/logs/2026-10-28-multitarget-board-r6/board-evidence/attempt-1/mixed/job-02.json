@@ -1,0 +1,288 @@
+{
+  "job": 2,
+  "count": 3,
+  "checks": [
+    {
+      "target_id": 0,
+      "case": "scene_00",
+      "expected_logits": [
+        46,
+        -14,
+        -42
+      ],
+      "actual": {
+        "target_id": 0,
+        "class": "bolt",
+        "score": 0.23621326334421827,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          46,
+          242,
+          214
+        ],
+        "margin_q": 60,
+        "score_q15": 7740
+      },
+      "match": true
+    },
+    {
+      "target_id": 1,
+      "case": "scene_01",
+      "expected_logits": [
+        -54,
+        43,
+        -4
+      ],
+      "actual": {
+        "target_id": 1,
+        "class": "nut",
+        "score": 0.18503372295297096,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          202,
+          43,
+          252
+        ],
+        "margin_q": 47,
+        "score_q15": 6063
+      },
+      "match": true
+    },
+    {
+      "target_id": 2,
+      "case": "scene_02",
+      "expected_logits": [
+        -96,
+        -2,
+        93
+      ],
+      "actual": {
+        "target_id": 2,
+        "class": "washer",
+        "score": 0.37400433362834556,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          160,
+          254,
+          93
+        ],
+        "margin_q": 95,
+        "score_q15": 12255
+      },
+      "match": true
+    }
+  ],
+  "result": {
+    "targets": [
+      {
+        "target_id": 0,
+        "class": "bolt",
+        "score": 0.23621326334421827,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          46,
+          242,
+          214
+        ],
+        "margin_q": 60,
+        "score_q15": 7740
+      },
+      {
+        "target_id": 1,
+        "class": "nut",
+        "score": 0.18503372295297096,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          202,
+          43,
+          252
+        ],
+        "margin_q": 47,
+        "score_q15": 6063
+      },
+      {
+        "target_id": 2,
+        "class": "washer",
+        "score": 0.37400433362834556,
+        "touches_border": false,
+        "valid": 1,
+        "low_conf": 1,
+        "error": 0,
+        "logits": [
+          160,
+          254,
+          93
+        ],
+        "margin_q": 95,
+        "score_q15": 12255
+      }
+    ],
+    "decision": {
+      "verdict": "RECHECK",
+      "expected": {
+        "bolt": 3,
+        "nut": 3,
+        "washer": 3
+      },
+      "actual": {
+        "bolt": 1,
+        "nut": 1,
+        "washer": 1
+      },
+      "delta": {
+        "bolt": -2,
+        "nut": -2,
+        "washer": -2
+      },
+      "missing": {
+        "bolt": 2,
+        "nut": 2,
+        "washer": 2
+      },
+      "extra": {
+        "bolt": 0,
+        "nut": 0,
+        "washer": 0
+      },
+      "reasons": [
+        "low_score"
+      ]
+    },
+    "trace": {
+      "backend": "MMIO",
+      "cfg_seq": 2,
+      "result_seq": 2,
+      "expected_seq": 2,
+      "accepted": true,
+      "unconsumed": true,
+      "error_code": 0,
+      "work_order_rev": 1,
+      "job_id": 2,
+      "capture_id": 2,
+      "source_config_id": 1,
+      "status": 6373,
+      "polls": 10,
+      "elapsed_ms": 22.883,
+      "fw": {
+        "result_seq": 2,
+        "reasons": 4,
+        "verdict_id": 3,
+        "verdict": "RECHECK",
+        "actual": [
+          1,
+          1,
+          1
+        ],
+        "reasons_names": [
+          "low_score"
+        ]
+      },
+      "ps_decision": {
+        "verdict": "RECHECK",
+        "expected": {
+          "bolt": 3,
+          "nut": 3,
+          "washer": 3
+        },
+        "actual": {
+          "bolt": 1,
+          "nut": 1,
+          "washer": 1
+        },
+        "delta": {
+          "bolt": -2,
+          "nut": -2,
+          "washer": -2
+        },
+        "missing": {
+          "bolt": 2,
+          "nut": 2,
+          "washer": 2
+        },
+        "extra": {
+          "bolt": 0,
+          "nut": 0,
+          "washer": 0
+        },
+        "reasons": [
+          "low_score"
+        ]
+      },
+      "targets": [
+        {
+          "class_id": 0,
+          "valid": 1,
+          "low_conf": 1,
+          "error": 0,
+          "logits": [
+            46,
+            242,
+            214
+          ],
+          "score_q15": 7740,
+          "margin_q": 60
+        },
+        {
+          "class_id": 1,
+          "valid": 1,
+          "low_conf": 1,
+          "error": 0,
+          "logits": [
+            202,
+            43,
+            252
+          ],
+          "score_q15": 6063,
+          "margin_q": 47
+        },
+        {
+          "class_id": 2,
+          "valid": 1,
+          "low_conf": 1,
+          "error": 0,
+          "logits": [
+            160,
+            254,
+            93
+          ],
+          "score_q15": 12255,
+          "margin_q": 95
+        }
+      ],
+      "perf_cycles": 405080,
+      "dma_bytes": 12288,
+      "events": [
+        {
+          "kind": "consume",
+          "result_seq": 1,
+          "status_before": 6373,
+          "status_after": 97
+        },
+        {
+          "kind": "model_load",
+          "crc32": 2805915865,
+          "bytes": 36032,
+          "sim_reported": null
+        }
+      ]
+    },
+    "result_seq": 2,
+    "cfg_seq": 2
+  },
+  "pass": true
+}

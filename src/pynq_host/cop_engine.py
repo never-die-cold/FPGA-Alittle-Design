@@ -20,6 +20,7 @@ import cop_regs as R
 from cop_driver import CopDriver, CopError, CopProtocolError, SimDmaPlane
 from cop_mmio_sim import CopSim, SimFaults, scripted_compute
 from inspection_rules import effective_policy, judge
+from vision_protocol import MAX_TARGETS
 
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "sim/vision"))
@@ -140,12 +141,16 @@ class CopEngine:
             decision = {**empty, "verdict": "RECHECK", "actual": None, "delta": None,
                         "missing": None, "extra": None, "reasons": ["target_limit"]}
             trace = {"kind": "target_limit", "simulated": self.simulated, "frame": frame_meta,
-                     "target_count": len(boxes), "policy_max": self.policy}
+                     "target_count": len(boxes), "policy_max": self.policy,
+                     "boxes": [list(box) for box in boxes]}
             self.last_trace = trace
             self._write_trace(round_dir, trace)
+            # The wire cannot carry >16 targets. Retain all candidates in the
+            # trace; an empty RECHECK list means counts are unavailable.
+            wire_boxes = boxes if len(boxes) <= MAX_TARGETS else []
             return {"status": "RECHECK",
                     "targets": [{"target_id": i, "bbox": list(box), "class": None,
-                                 "score": 0.0} for i, box in enumerate(boxes)],
+                                 "score": 0.0} for i, box in enumerate(wire_boxes)],
                     "decision": decision, "width": width, "height": height}
         if not boxes:
             # C03 §8 wants CHECK_FAIL with zero actuals for a valid empty scene.

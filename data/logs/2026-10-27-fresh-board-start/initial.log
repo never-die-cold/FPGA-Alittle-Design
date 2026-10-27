@@ -1,0 +1,20 @@
+30d6fc34-e372-4b0e-b9de-e8f4617b40d6
+ 22:18:28 up 2 min,  1 user,  load average: 3.25, 1.22, 0.45
+ExecMainStatus=0
+Id=bootpy.service
+ActiveState=inactive
+SubState=dead
+
+ExecMainStatus=0
+Id=fpga-vision-boot.service
+ActiveState=activating
+SubState=start
+b2690b0aa69df36c1638b5b652ce8bcf0c97f2799d302b332f5bcd432c3313b3  /home/xilinx/cop-pkg-product-20261027-r1/payload/pynq_cop_40mhz.bit
+5b54d888779410bd192cc8f45633c4a4620f489755e8fd801b040215c862aed0  /home/xilinx/cop-pkg-product-20261027-r1/payload/pynq_cop_40mhz.hwh
+total 16
+-rw-r--r-- 1 root   root   3389 Sep 22  2026 loaded.xclbin
+-rw-rw-r-- 1 xilinx xilinx 3446 Sep 22  2026 SHA256SUMS
+drwxrwxr-x 4 xilinx xilinx 4096 Sep 22  2026 sim
+drwxrwxr-x 3 xilinx xilinx 4096 Sep 22  2026 src
+  902       4 bash -c sudo -S -p '' cat /proc/sys/kernel/random/boot_id; uptime; systemctl show bootpy.service fpga-vision-boot.service -p Id -p ActiveState -p SubState -p ExecMainStatus; sha256sum /home/xilinx/cop-pkg-product-20261027-r1/payload/pynq_cop_40mhz.bit /home/xilinx/cop-pkg-product-20261027-r1/payload/pynq_cop_40mhz.hwh; ls -l /home/xilinx/cop-app-product-20261027-r1; ps -eo pid,etimes,args | grep -E "cop_product_service|vision_park_server"; ss -ltn | grep 8765
+  938       0 grep -E cop_product_service|vision_park_server

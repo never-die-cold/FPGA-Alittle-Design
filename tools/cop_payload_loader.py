@@ -141,6 +141,18 @@ def firmware_smoke(cop, timeout, sleeper=time.sleep):
         sleeper(0.05)
 
 
+def validate_clock_status(actual, values, expected_input=40.0):
+    tolerance = 0.0 if expected_input == 40.0 else 0.001
+    if abs(actual - expected_input) > tolerance:
+        raise LoaderError(f"FCLK1_MISMATCH: readback={actual:.6f} expected={expected_input:.6f}; "
+                          "next=apply the HWH clock plan then reload PL")
+    if not values or values[0] != STATUS["READY"]:
+        got = "missing" if not values else f"0x{values[0]:08x}"
+        raise LoaderError(f"FIRST_STATUS_INVALID: got={got} expected=0x00000001; next=reload PL and reset cop")
+    if any(value != STATUS["READY"] for value in values):
+        raise LoaderError("STATUS_UNSTABLE: every sample must be 0x00000001; next=capture reads and reset trace")
+
+
 def hwh_clock_plan(path):
     module = next((m for m in ET.parse(path).getroot().iter("MODULE")
                    if m.get("INSTANCE") == "cop_mmcm"), None)
@@ -167,15 +179,17 @@ def prepare_board(root, reads, smoke_timeout=None, api=None, sleeper=time.sleep)
     topology, expected_input = hwh_clock_plan(hwh)
     if topology == "direct":
         api.Clocks.fclk1_mhz = 40.0
-        if abs(float(api.Clocks.fclk1_mhz) - 40.0) > 0.001:
-            raise LoaderError("FCLK1 readback is not 40 MHz before PL reconfiguration")
+        if float(api.Clocks.fclk1_mhz) != 40.0:
+            raise LoaderError("FCLK1_MISMATCH before PL reload; next=set exactly 40.000000 MHz")
     overlay = api.Overlay(str(bit), download=True)
     if not overlay.is_loaded():
         raise LoaderError("PL reconfiguration did not reach loaded/done state")
     sleeper(0.05)
     actual = float(api.Clocks.fclk1_mhz)
-    if abs(actual - expected_input) > 0.001:
-        raise LoaderError(f"FCLK1={actual:.6f} differs from HWH input={expected_input:.6f} MHz")
+    tolerance = 0.0 if topology == "direct" else 0.001
+    if abs(actual - expected_input) > tolerance:
+        raise LoaderError(f"FCLK1_MISMATCH: readback={actual:.6f} expected={expected_input:.6f}; "
+                          "next=stop before cop MMIO and inspect the HWH clock plan")
     if topology == "direct":
         pulse_cop_reset(api.MMIO, sleeper)
     sleeper(0.01)
@@ -186,11 +200,10 @@ def prepare_board(root, reads, smoke_timeout=None, api=None, sleeper=time.sleep)
     print(f"clock_topology={topology} expected_cop_mhz=40.000000")
     print(f"measured_fclk1_mhz={actual:.6f}")
     print("status_first_reads=" + ",".join(f"0x{value:08x}" for value in values))
-    if any(value != STATUS["READY"] for value in values):
-        raise LoaderError("COP_NOT_READY: 0x0 is an invalid/reset cop domain; reconfigure PL before access")
+    validate_clock_status(actual, values, expected_input)
     if smoke_timeout is not None:
         firmware_smoke(cop, smoke_timeout, sleeper)
-    return cop, actual
+    return cop, actual, values
 
 
 def set_and_measure_clock(root, reads, smoke_timeout=2.0, api=None, sleeper=time.sleep):
@@ -318,7 +331,7 @@ def read_result(cop, expected, sequence_before, timeout):
 def run_board(args):
     manifest, payload, roi, expected, caps = preflight(args.package, args.case)
     from pynq import MMIO, allocate
-    cop, actual = prepare_board(args.package, 1)
+    cop, actual, status_reads = prepare_board(args.package, 1)
     dma, gpio = MMIO(DMA_BASE, 0x10000), MMIO(GPIO_BASE, 0x10000)
     initial_status = cop.read(REG["STATUS"])
     if initial_status & STATUS["UNCONSUMED"]:
@@ -336,6 +349,8 @@ def run_board(args):
         firmware_smoke(cop, min(args.timeout, 2.0))
         measured = read_result(cop, expected, result_sequence_before, args.timeout)
         measured.update({"case": args.case, "fclk1_mhz": actual,
+                         "status_first_reads": status_reads,
+                         "error_code": cop.read(REG["ERROR_CODE"]),
                          "payload_bytes": len(payload), "payload_crc32": manifest["crc32"],
                          "dma_stream_bits": caps["stream_bits"]})
         output = Path(args.measurement).resolve()

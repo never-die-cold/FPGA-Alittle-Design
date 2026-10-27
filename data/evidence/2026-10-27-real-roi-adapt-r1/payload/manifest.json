@@ -1,0 +1,212 @@
+{
+  "version": "coprocessor-manifest-v1",
+  "model_id": 1244672594,
+  "kind": "PROVISIONAL",
+  "payload_file": "payload.bin",
+  "payload_sha256": "58b3d8c684534c98138e48caf3a8a8f67ca51ebf79090804a66215a4bc84c945",
+  "crc32": "0x6f4d2bf7",
+  "total_bytes": 36032,
+  "tensors": [
+    {
+      "name": "conv1.weight",
+      "offset": 0,
+      "length": 1152,
+      "alignment": 64,
+      "bank": {
+        "kind": "WEIGHT16",
+        "base": 0
+      }
+    },
+    {
+      "name": "conv2.weight",
+      "offset": 1152,
+      "length": 4608,
+      "alignment": 64,
+      "bank": {
+        "kind": "WEIGHT16",
+        "base": 9
+      }
+    },
+    {
+      "name": "conv3.weight",
+      "offset": 5760,
+      "length": 9216,
+      "alignment": 64,
+      "bank": {
+        "kind": "WEIGHT16",
+        "base": 45
+      }
+    },
+    {
+      "name": "conv4.weight",
+      "offset": 14976,
+      "length": 18432,
+      "alignment": 64,
+      "bank": {
+        "kind": "WEIGHT16",
+        "base": 117
+      }
+    },
+    {
+      "name": "fc.weight",
+      "offset": 33408,
+      "length": 1024,
+      "alignment": 64,
+      "bank": {
+        "kind": "WEIGHT16",
+        "base": 261
+      }
+    },
+    {
+      "name": "conv1.bias",
+      "offset": 34432,
+      "length": 64,
+      "alignment": 64,
+      "bank": {
+        "kind": "BIAS32",
+        "base": 0
+      }
+    },
+    {
+      "name": "conv2.bias",
+      "offset": 34496,
+      "length": 128,
+      "alignment": 64,
+      "bank": {
+        "kind": "BIAS32",
+        "base": 16
+      }
+    },
+    {
+      "name": "conv3.bias",
+      "offset": 34624,
+      "length": 128,
+      "alignment": 64,
+      "bank": {
+        "kind": "BIAS32",
+        "base": 48
+      }
+    },
+    {
+      "name": "conv4.bias",
+      "offset": 34752,
+      "length": 256,
+      "alignment": 64,
+      "bank": {
+        "kind": "BIAS32",
+        "base": 80
+      }
+    },
+    {
+      "name": "fc.bias",
+      "offset": 35008,
+      "length": 12,
+      "alignment": 64,
+      "bank": {
+        "kind": "BIAS32",
+        "base": 144
+      }
+    },
+    {
+      "name": "conv1.multiplier",
+      "offset": 35072,
+      "length": 64,
+      "alignment": 64,
+      "bank": {
+        "kind": "MULTIPLIER32",
+        "base": 0
+      }
+    },
+    {
+      "name": "conv2.multiplier",
+      "offset": 35136,
+      "length": 128,
+      "alignment": 64,
+      "bank": {
+        "kind": "MULTIPLIER32",
+        "base": 16
+      }
+    },
+    {
+      "name": "conv3.multiplier",
+      "offset": 35264,
+      "length": 128,
+      "alignment": 64,
+      "bank": {
+        "kind": "MULTIPLIER32",
+        "base": 48
+      }
+    },
+    {
+      "name": "conv4.multiplier",
+      "offset": 35392,
+      "length": 256,
+      "alignment": 64,
+      "bank": {
+        "kind": "MULTIPLIER32",
+        "base": 80
+      }
+    },
+    {
+      "name": "fc.multiplier",
+      "offset": 35648,
+      "length": 12,
+      "alignment": 64,
+      "bank": {
+        "kind": "MULTIPLIER32",
+        "base": 144
+      }
+    },
+    {
+      "name": "conv1.shift",
+      "offset": 35712,
+      "length": 16,
+      "alignment": 64,
+      "bank": {
+        "kind": "SHIFT6",
+        "base": 0
+      }
+    },
+    {
+      "name": "conv2.shift",
+      "offset": 35776,
+      "length": 32,
+      "alignment": 64,
+      "bank": {
+        "kind": "SHIFT6",
+        "base": 16
+      }
+    },
+    {
+      "name": "conv3.shift",
+      "offset": 35840,
+      "length": 32,
+      "alignment": 64,
+      "bank": {
+        "kind": "SHIFT6",
+        "base": 48
+      }
+    },
+    {
+      "name": "conv4.shift",
+      "offset": 35904,
+      "length": 64,
+      "alignment": 64,
+      "bank": {
+        "kind": "SHIFT6",
+        "base": 80
+      }
+    },
+    {
+      "name": "fc.shift",
+      "offset": 35968,
+      "length": 3,
+      "alignment": 64,
+      "bank": {
+        "kind": "SHIFT6",
+        "base": 144
+      }
+    }
+  ],
+  "generation_command": "python sim/scripts/quantize_real_rois.py --annotations data/logs/2026-10-27-real-data-layout-02/annotations-confirmed.json --weights sim/build/real-roi-adapt-20261027-r1/fp32.pt --output sim/build/real-roi-ptq-20261027-r1"
+}

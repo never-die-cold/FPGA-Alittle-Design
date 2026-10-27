@@ -1,0 +1,2 @@
+python3 -u /home/xilinx/cop-app-product-20261027-r1/src/pynq_host/cop_product_service.py --package /home/xilinx/cop-pkg-product-20261027-r1 --root /home/xilinx/cop-live-fresh-20261027-r1 --order 2,3,4 --background-mode local --color-threshold 20 --min-score 0.8 
+PRODUCT_SERVICE_PID=1407 LOG=/home/xilinx/cop-live-fresh-20261027-r2/service.log

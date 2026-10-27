@@ -10,6 +10,12 @@ fi
 for artifact in "$@"; do
   if [ ! -s "$artifact" ]; then echo "ERROR: artifact missing or empty: $artifact"; exit 1; fi
 done
+if [ "${COP_WITH_VIDEO:-}" = 1 ]; then
+  echo "ERROR: NC first-net package requires variant A; COP_WITH_VIDEO must be unset"; exit 1
+fi
+if [ "$#" -ge 2 ] && grep -Eq 'INSTANCE="(capture_dma|capture_status|rx|tx|pipe)"' "$2"; then
+  echo "ERROR: video instance found in variant A HWH"; exit 1
+fi
 
 # Package evidence is regenerated, never copied from an unverified handwritten table.
 COPROCESSOR_PYTHON="$PY" bash sim/scripts/run_coprocessor_iverilog.sh bram_network
@@ -27,7 +33,8 @@ files=(
   docs/contracts/coprocessor-manifest-v1.md
   docs/coprocessor-storage-plan.md docs/coprocessor-vivado-checklist.md docs/coprocessor-nc-handoff.md
   docs/coprocessor-board-clock-runbook.md docs/coprocessor-payload-loader.md
-  docs/coprocessor-imem-init-gate.md tools/cop_payload_loader.py tools/cop_imem_gate.py
+  docs/coprocessor-imem-init-gate.md docs/coprocessor-build-variants.md
+  tools/cop_payload_loader.py tools/cop_imem_gate.py
   src/riscv/design_v1.md src/riscv_fw/cop_job.c src/coprocessor/*.v
   sim/coprocessor/tb_cnn_sequencer.v sim/coprocessor/tb_cop_bram_latency.v
   sim/coprocessor/generate_network_vectors.py sim/scripts/run_coprocessor_iverilog.sh
@@ -35,7 +42,7 @@ files=(
   build/build_coprocessor_gate.tcl build/constraints/coprocessor_ooc.xdc
   build/constraints/coprocessor_storage_ooc.xdc build/constraints/coprocessor_board_clock.xdc
   build/build_pynq_cop_gate.tcl build/create_pynq_cop_bd.tcl build/run_pynq_cop_gate.ps1
-  build/constraints/pynq_cop_board.xdc
+  build/constraints/pynq_cop_board.xdc build/constraints/pynq_cop_cdc.tcl
   board/scripts/program_soc.bat board/scripts/program_soc.tcl
 )
 for file in "${files[@]}"; do mkdir -p "$stage/payload/$(dirname "$file")"; cp "$file" "$stage/payload/$file"; done
@@ -63,6 +70,8 @@ fi
   echo "BOARD_CLOCK=UNVERIFIED_NEEDS_40MHZ_READBACK"
   echo "LOADER=BLOCKERS_RESOLVED_PENDING_BOARD_VALIDATION"
   echo "XSA=$xsa_status"
+  echo "BUILD_VARIANT=A_core_plus_coprocessor_ONLY"
+  echo "VIDEO_VARIANT=EXCLUDED_FROM_THIS_PACKAGE"
   echo "BUILD_REPRO=CLEAN_GATE_BUILD_ADOPTED_EARLIER_CONCURRENT_BUILD_INVALIDATED"
 } > "$stage/VERSION"
 

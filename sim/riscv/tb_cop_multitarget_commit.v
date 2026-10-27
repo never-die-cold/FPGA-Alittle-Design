@@ -37,12 +37,12 @@ module tb_cop_multitarget_commit;
         @(negedge clk);start=1;@(negedge clk);start=0;
         while(!done && cycles<100) begin @(negedge clk);cycles=cycles+1;end
         repeat(2) @(negedge clk);
-        if(cycles>=100 || seq!=1 || busy || writes!=3 || launched!=3) $fatal(1,"job completion");
+        if(cycles!=20 || seq!=1 || busy || writes!=3 || launched!=3) $fatal(1,"job completion");
         for(i=0;i<3;i=i+1) begin
             if(memory[i][15:0]!=i || memory[i][24]!==1'b1 || memory[i][55:32]!==24'h030201+i)
                 $fatal(1,"result slot %0d wrong: %h",i,memory[i]);
         end
-        $display("PASS: three distinct ROI results committed once in matching slots 0/1/2");
+        $display("PASS: three distinct ROI results committed once in matching slots 0/1/2 cycles=%0d",cycles);
         $finish;
     end
 endmodule

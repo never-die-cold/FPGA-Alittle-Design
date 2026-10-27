@@ -1,0 +1,25 @@
+{
+  "request": "user: 我们就用CNN了，YOLO相关的都移除库，只保留在本地",
+  "git_restore_commit": "cfbded8",
+  "untrack_keep_local": [
+    {
+      "path": "results/probe-yolo.json",
+      "sha256": "f91616028b071228931507e1382c327e8631638e77d926a6a79506eb70b66ac5"
+    },
+    {
+      "path": "results/yolo-reference.json",
+      "sha256": "a495edf0eba314c4f54e2e17928bca944168e2af21b210db380bef7666b9b7f4"
+    },
+    {
+      "path": "sim/vision/train_localization_cnn.py",
+      "sha256": "b9b351ba6bf382d0ca1812e4d7555e4292b6b961e693896b6461ab4fc4d29db3"
+    }
+  ],
+  "local_only_untracked": [
+    "models/yolov8n.pt",
+    "sim/scripts/*yolo*.py",
+    "data/logs/2026-10-27-yolo-switch-r1",
+    "sim/build/yolo-fastener-r1"
+  ],
+  "mixed_script_backups": "sim/build/yolo-local-backup-20261028"
+}

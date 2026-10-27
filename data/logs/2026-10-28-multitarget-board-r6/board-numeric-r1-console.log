@@ -1,0 +1,24 @@
+board_sequence=hwh_clocks,reconfigure_pl,wait_stable,status_check
+clock_topology=mmcm expected_cop_mhz=40.000000
+measured_fclk1_mhz=142.857143
+status_first_reads=0x00000001
+{"accepted_snapshot": 2146, "case": "roi_001", "class_id": 0, "dma_stream_bits": 64, "fclk1_mhz": 142.857143, "fw_decision": 65537, "logits": [67, -60, -13], "low_conf": 0, "margin_q": 80, "matches_expected": true, "payload_bytes": 36032, "payload_crc32": "0xa73ee0d9", "result_seq": 1, "score_q15": 10320, "valid": 1}
+measurement_file=/home/xilinx/cop-board-r6-20261028-r1/golden-roi_001.json
+board_sequence=hwh_clocks,reconfigure_pl,wait_stable,status_check
+clock_topology=mmcm expected_cop_mhz=40.000000
+measured_fclk1_mhz=142.857143
+status_first_reads=0x00000001
+BOARD_JOB job=1 count=1 seq=1 pass=True
+BOARD_JOB job=2 count=3 seq=2 pass=True
+BOARD_JOB job=3 count=10 seq=3 pass=True
+BOARD_JOB job=4 count=10 seq=4 pass=True
+Traceback (most recent call last):
+  File "/home/xilinx/cop-app-r6-20261028/sim/scripts/check_cnn_board_vectors.py", line 96, in <module>
+    main()
+  File "/home/xilinx/cop-app-r6-20261028/sim/scripts/check_cnn_board_vectors.py", line 55, in main
+    result = driver.run(job)
+  File "/home/xilinx/cop-app-r6-20261028/src/pynq_host/cop_driver.py", line 574, in run
+    self._validate_job(job)
+  File "/home/xilinx/cop-app-r6-20261028/src/pynq_host/cop_driver.py", line 430, in _validate_job
+    raise CopConfigError("target count must be 1..policy_max")
+cop_driver.CopConfigError: target count must be 1..policy_max

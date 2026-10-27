@@ -1,0 +1,10 @@
+python3 -u /home/xilinx/cop-app-fresh-20261027-r2/src/pynq_host/cop_product_service.py --package /home/xilinx/cop-pkg-product-20261027-r1 --root /home/xilinx/cop-live-data-20261027-r1 --order 3,3,3 --background-mode local --color-threshold 20 --min-score 0.8 board_sequence=hwh_clocks,reconfigure_pl,wait_stable,status_check
+clock_topology=mmcm expected_cop_mhz=40.000000
+measured_fclk1_mhz=142.857143
+status_first_reads=0x00000001
+Traceback (most recent call last):
+  File "/home/xilinx/cop-pkg-r6-multitarget-20261028/payload/tools/cop_board_fast_run.py", line 196, in <module>
+    main()
+  File "/home/xilinx/cop-pkg-r6-multitarget-20261028/payload/tools/cop_board_fast_run.py", line 190, in main
+    _, actual = loader.prepare_board(package, 1)
+ValueError: too many values to unpack (expected 2)

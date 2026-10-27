@@ -1,0 +1,239 @@
+{
+  "kind": "DEVELOPMENT_BOARD_NUMERIC_VECTORS",
+  "payload_sha256": "ffc2620df59ab0292a4130d6741fb71b73d972696198a992a21a63877d2b12fa",
+  "comparison": "data\\logs\\2026-10-28-r6-holdout-layout04\\comparison",
+  "cases": {
+    "roi_001": {
+      "result": {
+        "class_id": 0,
+        "margin_q": 80,
+        "score_q15": 10320,
+        "low_conf": false
+      },
+      "logits": [
+        67,
+        -60,
+        -13
+      ]
+    },
+    "scene_00": {
+      "result": {
+        "class_id": 1,
+        "margin_q": 44,
+        "score_q15": 5676,
+        "low_conf": false
+      },
+      "logits": [
+        -75,
+        52,
+        8
+      ]
+    },
+    "scene_01": {
+      "result": {
+        "class_id": 0,
+        "margin_q": 91,
+        "score_q15": 11739,
+        "low_conf": false
+      },
+      "logits": [
+        61,
+        -39,
+        -30
+      ]
+    },
+    "scene_02": {
+      "result": {
+        "class_id": 2,
+        "margin_q": 63,
+        "score_q15": 8127,
+        "low_conf": false
+      },
+      "logits": [
+        -83,
+        7,
+        70
+      ]
+    },
+    "scene_03": {
+      "result": {
+        "class_id": 1,
+        "margin_q": 8,
+        "score_q15": 1032,
+        "low_conf": false
+      },
+      "logits": [
+        -83,
+        39,
+        31
+      ]
+    },
+    "scene_04": {
+      "result": {
+        "class_id": 1,
+        "margin_q": 33,
+        "score_q15": 4257,
+        "low_conf": false
+      },
+      "logits": [
+        -12,
+        21,
+        -23
+      ]
+    },
+    "scene_05": {
+      "result": {
+        "class_id": 2,
+        "margin_q": 36,
+        "score_q15": 4644,
+        "low_conf": false
+      },
+      "logits": [
+        -44,
+        0,
+        36
+      ]
+    },
+    "scene_06": {
+      "result": {
+        "class_id": 0,
+        "margin_q": 63,
+        "score_q15": 8127,
+        "low_conf": false
+      },
+      "logits": [
+        41,
+        -22,
+        -28
+      ]
+    },
+    "scene_07": {
+      "result": {
+        "class_id": 0,
+        "margin_q": 39,
+        "score_q15": 5031,
+        "low_conf": false
+      },
+      "logits": [
+        23,
+        -16,
+        -17
+      ]
+    },
+    "scene_08": {
+      "result": {
+        "class_id": 1,
+        "margin_q": 36,
+        "score_q15": 4644,
+        "low_conf": false
+      },
+      "logits": [
+        -35,
+        29,
+        -7
+      ]
+    }
+  },
+  "rois": [
+    {
+      "name": "roi_001",
+      "path": "roi_001/input.bin",
+      "logits": [
+        67,
+        -60,
+        -13
+      ],
+      "roi_sha256": "d95c42ac5c2fead30e311f2fe0b6140ddc9f2fd82f8102a50640b7ba460e64cd"
+    },
+    {
+      "name": "scene_00",
+      "path": "scene_00/input.bin",
+      "logits": [
+        -75,
+        52,
+        8
+      ],
+      "roi_sha256": "a76ededd7a4a9ea1d43b17ab349ab7ffc1d8863d8aa5dca279164d8bf036ca0c"
+    },
+    {
+      "name": "scene_01",
+      "path": "scene_01/input.bin",
+      "logits": [
+        61,
+        -39,
+        -30
+      ],
+      "roi_sha256": "f336dd8375532135635e2780b554c4f93a23f22b17c70b46e16f04e4996392cf"
+    },
+    {
+      "name": "scene_02",
+      "path": "scene_02/input.bin",
+      "logits": [
+        -83,
+        7,
+        70
+      ],
+      "roi_sha256": "754e7bcd7bbce4672eee187f201d287bd92dd32463a08351548c6cb14e10d71d"
+    },
+    {
+      "name": "scene_03",
+      "path": "scene_03/input.bin",
+      "logits": [
+        -83,
+        39,
+        31
+      ],
+      "roi_sha256": "ba5b501abbff87001ce206e63fdb9cac0bb5910cfb48334b26710f9d709dc308"
+    },
+    {
+      "name": "scene_04",
+      "path": "scene_04/input.bin",
+      "logits": [
+        -12,
+        21,
+        -23
+      ],
+      "roi_sha256": "011d03a75f451f2a0d0be6af95739aac9601ad4dc5410c4e0b00267d72d7c9a1"
+    },
+    {
+      "name": "scene_05",
+      "path": "scene_05/input.bin",
+      "logits": [
+        -44,
+        0,
+        36
+      ],
+      "roi_sha256": "4c343d23ed7756e05711707cadb9c4db1d42276a9689a8d4132d375052d12d4c"
+    },
+    {
+      "name": "scene_06",
+      "path": "scene_06/input.bin",
+      "logits": [
+        41,
+        -22,
+        -28
+      ],
+      "roi_sha256": "c6c580f15b95d956bb1b517ca953b7e462b507ac6e04572bf8febafb6c34d54f"
+    },
+    {
+      "name": "scene_07",
+      "path": "scene_07/input.bin",
+      "logits": [
+        23,
+        -16,
+        -17
+      ],
+      "roi_sha256": "fac6d23a214c3c45e24841c8465d284bc8acdd178e1a02c1e2ba6a36588425e9"
+    },
+    {
+      "name": "scene_08",
+      "path": "scene_08/input.bin",
+      "logits": [
+        -35,
+        29,
+        -7
+      ],
+      "roi_sha256": "c8fbc536692073db76d0c7130a5536016c02cab8796486ed6521e9e189342dc3"
+    }
+  ]
+}

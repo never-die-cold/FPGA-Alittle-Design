@@ -1,0 +1,12 @@
+{
+  "pass": false,
+  "exception": "CopConfigError('target count must be 1..policy_max')",
+  "completed_jobs": 4,
+  "snapshot": {
+    "reason": "numeric_bench_failure",
+    "status": 97,
+    "result_seq": 4,
+    "error_code": 0,
+    "fw_decision": 263171
+  }
+}

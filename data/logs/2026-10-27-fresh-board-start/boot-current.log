@@ -1,0 +1,19 @@
+30d6fc34-e372-4b0e-b9de-e8f4617b40d6
+ 22:18:45 up 2 min,  1 user,  load average: 2.82, 1.25, 0.47
+ExecMainStatus=0
+Id=bootpy.service
+ActiveState=inactive
+SubState=dead
+
+ExecMainStatus=0
+Id=fpga-vision-boot.service
+ActiveState=activating
+SubState=start
+[  130.816124] pynq systemd[1]: Starting PYNQ vision after stock PL initialization...
+[  147.316092] pynq bash[900]: ip_dict:
+[  147.316092] pynq bash[900]:   pipe @ 0x40000000 range 0x10000
+[  147.316092] pynq bash[900]:   ps7 @ 0x00000000 range 0x0
+[  147.316092] pynq bash[900]: axi_regs 段: pipe @ 0x40000000
+[  147.316092] pynq bash[900]: PASS: load
+[  150.881231] pynq bash[900]: VISION_BOOT_PASS applied_config_id=1
+[  152.067586] pynq systemd[1]: Finished PYNQ vision after stock PL initialization.

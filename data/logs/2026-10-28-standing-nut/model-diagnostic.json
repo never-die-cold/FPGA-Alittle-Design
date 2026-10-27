@@ -1,0 +1,102 @@
+[
+  {
+    "model": "original",
+    "predictions": [
+      "bolt",
+      "bolt",
+      "bolt",
+      "bolt",
+      "bolt"
+    ],
+    "correct_nuts": 0,
+    "standing_target_ids": [
+      1,
+      2
+    ],
+    "flat_target_ids": [
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "model": "r1",
+    "predictions": [
+      "bolt",
+      "bolt",
+      "bolt",
+      "bolt",
+      "bolt"
+    ],
+    "correct_nuts": 0,
+    "standing_target_ids": [
+      1,
+      2
+    ],
+    "flat_target_ids": [
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "model": "r2",
+    "predictions": [
+      "bolt",
+      "bolt",
+      "bolt",
+      "bolt",
+      "bolt"
+    ],
+    "correct_nuts": 0,
+    "standing_target_ids": [
+      1,
+      2
+    ],
+    "flat_target_ids": [
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "model": "r3",
+    "predictions": [
+      "bolt",
+      "bolt",
+      "bolt",
+      "bolt",
+      "bolt"
+    ],
+    "correct_nuts": 0,
+    "standing_target_ids": [
+      1,
+      2
+    ],
+    "flat_target_ids": [
+      3,
+      4,
+      5
+    ]
+  },
+  {
+    "model": "r4",
+    "predictions": [
+      "bolt",
+      "bolt",
+      "bolt",
+      "nut",
+      "bolt"
+    ],
+    "correct_nuts": 1,
+    "standing_target_ids": [
+      1,
+      2
+    ],
+    "flat_target_ids": [
+      3,
+      4,
+      5
+    ]
+  }
+]

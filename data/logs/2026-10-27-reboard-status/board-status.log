@@ -1,0 +1,89 @@
+Linux pynq 6.6.10-xilinx-v2024.1-gb36799f4e960 #1 SMP PREEMPT Sat Apr 27 05:22:24 UTC 2024 armv7l armv7l armv7l GNU/Linux
+43effa49-7325-42a3-849a-a06413fd6809
+ 22:23:25 up 7 min,  1 user,  load average: 0.03, 0.48, 0.33
+3: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    inet 169.254.87.99/16 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet 192.168.50.99/24 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet 192.168.2.99/24 brd 192.168.2.255 scope global eth0:1
+       valid_lft forever preferred_lft forever
+○ bootpy.service - Executing boot.py from the boot partition
+     Loaded: loaded (/lib/systemd/system/bootpy.service; enabled; vendor preset: enabled)
+     Active: inactive (dead) since Tue 2026-09-22 22:18:23 UTC; 5min ago
+    Process: 232 ExecStart=/usr/local/bin/bootpy.sh (code=exited, status=0/SUCCESS)
+   Main PID: 232 (code=exited, status=0/SUCCESS)
+        CPU: 39.937s
+
+Sep 22 22:17:07 pynq systemd[1]: Starting Executing boot.py from the boot partition...
+Sep 22 22:18:23 pynq systemd[1]: bootpy.service: Deactivated successfully.
+Sep 22 22:18:23 pynq systemd[1]: Finished Executing boot.py from the boot partition.
+Sep 22 22:18:23 pynq systemd[1]: bootpy.service: Consumed 39.937s CPU time.
+
+× fpga-vision-boot.service - PYNQ vision after stock PL initialization
+     Loaded: loaded (/etc/systemd/system/fpga-vision-boot.service; enabled; vendor preset: enabled)
+     Active: failed (Result: exit-code) since Tue 2026-09-22 22:19:10 UTC; 4min 15s ago
+    Process: 858 ExecStart=/bin/bash -lc source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u /home/xilinx/vision_m2/pynq_vision_boot.py (code=exited, status=1/FAILURE)
+   Main PID: 858 (code=exited, status=1/FAILURE)
+        CPU: 15.196s
+
+Sep 22 22:19:09 pynq bash[858]:     main()
+Sep 22 22:19:09 pynq bash[858]:   File "/home/xilinx/vision_m2/pynq_vision_boot.py", line 16, in main
+Sep 22 22:19:09 pynq bash[858]:     vision.wait_applied(sequence, timeout=30.0, poll=0.02)
+Sep 22 22:19:09 pynq bash[858]:   File "/home/xilinx/vision_m2/vision_regs.py", line 114, in wait_applied
+Sep 22 22:19:09 pynq bash[858]:     raise TimeoutError("configuration not applied: check video/frame input")
+Sep 22 22:19:09 pynq bash[858]: TimeoutError: configuration not applied: check video/frame input
+Sep 22 22:19:10 pynq systemd[1]: fpga-vision-boot.service: Main process exited, code=exited, status=1/FAILURE
+Sep 22 22:19:10 pynq systemd[1]: fpga-vision-boot.service: Failed with result 'exit-code'.
+Sep 22 22:19:10 pynq systemd[1]: Failed to start PYNQ vision after stock PL initialization.
+Sep 22 22:19:10 pynq systemd[1]: fpga-vision-boot.service: Consumed 15.196s CPU time.
+operating
+/home/xilinx/cop-live-exe-20261027-r2:
+total 16
+drwxr-xr-x 163 root root 4096 Sep 22  2026 2dbe0d7b
+-rw-r--r--   1 root root  607 Sep 22  2026 hardware.json
+-rw-r--r--   1 root root  298 Sep 22  2026 service.log
+-rw-r--r--   1 root root    5 Sep 22  2026 service.pid
+
+/home/xilinx/cop-pkg-product-20261027-r1:
+total 44
+-rw-r--r-- 1 root   root    318 Sep 22  2026 evidence-roi_001.json
+-rw-rw-r-- 1 xilinx xilinx  138 Sep 22  2026 EXPECTED_OUTPUTS.tsv
+-rw-rw-r-- 1 xilinx xilinx 1446 Sep 22  2026 FILES.txt
+drwxrwxr-x 4 xilinx xilinx 4096 Sep 22  2026 golden
+-rw-r--r-- 1 root   root   3389 Sep 22  2026 loaded.xclbin
+drwxrwxr-x 4 xilinx xilinx 4096 Sep 22  2026 payload
+-rw-rw-r-- 1 xilinx xilinx 4371 Sep 22  2026 SHA256SUMS
+drwxrwxr-x 4 xilinx xilinx 4096 Sep 22  2026 sim
+drwxrwxr-x 3 xilinx xilinx 4096 Sep 22  2026 src
+-rw-rw-r-- 1 xilinx xilinx  395 Sep 22  2026 VERSION
+State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess
+LISTEN 0      4096   127.0.0.53%lo:53        0.0.0.0:*          
+LISTEN 0      50           0.0.0.0:445       0.0.0.0:*          
+LISTEN 0      128          0.0.0.0:9090      0.0.0.0:*          
+LISTEN 0      50           0.0.0.0:139       0.0.0.0:*          
+LISTEN 0      128          0.0.0.0:22        0.0.0.0:*          
+LISTEN 0      128          0.0.0.0:80        0.0.0.0:*          
+LISTEN 0      50              [::]:445          [::]:*          
+LISTEN 0      50              [::]:139          [::]:*          
+LISTEN 0      128             [::]:22           [::]:*          
+LISTEN 0      128             [::]:80           [::]:*          
+  416     367 /usr/local/share/pynq-venv/bin/python3 /usr/local/share/pynq-venv/bin/jupyter-notebook --no-browser --allow-root
+ 1347       2 bash -c sudo -S -p '' uname -a; cat /proc/sys/kernel/random/boot_id; uptime; ip -4 addr show eth0; systemctl --no-pager --full status bootpy.service fpga-vision-boot.service; cat /sys/class/fpga_manager/fpga0/state; ls -l /home/xilinx/cop-live-exe-20261027-r2 /home/xilinx/cop-pkg-product-20261027-r1; ss -ltnp | head -25; ps -eo pid,etimes,args | grep -E "cop_product_service|vision_park_server|vision_live|jupyter"; dmesg | grep -Ei "fpga|mmc|adma|I/O error|ext4.*error|oom|killed process|eth0" | tail -65
+ 1367       0 grep -E cop_product_service|vision_park_server|vision_live|jupyter
+[    1.398048] FPGA manager framework
+[   39.947329] macb e000b000.ethernet eth0: Cadence GEM rev 0x00020118 at 0xe000b000 irq 40 (3a:f6:62:da:0d:98)
+[   40.222744] fpga_manager fpga0: Xilinx Zynq FPGA Manager registered
+[   40.229159] mmc0: SDHCI controller on e0100000.mmc [e0100000.mmc] using ADMA
+[   40.303816] mmc0: new high speed SDHC card at address aaaa
+[   40.308979] mmcblk0: mmc0:aaaa SC16G 14.8 GiB
+[   40.319265]  mmcblk0: p1 p2
+[   40.347043] of-fpga-region fpga-region: FPGA Region probed
+[   40.918440] EXT4-fs (mmcblk0p2): recovery complete
+[   40.923074] EXT4-fs (mmcblk0p2): mounted filesystem 5a7f11a7-449d-4143-9d28-f718a44a2eaa r/w with ordered data mode. Quota mode: disabled.
+[   53.879773] FAT-fs (mmcblk0p1): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+[   54.289703] macb e000b000.ethernet eth0: PHY [e000b000.ethernet-ffffffff:00] driver [RTL8211E Gigabit Ethernet] (irq=POLL)
+[   54.289749] macb e000b000.ethernet eth0: configuring for phy/rgmii-id link mode
+[   58.503951] macb e000b000.ethernet eth0: Link is Up - 1Gbps/Full - flow control tx
+[  120.904828] fpga_manager fpga0: writing base.bin to Xilinx Zynq FPGA Manager
+[  145.071087] fpga_manager fpga0: writing vision.bin to Xilinx Zynq FPGA Manager
