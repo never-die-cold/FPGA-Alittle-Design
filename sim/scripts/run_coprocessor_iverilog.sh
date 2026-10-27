@@ -24,6 +24,10 @@ if ! command -v "${CROSS}gcc" >/dev/null 2>&1 ||
     fi
 fi
 export RISCV_CROSS="$CROSS"
+if ! command -v make >/dev/null 2>&1 && command -v mingw32-make >/dev/null 2>&1; then
+    make() { command mingw32-make "$@"; }
+    export -f make
+fi
 VECTORS="$BUILD/arithmetic-vectors"
 "$PY" "$ROOT/sim/coprocessor/generate_arithmetic_vectors.py" --output "$VECTORS"
 run_test() {

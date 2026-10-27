@@ -46,6 +46,8 @@ MODE="${1:-all}"
 IVERILOG_ARGS=()
 
 case "$MODE" in
+    cop_multitarget_commit) TBS=(riscv/tb_cop_multitarget_commit.v) ;;
+    cop_axi_cdc_skew) TBS=(riscv/tb_cop_axi_cdc_skew.v) ;;
     cop_mac_lane) exec bash "$(dirname "$0")/run_coprocessor_iverilog.sh" mac_lane ;;
     cop_dot8) exec bash "$(dirname "$0")/run_coprocessor_iverilog.sh" dot8 ;;
     cop_mac) exec bash "$(dirname "$0")/run_coprocessor_iverilog.sh" mac ;;
@@ -110,6 +112,14 @@ export PATH="$IVERILOG_DIR:$PATH"
 
 shopt -s nullglob
 RTL_FILES=(../src/riscv/*.v)
+if [ "$MODE" = cop_axi_cdc_skew ] || [ "$MODE" = all ]; then
+    RTL_FILES+=(../src/coprocessor/cop_axi_lite_cdc.v)
+    if [ "$MODE" = all ]; then TBS+=(riscv/tb_cop_axi_cdc_skew.v); fi
+fi
+if [ "$MODE" = cop_multitarget_commit ] || [ "$MODE" = all ]; then
+    RTL_FILES+=(../src/coprocessor/cop_task_ctrl.v)
+    if [ "$MODE" = all ]; then TBS+=(riscv/tb_cop_multitarget_commit.v); fi
+fi
 if [ ${#RTL_FILES[@]} -eq 0 ]; then
     echo "ERROR: src/riscv/ 下暂无 .v RTL（Part A 未开工）；脚本已就位，RTL 落盘后即可跑"
     exit 1
