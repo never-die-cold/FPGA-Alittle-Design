@@ -1,0 +1,13 @@
+[Unit]
+Description=PYNQ vision after stock PL initialization
+Requires=bootpy.service
+After=bootpy.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -lc 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u /home/xilinx/vision_m2/pynq_vision_boot.py'
+RemainAfterExit=yes
+TimeoutStartSec=180
+
+[Install]
+WantedBy=multi-user.target
