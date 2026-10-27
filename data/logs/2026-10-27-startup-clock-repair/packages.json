@@ -1,0 +1,14 @@
+[
+  {
+    "package": "build/board-package-mmcm-20261027-diagnostic",
+    "bad": [],
+    "version": "VERSION=mmcm-20261027-diagnostic\nPAYLOAD_KIND=DIAGNOSTIC_INTEGER_NETWORK_NOT_TRAINED\nMODEL_ID=0x4a303250\nBOARD=UNVERIFIED_NEEDS_NC\nBOARD_CLOCK=UNVERIFIED_NEEDS_TOPOLOGY_READBACK\nCLOCK_TOPOLOGY=mmcm\nFCLK1_EXPECTED_MHZ=142.857132\nCOP_EXPECTED_MHZ=40.000000\nBIT_SHA256=43ac4f446cd24e11b29453585d3e31a2722a574bcd7626423b2d4cbdff87ed1e\nHWH_SHA256=ec5de273f2e53c432c317648419d0da64d00b96e66c95c081ced885d4044475d\n",
+    "expected": "case\tclass_id\tmargin_q\tscore_q15\tlow_conf\tlogits\tresult_crc32\nzero\t2\t2\t258\t1\t2,-3,4\tcdc9b738\npattern\t0\t0\t0\t1\t1,-3,1\tb47dd829\n"
+  },
+  {
+    "package": "build/board-package-mmcm-20261027-trained",
+    "bad": [],
+    "version": "VERSION=mmcm-20261027-trained\nPAYLOAD_KIND=TRAINED_PTQ_NETWORK\nMODEL_ID=0x4a303251\nBOARD=UNVERIFIED_NEEDS_NC\nBOARD_CLOCK=UNVERIFIED_NEEDS_TOPOLOGY_READBACK\nCLOCK_TOPOLOGY=mmcm\nFCLK1_EXPECTED_MHZ=142.857132\nCOP_EXPECTED_MHZ=40.000000\nBIT_SHA256=43ac4f446cd24e11b29453585d3e31a2722a574bcd7626423b2d4cbdff87ed1e\nHWH_SHA256=ec5de273f2e53c432c317648419d0da64d00b96e66c95c081ced885d4044475d\n",
+    "expected": "case\tclass_id\tmargin_q\tscore_q15\tlow_conf\tlogits\tresult_crc32\nroi_001\t2\t53\t6837\t0\t-12,-30,41\t9a961e55\nframe\t0\t29\t3741\t0\t34,-41,5\t6d86e183\n"
+  }
+]

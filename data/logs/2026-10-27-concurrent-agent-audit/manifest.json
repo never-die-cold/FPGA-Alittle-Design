@@ -1,0 +1,218 @@
+{
+  "date": "2026-10-27",
+  "source_commit": "bc37c08ccc3c1293e35c8cc4bfc2809fb091ef4e",
+  "scope": "Read-only local session/board evidence, controlled runtime process stop and existing vision reload; no RTL change",
+  "binary_evidence": "uvc-*/raw.png: USB Video frames for black-screen comparison; recreate with sim/scripts/capture_uvc_raw.py using a new repo output directory",
+  "files": [
+    {
+      "path": "board-autostart.txt",
+      "bytes": 10797,
+      "sha256": "b5bbc360c6904d3d61b0f2d015bb50b34a8c18f047b635cde224197b34a6ee36"
+    },
+    {
+      "path": "board-cold-health.txt",
+      "bytes": 4003,
+      "sha256": "6ac89ed1637277c4b4302d6d8682964d1c8cedbcd555707ee0a839b480640c50"
+    },
+    {
+      "path": "board-idle-health.txt",
+      "bytes": 863,
+      "sha256": "ee31c54a9e4ed7b783ca957174578d3d8b6acdb145fe8830eaa74f6f28869b35"
+    },
+    {
+      "path": "board-load-order.txt",
+      "bytes": 1352,
+      "sha256": "26ae8293177b9c0884807879ae4d2966bb7b4ddc14032eb82698a2d0add5021e"
+    },
+    {
+      "path": "board-package-drift.json",
+      "bytes": 24872,
+      "sha256": "26419151c8dc75e6bb7a4d7af50d5f9f554ea7cf13f2a928eb457eb94c2e7283"
+    },
+    {
+      "path": "board-startup-config.txt",
+      "bytes": 8006,
+      "sha256": "c2a3960145fe060eaefdc402bd26a1a793e40f8a344eb86e4f2a065d45fa1b29"
+    },
+    {
+      "path": "deepseek-excerpts.json",
+      "bytes": 336070,
+      "sha256": "96efd308a231b31b5f3486ff20bec2c48c298c44f0b5e4db91af1dc25ff1d307"
+    },
+    {
+      "path": "diff-check.txt",
+      "bytes": 39,
+      "sha256": "f0e099a9be7b67864764c22bbfb70859bac3445a816e605759acccabf728c046"
+    },
+    {
+      "path": "git-state.txt",
+      "bytes": 4948,
+      "sha256": "8e1b76d9064001ab86b2c989e89e6df67388a346180677fa8e8b4055d5bc405f"
+    },
+    {
+      "path": "network-after-cold-boot.txt",
+      "bytes": 397,
+      "sha256": "e884441fb194836b9a4c9c1c64695bba55082dd61346106ce00a07f0d19e4a39"
+    },
+    {
+      "path": "network-initial.txt",
+      "bytes": 1395,
+      "sha256": "f8838937642524adf21d33a00cee94e2f7f424b256ba013bab275761d2bf1f6c"
+    },
+    {
+      "path": "orphan-ssh-action.txt",
+      "bytes": 26,
+      "sha256": "4a6f4bdbc6dd6946712fa867f25a9f03c954203fdc18b525088cd3647e1a7c8e"
+    },
+    {
+      "path": "orphan-ssh-before.json",
+      "bytes": 525,
+      "sha256": "c0ca522b3857d666a9e5c3a94357c415d3670112312a7d9c41c0406ca966298f"
+    },
+    {
+      "path": "package-integrity.txt",
+      "bytes": 245,
+      "sha256": "88ecf1ae28b323e037de344030e2f11714ad0c441f84ae0fcc5808e2e23d1981"
+    },
+    {
+      "path": "package-inventory.json",
+      "bytes": 5672,
+      "sha256": "ce65e7aee061027d4e9c5206b73e2de5f4671707815862f0bdece7620199cab1"
+    },
+    {
+      "path": "README.md",
+      "bytes": 9047,
+      "sha256": "7f41aa567869c40d7074373f342c356bb696da9ca7784298001f0ac120899cf6"
+    },
+    {
+      "path": "repo-hygiene.json",
+      "bytes": 2976,
+      "sha256": "904befec69cea274f206a06db304b5828025fa7535dd1f47a44f9adf1710da14"
+    },
+    {
+      "path": "serial-cold-boot.txt",
+      "bytes": 28488,
+      "sha256": "535b442048204da9e99e2f25c2689ae08acbde970db48dd6c5f5ae6618e18587"
+    },
+    {
+      "path": "serial-health.txt",
+      "bytes": 229,
+      "sha256": "825bbb55472f980582213690fe9bbbad407b9b063959d756e89406ca2562ab9b"
+    },
+    {
+      "path": "serial-initial.txt",
+      "bytes": 5,
+      "sha256": "f01a374e9c81e3db89b3a42940c4d6a5447684986a1296e42bf13f196eed6295"
+    },
+    {
+      "path": "source-state.json",
+      "bytes": 1053,
+      "sha256": "4209a748e971c64cab77fa8beebf94926dc83d3844dc42b126097dc7b954bd4a"
+    },
+    {
+      "path": "tcp-initial.json",
+      "bytes": 137,
+      "sha256": "7a29953e09d96cd44891e4edecc2878eb1d5d4363be40634928aea2edbb1c68b"
+    },
+    {
+      "path": "tcp-source-bound.json",
+      "bytes": 136,
+      "sha256": "34831916a00842e287fb01a2ed74f5d15277fdd946814fbeffd2df1b92fa3298"
+    },
+    {
+      "path": "uvc-after-vision/devices.txt",
+      "bytes": 115,
+      "sha256": "3589679453e58570d1726c94349a33a510fd4cba9c3c67545802596d8e566f05"
+    },
+    {
+      "path": "uvc-after-vision/metadata.json",
+      "bytes": 785,
+      "sha256": "0c27ac73001896c8b55186c44e263a0811e7ed31576decd268bd33352c641363"
+    },
+    {
+      "path": "uvc-after-vision/pixel-stats.json",
+      "bytes": 224,
+      "sha256": "0bab4a03af80c30ff50d03b4d6cee62662c122d5bfb980c18cb892873c1ecf52"
+    },
+    {
+      "path": "uvc-after-vision/raw.png",
+      "bytes": 5031,
+      "sha256": "08f1c9deef07be2f994555c18b6471d4c876c89b23eaa5dcdc33f513b955b0fe"
+    },
+    {
+      "path": "uvc-initial/devices.txt",
+      "bytes": 115,
+      "sha256": "3589679453e58570d1726c94349a33a510fd4cba9c3c67545802596d8e566f05"
+    },
+    {
+      "path": "uvc-initial/metadata.json",
+      "bytes": 682,
+      "sha256": "5e9419f22d99a436ad3de98202621787462fc2ba4f26654c53822e213673b7f7"
+    },
+    {
+      "path": "uvc-initial/pixel-stats.json",
+      "bytes": 119,
+      "sha256": "e88d681137253c28ed49e3b6f97ffcfee4cf874b7d6f7df677a35bb4aa473b49"
+    },
+    {
+      "path": "uvc-initial/raw.png",
+      "bytes": 5031,
+      "sha256": "08f1c9deef07be2f994555c18b6471d4c876c89b23eaa5dcdc33f513b955b0fe"
+    },
+    {
+      "path": "uvc-pi-direct/devices.txt",
+      "bytes": 115,
+      "sha256": "3589679453e58570d1726c94349a33a510fd4cba9c3c67545802596d8e566f05"
+    },
+    {
+      "path": "uvc-pi-direct/metadata.json",
+      "bytes": 940,
+      "sha256": "03e11d7b258740e8b616dc3ad15edcbcda8f514116aaaba0adf87eddc8ca0cda"
+    },
+    {
+      "path": "uvc-pi-direct/pixel-stats.json",
+      "bytes": 226,
+      "sha256": "ea5d38ca3caa936c795222b98f33bfee116c56517d175fee93cc4b1935bb0133"
+    },
+    {
+      "path": "uvc-pi-direct/raw.png",
+      "bytes": 1489604,
+      "sha256": "515bd252b9d87e6b8fbb6b09b033a42df156128f8a702e04300d582411b9e16b"
+    },
+    {
+      "path": "uvc-through-pynq-replug/devices.txt",
+      "bytes": 115,
+      "sha256": "3589679453e58570d1726c94349a33a510fd4cba9c3c67545802596d8e566f05"
+    },
+    {
+      "path": "uvc-through-pynq-replug/metadata.json",
+      "bytes": 942,
+      "sha256": "0c626d76449cd4ef84a063b4d70259154dfb66d4240c00793e877c07b757aedd"
+    },
+    {
+      "path": "uvc-through-pynq-replug/pixel-stats.json",
+      "bytes": 226,
+      "sha256": "301e6fbbdb6a8909ecf8400b528ad05474c5c8064c3800d18297466e1828ab02"
+    },
+    {
+      "path": "uvc-through-pynq-replug/raw.png",
+      "bytes": 1533365,
+      "sha256": "fea8f8fcce36a4ad5fcf56270de7f8ce372f98493875c79867f67fc08ad4a856"
+    },
+    {
+      "path": "vision-after-replug.txt",
+      "bytes": 231,
+      "sha256": "63d2be6d4a852752768a2b2de7f7cce87c9d7ea7c8cdb996a3d4349759fada35"
+    },
+    {
+      "path": "vision-recovery.txt",
+      "bytes": 2817,
+      "sha256": "e9559cd84488e350b05fe70df40b63a22d44439cce0425e84a0f08f3967fe32d"
+    },
+    {
+      "path": "zcode-excerpts.json",
+      "bytes": 87408,
+      "sha256": "d23a65dc81a8f07981475ccb097e7bd64ab64fe25f1377bcc87f424ba89f75b1"
+    }
+  ]
+}

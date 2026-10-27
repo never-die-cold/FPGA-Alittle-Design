@@ -1,0 +1,58 @@
+2026-09-22T20:17:49+00:00
+ 20:17:49 up 1 min,  1 user,  load average: 3.35, 0.97, 0.34
+Linux pynq 6.6.10-xilinx-v2024.1-gb36799f4e960 #1 SMP PREEMPT Sat Apr 27 05:22:24 UTC 2024 armv7l armv7l armv7l GNU/Linux
+===BOOT===
+94516e98-212e-4831-b11c-c3a49021c929
+unknown
+===DISK===
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/root        15G  7.0G  6.6G  52% /
+/dev/mmcblk0p1  130M  8.0M  122M   7% /boot
+TARGET SOURCE         FSTYPE OPTIONS
+/      /dev/mmcblk0p2 ext4   rw,relatime
+===NET===
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+dummy0           DOWN           
+eth0             UP             192.168.50.99/24 169.254.87.99/16 192.168.2.99/24 fe80::301d:84ff:fec8:b027/64 
+sit0@NONE        DOWN           
+===ERRORS===
+[   40.162193] cdns-wdt f8005000.watchdog: Xilinx Watchdog Timer with timeout 10s
+[   40.183734] sdhci: Secure Digital Host Controller Interface driver
+[   40.188629] sdhci: Copyright(c) Pierre Ossman
+[   40.191716] sdhci-pltfm: SDHCI platform and OF driver helper
+[   40.229196] mmc0: SDHCI controller on e0100000.mmc [e0100000.mmc] using ADMA
+[   40.310262] mmc0: new high speed SDHC card at address aaaa
+[   40.319609] mmcblk0: mmc0:aaaa SC16G 14.8 GiB
+[   40.334204]  mmcblk0: p1 p2
+[   40.764811] EXT4-fs (mmcblk0p2): 1 orphan inode deleted
+[   40.768785] EXT4-fs (mmcblk0p2): recovery complete
+[   40.784282] EXT4-fs (mmcblk0p2): mounted filesystem 5a7f11a7-449d-4143-9d28-f718a44a2eaa r/w with ordered data mode. Quota mode: disabled.
+[   53.139902] FAT-fs (mmcblk0p1): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+===PROCESSES===
+  PID  PPID STAT     ELAPSED COMMAND
+  220     1 Ss         00:42 /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
+  258   188 Ss         00:42 /bin/sh -c bash -c 'sleep 15; source /etc/profile.d/xrt_setup.sh; source /etc/profile.d/pynq_venv.sh; python3 -u /home/xilinx/vision_m2/m2_onboard.py load; sleep 3; python3 -u /home/xilinx/vision_m2/m2_onboard.py smoke || true'
+  267   258 S          00:42 bash -c sleep 15; source /etc/profile.d/xrt_setup.sh; source /etc/profile.d/pynq_venv.sh; python3 -u /home/xilinx/vision_m2/m2_onboard.py load; sleep 3; python3 -u /home/xilinx/vision_m2/m2_onboard.py smoke || true
+  292   184 R          00:41 python3 /boot/boot.py
+  429   206 S          00:31 /usr/local/share/pynq-venv/bin/python3 /usr/local/share/pynq-venv/bin/jupyter-notebook --no-browser --allow-root
+  569     1 Ssl        00:27 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+  573   267 R          00:27 python3 -u /home/xilinx/vision_m2/m2_onboard.py load
+  582     1 Ss         00:26 sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups
+  659     1 S          00:17 bash -c sleep 25; source /etc/profile.d/xrt_setup.sh; source /etc/profile.d/pynq_venv.sh; cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && nohup python3 -u park_live_server_v7.py --host 0.0.0.0 --port 8765 --root /home/xilinx/vision_m2/live-artifacts --order 2 2 2 --min-score 0.8 >> /home/xilinx/vision_m2/live-server.log 2>&1 &
+  661   659 Sl         00:17 python3 -u park_live_server_v7.py --host 0.0.0.0 --port 8765 --root /home/xilinx/vision_m2/live-artifacts --order 2 2 2 --min-score 0.8
+  702   429 Rl         00:08 /usr/bin/node /usr/local/share/pynq-venv/lib/python3.10/site-packages/jupyterlab/staging/yarn.js config list --json
+  774     2 R          00:00 /usr/bin/python3 /usr/share/apport/apport 758 31 0 1 758 !usr!sbin!haveged
+===CRON===
+===PACKAGES===
+/home/xilinx/cop-pkg
+/home/xilinx/cop-pkg-diagnostic-566b
+/home/xilinx/cop-pkg-edge-20261026
+/home/xilinx/cop-pkg-edge-diag-8884046
+/home/xilinx/cop-pkg-edge-trained-8884046
+/home/xilinx/cop-pkg-gate566b
+/home/xilinx/cop-pkg-imem-20261026
+/home/xilinx/cop-pkg-mmcm-oldtool
+/home/xilinx/cop-pkg-trained-566b
+/home/xilinx/cop-pkg-trained566b
+/home/xilinx/cop-pkg-trained-oldbit
+no crontab for xilinx

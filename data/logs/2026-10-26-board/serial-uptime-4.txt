@@ -1,0 +1,7 @@
+HOST_STARTED_UTC=2026-10-27T02:21:57.3069214Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=uptime; dmesg | grep -c mmc0
+
+ERROR: timeout; remote completion unconfirmed; no interrupt sent
+
+HOST_EXIT_CODE=124

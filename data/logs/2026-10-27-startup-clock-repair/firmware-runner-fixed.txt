@@ -1,0 +1,6 @@
+PASS: C02 arithmetic goldens {'requant': 8075, 'gap': 32515, 'logits': 2814}
+mingw32-make: Entering directory 'E:/Projects/FPGA-Alittle-Design/src/riscv_fw'
+mingw32-make: 'cop_job.elf' is up to date.
+mingw32-make: Leaving directory 'E:/Projects/FPGA-Alittle-Design/src/riscv_fw'
+PASS: cop work-order PASS/FAIL/RECHECK, low-confidence and 10/16 policy
+PASS: objdump 失败 → make 非零退出，cop_job.dis 未被改写（sha256 e560eae03872…）

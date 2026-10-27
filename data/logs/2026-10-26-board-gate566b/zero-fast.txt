@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/xilinx/cop-pkg-gate566b/payload/tools/cop_board_fast_run.py", line 198, in <module>
+    main()
+  File "/home/xilinx/cop-pkg-gate566b/payload/tools/cop_board_fast_run.py", line 193, in main
+    run_one(loader, package, args.case, args.measurement, args.timeout, pre, fast_send)
+  File "/home/xilinx/cop-pkg-gate566b/payload/tools/cop_board_fast_run.py", line 145, in run_one
+    loader.dma_send(dma, gpio, cop, buffers["payload"], len(payload), 0, timeout)
+  File "/home/xilinx/cop-pkg-gate566b/payload/tools/cop_board_fast_run.py", line 101, in fast_send
+    transfer_status = loader.wait_for(transfer_done, timeout, "AXI DMA MM2S timeout")
+  File "/home/xilinx/cop-pkg-gate566b/payload/tools/cop_payload_loader.py", line 188, in wait_for
+    raise LoaderError(message)
+cop_payload_loader.LoaderError: AXI DMA MM2S timeout

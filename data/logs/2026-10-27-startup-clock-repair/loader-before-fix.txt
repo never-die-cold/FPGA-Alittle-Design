@@ -1,0 +1,18 @@
+board_sequence=set_fclk,reconfigure_pl,wait_stable,pulse_fclkreset1,status_check
+measured_fclk1_mhz=40.000000
+status_first_reads=0x00000001,0x00000001,0x00000001
+firmware_smoke=PASS status=0x00000001 fw_decision=0x00000001
+firmware_smoke_timeout_dump={"CFG_APPLIED": "0x00000000", "CFG_SEQ": "0x00000000", "DMA_BYTES": "0x00000000", "ERROR_CODE": "0x00000000", "FW_DECISION": "0x00000000", "MODEL_ID": "0x00000000", "RESULT_SEQ": "0x00000000", "ROI_COUNT": "0x00000000", "STATUS": "0x00000000"}
+Traceback (most recent call last):
+  File "E:\Projects\FPGA-Alittle-Design\sim\coprocessor\test_cop_payload_loader.py", line 170, in <module>
+    if __name__ == "__main__": main()
+                               ^^^^^^
+  File "E:\Projects\FPGA-Alittle-Design\sim\coprocessor\test_cop_payload_loader.py", line 155, in main
+    loader.prepare_board(args.output, 3, 0.1, api=fake_pynq, sleeper=lambda _: None)
+  File "E:\Projects\FPGA-Alittle-Design\tools\cop_payload_loader.py", line 157, in prepare_board
+    overlay = api.Overlay(str(bit), download=True)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Projects\FPGA-Alittle-Design\sim\coprocessor\test_cop_payload_loader.py", line 147, in __init__
+    assert download and MmcmClocks.fclk1_mhz == 142.857132
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

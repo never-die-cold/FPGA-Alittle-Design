@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "/home/xilinx/cop-pkg-imem-20261026/remote-tools/run_board.py", line 19, in <module>
+    runpy.run_path(script, run_name="__main__")
+  File "/usr/lib/python3.10/runpy.py", line 269, in run_path
+    return _run_module_code(code, init_globals, run_name,
+  File "/usr/lib/python3.10/runpy.py", line 96, in _run_module_code
+    _run_code(code, mod_globals, init_globals,
+  File "/usr/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "payload/tools/cop_board_fast_run.py", line 142, in <module>
+    main()
+  File "payload/tools/cop_board_fast_run.py", line 135, in main
+    loader.run_board(run_args)
+  File "/home/xilinx/cop-pkg-imem-20261026/payload/tools/cop_payload_loader.py", line 250, in run_board
+    dma_send(dma, gpio, cop, buffers["payload"], len(payload), 0, args.timeout)
+  File "payload/tools/cop_board_fast_run.py", line 116, in fast_send
+    transfer_status = loader.wait_for(transfer_done, timeout, "AXI DMA MM2S timeout")
+  File "/home/xilinx/cop-pkg-imem-20261026/payload/tools/cop_payload_loader.py", line 122, in wait_for
+    raise LoaderError(message)
+cop_payload_loader.LoaderError: AXI DMA MM2S timeout

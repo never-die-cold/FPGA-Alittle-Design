@@ -1,0 +1,46 @@
+HOST_STARTED_UTC=2026-10-26T14:31:05.3359248Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=uptime; ip -4 addr show eth0 | grep inet; dmesg | grep -c 'mmc0: Timeout'; dmesg | grep -cE 'writing .*bin to Xilinx'
+uptime; ip -4 addr show eth0 | grep inet; dmesg | grep -c 'mmc0: Timeout'; dmesg | grep -cE 'writing .*bin to Xilinx'; printf '\n__PYNQ_RC_73e7f46d5549450ea2d82bdb33c97281=%d\n' $?
+mmc0: Timeout waiting for hardware interrupt.
+mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
+mmc0: sdhci: Blk size:  0x00007004 | Blk cnt:  0x00000001
+mmc0: sdhci: Argument:  0x00000000 | Trn mode: 0x00000013
+mmc0: sdhci: Present:   0x01ff0202 | Host ctl: 0x00000011
+mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
+mmc0: sdhci: Timeout:   0x0000000a | Int stat: 0x00000000
+mmc0: sdhci: Int enab:  0x02ff008b | Sig enab: 0x02ff008b
+mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
+mmc0: sdhci: Cmd:       0x0000163a | Max curr: 0x00000001
+mmc0: sdhci: Resp[0]:   0x00000920 | Resp[1]:  0x00000000
+mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+mmc0: sdhci: Host ctl2: 0x00000000
+mmc0: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x15845200
+mmc0: sdhci: ============================================
+I/O error, dev mmcblk0, sector 276352 op 0x1:(WRITE) flags 0x103000 phys_seg 1 prio class 2
+Buffer I/O error on dev mmcblk0p2, logical block 1008, lost async page write
+mmc0: Timeout waiting for hardware interrupt.
+mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
+mmc0: sdhci: Blk size:  0x00007200 | Blk cnt:  0x00000008
+mmc0: sdhci: Argument:  0x0005db68 | Trn mode: 0x00000023
+mmc0: sdhci: Present:   0x01ff0106 | Host ctl: 0x00000011
+mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
+mmc0: sdhci: Timeout:   0x0000000e | Int stat: 0x00000000
+mmc0: sdhci: Int enab:  0x02ff008b | Sig enab: 0x02ff008b
+mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
+mmc0: sdhci: Cmd:       0x0000193a | Max curr: 0x00000001
+mmc0: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x00000000
+mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+mmc0: sdhci: Host ctl2: 0x00000000
+mmc0: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x15845200
+mmc0: sdhci: ============================================
+
+ERROR: timeout; remote completion unconfirmed; no interrupt sent
+
+HOST_EXIT_CODE=124

@@ -1,0 +1,62 @@
+HOST_STARTED_UTC=2026-10-26T19:09:23.5436641Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=ls -la /tmp/zero-mmcm-oldtool.json 2>/dev/null && cat /tmp/zero-mmcm-oldtool.json || echo NO-JSON-YET
+ls -la /tmp/zero-mmcm-oldtool.json 2>/dev/null && cat /tmp/zero-mmcm-oldtool.json || echo NO-JSON-YET; printf '\n__PYNQ_RC_72cba6df978e4a61a7b886bfb2bf584d=%d\n' $?
+mmc0: Timeout waiting for hardware interrupt.
+mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
+mmc0: sdhci: Blk size:  0x00007200 | Blk cnt:  0x000000a0
+mmc0: sdhci: Argument:  0x00488828 | Trn mode: 0x00000023
+mmc0: sdhci: Present:   0x01ff0106 | Host ctl: 0x00000011
+mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
+mmc0: sdhci: Timeout:   0x0000000e | Int stat: 0x00000000
+mmc0: sdhci: Int enab:  0x02ff008b | Sig enab: 0x02ff008b
+mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
+mmc0: sdhci: Cmd:       0x0000193a | Max curr: 0x00000001
+mmc0: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x00000000
+mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+mmc0: sdhci: Host ctl2: 0x00000000
+mmc0: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x15845200
+mmc0: sdhci: ============================================
+mmc0: Timeout waiting for hardware interrupt.
+mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
+mmc0: sdhci: Blk size:  0x00007004 | Blk cnt:  0x00000001
+mmc0: sdhci: Argument:  0x00000000 | Trn mode: 0x00000013
+mmc0: sdhci: Present:   0x01ff0202 | Host ctl: 0x00000011
+mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
+mmc0: sdhci: Timeout:   0x0000000a | Int stat: 0x00000000
+mmc0: sdhci: Int enab:  0x02ff008b | Sig enab: 0x02ff008b
+mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
+mmc0: sdhci: Cmd:       0x0000163a | Max curr: 0x00000001
+mmc0: sdhci: Resp[0]:   0x00000920 | Resp[1]:  0x00000000
+mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+mmc0: sdhci: Host ctl2: 0x00000000
+mmc0: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x15845200
+mmc0: sdhci: ============================================
+mmc0: Timeout waiting for hardware interrupt.
+mmc0: sdhci: ============ SDHCI REGISTER DUMP ===========
+mmc0: sdhci: Sys addr:  0x00000000 | Version:  0x00008901
+mmc0: sdhci: Blk size:  0x00007200 | Blk cnt:  0x00000008
+mmc0: sdhci: Argument:  0x00b77538 | Trn mode: 0x00000023
+mmc0: sdhci: Present:   0x01ff0106 | Host ctl: 0x00000011
+mmc0: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+mmc0: sdhci: Wake-up:   0x00000000 | Clock:    0x00004007
+mmc0: sdhci: Timeout:   0x0000000e | Int stat: 0x00000000
+mmc0: sdhci: Int enab:  0x02ff008b | Sig enab: 0x02ff008b
+mmc0: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+mmc0: sdhci: Caps:      0x69ec0080 | Caps_1:   0x00000000
+mmc0: sdhci: Cmd:       0x0000193a | Max curr: 0x00000001
+mmc0: sdhci: Resp[0]:   0x00000900 | Resp[1]:  0x00000000
+mmc0: sdhci: Resp[2]:   0x00000000 | Resp[3]:  0x00000000
+mmc0: sdhci: Host ctl2: 0x00000000
+mmc0: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x15845200
+mmc0: sdhci: ============================================
+
+ERROR: timeout; remote completion unconfirmed; no interrupt sent
+
+HOST_EXIT_CODE=124

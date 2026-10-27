@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "E:\Projects\FPGA-Alittle-Design\sim\vision\test_cop_engine.py", line 181, in <module>
+    main()
+  File "E:\Projects\FPGA-Alittle-Design\sim\vision\test_cop_engine.py", line 172, in main
+    test_ps_gates()
+  File "E:\Projects\FPGA-Alittle-Design\sim\vision\test_cop_engine.py", line 86, in test_ps_gates
+    fields = engine.inspect_round(load_frame(), OUT / "limit", "chk000001")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Projects\FPGA-Alittle-Design\src\pynq_host\cop_engine.py", line 128, in inspect_round
+    return self._fields(frame, Path(round_dir), request_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Projects\FPGA-Alittle-Design\src\pynq_host\cop_engine.py", line 138, in _fields
+    boxes = detect_boxes(frame, self.color_threshold, self.min_area_ratio)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: test_ps_gates.<locals>.<lambda>() takes 1 positional argument but 3 were given

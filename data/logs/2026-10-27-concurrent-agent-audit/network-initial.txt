@@ -1,0 +1,31 @@
+2026-10-27T12:32:58.6372289+08:00
+
+Name                          InterfaceDescription                       Status       LinkSpeed
+----                          --------------------                       ------       ---------
+VMware Network Adapter VMnet8 VMware Virtual Ethernet Adapter for VMnet8 Up           100 Mbps
+VMware Network Adapter VMnet1 VMware Virtual Ethernet Adapter for VMnet1 Up           100 Mbps
+以太网 3                      TAP-Windows Adapter V9                     Disconnected 100 Mbps
+WLAN                          Realtek 8852CE WiFi 6E PCI-E NIC           Up           573.5 Mbps
+以太网                        Realtek PCIe GbE Family Controller         Up           1 Gbps
+tun0                          sing-tun Tunnel                            Up           100 Gbps
+蓝牙网络连接                  Bluetooth Device (Personal Area Network)   Disconnected 3 Mbps
+
+
+
+IPAddress    PrefixLength InterfaceAlias
+---------    ------------ --------------
+192.168.50.1           24 以太网
+
+
+
+Pinging 192.168.50.99 with 32 bytes of data:
+Request timed out.
+Request timed out.
+Request timed out.
+
+Ping statistics for 192.168.50.99:
+    Packets: Sent = 3, Received = 0, Lost = 3 (100% loss),
+
+Interface: 192.168.50.1 --- 0xa
+  Internet Address      Physical Address      Type
+  192.168.50.99         b6-62-c2-17-07-39     dynamic   

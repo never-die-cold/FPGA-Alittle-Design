@@ -1,0 +1,69 @@
+diff --git a/build/build_pynq_cop_gate.tcl b/build/build_pynq_cop_gate.tcl
+index ea24407..f25e397 100644
+--- a/build/build_pynq_cop_gate.tcl
++++ b/build/build_pynq_cop_gate.tcl
+@@ -98,6 +98,12 @@ if {[catch {
+     launch_runs synth_1 -jobs 2
+     wait_on_run synth_1
+     if {[get_property PROGRESS [get_runs synth_1]] ne "100%"} {error "Whole-system synthesis failed"}
++    set synth_log [file join [get_property DIRECTORY [get_runs synth_1]] runme.log]
++    if {![file isfile $synth_log]} {error "Synthesis log missing: $synth_log"}
++    set fh [open $synth_log r]; set synth_text [read $fh]; close $fh
++    if {[regexp -nocase {\$readmemh[^\n]*(unable to open|cannot open|not found|no such file|failed)} $synth_text]} {
++        error "IMEM/DMEM readmemh failed; the bitstream would boot NOPs"
++    }
+     open_run synth_1
+     reject_latches SYNTHESIS
+     report_utilization -file [file join $rep_dir utilization_synth.rpt]
+diff --git a/build/create_pynq_cop_bd.tcl b/build/create_pynq_cop_bd.tcl
+index fc375b5..342f597 100644
+--- a/build/create_pynq_cop_bd.tcl
++++ b/build/create_pynq_cop_bd.tcl
+@@ -18,6 +18,10 @@ set_property -dict [list CONFIG.PCW_USE_M_AXI_GP0 1 CONFIG.PCW_USE_S_AXI_HP0 1 \
+ cop_ext_intf ps7/DDR DDR
+ cop_ext_intf ps7/FIXED_IO FIXED_IO
+ set pl [create_bd_cell -type module -reference pynq_cop_top pl]
++set imem_hex [file normalize [file join [pwd] src/riscv_fw/cop_job.hex]]
++if {![file isfile $imem_hex]} { error "Missing IMEM hex: $imem_hex" }
++puts "IMEM_INIT_FILE=$imem_hex"
++set_property -dict [list CONFIG.IMEM_INIT_FILE $imem_hex CONFIG.DMEM_INIT_FILE $imem_hex] $pl
+ set control [cop_ip control_ic xilinx.com:ip:axi_interconnect:2.1]
+ set_property -dict [list CONFIG.NUM_SI 1 CONFIG.NUM_MI 3] $control
+ set dma [cop_ip dma xilinx.com:ip:axi_dma:7.1]
+diff --git a/build/run_pynq_cop_gate.ps1 b/build/run_pynq_cop_gate.ps1
+index 09b0960..cabb0d0 100644
+--- a/build/run_pynq_cop_gate.ps1
++++ b/build/run_pynq_cop_gate.ps1
+@@ -8,7 +8,10 @@ $cross = @("riscv32-unknown-elf-", "riscv64-unknown-elf-") | Where-Object {
+ if (-not $cross) { throw "Missing riscv32/riscv64 gcc; cop_job.hex was not refreshed" }
+ $make = Get-Command mingw32-make.exe, make.exe -ErrorAction SilentlyContinue | Select-Object -First 1
+ if (-not $make) { throw "Missing mingw32-make/make" }
+-& $make.Source -B -C src/riscv_fw "CROSS=$cross" cop_job.hex
++$python = Get-Command python.exe -ErrorAction SilentlyContinue | Select-Object -First 1
++if (-not $python) { throw "Missing python.exe for bin2hex.py" }
++$env:PYTHON = $python.Source
++& $make.Source -B -C src/riscv_fw "CROSS=$cross" "PYTHON=$env:PYTHON" cop_job.hex
+ if ($LASTEXITCODE -ne 0) { throw "cop_job.hex rebuild failed" }
+ & $Vivado -mode batch -source build/build_soc.tcl -tclargs 40 fwd
+ if ($LASTEXITCODE -ne 0) { throw "ENABLE_COP=0 baseline failed; production build not started" }
+diff --git a/src/riscv/pynq_cop_top.v b/src/riscv/pynq_cop_top.v
+index bb75175..6a99a94 100644
+--- a/src/riscv/pynq_cop_top.v
++++ b/src/riscv/pynq_cop_top.v
+@@ -59,12 +59,13 @@ module pynq_cop_top #(
+     (* ASYNC_REG="TRUE", SHREG_EXTRACT="NO" *) reg dma_req_c1,dma_req_c2,dma_kind_c1,dma_kind_c2;
+     reg cop_dma_start,cop_dma_kind;
+     (* ASYNC_REG="TRUE", SHREG_EXTRACT="NO" *) reg dma_ack_s1,dma_ack_s2;
++    reg dma_start_ps_q;
+     assign dma_start_ready_o=dma_ack_s2==dma_req_ps;
+     always @(posedge ps_clk_100_i or negedge ps_rst_n_i) begin
+-        if(!ps_rst_n_i) begin dma_req_ps<=0; dma_kind_hold<=0; dma_ack_s1<=0; dma_ack_s2<=0; end
++        if(!ps_rst_n_i) begin dma_req_ps<=0; dma_kind_hold<=0; dma_ack_s1<=0; dma_ack_s2<=0; dma_start_ps_q<=0; end
+         else begin
+-            dma_ack_s1<=dma_ack_cop; dma_ack_s2<=dma_ack_s1;
+-            if(dma_start_ps_i && dma_start_ready_o) begin dma_kind_hold<=dma_kind_ps_i; dma_req_ps<=!dma_req_ps; end
++            dma_ack_s1<=dma_ack_cop; dma_ack_s2<=dma_ack_s1; dma_start_ps_q<=dma_start_ps_i;
++            if(dma_start_ps_i && !dma_start_ps_q && dma_start_ready_o) begin dma_kind_hold<=dma_kind_ps_i; dma_req_ps<=!dma_req_ps; end
+         end
+     end
+     always @(posedge cop_clk_40_i or negedge cop_rst_n_i) begin

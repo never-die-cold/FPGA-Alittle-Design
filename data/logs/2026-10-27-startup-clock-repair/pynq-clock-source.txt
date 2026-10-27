@@ -1,0 +1,498 @@
+FILE /usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/overlay.py
+402:    def download(self, dtbo=None):
+403:        """The method to download a full bitstream onto PL.
+404:
+405:        After the bitstream has been downloaded, the "timestamp" in PL will be
+406:        updated. In addition, all the dictionaries on PL will
+407:        be reset automatically.
+408:
+409:        This method will use parameter `dtbo` or `self.dtbo` to configure the
+410:        device tree.
+411:
+412:        The download method will also configure some of the PS registers
+413:        based on the metadata file provided, e.g. PL clocks,
+414:        AXI master port width.
+415:
+416:        Parameters
+417:        ----------
+418:        dtbo : str
+419:            The path of the dtbo file.
+420:
+421:        """
+422:        for i in self.clock_dict:
+423:            if "enable" in self.clock_dict[i]:
+424:                enable = self.clock_dict[i]["enable"]
+425:                div0 = self.clock_dict[i]["divisor0"]
+426:                div1 = self.clock_dict[i]["divisor1"]
+427:                if enable:
+428:                    Clocks.set_pl_clk(i, div0, div1)
+429:                else:
+430:                    Clocks.set_pl_clk(i)
+431:
+432:        super().download(self.parser)
+433:        if dtbo:
+434:            super().insert_dtbo(dtbo)
+435:        elif self.dtbo:
+436:            super().insert_dtbo()
+437:
+438:    def pr_download(self, partial_region, partial_bit, dtbo=None, program=True):
+439:        """The method to download a partial bitstream onto PL.
+440:
+441:        In this method, the corresponding parser will only be
+442:        added once the `download()` method of the hierarchical block is called.
+443:
+444:        This method always uses the parameter `dtbo` to configure the device
+445:        tree.
+446:
+447:        Note
+448:        ----
+449:        There is no check on whether the partial region specified by users
+450:        is really partial-reconfigurable. So users have to make sure the
+451:        `partial_region` provided is correct.
+452:
+453:        Parameters
+454:        ----------
+455:        partial_region : str
+456:            The name of the hierarchical block corresponding to the PR region.
+949:    def download(self, bitfile_name, dtbo=None, program=True):
+950:        """Function to download a partial bitstream for the hierarchy block.
+951:
+952:        Since it is hard to know which hierarchy is to be reconfigured by only
+953:        looking at the metadata, we assume users will tell this information.
+954:        Thus, this function should be called only when users are sure about
+955:        the hierarchy name of the partial region.
+956:
+957:        Parameters
+958:        ----------
+959:        bitfile_name : str
+960:            The name of the partial bitstream.
+961:        dtbo : str
+962:            The relative or absolute path of the partial dtbo file.
+963:        program : bool
+964:            Whether the overlay should be downloaded.
+965:
+966:        """
+967:        if self.pr_loaded:
+968:            self._find_bitstream_by_abs(self.pr_loaded).remove_dtbo()
+969:        self._locate_metadata(bitfile_name, dtbo)
+970:        self._parse(bitfile_name)
+971:        self._load_bitstream(bitfile_name, program)
+972:        if dtbo:
+973:            self.bitstreams[bitfile_name].insert_dtbo()
+974:
+975:        self.device.update_partial_region(
+976:            self.description["fullpath"], self.parsers[self.pr_loaded]
+977:        )
+978:
+979:        self._overlay._deepcopy_dict_from(self.device)
+980:        self._overlay.pr_dict[self.description["fullpath"]] = {
+981:            "loaded": self.pr_loaded,
+982:            "dtbo": dtbo,
+983:        }
+984:        description = _complete_description(
+985:            self._overlay.ip_dict,
+986:            self._overlay.hierarchy_dict,
+987:            self._overlay.ignore_version,
+988:            self._overlay.mem_dict,
+989:            self._overlay.device,
+990:            self._overlay,
+991:        )
+992:        self._overlay._ip_map = _IPMap(description)
+993:
+994:    def _find_bitstream_by_abs(self, absolute_path):
+995:        for i in self.bitstreams.keys():
+996:            if self.bitstreams[i].bitfile_name == absolute_path:
+997:                return self.bitstreams[i]
+998:        return None
+999:
+1000:    def _locate_metadata(self, bitfile_name, dtbo):
+1001:        self.bitstreams[bitfile_name] = Bitstream(bitfile_name, dtbo, partial=True, device=self.device)
+1002:        bitfile_name = self.bitstreams[bitfile_name].bitfile_name
+1003:        self.parsers[bitfile_name] = self.device.get_bitfile_metadata(bitfile_name, partial=True)
+FILE /usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/ps.py
+180:    def fclk1_mhz(cls):
+181:        """The getter method for PL clock 1.
+182:
+183:        This method will read the register values, do the calculation,
+184:        and return the current clock rate.
+185:
+186:        Returns
+187:        -------
+188:        float
+189:            The returned clock rate measured in MHz.
+190:
+191:        """
+192:        return cls._instance.get_pl_clk(1)
+193:
+194:    @fclk1_mhz.setter
+195:    def fclk1_mhz(cls, clk_mhz):
+196:        """The setter method for PL clock 1.
+197:
+198:        Parameters
+199:        ----------
+200:        clk_mhz : float
+201:            The clock rate in MHz.
+202:
+203:        """
+204:        cls._instance.set_pl_clk(1, clk_mhz=clk_mhz)
+205:
+206:    @property
+207:    def fclk2_mhz(cls):
+208:        """The getter method for PL clock 2.
+209:
+210:        This method will read the register values, do the calculation,
+211:        and return the current clock rate.
+212:
+213:        Returns
+214:        -------
+215:        float
+216:            The returned clock rate measured in MHz.
+217:
+218:        """
+219:        return cls._instance.get_pl_clk(2)
+220:
+221:    @fclk2_mhz.setter
+222:    def fclk2_mhz(cls, clk_mhz):
+223:        """The setter method for PL clock 2.
+224:
+225:        Parameters
+226:        ----------
+227:        clk_mhz : float
+228:            The clock rate in MHz.
+229:
+230:        """
+231:        cls._instance.set_pl_clk(2, clk_mhz=clk_mhz)
+232:
+233:    @property
+234:    def fclk3_mhz(cls):
+195:    def fclk1_mhz(cls, clk_mhz):
+196:        """The setter method for PL clock 1.
+197:
+198:        Parameters
+199:        ----------
+200:        clk_mhz : float
+201:            The clock rate in MHz.
+202:
+203:        """
+204:        cls._instance.set_pl_clk(1, clk_mhz=clk_mhz)
+205:
+206:    @property
+207:    def fclk2_mhz(cls):
+208:        """The getter method for PL clock 2.
+209:
+210:        This method will read the register values, do the calculation,
+211:        and return the current clock rate.
+212:
+213:        Returns
+214:        -------
+215:        float
+216:            The returned clock rate measured in MHz.
+217:
+218:        """
+219:        return cls._instance.get_pl_clk(2)
+220:
+221:    @fclk2_mhz.setter
+222:    def fclk2_mhz(cls, clk_mhz):
+223:        """The setter method for PL clock 2.
+224:
+225:        Parameters
+226:        ----------
+227:        clk_mhz : float
+228:            The clock rate in MHz.
+229:
+230:        """
+231:        cls._instance.set_pl_clk(2, clk_mhz=clk_mhz)
+232:
+233:    @property
+234:    def fclk3_mhz(cls):
+235:        """The getter method for PL clock 3.
+236:
+237:        This method will read the register values, do the calculation,
+238:        and return the current clock rate.
+239:
+240:        Returns
+241:        -------
+242:        float
+243:            The returned clock rate measured in MHz.
+244:
+245:        """
+246:        return cls._instance.get_pl_clk(3)
+247:
+248:    @fclk3_mhz.setter
+249:    def fclk3_mhz(cls, clk_mhz):
+273:    def set_pl_clk(cls, clk_idx, div0=None, div1=None,
+274:                   clk_mhz=DEFAULT_PL_CLK_MHZ):
+275:        """This method sets a PL clock frequency.
+276:
+277:        Users have to specify the index of the PL clock to be changed.
+278:        For example, for fclk1 (Zynq) or pl_clk_1 (ZynqUltrascale),
+279:        `clk_idx` is 1.
+280:
+281:        The CPU, and other source clocks, by default, should not get changed.
+282:
+283:        Users have two options:
+284:        1. specify the two frequency divider values directly (div0, div1), or
+285:        2. specify the clock rate, in which case the divider values will be
+286:        calculated.
+287:
+288:        Note
+289:        ----
+290:        In case `div0` and `div1` are both specified, the parameter `clk_mhz`
+291:        will be ignored.
+292:
+293:        Parameters
+294:        ----------
+295:        clk_idx : int
+296:            The index of the PL clock to be changed, from 0 to 3.
+297:        div0 : int
+298:            The first frequency divider value.
+299:        div1 : int
+300:            The second frequency divider value.
+301:        clk_mhz : float
+302:            The clock rate in MHz.
+303:
+304:        """
+305:        cls._instance.set_pl_clk(clk_idx, div0, div1, clk_mhz)
+306:
+307:    @property
+308:    def _instance(cls):
+309:        if not hasattr(cls, '_real_instance'):
+310:            if not cls.device:
+311:                # If device is not set, default to active device
+312:                from pynq.pl_server.device import Device
+313:                cls.device = Device.active_device
+314:            if cls.device.arch == ZYNQ_ARCH:
+315:                cls._real_instance = _ClocksZynq(device=cls.device)
+316:            elif cls.device.arch == ZU_ARCH:
+317:                cls._real_instance = _ClocksUltrascale(device=cls.device)
+318:            else:
+319:                raise RuntimeError('Architecture not supported for Clocks')
+320:        return cls._real_instance
+321:
+322:
+323:class _ClocksBase:
+324:
+325:    def get_pl_clk(self, clk_idx):
+326:        """This method will return the clock frequency.
+327:
+347:    def set_pl_clk(self, clk_idx, div0=None, div1=None,
+348:                   clk_mhz=DEFAULT_PL_CLK_MHZ):
+349:        """This method sets a PL clock frequency.
+350:
+351:        Users have to specify the index of the PL clock to be changed.
+352:        For example, for fclk1 (Zynq) or pl_clk_1 (ZynqUltrascale),
+353:        `clk_idx` is 1.
+354:
+355:        The CPU, and other source clocks, by default, should not get changed.
+356:
+357:        Users have two options:
+358:        1. specify the two frequency divider values directly (div0, div1), or
+359:        2. specify the clock rate, in which case the divider values will be
+360:        calculated.
+361:
+362:        Note
+363:        ----
+364:        In case `div0` and `div1` are both specified, the parameter `clk_mhz`
+365:        will be ignored.
+366:
+367:        Parameters
+368:        ----------
+369:        clk_idx : int
+370:            The index of the PL clock to be changed, from 0 to 3.
+371:        div0 : int
+372:            The first frequency divider value.
+373:        div1 : int
+374:            The second frequency divider value.
+375:        clk_mhz : float
+376:            The clock rate in MHz.
+377:
+378:        """
+379:        if clk_idx not in range(4):
+380:            raise ValueError("Valid PL clock index is 0 - 3.")
+381:
+382:        pl_clk_reg = self.PL_CLK_CTRLS[clk_idx]
+383:        div0_width = 6
+384:        div1_width = 6
+385:        src_clk_idx = pl_clk_reg.SRCSEL
+386:        src_clk_mhz = self._get_src_clk_mhz(src_clk_idx)
+387:
+388:        if div0 is None and div1 is None:
+389:            div0, div1 = self._get_2_divisors(src_clk_mhz, clk_mhz,
+390:                                              div0_width, div1_width)
+391:        elif div0 is not None and div1 is None:
+392:            div1 = round(src_clk_mhz / clk_mhz / div0)
+393:        elif div1 is not None and div0 is None:
+394:            div0 = round(src_clk_mhz / clk_mhz / div1)
+395:
+396:        if div0 <= 0 or div0 > ((1 << div0_width) - 1):
+397:            raise ValueError("Frequency divider 0 value out of range.")
+398:        if div1 <= 0 or div1 > ((1 << div1_width) - 1):
+399:            raise ValueError("Frequency divider 1 value out of range.")
+400:
+401:        pl_clk_reg.DIVISOR0 = div0
+494:    def set_pl_clk(self, clk_idx, div0=None, div1=None,
+495:                   clk_mhz=DEFAULT_PL_CLK_MHZ):
+496:        """This method sets a PL clock frequency.
+497:
+498:        Users have to specify the index of the PL clock to be changed.
+499:
+500:        The CPU, and other source clocks, by default, should not get changed.
+501:
+502:        Users have two options:
+503:        1. specify the two frequency divider values directly (div0, div1), or
+504:        2. specify the clock rate, in which case the divider values will be
+505:        calculated.
+506:
+507:        Note
+508:        ----
+509:        In case `div0` and `div1` are both specified, the parameter `clk_mhz`
+510:        will be ignored.
+511:
+512:        Parameters
+513:        ----------
+514:        clk_idx : int
+515:            The index of the PL clock to be changed, from 0 to 3.
+516:        div0 : int
+517:            The first frequency divider value.
+518:        div1 : int
+519:            The second frequency divider value.
+520:        clk_mhz : float
+521:            The clock rate in MHz.
+522:
+523:        """
+524:        pl_clk_reg = self.PL_CLK_CTRLS[clk_idx]
+525:        pl_clk_reg.CLKACT = 1
+526:        pl_clk_reg.SRC_FIELD = self.PLX_CTRL_SRC_DEFAULT
+527:        super().set_pl_clk(clk_idx, div0, div1, clk_mhz)
+528:
+529:    def get_pll_mhz(self, pll_reg):
+530:        """The getter method for PLL output clocks.
+531:
+532:        Parameters
+533:        ----------
+534:        pll_reg : Register
+535:            The control register for a PLL
+536:
+537:        Returns
+538:        -------
+539:        float
+540:            The PLL output clock rate measured in MHz.
+541:
+542:        """
+543:        if pll_reg.PRE_SRC != self.CRX_APB_SRC_DEFAULT:
+544:            raise ValueError("Invalid PLL Source")
+545:
+546:        pll_fbdiv = pll_reg.FBDIV
+547:        if pll_reg.DIV2:
+548:            pll_odiv2 = 2
+614:    def set_pl_clk(self, clk_idx, div0=None, div1=None,
+615:                   clk_mhz=DEFAULT_PL_CLK_MHZ):
+616:        """This method sets a PL clock frequency.
+617:
+618:        Users have to specify the index of the PL clock to be changed.
+619:
+620:        The CPU, and other source clocks, by default, should not get changed.
+621:
+622:        Users have two options:
+623:        1. specify the two frequency divider values directly (div0, div1), or
+624:        2. specify the clock rate, in which case the divider values will be
+625:        calculated.
+626:
+627:        Note
+628:        ----
+629:        In case `div0` and `div1` are both specified, the parameter `clk_mhz`
+630:        will be ignored.
+631:
+632:        Parameters
+633:        ----------
+634:        clk_idx : int
+635:            The index of the PL clock to be changed, from 0 to 3.
+636:        div0 : int
+637:            The first frequency divider value.
+638:        div1 : int
+639:            The second frequency divider value.
+640:        clk_mhz : float
+641:            The clock rate in MHz.
+642:
+643:        """
+644:        super().set_pl_clk(clk_idx, div0, div1, clk_mhz)
+645:
+646:    def get_pll_mhz(self, pll_reg):
+647:        """The getter method for PLL output clocks.
+648:
+649:        Parameters
+650:        ----------
+651:        pll_reg : Register
+652:            The control register for a PLL
+653:
+654:        Returns
+655:        -------
+656:        float
+657:            The PLL output clock rate measured in MHz.
+658:
+659:        """
+660:        pll_fbdiv = pll_reg.PLL_FDIV
+661:        clk_mhz = self._ref_clk_mhz * pll_fbdiv
+662:
+663:        return round(clk_mhz, 6)
+664:
+665:    def get_cpu_mhz(self):
+666:        """The getter method for the CPU clock.
+667:
+668:        Returns
+FILE /usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/bitstream.py
+151:    def download(self, parser=None):
+152:        """Download the bitstream onto PL and update PL information.
+153:
+154:        If device tree blob has been specified during initialization, this
+155:        method will also insert the corresponding device tree blob into the
+156:        system. This is same for both full bitstream and partial bitstream.
+157:
+158:        Note
+159:        ----
+160:        For partial bitstream, this method does not guarantee isolation between
+161:        static and dynamic regions.
+162:
+163:        Returns
+164:        -------
+165:        None
+166:
+167:        """
+168:        self.device.download(self, parser)
+169:
+170:    def gen_cache(self, parser=None):
+171:        """ Generates the pickled metadata cache in pl_server/ even if no download has occurred """
+172:        self.device.gen_cache(self, parser)
+173:
+174:    def remove_dtbo(self):
+175:        """Remove dtbo file from the system.
+176:
+177:        A simple wrapper of the corresponding method in the PL class. This is
+178:        very useful for partial bitstream downloading, where loading the
+179:        new device tree blob will overwrites the existing device tree blob
+180:        in the same partial region.
+181:
+182:        """
+183:        self.device.remove_device_tree(self.dtbo)
+184:
+185:    def insert_dtbo(self, dtbo=None):
+186:        """Insert dtbo file into the system.
+187:
+188:        A simple wrapper of the corresponding method in the PL class. If
+189:        `dtbo` is None, `self.dtbo` will be used to insert the dtbo
+190:        file. In most cases, users should just ignore the parameter
+191:        `dtbo`.
+192:
+193:        Parameters
+194:        ----------
+195:        dtbo : str
+196:            The relative or absolute path to the device tree segment.
+197:
+198:        """
+199:        if dtbo:
+200:            resolved_dtbo = _find_dtbo_file(dtbo, self.bitfile_name)
+201:            if resolved_dtbo:
+202:                self.dtbo = resolved_dtbo
+203:            else:
+204:                raise IOError("DTBO file {} does not exist.".format(dtbo))
+205:        if not self.dtbo:

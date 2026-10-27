@@ -1,0 +1,4 @@
+board_sequence=set_fclk,reconfigure_pl,wait_stable,pulse_fclkreset1,status_check
+measured_fclk1_mhz=40.000000
+status_first_reads=0x00000001
+BLOCKED: AXI DMA MM2S timeout

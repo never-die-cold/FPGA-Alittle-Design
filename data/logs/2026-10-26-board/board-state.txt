@@ -1,0 +1,41 @@
+# Raw state excerpts (2026-10-26)
+
+## FCLK after setting 40 MHz and reloading PL
+measured_fclk1_mhz=40.000000
+status_first_reads=0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001
+
+## 10/25 old bit, loader zero
+BLOCKED: NO_ACK: firmware did not assert ACCEPTED
+STATUS=0x00000061
+CFG_APPLIED=0x6ab2c823
+DMA_BYTES=0x00001000
+FW_DECISION=0x00000000
+
+## IMEM-fixed bit, loader zero
+BLOCKED: AXI DMA MM2S timeout
+STATUS=0x00000121
+DMA_BYTES=0x00000200   # another attempt: 0x00000000
+DMACR=0x00010003
+DMASR=0x00000000
+GPIO2_DATA=0x00000001
+FW_DECISION=0x00001003
+
+## Vivado synth log for IMEM fix
+INFO: [Synth 8-3876] $readmem data file 'E:/Projects/FPGA-Alittle-Design/src/riscv_fw/cop_job.hex' is read successfully
+INFO: [Synth 8-3876] $readmem data file 'E:/Projects/FPGA-Alittle-Design/src/riscv_fw/cop_job.hex' is read successfully
+PYNQ COP WHOLE-SYSTEM GATE PASSED: WNS=2.771 DSP=136 BRAM36=69.0 CDC_ALLOWLIST=CDC-15=73,CDC-3=12,CDC-6=7 DRC=0
+
+## 2026-10-26 hardware PASS via fast-run (3x zero + 3x pattern)
+zero: class=2 margin=2 score=258 logits=2,-3,4 matches_expected=true
+pattern: class=0 margin=0 score=0 logits=1,-3,1 matches_expected=true
+STATUS=0x00000061
+RESULT_SEQ=0x00000001
+FW_DECISION=0x00010403
+DMA_BYTES=0x00001000
+
+## continuous second job (no Overlay reload)
+BLOCKED: NO_ACK: firmware did not assert ACCEPTED
+
+## SLCR FPGA_RST_CTRL experiment
+board hung; SSH banner reset; COM12 no output; power cycle required
+# do not repeat; continuous jobs need firmware loop/new bitstream

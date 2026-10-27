@@ -1,0 +1,16 @@
+{
+ "frame": {
+  "height": 720,
+  "pixel_sha256": "f8b08ec95560a9e88d8dc7e63e5407a17c99aa806d79627641504e5f61ea7556",
+  "width": 1280
+ },
+ "kind": "target_limit",
+ "localization": {
+  "background_mode": "local",
+  "color_threshold": 20.0,
+  "min_area_ratio": 8e-05
+ },
+ "policy_max": 10,
+ "simulated": false,
+ "target_count": 12
+}

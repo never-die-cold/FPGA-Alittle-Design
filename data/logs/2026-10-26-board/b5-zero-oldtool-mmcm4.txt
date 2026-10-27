@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/home/xilinx/cop-pkg-mmcm-oldtool/remote-tools/run_board.py", line 19, in <module>
+    runpy.run_path(script, run_name="__main__")
+  File "/usr/lib/python3.10/runpy.py", line 269, in run_path
+    return _run_module_code(code, init_globals, run_name,
+  File "/usr/lib/python3.10/runpy.py", line 96, in _run_module_code
+    _run_code(code, mod_globals, init_globals,
+  File "/usr/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "payload/tools/cop_board_fast_run.py", line 142, in <module>
+    main()
+  File "payload/tools/cop_board_fast_run.py", line 135, in main
+    loader.run_board(run_args)
+  File "/home/xilinx/cop-pkg-mmcm-oldtool/payload/tools/cop_payload_loader.py", line 238, in run_board
+    cop, dma, gpio = MMIO(COP_BASE, 0x1000), MMIO(DMA_BASE, 0x10000), MMIO(GPIO_BASE, 0x10000)
+NameError: name 'MMIO' is not defined

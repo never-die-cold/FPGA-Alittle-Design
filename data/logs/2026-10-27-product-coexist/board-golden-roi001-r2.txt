@@ -1,0 +1,52 @@
+EXPECTED_OUTPUTS.tsv: OK
+golden/frame/input.hex: OK
+golden/roi_001/input.hex: OK
+payload/provisional-model/manifest.json: OK
+payload/provisional-model/payload.bin: OK
+payload/pynq_cop_40mhz.bit: OK
+payload/pynq_cop_40mhz.hwh: OK
+payload/tools/cop_board_fast_run.py: OK
+payload/tools/cop_fclk.py: OK
+payload/tools/cop_payload_loader.py: OK
+sim/scripts/cop_hw_round.py: OK
+sim/vision/localization_opencv.py: OK
+src/pynq_host/arm_localize.py: OK
+src/pynq_host/arm_localize_bench.py: OK
+src/pynq_host/arm_localize_selftest.py: OK
+src/pynq_host/base_captures.py: OK
+src/pynq_host/c01_backend.py: OK
+src/pynq_host/c01_capture.py: OK
+src/pynq_host/c01_park_capture.py: OK
+src/pynq_host/cop_driver.py: OK
+src/pynq_host/cop_engine.py: OK
+src/pynq_host/cop_mmio_sim.py: OK
+src/pynq_host/cop_regs.py: OK
+src/pynq_host/dataset_audit.py: OK
+src/pynq_host/dataset_manifest.py: OK
+src/pynq_host/inspection_artifacts.py: OK
+src/pynq_host/inspection_model.py: OK
+src/pynq_host/inspection_replay.py: OK
+src/pynq_host/inspection_rules.py: OK
+src/pynq_host/inspection_run.py: OK
+src/pynq_host/m2_onboard.py: OK
+src/pynq_host/model_audit.py: OK
+src/pynq_host/model_reference.py: OK
+src/pynq_host/numpy_reference.py: OK
+src/pynq_host/onboard_smoke.py: OK
+src/pynq_host/reference_package.py: OK
+src/pynq_host/reference_tensors.py: OK
+src/pynq_host/roi_preprocess.py: OK
+src/pynq_host/round_artifacts.py: OK
+src/pynq_host/vision_demo.py: OK
+src/pynq_host/vision_live_service.py: OK
+src/pynq_host/vision_mock_service.py: OK
+src/pynq_host/vision_protocol.py: OK
+src/pynq_host/vision_regs.py: OK
+VERSION: OK
+board_sequence=hwh_clocks,reconfigure_pl,wait_stable,status_check
+clock_topology=mmcm expected_cop_mhz=40.000000
+measured_fclk1_mhz=142.857143
+status_first_reads=0x00000001
+firmware_smoke=PASS status=0x00000862 fw_decision=0x00000000
+{"accepted_snapshot": 2146, "case": "roi_001", "class_id": 2, "dma_stream_bits": 64, "fclk1_mhz": 142.857143, "fw_decision": 65537, "logits": [-12, -30, 41], "low_conf": 0, "margin_q": 53, "matches_expected": true, "payload_bytes": 36032, "payload_crc32": "0x05b6f630", "result_seq": 1, "score_q15": 6837, "valid": 1}
+measurement_file=/home/xilinx/cop-pkg-product-20261027-r1/evidence-roi_001.json

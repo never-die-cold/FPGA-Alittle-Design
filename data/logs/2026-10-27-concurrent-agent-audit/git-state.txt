@@ -1,0 +1,93 @@
+dev/riscv
+bc37c08 docs: update NC handoff and clock runbook for edge-fix cold boot
+b1e1055 docs: record 2026-10-26 final status and board blocker
+ea7a5c1 docs: correct cold-boot clock sequence; record board mmc blocker
+75fb2eb fix(coprocessor): edge-detect PS DMA start; harden IMEM gate python env; archive edge build evidence
+8884046 Merge branch 'dev/riscv' of https://github.com/never-die-cold/FPGA-Alittle-Design into dev/riscv
+ M build/build_pynq_cop_gate.tcl
+ M build/create_pynq_cop_bd.tcl
+ M data/logs/README.md
+ M docs/contracts/coprocessor-ps-driver-v0.md
+ M docs/coprocessor-board-clock-runbook.md
+ M sim/coprocessor/generate_payload_manifest.py
+ M sim/vision/test_cop_driver.py
+ M src/pynq_host/README.md
+ M src/pynq_host/cop_driver.py
+ M src/riscv/pynq_cop_top.v
+ M tools/cop_payload_loader.py
+?? build/_force_reload.sh
+?? build/_gate_env.tcl
+?? build/_oneshot_board.sh
+?? build/_oneshot_health_first.sh
+?? build/_probe_alive.sh
+?? build/_probe_cop_python.tcl
+?? build/_probe_dma.sh
+?? build/_probe_hwh.sh
+?? build/_probe_isxsa.sh
+?? build/_probe_overlay.sh
+?? build/_probe_parser.sh
+?? build/_probe_pynq_code.sh
+?? build/_probe_pythonhome.tcl
+?? build/_run_known.sh
+?? build/_run_trained.sh
+?? build/_run_trained2.sh
+?? build/_run_trained3.sh
+?? build/board-package-edge-fix-trained/
+?? build/board-package-edge-fix/
+?? build/board-package-j02/
+?? build/board-package-trained/
+?? build/board-packages/
+?? data/logs/2026-10-26-board-gate566b/
+?? data/logs/2026-10-26-board/
+?? data/logs/2026-10-26-build/add_cop_fclk.py
+?? data/logs/2026-10-26-build/build_board_package_temp.py
+?? data/logs/2026-10-26-build/gate-rebuild-10-mmcm.log
+?? data/logs/2026-10-26-build/gate-rebuild-11-mmcm.log
+?? data/logs/2026-10-26-build/gate-rebuild-12-mmcm.log
+?? data/logs/2026-10-26-build/gate-rebuild-13-mmcm.log
+?? data/logs/2026-10-26-build/gate-rebuild-14-mmcm.log
+?? data/logs/2026-10-26-build/gate-rebuild-2.log
+?? data/logs/2026-10-26-build/gate-rebuild-3.log
+?? data/logs/2026-10-26-build/gate-rebuild-4.log
+?? data/logs/2026-10-26-build/gate-rebuild-5.log
+?? data/logs/2026-10-26-build/gate-rebuild-6-mmcm.log
+?? data/logs/2026-10-26-build/gate-rebuild-7-mmcm.log
+?? data/logs/2026-10-26-build/gate-rebuild-8-mmcm.log
+?? data/logs/2026-10-26-build/gate-rebuild-9-mmcm.log
+?? data/logs/2026-10-26-build/jupyter_probe.py
+?? data/logs/2026-10-26-build/probe_board.py
+?? data/logs/2026-10-26-build/serial_cmd.ps1
+?? data/logs/2026-10-26-build/write_test.txt
+?? data/logs/2026-10-26-imem-gate-local/
+?? data/logs/2026-10-26-trained-payload/
+?? data/logs/2026-10-27-concurrent-agent-audit/
+?? docs/runbooks/board-morning-2026-10-27.md
+?? docs/runbooks/concurrent-agent-audit-2026-10-27.md
+?? report/llm_log/2026-10-26-imem-edge-fix-handoff.md
+?? report/llm_log/2026-10-26-imem-edge-fix.patch
+?? sim/scripts/board_ssh.py
+?? sim/scripts/build_board_package.py
+?? sim/scripts/cop_board_fast_run.py
+?? sim/scripts/cop_fclk.py
+?? sim/scripts/export_trained_payload.py
+worktree E:/Projects/FPGA-Alittle-Design
+HEAD bc37c08ccc3c1293e35c8cc4bfc2809fb091ef4e
+branch refs/heads/dev/riscv
+
+  dev/exe                  aa4f0ca [origin/dev/exe] Merge pull request #88 from never-die-cold/dev/exe
+* dev/riscv                bc37c08 [origin/dev/riscv: ahead 4] docs: update NC handoff and clock runbook for edge-fix cold boot
+  dev/vision               aa4f0ca [origin/dev/vision] Merge pull request #88 from never-die-cold/dev/exe
+  fix/imem-init-2026-10-26 aa4f0ca Merge pull request #88 from never-die-cold/dev/exe
+  main                     aa4f0ca [origin/main] Merge pull request #88 from never-die-cold/dev/exe
+bc37c08 HEAD@{2026-10-26 22:44:33 +0800}: commit: docs: update NC handoff and clock runbook for edge-fix cold boot
+b1e1055 HEAD@{2026-10-26 22:42:03 +0800}: commit: docs: record 2026-10-26 final status and board blocker
+ea7a5c1 HEAD@{2026-10-26 22:37:04 +0800}: commit: docs: correct cold-boot clock sequence; record board mmc blocker
+75fb2eb HEAD@{2026-10-26 22:33:22 +0800}: commit (amend): fix(coprocessor): edge-detect PS DMA start; harden IMEM gate python env; archive edge build evidence
+0d68b38 HEAD@{2026-10-26 22:31:30 +0800}: commit: fix(coprocessor): edge-detect PS DMA start; harden IMEM gate python env; archive edge build evidence
+8884046 HEAD@{2026-10-26 21:31:30 +0800}: merge origin/dev/riscv: Fast-forward
+aa4f0ca HEAD@{2026-10-26 21:31:30 +0800}: checkout: moving from dev/vision to dev/riscv
+aa4f0ca HEAD@{2026-10-26 21:31:04 +0800}: checkout: moving from fix/imem-init-2026-10-26 to dev/vision
+aa4f0ca HEAD@{2026-10-26 20:47:43 +0800}: checkout: moving from dev/vision to fix/imem-init-2026-10-26
+aa4f0ca HEAD@{2026-10-26 20:29:48 +0800}: merge origin/main: Fast-forward
+35ad30d HEAD@{2026-10-26 20:29:48 +0800}: checkout: moving from dev/exe to dev/vision
+aa4f0ca HEAD@{2026-10-26 20:29:48 +0800}: merge origin/main: Fast-forward
