@@ -15,6 +15,14 @@
 `build/attach_pynq_video.tcl`，也不会装入 HDMI/视觉 XDC。它才可在新门禁通过后进入当前
 NC 首网包；在此之前没有有效新包。
 
+2026-10-27 JL 用 `COP_BUILD_NAME=pynq_cop_a_20261027_r1`、未设 `COP_WITH_VIDEO` 实测门禁
+PASS：WNS 2.078 ns、DSP 136/220、BRAM36 69/140、latch/DRC=0；IMEM 首字 `00008117`、
+INIT 非零、readmem warning=0；CDC-15/3/6=`73/12/7`，allowlist 仍为 5 条。产物 SHA256：
+bit `f325a0dc4c2cb143e24ef13df6608e206af5c58f0354b3deec6f039d5875f71f`，
+hwh `480d04a3d9abee59e81892378c2457dfe92ea0cf6fc0822d4467b2121dbab358`，
+xsa `9e0a56276e89e2a94e3155eea7e267c97b97014ed74c8874524d03eaa462534c`。
+该门禁不等于板级验收；B 仍全部 UNVERIFIED。
+
 ```powershell
 $env:COP_PYTHON="C:\Microsoft VS Code\anaconda\python.exe"
 $env:COP_BUILD_NAME="pynq_cop_a_20261027_r1"
