@@ -81,14 +81,14 @@ def test_ps_gates():
     engine = make_engine()
     original = cop_engine.detect_boxes
     try:
-        cop_engine.detect_boxes = lambda frame: [(10 + 40 * i, 10, 40 + 40 * i, 60)
+        cop_engine.detect_boxes = lambda frame, *args: [(10 + 40 * i, 10, 40 + 40 * i, 60)
                                                  for i in range(12)]
         fields = engine.inspect_round(load_frame(), OUT / "limit", "chk000001")
         assert fields["status"] == "RECHECK" and fields["decision"]["reasons"] == ["target_limit"]
         assert engine.sim.jobs == 0
         trace = json.loads((OUT / "limit" / "cop_trace.json").read_text(encoding="utf-8"))
         assert trace["kind"] == "target_limit"
-        cop_engine.detect_boxes = lambda frame: []
+        cop_engine.detect_boxes = lambda frame, *args: []
         fields = engine.inspect_round(load_frame(), OUT / "empty", "chk000002")
         assert fields["status"] == "CHECK_FAIL" and fields["targets"] == []
         assert fields["decision"]["actual"] == {"bolt": 0, "nut": 0, "washer": 0}
@@ -103,7 +103,7 @@ def test_touch_border_is_stricter_than_firmware():
     engine = make_engine(classes=("bolt",), order={"bolt": 1, "nut": 0, "washer": 0})
     original = cop_engine.detect_boxes
     try:
-        cop_engine.detect_boxes = lambda frame: [(0, 10, 40, 60)]
+        cop_engine.detect_boxes = lambda frame, *args: [(0, 10, 40, 60)]
         fields = engine.inspect_round(load_frame(), OUT / "border", "chk000001")
         assert fields["status"] == "RECHECK"
         assert "touches_border" in fields["decision"]["reasons"]

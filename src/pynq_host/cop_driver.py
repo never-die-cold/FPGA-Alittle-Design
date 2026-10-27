@@ -136,28 +136,128 @@ class PynqMmio:
 
 
 class PynqDmaPlane:
-    """J08 data-plane seam.  Physical bank/DataMover wiring is OPEN-1/OPEN-2."""
+    """J08 AXI DMA MM2S data plane for real hardware.
 
-    def __init__(self, *args, **kwargs):
-        raise NotImplementedError(
-            "DataMover/AXI DMA plane is not implemented; use SimDmaPlane until J08 "
-            "provides the physical bank and result DMA (OPEN-1/OPEN-2)")
+    Same handshake as tools/cop_payload_loader.py (the board-tested path): one
+    MM2S packet per kind, started through the GPIO dma_start level, gated on
+    STATUS.DMA_BUSY and verified against DMA_BYTES.  The plane owns the 64-byte
+    aligned PS buffers, so the driver must be built with
+    addresses=plane.addresses; any other address fails closed.
+    """
+
+    DMA_DMACR, DMA_DMASR, DMA_SA, DMA_LENGTH = 0x00, 0x04, 0x18, 0x28
+    DMA_RESET, DMA_RUN, DMA_IDLE, DMA_ERRORS = 0x4, 0x1, 0x2, 0x770
+    GPIO_DATA, GPIO_TRI, GPIO2_DATA, GPIO2_TRI = 0x00, 0x04, 0x08, 0x0C
+    KIND_WEIGHT, KIND_ROI = 0, 1
+    MAX_PACKET = 0xFFFF
+    ROI_BYTES = 4096
+
+    def __init__(self, dma, gpio, cop, allocate, max_targets=15, timeout=5.0,
+                 poll_s=0.01):
+        if type(max_targets) is not int or not 1 <= max_targets <= 15:
+            raise ValueError("one ROI packet carries at most 15 targets (15*4096 < 65535)")
+        self.dma, self.gpio, self.cop = dma, gpio, cop
+        self.timeout, self.poll_s = float(timeout), float(poll_s)
+        self.buffers = {"weight": allocate(shape=(0x10000,), dtype="u1"),
+                        "roi": allocate(shape=(max_targets * self.ROI_BYTES,), dtype="u1"),
+                        "descriptor": allocate(shape=(64,), dtype="u1"),
+                        "result": allocate(shape=(256,), dtype="u1")}
+        self.buffers["descriptor"][:] = 0
+        self.buffers["result"][:] = 0
+        self.addresses = {name: int(buffer.physical_address)
+                          for name, buffer in self.buffers.items()}
+        self.events = []
+
+    def _wait(self, predicate, what):
+        deadline = time.monotonic() + self.timeout
+        while time.monotonic() < deadline:
+            value = predicate()
+            if value is not None:
+                return value
+            time.sleep(self.poll_s)
+        raise CopTimeoutError(f"{what} timed out after {self.timeout:g} s")
+
+    def _status(self):
+        return self.cop.read32(R.OFFSETS["STATUS"])
+
+    def _fill(self, name, data):
+        import numpy as np
+        buffer = self.buffers[name]
+        if len(data) > buffer.nbytes:
+            raise R.CopBusError(f"{name} data {len(data)} exceeds buffer {buffer.nbytes}")
+        buffer[:len(data)] = np.frombuffer(bytes(data), dtype=np.uint8)
+        buffer.flush()
+        return buffer
+
+    def _send(self, name, length, kind):
+        if not 1 <= length <= self.MAX_PACKET:
+            raise R.CopBusError(f"{name} packet {length} does not fit the 16-bit DMA length")
+        if not self.gpio.read(self.GPIO2_DATA) & 1:
+            raise R.CopBusError("dma start_ready is 0 before the request")
+        self.gpio.write(self.GPIO_TRI, 0)
+        self.gpio.write(self.GPIO2_TRI, 0xFFFFFFFF)
+        self.gpio.write(self.GPIO_DATA, (kind << 1) | 1)
+        self.gpio.write(self.GPIO_DATA, kind << 1)
+        self._wait(lambda: self._status() & R.STATUS_DMA_BUSY or None,
+                   "dma_start was not accepted")
+        self.buffers[name].flush()
+        self.dma.write(self.DMA_DMACR, self.DMA_RESET)
+        self._wait(lambda: None if self.dma.read(self.DMA_DMACR) & self.DMA_RESET else 1,
+                   "AXI DMA reset")
+        self.dma.write(self.DMA_DMACR, self.DMA_RUN)
+        self.dma.write(self.DMA_SA, int(self.buffers[name].physical_address))
+        self.dma.write(self.DMA_LENGTH, length)
+        payload_error = [False]
+
+        def done():
+            payload_error[0] |= bool(self.gpio.read(self.GPIO2_DATA) & 2)
+            status = self.dma.read(self.DMA_DMASR)
+            if status & self.DMA_ERRORS:
+                raise CopProtocolError(f"AXI DMA MM2S error 0x{status:08x}")
+            return status if status & self.DMA_IDLE else None
+
+        self._wait(done, "AXI DMA MM2S")
+        self._wait(lambda: None if self._status() & R.STATUS_DMA_BUSY else 1,
+                   "coprocessor DMA loader")
+        bits = self.gpio.read(self.GPIO2_DATA)
+        if payload_error[0] or bits & 2:
+            raise CopProtocolError("payload_error observed during DMA")
+        if not bits & 1:
+            raise CopProtocolError("dma start_ready did not return")
+        reported = self.cop.read32(R.OFFSETS["DMA_BYTES"])
+        if reported != length:
+            raise CopProtocolError(f"DMA_BYTES {reported} differs from submitted {length}")
+        self.events.append({"kind": "dma", "buffer": name, "bytes": length, "packet": kind})
 
     def load_model(self, addr, payload):
-        raise NotImplementedError("J08 data plane")
+        if addr != self.addresses["weight"]:
+            raise R.CopBusError("weight address differs from the allocated buffer")
+        self._fill("weight", payload)
+        self._send("weight", len(payload), self.KIND_WEIGHT)
 
     def load_rois(self, addr, rois, stride):
-        raise NotImplementedError("J08 data plane")
+        if addr != self.addresses["roi"] or stride != self.ROI_BYTES:
+            raise R.CopBusError("ROI address/stride violates v0")
+        data = b"".join(bytes(roi).ljust(self.ROI_BYTES, b"\0") for roi in rois)
+        self._fill("roi", data)
+        self._send("roi", len(data), self.KIND_ROI)
 
     def load_descriptors(self, addr, descriptors):
-        raise NotImplementedError("J08 data plane")
+        # v0 hardware path (identical to the gate loader) leaves this table
+        # zeroed and does not DMA it; J08 must freeze the physical layout first.
+        self.events.append({"kind": "descriptor_skipped", "count": len(descriptors)})
+
+    def free(self):
+        for buffer in self.buffers.values():
+            buffer.freebuffer()
 
 
 class CopDriver:
     def __init__(self, transport, dma, order, min_score, max_targets=16,
                  policy_max=None, model_payload=b"COP-SIM-PLACEHOLDER-MODEL",
                  model_id=MODEL_ID_DEFAULT, addresses=None, job_timeout_s=5.0,
-                 accept_timeout_s=1.0, config_timeout_s=2.0, poll_s=0.002):
+                 accept_timeout_s=1.0, config_timeout_s=2.0, poll_s=0.002,
+                 dma_after_commit=False):
         judge([], order, min_score, max_targets, policy_max)  # freeze/validate inputs
         if not isinstance(model_payload, (bytes, bytearray)) or not model_payload:
             raise ValueError("model payload must be non-empty bytes")
@@ -182,6 +282,7 @@ class CopDriver:
         self.accept_timeout_s = accept_timeout_s
         self.config_timeout_s = config_timeout_s
         self.poll_s = poll_s
+        self.dma_after_commit = bool(dma_after_commit)
         self.cfg_seq = 0
         self.last_result_seq = None
         self._model_loaded = None
@@ -378,18 +479,22 @@ class CopDriver:
         self.write("MIN_MARGIN_Q", self.min_margin_q)
         signature = (self.model_id, self.model_crc, addresses["weight"],
                      len(self.model_payload))
-        if self._model_loaded != signature:
-            info = self.dma.load_model(addresses["weight"], self.model_payload)
-            self._model_loaded = signature
-            self.events.append({"kind": "model_load", "crc32": self.model_crc,
-                                "bytes": len(self.model_payload),
-                                "sim_reported": info})
-        self.dma.load_rois(addresses["roi"], [bytes(t["roi"]) for t in targets],
-                           R.ROI_BYTES)
-        self.dma.load_descriptors(addresses["descriptor"], [
-            {"target_id": t["target_id"], "flags": t.get("flags", 0),
-             "roi_index": index, "reserved": 0}
-            for index, t in enumerate(targets)])
+        def load_data_plane():
+            if self._model_loaded != signature:
+                info = self.dma.load_model(addresses["weight"], self.model_payload)
+                self._model_loaded = signature
+                self.events.append({"kind": "model_load", "crc32": self.model_crc,
+                                    "bytes": len(self.model_payload),
+                                    "sim_reported": info})
+            self.dma.load_rois(addresses["roi"], [bytes(t["roi"]) for t in targets],
+                               R.ROI_BYTES)
+            self.dma.load_descriptors(addresses["descriptor"], [
+                {"target_id": t["target_id"], "flags": t.get("flags", 0),
+                 "roi_index": index, "reserved": 0}
+                for index, t in enumerate(targets)])
+
+        if not self.dma_after_commit:
+            load_data_plane()
         self.cfg_seq = (self.cfg_seq + 1) & 0xFFFFFFFF
         if self.cfg_seq == 0:
             self.cfg_seq = 1
@@ -417,6 +522,11 @@ class CopDriver:
             raise CopConfigError(
                 f"configuration not applied (status=0x{status:08x}, "
                 f"error_code={error_code}, sim_error={error_name})")
+        if self.dma_after_commit:
+            # cop_top clears MODEL_VALID and ROI_VALID on every new commit.
+            # The physical model bank must therefore be revalidated each job.
+            self._model_loaded = None
+            load_data_plane()
         return self.cfg_seq
 
     def _ps_targets(self, hardware, descriptors):
@@ -546,10 +656,13 @@ class CopDriver:
                 or status_after & (R.STATUS_ERROR | R.STATUS_TIMEOUT | R.STATUS_BUSY):
             raise CopProtocolError("result window changed or invalidated during read")
 
+        def decision_ready():
+            value = self.read("FW_DECISION")
+            return value if value >> 16 == (seq_before & 0xFFFF) else None
+        fw_word, _ = self._poll(decision_ready, self.job_timeout_s,
+                                "firmware decision for current RESULT_SEQ")
+        fw_decision = R.decode_fw_decision(fw_word)
         fw_counts = R.unpack_actual(self.read("FW_ACTUAL_COUNTS"))
-        fw_decision = R.decode_fw_decision(self.read("FW_DECISION"))
-        if fw_decision["result_seq"] != seq_before:
-            raise CopProtocolError("FW_DECISION result_seq does not match RESULT_SEQ")
         fw_rules = R.firmware_judge(
             [{"class_id": item["class_id"], "valid": item["valid"],
               "low_conf": item["low_conf"], "error": item["error"]} for item in hardware],

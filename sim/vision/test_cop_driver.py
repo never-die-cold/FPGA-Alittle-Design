@@ -10,6 +10,7 @@ from pathlib import Path
 root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(root / "src/pynq_host"))
 import cop_regs as R
+from cop_regs import CopBusError
 from cop_driver import (CopConfigError, CopDriver, CopHardwareTimeout, CopNoAck,
                         CopProtocolError, CopStaleResult, CopTimeoutError,
                         PynqDmaPlane, PynqMmio, SimDmaPlane)
@@ -264,12 +265,95 @@ def test_pynq_transport_round():
         sim.close()
 
 
-def test_real_dma_plane_and_ps_base():
+class _FakeMmio:
+    def __init__(self):
+        self.calls = []
+
+    def read(self, addr):
+        self.calls.append(("r", addr))
+        return 0
+
+    def write(self, addr, value):
+        self.calls.append(("w", addr, value))
+
+
+class _FakeBuffer:
+    def __init__(self, size, base):
+        self.data = bytearray(size)
+        self.physical_address = base
+
+    @property
+    def nbytes(self):
+        return len(self.data)
+
+    def __setitem__(self, key, value):
+        self.data[key] = bytes(value)
+
+    def flush(self):
+        pass
+
+    def freebuffer(self):
+        pass
+
+
+def test_real_dma_plane_guards():
+    buffers = []
+
+    def allocate(shape, dtype):
+        buffer = _FakeBuffer(shape[0], 0x40000000 + 0x10000 * len(buffers))
+        buffers.append(buffer)
+        return buffer
+
+    plane = PynqDmaPlane(PynqMmio(_FakeMmio(), 0x40010000),
+                         PynqMmio(_FakeMmio(), 0x40020000),
+                         PynqMmio(_FakeMmio(), 0x40000000), allocate)
+    assert plane.addresses["weight"] == 0x40000000
+    assert plane.addresses["roi"] == 0x40010000
     try:
-        PynqDmaPlane()
-        raise AssertionError("unimplemented J08 data plane constructed")
-    except NotImplementedError as error:
-        assert "J08" in str(error)
+        PynqDmaPlane(None, None, None, allocate, max_targets=16)
+        raise AssertionError("ROI packet above 15 targets accepted")
+    except ValueError:
+        pass
+    try:
+        plane.load_model(0x1234, b"\x01")
+        raise AssertionError("weight load accepted a foreign address")
+    except CopBusError:
+        pass
+    try:
+        plane.load_rois(plane.addresses["roi"], [bytes(4096)] * 16, 4096)
+        raise AssertionError("16 ROIs overran the 16-bit DMA length")
+    except CopBusError:
+        pass
+    assert plane.load_descriptors(plane.addresses["descriptor"], [{"target_id": 0}]) is None
+
+
+def test_hardware_commit_revalidates_model():
+    class Hardware:
+        def __init__(self):
+            self.values = {}
+            self.events = []
+        def read32(self, offset):
+            return self.values.get(offset, 0)
+        def write32(self, offset, value):
+            self.values[offset] = value
+            if offset == R.OFFSETS["CFG_COMMIT"]:
+                self.values[R.OFFSETS["CFG_APPLIED"]] = self.values[R.OFFSETS["CFG_SEQ"]]
+                self.events.append("commit")
+    class Plane:
+        def load_model(self, addr, payload):
+            hardware.events.append("model")
+        def load_rois(self, addr, rois, stride):
+            hardware.events.append("roi")
+        def load_descriptors(self, addr, descriptors):
+            pass
+    hardware = Hardware()
+    driver = CopDriver(hardware, Plane(), dict(ORDER), 0.8, dma_after_commit=True)
+    for job_id in (1, 2):
+        driver._configure(make_job(job_id), 3)
+    assert hardware.events == ["commit", "model", "roi", "commit", "model", "roi"]
+
+
+def test_ps_base_rule():
     try:
         PynqMmio(object())
         raise AssertionError("PynqMmio accepted a default base")
@@ -304,7 +388,9 @@ def main():
     test_stale_result_and_recovery()
     test_model_fault_and_reload()
     test_pynq_transport_round()
-    test_real_dma_plane_and_ps_base()
+    test_real_dma_plane_guards()
+    test_hardware_commit_revalidates_model()
+    test_ps_base_rule()
     print("PASS: PS driver A1/A2 (accepted/unconsumed/consume/NO_ACK/HW_TIMEOUT/stale/CRC/PynqMmio)")
 
 

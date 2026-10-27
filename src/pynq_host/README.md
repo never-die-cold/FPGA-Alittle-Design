@@ -94,7 +94,14 @@ python src/pynq_host/vision_live_service.py --root <dir> --capture-dir <png dir>
 板上控制面接缝：`PynqMmio(MMIO(base, 0x1000), base)`；PYNQ 的 MMIO 读写参数已是相对
 offset，适配器不再加 base。上板后先跑只读预检
 `python sim/scripts/cop_board_preflight.py --base <Address Editor base>`，再谈数据面；
-`PynqDmaPlane` 仍故意未实现（J08 物理 bank/结果 DMA）。
+`PynqDmaPlane`（2026-10-26）按 `tools/cop_payload_loader.py` 同一条 MM2S 握手实现：
+每个 kind 一个包、GPIO `dma_start` 电平启动、`STATUS.DMA_BUSY` 把关、`DMA_BYTES` 对账；
+PS 地址由它自己分配的 buffer 决定（`addresses=plane.addresses`），单包 ROI 上限 15 目标。
+10/27 已在共存旧包上运行真实帧；多目标结果槽错位已发现并修复 RTL，修复包未上板，不能据此签署多目标验收。描述符表仍按门禁装载器保持清零、不做 DMA（J08 未冻结物理排布）。
+
+真实服务入口为 `cop_product_service.py --package <包> --root <新目录> --order 2,4,4`；
+调用 C01 park 捕获、PS 定位/ROI 和 PL CNN，记录 `COP_HW` 来源。当前模型与定位仍待重新联调，
+`RECHECK` 是实际判定；包/位流/服务版本和已验证边界见[10/27交接](../../docs/runbooks/pynq-coexist-handoff-2026-10-27.md)。
 
 ## 板卡访问
 

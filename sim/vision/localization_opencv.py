@@ -22,7 +22,7 @@ def contrast_mask(lab, background, color_threshold):
     return (squared >= cutoff).astype(np.uint8) * 255
 
 
-def detect_boxes(image, color_threshold=22, min_area_ratio=0.00008):
+def detect_boxes(image, color_threshold=22, min_area_ratio=0.00008, background_mode="corners"):
     """Find separated objects that contrast with the four image corners."""
     if image is None or image.ndim != 3 or image.shape[2] != 3:
         raise ValueError("image must be a BGR color image")
@@ -33,8 +33,28 @@ def detect_boxes(image, color_threshold=22, min_area_ratio=0.00008):
                               lab[:patch, -patch:].reshape(-1, 3),
                               lab[-patch:, :patch].reshape(-1, 3),
                               lab[-patch:, -patch:].reshape(-1, 3)))
-    background = np.median(corners, axis=0)
+    if background_mode == "corners":
+        background = np.median(corners, axis=0)
+    elif background_mode == "local":
+        # At 720p this removes narrow fasteners from the background estimate,
+        # while following broad illumination gradients. Widen before doubling.
+        small = cv2.resize(lab, (max(1, width//4), max(1, height//4)),
+                           interpolation=cv2.INTER_AREA)
+        background = cv2.resize(cv2.medianBlur(small, 31), (width, height),
+                                interpolation=cv2.INTER_LINEAR).astype(np.int16)
+    else:
+        raise ValueError("background_mode must be corners or local")
     mask = contrast_mask(lab, background, color_threshold)
+    if background_mode == "local":
+        # Join small gaps in reflective rims before removing isolated grain.
+        mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE,
+                               cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7)))
+        mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN,
+                               cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3)))
+        count, _, stats, _ = cv2.connectedComponentsWithStats(mask)
+        minimum = max(9, int(height * width * min_area_ratio))
+        return [(int(x), int(y), int(x+w), int(y+h))
+                for x,y,w,h,area in stats[1:] if area >= minimum]
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
     mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
     mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
