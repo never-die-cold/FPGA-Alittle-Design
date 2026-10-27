@@ -1,0 +1,7 @@
+﻿cd ~/pkg-2fc2bdd4a8f8/cop-board-gate-2fc2bdd4a8f8; sudo -n -E python3 ~/cop-pkg/clock_no_smoke.py > /tmp/clock-nosmoke.txt 2>&1; echo CLOCK_NOSMOKE_EXIT=$?; cat /tmp/clock-nosmoke.txt
+[?2004lCLOCK_NOSMOKE_EXIT=0
+board_sequence=hwh_clocks,reconfigure_pl,wait_stable,status_check
+clock_topology=mmcm expected_cop_mhz=40.000000
+measured_fclk1_mhz=142.857143
+status_first_reads=0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001,0x00000001
+[?2004hxilinx@pynq:~/pkg-2fc2bdd4a8f8/cop-board-gate-2fc2bdd4a8f8$ 

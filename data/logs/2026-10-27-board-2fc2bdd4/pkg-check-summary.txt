@@ -1,0 +1,6 @@
+﻿cd ~/pkg-2fc2bdd4a8f8/cop-board-gate-2fc2bdd4a8f8; echo PWD=$PWD; grep -c ": OK$" /tmp/pkg-check-2fc2.txt; grep -v ": OK$" /tmp/pkg-check-2fc2.txt | head -5; sudo -n true; echo SUDO_N=$?
+[?2004lPWD=/home/xilinx/pkg-2fc2bdd4a8f8/cop-board-gate-2fc2bdd4a8f8
+116
+sudo: a password is required
+SUDO_N=1
+[?2004hxilinx@pynq:~/pkg-2fc2bdd4a8f8/cop-board-gate-2fc2bdd4a8f8$ 
