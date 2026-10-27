@@ -1,0 +1,8 @@
+WARN: check failed (1/3): HTTP Error 503: Service Unavailable
+Traceback (most recent call last):
+  File "E:\Projects\FPGA-Alittle-Design\sim\vision\test_cop_service.py", line 176, in <module>
+    main()
+  File "E:\Projects\FPGA-Alittle-Design\sim\vision\test_cop_service.py", line 167, in main
+    assert overflow["target_count"] == count and overflow["boxes"] == [list(b) for b in boxes]
+                                                 ~~~~~~~~^^^^^^^^^
+KeyError: 'boxes'

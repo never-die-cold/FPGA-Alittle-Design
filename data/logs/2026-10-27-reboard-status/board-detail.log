@@ -1,0 +1,121 @@
+[  129.517380] pynq systemd[1]: Starting PYNQ vision after stock PL initialization...
+[  145.177239] pynq bash[858]: ip_dict:
+[  145.177239] pynq bash[858]:   pipe @ 0x40000000 range 0x10000
+[  145.177239] pynq bash[858]:   ps7 @ 0x00000000 range 0x0
+[  145.177239] pynq bash[858]: axi_regs 段: pipe @ 0x40000000
+[  145.177239] pynq bash[858]: PASS: load
+[  175.341519] pynq bash[858]: Traceback (most recent call last):
+[  175.341519] pynq bash[858]:   File "/home/xilinx/vision_m2/pynq_vision_boot.py", line 21, in <module>
+[  175.347121] pynq bash[858]:     main()
+[  175.347121] pynq bash[858]:   File "/home/xilinx/vision_m2/pynq_vision_boot.py", line 16, in main
+[  175.347121] pynq bash[858]:     vision.wait_applied(sequence, timeout=30.0, poll=0.02)
+[  175.347121] pynq bash[858]:   File "/home/xilinx/vision_m2/vision_regs.py", line 114, in wait_applied
+[  175.347121] pynq bash[858]:     raise TimeoutError("configuration not applied: check video/frame input")
+[  175.349884] pynq bash[858]: TimeoutError: configuration not applied: check video/frame input
+[  176.460743] pynq systemd[1]: fpga-vision-boot.service: Main process exited, code=exited, status=1/FAILURE
+[  176.462972] pynq systemd[1]: fpga-vision-boot.service: Failed with result 'exit-code'.
+[  176.465206] pynq systemd[1]: Failed to start PYNQ vision after stock PL initialization.
+[  176.467263] pynq systemd[1]: fpga-vision-boot.service: Consumed 15.196s CPU time.
+[Unit]
+Description=PYNQ vision after stock PL initialization
+Requires=bootpy.service
+After=bootpy.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -lc 'source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u /home/xilinx/vision_m2/pynq_vision_boot.py'
+RemainAfterExit=yes
+TimeoutStartSec=180
+
+[Install]
+WantedBy=multi-user.target
+@reboot root ip addr add 192.168.50.99/24 dev eth0
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/root        15G  7.2G  6.4G  54% /
+/dev/mmcblk0p1  130M  8.0M  122M   7% /boot
+total 8964
+drwxrwxr-x  3 xilinx xilinx    4096 Sep 21 23:25 c01-38950ebeddc24b89ae0b76aeffd4369e
+drwxrwxr-x  2 xilinx xilinx    4096 Sep 21 18:31 c01-8b4d42b3653c4c31a70626bf9a971abf
+drwxrwxr-x  3 xilinx xilinx    4096 Sep 22 03:36 c01-8b702ebb0b284fa3a408491e13e644e3
+drwxrwxr-x  2 xilinx xilinx    4096 Sep 21 18:29 c01-a2a0452a39f94cfdbb0da5bcb750e5ca
+drwxrwxr-x  2 xilinx xilinx    4096 Sep 21 19:09 c01-ab75f5d26f8747418c4b6b0fd83995cd
+drwxrwxr-x  3 xilinx xilinx    4096 Sep 21 23:22 c01-c88a93dd814b4f4bb2e86172aecbcf61
+-rw-r--r--  1 root   root         0 Sep 21 23:22 c01-capture.lock
+drwxrwxr-x  2 xilinx xilinx    4096 Sep 21 18:25 c01-cefc3ffab83448b1ae9e41b345276c4e
+drwxrwxr-x  2 xilinx xilinx    4096 Sep 22 06:09 c01-e06a1e2be89d4499bb1724b7f08298c4
+drwxrwxr-x  3 xilinx xilinx    4096 Sep 22 01:07 c01-ff610bdae8ef46ce9304e531ebaf9627
+-rw-rw-r--  1 xilinx xilinx     219 Sep 20 16:37 demo.log
+-rw-r--r--  1 xilinx xilinx     114 Sep 20 16:38 env.log
+drwxr-xr-x 18 root   root      4096 Sep 22 20:17 live-artifacts
+-rw-r--r--  1 root   root    244348 Sep 22 20:17 live-server.log
+-rw-r--r--  1 root   root      3389 Sep 21 03:02 loaded.xclbin
+-rw-r--r--  1 xilinx xilinx     115 Sep 20 16:38 load.log
+-rwxr-xr-x  1 xilinx xilinx    3103 Sep 21 03:02 m2_onboard.py
+-rw-r--r--  1 root   root    986678 Sep 21 16:57 n03-base-35fbfda1e7ff404ba4cbc30c419bf235.png
+-rw-r--r--  1 root   root   1027986 Sep 21 16:55 n03-base-4f8b00f27c734745bd95e6d7ad43f8a5.png
+-rw-r--r--  1 root   root    989630 Sep 21 17:11 n03-base-9caec930568c46a89bcddff859ffc954.png
+-rw-r--r--  1 root   root   1432893 Sep 21 21:27 n03-base-a668ca233d4c44e49ee189192e580c59.png
+-rw-r--r--  1 root   root      3947 Sep 21 16:21 n03-base-c29e8a3a84a14ab8a20b5c6b17d9051d.png
+drwxrwxr-x  2 xilinx xilinx    4096 Sep 21 18:25 __pycache__
+-rw-r--r--  1 root   root       635 Sep 22 20:44 pynq_vision_boot.py
+-rw-r--r--  1 xilinx xilinx    2140 Sep 20 16:28 RUNBOOK.md
+-rw-r--r--  1 xilinx xilinx     131 Sep 20 16:38 smoke.log
+-rw-r--r--  1 xilinx xilinx 4045769 Sep 21 03:02 vision.bit
+-rwxr-xr-x  1 xilinx xilinx    2245 Sep 21 03:02 vision_demo.py
+-rw-r--r--  1 xilinx xilinx  313989 Sep 21 03:02 vision.hwh
+-rwxr-xr-x  1 xilinx xilinx    5626 Sep 21 03:02 vision_regs.py
+-rw-rw-r--  1 xilinx xilinx      74 Sep 20 17:16 watch2.log
+-rw-rw-r--  1 xilinx xilinx      54 Sep 20 17:17 watch3.log
+-rw-rw-r--  1 xilinx xilinx      28 Sep 21 02:25 watch4.log
+-rw-rw-r--  1 xilinx xilinx      28 Sep 21 02:20 watch5.log
+-rw-r--r--  1 root   root        24 Sep 21 02:24 watch6.log
+-rw-r--r--  1 root   root       102 Sep 21 03:07 watch7.log
+-rw-rw-r--  1 xilinx xilinx      72 Sep 20 17:12 watch.log
+-rwxr-xr-x  1 xilinx xilinx     998 Sep 21 03:02 watch_video.py
+lrwxrwxrwx 1 root root 0 Sep 22 22:17 /sys/class/fpga_manager/fpga0 -> ../../devices/soc0/axi/f8007000.devcfg/fpga_manager/fpga0
+{
+  "bit_sha256": "b2690b0aa69df36c1638b5b652ce8bcf0c97f2799d302b332f5bcd432c3313b3",
+  "payload_sha256": "a31a26f734796aa9867507ae5fea68581b314e2c8eb3aed1aee26075cdbd8736",
+  "model_id": 1244672593,
+  "model_status": "PROVISIONAL",
+  "order": {
+    "bolt": 2,
+    "nut": 4,
+    "washer": 4
+  },
+  "localization": {
+    "package": "/home/xilinx/cop-pkg-product-20261027-r1",
+    "root": "/home/xilinx/cop-live-exe-20261027-r2",
+    "order": "2,4,4",
+    "min_score": 0.8,
+    "color_threshold": 20.0,
+    "min_area_ratio": 8e-05,
+    "background_mode": "local",
+    "host": "0.0.0.0",
+    "port": 8765
+  }
+}[  121.225275] [drm] bitstream 49f625c2-a92a-c767-a06f-7569bc487625 unlocked, ref=0
+[  128.589419] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(290)
+[  129.765155] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(757)
+[  140.706915] zocl-drm axi:zyxclmm_drm: zocl_create_client: created KDS client for pid(858), ret: 0
+[  140.707144] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(858)
+[  140.708525] zocl-drm axi:zyxclmm_drm: zocl_create_client: created KDS client for pid(858), ret: 0
+[  140.712260] [drm] bitstream 49f625c2-a92a-c767-a06f-7569bc487625 locked, ref=1
+[  140.712363] zocl-drm axi:zyxclmm_drm:  ffffffffc14a0810 kds_add_context: Client pid(858) add context Domain(65535) CU(0xffff) shared(true)
+[  140.713442] zocl-drm axi:zyxclmm_drm:  ffffffffc14a0810 kds_del_context: Client pid(858) del context Domain(65535) CU(0xffff)
+[  140.713508] [drm] bitstream 49f625c2-a92a-c767-a06f-7569bc487625 unlocked, ref=0
+[  145.071087] fpga_manager fpga0: writing vision.bin to Xilinx Zynq FPGA Manager
+[  145.157428] [drm] Loading xclbin 8ada4652-b2be-8e9c-66d9-3f6c35400385 to slot 0
+[  145.157467] [drm] skip kind 29(AIE_RESOURCES) return code: -22
+[  145.157507] [drm] skip kind 8(IP_LAYOUT) return code: -22
+[  145.157525] [drm] skip kind 9(DEBUG_IP_LAYOUT) return code: -22
+[  145.157538] [drm] skip kind 25(AIE_METADATA) return code: -22
+[  145.157552] [drm] skip kind 7(CONNECTIVITY) return code: -22
+[  145.157566] [drm] found kind 6(MEM_TOPOLOGY)
+[  145.157726] [drm] Memory 0 is not reserved in device tree. Will allocate memory from CMA
+[  145.157788] [drm] zocl_xclbin_read_axlf 8ada4652-b2be-8e9c-66d9-3f6c35400385 ret: 0
+[  145.188215] [drm] bitstream 8ada4652-b2be-8e9c-66d9-3f6c35400385 locked, ref=1
+[  145.188329] zocl-drm axi:zyxclmm_drm:  ffffffffc14a0810 kds_add_context: Client pid(858) add context Domain(65535) CU(0xffff) shared(true)
+[  145.188446] zocl-drm axi:zyxclmm_drm:  ffffffffc14a0810 kds_del_context: Client pid(858) del context Domain(65535) CU(0xffff)
+[  145.188502] [drm] bitstream 8ada4652-b2be-8e9c-66d9-3f6c35400385 unlocked, ref=0
+[  176.004413] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(858)

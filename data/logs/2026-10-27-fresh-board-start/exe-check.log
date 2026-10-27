@@ -1,0 +1,6 @@
+session ae79edbb-ac93-4dea-936c-0896b8d705c4 mode LIVE hardware_connected True
+Traceback (most recent call last):
+  File "preview.py", line 322, in <module>
+  File "preview.py", line 296, in main
+RuntimeError: preview image save failed
+[PYI-21968:ERROR] Failed to execute script 'preview' due to unhandled exception!

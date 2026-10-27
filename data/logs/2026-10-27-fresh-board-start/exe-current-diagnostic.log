@@ -1,0 +1,18 @@
+30d6fc34-e372-4b0e-b9de-e8f4617b40d6
+board_sequence=hwh_clocks,reconfigure_pl,wait_stable,status_check
+clock_topology=mmcm expected_cop_mhz=40.000000
+measured_fclk1_mhz=142.857143
+status_first_reads=0x00000001
+PRODUCT_SERVICE_READY {"engine": "COP_HW", "capture": "C01_PARK", "port": 8765, "order": {"bolt": 2, "nut": 4, "washer": 4}}
+/home/xilinx/cop-live-fresh-20261027-r2/ae79edbb/check-000005/capture-dma.json
+/home/xilinx/cop-live-fresh-20261027-r2/ae79edbb/check-000005/cop_trace.json
+/home/xilinx/cop-live-fresh-20261027-r2/ae79edbb/check-000001/capture-dma.json
+/home/xilinx/cop-live-fresh-20261027-r2/ae79edbb/check-000001/cop_trace.json
+/home/xilinx/cop-live-fresh-20261027-r2/ae79edbb/check-000003/capture-dma.json
+/home/xilinx/cop-live-fresh-20261027-r2/ae79edbb/check-000003/cop_trace.json
+/home/xilinx/cop-live-fresh-20261027-r2/ae79edbb/check-000004/capture-dma.json
+/home/xilinx/cop-live-fresh-20261027-r2/ae79edbb/check-000004/cop_trace.json
+/home/xilinx/cop-live-fresh-20261027-r2/ae79edbb/check-000002/capture-dma.json
+/home/xilinx/cop-live-fresh-20261027-r2/ae79edbb/check-000002/cop_trace.json
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/root        15G  7.2G  6.4G  54% /

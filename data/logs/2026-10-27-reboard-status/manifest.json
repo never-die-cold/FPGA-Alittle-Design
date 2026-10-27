@@ -1,0 +1,51 @@
+{
+  "source_commit": "cfbded8",
+  "date": "2026-10-27",
+  "files": [
+    {
+      "path": "board-detail.log",
+      "sha256": "b8ed9c0230f2db973324adb5e46af079469b9faa7b0aa85a436efc2b36bb97a5",
+      "bytes": 7794
+    },
+    {
+      "path": "board-status.log",
+      "sha256": "45c98bfc83008d835828f076c655bf804a8f0a0c01d7265860daa61e6d96f363",
+      "bytes": 6473
+    },
+    {
+      "path": "http-status.log",
+      "sha256": "52e654cdf61168c30bc95fe384aa7083ee2d1ea981887bc5cb6b292f75d8a15f",
+      "bytes": 328
+    },
+    {
+      "path": "probe-board.sh",
+      "sha256": "25a93dab952db9d7cabb3c635d0bf942f63de32ffc83bdeeb0558b6678da8d7f",
+      "bytes": 1083
+    },
+    {
+      "path": "README.md",
+      "sha256": "e1aa86524b6a34d5d91fc73850edfbd56ac4ed531c6c59d8633665ccc0c172ee",
+      "bytes": 3307
+    },
+    {
+      "path": "runtime.log",
+      "sha256": "4f7c789e71e4d8eb65c32a8d21bb8b1da63b906c04ee41bffc27a6b422b61ae2",
+      "bytes": 35015
+    },
+    {
+      "path": "uvc/devices.txt",
+      "sha256": "3589679453e58570d1726c94349a33a510fd4cba9c3c67545802596d8e566f05",
+      "bytes": 115
+    },
+    {
+      "path": "uvc/metadata.json",
+      "sha256": "b2c37e8cb10115ae77a93d88d2d88aadac4456815be4688950af6b983706dc3b",
+      "bytes": 941
+    },
+    {
+      "path": "uvc/raw.png",
+      "sha256": "08f1c9deef07be2f994555c18b6471d4c876c89b23eaa5dcdc33f513b955b0fe",
+      "bytes": 5031
+    }
+  ]
+}
