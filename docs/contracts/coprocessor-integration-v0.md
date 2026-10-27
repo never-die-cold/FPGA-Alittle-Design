@@ -27,6 +27,10 @@ PS 侧另用真正的 AXI4-Lite slave 访问同一逻辑寄存器映射。
 
 ## 2. v0 系统分工
 
+多目标结果提交：`result_write` 为寄存脉冲，消费者在下一上升沿写结果 RAM；
+该沿之前必须保持目标槽号和 target_id，写入后才能推进下一个 ROI。
+复现入口：`bash sim/scripts/run_iverilog.sh cop_multitarget_commit`。
+
 ```text
 PS 软件 / LIVE 服务
   ├─ 定位、scene-gray-border-padding-v1、INT8 输入导出
@@ -57,6 +61,12 @@ RISC-V 固件              │       cop_top（计算域）
    本地镜像的同拍值，写在上升沿进入命令邮箱，不给核增加 wait state。
 3. **CDC**：配置、命令和结果均使用“稳定 payload + toggle/ack”或异步 FIFO；多位总线禁止
    逐位双触发器同步。RISC-V 只有在 `CFG_APPLIED`/`RESULT_SEQ` 改变后读取对应快照。
+
+2026-10-27 PS AXI-Lite 实现补充：payload 保持到对应握手完成；请求和 ACK 各经三级同步，
+payload 经两级采样后额外获得一拍稳定窗口。实现约束对 held payload 设置目的域一周期
+max-delay/bus-skew（PS=10 ns、cop=25 ns），不得用全时钟域 false path 掩盖数据束延迟。
+寄存器地址与字段不变；接口允许新增的握手等待周期。定向复现入口为
+`bash sim/scripts/run_iverilog.sh cop_axi_cdc_skew`。
 
 ### 3.1.1 J04 核侧访问细则（2026-10-18 冻结）
 

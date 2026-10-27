@@ -1,0 +1,15 @@
+Sep 22 20:41:18 pynq systemd[1]: Starting PYNQ vision after stock PL initialization...
+Sep 22 20:41:34 pynq bash[875]: ip_dict:
+Sep 22 20:41:34 pynq bash[875]:   pipe @ 0x40000000 range 0x10000
+Sep 22 20:41:34 pynq bash[875]:   ps7 @ 0x00000000 range 0x0
+Sep 22 20:41:34 pynq bash[875]: axi_regs 段: pipe @ 0x40000000
+Sep 22 20:41:34 pynq bash[875]: PASS: load
+Sep 22 20:41:45 pynq bash[969]: R11 busy=0 R12 applied=0
+Sep 22 20:41:46 pynq bash[969]: NOVIDEO: commit 未在帧首确认——寄存器通路 OK 但无输入视频（查 HDMI IN 源/线材）
+Sep 22 20:41:47 pynq systemd[1]: fpga-vision-boot.service: Control process exited, code=exited, status=3/NOTIMPLEMENTED
+Sep 22 20:41:47 pynq systemd[1]: fpga-vision-boot.service: Failed with result 'exit-code'.
+Sep 22 20:41:47 pynq systemd[1]: Failed to start PYNQ vision after stock PL initialization.
+Sep 22 20:41:47 pynq systemd[1]: fpga-vision-boot.service: Consumed 25.688s CPU time.
+ExecMainStatus=0
+ExecStartPost={ path=/bin/bash ; argv[]=/bin/bash -lc source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u /home/xilinx/vision_m2/m2_onboard.py smoke ; ignore_errors=no ; start_time=[Tue 2026-09-22 20:41:35 UTC] ; stop_time=[Tue 2026-09-22 20:41:47 UTC] ; pid=969 ; code=exited ; status=3 }
+ 20:43:56 up 4 min,  1 user,  load average: 0.47, 0.89, 0.44

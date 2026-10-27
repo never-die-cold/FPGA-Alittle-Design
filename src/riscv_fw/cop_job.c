@@ -31,7 +31,7 @@ static int cop_write(unsigned int reg, uint32_t value)
     return 0;
 }
 
-int main(void)
+static int run_job(void)
 {
     struct cop_target targets[16]; struct cop_judgement judged;
     struct cop_order order; uint32_t word,status=0,seq=0,decision,seq_before,seq_after;
@@ -106,4 +106,21 @@ finish:
         judged.verdict=COP_RECHECK;
     tohost=0x4a303400u|judged.verdict;
     return 0;
+}
+
+int main(void)
+{
+    uint32_t last_config=0;
+    for(;;) {
+        uint32_t status=COP[REG_STATUS], config=COP[REG_CFG_APPLIED];
+        uint32_t count=COP[REG_ROI_COUNT]&31u;
+        /* A committed configuration is the job receipt. PS persists and consumes
+           its terminal before committing a new sequence; idle has no deadline. */
+        if(config==0u || config==last_config || count==0u ||
+           (status&(STATUS_BUSY|STATUS_UNCONSUMED|STATUS_DMA_BUSY)) ||
+           !(status&STATUS_CFG_VALID) || !(status&STATUS_MODEL_VALID) ||
+           COP[REG_DMA_BYTES]!=count*4096u) continue;
+        last_config=config;
+        run_job();
+    }
 }

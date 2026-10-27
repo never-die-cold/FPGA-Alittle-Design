@@ -71,6 +71,8 @@ if {[catch {
         return [join $result ,]
     }
     proc find_gate_python {} {
+        unset -nocomplain ::env(PYTHONHOME)
+        unset -nocomplain ::env(PYTHONPATH)
         if {[info exists ::env(COP_PYTHON)] && [file isfile $::env(COP_PYTHON)]} {
             return $::env(COP_PYTHON)
         }
@@ -128,8 +130,15 @@ if {[catch {
     }
     set script_dir [file normalize [file dirname [info script]]]
     set root [file normalize [file join $script_dir ..]]
-    set run_dir [file join $script_dir run pynq_cop_40mhz]
-    set rep_dir [file join $script_dir reports pynq_cop_40mhz]
+    set build_name pynq_cop_40mhz
+    if {[info exists ::env(COP_BUILD_NAME)]} {
+        set build_name $::env(COP_BUILD_NAME)
+        if {![regexp {^[a-zA-Z0-9_-]+$} $build_name]} {error "Invalid COP_BUILD_NAME"}
+        if {[file exists [file join $script_dir run $build_name]]} {error "Build output already exists: $build_name"}
+    }
+    set run_dir [file join $script_dir run $build_name]
+    set with_video [expr {[info exists ::env(COP_WITH_VIDEO)] && $::env(COP_WITH_VIDEO) eq "1"}]
+    set rep_dir [file join $script_dir reports $build_name]
     set project_dir [file join $run_dir project]
     file mkdir $run_dir; file mkdir $rep_dir; cd $root
     set cop_job_hex [file normalize [file join $root src riscv_fw cop_job.hex]]
@@ -154,16 +163,31 @@ if {[catch {
     }
     create_project -force pynq_cop_40mhz $project_dir -part xc7z020clg400-1
     set_property target_language Verilog [current_project]
+    if {$with_video} {
+        set_property ip_repo_paths [file normalize sim/build/hdmi-library-full] [current_project]
+        update_ip_catalog
+        add_files [glob src/vision/*.v]
+    }
     add_files [concat [glob src/riscv/*.v] [glob src/coprocessor/*.v]]
     add_files -norecurse [list $cop_job_hex $cop_imem_hex $cop_dmem_hex]
     source build/create_pynq_cop_bd.tcl
+    if {$with_video} {source build/attach_pynq_video.tcl}
     set bd [get_files */cop_system.bd]
     generate_target all $bd
+    if {$with_video} {
+        add_files -fileset constrs_1 sim/build/hdmi-source/hdmi_pins.xdc
+        foreach name {config_cdc capture_cdc} {
+            add_files -fileset constrs_1 src/vision/$name.xdc
+            set_property USED_IN_SYNTHESIS false [get_files $name.xdc]
+            set_property PROCESSING_ORDER LATE [get_files $name.xdc]
+        }
+    }
     add_files [make_wrapper -files $bd -top]
     add_files -fileset constrs_1 build/constraints/pynq_cop_board.xdc
     set_property PROCESSING_ORDER LATE [get_files pynq_cop_board.xdc]
     set_property top cop_system_wrapper [current_fileset]
     update_compile_order -fileset sources_1
+    set_property STEPS.OPT_DESIGN.TCL.POST [file join $script_dir constraints pynq_cop_cdc.tcl] [get_runs impl_1]
     launch_runs synth_1 -jobs 2
     wait_on_run synth_1
     if {[get_property PROGRESS [get_runs synth_1]] ne "100%"} {error "Whole-system synthesis failed"}
@@ -186,6 +210,12 @@ if {[catch {
     set timing [report_timing_summary -delay_type min_max -report_unconstrained \
         -check_timing_verbose -return_string -file [file join $rep_dir timing_impl.rpt]]
     set cdc [report_cdc -details -return_string -file [file join $rep_dir cdc_impl.rpt]]
+    if {$with_video} {
+        source sim/scripts/validate_vision_cdc.tcl
+        vision_check_cdc 1 raw_capture
+        set cdc [report_cdc -cells [get_cells -hier -filter {NAME =~ */pl/inst}] \
+            -details -return_string -file [file join $rep_dir cdc_cop_impl.rpt]]
+    }
     report_drc -file [file join $rep_dir drc_impl.rpt]
     set checks {no_clock constant_clock unconstrained_internal_endpoints generated_clocks}
     set checked [check_timing -override_defaults $checks -verbose -return_string]
@@ -219,6 +249,13 @@ if {[catch {
     if {![file isfile $bit] || ![file isfile $hwh]} {error "Gate passed but bitstream/hwh is missing"}
     file copy -force $bit [file join $run_dir pynq_cop_40mhz.bit]
     file copy -force $hwh [file join $run_dir pynq_cop_40mhz.hwh]
+    set hwh_stream [open $hwh r]; set hwh_text [read $hwh_stream]; close $hwh_stream
+    foreach {label base} {COP 40000000 DMA 40010000 GPIO 40020000} {
+        if {![regexp -nocase "C_BASEADDR\\\"\\ +VALUE=\\\"0x$base" $hwh_text]} {
+            error "HWH base gate failed: $label base 0x$base absent from handoff"
+        }
+    }
+    puts "HWH BASE GATE PASSED: COP=0x40000000 DMA=0x40010000 GPIO=0x40020000"
     write_hw_platform -fixed -include_bit -force -file [file join $run_dir pynq_cop_40mhz.xsa]
     puts "PYNQ COP WHOLE-SYSTEM GATE PASSED: WNS=$wns DSP=$dsp BRAM36=$bram36 CDC_ALLOWLIST=$cdc_counts DRC=0"
     puts "ARTIFACTS: $run_dir/pynq_cop_40mhz.bit $run_dir/pynq_cop_40mhz.hwh"

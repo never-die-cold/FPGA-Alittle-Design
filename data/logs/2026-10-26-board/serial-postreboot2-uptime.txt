@@ -1,0 +1,9 @@
+HOST_STARTED_UTC=2026-10-26T19:14:01.1331496Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=uptime
+uptime; printf '\n__PYNQ_RC_55a31b79b81343a781c1f51bbe48dfba=%d\n' $?
+[?2004l-bash: /usr/bin/uptime: Input/output error
+
+__PYNQ_RC_55a31b79b81343a781c1f51bbe48dfba=126
+[?2004hxilinx@pynq:~/cop-pkg-mmcm-oldtool$ 
+HOST_EXIT_CODE=126

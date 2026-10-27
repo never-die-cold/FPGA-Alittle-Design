@@ -1,0 +1,7 @@
+mingw32-make: Entering directory 'E:/Projects/FPGA-Alittle-Design/src/riscv_fw'
+riscv32-unknown-elf-gcc -march=rv32i  -mabi=ilp32 -mcmodel=medany -mno-relax -O2 -Wall -Wextra -ffreestanding -nostdlib -nostartfiles -Wl,--build-id=none -T link.ld start.S cop_job.c -o cop_job.elf
+riscv32-unknown-elf-objcopy -O binary cop_job.elf cop_job.bin
+python bin2hex.py cop_job.bin cop_job.hex
+cop_job.bin -> cop_job.hex: 16376 bytes, 4094 words (32-bit little-endian)
+rm cop_job.bin
+mingw32-make: Leaving directory 'E:/Projects/FPGA-Alittle-Design/src/riscv_fw'

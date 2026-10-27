@@ -1,0 +1,33 @@
+board_sequence=hwh_clocks,reconfigure_pl,wait_stable,status_check
+clock_topology=mmcm expected_cop_mhz=40.000000
+measured_fclk1_mhz=142.857143
+status_first_reads=0x00000001
+firmware_smoke=PASS status=0x00000862 fw_decision=0x00000000
+{"accepted_snapshot": 2146, "case": "zero", "class_id": 4, "dma_stream_bits": 64, "fclk1_mhz": 142.857143, "fw_decision": 66563, "logits": [2, -3, 4], "low_conf": 0, "margin_q": 2, "matches_expected": false, "payload_bytes": 36032, "payload_crc32": "0x2f760211", "result_seq": 1, "score_q15": 258, "valid": 0}
+measurement_file=/home/xilinx/cop-pkg-mmcm-20261027-diagnostic/evidence/zero-01.json
+DMA_RUN_EXIT=1
+===SNAPSHOT===
+SNAPSHOT_EXIT=124
+===SLCR===
+{
+  "FPGA0_CLK_CTRL": "0x00200500",
+  "FPGA1_CLK_CTRL": "0x00100700",
+  "FPGA2_CLK_CTRL": "0x00100500",
+  "FPGA3_CLK_CTRL": "0x00200500",
+  "FPGA_RST_CTRL": "0x00000000",
+  "LVL_SHFTR_EN": "0x0000000f"
+}
+===HEALTH===
+ 20:47:27 up 8 min,  1 user,  load average: 0.73, 0.75, 0.47
+[  487.037412] [drm] skip kind 25(AIE_METADATA) return code: -22
+[  487.037426] [drm] skip kind 7(CONNECTIVITY) return code: -22
+[  487.037440] [drm] found kind 6(MEM_TOPOLOGY)
+[  487.037568] [drm] Memory 0 is not reserved in device tree. Will allocate memory from CMA
+[  487.037629] [drm] zocl_xclbin_read_axlf ac6f80bd-c852-2087-703c-aec7b16652ff ret: 0
+[  487.062198] [drm] bitstream ac6f80bd-c852-2087-703c-aec7b16652ff locked, ref=1
+[  487.062317] zocl-drm axi:zyxclmm_drm:  ffffffffc157c810 kds_add_context: Client pid(1706) add context Domain(65535) CU(0xffff) shared(true)
+[  487.062423] zocl-drm axi:zyxclmm_drm:  ffffffffc157c810 kds_del_context: Client pid(1706) del context Domain(65535) CU(0xffff)
+[  487.062475] [drm] bitstream ac6f80bd-c852-2087-703c-aec7b16652ff unlocked, ref=0
+[  487.776786] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(1706)
+BLOCKED: measured result differs from EXPECTED_OUTPUTS.tsv
+SSH_EXIT=0

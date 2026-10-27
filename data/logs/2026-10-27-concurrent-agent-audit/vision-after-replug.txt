@@ -1,0 +1,5 @@
+R11 busy=0 R12 applied=1
+commit 配置号=2 status={'busy': False, 'applied_config_id': 2}
+PASS: smoke（视频在位，帧首整组应用已确认）
+SMOKE_EXIT=0
+ 20:29:46 up 13 min,  1 user,  load average: 0.36, 0.26, 0.31

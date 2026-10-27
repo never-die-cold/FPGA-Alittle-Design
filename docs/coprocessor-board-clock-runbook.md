@@ -1,7 +1,30 @@
 # 协处理器板端 40 MHz 时钟 runbook
 
+> 2026-10-27 现况：本页下方为旧直连时钟方案；同名 edge 包现已替换成 MMCM 版，不能原样执行其中的改钟/上板命令。
+> 先阅读[并发会话审计](runbooks/concurrent-agent-audit-2026-10-27.md)，核对 bit 哈希、时钟拓扑和 loader 配套关系。
+
 > 当前板级功能状态仍为 **UNVERIFIED**。旧源码的 Windows Vivado 2026.1 整机门禁曾 PASS；
 > 加入 IMEM 初始化门禁后的新源码尚待重跑，旧结论不等于新 bit 或板级验收。
+
+## 2026-10-26 冷启动补充（edge-fix）
+
+- 冷板/重启后 PL 未配置，PYNQ Clocks 找不到 device：cop_fclk.py 会报 No Devices Found
+  （B 已复现，见 data/logs/2026-10-26-board/b4-fclk-set-40.txt）。
+- 修正顺序：
+  1. 先由用户/队友 JTAG 烧 edge-fix bit（PL 配置、PYNQ device 出现）。
+  2. 跑 loader clock：
+
+~~~bash
+sudo -E /usr/local/share/pynq-venv/bin/python3 payload/tools/cop_payload_loader.py clock --package . --reads 20 --smoke-timeout 2
+~~~
+
+     它内含 FCLK1=40、重载 PL、FCLKRESET1、20 次首读。
+  3. 再跑 zero/pattern、roi_001/frame。
+- 若坚持用 cop_fclk.py：必须在已有 PL/device 后 set，再 JTAG 重载 bit，再跑 loader clock。
+- 板卡 mmc0/SDHCI 报错时先恢复 SD/电源，不要继续烧写；现场卡见
+  data/logs/2026-10-26-board/USER-ACTIONS.md。
+- edge-fix bit 9341F7FA...；包 build/board-package-edge-fix 与 -trained；
+  证据 data/logs/2026-10-26-build/README.md。
 
 ## 为什么 JTAG 后仍是 142.857 MHz
 

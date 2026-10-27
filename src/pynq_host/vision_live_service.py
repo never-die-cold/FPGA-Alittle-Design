@@ -242,7 +242,9 @@ def make_server(host="127.0.0.1", port=8765, root=None, captures=None, engine=No
                     if type(control) is not int or not 0 <= control <= 15:
                         raise ValueError("reserved control bits")
                     with state.lock:
-                        state.config_id = (state.config_id + 1) & 0xFFFFFFFF
+                        configure = getattr(state.captures, "configure", None)
+                        state.config_id = (configure(control) if configure else
+                                           (state.config_id + 1) & 0xFFFFFFFF)
                         applied = state.config_id
                     self.reply(200, {"mode": "LIVE", "applied_config_id": applied})
             except (ValueError, TypeError) as error:

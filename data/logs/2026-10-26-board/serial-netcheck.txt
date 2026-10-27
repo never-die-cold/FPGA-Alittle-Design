@@ -1,0 +1,7 @@
+HOST_STARTED_UTC=2026-10-26T13:47:23.3822981Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=ip -4 addr show | grep -E 'inet|^[0-9]+:'
+
+ERROR: 使用“0”个参数调用“Open”时发生异常:“对端口“COM12”的访问被拒绝。”
+
+HOST_EXIT_CODE=1

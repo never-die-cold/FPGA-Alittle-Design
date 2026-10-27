@@ -117,8 +117,11 @@ dma.load_model(addr, payload) / load_rois(addr, rois, stride) / load_descriptors
   （`test_cop_driver.py::test_pynq_transport_round`），但**未上板**。
 - 板上只读预检：`python sim/scripts/cop_board_preflight.py --base <Address Editor base>`
   只读 `IP_ID/VERSION/CAPABILITY/STATUS/ERROR_CODE/RESULT_SEQ`，不写、不碰 DMA；
-  成功不等于板级验收。数据面 `PynqDmaPlane` 仍按 J08 的 DataMover/物理 bank 实现
-  （当前**故意** `NotImplementedError`，不假装已实现）；
+  成功不等于板级验收。数据面 `PynqDmaPlane` 已按门禁装载器的 MM2S 路径实现
+  （每 kind 一包、GPIO 启动、`DMA_BUSY`/`DMA_BYTES` 对账、buffer 地址即 PS 地址），
+  10/27 已在共存旧包接到真实帧，发现多目标结果槽错位；修复 RTL 尚未上板，完整验收未完成。
+  硬件路径显式选 `dma_after_commit=True`，每次配置提交后重新装载模型以恢复 MODEL_VALID；
+  DONE 后等当前 RESULT_SEQ 的固件判定写回再读取计数。描述符表仍保持清零语义，J08 物理排布未冻结；
 - 服务/引擎/报文/EXE 不需要重写；`CopEngine` 继续产出同样的
   `status/targets/decision/width/height`，并写 `cop_trace.json`；
 - 真实链路全部就绪前，`prototype=true` 不得关闭；`/v1/status` 的 `engine`

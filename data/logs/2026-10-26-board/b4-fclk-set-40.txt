@@ -1,0 +1,11 @@
+/home/xilinx/pynq/pl_server/device.py:56: UserWarning: No devices found, is the XRT environment sourced?
+  warnings.warn(
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/home/xilinx/pynq/ps.py", line 204, in fclk1_mhz
+    cls._instance.set_pl_clk(1, clk_mhz=clk_mhz)
+  File "/home/xilinx/pynq/ps.py", line 313, in _instance
+    cls.device = Device.active_device
+  File "/home/xilinx/pynq/pl_server/device.py", line 71, in active_device
+    raise RuntimeError("No Devices Found")
+RuntimeError: No Devices Found

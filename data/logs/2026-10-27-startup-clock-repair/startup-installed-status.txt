@@ -1,0 +1,17 @@
+Result=success
+Requires=bootpy.service sysinit.target system.slice
+After=sysinit.target bootpy.service systemd-journald.socket basic.target system.slice
+LoadState=loaded
+ActiveState=active
+SubState=exited
+@reboot root ip addr add 192.168.50.99/24 dev eth0
+Sep 22 20:36:08 pynq systemd[1]: Starting PYNQ vision after stock PL initialization...
+Sep 22 20:36:21 pynq bash[2883]: ip_dict:
+Sep 22 20:36:21 pynq bash[2883]:   pipe @ 0x40000000 range 0x10000
+Sep 22 20:36:21 pynq bash[2883]:   ps7 @ 0x00000000 range 0x0
+Sep 22 20:36:21 pynq bash[2883]: axi_regs 段: pipe @ 0x40000000
+Sep 22 20:36:21 pynq bash[2883]: PASS: load
+Sep 22 20:36:32 pynq bash[2948]: R11 busy=0 R12 applied=0
+Sep 22 20:36:32 pynq bash[2948]: commit 配置号=1 status={'busy': False, 'applied_config_id': 1}
+Sep 22 20:36:32 pynq bash[2948]: PASS: smoke（视频在位，帧首整组应用已确认）
+Sep 22 20:36:33 pynq systemd[1]: Finished PYNQ vision after stock PL initialization.

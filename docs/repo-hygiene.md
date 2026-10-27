@@ -49,6 +49,10 @@ python sim/scripts/restore_snapshot.py --run <run> --check   # 验证快照恢�
 
 ## 5. 例外流程
 
+2026-10-27 集成归档例外：整理前已跟踪文件约 188.56 MiB，超过 175 MiB 历史预算。
+本次只加入约 12 MiB 的并发审计、启动恢复、旧包失败及 EXE 固定证据；其余生成包和重复图像留本地。
+文件 SHA 在各运行目录 manifest 中记录。未经归档整理不删除既有文件；后续单独收敛历史体积。
+
 1. 在 `docs/repo-hygiene.md` 或对应 README 写理由。
 2. 加 allowlist（脚本内集中维护，不分散）。
 3. PR 说明“为什么这次必须例外、何时回收”。

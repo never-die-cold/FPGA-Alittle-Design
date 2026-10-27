@@ -7,7 +7,7 @@ module pynq_cop_top #(
     input wire ps_clk_100_i,
     (* X_INTERFACE_INFO="xilinx.com:signal:reset:1.0 PS_RST RST", X_INTERFACE_PARAMETER="POLARITY ACTIVE_LOW" *)
     input wire ps_rst_n_i,
-    (* X_INTERFACE_INFO="xilinx.com:signal:clock:1.0 COP_CLK CLK", X_INTERFACE_PARAMETER="ASSOCIATED_RESET cop_rst_n_i, FREQ_HZ 40000000" *)
+    (* X_INTERFACE_INFO="xilinx.com:signal:clock:1.0 COP_CLK CLK", X_INTERFACE_PARAMETER="ASSOCIATED_RESET cop_rst_n_i, FREQ_HZ 39999996" *)
     input wire cop_clk_40_i,
     (* X_INTERFACE_INFO="xilinx.com:signal:reset:1.0 COP_RST RST", X_INTERFACE_PARAMETER="POLARITY ACTIVE_LOW" *)
     input wire cop_rst_n_i,
@@ -59,12 +59,13 @@ module pynq_cop_top #(
     (* ASYNC_REG="TRUE", SHREG_EXTRACT="NO" *) reg dma_req_c1,dma_req_c2,dma_kind_c1,dma_kind_c2;
     reg cop_dma_start,cop_dma_kind;
     (* ASYNC_REG="TRUE", SHREG_EXTRACT="NO" *) reg dma_ack_s1,dma_ack_s2;
+    reg dma_start_ps_q;
     assign dma_start_ready_o=dma_ack_s2==dma_req_ps;
     always @(posedge ps_clk_100_i or negedge ps_rst_n_i) begin
-        if(!ps_rst_n_i) begin dma_req_ps<=0; dma_kind_hold<=0; dma_ack_s1<=0; dma_ack_s2<=0; end
+        if(!ps_rst_n_i) begin dma_req_ps<=0; dma_kind_hold<=0; dma_ack_s1<=0; dma_ack_s2<=0; dma_start_ps_q<=0; end
         else begin
-            dma_ack_s1<=dma_ack_cop; dma_ack_s2<=dma_ack_s1;
-            if(dma_start_ps_i && dma_start_ready_o) begin dma_kind_hold<=dma_kind_ps_i; dma_req_ps<=!dma_req_ps; end
+            dma_ack_s1<=dma_ack_cop; dma_ack_s2<=dma_ack_s1; dma_start_ps_q<=dma_start_ps_i;
+            if(dma_start_ps_i && !dma_start_ps_q && dma_start_ready_o) begin dma_kind_hold<=dma_kind_ps_i; dma_req_ps<=!dma_req_ps; end
         end
     end
     always @(posedge cop_clk_40_i or negedge cop_rst_n_i) begin

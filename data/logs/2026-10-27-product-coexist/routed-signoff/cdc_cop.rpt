@@ -1,0 +1,126 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Tue Oct 27 19:17:48 2026
+| Host         : never-die-cold running 64-bit major release  (build 9200)
+| Command      : report_cdc -cells [get_cells -quiet -hier -filter {NAME =~ */pl/inst}] -details -return_string -file build/run/pynq_product_resume_20261027_r1/cdc_cop.rpt
+| Design       : cop_system_wrapper
+| Device       : 7z020-clg400
+| Speed File   : -1  PRODUCTION 1.12 2019-11-22
+| Design State : Routed
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CDC Report
+
+ID      Severity  Count  Description
+------  --------  -----  ----------------------------------------------
+CDC-3   Info         12  1-bit synchronized with ASYNC_REG property
+CDC-6   Warning       7  Multi-bit synchronized with ASYNC_REG property
+CDC-15  Warning      73  Clock enable controlled CDC structure detected
+
+Source Clock: clk_out1_cop_system_cop_mmcm_0
+Destination Clock: clk_fpga_0
+CDC Type: No Common Primary Clock
+
+Row  ID     Severity  Description                                     Depth  Exception                Source (From)                                         Destination (To)
+---  -----  --------  ----------------------------------------------  -----  -----------------------  ----------------------------------------------------  -----------------------------------------------------------------------------------------
+  1  CDC-3  Info      1-bit synchronized with ASYNC_REG property          5  False Path               cop_system_i/pl/inst/adapter/error_o_reg/C            cop_system_i/dma_control/U0/gpio_core_1/Dual.INPUT_DOUBLE_REGS5/syncstages_ff_reg[0][1]/D
+  2  CDC-3  Info      1-bit synchronized with ASYNC_REG property          2  Max Delay Datapath Only  cop_system_i/pl/inst/axil_cdc/bresp_hold_reg[1]/C     cop_system_i/pl/inst/axil_cdc/bresp_s1_reg[1]/D
+  3  CDC-3  Info      1-bit synchronized with ASYNC_REG property          3  False Path               cop_system_i/pl/inst/axil_cdc/r_ack_reg/C             cop_system_i/pl/inst/axil_cdc/rack_s1_reg/D
+  4  CDC-6  Warning   Multi-bit synchronized with ASYNC_REG property      2  Max Delay Datapath Only  cop_system_i/pl/inst/axil_cdc/rdata_hold_reg[31:0]/C  cop_system_i/pl/inst/axil_cdc/rdata_s1_reg[31:0]/D
+  5  CDC-3  Info      1-bit synchronized with ASYNC_REG property          2  Max Delay Datapath Only  cop_system_i/pl/inst/axil_cdc/rresp_hold_reg[1]/C     cop_system_i/pl/inst/axil_cdc/rresp_s1_reg[1]/D
+  6  CDC-3  Info      1-bit synchronized with ASYNC_REG property          3  False Path               cop_system_i/pl/inst/axil_cdc/w_ack_reg/C             cop_system_i/pl/inst/axil_cdc/wack_s1_reg/D
+  7  CDC-6  Warning   Multi-bit synchronized with ASYNC_REG property      2  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/rgray_reg[3:0]/C        cop_system_i/pl/inst/axis_cdc/rgray_s1_reg[3:0]/D
+  8  CDC-3  Info      1-bit synchronized with ASYNC_REG property          2  None                     cop_system_i/pl/inst/axis_cdc/rbin_reg[4]/C           cop_system_i/pl/inst/axis_cdc/rgray_s1_reg[4]/D
+  9  CDC-3  Info      1-bit synchronized with ASYNC_REG property          2  False Path               cop_system_i/pl/inst/dma_req_seen_reg/C               cop_system_i/pl/inst/dma_ack_s1_reg/D
+
+Source Clock: clk_fpga_0
+Destination Clock: clk_out1_cop_system_cop_mmcm_0
+CDC Type: No Common Primary Clock
+
+Row  ID      Severity  Description                                     Depth  Exception                Source (From)                                      Destination (To)
+---  ------  --------  ----------------------------------------------  -----  -----------------------  -------------------------------------------------  -------------------------------------------------
+  1  CDC-6   Warning   Multi-bit synchronized with ASYNC_REG property      2  Max Delay Datapath Only  cop_system_i/pl/inst/axil_cdc/ar_hold_reg[11:0]/C  cop_system_i/pl/inst/axil_cdc/ar_m1_reg[11:0]/D
+  2  CDC-6   Warning   Multi-bit synchronized with ASYNC_REG property      2  Max Delay Datapath Only  cop_system_i/pl/inst/axil_cdc/aw_hold_reg[11:0]/C  cop_system_i/pl/inst/axil_cdc/aw_m1_reg[11:0]/D
+  3  CDC-3   Info      1-bit synchronized with ASYNC_REG property          3  False Path               cop_system_i/pl/inst/axil_cdc/r_req_reg/C          cop_system_i/pl/inst/axil_cdc/rreq_m1_reg/D
+  4  CDC-6   Warning   Multi-bit synchronized with ASYNC_REG property      2  Max Delay Datapath Only  cop_system_i/pl/inst/axil_cdc/wd_hold_reg[31:0]/C  cop_system_i/pl/inst/axil_cdc/wd_m1_reg[31:0]/D
+  5  CDC-3   Info      1-bit synchronized with ASYNC_REG property          3  False Path               cop_system_i/pl/inst/axil_cdc/w_req_reg/C          cop_system_i/pl/inst/axil_cdc/wreq_m1_reg/D
+  6  CDC-6   Warning   Multi-bit synchronized with ASYNC_REG property      2  Max Delay Datapath Only  cop_system_i/pl/inst/axil_cdc/ws_hold_reg[3:0]/C   cop_system_i/pl/inst/axil_cdc/ws_m1_reg[3:0]/D
+  7  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[11][0]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[0]/D
+  8  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[13][1]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[1]/D
+  9  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[3][2]/C      cop_system_i/pl/inst/axis_cdc/out_data_reg[2]/D
+ 10  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[7][3]/C      cop_system_i/pl/inst/axis_cdc/out_data_reg[3]/D
+ 11  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[4][4]/C      cop_system_i/pl/inst/axis_cdc/out_data_reg[4]/D
+ 12  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[1][5]/C      cop_system_i/pl/inst/axis_cdc/out_data_reg[5]/D
+ 13  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[2][6]/C      cop_system_i/pl/inst/axis_cdc/out_data_reg[6]/D
+ 14  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[10][7]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[7]/D
+ 15  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[12][8]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[8]/D
+ 16  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[12][9]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[9]/D
+ 17  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[7][10]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[10]/D
+ 18  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[6][11]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[11]/D
+ 19  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[8][12]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[12]/D
+ 20  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[7][13]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[13]/D
+ 21  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[0][14]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[14]/D
+ 22  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[2][15]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[15]/D
+ 23  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[6][16]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[16]/D
+ 24  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[2][17]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[17]/D
+ 25  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[11][18]/C    cop_system_i/pl/inst/axis_cdc/out_data_reg[18]/D
+ 26  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[6][19]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[19]/D
+ 27  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[12][20]/C    cop_system_i/pl/inst/axis_cdc/out_data_reg[20]/D
+ 28  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[11][21]/C    cop_system_i/pl/inst/axis_cdc/out_data_reg[21]/D
+ 29  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[6][22]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[22]/D
+ 30  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[10][23]/C    cop_system_i/pl/inst/axis_cdc/out_data_reg[23]/D
+ 31  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[1][24]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[24]/D
+ 32  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[8][25]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[25]/D
+ 33  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[3][26]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[26]/D
+ 34  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[12][27]/C    cop_system_i/pl/inst/axis_cdc/out_data_reg[27]/D
+ 35  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[7][28]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[28]/D
+ 36  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[14][29]/C    cop_system_i/pl/inst/axis_cdc/out_data_reg[29]/D
+ 37  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[1][30]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[30]/D
+ 38  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[1][31]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[31]/D
+ 39  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[14][32]/C    cop_system_i/pl/inst/axis_cdc/out_data_reg[32]/D
+ 40  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[6][33]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[33]/D
+ 41  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[4][34]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[34]/D
+ 42  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[12][35]/C    cop_system_i/pl/inst/axis_cdc/out_data_reg[35]/D
+ 43  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[4][36]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[36]/D
+ 44  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[6][37]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[37]/D
+ 45  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[6][38]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[38]/D
+ 46  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[5][39]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[39]/D
+ 47  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[10][40]/C    cop_system_i/pl/inst/axis_cdc/out_data_reg[40]/D
+ 48  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[15][41]/C    cop_system_i/pl/inst/axis_cdc/out_data_reg[41]/D
+ 49  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[5][42]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[42]/D
+ 50  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[2][43]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[43]/D
+ 51  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[6][44]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[44]/D
+ 52  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[13][45]/C    cop_system_i/pl/inst/axis_cdc/out_data_reg[45]/D
+ 53  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[7][46]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[46]/D
+ 54  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[15][47]/C    cop_system_i/pl/inst/axis_cdc/out_data_reg[47]/D
+ 55  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[13][48]/C    cop_system_i/pl/inst/axis_cdc/out_data_reg[48]/D
+ 56  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[2][49]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[49]/D
+ 57  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[9][50]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[50]/D
+ 58  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[1][51]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[51]/D
+ 59  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[12][52]/C    cop_system_i/pl/inst/axis_cdc/out_data_reg[52]/D
+ 60  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[7][53]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[53]/D
+ 61  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[5][54]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[54]/D
+ 62  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[6][55]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[55]/D
+ 63  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[15][56]/C    cop_system_i/pl/inst/axis_cdc/out_data_reg[56]/D
+ 64  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[8][57]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[57]/D
+ 65  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[2][58]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[58]/D
+ 66  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[3][59]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[59]/D
+ 67  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[10][60]/C    cop_system_i/pl/inst/axis_cdc/out_data_reg[60]/D
+ 68  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[9][61]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[61]/D
+ 69  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[10][62]/C    cop_system_i/pl/inst/axis_cdc/out_data_reg[62]/D
+ 70  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[7][63]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[63]/D
+ 71  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[7][64]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[64]/D
+ 72  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[15][65]/C    cop_system_i/pl/inst/axis_cdc/out_data_reg[65]/D
+ 73  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[0][66]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[66]/D
+ 74  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[1][67]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[67]/D
+ 75  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[3][68]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[68]/D
+ 76  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[11][69]/C    cop_system_i/pl/inst/axis_cdc/out_data_reg[69]/D
+ 77  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[7][70]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[70]/D
+ 78  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[4][71]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[71]/D
+ 79  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/mem_reg[3][72]/C     cop_system_i/pl/inst/axis_cdc/out_data_reg[72]/D
+ 80  CDC-6   Warning   Multi-bit synchronized with ASYNC_REG property      2  Max Delay Datapath Only  cop_system_i/pl/inst/axis_cdc/wgray_reg[3:0]/C     cop_system_i/pl/inst/axis_cdc/wgray_m1_reg[3:0]/D
+ 81  CDC-3   Info      1-bit synchronized with ASYNC_REG property          2  None                     cop_system_i/pl/inst/axis_cdc/wbin_reg[4]/C        cop_system_i/pl/inst/axis_cdc/wgray_m1_reg[4]/D
+ 82  CDC-3   Info      1-bit synchronized with ASYNC_REG property          2  False Path               cop_system_i/pl/inst/dma_kind_hold_reg/C           cop_system_i/pl/inst/dma_kind_c1_reg/D
+ 83  CDC-3   Info      1-bit synchronized with ASYNC_REG property          2  False Path               cop_system_i/pl/inst/dma_req_ps_reg/C              cop_system_i/pl/inst/dma_req_c1_reg/D
+

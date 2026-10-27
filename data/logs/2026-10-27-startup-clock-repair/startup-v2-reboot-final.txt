@@ -1,0 +1,14 @@
+ 21:08:47 up 4 min,  1 user,  load average: 0.65, 0.96, 0.46
+Result=success
+ActiveState=active
+SubState=exited
+Sep 22 21:06:36 pynq systemd[1]: Starting PYNQ vision after stock PL initialization...
+Sep 22 21:06:51 pynq bash[891]: ip_dict:
+Sep 22 21:06:51 pynq bash[891]:   pipe @ 0x40000000 range 0x10000
+Sep 22 21:06:51 pynq bash[891]:   ps7 @ 0x00000000 range 0x0
+Sep 22 21:06:51 pynq bash[891]: axi_regs 段: pipe @ 0x40000000
+Sep 22 21:06:51 pynq bash[891]: PASS: load
+Sep 22 21:06:55 pynq bash[891]: VISION_BOOT_PASS applied_config_id=1
+Sep 22 21:06:56 pynq systemd[1]: Finished PYNQ vision after stock PL initialization.
+[  121.663803] fpga_manager fpga0: writing base.bin to Xilinx Zynq FPGA Manager
+[  145.703288] fpga_manager fpga0: writing vision.bin to Xilinx Zynq FPGA Manager

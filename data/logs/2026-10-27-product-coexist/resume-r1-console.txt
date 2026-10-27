@@ -1,0 +1,197 @@
+INFO: [Common 17-3922] A valid Vivado Design Suite BASIC license has been detected. Your current license is active and will expire on 14-sep-2027.
+
+****** Vivado v2026.1 (64-bit)
+  **** SW Build 6511674 on Tue Jun 16 11:02:23 MDT 2026
+  **** IP Build 6504888 on Tue Jun 09 09:05:25 MDT 2026
+  **** SharedData Build 6501428 on Mon Jun 08 17:34:18 MDT 2026
+  **** Start of session at: Tue Oct 27 19:16:28 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source sim/scripts/finish_cop_product.tcl
+# if {[catch {
+#     if {[llength $argv] != 3} {error "need routed.dcp imem.hex output-dir"}
+#     lassign $argv dcp imem out
+#     if {[file exists $out]} {error "output already exists: $out"}
+#     file mkdir $out
+#     open_checkpoint $dcp
+#     source sim/scripts/validate_vision_cdc.tcl
+#     vision_check_cdc 1 raw_capture
+#     set fh [open $imem r]; set words [split [string trim [read $fh]] \n]; close $fh
+#     if {[llength $words] != 8192} {error "expected materialized 8192-word IMEM"}
+#     set lanes [get_cells -quiet -hier -filter {REF_NAME == RAMB36E1 && NAME =~ */soc/u_imem/rdata_reg_*}]
+#     if {[llength $lanes] != 8} {error "IMEM must have eight RAMB36 lanes"}
+#     foreach cell $lanes {
+#         if {![regexp {rdata_reg_([0-7])$} $cell -> lane]} {error "unknown IMEM lane: $cell"}
+#         for {set block 0} {$block < 128} {incr block} {
+#             set raw [get_property [format INIT_%02X $block] $cell]
+#             if {![regexp -nocase {'h([0-9a-f]+)$} $raw -> digits]} {error "unknown INIT encoding"}
+#             set digits [format %064s $digits]
+#             for {set nibble 0} {$nibble < 64} {incr nibble} {
+#                 set index [expr {$block*64+$nibble}]
+#                 set expected [string index [string trim [lindex $words $index]] [expr {7-$lane}]]
+#                 if {![string equal -nocase $expected [string index $digits [expr {63-$nibble}]]]} {
+#                     error "IMEM differs from build input at word $index lane $lane"
+#                 }
+#             }
+#         }
+#     }
+#     puts "IMEM EXACT MATCH: all 8192 words match materialized build input"
+#     set cop_cells [get_cells -quiet -hier -filter {NAME =~ */pl/inst}]
+#     if {[llength $cop_cells] != 1} {error "cop hierarchy absent"}
+#     set cdc [report_cdc -cells $cop_cells -details -return_string -file $out/cdc_cop.rpt]
+#     if {[regexp -line {^[[:space:]]*CDC-[0-9]+[[:space:]]+Critical[[:space:]]+[1-9]} $cdc]} {
+#         error "critical cop CDC finding"
+#     }
+#     foreach {a b budget} {
+#         aw_hold aw_m1 25 wd_hold wd_m1 25 ws_hold ws_m1 25 ar_hold ar_m1 25
+#         rdata_hold rdata_s1 10 bresp_hold bresp_s1 10 rresp_hold rresp_s1 10
+#     } {
+#         set from [get_cells -quiet -hier -regexp ".*pl/inst/axil_cdc/${a}_reg.*"]
+#         set to [get_cells -quiet -hier -regexp ".*pl/inst/axil_cdc/${b}_reg.*"]
+#         if {![llength $from] || ![llength $to]} {error "CDC bundle absent: $a $b"}
+#         set paths [get_timing_paths -quiet -from $from -to $to -max_paths 1]
+#         if {![llength $paths]} {error "CDC payload is cut: $a"}
+#         set p [lindex $paths 0]
+#         if {[get_property REQUIREMENT $p]>$budget+0.001 || [get_property SLACK $p]<0} {
+#             error "CDC payload timing failed: $a"
+#         }
+#     }
+#     report_bus_skew -file $out/bus_skew.rpt
+#     report_timing_summary -delay_type min_max -report_unconstrained -file $out/timing.rpt
+#     set wns [get_property SLACK [get_timing_paths -delay_type max -max_paths 1]]
+#     set whs [get_property SLACK [get_timing_paths -delay_type min -max_paths 1]]
+#     if {$wns<0 || $whs<0} {error "setup/hold timing failed: $wns/$whs"}
+#     set latches [get_cells -quiet -hier -filter {REF_NAME =~ LDCE || REF_NAME =~ LDPE}]
+#     if {[llength $latches]} {error "latches present"}
+#     report_utilization -file $out/utilization.rpt
+#     report_drc -file $out/drc.rpt
+#     set bad [get_drc_violations -quiet -filter {SEVERITY == Error || SEVERITY == "Critical Warning"}]
+#     if {[llength $bad]} {error "blocking DRC: $bad"}
+#     set fh [open $out/gate_summary.txt w]
+#     puts $fh "DCP=[file normalize $dcp]\nWNS_NS=$wns\nWHS_NS=$whs\nIMEM_EXACT_WORDS=8192\nVISION_PROFILE=raw_capture\nLATCHES=0\nDRC_BLOCKING=0"
+#     close $fh
+#     write_bitstream -file $out/pynq_cop_40mhz.bit
+#     puts "PRODUCT BIT WRITTEN: $out/pynq_cop_40mhz.bit"
+# } reason]} {puts stderr "PRODUCT RESUME FAILED: $reason"; exit 1}
+Command: open_checkpoint build/run/pynq_cop_40mhz/project/pynq_cop_40mhz.runs/impl_1/cop_system_wrapper_routed.dcp
+
+Starting open_checkpoint Task
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.061 . Memory (MB): peak = 357.410 ; gain = 5.012
+INFO: [Device 21-403] Loading part xc7z020clg400-1
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.233 . Memory (MB): peak = 943.434 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 3730 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 1 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2026.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+WARNING: [Constraints 18-550] Could not create 'IBUF_LOW_PWR' constraint because net 'cop_system_i/cop_mmcm/clk_in1' is not directly connected to top level port. 'IBUF_LOW_PWR' is ignored for synthesis but preserved for implementation.
+Read ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.137 . Memory (MB): peak = 1097.719 ; gain = 9.754
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Project 1-853] Binary constraint restore complete.
+INFO: [Designutils 20-5722] Start Reading Physical Databases.
+Reading placement.
+Read Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.126 . Memory (MB): peak = 1812.242 ; gain = 0.000
+Reading placer database...
+Read Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.022 . Memory (MB): peak = 1812.242 ; gain = 0.000
+Read PlaceDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1812.242 ; gain = 0.000
+Read placeStorage: Time (s): cpu = 00:00:01 ; elapsed = 00:00:02 . Memory (MB): peak = 1872.793 ; gain = 60.551
+Read PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1872.793 ; gain = 0.000
+Reading routing.
+Read RouteStorage: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.942 . Memory (MB): peak = 1886.527 ; gain = 13.734
+Read Physdb Files: Time (s): cpu = 00:00:02 ; elapsed = 00:00:03 . Memory (MB): peak = 1886.527 ; gain = 74.285
+Restored from archive | CPU: 2.000000 secs | Memory: 0.000000 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:02 ; elapsed = 00:00:03 . Memory (MB): peak = 1886.527 ; gain = 74.285
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.036 . Memory (MB): peak = 1955.055 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 1051 instances were transformed.
+  IOBUF => IOBUF (IBUF, OBUFT): 2 instances
+  RAM256X1S => RAM256X1S (MUXF7(x2), MUXF8, RAMS64E(x4)): 1024 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 20 instances
+  RAM32X1D => RAM32X1D (RAMD32(x2)): 5 instances
+
+INFO: [Project 1-604] Checkpoint was created with Vivado v2026.1 (64-bit) build 6511674
+WARNING: [Vivado 12-23575] Critical violations of the methodology design rules detected. Critical violations may contribute to timing failures or cause functional issues in hardware. Run report_methodology for more information.
+open_checkpoint: Time (s): cpu = 00:00:30 ; elapsed = 00:00:36 . Memory (MB): peak = 1958.125 ; gain = 1612.637
+## proc vision_check_cdc {with_capture {profile full}} {
+##     if {$profile ni {full raw_capture}} {error "unknown vision CDC profile: $profile"}
+##     set config_first [get_pins -hier -filter {NAME =~ *req_meta_reg/D || NAME =~ *ack_meta_reg/D}]
+##     if {[llength $config_first] != 2} {error "expected two config handshake first-stage inputs"}
+##     set patterns {*u_config/hold_data_reg* *u_config/hold_id_reg* *u_config/dst_data_reg* *u_config/dst_id_reg*}
+##     if {$profile eq "raw_capture"} {
+##         # This profile has no consumer for analysis/snapshot or destination ID.
+##         # hold_id and src_applied remain entirely in the source clock domain.
+##         foreach pattern {*u_config/hold_data_reg* *u_config/dst_data_reg* *u_config/dst_id_reg* \
+##                          *u_gauss/* *u_sobel/* *u_scaler/* *u_copbuf/*} {
+##             if {[llength [get_cells -quiet -hier -filter "NAME =~ $pattern"]]} {
+##                 error "raw_capture profile unexpectedly retains analysis cells: $pattern"
+##             }
+##         }
+##         set patterns {*u_config/hold_id_reg* *u_config/src_applied_reg* \
+##                       *u_config/req_meta_reg* *u_config/req_sync_reg* \
+##                       *u_config/ack_meta_reg* *u_config/ack_sync_reg*}
+##         foreach pin $config_first {
+##             if {![get_property ASYNC_REG [get_cells -of_objects $pin]]} {
+##                 error "config handshake lacks ASYNC_REG: $pin"
+##             }
+##         }
+##         puts "VISION PROFILE raw_capture: source ID counter retained; request/ACK cross; analysis payload pruned"
+##     }
+##     foreach pattern $patterns {
+##         if {![llength [get_cells -hier -filter "NAME =~ $pattern"]]} {error "missing config CDC bundle: $pattern"}
+##     }
+##     if {$with_capture} {
+##         set capture_first [get_pins -hier -regexp {.*capture_status.*/(lock_sync_reg\[0\]|fault_bridge/(ack_sync_reg\[0\]|pending_sync_reg\[0\]))/D}]
+##         if {[llength $capture_first] != 3} {error "expected three capture CDC first-stage inputs, got [llength $capture_first]"}
+##         foreach pin $capture_first {
+##             if {![get_property ASYNC_REG [get_cells -of_objects $pin]]} {error "capture synchronizer missing ASYNC_REG: $pin"}
+##         }
+##         puts "PASS: CDC structural assertions (config first-stage=2, capture first-stage=3)"
+##     } else {puts "PASS: CDC structural assertions (config first-stage=2)"}
+## }
+VISION PROFILE raw_capture: source ID counter retained; request/ACK cross; analysis payload pruned
+PASS: CDC structural assertions (config first-stage=2, capture first-stage=3)
+IMEM EXACT MATCH: all 8192 words match materialized build input
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+INFO: [Timing 38-314] The report_cdc command only analyzes and reports clock domain crossing paths where clocks have been defined on both source and destination sides. Ports with no input delay constraint are skipped. Please run check_timing to verify there are no missing clock definitions in your design, nor any unconstrained input port.
+report_cdc: Time (s): cpu = 00:00:24 ; elapsed = 00:00:14 . Memory (MB): peak = 2111.414 ; gain = 150.672
+WARNING: [Timing 38-436] There are set_bus_skew constraint(s) in this design. Please run report_bus_skew to ensure that bus skew requirements are met.
+report_timing_summary: Time (s): cpu = 00:00:08 ; elapsed = 00:00:07 . Memory (MB): peak = 2209.633 ; gain = 98.090
+Command: report_drc -file build/run/pynq_product_resume_20261027_r1/drc.rpt
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'D:/Vivado_downloads/2026.1/Vivado/data/ip'.
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 2-168] The results of DRC are in file E:/Projects/FPGA-Alittle-Design/build/run/pynq_product_resume_20261027_r1/drc.rpt.
+report_drc completed successfully
+report_drc: Time (s): cpu = 00:00:13 ; elapsed = 00:00:09 . Memory (MB): peak = 2319.145 ; gain = 109.512
+Command: write_bitstream -file build/run/pynq_product_resume_20261027_r1/pynq_cop_40mhz.bit
+Attempting to get a license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+INFO: [Common 17-349] Got license for feature 'Vivado_Implementation' and/or device 'xc7z020'
+Running DRC as a precondition to command write_bitstream
+INFO: [IP_Flow 19-1839] IP Catalog is up to date.
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado 12-3199] DRC finished with 0 Errors
+INFO: [Vivado 12-3200] Please refer to the DRC report (report_drc) for more information.
+Integrating Hard IP ELF/MEM with the PDI.
+INFO: [Designutils 20-2272] Running write_bitstream with 2 threads.
+Initializing bitstream generation complete. Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 2433.078 ; gain = 74.996
+Loading data files...
+Loading site data...
+Loading route data...
+Processing options...
+Creating bitmap...
+Creating bitstream...
+Writing bitstream build/run/pynq_product_resume_20261027_r1/pynq_cop_40mhz.bit...
+Generate Bitstream complete. Time (s): cpu = 00:00:28 ; elapsed = 00:00:20 . Memory (MB): peak = 2729.383 ; gain = 371.301
+INFO: [Vivado 12-1842] Bitgen Completed Successfully.
+INFO: [Common 17-83] Releasing license: Vivado_Implementation
+16 Infos, 1 Warnings, 0 Critical Warnings and 0 Errors encountered.
+write_bitstream completed successfully
+write_bitstream: Time (s): cpu = 00:00:37 ; elapsed = 00:00:34 . Memory (MB): peak = 2729.383 ; gain = 410.238
+PRODUCT BIT WRITTEN: build/run/pynq_product_resume_20261027_r1/pynq_cop_40mhz.bit
+# exit 0
+INFO: [Common 17-206] Exiting Vivado at Tue Oct 27 19:18:58 2026...

@@ -1,0 +1,129 @@
+===STARTUP_MATCHES===
+/etc/cron.d/pynq-live:2:@reboot root bash -c 'sleep 15; source /etc/profile.d/xrt_setup.sh; source /etc/profile.d/pynq_venv.sh; python3 -u /home/xilinx/vision_m2/m2_onboard.py load; sleep 3; python3 -u /home/xilinx/vision_m2/m2_onboard.py smoke || true'
+/etc/cron.d/pynq-live:3:@reboot root bash -c 'sleep 25; source /etc/profile.d/xrt_setup.sh; source /etc/profile.d/pynq_venv.sh; cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && nohup python3 -u park_live_server_v7.py --host 0.0.0.0 --port 8765 --root /home/xilinx/vision_m2/live-artifacts --order 2 2 2 --min-score 0.8 >> /home/xilinx/vision_m2/live-server.log 2>&1 &'
+/etc/systemd/system/basic.target.wants/bootpy.service:2:Description=Executing boot.py from the boot partition
+/lib/systemd/system/bootpy.service:2:Description=Executing boot.py from the boot partition
+===CURRENT===
+root       185     1 Ss         01:44 /usr/sbin/cron -f -P
+root       659     1 S          01:18 bash -c sleep 25; source /etc/profile.d/xrt_setup.sh; source /etc/profile.d/pynq_venv.sh; cd /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3 && nohup python3 -u park_live_server_v7.py --host 0.0.0.0 --port 8765 --root /home/xilinx/vision_m2/live-artifacts --order 2 2 2 --min-score 0.8 >> /home/xilinx/vision_m2/live-server.log 2>&1 &
+root       661   659 Sl         01:18 python3 -u park_live_server_v7.py --host 0.0.0.0 --port 8765 --root /home/xilinx/vision_m2/live-artifacts --order 2 2 2 --min-score 0.8
+===VISION_FILES===
+-rw-rw-r-- 1 xilinx xilinx   10311 Sep 22 02:08 /home/xilinx/vision_m2/c01-8b702ebb0b284fa3a408491e13e644e3/park_live_server_v7.py
+-rw-r--r-- 1 xilinx xilinx 4045769 Sep 21 03:02 /home/xilinx/vision_m2/vision.bit
+===SERVICE_CODE===
+"""W05 live service on the real park chain: ParkCaptures backend + NumPy engine.
+
+Backend: every round acquires the board capture lock, ensures the candidate
+overlay (skips download when already loaded), settles on a real frame tick,
+runs one protected slot-0 copy through the reviewed ParkFrameCapture bytes,
+writes capture.png into the round dir, and restores the original vision with
+the bounded busy-aware smoke loop so the user's display recovers between
+rounds. prototype stays True until formal N03 acceptance (honest C04 §3.2).
+Engine: golden locate (default parameters) -> crop_resize 64x64 -> folded
+FP32 NumPy CNN (no torch on the board) -> inspection_rules-shaped judge with
+the caller's order/min_score. HTTP surface is the unmodified
+vision_live_service.make_server (same /v1 endpoints as EXE expects).
+"""
+import argparse
+import hashlib
+import json
+import sys
+import time
+from pathlib import Path
+import numpy as np
+
+SITE = '/home/xilinx/vision_m2'
+TRIAL = Path(SITE) / 'c01-8b702ebb0b284fa3a408491e13e644e3'
+sys.path.insert(0, SITE)
+DRIVER_SHA = '1f11aefdc11805387b0c345583828fd733e5e38b0b0e043b0510808f648e8430'
+PARK_SHA = '953dec241be0f4c76d254cdca6efc4da2f334b978338eded49c694dd2f1001b5'
+BIT_SHA = '86d2adb0343de1785270d207eee3c6b8fee2a6444bc64705bc068e3fc781d14f'
+HWH_SHA = 'eaaf68c3732f1a2bf85756fc0b3a8c6b07bb5cf5b36f32020882860a6aaebf5c'
+CLASSES = ('bolt', 'nut', 'washer')
+
+
+def _restore_original():
+    import m2_onboard
+    m2_onboard.cmd_load()
+    deadline = time.monotonic() + 40.0
+    last = None
+    while time.monotonic() < deadline:
+        try:
+            m2_onboard.cmd_smoke()
+            return
+        except SystemExit:
+            last = 'SystemExit'
+        except RuntimeError as exc:
+            last = repr(exc)
+            if 'busy' not in last:
+                raise
+        time.sleep(1.0)
+    raise RuntimeError('restore smoke timeout: ' + str(last))
+
+
+class ParkCaptures:
+    backend = 'PARK'
+    prototype = True
+
+    def __init__(self):
+        import fcntl
+        self.fcntl = fcntl
+        self.seq = 0
+        self.lock_path = Path(SITE) / 'c01-capture.lock'
+        sys.path.insert(0, str(TRIAL))
+        from c01_capture import QUARANTINE  # noqa: F401  import parity with diag entries
+        self._capture_cls = None
+
+    def _chain(self, round_dir):
+        import cv2
+        from pynq import MMIO, PL, Overlay, allocate
+        from c01_status_onboard import verify, load_candidate
+        from c01_park_capture import ParkFrameCapture
+        bit = TRIAL / 'capture.bit'
+        if not PL.bitfile_name or 'capture' not in str(PL.bitfile_name):
+            verify(bit, BIT_SHA)
+            verify(bit.with_suffix('.hwh'), HWH_SHA)
+            load_candidate(bit, Overlay)
+        if 'capture' not in str(PL.bitfile_name):
+            raise RuntimeError('candidate overlay is not loaded')
+        status, dma = MMIO(0x42000000, 65536), MMIO(0x43000000, 65536)
+        deadline = time.monotonic() + 30.0
+        while True:
+            tick_a = status.read(8)
+            time.sleep(1.0)
+            if status.read(8) > tick_a and status.read(4) & 1:
+                break
+            if time.monotonic() >= deadline:
+                raise RuntimeError('video settle timeout on candidate')
+        def identity():
+===SYS_STATE===
+operating
+[  135.212674] [drm] Memory 0 is not reserved in device tree. Will allocate memory from CMA
+[  135.212753] [drm] Memory 1 is not reserved in device tree. Will allocate memory from CMA
+[  135.212820] [drm] Memory 2 is not reserved in device tree. Will allocate memory from CMA
+[  135.212886] [drm] Memory 3 is not reserved in device tree. Will allocate memory from CMA
+[  135.212954] [drm] Memory 4 is not reserved in device tree. Will allocate memory from CMA
+[  135.213012] [drm] zocl_xclbin_read_axlf 10b989db-2f72-0b3d-4a35-69a82b50a7b8 ret: 0
+[  135.255086] [drm] bitstream 10b989db-2f72-0b3d-4a35-69a82b50a7b8 locked, ref=1
+[  135.255211] zocl-drm axi:zyxclmm_drm:  ffffffffc157c810 kds_add_context: Client pid(292) add context Domain(65535) CU(0xffff) shared(true)
+[  135.255329] zocl-drm axi:zyxclmm_drm:  ffffffffc157c810 kds_del_context: Client pid(292) del context Domain(65535) CU(0xffff)
+[  135.255381] [drm] bitstream 10b989db-2f72-0b3d-4a35-69a82b50a7b8 unlocked, ref=0
+[  142.838211] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(292)
+[  144.678381] zocl-drm axi:zyxclmm_drm: zocl_destroy_client: client exits pid(862)
+===CLOCKS===
+          fclk3_mux                   1        1        0  1000000000          0     0  50000         Y
+             fclk3_div0               1        1        0   333333334          0     0  50000         Y
+                fclk3_div1            1        1        0   166666667          0     0  50000         Y
+                   fclk3              1        1        0   166666667          0     0  50000         Y
+          fclk2_mux                   1        1        0  1000000000          0     0  50000         Y
+             fclk2_div0               1        1        0   200000000          0     0  50000         Y
+                fclk2_div1            1        1        0   200000000          0     0  50000         Y
+                   fclk2              1        1        0   200000000          0     0  50000         Y
+          fclk1_mux                   1        1        0  1000000000          0     0  50000         Y
+             fclk1_div0               1        1        0   142857143          0     0  50000         Y
+                fclk1_div1            1        1        0   142857143          0     0  50000         Y
+                   fclk1              1        1        0   142857143          0     0  50000         Y
+          fclk0_mux                   1        1        0  1000000000          0     0  50000         Y
+             fclk0_div0               1        1        0   200000000          0     0  50000         Y
+                fclk0_div1            1        1        0   100000000          0     0  50000         Y
+                   fclk0              1        1        0   100000000          0     0  50000         Y

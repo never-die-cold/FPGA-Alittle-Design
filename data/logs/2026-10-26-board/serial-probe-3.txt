@@ -1,0 +1,14 @@
+HOST_STARTED_UTC=2026-10-26T14:00:26.0654977Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=uptime; ip -4 addr show | grep inet; echo B1-PROBE-DONE
+uptime; ip -4 addr show | grep inet; echo B1-PROBE-DONE; printf '\n__PYNQ_RC_2547ec169dca4d71a5711185f7597263=%d\n' $?
+[?2004l 19:18:31 up 2 min,  1 user,  load average: 5.08, 1.83, 0.66
+    [01;31m[Kinet[m[K 127.0.0.1/8 scope host lo
+    [01;31m[Kinet[m[K 169.254.87.99/16 scope global eth0
+    [01;31m[Kinet[m[K 192.168.50.99/24 scope global eth0
+    [01;31m[Kinet[m[K 192.168.2.99/24 brd 192.168.2.255 scope global eth0:1
+B1-PROBE-DONE
+
+__PYNQ_RC_2547ec169dca4d71a5711185f7597263=0
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=0

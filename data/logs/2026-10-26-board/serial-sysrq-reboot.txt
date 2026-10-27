@@ -1,0 +1,9 @@
+HOST_STARTED_UTC=2026-10-26T19:14:48.5953260Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=echo xilinx | sudo -S -p '' sh -c 'echo b > /proc/sysrq-trigger'
+echo xilinx | sudo -S -p '' sh -c 'echo b > /proc/sysrq-trigger'; printf '\n__PYNQ_RC_65f41169651f46129dba5f48cebd6622=%d\n' $?
+[?2004l-bash: /usr/bin/sudo: Input/output error
+
+__PYNQ_RC_65f41169651f46129dba5f48cebd6622=126
+[?2004hxilinx@pynq:~/cop-pkg-mmcm-oldtool$ 
+HOST_EXIT_CODE=126

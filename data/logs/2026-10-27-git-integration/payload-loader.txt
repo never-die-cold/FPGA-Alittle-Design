@@ -1,0 +1,13 @@
+board_sequence=set_fclk,reconfigure_pl,wait_stable,pulse_fclkreset1,status_check
+clock_topology=direct expected_cop_mhz=40.000000
+measured_fclk1_mhz=40.000000
+status_first_reads=0x00000001,0x00000001,0x00000001
+firmware_smoke=PASS status=0x00000001 fw_decision=0x00000001
+firmware_smoke_timeout_dump={"CFG_APPLIED": "0x00000000", "CFG_SEQ": "0x00000000", "DMA_BYTES": "0x00000000", "ERROR_CODE": "0x00000000", "FW_DECISION": "0x00000000", "MODEL_ID": "0x00000000", "RESULT_SEQ": "0x00000000", "ROI_COUNT": "0x00000000", "STATUS": "0x00000000"}
+board_sequence=hwh_clocks,reconfigure_pl,wait_stable,status_check
+clock_topology=mmcm expected_cop_mhz=40.000000
+measured_fclk1_mhz=142.857132
+status_first_reads=0x00000001,0x00000001,0x00000001
+firmware_smoke=PASS status=0x00000001 fw_decision=0x00000001
+PASS: MMCM preserves input clock, skips SLCR reset, rejects wrong input before MMIO
+PASS: payload_loader DMA16 plus clock->PL reload->FCLKRESET1->STATUS ordering; unreconfigured access and silent firmware fail closed

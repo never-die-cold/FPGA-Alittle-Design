@@ -1,0 +1,16 @@
+Result=success
+ActiveState=active
+SubState=exited
+Sep 22 20:41:47 pynq systemd[1]: fpga-vision-boot.service: Control process exited, code=exited, status=3/NOTIMPLEMENTED
+Sep 22 20:41:47 pynq systemd[1]: fpga-vision-boot.service: Failed with result 'exit-code'.
+Sep 22 20:41:47 pynq systemd[1]: Failed to start PYNQ vision after stock PL initialization.
+Sep 22 20:41:47 pynq systemd[1]: fpga-vision-boot.service: Consumed 25.688s CPU time.
+Sep 22 20:45:22 pynq systemd[1]: Starting PYNQ vision after stock PL initialization...
+Sep 22 20:45:36 pynq bash[1465]: ip_dict:
+Sep 22 20:45:36 pynq bash[1465]:   pipe @ 0x40000000 range 0x10000
+Sep 22 20:45:36 pynq bash[1465]:   ps7 @ 0x00000000 range 0x0
+Sep 22 20:45:36 pynq bash[1465]: axi_regs 段: pipe @ 0x40000000
+Sep 22 20:45:36 pynq bash[1465]: PASS: load
+Sep 22 20:45:39 pynq bash[1465]: VISION_BOOT_PASS applied_config_id=1
+Sep 22 20:45:41 pynq systemd[1]: Finished PYNQ vision after stock PL initialization.
+No jobs running.

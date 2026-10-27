@@ -1,0 +1,91 @@
+EXPECTED_OUTPUTS.tsv: FAILED open or read
+golden/frame/input.hex: FAILED open or read
+golden/roi_001/input.hex: FAILED open or read
+payload/provisional-model/manifest.json: FAILED open or read
+payload/provisional-model/payload.bin: FAILED open or read
+payload/pynq_cop_40mhz.bit: FAILED open or read
+payload/pynq_cop_40mhz.hwh: FAILED open or read
+payload/tools/cop_board_fast_run.py: FAILED open or read
+payload/tools/cop_fclk.py: FAILED open or read
+payload/tools/cop_payload_loader.py: FAILED open or read
+sim/scripts/cop_hw_round.py: FAILED open or read
+sim/vision/localization_opencv.py: FAILED open or read
+src/pynq_host/arm_localize.py: FAILED open or read
+src/pynq_host/arm_localize_bench.py: FAILED open or read
+src/pynq_host/arm_localize_selftest.py: FAILED open or read
+src/pynq_host/base_captures.py: FAILED open or read
+src/pynq_host/c01_backend.py: FAILED open or read
+src/pynq_host/c01_capture.py: FAILED open or read
+src/pynq_host/c01_park_capture.py: FAILED open or read
+src/pynq_host/cop_driver.py: FAILED open or read
+src/pynq_host/cop_engine.py: FAILED open or read
+src/pynq_host/cop_mmio_sim.py: FAILED open or read
+src/pynq_host/cop_regs.py: FAILED open or read
+src/pynq_host/dataset_audit.py: FAILED open or read
+src/pynq_host/dataset_manifest.py: FAILED open or read
+src/pynq_host/inspection_artifacts.py: FAILED open or read
+src/pynq_host/inspection_model.py: FAILED open or read
+src/pynq_host/inspection_replay.py: FAILED open or read
+src/pynq_host/inspection_rules.py: FAILED open or read
+src/pynq_host/inspection_run.py: FAILED open or read
+src/pynq_host/m2_onboard.py: FAILED open or read
+src/pynq_host/model_audit.py: FAILED open or read
+src/pynq_host/model_reference.py: FAILED open or read
+src/pynq_host/numpy_reference.py: FAILED open or read
+src/pynq_host/onboard_smoke.py: FAILED open or read
+src/pynq_host/reference_package.py: FAILED open or read
+src/pynq_host/reference_tensors.py: FAILED open or read
+src/pynq_host/roi_preprocess.py: FAILED open or read
+src/pynq_host/round_artifacts.py: FAILED open or read
+src/pynq_host/vision_demo.py: FAILED open or read
+src/pynq_host/vision_live_service.py: FAILED open or read
+src/pynq_host/vision_mock_service.py: FAILED open or read
+src/pynq_host/vision_protocol.py: FAILED open or read
+src/pynq_host/vision_regs.py: FAILED open or read
+VERSION: FAILED open or read
+sha256sum: 'EXPECTED_OUTPUTS.tsv'$'\r': No such file or directory
+sha256sum: 'golden/frame/input.hex'$'\r': No such file or directory
+sha256sum: 'golden/roi_001/input.hex'$'\r': No such file or directory
+sha256sum: 'payload/provisional-model/manifest.json'$'\r': No such file or directory
+sha256sum: 'payload/provisional-model/payload.bin'$'\r': No such file or directory
+sha256sum: 'payload/pynq_cop_40mhz.bit'$'\r': No such file or directory
+sha256sum: 'payload/pynq_cop_40mhz.hwh'$'\r': No such file or directory
+sha256sum: 'payload/tools/cop_board_fast_run.py'$'\r': No such file or directory
+sha256sum: 'payload/tools/cop_fclk.py'$'\r': No such file or directory
+sha256sum: 'payload/tools/cop_payload_loader.py'$'\r': No such file or directory
+sha256sum: 'sim/scripts/cop_hw_round.py'$'\r': No such file or directory
+sha256sum: 'sim/vision/localization_opencv.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/arm_localize.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/arm_localize_bench.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/arm_localize_selftest.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/base_captures.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/c01_backend.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/c01_capture.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/c01_park_capture.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/cop_driver.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/cop_engine.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/cop_mmio_sim.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/cop_regs.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/dataset_audit.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/dataset_manifest.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/inspection_artifacts.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/inspection_model.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/inspection_replay.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/inspection_rules.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/inspection_run.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/m2_onboard.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/model_audit.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/model_reference.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/numpy_reference.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/onboard_smoke.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/reference_package.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/reference_tensors.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/roi_preprocess.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/round_artifacts.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/vision_demo.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/vision_live_service.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/vision_mock_service.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/vision_protocol.py'$'\r': No such file or directory
+sha256sum: 'src/pynq_host/vision_regs.py'$'\r': No such file or directory
+sha256sum: 'VERSION'$'\r': No such file or directory
+sha256sum: WARNING: 45 listed files could not be read
