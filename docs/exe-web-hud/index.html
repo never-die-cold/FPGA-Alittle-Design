@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" id="meta-theme-color" content="#0B0F17">
+<title>EdgeSight · 检查控制台（Web 原型）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M6 26 14 6h5L11 26Z' fill='%2300D2FF'/%3E%3Cpath d='M15 26 23 6h5L20 26Z' fill='%231E5F8A'/%3E%3C/svg%3E">
+<script>
+  // 首帧前确定主题，避免暗色闪白（同参考前端做法，键名 edgesight-theme）。
+  (function () {
+    var stored = null;
+    try { stored = localStorage.getItem('edgesight-theme'); } catch (e) { /* 隐私模式忽略 */ }
+    var theme = stored === 'dark' || stored === 'light' ? stored
+      : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    document.documentElement.dataset.theme = theme;
+  })();
+</script>
+<style>
+/* ==========================================================================
+   EdgeSight 检查控制台 —— EXE HUD v4「应用外壳」的 Web 化原型。
+   布局/交互骨架借鉴 Project Mozart 控制中心（顶栏状态条 + 三栏 + 设计令牌 +
+   亮暗主题 + 终端日志）；信息架构、状态语义与配色纪律来自 EXE HUD v4 定稿：
+   - 面板区 UI 控件用品牌青，绿色专属目标框/序号片/判定 PASS（不与 UI 混用）；
+   - RUN 按钮三态：青 IDLE → 琥珀 QUEUED·WAITING → 暗底 RUNNING；
+   - 等待态三重冗余：撤框 + 计数置 -- + 状态文字（等待文字琥珀置深色衬底）。
+   纯前端模拟，不访问相机/网络/板端服务；数据为合成演示数据。
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Inter';
+  src: url('../../src/vision_client/assets/fonts/InterVariable.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+  --bg: #0B0F17;
+  --surface: #10151F;
+  --panel: #111825;
+  --panel2: #17202F;
+  --panel3: #0D131E;
+  --edge: #28344A;
+  --edge-soft: #1B2433;
+  --ink: #E6EDF6;
+  --ink-2: #AEB9C8;
+  --ink-3: #7A8698;
+  --ink-4: #5A6478;
+  --accent: #00D2FF;
+  --accent-strong: #00A6E6;
+  --accent-text: #0A100C;
+  --cyan-dim: rgba(0, 210, 255, 0.14);
+  --green: #00E682;
+  --amber: #FFB020;
+  --amber-deep: #F09600;
+  --red: #FF4D4F;
+  --ok-bg: rgba(0, 230, 130, 0.13);
+  --warn-bg: rgba(255, 176, 32, 0.13);
+  --err-bg: rgba(255, 77, 79, 0.15);
+  --info-bg: rgba(0, 210, 255, 0.12);
+  --feed: #C9C5BD;
+  --feed-line: rgba(60, 55, 45, 0.10);
+  --bracket: rgba(236, 228, 214, 0.85);
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  --console-bg: #050806;
+  --console-edge: #173B23;
+  --console-head: #0B1F13;
+  --console-text: #8BE3B4;
+  --track: #1E2634;
+}
+[data-theme="light"] {
+  color-scheme: light;
+  --bg: #F2F4F8;
+  --surface: #FFFFFF;
+  --panel: #FFFFFF;
+  --panel2: #F1F4F8;
+  --panel3: #E9EDF3;
+  --edge: #DCE2EB;
+  --edge-soft: #E8ECF2;
+  --ink: #16202E;
+  --ink-2: #3D4756;
+  --ink-3: #647083;
+  --ink-4: #98A2B3;
+  --accent: #00A9D6;
+  --accent-strong: #0087B8;
+  --accent-text: #FFFFFF;
+  --cyan-dim: rgba(0, 169, 214, 0.12);
+  --green: #00B368;
+  --amber: #C77700;
+  --amber-deep: #A65E00;
+  --red: #DC2626;
+  --ok-bg: rgba(0, 179, 104, 0.12);
+  --warn-bg: rgba(199, 119, 0, 0.12);
+  --err-bg: rgba(220, 38, 38, 0.10);
+  --info-bg: rgba(0, 169, 214, 0.10);
+  --feed: #C9C5BD;
+  --feed-line: rgba(60, 55, 45, 0.10);
+  --bracket: rgba(236, 228, 214, 0.85);
+  --shadow: 0 2px 10px rgba(23, 32, 46, 0.08);
+  --track: #DDE3EC;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', 'Noto Sans SC', 'Microsoft YaHei', 'PingFang SC', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+button, h1, h2, h3 { font-family: inherit; }
+.mono { font-family: ui-monospace, 'Cascadia Mono', Consolas, 'Courier New', monospace; font-variant-numeric: tabular-nums; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: var(--edge); border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* ---------- 顶部状态条（EXE 顶栏语义 × 参考前端 hardware-stat 外形） ---------- */
+.app-header {
+  display: flex; align-items: center; gap: 14px;
+  height: 58px; padding: 0 18px;
+  background: var(--surface); border-bottom: 1px solid var(--edge);
+  box-shadow: var(--shadow);
+  position: relative; z-index: 20;
+}
+.brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.brand-logo { width: 26px; height: 26px; flex: none; }
+.brand-name { font-size: 17px; font-weight: 800; letter-spacing: -0.01em; }
+.brand-tag {
+  font-size: 9px; font-weight: 800; letter-spacing: 0.14em; color: var(--ink-4);
+  border: 1px solid var(--edge); border-radius: 4px; padding: 2px 6px; white-space: nowrap;
+}
+.badge {
+  display: inline-flex; align-items: center; border-radius: 999px;
+  padding: 3px 11px; font-size: 11px; font-weight: 800; letter-spacing: 0.06em;
+  font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  white-space: nowrap;
+}
+.badge-live { background: var(--accent); color: #06222E; }
+.badge-mock { background: var(--amber); color: #2A1C00; }
+.badge-file { background: var(--panel3); color: var(--ink-2); border: 1px solid var(--edge); }
+.badge-proto { background: var(--red); color: #2B0505; }
+.verdict-text { font-size: 14px; font-weight: 800; letter-spacing: 0.02em; white-space: nowrap; }
+.verdict-pass { color: var(--green); }
+.verdict-fail { color: var(--red); }
+.verdict-warn { color: var(--amber); }
+.verdict-none { color: var(--ink-3); }
+.hw-group { display: flex; align-items: center; gap: 0; margin-left: 6px; overflow: hidden; }
+.hw-stat { display: flex; align-items: center; gap: 7px; padding: 4px 13px; white-space: nowrap; }
+.hw-stat + .hw-stat { border-left: 1px solid var(--edge-soft); }
+.hw-icon { width: 15px; height: 15px; color: var(--ink-4); flex: none; }
+.hw-label { font-size: 10px; font-weight: 800; letter-spacing: 0.08em; color: var(--ink-4); }
+.hw-value { font-size: 12px; font-weight: 700; color: var(--ink-2); }
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+.sys-online { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; color: var(--ink-2); white-space: nowrap; }
+.sys-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px rgba(0, 230, 130, 0.5); }
+.sys-dot.off { background: var(--red); box-shadow: 0 0 8px rgba(255, 77, 79, 0.5); }
+.header-sep { width: 1px; height: 26px; background: var(--edge); }
+.clock { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--ink-2); }
+.theme-toggle {
+  display: inline-flex; width: 32px; height: 32px; align-items: center; justify-content: center;
+  border: 1px solid var(--edge); border-radius: 8px; background: var(--panel);
+  color: var(--ink-3); cursor: pointer; transition: color 150ms ease, border-color 150ms ease;
+}
+.theme-toggle:hover { color: var(--ink); border-color: var(--ink-3); }
+.theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- 三栏主布局 ---------- */
+.layout {
+  display: grid; grid-template-columns: 292px minmax(0, 1fr) 348px;
+  gap: 12px; padding: 12px 14px 14px;
+  height: calc(100vh - 58px); min-height: 620px;
+}
+.col { display: flex; flex-direction: column; gap: 12px; min-height: 0; overflow-y: auto; }
+.col::-webkit-scrollbar { width: 6px; }
+.card {
+  background: var(--panel); border: 1px solid var(--edge); border-radius: 12px;
+  padding: 13px 15px; box-shadow: var(--shadow); flex: none;
+}
+.card-title {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.12em; color: var(--ink);
+  margin: 0 0 8px; text-transform: uppercase;
+}
+.card-title .hint { font-size: 10px; font-weight: 700; letter-spacing: 0.04em; color: var(--ink-4); text-transform: none; }
+.micro { font-size: 10px; line-height: 1.4; }
+.tiny { font-size: 11px; line-height: 1.45; }
+.dim { color: var(--ink-3); }
+.faint { color: var(--ink-4); }
+.kbd {
+  display: inline-block; min-width: 20px; text-align: center; padding: 1px 6px;
+  border: 1px solid var(--edge); border-bottom-width: 2px; border-radius: 5px;
+  background: var(--panel2); font-size: 10px; font-weight: 800; color: var(--ink-2);
+}
+
+/* ---------- 左栏：系统状态 / 数据源 / 演示控制 / 记录 ---------- */
+.sys-line { display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 800; }
+.sys-line .state-ok { color: var(--green); }
+.sys-line .state-err { color: var(--red); }
+.mode-row {
+  display: flex; align-items: center; gap: 10px;
+  border: 1px solid transparent; border-radius: 9px; padding: 7px 10px;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+.mode-row:hover { background: var(--panel2); }
+.mode-row.is-active { background: var(--panel2); border-color: var(--edge); }
+.mode-name { font-size: 12px; font-weight: 700; letter-spacing: 0.05em; }
+.mode-desc { font-size: 10px; color: var(--ink-4); margin-top: 1px; }
+.mode-row .spacer { flex: 1; }
+.toggle { position: relative; width: 36px; height: 20px; flex: none; }
+.toggle input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.toggle .track { position: absolute; inset: 0; border-radius: 999px; background: var(--track); transition: background-color 150ms ease; }
+.toggle .knob {
+  position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--edge); transition: left 150ms ease, background-color 150ms ease;
+}
+.toggle input:checked + .track { background: var(--accent); }
+.toggle input:checked ~ .knob { left: 18px; background: var(--accent-text); border-color: transparent; }
+.toggle input:focus-visible + .track { outline: 2px solid var(--accent); outline-offset: 2px; }
+.param-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 5px 0; }
+.param-row label { font-size: 11px; font-weight: 700; color: var(--ink-2); }
+select.field {
+  background: var(--panel2); border: 1px solid var(--edge); border-radius: 7px;
+  color: var(--ink); font: 700 11px/1 'Inter', 'Noto Sans SC', sans-serif;
+  padding: 5px 8px; cursor: pointer;
+}
+select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.sim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.sim-grid .btn { padding: 6px 8px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  border: 1px solid var(--edge); border-radius: 8px; background: var(--panel2);
+  color: var(--ink-2); font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
+  padding: 7px 10px; cursor: pointer; white-space: nowrap;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease, filter 150ms ease;
+}
+.btn:hover { border-color: var(--ink-3); color: var(--ink); }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.btn-accent { background: var(--accent); border-color: transparent; color: var(--accent-text); font-weight: 800; }
+.btn-accent:hover { filter: brightness(1.08); color: var(--accent-text); border-color: transparent; }
+.btn-block { width: 100%; }
+.rec-line { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+.rec-num { font-size: 23px; font-weight: 800; color: var(--accent); line-height: 1; }
+.rec-label { font-size: 10px; font-weight: 800; letter-spacing: 0.1em; color: var(--ink-4); }
+
+/* ---------- 中栏：视频舞台 / 状态条 / 终端日志 ---------- */
+.col-center { overflow: hidden; }
+.stage-wrap { flex: none; display: flex; justify-content: center; }
+.stage {
+  position: relative; width: 100%; aspect-ratio: 16 / 9; max-height: 56vh;
+  border-radius: 14px; border: 1px solid var(--edge); overflow: hidden;
+  background: var(--feed);
+  background-image:
+    linear-gradient(var(--feed-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--feed-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  box-shadow: inset 0 0 90px rgba(20, 16, 10, 0.16), var(--shadow);
+}
+.corner { position: absolute; width: 26px; height: 26px; pointer-events: none; }
+/* 亮色主题下视频舞台加强外阴影与描边，与浅色卡片拉开层次 */
+[data-theme="light"] .stage {
+  border-color: #C7CFDA;
+  box-shadow: inset 0 0 90px rgba(20, 16, 10, 0.16),
+    0 1px 3px rgba(23, 32, 46, 0.10), 0 8px 22px rgba(23, 32, 46, 0.14);
+}
+.corner::before, .corner::after { content: ''; position: absolute; background: var(--bracket); }
+.corner::before { width: 100%; height: 2px; }
+.corner::after { width: 2px; height: 100%; }
+.corner.tl { top: 12px; left: 12px; }
+.corner.tr { top: 12px; right: 12px; transform: scaleX(-1); }
+.corner.bl { bottom: 12px; left: 12px; transform: scaleY(-1); }
+.corner.br { bottom: 12px; right: 12px; transform: scale(-1); }
+
+.tgt { position: absolute; border: 2px solid var(--green); border-radius: 2px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.22); }
+.tgt-chip {
+  position: absolute; top: -27px; left: -2px;
+  background: var(--green); color: #0A100C; border-radius: 999px;
+  padding: 2px 10px; font-size: 11px; font-weight: 800; letter-spacing: 0.04em;
+}
+.shape { position: absolute; inset: 0; margin: auto; filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.3)); }
+.shape-bolt { width: 40%; height: 76%; border-radius: 11px;
+  background: linear-gradient(155deg, #57503F 0%, #3C362C 46%, #2C2820 100%); }
+.shape-bolt::after { content: ''; position: absolute; left: 50%; top: 12%; width: 22%; height: 3px;
+  transform: translateX(-50%); border-radius: 2px; background: rgba(0, 0, 0, 0.4); }
+.shape-nut { width: 82%; height: 82%; clip-path: polygon(25% 4%, 75% 4%, 98% 50%, 75% 96%, 25% 96%, 2% 50%);
+  background: linear-gradient(150deg, #4A443A 0%, #322D25 100%); }
+.shape-nut::after { content: ''; position: absolute; inset: 0; margin: auto; width: 40%; height: 40%;
+  border-radius: 50%; background: var(--feed); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.35); }
+.shape-washer { width: 86%; height: 86%; border-radius: 50%;
+  background: radial-gradient(closest-side, transparent 0 41%, #413B31 42% 76%, transparent 77%); }
+
+.verdict-banner {
+  position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+  border-radius: 999px; padding: 5px 16px; font-size: 13px; font-weight: 800; letter-spacing: 0.06em;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); white-space: nowrap;
+}
+.verdict-banner.pass { background: var(--green); color: #06210F; }
+.verdict-banner.fail { background: var(--red); color: #FFF3F3; }
+.verdict-banner.warn { background: var(--amber); color: #2A1C00; }
+.overlay-center { position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 7px; pointer-events: none; }
+.overlay-chip {
+  background: rgba(7, 10, 16, 0.78); border: 1px solid rgba(255, 176, 32, 0.42);
+  color: var(--amber); border-radius: 10px; padding: 10px 24px; text-align: center;
+}
+.overlay-chip b { font-size: 15px; font-weight: 800; letter-spacing: 0.14em; display: block; }
+.overlay-chip span { font-size: 11px; color: #C2C9D4; }
+.overlay-chip.err { border-color: rgba(255, 77, 79, 0.5); color: var(--red); }
+
+.status-strip {
+  flex: none; display: flex; align-items: center; gap: 12px;
+  background: var(--surface); border: 1px solid var(--edge); border-radius: 12px;
+  padding: 9px 14px; min-height: 46px; box-shadow: var(--shadow);
+}
+.strip-item { display: flex; align-items: baseline; gap: 7px; }
+.strip-label { font-size: 9px; font-weight: 800; letter-spacing: 0.12em; color: var(--ink-4); }
+.strip-value { font-size: 15px; font-weight: 800; }
+.chip {
+  display: inline-flex; align-items: center; border-radius: 5px; padding: 2px 8px;
+  font-size: 10px; font-weight: 800; letter-spacing: 0.05em; white-space: nowrap;
+  font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+}
+.chip-ok { background: var(--ok-bg); color: var(--green); }
+.chip-warn { background: var(--warn-bg); color: var(--amber); }
+.chip-err { background: var(--err-bg); color: var(--red); }
+.chip-info { background: var(--info-bg); color: var(--accent); }
+.chip-subtle { background: var(--panel2); color: var(--ink-2); border: 1px solid var(--edge); }
+.strip-right { margin-left: auto; display: flex; gap: 14px; font-size: 11px; font-weight: 600; color: var(--ink-3); }
+
+.console-log {
+  flex: 1 1 170px; min-height: 150px; display: flex; flex-direction: column;
+  background: var(--console-bg); border: 1px solid var(--console-edge); border-radius: 12px;
+  overflow: hidden; font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+}
+.console-head {
+  display: flex; align-items: center; gap: 10px; padding: 7px 12px;
+  background: var(--console-head); color: var(--console-text);
+  font-size: 10px; font-weight: 800; letter-spacing: 0.16em;
+}
+.console-head .spacer { flex: 1; }
+.console-select {
+  background: transparent; border: 0; color: var(--console-text);
+  font: 700 10px ui-monospace, Consolas, monospace; cursor: pointer;
+}
+.console-select option { color: #111827; background: #FFFFFF; }
+.console-clear { background: none; border: 0; color: inherit; font: 800 10px ui-monospace, Consolas, monospace;
+  letter-spacing: 0.1em; cursor: pointer; opacity: 0.85; }
+.console-clear:hover { opacity: 1; }
+.console-body { flex: 1; overflow-y: auto; padding: 10px 12px; display: flex; flex-direction: column; gap: 5px; }
+.log-line { display: flex; gap: 8px; font-size: 11.5px; line-height: 1.5; }
+.log-caret { color: #34D399; font-weight: 700; flex: none; }
+.log-time { color: #6B7280; flex: none; }
+.log-tag { color: #6EE7B7; font-weight: 700; flex: none; min-width: 52px; }
+.log-msg { color: #C4CCD6; word-break: break-word; }
+.log-tag.t-RUN { color: #7DD3FC; } .log-tag.t-LINK { color: #93C5FD; }
+.log-tag.t-STATE { color: #FBBF24; } .log-tag.t-REC { color: #6EE7B7; }
+.log-tag.t-ERR { color: #F87171; } .log-tag.t-BOOT { color: #94A3B8; }
+
+/* ---------- 右栏：识别范围表（置顶）/ 检测对象 / 服务信息 ---------- */
+.scope-note { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; color: var(--ink-4); margin: -4px 0 6px; }
+.scope-row {
+  display: flex; align-items: center; gap: 12px; height: 40px;
+  border-radius: 8px; padding: 0 10px; cursor: pointer;
+  transition: background-color 120ms ease;
+}
+.scope-row:hover { background: var(--panel2); }
+.scope-row.off .scope-name, .scope-row.off .scope-count { color: var(--ink-4); }
+.scope-check {
+  width: 20px; height: 20px; flex: none; border-radius: 6px; position: relative;
+  background: var(--panel2); border: 2px solid var(--edge); transition: background-color 120ms ease, border-color 120ms ease;
+}
+.scope-row.on .scope-check { background: var(--accent); border-color: var(--accent); }
+.scope-check svg { position: absolute; inset: 0; margin: auto; opacity: 0; transition: opacity 120ms ease; }
+.scope-row.on .scope-check svg { opacity: 1; }
+.scope-name { font-size: 14px; font-weight: 600; }
+.scope-row.on .scope-name { color: var(--ink); }
+.scope-count { margin-left: auto; font-size: 15px; font-weight: 800; color: var(--ink-3); }
+.scope-row.on .scope-count.has { color: var(--ink); }
+.fresh-row { display: flex; align-items: center; gap: 10px; margin: 10px 2px 12px; }
+.fresh-label { font-size: 10px; font-weight: 800; letter-spacing: 0.1em; color: var(--ink-4); flex: none; }
+.fresh-track { flex: 1; height: 7px; border-radius: 4px; background: var(--track); overflow: hidden; }
+.fresh-fill { height: 100%; border-radius: 4px; background: var(--accent); transition: width 180ms linear, background-color 300ms ease; }
+.run-btn {
+  width: 100%; height: 42px; border: 0; border-radius: 999px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  font: 800 13px 'Inter', 'Noto Sans SC', sans-serif; letter-spacing: 0.08em;
+  background: linear-gradient(90deg, var(--accent), var(--accent-strong)); color: #06222E;
+  transition: filter 150ms ease, background-color 150ms ease, color 150ms ease;
+}
+.run-btn:hover { filter: brightness(1.07); }
+.run-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.run-btn.queued { background: var(--amber); color: #2A1C00; }
+.run-btn.running { background: var(--panel2); color: var(--accent); box-shadow: inset 0 0 0 1px var(--edge); }
+.run-btn.running .run-spinner { animation: spin 900ms linear infinite; }
+.run-btn[hidden] { display: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.run-ico { width: 17px; height: 17px; flex: none; }
+.run-arrow { width: 14px; height: 14px; flex: none; margin-left: 2px; }
+
+.obj-grid { display: flex; flex-direction: column; gap: 10px; }
+.obj-card {
+  display: flex; gap: 12px; align-items: center; padding: 9px;
+  background: var(--panel2); border: 1px solid var(--edge); border-radius: 10px;
+  transition: border-color 150ms ease, transform 150ms ease;
+}
+.obj-card:hover { border-color: var(--ink-3); transform: translateY(-1px); }
+.obj-thumb {
+  width: 74px; height: 56px; flex: none; border-radius: 8px; position: relative; overflow: hidden;
+  background: var(--feed);
+  background-image: linear-gradient(var(--feed-line) 1px, transparent 1px), linear-gradient(90deg, var(--feed-line) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.obj-meta { min-width: 0; flex: 1; }
+.obj-top { display: flex; align-items: center; gap: 8px; }
+.obj-tchip { background: var(--green); color: #0A100C; border-radius: 999px; padding: 1px 9px;
+  font-size: 11px; font-weight: 800; }
+.obj-class { font-size: 13px; font-weight: 700; }
+.obj-score { font-size: 12px; font-weight: 700; color: var(--ink-2); margin-left: auto; }
+.obj-coords { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; margin-top: 5px;
+  font-size: 11px; font-weight: 600; color: var(--ink-3); }
+.obj-more { font-size: 12px; font-weight: 600; color: var(--ink-4); padding: 2px 4px; }
+.svc-rows { display: flex; flex-direction: column; gap: 6px; }
+.svc-row { display: flex; justify-content: space-between; gap: 10px; font-size: 11px; }
+.svc-row .k { color: var(--ink-4); font-weight: 700; letter-spacing: 0.05em; }
+.svc-row .v { color: var(--ink-2); font-weight: 600; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ---------- Toast（底部居中、实底卡片，避免与视频区横幅叠压） ---------- */
+.toast {
+  position: fixed; bottom: 22px; left: 50%; transform: translate(-50%, 10px); z-index: 60;
+  background: var(--surface); border: 1px solid rgba(255, 176, 32, 0.55); color: var(--amber);
+  border-radius: 9px; padding: 9px 16px; font-size: 12px; font-weight: 700;
+  box-shadow: var(--shadow); opacity: 0; pointer-events: none;
+  transition: opacity 200ms ease, transform 200ms ease; max-width: 60vw;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast.err { border-color: rgba(255, 77, 79, 0.6); color: var(--red); }
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 1180px) {
+  .layout { grid-template-columns: 1fr; height: auto; }
+  .col { overflow: visible; }
+  .stage { max-height: none; }
+  .console-log { min-height: 240px; }
+  .hw-group { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- 顶部状态条：模式徽标 + 工单判定 + 资源统计 + 系统在线 + 时钟（EXE 顶栏语义） -->
+<header class="app-header">
+  <div class="brand">
+    <svg class="brand-logo" viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M6 26 14 6h5L11 26Z" fill="var(--accent)"/>
+      <path d="M15 26 23 6h5L20 26Z" fill="#1E5F8A"/>
+    </svg>
+    <span class="brand-name">EdgeSight</span>
+    <span class="brand-tag">HUD v4 · WEB</span>
+  </div>
+  <span id="mode-badge" class="badge badge-live">LIVE</span>
+  <span id="proto-badge" class="badge badge-proto">PROTOTYPE</span>
+  <span id="verdict-text" class="verdict-text verdict-none">SYSTEM BOOT</span>
+  <div class="hw-group" aria-label="画面与会话统计">
+    <div class="hw-stat">
+      <svg class="hw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
+      <span class="hw-label">RES</span><span class="hw-value mono">1280×720</span>
+    </div>
+    <div class="hw-stat">
+      <svg class="hw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h3l2-6 4 12 3-8 2 4h6"/></svg>
+      <span class="hw-label">FPS</span><span class="hw-value mono" id="hw-fps">30</span>
+    </div>
+    <div class="hw-stat">
+      <svg class="hw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
+      <span class="hw-label">SESSION</span><span class="hw-value mono" id="hw-session">—</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="sys-online"><span id="sys-dot" class="sys-dot"></span><span id="sys-text">SYSTEM ONLINE</span></div>
+    <div class="header-sep"></div>
+    <div class="clock">
+      <svg class="hw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      <span class="mono" id="clock">—</span>
+    </div>
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-label="切换亮色/暗色主题">
+      <svg id="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+      <svg id="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- 左栏：系统控制与记录（参考前端左栏语义 → EXE 数据源/参数/记录） -->
+  <aside class="col" aria-label="系统控制">
+    <section class="card">
+      <h2 class="card-title">SYSTEM <span class="hint" id="sys-sub">vision-service v1.2</span></h2>
+      <div class="sys-line"><span id="svc-dot" class="sys-dot"></span><span id="svc-text" class="state-ok">检查服务已连接</span></div>
+      <div class="tiny dim" style="margin:4px 0 10px" id="svc-desc">PYNQ 板端 · 轮次协议 v1.2 · 自动轮询进行中</div>
+      <div class="param-row">
+        <label for="sel-auto">自动轮询</label>
+        <div class="toggle" style="transform:scale(0.9)">
+          <input type="checkbox" id="sel-auto" checked aria-label="自动轮询开关">
+          <span class="track"></span><span class="knob"></span>
+        </div>
+      </div>
+      <div class="param-row">
+        <label for="sel-interval">轮询间隔 interval</label>
+        <select class="field" id="sel-interval">
+          <option value="1100">1.1 s（快）</option>
+          <option value="2200" selected>2.2 s（标准）</option>
+          <option value="4400">4.4 s（慢）</option>
+        </select>
+      </div>
+      <div class="param-row">
+        <label for="sel-maxage">年龄窗 max-age</label>
+        <select class="field" id="sel-maxage">
+          <option value="2000">2.0 s</option>
+          <option value="4500" selected>4.5 s</option>
+        </select>
+      </div>
+      <div class="micro faint" style="margin-top:5px">启动校验：interval 必须小于 max-age（防周期性空窗）。</div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">数据源 <span class="hint">单选 · 与 EXE 组装模式对应</span></h2>
+      <div class="mode-row is-active" id="mode-live">
+        <div><div class="mode-name mono">LIVE</div><div class="mode-desc">采集卡视频 + 板端轮次叠加</div></div>
+        <span class="spacer"></span>
+        <div class="toggle"><input type="checkbox" checked data-mode="live" aria-label="LIVE 模式"><span class="track"></span><span class="knob"></span></div>
+      </div>
+      <div class="mode-row" id="mode-mock">
+        <div><div class="mode-name mono">LOCAL DEMO</div><div class="mode-desc">MOCK ONLY · 离线模拟服务</div></div>
+        <span class="spacer"></span>
+        <div class="toggle"><input type="checkbox" data-mode="mock" aria-label="LOCAL DEMO 模式"><span class="track"></span><span class="knob"></span></div>
+      </div>
+      <div class="mode-row" id="mode-replay">
+        <div><div class="mode-name mono">FILE REPLAY</div><div class="mode-desc">只读回放 · 不访问相机/网络</div></div>
+        <span class="spacer"></span>
+        <div class="toggle"><input type="checkbox" data-mode="replay" aria-label="FILE REPLAY 模式"><span class="track"></span><span class="knob"></span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">演示控制 <span class="hint">注入联调事件</span></h2>
+      <div class="sim-grid">
+        <button type="button" class="btn" id="sim-drop">模拟断联</button>
+        <button type="button" class="btn" id="sim-cfg">配置变化</button>
+        <button type="button" class="btn" id="sim-miss">缺件场景</button>
+        <button type="button" class="btn" id="sim-limit">target_limit 轮</button>
+      </div>
+      <div class="micro faint" style="margin-top:6px">断联后连续 3 次失败自动重新握手（D5）。</div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">批次记录 <span class="hint mono">records.jsonl</span></h2>
+      <div class="rec-line"><span class="rec-num mono" id="rec-num">0</span><span class="rec-label">REC</span></div>
+      <button type="button" class="btn btn-accent btn-block" id="btn-export">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        导出 CSV（UTF-8 BOM）
+      </button>
+      <div class="micro faint" style="margin-top:7px">仅手动<b>有效</b>轮次落记录；自动轮永不记录（D8–D10）。</div>
+    </section>
+
+    <section class="card tiny dim">
+      <span class="kbd">C</span>&nbsp; 触发检查 · 悬停范围表行可预览
+    </section>
+  </aside>
+
+  <!-- 中栏：视频视口（无面板遮挡）+ 轮次状态条 + 终端日志 -->
+  <section class="col col-center" aria-label="检查画面与日志">
+    <div class="stage-wrap">
+      <div class="stage" id="stage">
+        <span class="corner tl"></span><span class="corner tr"></span>
+        <span class="corner bl"></span><span class="corner br"></span>
+        <div id="targets" style="position:absolute;inset:0"></div>
+        <div id="verdict-banner" class="verdict-banner" hidden></div>
+        <div id="overlay-center" class="overlay-center" hidden>
+          <div class="overlay-chip" id="overlay-chip"><b>WAITING</b><span id="overlay-sub">等待下一轮有效结果</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="status-strip">
+      <div class="strip-item"><span class="strip-label">ROUND</span><span class="strip-value mono" id="strip-round">0</span></div>
+      <span id="strip-verdict" class="chip chip-subtle">—</span>
+      <span class="tiny dim" id="strip-missing"></span>
+      <div class="strip-right mono">
+        <span id="strip-check">check —</span><span id="strip-cfg">cfg —</span><span id="strip-trigger">—</span>
+      </div>
+    </div>
+
+    <div class="console-log" role="log" aria-live="polite" aria-label="系统日志">
+      <div class="console-head">
+        <span>系统日志</span>
+        <span class="spacer"></span>
+        <select class="console-select" id="log-filter" aria-label="按标签过滤日志">
+          <option value="ALL">ALL</option><option value="RUN">RUN</option><option value="STATE">STATE</option>
+          <option value="LINK">LINK</option><option value="REC">REC</option><option value="ERR">ERR</option>
+        </select>
+        <button type="button" class="console-clear" id="log-clear">清空</button>
+      </div>
+      <div class="console-body" id="console-body"></div>
+    </div>
+  </section>
+
+  <!-- 右栏：识别范围表（置顶）+ 检测对象 + 服务信息（EXE HUD v4 右列信息架构） -->
+  <aside class="col" aria-label="识别范围与检测结果">
+    <section class="card" id="scope-card">
+      <h2 class="card-title">INSPECTION SCOPE <span class="hint" id="scope-round-note">ROUND — · REC —</span></h2>
+      <div class="scope-note" id="scope-note">勾选 = 显示并跟踪该类别；计数 = 该类别已分类目标数</div>
+      <div id="scope-rows"></div>
+      <div class="fresh-row">
+        <span class="fresh-label">FRESHNESS</span>
+        <div class="fresh-track"><div class="fresh-fill" id="fresh-fill" style="width:0%"></div></div>
+      </div>
+      <button type="button" class="run-btn" id="run-btn">
+        <svg class="run-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"/></svg>
+        <span id="run-label">RUN INSPECTION</span>
+        <svg class="run-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
+      </button>
+      <div class="micro faint" id="replay-note" hidden>回放模式只读：无触发按钮，勾选框隐藏，计数为「实际 / 工单」。</div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">DETECTED OBJECTS
+        <span id="obj-count" class="chip chip-ok">0</span>
+      </h2>
+      <div class="obj-grid" id="obj-grid"></div>
+      <div class="obj-more" id="obj-more" hidden></div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">SERVICE</h2>
+      <div class="svc-rows mono">
+        <div class="svc-row"><span class="k">ENDPOINT</span><span class="v" id="svc-endpoint">http://127.0.0.1:8765</span></div>
+        <div class="svc-row"><span class="k">SESSION</span><span class="v" id="svc-session">—</span></div>
+        <div class="svc-row"><span class="k">CONFIG</span><span class="v" id="svc-cfg">3</span></div>
+        <div class="svc-row"><span class="k">PROTOCOL</span><span class="v">v1.2 · ≤16 targets</span></div>
+        <div class="svc-row"><span class="k">UVC</span><span class="v" id="svc-uvc">CAPTURE OK</span></div>
+      </div>
+    </section>
+  </aside>
+</main>
+
+<div class="toast" id="toast" role="alert" aria-atomic="true"></div>
+
+<script>
+'use strict';
+/* ==========================================================================
+   模拟内核：按 rounds.py 的对外语义做离线演示——
+   自动轮（interval）永不记录；手动轮（RUN / C 键）成功才 REC+1；
+   结果有效性 = 会话 + 配置号 + 年龄窗（D3），过期/断联/配置变化即撤框 WAITING；
+   手动轮失败立即置 NO VALID RESULT 并撤旧 PASS（2026-10-20 异常语义）。
+   ========================================================================== */
+const $ = (s) => document.querySelector(s);
+const CLASSES = ['bolt', 'nut', 'washer'];
+const WORKORDER = { bolt: 2, nut: 2, washer: 2 };
+
+const state = {
+  mode: 'live',            // live | mock | replay
+  connected: true,
+  session: rid(), config: 3, checkId: 47, round: 12, rec: 0,
+  prototype: true,
+  auto: true, interval: 2200, maxAge: 4500,
+  scope: { bolt: true, nut: true, washer: true },
+  button: 'idle',          // idle | queued | running
+  result: null,            // { scene, targets, verdict, missing, counts, ts, check, cfg, trigger }
+  forceScene: null,        // 缺件/target_limit 演示注入
+  records: [],
+  cycleIdx: 0,
+};
+
+function rid() { return Math.floor(Math.random() * 0xffffffff).toString(16).padStart(8, '0'); }
+function now() { return performance.now(); }
+function fmtClock(d) {
+  const p = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+}
+function fmtTime(d) { const p = (n) => String(n).padStart(2, '0'); return `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`; }
+
+/* ---------- 场景（坐标为 1280×720 源坐标，与 EXE mock 同风格） ---------- */
+const T = (t, cls, score, x, y, w, h) => ({ t, cls, score, box: [x, y, w, h] });
+const SCENES = {
+  pass: {
+    verdict: 'CHECK_PASS', missing: '', kind: 'pass',
+    targets: [
+      T('T0', 'bolt', 0.97, 190, 140, 130, 190), T('T1', 'nut', 0.91, 560, 300, 150, 150),
+      T('T2', 'washer', 0.89, 770, 108, 150, 150), T('T3', 'nut', 0.94, 965, 208, 132, 132),
+      T('T4', 'washer', 0.92, 415, 438, 162, 162), T('T5', 'bolt', 0.95, 880, 462, 122, 182),
+    ],
+  },
+  fail: {
+    verdict: 'CHECK_FAIL', missing: '-washerx1', kind: 'fail',
+    targets: [
+      T('T0', 'bolt', 0.97, 190, 140, 130, 190), T('T1', 'nut', 0.91, 560, 300, 150, 150),
+      T('T2', 'washer', 0.89, 770, 108, 150, 150), T('T3', 'nut', 0.94, 965, 208, 132, 132),
+      T('T5', 'bolt', 0.95, 880, 462, 122, 182),
+    ],
+  },
+  recheck: {
+    verdict: 'RECHECK', missing: '未完整计数', kind: 'warn', countsHidden: true,
+    targets: [
+      T('T0', 'bolt', 0.97, 190, 140, 130, 190), T('T1', null, null, 560, 300, 150, 150),
+      T('T2', 'washer', 0.89, 770, 108, 150, 150), T('T3', null, null, 965, 208, 132, 132),
+      T('T5', 'bolt', 0.95, 880, 462, 122, 182),
+    ],
+  },
+};
+const CYCLE = ['pass', 'fail', 'recheck'];
+function cycleScene() {
+  const key = CYCLE[state.cycleIdx % CYCLE.length]; state.cycleIdx++;
+  return SCENES[key];
+}
+function manualScene() { // 演示注入只由手动轮消费，避免被并发自动轮抢走
+  if (state.forceScene) { const key = state.forceScene; state.forceScene = null; return SCENES[key]; }
+  return cycleScene();
+}
+function countsOf(scene) {
+  if (scene.countsHidden) return null; // target_limit 轮：计数列显示 --，不映射零值
+  const c = { bolt: 0, nut: 0, washer: 0 };
+  for (const t of scene.targets) if (t.cls) c[t.cls]++;
+  return c;
+}
+
+/* ---------- 日志（终端式，标签可过滤） ---------- */
+const consoleBody = $('#console-body');
+let logFilter = 'ALL';
+function log(tag, msg) {
+  const line = document.createElement('div');
+  line.className = 'log-line'; line.dataset.tag = tag;
+  line.innerHTML = `<span class="log-caret">&gt;</span><span class="log-time">${fmtTime(new Date())}</span>` +
+    `<span class="log-tag t-${tag}">${tag}</span><span class="log-msg"></span>`;
+  line.querySelector('.log-msg').textContent = msg;
+  consoleBody.appendChild(line);
+  while (consoleBody.children.length > 160) consoleBody.firstChild.remove();
+  if (logFilter === 'ALL' || logFilter === tag) line.style.display = '';
+  else line.style.display = 'none';
+  consoleBody.scrollTop = consoleBody.scrollHeight;
+}
+$('#log-filter').addEventListener('change', (e) => {
+  logFilter = e.target.value;
+  for (const line of consoleBody.children)
+    line.style.display = (logFilter === 'ALL' || line.dataset.tag === logFilter) ? '' : 'none';
+});
+$('#log-clear').addEventListener('click', () => { consoleBody.innerHTML = ''; });
+
+/* ---------- Toast ---------- */
+let toastTimer;
+function toast(msg, isErr) {
+  const el = $('#toast');
+  el.textContent = msg; el.className = 'toast show' + (isErr ? ' err' : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = 'toast' + (isErr ? ' err' : ''); }, 4000);
+}
+
+/* ---------- 顶栏 / 状态条 ---------- */
+function setVerdict(text, cls) {
+  const el = $('#verdict-text');
+  el.textContent = text; el.className = 'verdict-text ' + cls;
+}
+function renderTopbar() {
+  const badge = $('#mode-badge');
+  badge.className = 'badge ' + (state.mode === 'live' ? 'badge-live' : state.mode === 'mock' ? 'badge-mock' : 'badge-file');
+  badge.textContent = state.mode === 'live' ? 'LIVE' : state.mode === 'mock' ? 'MOCK ONLY' : 'OFFLINE FILE';
+  $('#proto-badge').hidden = !(state.prototype && state.mode !== 'replay');
+  $('#hw-session').textContent = state.session;
+  $('#sys-text').textContent = state.connected ? 'SYSTEM ONLINE' : 'SERVICE LOST';
+  $('#sys-dot').className = 'sys-dot' + (state.connected ? '' : ' off');
+  const svcUp = state.mode === 'replay' ? true : state.connected; // 回放本地文件，不涉及网络
+  $('#svc-dot').className = 'sys-dot' + (svcUp ? '' : ' off');
+  $('#svc-text').textContent = svcUp ? '检查服务已连接' : '检查服务不可达';
+  $('#svc-text').className = svcUp ? 'state-ok' : 'state-err';
+}
+function renderStrip() {
+  $('#strip-round').textContent = state.round;
+  $('#hw-session').textContent = state.session;
+  $('#svc-session').textContent = state.session;
+  $('#svc-cfg').textContent = state.config;
+  $('#svc-endpoint').textContent = state.mode === 'mock' ? 'mock://127.0.0.1:8765' : 'http://127.0.0.1:8765';
+  $('#svc-uvc').textContent = state.mode === 'replay' ? 'OFFLINE' : state.connected ? 'CAPTURE OK' : 'NO SIGNAL';
+  const r = state.result;
+  const chip = $('#strip-verdict'), miss = $('#strip-missing');
+  if (!r) {
+    chip.textContent = 'WAITING'; chip.className = 'chip chip-warn'; miss.textContent = '';
+    setVerdict(state.manualFail ? 'NO VALID RESULT | check failed' : 'WAITING', state.manualFail ? 'verdict-fail' : 'verdict-warn');
+  } else {
+    const map = { pass: ['chip-ok', 'verdict-pass'], fail: ['chip-err', 'verdict-fail'], warn: ['chip-warn', 'verdict-warn'] };
+    chip.textContent = r.verdict + (r.missing ? ' ' + r.missing : '');
+    chip.className = 'chip ' + map[r.kind][0];
+    miss.textContent = r.missing ? `工单 ${woText()} · 差额 ${r.missing}` : `工单 ${woText()} · 全部满足`;
+    setVerdict(r.verdict + (r.missing ? ' ' + r.missing : ''), map[r.kind][1]);
+  }
+  $('#strip-check').textContent = r ? `check ${r.check}` : `check ${state.checkId + 1}`;
+  $('#strip-cfg').textContent = `cfg ${r ? r.cfg : state.config}`;
+  $('#strip-trigger').textContent = r ? (r.trigger === 'manual' ? '手动触发' : r.trigger === 'replay' ? '回放快照' : '自动轮询') : '—';
+}
+function woText() { return 'bolt×2 nut×2 washer×2'; }
+
+/* ---------- 视频舞台：目标框（绿色专属）+ 判定横幅 + WAITING 衬底 ---------- */
+function renderStage() {
+  const layer = $('#targets');
+  layer.innerHTML = '';
+  const banner = $('#verdict-banner');
+  const r = state.result;
+  if (r) {
+    for (const t of r.targets) {
+      if (t.cls && !state.scope[t.cls]) continue; // 未勾选：不画框（T 序号保留原始编号）
+      const [x, y, w, h] = t.box;
+      const box = document.createElement('div');
+      box.className = 'tgt';
+      box.style.left = (x / 1280 * 100) + '%'; box.style.top = (y / 720 * 100) + '%';
+      box.style.width = (w / 1280 * 100) + '%'; box.style.height = (h / 720 * 100) + '%';
+      const chip = document.createElement('span');
+      chip.className = 'tgt-chip'; chip.textContent = t.t;
+      const shape = document.createElement('span');
+      shape.className = 'shape ' + (t.cls ? `shape-${t.cls}` : 'shape-nut');
+      shape.style.opacity = t.cls ? '1' : '0.55';
+      box.append(shape, chip);
+      layer.appendChild(box);
+    }
+    banner.hidden = false;
+    banner.className = 'verdict-banner ' + r.kind;
+    banner.textContent = r.verdict + (r.missing ? ' ' + r.missing : '');
+  } else {
+    banner.hidden = true;
+  }
+  const overlay = $('#overlay-center');
+  overlay.hidden = !!r;
+  if (!r) {
+    const chipEl = $('#overlay-chip');
+    if (!state.connected) {
+      chipEl.className = 'overlay-chip err';
+      chipEl.querySelector('b').textContent = 'RECONNECTING';
+      $('#overlay-sub').textContent = '连续 HTTP 失败 · 自动重新握手（D5）';
+    } else if (state.manualFail) {
+      chipEl.className = 'overlay-chip err';
+      chipEl.querySelector('b').textContent = 'CHECK FAILED';
+      $('#overlay-sub').textContent = '本轮请求无效 · 旧判定已撤除';
+    } else if (state.mode === 'replay') {
+      chipEl.className = 'overlay-chip';
+      chipEl.querySelector('b').textContent = 'OFFLINE FILE';
+      $('#overlay-sub').textContent = '静态快照回放 · 不访问相机或网络';
+    } else {
+      chipEl.className = 'overlay-chip';
+      chipEl.querySelector('b').textContent = 'WAITING';
+      $('#overlay-sub').textContent = '结果过期或未到达 · 已撤框';
+    }
+  }
+}
+
+/* ---------- 识别范围表（右栏置顶，交互与 EXE hit_test 对齐） ---------- */
+function renderScope() {
+  const wrap = $('#scope-rows');
+  wrap.innerHTML = '';
+  const readonly = state.mode === 'replay';
+  $('#run-btn').hidden = readonly;
+  $('#replay-note').hidden = !readonly;
+  $('#scope-note').textContent = readonly
+    ? '回放只读：计数为「实际 / 工单」，勾选框隐藏'
+    : '勾选 = 显示并跟踪该类别；计数 = 该类别已分类目标数';
+  const r = state.result;
+  for (const cls of CLASSES) {
+    const on = state.scope[cls];
+    const row = document.createElement('div');
+    row.className = 'scope-row ' + (on ? 'on' : 'off');
+    row.dataset.cls = cls;
+    let check = '';
+    if (!readonly) {
+      check = `<span class="scope-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#06222E" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 12.5 5 5 10-11"/></svg></span>`;
+    }
+    let countText, has;
+    if (readonly) {
+      const n = r ? (r.counts ? r.counts[cls] : 0) : 0;
+      countText = `${n} / ${WORKORDER[cls]}`; has = true;
+    } else {
+      const n = r && r.counts ? r.counts[cls] : null;
+      countText = n === null || n === undefined ? '--' : String(n); has = n !== null && n !== undefined;
+    }
+    row.innerHTML = `${check}<span class="scope-name mono">${cls}</span><span class="scope-count mono ${has ? 'has' : ''}">${countText}</span>`;
+    row.addEventListener('click', () => toggleScope(cls));
+    row.addEventListener('mouseenter', () => { if (!readonly) row.classList.add('hover'); });
+    wrap.appendChild(row);
+  }
+  $('#scope-round-note').textContent = `ROUND ${state.round} · REC ${state.rec}`;
+}
+function toggleScope(cls) {
+  if (state.mode === 'replay') return;
+  state.scope[cls] = !state.scope[cls];
+  log('STATE', `范围勾选 ${cls} → ${state.scope[cls] ? '显示并跟踪' : '隐藏（计数保留，T 序号不重排）'}`);
+  renderScope(); renderStage(); renderObjects();
+}
+
+/* ---------- FRESHNESS（青色按年龄收缩，临近过期转琥珀，过期红色撤框） ---------- */
+function freshnessLoop() {
+  const fill = $('#fresh-fill');
+  const r = state.result;
+  if (!r || state.mode === 'replay') { fill.style.width = '0%'; return; }
+  const age = now() - r.ts;
+  const frac = Math.max(0, 1 - age / state.maxAge);
+  fill.style.width = (frac * 100).toFixed(1) + '%';
+  fill.style.background = frac > 0.35 ? 'var(--accent)' : frac > 0 ? 'var(--amber)' : 'var(--red)';
+  if (age >= state.maxAge) {
+    state.result = null;
+    log('STATE', `结果超过 max-age（${(state.maxAge / 1000).toFixed(1)}s），撤框显示 WAITING`);
+    renderAll();
+  }
+}
+
+/* ---------- 检测对象列表（3 张紧凑卡片 + +N more，缩略图/T 序号/XYWH） ---------- */
+function renderObjects() {
+  const grid = $('#obj-grid');
+  grid.innerHTML = '';
+  const r = state.result;
+  const entries = r ? r.targets.filter((t) => !t.cls || state.scope[t.cls]) : [];
+  const countEl = $('#obj-count');
+  countEl.textContent = entries.length ? String(entries.length) : '--';
+  countEl.className = 'chip ' + (entries.length ? 'chip-ok' : 'chip-subtle');
+  for (const t of entries.slice(0, 3)) {
+    const card = document.createElement('div');
+    card.className = 'obj-card';
+    const [x, y, w, h] = t.box;
+    card.innerHTML =
+      `<div class="obj-thumb"><span class="shape ${t.cls ? 'shape-' + t.cls : 'shape-nut'}" style="${t.cls ? '' : 'opacity:.55'}"></span></div>` +
+      `<div class="obj-meta"><div class="obj-top"><span class="obj-tchip mono">${t.t}</span>` +
+      `<span class="obj-class">${t.cls || 'unclassified'}</span>` +
+      `<span class="obj-score mono">${t.score != null ? t.score.toFixed(2) : '--'}</span></div>` +
+      `<div class="obj-coords mono"><span>X: ${x}&nbsp;&nbsp;Y: ${y}</span><span>W: ${w}&nbsp;&nbsp;H: ${h}</span></div></div>`;
+    grid.appendChild(card);
+  }
+  const more = $('#obj-more');
+  more.hidden = entries.length <= 3;
+  if (entries.length > 3) more.textContent = `+${entries.length - 3} more`;
+}
+
+/* ---------- RUN 按钮三态：青 IDLE → 琥珀 QUEUED·WAITING → 暗底 RUNNING ---------- */
+function renderButton() {
+  const btn = $('#run-btn');
+  const label = $('#run-label');
+  btn.className = 'run-btn' + (state.button === 'idle' ? '' : ' ' + state.button);
+  if (state.button === 'idle') label.textContent = 'RUN INSPECTION';
+  else if (state.button === 'queued') label.textContent = 'QUEUED · WAITING';
+  else label.textContent = 'RUNNING';
+  btn.querySelector('.run-ico').innerHTML = state.button === 'running'
+    ? '<circle cx="12" cy="12" r="8" stroke-dasharray="34" stroke-dashoffset="18"/>'
+    : '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"/>';
+}
+async function manualRun() {
+  if (state.mode === 'replay') { toast('回放模式只读，不提供触发', false); return; }
+  if (state.button !== 'idle') return;
+  state.button = 'queued'; renderButton();
+  log('RUN', '手动轮请求已入队（trigger_ref 复用直到成功；check 号完成时分配）');
+  await sleep(900);
+  state.button = 'running'; renderButton();
+  await sleep(1500);
+  state.button = 'idle'; renderButton();
+  if (!state.connected) {
+    state.manualFail = true; state.result = null;   // 立即撤旧 PASS，不等 max_age
+    log('ERR', '手动轮失败：NO VALID RESULT | check failed（网络重试将复用 trigger_ref）');
+    toast('检查请求失败：服务不可达，已撤除旧判定', true);
+    renderAll();
+    return;
+  }
+  state.checkId++; state.round++; state.rec++;
+  const scene = manualScene();
+  state.manualFail = false;
+  state.result = { ...scene, counts: countsOf(scene), ts: now(), check: state.checkId, cfg: state.config, trigger: 'manual' };
+  state.records.push({ check: state.checkId, round: state.round, time: fmtClock(new Date()), mode: state.mode, verdict: scene.verdict, missing: scene.missing, targets: scene.targets.length });
+  log('RUN', `手动轮 #${state.round} check=${state.checkId} 完成 → REC ${state.rec}（${state.mode === 'mock' ? 'mock_' : ''}${state.checkId}.png）`);
+  renderAll();
+}
+function sleep(ms) { return new Promise((res) => setTimeout(res, ms)); }
+
+/* ---------- 自动轮询（自动轮永不记录）与断联重握手 ---------- */
+let autoTimer = null;
+function autoRound() {
+  if (!state.auto || state.mode === 'replay') return;
+  if (!state.connected) { linkFails(); return; }
+  state.checkId++; state.round++;
+  const scene = cycleScene();
+  state.manualFail = false;
+  state.result = { ...scene, counts: countsOf(scene), ts: now(), check: state.checkId, cfg: state.config, trigger: 'auto' };
+  log('RUN', `自动轮 #${state.round} check=${state.checkId} OK · ${scene.targets.length} 目标 · ${scene.verdict}`);
+  renderAll();
+}
+let failCount = 0, recovering = false;
+function linkFails() {
+  if (recovering) return;
+  failCount++;
+  if (failCount < 3) log('LINK', `POST /v1/check 失败 ${failCount}/3，${(state.interval / 1000).toFixed(1)}s 后重试`);
+  if (failCount >= 3) {
+    recovering = true;
+    log('LINK', '连续 3 次 HTTP 失败，触发重新握手（D5）…');
+    setTimeout(() => {
+      state.session = rid(); state.connected = true; failCount = 0; recovering = false;
+      log('LINK', `握手成功 → session=${state.session} · cfg=${state.config} · 新会话结果按 D3 重新计龄`);
+      renderAll();
+    }, 1800);
+  }
+}
+function startAuto() {
+  clearInterval(autoTimer);
+  autoTimer = setInterval(autoRound, state.interval);
+}
+
+/* ---------- 模式切换（与 EXE 三种组装对应，单选互斥） ---------- */
+function syncModeRows() {
+  for (const row of document.querySelectorAll('.mode-row')) {
+    const m = row.querySelector('input').dataset.mode;
+    row.classList.toggle('is-active', m === state.mode);
+    row.querySelector('input').checked = m === state.mode;
+  }
+}
+function setMode(mode) {
+  const changed = state.mode !== mode;
+  state.mode = mode;
+  syncModeRows(); // 活动模式不允许关断：勾选态始终回写
+  if (!changed) return;
+  if (mode === 'replay') {
+    const scene = SCENES.pass;
+    state.result = { ...scene, counts: countsOf(scene), ts: now(), check: state.checkId, cfg: state.config, trigger: 'replay' };
+    log('REC', '载入回放 result.json · packet 绑定 + capture 哈希校验通过（只读，不联网）');
+    setVerdict('OFFLINE FILE', 'verdict-none');
+  } else {
+    state.result = null;
+    log('LINK', mode === 'live' ? '切换 LIVE：采集卡视频 + 板端轮次叠加' : '切换 LOCAL DEMO：MOCK 服务（合成数据，不得作为板端识别证据）');
+  }
+  renderAll();
+}
+document.querySelectorAll('.mode-row input').forEach((input) => {
+  input.addEventListener('change', () => setMode(input.dataset.mode));
+});
+
+/* ---------- 演示事件注入 ---------- */
+$('#sim-drop').addEventListener('click', () => {
+  if (state.mode === 'replay') { toast('回放模式不涉及网络', false); return; }
+  state.connected = false; failCount = 0; recovering = false;
+  state.result = null;
+  log('LINK', '模拟断联：服务不可达，撤框等待重连');
+  renderAll();
+});
+$('#sim-cfg').addEventListener('click', () => {
+  state.config++;
+  if (state.result) state.result = null;
+  log('STATE', `配置变化 cfg ${state.config - 1}→${state.config}，旧轮结果按 D3 失效（撤框）`);
+  toast('配置已变更，旧结果失效，等待下一轮');
+  renderAll();
+});
+$('#sim-miss').addEventListener('click', () => { state.forceScene = 'fail'; log('STATE', '已注入缺件场景：下一次手动检查判定 CHECK_FAIL'); });
+$('#sim-limit').addEventListener('click', () => {
+  state.forceScene = 'recheck';
+  log('STATE', '已注入 target_limit 轮：下一次手动检查 RECHECK 未完整计数，计数列显示 --（不映射零值）');
+});
+
+/* ---------- 参数 / 记录 / 主题 / 键盘 ---------- */
+$('#sel-auto').addEventListener('change', (e) => {
+  state.auto = e.target.checked;
+  $('#svc-desc').textContent = state.auto ? 'PYNQ 板端 · 轮次协议 v1.2 · 自动轮询进行中' : 'PYNQ 板端 · 轮次协议 v1.2 · 自动轮询已暂停';
+  log('STATE', `自动轮询${state.auto ? '开启' : '暂停'}（暂停后结果将在 max-age 后过期，画面进入 WAITING）`);
+});
+$('#sel-interval').addEventListener('change', (e) => {
+  const v = Number(e.target.value);
+  if (v >= state.maxAge) {
+    e.target.value = String(state.interval);
+    toast('interval 必须小于 max-age（否则每轮结果在下轮前过期），已回退', true);
+    log('ERR', `拒绝 interval=${v / 1000}s ≥ max-age=${state.maxAge / 1000}s（启动校验语义）`);
+    return;
+  }
+  state.interval = v; startAuto();
+  log('STATE', `轮询间隔 → ${(v / 1000).toFixed(1)}s`);
+});
+$('#sel-maxage').addEventListener('change', (e) => {
+  const v = Number(e.target.value);
+  if (v <= state.interval) {
+    e.target.value = String(state.maxAge);
+    toast('max-age 必须大于 interval，已回退', true);
+    return;
+  }
+  state.maxAge = v;
+  log('STATE', `年龄窗 max-age → ${(v / 1000).toFixed(1)}s（年龄按 EXE 接收时刻计量）`);
+});
+$('#btn-export').addEventListener('click', () => {
+  if (!state.records.length) { toast('暂无批次记录：手动触发一轮有效检查后再导出', false); return; }
+  const head = 'check_id,round,time,mode,verdict,missing,targets';
+  const rows = state.records.map((r) => [r.check, r.round, r.time, r.mode, r.verdict, r.missing || '', r.targets].join(','));
+  const blob = new Blob(['\uFEFF' + [head, ...rows].join('\r\n')], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'records.csv'; a.click();
+  URL.revokeObjectURL(a.href);
+  log('REC', `导出 records.csv（UTF-8 BOM，Excel 直接打开）· ${state.records.length} 条`);
+});
+$('#run-btn').addEventListener('click', manualRun);
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'c' && e.key !== 'C') return;
+  if (/input|select|textarea/i.test(document.activeElement.tagName)) return;
+  e.preventDefault(); manualRun();
+});
+
+$('#theme-toggle').addEventListener('click', () => {
+  const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = next;
+  try { localStorage.setItem('edgesight-theme', next); } catch (e) { /* 忽略 */ }
+  $('#icon-moon').style.display = next === 'dark' ? '' : 'none';
+  $('#icon-sun').style.display = next === 'light' ? '' : 'none';
+  $('#meta-theme-color').setAttribute('content', next === 'dark' ? '#0B0F17' : '#F2F4F8');
+});
+if (document.documentElement.dataset.theme === 'light') {
+  $('#icon-moon').style.display = 'none'; $('#icon-sun').style.display = '';
+}
+
+/* ---------- 时钟与 FPS（顶栏仪表） ---------- */
+setInterval(() => { $('#clock').textContent = fmtClock(new Date()); }, 500);
+$('#clock').textContent = fmtClock(new Date());
+setInterval(() => { $('#hw-fps').textContent = String(29 + Math.floor(Math.random() * 2)); }, 1000);
+
+/* ---------- 总渲染与启动 ---------- */
+function renderAll() {
+  renderTopbar(); renderStrip(); renderStage(); renderScope(); renderObjects(); renderButton();
+  $('#rec-num').textContent = String(state.rec);
+}
+renderAll();
+startAuto();
+setInterval(freshnessLoop, 180); // 年龄按 EXE 接收时刻计量，180ms 步进收缩足够平滑
+log('BOOT', 'EdgeSight Web 原型启动 · 画布自适应 · HUD v4 语义（纯前端模拟，合成数据）');
+log('LINK', `握手成功 session=${state.session} · cfg=${state.config} · protocol=v1.2`);
+log('STATE', '自动轮询已开启 · 结果有效性 = 会话 + 配置号 + 年龄窗（D3）');
+setTimeout(() => autoRound(), 400);
+</script>
+</body>
+</html>
