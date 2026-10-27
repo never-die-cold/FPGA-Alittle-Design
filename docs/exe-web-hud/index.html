@@ -221,6 +221,8 @@ button, h1, h2, h3 { font-family: inherit; }
 .toggle input:checked + .track { background: var(--accent); }
 .toggle input:checked ~ .knob { left: 18px; background: var(--accent-text); border-color: transparent; }
 .toggle input:focus-visible + .track { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* track/knob 只是视觉层：不拦截指针，否则点击落不到下面的 input 上（实测踩坑） */
+.toggle .track, .toggle .knob { pointer-events: none; }
 .param-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 5px 0; }
 .param-row label { font-size: 11px; font-weight: 700; color: var(--ink-2); }
 select.field {
@@ -531,7 +533,7 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
     </section>
 
     <section class="card">
-      <h2 class="card-title">数据源 <span class="hint">单选 · 与 EXE 组装模式对应</span></h2>
+      <h2 class="card-title">数据源 <span class="hint">单选 · 对应 EXE 三种启动方式</span></h2>
       <div class="mode-row is-active" id="mode-live">
         <div><div class="mode-name mono">LIVE</div><div class="mode-desc">采集卡视频 + 板端轮次叠加</div></div>
         <span class="spacer"></span>
@@ -1036,7 +1038,15 @@ function setMode(mode) {
   renderAll();
 }
 document.querySelectorAll('.mode-row input').forEach((input) => {
-  input.addEventListener('change', () => setMode(input.dataset.mode));
+  input.addEventListener('change', () => {
+    // 当前模式不允许关断（EXE 三种组装互斥且恒有其一）：回弹并说明
+    if (!input.checked && state.mode === input.dataset.mode) {
+      syncModeRows();
+      toast('数据源保持单选：当前模式不会关断，切换请打开另一行');
+      return;
+    }
+    setMode(input.dataset.mode);
+  });
 });
 
 /* ---------- 演示事件注入 ---------- */

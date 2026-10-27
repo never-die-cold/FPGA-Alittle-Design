@@ -52,3 +52,13 @@
 
 未接真实数据源；勾选不下发（待 C04 §6）；EXE 发布物仍以 Pillow HUD 为准，
 本原型不改动 `src/vision_client/` 任何源码。
+
+## 用户反馈驱动的修复（2026-10-28 补）
+
+- owner 实测「数据源开关点了没反应」：`.toggle` 的视觉层 track/knob 叠在透明
+  `<input>` 之上拦截了全部点击（自动轮询开关同病）→ 两者加 `pointer-events:none`
+  让事件落到 input；当前模式关断改为回弹 + toast 说明（三种组装互斥、恒有其一）。
+- 提示语「与 EXE 组装模式对应」改为「对应 EXE 三种启动方式」，README 补齐
+  `--endpoint` / `--mock` / `--replay` 映射说明。
+- 评审截图 9 张按 repo-hygiene 规则 6 入库 `shots/`（用途 + sha256 + 重建方式；
+  1280 宽 + Pillow optimize，共 3.6 MB）。

@@ -31,6 +31,12 @@ start docs\exe-web-hud\index.html
 | 终端式日志（EXE 无，参考前端有） | 中栏底部终端日志（标签过滤，演示轮次/状态/链路事件） |
 | —（EXE 用命令行参数） | 左栏表单：自动轮询开关、interval、max-age、数据源三模式、演示事件注入 |
 
+数据源三行的含义（单选互斥，同一时刻只运行一种，对应 EXE 启动参数三选一）：
+`LIVE` = `--source 0 --endpoint http://板端:8765`（采集卡视频 + 板端轮次叠加）；
+`LOCAL DEMO` = `--mock`（本地模拟服务，MOCK ONLY 徽标，合成数据不得作为板端证据）；
+`FILE REPLAY` = `--replay result.json`（离线回放，只读：无触发按钮、无勾选框、计数为「实际/工单」）。
+EXE 另有 UVC-only 状态（无 `--endpoint` 时隐藏面板），原型中以断联演示近似表达。
+
 ## 状态语义（对 `rounds.py` 对外语义的演示）
 
 - 结果有效性 = 会话 + 配置号 + 年龄窗（D3）：过期 / 断联 / 配置变化即**撤框 + 计数置 -- + 状态文字**三重冗余；
@@ -47,6 +53,11 @@ start docs\exe-web-hud\index.html
 - **绿色专属**目标框 / T 序号片 / 判定 PASS / 对象计数徽标，不与普通 UI 混用；
 - 琥珀 = 等待（QUEUED / WAITING / RECHECK），红 = FAIL / PROTOTYPE / 故障；
 - 等待文字置于深色衬底框内（避免亮琥珀落在浅底发虚，10-08 定稿要点）。
+
+## 评审截图
+
+`shots/` 存档 2026-10-27/28 评审的 9 张实渲染截图（各状态基准图，含 sha256 与重建步骤，
+见 [shots/README.md](shots/README.md)）。
 
 ## 边界（勿过度解读）
 
