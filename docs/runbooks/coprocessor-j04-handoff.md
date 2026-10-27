@@ -1,7 +1,7 @@
 # J04 协处理器实现交接单
 
 > 状态：JL 侧“实现 + 可交接”收口；不等于完整验证通过或板级验收，JL 不代 WC/NC 签字。
-> J04 总状态见[模块计划](../../src/coprocessor/plan.md)：J04a（JL 实现/冒烟）✅，J04b（完整验证/物理 bank/综合/板验）🟡。
+> J04 总状态见[模块计划](../../src/coprocessor/plan.md)：J04a（JL 实现/冒烟）✅，J04b 🟡（影子 bank 与整机 40 MHz 综合实现门禁已过；任务描述表、结果 DMA 与板验未完成，以模块计划现行口径为准）。
 > 源码锚点：PR #86 的 head（`dev/riscv`），不写死 SHA 以免自我引用失效；交接基线为 `7d6355b`
 > （`411d9ee..7d6355b`，9 个提交）。内容锚点以本单 §2 的文件 SHA256 为准。
 > 早期日志中的 `9fdd035` 等哈希是 rebase 前本地记录，不对应远端提交；复现以本单和 `dev/riscv` 为准。
@@ -103,7 +103,7 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 | AXI 多 outstanding、burst、跨 AXI 时钟域复位序列 | RTL 验证队友 | 现命名“单笔、无 burst”是有意约束；若要支持需先冻结契约再扩 TB |
 | payload 各 bank 物理地址适配与结果 DMA | SoC 集成队友 | 接真实 BRAM/DataMover；逐字节与 C02 payload/result 黄金一致 |
 | arch-test 本轮重跑 | 核验证队友 | 本次全仓入口及四档 CoreMark 已通过，但该入口不含 arch-test；规定 arch-test 矩阵仍需单独重跑 |
-| 整机 SoC 时序、bitstream、XSim 回归 | NC/FPGA 队友 | `cop_top` OOC 的综合/实现已做过（见 §4 与 OPEN-12），但整机含视频/存储/PS，仍需单独收口 |
+| 整机 XSim 对拍、连续作业与板级整网验证 | NC/FPGA 队友 | 整机 40 MHz 综合实现门禁与位流已过（edge-fix bit `9341F7FA…`，WNS +3.062 ns，见 `data/logs/2026-10-26-build/README.md`），`pynq_top` TB 已入 `all`；板上 UNVERIFIED，XSim 对拍与连续作业仍未做 |
 | PYNQ、网口/串口、实机上板 | NC | 按 J08 包运行并返回日志、版本、位流/模型 SHA256 |
 | 正式 PTQ/QAT、真实精度与真实黄金 | JL 后续 J05/J06 | 真实留出集报告和正式 manifest；本 J04 包不替代 |
 
@@ -123,8 +123,8 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 
 ## 7. OPEN（保守默认与影响面）
 
-- **OPEN-1 payload bank 适配**：当前 loader 导出 word/address/keep，顶层 TB 用 J02 memory model；
-  默认不宣称已写入实体 BRAM。影响模型装载、综合资源和实际推理。
+- **OPEN-1 payload bank 适配（2026-10-22 起部分关闭）**：manifest v1→影子 bank 已由 `cop_payload_adapter`/`cop_bram_storage` 接入生产板顶 `pynq_cop_top`，
+  `payload_network` 离板 TB 已入 `all`；仍 OPEN：板级 payload 装载验证。影响模型装载、综合资源和实际推理。
 - **OPEN-2 结果外搬**：当前结果在本地 16×16-byte 窗口读回，尚未写 `RESULT_ADDR`；默认固件
   轮询窗口，不宣称结果 DMA 完成。影响 PS 大批量结果读取。
 - **OPEN-3 配置改变后的 VALID 撤销**：C03 未逐字段冻结撤销时点。JL 侧已按保守默认实现，实际行为是：
@@ -170,5 +170,6 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 每步独立 TB + `all`、只做本地 commit、不 push。未执行 merge、tag 或破坏性 git 操作。
 
 **J04 实现完成 ≠ 完整验证通过 ≠ 板级验收。** 早期交接只覆盖列出的冒烟；后续 `cop_top` OOC 与
-2026-10-20 全仓入口复跑证据已补入 §4。独立 arch-test 本轮重跑、穷举负例、CDC 全场景与返回路径、
-整机综合/实现/XSim、bitstream 和上板仍未完成；不代 WC/NC/验证队友签字。
+2026-10-20 全仓入口复跑证据已补入 §4。整机 40 MHz 综合实现门禁与位流已过（edge-fix bit
+`9341F7FA…`，见 `data/logs/2026-10-26-build/README.md`，板上 UNVERIFIED）。独立 arch-test 本轮重跑、
+穷举负例、CDC 全场景与返回路径、整机 XSim 对拍、连续作业与板级整网验证仍未完成；不代 WC/NC/验证队友签字。
