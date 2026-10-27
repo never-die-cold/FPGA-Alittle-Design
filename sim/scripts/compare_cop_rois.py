@@ -61,24 +61,33 @@ def predict(raw, layers):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--package", type=Path, required=True)
+    parser.add_argument("--reference-package", type=Path,
+                        help="known old golden package for independently checking the evaluator")
     parser.add_argument("--round", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     layers = layers_from_payload(args.package/"payload/provisional-model")
-    roi = bytes(int(v,16) for v in (args.package/"golden/roi_001/input.hex").read_text().split())
-    golden = predict(roi,layers)
+    reference = args.reference_package or args.package
+    reference_layers = layers_from_payload(reference/"payload/provisional-model")
+    roi = bytes(int(v,16) for v in (reference/"golden/roi_001/input.hex").read_text().split())
+    golden = predict(roi,reference_layers)
     if golden != [-12,-30,41]:
         raise RuntimeError("integer evaluator failed the known packaged golden: "+str(golden))
     trace = json.loads((args.round/"cop_trace.json").read_bytes())
     rows = []
     hardware = trace["driver"]["targets"]
+    if len(hardware) != len(trace["rois"]) or not hardware:
+        raise RuntimeError("hardware/ROI count mismatch or empty round")
     for index, item in enumerate(trace["rois"]):
         expected = predict((args.round/item["path"]).read_bytes(),layers)
         actual = [v-256 if v>127 else v for v in hardware[index]["logits"]]
-        rows.append({"index":index,"reference":expected,"hardware":actual,"match":expected==actual,
+        match = expected == actual and bool(hardware[index]["valid"]) and not hardware[index]["error"]
+        rows.append({"index":index,"reference":expected,"hardware":actual,"match":match,
                      "valid":hardware[index]["valid"]})
     args.output.write_bytes((json.dumps({"golden":golden,"rois":rows},indent=2)+"\n").encode())
     print(json.dumps(rows))
+    if not all(row["match"] for row in rows):
+        raise SystemExit("hardware/integer comparison failed")
 
 
 if __name__ == "__main__":
