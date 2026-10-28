@@ -37,6 +37,7 @@ ROOT_ALLOWED_DIRS = {
     "models",
     "results",
     "tools",
+    "others",
 }
 GENERATED_PATTERNS = (
     re.compile(r"(^|/)\.vvp$"),
@@ -51,6 +52,7 @@ GENERATED_PATTERNS = (
 )
 # Historical snapshots are intentionally excluded from the current-link gate.
 LINK_EXCLUDE_PREFIXES = (
+    "docs/archive/",
     "data/logs/",
     "data/evidence/",
     "report/llm_log/",

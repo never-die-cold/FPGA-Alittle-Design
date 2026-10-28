@@ -12,7 +12,7 @@ __DATE__，`__REV__` 及当时工作区；范围：**__SCOPE__**。覆盖 __PROJ
 | [核契约](../../src/riscv/design_v1.md) → [core_top](../../src/riscv/core_top.v) → [核测试](sections/sim.md) | 指令如何执行，停顿/转发/预测怎样验证 |
 | [视觉契约](../../src/vision/design_v0.md) → [video_pipeline](../../src/vision/video_pipeline.v) → [vision_axi](../../src/vision/vision_axi.v) | 视频与分析怎样分流，PS 如何改配置 |
 | [C01 基线](../../docs/c01-capture-implementation-baseline.md) → [捕获 BD](../../sim/scripts/create_capture_hdmi_bd.tcl) | 显示旁路、状态和 DDR 取帧有哪些区别 |
-| [PS 入口](../../src/pynq_host/README.md) → [FILE 服务](../../src/pynq_host/vision_live_service.py) → [EXE](../../src/vision_client/preview.py) | 一轮检查怎样经过服务、界面、记录 |
+| [PS 入口](../../src/pynq_host/README.md) → [FILE 服务](../../src/pynq_host/vision_live_service.py) → [网页端](../../src/web_client/index.html) | 一轮检查怎样经过服务、界面、记录 |
 | [CNN 契约](../../src/coprocessor/design_v0.md) → [整数参考](../../src/coprocessor/int8_reference.py) → [测试](../../sim/coprocessor/test_int8_conv.py) | 已冻结哪些算术规则，为什么还不能称硬件完成 |
 
 ```mermaid

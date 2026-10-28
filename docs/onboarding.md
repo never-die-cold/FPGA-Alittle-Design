@@ -27,8 +27,8 @@ git push                  # ④ 上传到仓库，队友才能看到
 > 💡 不习惯命令行可以装 [GitHub Desktop](https://desktop.github.com/)，按钮操作，效果一样。
 > 推荐教程：B 站搜"Git 一小时入门"，边看边跟着敲一遍。
 
-> 📌 开工后是**三线并行 + 每周 PR** 的多人协作模式（每人一条 dev 分支，组长统一合并，任何人不含组长不直接 push `main`）：
-> 本文只讲单人基础操作；PR 审核与合并节奏见根目录 `plan.md` §2。
+> 📌 开工后是**开发分支 + PR** 的协作模式（开发分支经 PR 合入 `main`，不直接 push）：
+> 本文只讲单人基础操作；分支规矩见根目录 `plan.md` §2。
 
 ---
 
@@ -70,13 +70,13 @@ Agent = 能帮你**实际干活**的 AI（写代码、改文件、跑命令）�
 
 | 顺序 | 文档 | 你要读懂什么 |
 |:---|:---|:---|
-| ① | `README.md`（仓库首页） | 我们要做什么作品、三个模块怎么配合、时间节点、分工 |
+| ① | `README.md`（仓库首页） | 我们要做什么作品、三个模块怎么配合、提交节点 |
 | ② | `docs/README.md` | 人读入口：目录地图与"找东西"规则 |
 | ③ | `report/llm_log/README.md` + `template.md` | 大模型协作记录的规矩：什么时候记、怎么记 |
 | ④ | `report/llm_log/2026-09-04-project-kickoff.md` | 看一条真实记录长什么样 |
 | ⑤ | `docs/research/resources.md` | 学习资源清单，后续学习要用 |
 
-> ⚠️ 注意：src/、sim/、build/ 等目录现在大部分是**空壳占位**（只有说明 README），这是正常的——下周开工后往里填代码。
+> 当前 src/、sim/、build/ 均为实际工程内容；目录职责见 [project-map](project-map.md)。
 
 ---
 
@@ -88,7 +88,7 @@ Agent = 能帮你**实际干活**的 AI（写代码、改文件、跑命令）�
    - **Bug 报告**：仿真 / 上板 / 工具链问题，填现象、复现步骤、期望与实际结果、日志
    - **任务 / 待办**：需要跟踪的任务或提问，填验收标准、负责人、截止时间
 2. **标签**（负责人建一次，共 5 个）：`bug` / `rtl` / `verify` / `docs` / `hardware`
-3. **里程碑与检查点**：收口日期以根目录 `plan.md` §1.2 为准；每阶段验收开一个 gate issue 挂到对应里程碑（M1 三个：[#19 Part A](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/19) / [#20 Part B](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20) / [#21 Part C + M1 收口](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)），验收清单全勾才关闭。远端 milestone 日期由维护人核对同步，不把本地文档修改视为远端更新
+3. **里程碑与检查点**：提交节点以根目录 `plan.md` §1.2 为准；每阶段验收开一个 gate issue 挂到对应里程碑（M1 三个：[#19 Part A](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/19) / [#20 Part B](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20) / [#21 Part C + M1 收口](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)），验收清单全勾才关闭。远端 milestone 日期由维护人核对同步，不把本地文档修改视为远端更新
 4. **关闭规矩**：修复的 commit message 写 `fixes #12`（或 `closes #12`），推送后自动关闭；修复过程顺手记入 `report/llm_log/`
 5. **与排期的边界**：主计划只固定收口时间；全项目下一交付物、依赖与卡点看根目录 `plan.md` §3，核专项看 `src/riscv/plan_calendar.md`，不为逐日排期重复建 issue
 

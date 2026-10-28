@@ -1,5 +1,7 @@
 # 协处理器 Vivado 检查清单
 
+
+> 2026-10-28 注：本地产物目录已迁移——`build/run/`、`build/reports/pynq_*` 现位于 `others/build/`，下文旧路径按此解读。
 > 状态（2026-10-26）：**40 MHz compute/storage OOC VERIFIED**；`ENABLE_COP=0` 基线 PASS；
 > 含 IMEM INIT 门禁的 Vivado 2026.1 整机 40 MHz 门禁 **PASS**。这不等于板级验收。
 

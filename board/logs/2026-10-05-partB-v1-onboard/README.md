@@ -51,3 +51,5 @@
 - `report/llm_log/2026-10-05-partB-v1-onboard-verify.md`（本次验证协作记录）
 - `docs/partB-rtl-handoff.md`（团队交接单）
 - `board/logs/2026-09-26-soc-onboard/`（v0/Part A 上板证据，独立）
+
+> 2026-10-28 注：文中交接单现位于 `docs/archive/partB-rtl-handoff.md`（docs/ 顶层文件已归档）。

@@ -1,4 +1,4 @@
-"""批次记录存储（EXE 侧，M3 起步）——决策单 D8–D10；W07 起 schema v2。
+"""批次记录存储（前端参考实现，M3 起步）——决策单 D8–D10；W07 起 schema v2。
 
 规则：
 - D8 只有手动触发的轮次是记录候选；自动间隔轮次永不落记录
@@ -11,12 +11,12 @@
   含 expected/actual/delta/missing/extra/reasons——当轮工单即 decision.expected）、
   prototype（来源标识）、protocol_version（报文契约版本）；替代 v1 的 verdict
   预留字段（该字段误读顶层 verdict，对 v1.2 报文恒为 None）。
-  result_age_s 按 EXE 接收时基传入（age_s），created_at 保留原始服务端时间戳供诊断。
+  result_age_s 按前端接收时基传入（age_s），created_at 保留原始服务端时间戳供诊断。
 - 重启安全（2026-10-13，NC 点名）：BatchRecords 启动时从既有 records.jsonl 重建去重键与计数；
   AnomalyLog 按既有行数续编截图序号（防 anomaly_*.png 覆盖）；损坏记录行大声失败——
   静默跳过会让去重失效、重复证据被写入。
 
-截图写入通过注入的 save_image(path, frame) 回调完成；缺省惰性导入 cv2（EXE 内可用），
+截图写入通过注入的 save_image(path, frame) 回调完成；缺省惰性导入 cv2（需要时可用），
 离线测试传桩函数以保持纯 stdlib。
 """
 import json
@@ -70,7 +70,7 @@ class BatchRecords:
     def write(self, packet, frame, age_s=None):
         """落一条记录（jsonl 行 + 截图）；重复键返回 None，不抛异常。
 
-        age_s 为 EXE 接收时基的结果年龄（调用方传入）；缺省回退 created_at 差值。
+        age_s 为前端接收时基的结果年龄（调用方传入）；缺省回退 created_at 差值。
         """
         key = (packet["session_id"], packet["check_id"])
         if key in self.keys:

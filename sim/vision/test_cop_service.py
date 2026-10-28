@@ -16,7 +16,7 @@ from unittest.mock import patch
 
 root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(root / "src/pynq_host"))
-sys.path.insert(0, str(root / "src/vision_client"))
+sys.path.insert(0, str(root / "src/pynq_host"))
 import rounds
 import cop_regs as R
 from cop_engine import CopEngine

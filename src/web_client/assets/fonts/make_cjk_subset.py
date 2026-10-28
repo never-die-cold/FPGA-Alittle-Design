@@ -7,7 +7,7 @@ ASCII + GB2312 全集（一/二级汉字及全角区，6763 字）+ 常用符号
 用法（需 fonttools，仅构建机安装）：
     py -m pip install --target sim/build/vision-client-deps fonttools
     set PYTHONPATH=<仓库路径下的 sim/build/vision-client-deps>
-    py src/vision_client/assets/fonts/make_cjk_subset.py
+    py src/web_client/assets/fonts/make_cjk_subset.py
 
 首次运行从 jsDelivr 下载全量字体（可复现源）。若 M3 后期出现缺字（豆腐块）：
 把所需字符补进 EXTRA（或改用全量字体）后重跑本脚本。

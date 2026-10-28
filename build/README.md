@@ -12,8 +12,7 @@ Vivado 构建脚本与综合/实现报告，保证工程可由他人从零复现
 - `build_fmax.tcl`：核 OOC 周期／配置入口；`-core_profile nofwd|fwd|bht1|bht2` 显式传参
 - `build_soc.tcl`：板级 40／125 MHz 与四配置构建；默认 40 MHz、fwd、BHT 关
 - `reports/`：综合与实现报告归档（资源占用、Fmax/WNS、最差路径）——指标证据，入库
-- `run/`：临时产物（checkpoint / 日志，不入库）
-- `artifacts/`：本地发布物（如 `nc-offboard-release-20261014.zip`），不入库；`git status` 不应看到它
+- `run/`、`reports/pynq_*`、`board-package*`、`board-app-*`：本地产物，2026-10-28 起移至 `others/build/`（gitignore，不入库）
 
 ## 用法（Vivado 2026.1）
 
@@ -31,8 +30,8 @@ D:\vivado\2026.1\Vivado\bin\vivado.bat -mode batch -source build/build_fmax.tcl 
 ```
 
 fwd 报告／位流目录为 `soc_40mhz/` 或 `soc_125mhz/`；其他配置加 `_nofwd/_bht1/_bht2` 后缀。
-例如主档位流为 `build/run/soc_40mhz_bht2/pynq_z2_soc_40mhz_bht2.bit`，默认 fwd 为
-`build/run/soc_40mhz/pynq_z2_soc_40mhz.bit`。脚本在时钟对象、未约束路径、WNS 或 DRC
+例如主档位流为 `others/build/run/soc_40mhz_bht2/pynq_z2_soc_40mhz_bht2.bit`，默认 fwd 为
+`others/build/run/soc_40mhz/pynq_z2_soc_40mhz.bit`（2026-10-28 前born于 `build/run/`）。脚本在时钟对象、未约束路径、WNS 或 DRC
 门禁失败时停止，不生成该档位流。125 MHz 未过只能记录实际结果，不能写成已达标。
 
 > 核 OOC 不含外部存储器，不能代替 SoC 全路径验收；核顶层不直接按板级 I/O 布局。

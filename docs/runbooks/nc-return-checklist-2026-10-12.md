@@ -1,6 +1,7 @@
 # NC 返场执行单与待确认项（2026-10-12）
 
-依据[三人收尾清单](../project-closeout-three-person-checklist.md)，基线 `dev/model@3e2e1c9`；本次离板续工。
+> 状态：历史快照（2026-10-12 NC 返岗核对单）。
+分工记录已归档（见 git 历史）；基线 `dev/model@3e2e1c9`，本次离板续工。
 用户已报告硬件连接完成；本轮未重新读取板端状态、加载位流或打开串口/UVC。
 本轮新增文件与原始输出见[证据](../../data/logs/2026-10-12-unattended-offline/README.md)。原有暂存与未暂存改动保留。
 2026-10-14续核：最终custom单帧驱动已离板验证，精确版本/返板步骤见[执行单](n03-custom-return-runbook-2026-10-14.md)；C04的Q1/Q3和Q5的NC原则已本人确认，Q5交JL对齐、修复后再验收。
@@ -31,7 +32,7 @@
 | 重启去重 | BatchRecords.keys 仅在进程内，未从旧 records.jsonl 重建 | WC 给出重启后同键不重复记录的实现与仓库负例 |
 | 配置回执 | /v1/config 只接受 control 并推进软件 config_id；工单来自启动参数 | WC/JL 接通当轮工单内容与真实硬件配置确认，不能把软件编号当 R12 回执 |
 
-源码依据：[服务](../../src/pynq_host/vision_live_service.py)、[记录](../../src/vision_client/records.py)、[前端](../../src/vision_client/preview.py)。
+源码依据：[服务](../../src/pynq_host/vision_live_service.py)、[记录](../../src/pynq_host/records.py)、[前端](../../src/web_client/index.html)。
 既有 Q2 及 NC 已确认部分保持有效；以上未决项不由离板回归 PASS 自动闭环。
 
 ## 3. 采集口径同步结果与实测边界

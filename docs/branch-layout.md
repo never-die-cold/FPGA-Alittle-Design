@@ -1,6 +1,6 @@
 # 当前分支、worktree 与同步规则
 
-2026-10-08 按用户指定保留五个开发分支；2026-10-19 仓库整理新增 `chore/repo-cleanup`，随后通过 PR #79–#83 合并并同步。职责以根计划 §2 为准。
+2026-10-08 按用户指定保留五个开发分支；2026-10-19 仓库整理新增 `chore/repo-cleanup`，随后通过 PR #79–#83 合并并同步。分支规矩以根计划 §2 为准。
 
 ## 分支
 
@@ -9,13 +9,13 @@
 | `main` | 经 PR 合入的集成版本 | 当前集成版本 |
 | `dev/riscv` | RISC-V 核与协处理器 RTL | 与 main 同步 |
 | `dev/vision` | 视觉 RTL、板端链路与验证 | 与 main 同步 |
-| `dev/model` | 模型训练、导出与黄金参考 | 与 main 同步 |
+| `dev/model` | 模型训练、导出与黄金参考 | 已退役（独有提交已并入 main） |
 | `dev/exe` | EXE、联调及板务协调 | 与 main 同步 |
 | `chore/repo-cleanup` | 仓库整理专用；已合入 main | 与 main 同步，保留为整理记录 |
 
 > 合并顺序、冲突解决与测试结果见 [`report/llm_log/2026-10-19-branch-integration.md`](../report/llm_log/2026-10-19-branch-integration.md)。
 
-`dev/bench`、`dev/verify` 已于 2026-10-19 删除（0 ahead）；历史记录里的旧名称和提交号保持原样，不作为当前开分支指令。
+`dev/bench` 已于 2026-10-19 删除（0 ahead）；`dev/verify` 为 verify 线重建并经 PR #91 并入 main（2026-10-28），本地与远端现存。历史记录里的旧名称和提交号保持原样，不作为当前开分支指令。
 
 ## Worktree
 

@@ -6,7 +6,7 @@
 
 ## 1. 十条规则
 
-1. **根目录白名单**：只允许 `README.md`、`plan.md`、`AGENTS.md`、`LICENSE`、`.gitignore`、`.gitattributes`；目录只允许 `src/`、`sim/`、`build/`、`board/`、`data/`、`docs/`、`report/`、`skill/`、`models/`、`results/`、`.github/`。`models/`、`results/` 是已记录的例外。
+1. **根目录白名单**：只允许 `README.md`、`plan.md`、`AGENTS.md`、`LICENSE`、`.gitignore`、`.gitattributes`；目录只允许 `src/`、`sim/`、`build/`、`board/`、`data/`、`docs/`、`report/`、`skill/`、`models/`、`results/`、`tools/`、`others/`、`.github/`。`models/`、`results/` 是已记录的例外；`others/` 只放本地非仓库文件（gitignore，不入库）。
 2. **每个顶层目录有 README**：说清是什么、入口、不做什么。
 3. **每次运行一个目录**：`data/logs/YYYY-MM-DD-topic/`，必须有 `README.md`；缺说明标记 `PROVENANCE GAP`。
 4. **运行 README 六要素**：日期、commit、命令、结果、产物、边界/未完成项。
@@ -32,7 +32,7 @@
 - file-guide：`python docs/file-guide/tools/generate.py --scope source --date YYYY-MM-DD` → `build/file-guide/`（ignore）。
 - Icarus：`sim/build/`（ignore）；`.vvp` 不再入库。
 - XSim：`sim/xsim.dir/`、`*.log`、`*.jou`、`*.wdb`（ignore）。
-- Vivado：`build/run/`、`build/reports/fmax/`、*.dcp、*.bit（ignore）。
+- Vivado：`others/build/run/`、`others/build/reports/`（原 `build/run/`、`build/reports/`，2026-10-28 迁移）、*.dcp、*.bit（ignore）。
 - Python：`__pycache__/`、`.pytest_cache/`、`.venv/`（ignore）。
 
 ## 4. 检查命令

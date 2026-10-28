@@ -12,7 +12,7 @@
 | `coprocessor/` | INT8 CNN 算子、整网控制器、整数参考 | [README](coprocessor/README.md)、[design_v0](coprocessor/design_v0.md) |
 | `riscv_fw/` | RISC-V 裸机固件、CoreMark、测试程序与 hex/dis | [README](riscv_fw/README.md)、[Makefile](riscv_fw/Makefile) |
 | `pynq_host/` | PS 侧配置、定位/ROI、检查服务、FILE/LIVE 骨架 | [README](pynq_host/README.md)、[ONBOARD](pynq_host/ONBOARD.md) |
-| `vision_client/` | Windows EXE：UVC 预览、轮次叠加、记录/CSV | [README](vision_client/README.md) |
+| `web_client/` | HTML 网页端前端（HUD v4 检查界面，单文件 index.html） | [README](web_client/README.md) |
 
 ## 常用入口
 

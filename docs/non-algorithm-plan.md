@@ -1,10 +1,12 @@
 # 非识别算法工作包看板
 
+> 状态：历史快照（2026-10-12；EXE 形态已移除、分工与排期管理已撤销；当前口径见根目录 [plan.md](../plan.md)）。
+
 更新日期：2026-10-12。范围排除CNN/定位/训练/量化算子实现，维护启动、接口、EXE与发布依赖；软件原型不替代真实硬件验收。
 
 ## 基线与状态
 
-当前已合并基线为`3e2e1c9`（PR #69/#70/#71），旧dev/bench/Part C分叉不再是当前整合待办。本工作区另有未提交NC离板修复/输入审计，证据见[离板记录](../data/logs/2026-10-12-nc-offline/README.md)。执行分工以[三人清单](project-closeout-three-person-checklist.md)为准。
+当前已合并基线为`3e2e1c9`（PR #69/#70/#71），旧dev/bench/Part C分叉不再是当前整合待办。本工作区另有未提交NC离板修复/输入审计，证据见[离板记录](../data/logs/2026-10-12-nc-offline/README.md)。分工记录已归档（见 git 历史）。
 
 | 工作包 | 状态 | 依赖 | 版本与证据 |
 |---|---|---|---|
@@ -14,7 +16,7 @@
 | HDMI启动/恢复 | 特定配置手动恢复有证据；完整冷启动/长测/物理拔插仍未验收 | Pi CEA720p60、采集卡共存与实际位流 | [N01现场记录](../data/logs/2026-10-10-onboard-n01/README.md)；不能用另一位流代签 |
 | RISC-V核验收 | 核与最小SoC已收口 | 后续协处理器接入不退化 | [核收口报告](../report/module1-closure.md)；MMIO/工业固件仍未接入 |
 | 板端控制/结果接口 | v1.2 MOCK/LIVE与FILE服务骨架已实现 | 真实取帧/MMIO/CNN、R12应用回执、HTTP请求级幂等 | [协议](contracts/vision-sync-protocol-decisions.md)；软件config_id不代表硬件生效 |
-| Windows EXE | 视频/轮次、重连撤框、LIVE类别/分数/工单横幅、PROTOTYPE已离板验证 | 检查快照查看、真实硬件/目标机复验 | [客户端说明](../src/vision_client/README.md)；轮次叠加不是逐帧同步 |
+| 前端（原 EXE 形态） | 视频/轮次、重连撤框、LIVE类别/分数/工单横幅、PROTOTYPE已离板验证 | 网页端真实数据接线与目标环境复验 | 前端现为 [src/web_client](../src/web_client/README.md)；轮次叠加不是逐帧同步 |
 | 工单/记录/发布 | 文件候选规则、手动有效轮幂等记录、v2/CSV/异常截图已有 | 核侧工单判定、真实闭环与最终发布 | [离板检查](runbooks/offline-inspection.md)；记录去重不等于网络重试幂等 |
 
 ## 实施门槛

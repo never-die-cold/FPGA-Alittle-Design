@@ -1,5 +1,7 @@
 # CNN 协处理器 v0 交接索引
 
+
+> 2026-10-28 更新：板上验证已推进——10-26 edge-fix/trained 包、10-27 cdc/MMCM 共存包四例黄金、10-28 r6 多目标 12 轮/85 结果逐项一致（见 [plan §3.1](../../plan.md) 与 data/logs/2026-10-28-multitarget-board-r6/）。下文「BOARD UNVERIFIED」为 10-26 时点口径；结果 DMA/连续作业仍未验收。
 > 给 JL、WC、NC 查找离板计算链的唯一入口；交接或复现前阅读。  
 > 本页只指向权威契约和证据，不复制寄存器表、payload offset 或历史日志正文。
 
@@ -33,7 +35,7 @@
 | J04 实现交接与 OPEN-1..12 | [实现交接单](../runbooks/coprocessor-j04-handoff.md) |
 | J03 本轮离板复验 | [验收索引](../../data/logs/2026-10-18-j03-closeout/README.md) |
 | 10/13 CNN/DDR 历史接口与失败边界 | [历史交接](../archive/cnn-ddr-offline-handoff-2026-10-13.md) |
-| 三人职责与最终签收 | [收口清单](../project-closeout-three-person-checklist.md) |
+| 交付签收 | 证据目录逐项核对，未验证项写入交付记录 |
 
 若计划、README 或本页与 C02/C03 冲突，以 C02/C03 为准，并修正文档；不得反向改契约。
 
@@ -56,7 +58,7 @@ J04a 控制面已在此基础上完成离板冒烟；J04b 完整验证仍未完�
 ## NC 对接边界
 
 - 片上存储需求与 10/13 历史 word 级接口可供规划，但正式 payload 字节数以模型 manifest 为准；
-- OOC 正时序不代表完整 SoC 100 MHz；整机 40 MHz 综合实现门禁已 PASS（见本页「当前状态」最新条目与[NC 交接](coprocessor-nc-handoff.md)），板上整网推理与连续作业 UNVERIFIED；
+- OOC 正时序不代表完整 SoC 100 MHz；整机 40 MHz 综合实现门禁已 PASS（见本页「当前状态」最新条目与[NC 交接](../coprocessor-nc-handoff.md)），板上整网推理与连续作业 UNVERIFIED；
 - J08 顺序保持“算子诊断包 → 首网包 → 整机包”，当前三包均未正式发布。
 
 ## 复现入口

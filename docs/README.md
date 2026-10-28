@@ -16,7 +16,7 @@
 
 | 类型 | 判定 | 例子 |
 |:---|:---|:---|
-| 当前 | 无历史标记，且被本文或 `project-map.md` 列为入口 | `plan.md`、`workflow.md`、`onboarding.md`、`project-closeout-three-person-checklist.md`、各模块 README/契约 |
+| 当前 | 无历史标记，且被本文或 `project-map.md` 列为入口 | `plan.md`、`workflow.md`、`onboarding.md`、各模块 README/契约 |
 | 历史快照 | 首行有“历史快照（日期）”标记 | `archive/three-day-plan.md`、`archive/partB-*`、`archive/partC-*`、旧 review/交接单 |
 | 草案/建议稿 | 标题或状态行注明“草案/建议” | `contracts/inspection-v0-contract.md`、`contracts/c01-capture-status-contract.md` |
 | 外包原文 | `docs/outsource/fastener-vision-2026-10-07/`，原字节保留 | 不改写；项目维护版另见 `outsource/fastener-handoff.md` |
@@ -28,12 +28,14 @@
 
 | 目录 | 是什么 |
 |:---|:---|
-| `src/` | 设计源码：RISC-V 核、视觉 RTL、CNN、固件、PS 软件、EXE |
+| `src/` | 设计源码：RISC-V 核、视觉 RTL、CNN、固件、PS 软件 |
 | `sim/` | testbench 与一键仿真/构建入口 |
 | `build/` | Vivado 可复现构建脚本 + 综合/实现报告 |
 | `board/` | 上板指南、冒烟工程、实测记录 |
 | `data/` | 指标、运行日志、证据、黄金参考 |
 | `report/` | 设计报告 + `llm_log/` 协作记录 |
+| `tools/` | 本地辅助脚本（已入库：cop_payload_loader 等） |
+| `others/` | 本地非仓库文件（构建产物/YOLO/VCD；gitignore，不入库） |
 | `skill/` | Skill 包 |
 | `models/`、`results/` | 外包交付的模型与实验结果；结构例外，不移动 |
 | `docs/` | 本目录：导航（README/project-map/repo-hygiene/workflow/onboarding） |
@@ -59,10 +61,10 @@
 | CNN 契约 | [`src/coprocessor/design_v0.md`](../src/coprocessor/design_v0.md) |
 | CNN 协处理器状态与交接 | [`contracts/coprocessor-handoff-v0.md`](contracts/coprocessor-handoff-v0.md) |
 | CNN 协处理器 J04 实现交接与 OPEN | [`runbooks/coprocessor-j04-handoff.md`](runbooks/coprocessor-j04-handoff.md) |
-| WC 协处理器软件接口 | [`coprocessor-wc-interface.md`](coprocessor-wc-interface.md) |
+| 协处理器软件接口 | [`coprocessor-wc-interface.md`](coprocessor-wc-interface.md) |
 | 协处理器存储规划 | [`coprocessor-storage-plan.md`](coprocessor-storage-plan.md) |
-| JL Vivado 检查清单 | [`coprocessor-vivado-checklist.md`](coprocessor-vivado-checklist.md) |
-| NC 协处理器交接 | [`coprocessor-nc-handoff.md`](coprocessor-nc-handoff.md) |
+| Vivado 检查清单 | [`coprocessor-vivado-checklist.md`](coprocessor-vivado-checklist.md) |
+| 协处理器交接 | [`coprocessor-nc-handoff.md`](coprocessor-nc-handoff.md) |
 | 协处理器板端 40 MHz 时钟 | [`coprocessor-board-clock-runbook.md`](coprocessor-board-clock-runbook.md) |
 | 协处理器最小 payload loader | [`coprocessor-payload-loader.md`](coprocessor-payload-loader.md) |
 | cop_job IMEM/DMEM 初始化门禁 | [`coprocessor-imem-init-gate.md`](coprocessor-imem-init-gate.md) |
@@ -78,8 +80,8 @@
 - 核/协处理器：[`src/riscv/plan.md`](../src/riscv/plan.md)、[`src/riscv/plan_calendar.md`](../src/riscv/plan_calendar.md)、[`src/coprocessor/README.md`](../src/coprocessor/README.md)、[`runbooks/coprocessor-j04-handoff.md`](runbooks/coprocessor-j04-handoff.md)。
 - 视觉/上板：[`src/vision/README.md`](../src/vision/README.md)、[`board/README.md`](../board/README.md)、[`contracts/c01-capture-implementation-baseline.md`](contracts/c01-capture-implementation-baseline.md)。
 - 模型/数据：[`runbooks/module3-model-training.md`](runbooks/module3-model-training.md)、[`outsource/fastener-handoff.md`](outsource/fastener-handoff.md)。
-- EXE/服务：[`src/pynq_host/README.md`](../src/pynq_host/README.md)、[`src/vision_client/README.md`](../src/vision_client/README.md)。
-- 交付/答辩：[`docs/project-closeout-three-person-checklist.md`](project-closeout-three-person-checklist.md)、[`report/`](../report)。
+- 前端：[`src/web_client/README.md`](../src/web_client/README.md)；板端服务：[`src/pynq_host/README.md`](../src/pynq_host/README.md)。
+- 交付/答辩：[`plan.md`](../plan.md) §3（当前状态与卡点）、[`report/`](../report)。
 
 ## 6. 写作规范（防 AI 味）
 

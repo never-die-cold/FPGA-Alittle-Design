@@ -1,5 +1,7 @@
 # CNN 协处理器 NC 交接
 
+
+> 2026-10-28 注：文中 `build/board-package-*`、`build/run/` 本地产物现位于 `others/build/`。
 > 交付边界：**JL 交付 ≠ 板级验收**。JL 负责 RTL、Windows Vivado 产物与可追溯包；
 > NC 负责下载和现场稳定性；WC 负责软件接入、独立软件看门狗及消费式 W1C 流程。
 

@@ -6,12 +6,12 @@
 
 ## 1. 一句话
 
-在 PYNQ-Z2 上用自研 RISC-V 核 + HDMI 视觉预处理 + INT8 CNN 协处理器做紧固件识别与工单检查；板端结果经网口到 Windows EXE 展示，视频走 HDMI + USB 采集卡。
+在 PYNQ-Z2 上用自研 RISC-V 核 + HDMI 视觉预处理 + INT8 CNN 协处理器做紧固件识别与工单检查；板端结果经网口到网页端（`src/web_client/`）展示，视频走 HDMI + USB 采集卡。
 
 ## 2. 当前该看哪
 
-- 全项目目标、分工、收口时间、验收：[`plan.md`](../plan.md)（唯一权威）。
-- 当前状态、下一交付物、卡点：[`plan.md`](../plan.md) §3.1/§3.2。
+- 全项目目标与验收口径：[`plan.md`](../plan.md)（唯一权威）。
+- 当前状态与卡点：[`plan.md`](../plan.md) §3。
 - 模块一核：[`src/riscv/plan.md`](../src/riscv/plan.md)、[`src/riscv/design_v1.md`](../src/riscv/design_v1.md)、[`report/module1-closure.md`](../report/module1-closure.md)。
 - 模块二视觉：[`src/vision/README.md`](../src/vision/README.md)、[`src/vision/design_v0.md`](../src/vision/design_v0.md)。
 - 模块三 CNN：[`src/coprocessor/README.md`](../src/coprocessor/README.md)、[`src/coprocessor/design_v0.md`](../src/coprocessor/design_v0.md)。
@@ -21,13 +21,13 @@
 ## 3. 目录地图
 
 ```text
-├── src/                设计源码（RTL / 固件 / PS 软件 / EXE）
+├── src/                设计源码（RTL / 固件 / PS 软件）
 │   ├── riscv/          RV32IM 核、流水线/转发/BHT、最小 SoC、契约
 │   ├── vision/         HDMI 预处理、捕获状态、AXI、OSD
 │   ├── coprocessor/    INT8 CNN 算子/整网控制器/整数参考
 │   ├── riscv_fw/       裸机固件、CoreMark、测试程序；hex/dis 入库
-│   ├── pynq_host/      PS 侧配置、定位/ROI、检查服务、FILE/LIVE 骨架
-│   └── vision_client/  Windows EXE：UVC、轮次叠加、记录/CSV
+│   ├── pynq_host/      PS 侧配置、定位/ROI、检查服务、FILE/LIVE 骨架、记录/CSV 参考
+│   └── web_client/     网页端前端（原型；真实数据接线待完成）
 ├── sim/                testbench 与仿真入口
 │   ├── riscv/          RISC-V tb
 │   ├── vision/         视觉 tb 与视觉 Python 测试
@@ -43,14 +43,16 @@
 │   └── golden/         测试答案/参考向量
 ├── docs/               人读文档与导航
 │   ├── contracts/      跨模块接口/语义契约
-│   ├── runbooks/       上板/NC/训练/复现执行单
+│   ├── runbooks/       上板/训练/复现执行单
 │   ├── research/       赛题调研、资源、方案对比
 │   ├── archive/        历史快照（不改写）
 │   └── file-guide/     逐文件索引生成器（输出到 build/）
 ├── report/             设计报告 + llm_log 协作记录
+├── tools/              本地辅助脚本（已入库：cop_payload_loader 等）
+└── others/             本地非仓库文件（构建产物/YOLO/VCD；gitignore，不入库）
 ├── skill/              Skill 包（换题可复用）
 ├── models/             FP32/HOG 原型权重（结构例外，见下）
-└── results/            外包实验的逐图评估与训练记录（结构例外，见下）
+├── results/            外包实验的逐图评估与训练记录（结构例外，见下）
 ```
 
 ### 两个结构例外
@@ -60,9 +62,9 @@
 ## 4. 数据流（一张图）
 
 ```text
-相机 HDMI → 板卡视觉流水线 ─┬→ HDMI OUT → 采集卡 → EXE 显示
+相机 HDMI → 板卡视觉流水线 ─┬→ HDMI OUT → 采集卡 → 网页端显示
                             └→ 分析路径 → ROI/CNN → 结果
-RISC-V 核 ── 调度/计数/工单判定 ── PS 服务 ── 网口 ── EXE
+RISC-V 核 ── 调度/计数/工单判定 ── PS 服务 ── 网口 ── 网页端
 ```
 
 口径：仿真、实现、离板、实机是四种不同证据；文件存在不等于接口已接入，更不等于验收通过。
@@ -100,7 +102,7 @@ RISC-V 核 ── 调度/计数/工单判定 ── PS 服务 ── 网口 ─�
 
 1. 根 [`README.md`](../README.md)：作品是什么、要交什么。
 2. 本文件：目录与找东西。
-3. [`plan.md`](../plan.md)：当前状态、分工、验收。
+3. [`plan.md`](../plan.md)：当前状态、验收。
 4. 按分工读模块 README + 契约；跑测试前读 [`docs/workflow.md`](workflow.md)。
 5. 要复现某条证据时，从 `data/logs`/`data/evidence` 的 README 进入，不靠文件名猜。
 

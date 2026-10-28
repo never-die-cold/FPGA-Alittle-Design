@@ -3,6 +3,7 @@
 > 给谁看：查一次仿真、构建、上板或代码审查原始证据的人。
 > 规则：一次运行一个目录；目录名 `YYYY-MM-DD-topic`；每个目录必须有 `README.md`。
 > 模板：[`_template/README.md`](_template/README.md)。新增目录后运行 `python sim/scripts/index_runs.py --write` 刷新本索引。
+> 所有 run README 均为历史快照：只追加、不改写；当前状态只看根目录 [plan.md](../../plan.md) §3.1。
 
 ## 硬规则
 
@@ -15,7 +16,7 @@
 7. 当前目录缺 README 的标记为 `PROVENANCE GAP`；补说明时只写能核实的事实，未知处写“待核”。
 
 <!-- RUN-INDEX:START -->
-## 目录索引（142 个运行，自动生成）
+## 目录索引（153 个运行，自动生成）
 
 | 目录 | 日期 | 文件数 | 大小 | 说明 |
 |:---|:---:|---:|---:|:---|
@@ -29,10 +30,21 @@
 | `cnn-ooc-106904d01e0045089b9d1688ddce6e85` | — | 10 | 27 KB | cnn-ooc-106904d01e0045089b9d1688ddce6e85 |
 | `c01-capture-e2a602d6e0da49a2b6da072abca47c70` | — | 83 | 3.3 MB | c01-capture-e2a602d6e0da49a2b6da072abca47c70 |
 | `c01-capture-19af0b2c829447b89d442a6f4f09f8f3` | — | 79 | 2.7 MB | c01-capture-19af0b2c829447b89d442a6f4f09f8f3 |
+| `2026-10-28-washer-collection` | 2026-10-28 | 101 | 4.3 MB | 2026-10-28 CNN 继续训练与本地实验隔离 |
+| `2026-10-28-sync-selftest` | 2026-10-28 | 26 | 67 KB | 2026-10-28 sync-selftest 运行记录 |
+| `2026-10-28-standing-nut` | 2026-10-28 | 158 | 9.4 MB | 2026-10-28 五螺母、两竖立姿态诊断 |
+| `2026-10-28-r6-holdout-layout04` | 2026-10-28 | 58 | 1.6 MB | Frozen r6: new placement of the existing specimens |
+| `2026-10-28-multitarget-board-r6` | 2026-10-28 | 141 | 3.8 MB | Multi-target result-slot fix and frozen CNN r6 on-board comparison |
+| `2026-10-28-mixed-standing-r6` | 2026-10-28 | 30 | 1.5 MB | 2026-10-28 CNN r6 新混合摆放对照 |
 | `2026-10-27-startup-clock-repair` | 2026-10-27 | 70 | 5.4 MB | 2026-10-27 启动竞争与 MMCM 工具修复 |
+| `2026-10-27-reboard-status` | 2026-10-27 | 10 | 60 KB | 2026-10-27 重新上板状态检查 |
+| `2026-10-27-real-data-layout-03` | 2026-10-27 | 92 | 4.6 MB | 2026-10-27 第 3 组开发留出对照 |
+| `2026-10-27-real-data-layout-02` | 2026-10-27 | 30 | 1.5 MB | 2026-10-27 真实摆放 02、确认标签与首轮微调 |
 | `2026-10-27-product-coexist` | 2026-10-27 | 123 | 20.4 MB | 2026-10-27 共存位流与真实检查链 |
 | `2026-10-27-git-integration` | 2026-10-27 | 14 | 33 KB | 2026-10-27 提交前定向检查 |
+| `2026-10-27-fresh-board-start` | 2026-10-27 | 54 | 5.7 MB | 2026-10-27 新启动与真实场景模型诊断 |
 | `2026-10-27-concurrent-agent-audit` | 2026-10-27 | 43 | 3.4 MB | 2026-10-27 并发会话审计与板端诊断 |
+| `2026-10-27-board-2fc2bdd4` | 2026-10-27 | 14 | 19 KB | 2026-10-27 新包 2fc2bdd4 板验：zero / pattern PASS，clock smoke 与固件口径冲突 |
 | `2026-10-26-trained-payload` | 2026-10-26 | 16 | 280 KB | 2026-10-26 训练权重导出为 INT8 payload：RTL 仿真 PASS（未上板） |
 | `2026-10-26-imem-gate-local` | 2026-10-26 | 4 | 5 KB | 2026-10-26 本机重跑 IMEM 整机门禁：PASS（未上板） |
 | `2026-10-26-build` | 2026-10-26 | 25 | 1.2 MB | 2026-10-26 构建线（Agent A）证据 |

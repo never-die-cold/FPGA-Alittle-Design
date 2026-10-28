@@ -5,8 +5,8 @@
 ## 规划内容
 
 - `main.c`：主调度流程（触发预处理 → 启动推理 → 取结果 → 上报 PS）
-- `cop_driver.c/h`：CNN协处理器驱动（尚未实现；按[C03](../../docs/contracts/coprocessor-integration-v0.md)使用本地MMIO load/store启动/轮询，v0不启用自定义指令）
-- `bench.c`：CPI/性能基准测试程序
+- `cop_job.c` / `cop_work_order.h`：工单固件（已实现，J04a 离板冒烟；按[C03](../../docs/contracts/coprocessor-integration-v0.md)使用本地MMIO load/store启动/轮询，v0不启用自定义指令）
+- `bench_v0_1.c`：CPI/性能基准测试程序
 - `link.ld` / `start.S`：链接脚本与启动代码
 - `Makefile`：工具链构建脚本
 

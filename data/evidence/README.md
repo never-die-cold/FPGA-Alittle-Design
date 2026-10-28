@@ -19,12 +19,15 @@
 4. 缺 README 的目录标记 `PROVENANCE GAP`；补说明时不得把“有文件”写成“已验收”。
 
 <!-- RUN-INDEX:START -->
-## 目录索引（15 个证据主题，自动生成）
+## 目录索引（18 个证据主题，自动生成）
 
 | 目录 | 日期 | 文件数 | 大小 | 说明 |
 |:---|:---:|---:|---:|:---|
 | `cnn-ddr-offline-cdfbf6823fe24cfe8015449a9b0da708` | — | 67 | 567 KB | cnn-ddr-offline-cdfbf6823fe24cfe8015449a9b0da708 |
 | `cnn-ddr-offline-0635d33e8e274f88a88cd2a6a90464b2` | — | 67 | 567 KB | cnn-ddr-offline-0635d33e8e274f88a88cd2a6a90464b2 |
+| `2026-10-28-web-hud-shots` | 2026-10-28 | 10 | 3.5 MB | 网页端 HUD 评审截图存档 |
+| `2026-10-28-cnn-r6` | 2026-10-28 | 13 | 265 KB | CNN r6：清晰竖立螺母开发候选 |
+| `2026-10-27-real-roi-adapt-r1` | 2026-10-27 | 8 | 193 KB | 真实 ROI 开发微调与 PTQ 候选 r1 |
 | `2026-10-13-soc-reset-ce` | 2026-10-13 | 20 | 81 KB | 2026-10-13-soc-reset-ce |
 | `2026-10-13-ddr-experiment-inputs` | 2026-10-13 | 8 | 43 KB | 2026-10-13-ddr-experiment-inputs |
 | `2026-10-13-cnn-pipeline-ooc-inputs` | 2026-10-13 | 11 | 25 KB | 2026-10-13-cnn-pipeline-ooc-inputs |

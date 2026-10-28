@@ -42,7 +42,6 @@
   "make_board_pkg.sh": "从XSA提取bit/hwh并与PS工具打成板端包；用于把配套产物移交上板。",
   "make_arm_localize_pkg.py": "把标准库定位运行器、测试数据、哈希和说明打成便携包；用于ARM离板/板端文件基线。",
   "make_replay_scene.py": "生成重复帧/异常摆放等合成回放画面和播放清单；它测试链路/规则，不是真实紧固件数据。",
-  "build_vision_client.ps1": "装配固定前端依赖、字体和源码并打包Windows EXE；构建中运行自测和本地服务联调。",
   "run_module1_xsim.ps1": "使用相同固件/testbench在XSim复验核四档结果和计数；与Icarus原始结果对照。",
   "run_riscv_xsim.bat": "Windows XSim核仿真入口；与核testbench和已预载固件配套。",
   "run_cpi_matrix.sh": "固定CoreMark镜像运行转发开/关等核参数比较；保存每档周期/退休口径供CPI报告。",

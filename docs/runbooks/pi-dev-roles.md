@@ -16,7 +16,7 @@
 | 角色 | 内容 | 前置 | 产出 |
 |:---|:---|:---|:---|
 | R1 交叉基准 | arm_localize 便携包在 Pi（Cortex-A72）跑分，与 Zynq A9 / PC 三方对照 | Pi 可 SSH（现在即可） | 三方耗时表入档，支撑 10/5「定位必须 PL 加速」拍板 |
-| R2 mock 服务宿主 | `vision_mock_service.py --host 0.0.0.0` 挂 Pi，EXE 远程联调 | Pi 可 SSH | EXE 联调不占 PC/板卡；联调日志存证 |
+| R2 mock 服务宿主 | `vision_mock_service.py --host 0.0.0.0` 挂 Pi，前端远程联调 | Pi 可 SSH | 前端联调不占 PC/板卡；联调日志存证 |
 | R3 回放源 | 循环播放合成场景 → HDMI → PYNQ IN：换源/EDID/断连测试 + M3 重复帧/缺件/多余件验收动作 | **micro-HDMI→HDMI-A 线到货** | 素材生成器 `sim/scripts/make_replay_scene.py` + 实测记录 |
 | R4 正式演示源 | CM3 相机 → Pi → PYNQ（原定角色，hardware.md §1 链路） | 线 + CM3 到货 | 验线（hardware.md §4）→ 采集规程 §2 机位定标 |
 
@@ -43,7 +43,7 @@ python sim/vision/compare_arm_localize_bench.py \
 ```bash
 # Pi 上（src/pynq_host 同目录需有 vision_protocol.py）
 python3 vision_mock_service.py --host 0.0.0.0 --port 8765
-# EXE 侧
+# 前端侧
 vision_preview.exe --mock --endpoint http://<pi_ip>:8765
 ```
 

@@ -18,9 +18,9 @@
 </script>
 <style>
 /* ==========================================================================
-   EdgeSight 检查控制台 —— EXE HUD v4「应用外壳」的 Web 化原型。
+   EdgeSight 检查控制台 —— HUD v4「应用外壳」网页端。
    布局/交互骨架借鉴 Project Mozart 控制中心（顶栏状态条 + 三栏 + 设计令牌 +
-   亮暗主题 + 终端日志）；信息架构、状态语义与配色纪律来自 EXE HUD v4 定稿：
+   亮暗主题 + 终端日志）；信息架构、状态语义与配色纪律来自 HUD v4 定稿：
    - 面板区 UI 控件用品牌青，绿色专属目标框/序号片/判定 PASS（不与 UI 混用）；
    - RUN 按钮三态：青 IDLE → 琥珀 QUEUED·WAITING → 暗底 RUNNING；
    - 等待态三重冗余：撤框 + 计数置 -- + 状态文字（等待文字琥珀置深色衬底）。
@@ -29,7 +29,7 @@
 
 @font-face {
   font-family: 'Inter';
-  src: url('../../src/vision_client/assets/fonts/InterVariable.ttf') format('truetype');
+  src: url('assets/fonts/InterVariable.ttf') format('truetype');
   font-weight: 100 900;
   font-display: swap;
 }
@@ -119,7 +119,7 @@ button, h1, h2, h3 { font-family: inherit; }
 ::-webkit-scrollbar-thumb { background: var(--edge); border-radius: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 
-/* ---------- 顶部状态条（EXE 顶栏语义 × 参考前端 hardware-stat 外形） ---------- */
+/* ---------- 顶部状态条（HUD v4 顶栏语义 × 参考前端 hardware-stat 外形） ---------- */
 .app-header {
   display: flex; align-items: center; gap: 14px;
   height: 58px; padding: 0 18px;
@@ -458,7 +458,7 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
 </head>
 <body>
 
-<!-- 顶部状态条：模式徽标 + 工单判定 + 资源统计 + 系统在线 + 时钟（EXE 顶栏语义） -->
+<!-- 顶部状态条：模式徽标 + 工单判定 + 资源统计 + 系统在线 + 时钟（HUD v4 顶栏语义） -->
 <header class="app-header">
   <div class="brand">
     <svg class="brand-logo" viewBox="0 0 32 32" aria-hidden="true">
@@ -501,7 +501,7 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
 
 <main class="layout">
 
-  <!-- 左栏：系统控制与记录（参考前端左栏语义 → EXE 数据源/参数/记录） -->
+  <!-- 左栏：系统控制与记录（参考前端左栏语义 → 数据源/参数/记录） -->
   <aside class="col" aria-label="系统控制">
     <section class="card">
       <h2 class="card-title">SYSTEM <span class="hint" id="sys-sub">vision-service v1.2</span></h2>
@@ -533,7 +533,7 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
     </section>
 
     <section class="card">
-      <h2 class="card-title">数据源 <span class="hint">单选 · 对应 EXE 三种启动方式</span></h2>
+      <h2 class="card-title">数据源 <span class="hint">单选，三种数据源互斥</span></h2>
       <div class="mode-row is-active" id="mode-live">
         <div><div class="mode-name mono">LIVE</div><div class="mode-desc">采集卡视频 + 板端轮次叠加</div></div>
         <span class="spacer"></span>
@@ -614,7 +614,7 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
     </div>
   </section>
 
-  <!-- 右栏：识别范围表（置顶）+ 检测对象 + 服务信息（EXE HUD v4 右列信息架构） -->
+  <!-- 右栏：识别范围表（置顶）+ 检测对象 + 服务信息（HUD v4 右列信息架构） -->
   <aside class="col" aria-label="识别范围与检测结果">
     <section class="card" id="scope-card">
       <h2 class="card-title">INSPECTION SCOPE <span class="hint" id="scope-round-note">ROUND — · REC —</span></h2>
@@ -689,7 +689,7 @@ function fmtClock(d) {
 }
 function fmtTime(d) { const p = (n) => String(n).padStart(2, '0'); return `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`; }
 
-/* ---------- 场景（坐标为 1280×720 源坐标，与 EXE mock 同风格） ---------- */
+/* ---------- 场景（坐标为 1280×720 源坐标，与 mock 同风格） ---------- */
 const T = (t, cls, score, x, y, w, h) => ({ t, cls, score, box: [x, y, w, h] });
 const SCENES = {
   pass: {
@@ -859,7 +859,7 @@ function renderStage() {
   }
 }
 
-/* ---------- 识别范围表（右栏置顶，交互与 EXE hit_test 对齐） ---------- */
+/* ---------- 识别范围表（右栏置顶，交互与 hit_test 对齐） ---------- */
 function renderScope() {
   const wrap = $('#scope-rows');
   wrap.innerHTML = '';
@@ -1013,7 +1013,7 @@ function startAuto() {
   autoTimer = setInterval(autoRound, state.interval);
 }
 
-/* ---------- 模式切换（与 EXE 三种组装对应，单选互斥） ---------- */
+/* ---------- 模式切换（三种数据源对应，单选互斥） ---------- */
 function syncModeRows() {
   for (const row of document.querySelectorAll('.mode-row')) {
     const m = row.querySelector('input').dataset.mode;
@@ -1039,7 +1039,7 @@ function setMode(mode) {
 }
 document.querySelectorAll('.mode-row input').forEach((input) => {
   input.addEventListener('change', () => {
-    // 当前模式不允许关断（EXE 三种组装互斥且恒有其一）：回弹并说明
+    // 当前模式不允许关断（三种数据源互斥且恒有其一）：回弹并说明
     if (!input.checked && state.mode === input.dataset.mode) {
       syncModeRows();
       toast('数据源保持单选：当前模式不会关断，切换请打开另一行');
@@ -1095,7 +1095,7 @@ $('#sel-maxage').addEventListener('change', (e) => {
     return;
   }
   state.maxAge = v;
-  log('STATE', `年龄窗 max-age → ${(v / 1000).toFixed(1)}s（年龄按 EXE 接收时刻计量）`);
+  log('STATE', `年龄窗 max-age → ${(v / 1000).toFixed(1)}s（年龄按前端接收时刻计量）`);
 });
 $('#btn-export').addEventListener('click', () => {
   if (!state.records.length) { toast('暂无批次记录：手动触发一轮有效检查后再导出', false); return; }
@@ -1138,7 +1138,7 @@ function renderAll() {
 }
 renderAll();
 startAuto();
-setInterval(freshnessLoop, 180); // 年龄按 EXE 接收时刻计量，180ms 步进收缩足够平滑
+setInterval(freshnessLoop, 180); // 年龄按前端接收时刻计量，180ms 步进收缩足够平滑
 log('BOOT', 'EdgeSight Web 原型启动 · 画布自适应 · HUD v4 语义（纯前端模拟，合成数据）');
 log('LINK', `握手成功 session=${state.session} · cfg=${state.config} · protocol=v1.2`);
 log('STATE', '自动轮询已开启 · 结果有效性 = 会话 + 配置号 + 年龄窗（D3）');

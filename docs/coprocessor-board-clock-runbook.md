@@ -1,5 +1,6 @@
 # 协处理器板端 40 MHz 时钟 runbook
 
+> 状态：历史快照（直连改钟方案已被片内 MMCM 方案取代，见 data/logs/2026-10-27-startup-clock-repair/ 与 plan.md §3.1）；「JTAG 后 FCLK1 仍 142.857 MHz」「JTAG≠PS7 初始化」两节仍有效。本地产物路径已迁 others/build/。
 > 2026-10-27 现况：本页下方为旧直连时钟方案；同名 edge 包现已替换成 MMCM 版，不能原样执行其中的改钟/上板命令。
 > 先阅读[并发会话审计](runbooks/concurrent-agent-audit-2026-10-27.md)，核对 bit 哈希、时钟拓扑和 loader 配套关系。
 

@@ -3,11 +3,13 @@
 > 是什么：G0 冻结项 C04——统一 LIVE 检查在「关联 / 显示 / 来源标识 / 统计」四件事上的应用层语义；
 > 补全 [plan.md](../../plan.md) §1.3 最后一条（视频与结果轮次关联）在应用层的可执行边界。
 > 给谁看：never-die-cold（板端服务实现与确认，N09/N10 验收口径）、jianglibo（C03 接口确认）、watercopper（EXE/服务实现）。
-> 怎么用：逐项评审（文末确认清单 Q1–Q6）→ 确认后回写 plan.md §3.4/§5.3、[EXE README](../../src/vision_client/README.md) 与验收矩阵。
+> 怎么用：逐项评审（文末确认清单 Q1–Q6）→ 确认后回写 plan.md §3.4、[网页端 README](../../src/web_client/README.md) 与验收矩阵。
 > **本文不新增任何报文字段**——报文以[协议决策单](vision-sync-protocol-decisions.md) D6 v1.2 为唯一出处；新增字段一律走 §6 版本评审。
 > 状态：设计稿 2026-10-10，待 NC/JL 确认（G0 门：C01–C04 书面一致）。
 > 2026-10-14 NC本人确认Q1软件采集序号、Q3本轮capture权威原帧、Q5超10复检/未完整计数标识/映射零值非实测；[评审单](../archive/c04-nc-review-2026-10-14.md)记录原话。Q5待JL对齐及实现修复后验收，C04整体未冻结。
 > 边界：首版＝静止工位、人工触发、轮次级关联；逐帧精确关联与连续运动不纳入首版（决策单 D1 前提）。
+
+> 更新（2026-10-28）：前端形态改为 HTML 网页端（`src/web_client/`）。本文所称 EXE 指冻结时的前端实现载体，协议语义不变；原 `src/vision_client/` 已随 EXE 形态移除（本地备份与 git 历史保留），记录/CSV 参考实现现位于 `src/pynq_host/`。
 
 ## 1. 术语与对象
 
@@ -37,7 +39,7 @@
 - 工单与参数由 EXE 提交，服务端返回 applied_config_id；EXE 以确认生效的 config_id 为准（沿用现有 `/v1/config` 流程）。
 - 每轮结果锁定：session_id + check_id + config_id + **当轮工单内容（expected 计数）**。记录必须保存当轮 expected 与 config_id——只存 config_id 无法复现判定依据（W07）。
 - 配置不符即撤框（D3，`rounds._state` config 分支已实现）；换工单后旧轮结果不得显示。
-- **工单 ≤10 件（V0 候选）与协议 16 目标上限互不替换**：结果最多 16 个目标；超工单上限不截断放行——按[检查V0 §3](inspection-v0-contract.md) 转 RECHECK（**Q5** 确认表述）。C03 已冻结口径：16 为目标检测能力、10 件为检查 V0 业务策略候选（[三人清单](../project-closeout-three-person-checklist.md)）；**能力上限不自动成为业务放行条件**。Q5 剩余项 = WC/JL 对齐超限 RECHECK 与部分计数标识（CSV 已加 `reasons` 列暴露 `target_limit`；界面口径待 NC 验收）。
+- **工单 ≤10 件（V0 候选）与协议 16 目标上限互不替换**：结果最多 16 个目标；超工单上限不截断放行——按[检查V0 §3](inspection-v0-contract.md) 转 RECHECK（**Q5** 确认表述）。C03 已冻结口径：16 为目标检测能力、10 件为检查 V0 业务策略候选（分工记录已归档，见 git 历史）；**能力上限不自动成为业务放行条件**。Q5 剩余项 = WC/JL 对齐超限 RECHECK 与部分计数标识（CSV 已加 `reasons` 列暴露 `target_limit`；界面口径待 NC 验收）。
 - 超限映射注记（2026-10-10，W05 骨架实现，**待 NC/JL 追认**）：检查链候选超限时 decision 计数为
   `null`（"未完整计数"语义），而报文契约要求五计数 dict 必填；服务端（`vision_live_service.complete_decision`）
   映射为按报文内已列目标重算 actual/delta/missing/extra，verdict/reasons 保持 RECHECK——
@@ -154,7 +156,7 @@
 - [LIVE 接口样例（G0 互交件）](../../data/evidence/2026-10-12-live-interface-sample/README.md)（合成数据非板上识别；含报文→显示映射与复现命令）
 - [检查 V0 契约](inspection-v0-contract.md)（取图 / ROI / 成功定义）
 - [离板检查](../runbooks/offline-inspection.md)（FILE_REPLAY 与证据规则）
-- [EXE README](../../src/vision_client/README.md)（当前实现与入口）
+- [网页端 README](../../src/web_client/README.md)（当前实现与入口）
 - [plan.md](../../plan.md) §1.3 / §1.4 / §3.4
 
 ## 变更记录

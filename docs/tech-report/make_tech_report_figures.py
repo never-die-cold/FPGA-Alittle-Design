@@ -141,7 +141,7 @@ def fig_system():
 
     box(ax, 75.0, 73.0, 9.0, 12.0, "USB 采集卡", kind="gray", fs=8.8,
         sub="HDMI→UVC")
-    box(ax, 87.0, 59.0, 12.0, 26.0, "Windows EXE", kind="disp", fs=9.5,
+    box(ax, 87.0, 59.0, 12.0, 26.0, "HTML 网页端", kind="disp", fs=9.5,
         sub="Python + OpenCV\n视频叠加 · 工单判定\n记录 / 截图 / 导出", tc="#14532D")
 
     arrow(ax, (11.5, 63), (16.5, 76), "HDMI IN", rad=-0.12, fs=7.4,
@@ -255,7 +255,7 @@ def fig_video():
         sub="原始 RGB 恒 1 拍 + frame_id\n分析开关/反压均不影响", tc="#14532D")
     box(ax, 47.0, 76.0, 16.0, 12.0, "rgb2dvi", kind="disp", fs=9.2,
         sub="HDMI OUT 1280×720@60", tc="#14532D")
-    box(ax, 67.0, 76.0, 31.0, 12.0, "USB 采集卡 → EXE", kind="gray", fs=9.2,
+    box(ax, 67.0, 76.0, 31.0, 12.0, "USB 采集卡 → 网页端", kind="gray", fs=9.2,
         sub="彩色原图预览 + 框/标签叠加")
     arrow(ax, (12.0, 54.0), (20.0, 76.0), "raw 旁路", rad=0.1, fs=7.4,
           toff=(-2.0, 1.5))
@@ -387,7 +387,7 @@ def fig_sw():
     fig, ax = fig_new(13.0, 7.2)
 
     zone(ax, 1.0, 8.0, 44.0, 84.0, "软件分层", kind="gray", fs=9.5)
-    box(ax, 2.5, 76.0, 41.0, 12.0, "Windows EXE（Python + OpenCV）", kind="disp", fs=9.0,
+    box(ax, 2.5, 76.0, 41.0, 12.0, "HTML 网页端（单文件）", kind="disp", fs=9.0,
         sub="HUD 1600×900 · 识别范围表 · RUN 三态\n记录 / 截图 / CSV 导出 / 异常提示", tc="#14532D")
     box(ax, 2.5, 58.0, 41.0, 12.0, "HTTP/JSON 协议 v1.2", kind="cfg", fs=9.0,
         sub="GET /v1/status · /v1/latest\nPOST /v1/check · /v1/config")
@@ -449,7 +449,7 @@ def fig_flow():
         ("全量回归", "Icarus + XSim"),
         ("综合与时序", "WNS/资源/DRC"),
         ("上板 bring-up", "时钟/预检/DMA"),
-        ("软件联调", "服务 + EXE"),
+        ("软件联调", "服务 + 网页端"),
         ("证据归档", "日志/哈希/复现"),
     ]
     n = len(labels)

@@ -13,7 +13,7 @@
 | [`coremark.md`](coremark.md) | CoreMark 基准契约与工作包计划 |
 | [`inspection-v0-contract.md`](inspection-v0-contract.md) | 检查 V0：取图、ROI 预处理与首次成功检查契约（建议稿） |
 | [`vision-live-semantics.md`](vision-live-semantics.md) | LIVE 检查、显示与来源语义（C04 设计稿） |
-| [`vision-sync-protocol-decisions.md`](vision-sync-protocol-decisions.md) | 视频/结果同步协议决策单（EXE 前端 × 板端服务） |
+| [`vision-sync-protocol-decisions.md`](vision-sync-protocol-decisions.md) | 视频/结果同步协议决策单（网页端前端 × 板端服务） |
 
 ## 相关入口
 

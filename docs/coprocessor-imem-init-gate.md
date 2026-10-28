@@ -1,5 +1,7 @@
 # cop_job IMEM/DMEM 初始化门禁
 
+
+> 2026-10-28 注：本地产物目录已迁移——`build/run/`、`build/reports/pynq_*` 现位于 `others/build/`，下文旧路径按此解读。
 ## 调用清单
 
 仓库活跃源码没有 `$readmemb`。会进入综合的 `$readmemh` 只有两处：

@@ -1,4 +1,4 @@
-"""轮次叠加状态机（src/vision_client/rounds.py）离线测试——D2/D3/D5 撤框与 D8 手动触发。
+"""轮次叠加状态机（src/pynq_host/rounds.py）离线测试——D2/D3/D5 撤框与 D8 手动触发。
 
 运行在真实 mock 服务（本地回环）上，不依赖 cv2/窗口：
 触发节流、手动触发标记与防抖、超龄撤框、配置不符撤框、断联（连续失败）撤框且不崩溃、
@@ -13,7 +13,7 @@ from unittest.mock import patch
 
 root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(root / "src/pynq_host"))
-sys.path.insert(0, str(root / "src/vision_client"))
+sys.path.insert(0, str(root / "src/pynq_host"))
 from vision_mock_service import make_server
 from rounds import AsyncRemoteRounds, RemoteRounds, WAITING, http_json
 

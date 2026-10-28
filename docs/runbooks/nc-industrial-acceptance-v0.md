@@ -1,6 +1,6 @@
 # NC工业与故障验收执行矩阵
 
-2026-10-14；依据[三人清单N09–N12](../project-closeout-three-person-checklist.md)、[C03 §8](../contracts/coprocessor-integration-v0.md)及[NC已确认C04](../contracts/vision-live-semantics.md)。
+2026-10-14；依据分工记录 N09–N12（已归档，见 git 历史）、[C03 §8](../contracts/coprocessor-integration-v0.md)及[NC已确认C04](../contracts/vision-live-semantics.md)。
 本单是离板准备：以下实机用例全部未测，不以FILE/MOCK回归勾选通过。默认工单bolt=2/nut=2/washer=2；变更须记录当轮expected与配置回执。
 进入条件：当前版本N01–N03通过、正式模型/集成包及真实LIVE交付。软件诊断可先演练，但结果标PS/FP32/PROTOTYPE。
 

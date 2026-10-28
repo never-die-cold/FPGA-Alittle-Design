@@ -7,7 +7,7 @@
 - C02：[`design_v0.md`](design_v0.md)；整数、形状、排布、payload 与资源边界。
 - C03：[`docs/contracts/coprocessor-integration-v0.md`](../../docs/contracts/coprocessor-integration-v0.md)；MMIO、DMA、状态与分工。
 - 交接索引：[`docs/contracts/coprocessor-handoff-v0.md`](../../docs/contracts/coprocessor-handoff-v0.md)。
-- 总验收：[`plan.md`](../../plan.md) 与[三人收口清单](../../docs/project-closeout-three-person-checklist.md)。
+- 总验收：[`plan.md`](../../plan.md)；交付签收按证据目录逐项核对。
 - J03 本轮证据：[`data/logs/2026-10-18-j03-closeout/README.md`](../../data/logs/2026-10-18-j03-closeout/README.md)。
 
 ## J01–J10 状态

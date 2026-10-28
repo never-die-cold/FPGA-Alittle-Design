@@ -1,4 +1,4 @@
-"""轮次叠加会话状态机（EXE 侧）——D2 触发 / D3 有效性撤框 / D5 会话重连。
+"""轮次叠加会话状态机（前端参考实现）——D2 触发 / D3 有效性撤框 / D5 会话重连。
 
 preview.py 只负责取帧与渲染；状态机抽离为纯 stdlib 模块（不依赖 cv2），
 离板可测：sim/vision/test_vision_rounds.py。
@@ -13,8 +13,8 @@ preview.py 只负责取帧与渲染；状态机抽离为纯 stdlib 模块（不�
   0.3s 防抖防按键自动重复灌爆批次表；
 - 事件（D11）：overlay 状态迁移 / 会话变化 / 重握手失败记入 events 队列，
   由上层 drain_events() 取走写 anomalies.jsonl（异常事件日志）；
-- 新鲜度按 **EXE 接收时刻**（received_at）计量：不与服务端 created_at 跨机比较
-  （板卡/EXE 时钟不同源）；同迭代"先取钟再请求"的负年龄不判超龄（2026-10-08 实机 flap 修复）。
+- 新鲜度按 **前端接收时刻**（received_at）计量：不与服务端 created_at 跨机比较
+  （板卡/前端时钟不同源）；同迭代"先取钟再请求"的负年龄不判超龄（2026-10-08 实机 flap 修复）。
 """
 import json
 import copy
@@ -172,7 +172,7 @@ class RemoteRounds:
             self.rehandshake()
             return
         self.packet = packet
-        self.received_at = time.time()  # 新鲜度基准：EXE 自己的接收时刻，不跨机比较 created_at
+        self.received_at = time.time()  # 新鲜度基准：前端自己的接收时刻，不跨机比较 created_at
         # 采纳点才更新来源标记：失败的手动轮不得让残留旧报文冒充手动结果（D8）。
         self.last_round_manual = manual
         self.fails = 0

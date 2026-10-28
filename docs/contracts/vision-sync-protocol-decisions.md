@@ -1,9 +1,11 @@
 # 视频/结果同步协议决策单（EXE 前端 × 板端服务）
 
 > 是什么：Windows EXE 与板端结果服务之间"检查轮次"同步契约的决策底稿——补全根目录 [plan.md](../../plan.md) §1.3 悬置的"视频与网口结果对应关系"。
-> 给谁看：watercopper（EXE与服务适配实现）、never-die-cold（D7板端真实服务责任人及实机验收）。当前执行分工见[三人清单](../project-closeout-three-person-checklist.md)。
-> 怎么用：评审逐项追认；冻结后回写 [vision_client README](../../src/vision_client/README.md) 与 `vision_protocol.py`（schema 代码改动另起步骤，不在本单内动手）。
-> 初始决策基线：dev/bench @ 01b3750（2026-10-06）；当前schema为v1.2，软件实现见[客户端说明](../../src/vision_client/README.md)与[10/12整合证据](../../data/logs/2026-10-12-pr-review/README.md)。
+> 给谁看：前端与服务适配线、板端真实服务与实机验收线。分工记录已归档（见 git 历史）。
+> 怎么用：评审逐项追认；冻结后回写 [网页端 README](../../src/web_client/README.md) 与 `vision_protocol.py`（schema 代码改动另起步骤，不在本单内动手）。
+> 初始决策基线：dev/bench @ 01b3750（2026-10-06）；当前schema为v1.2，软件实现见[网页端说明](../../src/web_client/README.md)与[10/12整合证据](../../data/logs/2026-10-12-pr-review/README.md)。
+
+> 更新（2026-10-28）：前端形态改为 HTML 网页端（`src/web_client/`）。本文所称 EXE 指冻结时的前端实现载体，协议语义不变；原 `src/vision_client/` 已随 EXE 形态移除（本地备份与 git 历史保留），记录/CSV 参考实现现位于 `src/pynq_host/`。
 
 ## 0. 决策总览
 
@@ -96,7 +98,7 @@ Q01已随PR #67合并：顶层与逐目标严格白名单拒绝非对象/未知�
 - **D9 去重**：记录键 = (session_id, check_id)；同键重复写入被拒，"一次确认的检查只记一条"。
   结果未到/过期/断联不记录（异常事件与异常截图列 M3 项，独立于批次）。
   当前实现只维护进程内键集合，跨进程复用同目录未恢复旧键；持久去重与HTTP请求重试幂等仍待实现，不能由D9同进程测试推导。
-- **D10 存储与标识**：当前`records.jsonl`为schema v2，保存session/check/config/frame、记录时间/接收时基年龄/原created_at、目标、status、原decision、prototype、protocol_version与截图名；兼容导出旧v1记录。`screenshots/`保存记录时含框画面：MOCK=`mock_`，LIVE+prototype=`proto_`，真实LIVE无前缀。MOCK/PROTOTYPE不得当板上识别证据；无前缀也不独立证明硬件来源。CSV已实现，字段以[records.py](../../src/vision_client/records.py)及[export_records.py](../../src/vision_client/export_records.py)为准，C04整体仍待评审。
+- **D10 存储与标识**：当前`records.jsonl`为schema v2，保存session/check/config/frame、记录时间/接收时基年龄/原created_at、目标、status、原decision、prototype、protocol_version与截图名；兼容导出旧v1记录。`screenshots/`保存记录时含框画面：MOCK=`mock_`，LIVE+prototype=`proto_`，真实LIVE无前缀。MOCK/PROTOTYPE不得当板上识别证据；无前缀也不独立证明硬件来源。CSV已实现，字段以[records.py](../../src/pynq_host/records.py)及[export_records.py](../../src/pynq_host/export_records.py)为准，C04整体仍待评审。
 - **D8 补充（记录资格时间点，2026-10-08 经理解题推演修正）**：手动标记在**报文被采纳**时
   才生效——断联中的手动触发失败后，残留旧报文不得冒充手动轮结果被记入批次档案。
 - **D11 异常事件日志**：overlay 状态迁移（no_result/outage/stale/config/offline/ok，含恢复）、

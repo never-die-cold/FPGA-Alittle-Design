@@ -37,7 +37,7 @@ sim/
 
 ## 仿真工具（双工具复核对拍，2026-09-14 更新）
 
-- **主力回归**：Icarus Verilog 13.0（MSYS2 ucrt64 包 `mingw-w64-ucrt-x86_64-iverilog`）——一键跑全部 tb
+- **主力回归**：Icarus Verilog（2026-09-14 验收口径 13.0；本机现为 11.0，见下）——一键跑全部 tb
 - **XSim 复核**（Vivado 2026.1 已装，issue #2）：同一套 tb 已复核对拍，**两工具结论一致**（2026-09-14；`xvlog → xelab → xsim -R`，从 `sim/` 目录运行以保证 `$readmemh` 相对路径正确）
 - 用法（MSYS2 UCRT64 shell 中，产物在 `sim/build/`）：
   - 一键跑全部：`bash sim/scripts/run_iverilog.sh all`（含 CoreMark，约 2,100 万周期）；单档另含 `soc` / `soc_check` / `bench` / `coremark`

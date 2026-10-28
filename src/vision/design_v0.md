@@ -1,7 +1,7 @@
 # vision design_v0 —— HDMI 图像预处理流水线接口设计（已冻结，寄存器映射 v1.1）
 
 > 是什么：模块二（HDMI 直通 + 预处理流水线）的模块划分、接口与验证策略。
-> 给谁看：never-die-cold（模块二 RTL，本文维护者）、watercopper（黄金参考与测试数据，第 6 节需求单）、jianglibo（第 7 节模块三衔接）。
+> 给谁看：视觉 RTL 维护线（本文）、黄金参考与测试数据负责线（第 6 节需求单）、模块三衔接（第 7 节）。
 > 什么时候读：接口对接与上板联调时；接口已按 §3.3/§4 冻结，变更须另立版本并回写契约。
 > 状态：**离板实现已收口（2026-10-02），接口已冻结（2026-10-05 评审）**。§3.1/§3.3/§4 为已实现口径，§5 未决项仅剩上板类。上游依据：`src/vision/README.md` 模块清单、`docs/research/proposal_upgrade.md` A 档任务、`docs/research/track_research.md` §1.4 Ultra-Vision 参考。
 
@@ -144,9 +144,9 @@ R13–R15 仍保留。独立 axi_regs 默认旧模式，保留区行为兼容；
    > vs/hs/de 驱动板上输出芯片并行总线；上板若实测源时序非标（in≠out 需重生成时序）再补
    > free-run 时序发生器档。TMDS 串化问题待原理图复核（D4）。
 4. **模块三网络输入尺寸**（联动 §7）。
-5. 上板分工：板务归 watercopper（根目录 [项目主计划](../../plan.md) §2），I2C 初始化脚本与 EDID 由谁维护需对齐。
+5. 上板分工：板务与采集执行线负责，I2C 初始化脚本与 EDID 的维护需对齐。
 
-## 6. 验证策略与黄金参考需求单（给 watercopper）
+## 6. 验证策略与黄金参考需求单
 
 > 2026-10-01 分工变更：never-die-cold 兜底测试数据项（用户确认"watercopper 的我也能做"），以下为闭环状态。
 
@@ -161,9 +161,9 @@ R13–R15 仍保留。独立 axi_regs 默认旧模式，保留区行为兼容；
   - ✅ 资源：OOC utilization rpt 两批（unit/real/real75）
 - XSim 对拍口径沿用 Part B（`docs/archive/partB-verify-plan.md` §6）：iverilog 全 PASS 后 XSim 复跑同判据。**✅ 已执行（2026-10-01 12/12；2026-10-02 全部 22 tb）**：一键入口 `bash sim/scripts/run_vision_xsim.sh all`，证据 `data/logs/2026-10-02-vision-offboard/xsim-recheck.log`。
 
-## 7. 与模块三的衔接（给 jianglibo 的对齐点）
+## 7. 与模块三的衔接
 
-- `scaler` 输出尺寸 = CNN 输入尺寸；输出侧先落**乒乓行组缓冲**（BRAM）再喂 `cop_top`。C02/C03 已冻结，接口见 [docs/contracts/coprocessor-integration-v0.md](../../docs/contracts/coprocessor-integration-v0.md)；`cop_top` 尚未实现。
+- `scaler` 输出尺寸 = CNN 输入尺寸；输出侧先落**乒乓行组缓冲**（BRAM）再喂 `cop_top`。C02/C03 已冻结，接口见 [docs/contracts/coprocessor-integration-v0.md](../../docs/contracts/coprocessor-integration-v0.md)；`cop_top` 已实现并离板冒烟（J04a），板级验收未完成。
   **2026-10-01 预实现**：`cop_buf.v`（乒乓帧缓冲 + cop_ready 反压）已落地并通过双口径 tb——契约冻结时若接口形态不同，仅需改 cop_buf 读侧封装（存储与写侧不动）；M3 可参照 tb_cop_buf 的 vs/hs/de 消费时序设计。
 - A3 软/硬推理切换：PS 软件版与协处理器版同屏对比，依赖模块三暴露"推理完成"信号到 OSD 显示延迟数值。
 - 权重加载：训练侧产出 hex 的位宽/排布必须与 `cop_top` 权重存储一致——见 `docs/runbooks/module3-model-training.md`，训练侧在拿到协处理器契约前先按"INT8、权重排布可参数化"准备。

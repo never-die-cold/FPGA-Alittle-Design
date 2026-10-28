@@ -49,7 +49,7 @@
 
 ## 6. 复现入口
 
-- 核：bash sim/scripts/run_iverilog.sh all；见 [模块一复现](runbooks/module1-reproduction.md)。
+- 核：bash sim/scripts/run_iverilog.sh all；见 [模块一复现](../docs/runbooks/module1-reproduction.md)。
 - 协处理器离板：bash sim/scripts/run_coprocessor_iverilog.sh all。
 - edge bit：build/build_pynq_cop_gate.tcl；包：sim/scripts/build_board_package.py。
 - 上板：tools/cop_payload_loader.py、sim/scripts/cop_fclk.py、sim/scripts/cop_board_fast_run.py。
