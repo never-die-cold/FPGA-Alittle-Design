@@ -96,3 +96,8 @@ build/artifacts/
 /sim/vision/train_localization_cnn.py
 /results/*yolo*.json
 /data/logs/*yolo*/
+
+# --- 本地非仓库文件（others/，仅本机保留） ---
+/others/
+.zcode/
+/src/riscv_fw/*.dis

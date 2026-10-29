@@ -1,15 +1,0 @@
-﻿cd ~/pkg-2fc2bdd4a8f8/cop-board-gate-2fc2bdd4a8f8; sudo -n -E python3 ~/cop-pkg/sim/scripts/cop_board_preflight.py --base 0x40000000 > /tmp/preflight-2fc2.txt 2>&1; echo PREFLIGHT_EXIT=$?; cat /tmp/preflight-2fc2.txt
-[?2004lPREFLIGHT_EXIT=0
-{
-  "accepted": false,
-  "busy": false,
-  "capability": 0,
-  "error_code": 0,
-  "ip_id": 1129271344,
-  "ready": true,
-  "result_seq": 1,
-  "status": 97,
-  "unconsumed": false,
-  "version": 0
-}
-[?2004hxilinx@pynq:~/pkg-2fc2bdd4a8f8/cop-board-gate-2fc2bdd4a8f8$ 

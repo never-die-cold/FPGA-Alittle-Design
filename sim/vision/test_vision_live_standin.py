@@ -11,7 +11,7 @@ from pathlib import Path
 
 root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(root / "src/pynq_host"))
-sys.path.insert(0, str(root / "src/vision_client"))
+sys.path.insert(0, str(root / "src/pynq_host"))
 from vision_mock_service import make_server
 from vision_protocol import mock_packet, validate_packet
 from rounds import RemoteRounds, live_view

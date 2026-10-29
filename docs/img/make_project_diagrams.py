@@ -131,12 +131,12 @@ def fig1_system():
             color=ARROW, ha="left")
 
     box(ax, 77, 56, 10, 12, "USB 采集卡", kind="gray", fs=12)
-    box(ax, 88, 44, 10.5, 14, "Windows EXE", kind="disp", fs=12,
+    box(ax, 88, 44, 10.5, 14, "HTML 网页端", kind="disp", fs=12,
         sub="视频叠加 · 工单统计\n（watercopper）")
     arrow(ax, (69, 62), (77, 62), "HDMI OUT")
     arrow(ax, (82, 56), (90, 58), "USB 视频", rad=-0.1)
     arrow(ax, (71, 13), (88, 44), "结果报文", ls="--", rad=-0.15, toff=(3.0, 4.0))
-    note(ax, 50, 3, "EXE 不混用不同检查轮次；过期结果不得显示为当前检查通过（同步协议待冻结）", fs=9.5,
+    note(ax, 50, 3, "前端不混用不同检查轮次；过期结果不得显示为当前检查通过（轮次协议 v1.2 已冻结）", fs=9.5,
          ha="center")
 
     note(ax, 1, 88, "图例", fs=10, color=INK)

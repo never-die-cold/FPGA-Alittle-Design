@@ -122,7 +122,7 @@ dma.load_model(addr, payload) / load_rois(addr, rois, stride) / load_descriptors
   10/27 已在共存旧包接到真实帧，发现多目标结果槽错位；修复 RTL 尚未上板，完整验收未完成。
   硬件路径显式选 `dma_after_commit=True`，每次配置提交后重新装载模型以恢复 MODEL_VALID；
   DONE 后等当前 RESULT_SEQ 的固件判定写回再读取计数。描述符表仍保持清零语义，J08 物理排布未冻结；
-- 服务/引擎/报文/EXE 不需要重写；`CopEngine` 继续产出同样的
+- 服务/引擎/报文/前端不需要重写；`CopEngine` 继续产出同样的
   `status/targets/decision/width/height`，并写 `cop_trace.json`；
 - 真实链路全部就绪前，`prototype=true` 不得关闭；`/v1/status` 的 `engine`
   必须从 `COP_SIM` 改成真实后端标识。
@@ -157,7 +157,7 @@ dma.load_model(addr, payload) / load_rois(addr, rois, stride) / load_descriptors
 40.000000 MHz 时，改钟后的旧 PL 连续 20 次仍为 `0x0`；时钟不变、fresh Overlay 重配后
 20 次均为 `0x1`。因此 `0x0` 只表示 cop 域未就绪/已失效，不能判成超频。强制恢复顺序为
 改钟 → 重配 PL → 等稳定 → FCLKRESETN1 脉冲 → 首读校验，详见
-[`coprocessor-board-clock-runbook.md`](../coprocessor-board-clock-runbook.md)。本勘误不改变任何寄存器、
+板卡时钟 runbook 要点（git 历史 88ac1c4 前 docs/coprocessor-board-clock-runbook.md）。本勘误不改变任何寄存器、
 握手或 PS 软件接口语义。
 
 ## 7. 证据与边界
@@ -168,7 +168,7 @@ dma.load_model(addr, payload) / load_rois(addr, rois, stride) / load_descriptors
   `test_cop_mmio.py`（A1/A2：ACCEPTED/UNCONSUMED/CONSUME/互斥终态/ERROR_CODE/NO_ACK/HW_TIMEOUT 前置）、
   `test_cop_driver.py`（ACCEPTED 等待/两个软件看门狗/CONSUME 原子性/旧序号/CRC 重载/重复 JOB_ID）、
   `test_cop_engine.py`（定位/ROI/规则/trace/border/low_conf/异常）、
-  `test_cop_service.py`（服务+EXE：一轮、落盘后 CONSUME、去重、503、同 ref 重试、记录）、
+  `test_cop_service.py`（服务+前端：一轮、落盘后 CONSUME、去重、503、同 ref 重试、记录）、
   `test_cop_exe_round.py`（完整一轮显示/保存/追溯）。
 - 一轮证据：`bash sim/scripts/run_cop_sim_round.sh <output-dir>` →
   `data/logs/2026-10-21-cop-a2-round/run/`（`summary.json`、`screen.png`、

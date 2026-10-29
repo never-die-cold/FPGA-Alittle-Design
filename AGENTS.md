@@ -9,7 +9,7 @@
 
 1. **读开工清单**：完整阅读 `docs/workflow.md`，逐项执行其中的「必做」项。
 2. **核实现状**：先跑 `git rev-parse --abbrev-ref HEAD`、`git log --oneline -5`、`git status`；
-   再对照根目录 `plan.md`（全项目）、`src/riscv/plan.md`（核专项）与对应版本核接口契约，
+   再对照根目录 `plan.md`（全项目）与对应版本模块接口契约，
    在开工回复开头贴出一份三类清单：
    - ✅ 已实现并验证
    - 🟡 已实现但未验证
@@ -22,7 +22,7 @@
 - 默认只改 `src/riscv/`。
 - 以下跨目录改动**直接执行、无需停下征得同意**，但必须在本步汇报里列明：
   `sim/riscv/`、`sim/scripts/`、`sim/arch_test/`、`data/logs/`、`data/evidence/`、
-  `report/llm_log/`、`src/riscv/design_v0.md`、`src/riscv/plan.md`、`docs/`。
+  `report/llm_log/`、`src/riscv/design_v0.md`、`docs/`。
 - 超出上述范围 → 先说明再改，不要默默动手。
 
 ### 2. 可复现性（最关键）
@@ -48,6 +48,6 @@
 - 详细清单：`docs/workflow.md`
 - 仓库卫生（生成物/日志/README/预算）：`docs/repo-hygiene.md`
 - 主计划与全局验收：根目录 `plan.md`
-- RISC-V 专项与核验收：`src/riscv/plan.md` §3.2 / §4.1
+- 核已收口：验收数据见 `report/module1-closure.md`；核接口契约 `src/riscv/design_v0.md` / `design_v1.md`
 - 接口契约：`src/riscv/design_v0.md`
 - 工作流技能：`skill/gufa-programming/SKILL.md`、`skill/understand-gate/SKILL.md`

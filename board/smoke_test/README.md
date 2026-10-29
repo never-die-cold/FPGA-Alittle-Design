@@ -76,7 +76,7 @@ RTL 是 Verilog；仿真启用 `-g2005-sv` 仅用于 testbench 的 `$fatal(1)` �
 
 ## Windows Vivado 构建
 
-本阶段没有实际运行 Vivado，尚未验证综合、实现或 bitstream。
+2026-09-20 更新：Windows Vivado 构建已完成并通过 JTAG 上板，见 [board/logs/2026-09-20-pynq-z2-smoke/README.md](../logs/2026-09-20-pynq-z2-smoke/README.md)。以下为当时步骤，保留供复现。
 需要 Windows Vivado 和 Zynq-7000 / XC7Z020 器件支持；无需安装 board files，
 因为工程直接指定 part 并读取已核实 XDC。
 

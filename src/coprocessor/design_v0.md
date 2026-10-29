@@ -21,9 +21,9 @@
 
 - 已实现标量/阵列与流水线 MAC、分拍卷积寻址、bias/ReLU/requant/GAP/FC 和固定整网控制器；仓库逐元素诊断 tb 已接入总回归，见[当前计算链说明](README.md)。
 - 已实现完整整数参考与两组固定种子诊断整网黄金；正式 PTQ/QAT、生产权重包和真实精度未实现/验收。
-- 实体 BRAM、协处理器 MMIO/DMA 顶层尚未实现；当前计算器使用外部一拍同步存储接口。
+- 实体 BRAM、协处理器 MMIO/DMA 顶层：10/13 快照时未实现，后经 J04a 实现并离板冒烟（见 [README](README.md)）；当前计算器使用外部一拍同步存储接口。
 - 控制器 OOC 100 MHz 已有 setup/hold/资源报告；实体存储/SoC/视频集成后的完整时序、资源和板端延迟尚未验证。
-- 与核、PS、DMA、固件及真实数据的集成。
+- 与核、PS、DMA、固件及真实数据的集成：J04a 固件窗口/MMIO 冒烟已通，整机集成验收未签。
 
 ## 2. 首网与逐层形状
 
@@ -132,10 +132,10 @@ multiplier/shift 的搜索算法可演进，但二者的最终整数值必须进
 - 因 multiplier 为正，Conv 的 ReLU 放在 requant 前与饱和后的非负结果一致；契约固定前者，
   便于负累加提前归零。
 
-### 4.4 首个 MAC 原语实现记录（2026-10-12）
+### 4.4 首个 MAC 原语演进记录（2026-10-12 首步；2026-10-29 退役）
 
-`int8_mac.v` 输入 signed INT8 activation/weight 与 signed INT32 accumulator，输出 result 和 overflow；组合逻辑，无时钟、存储或握手。16 位乘积符号扩展后在 33 位中相加，溢出时 result 无效，调用方必须拒绝；不改变 §3.3 的合法模型累加不溢出要求，不做每次 MAC 饱和。
-验证入口 `bash sim/scripts/run_iverilog.sh cop_mac`（也接入 all），仓库 tb 使用 64 位独立期望值；[首步证据](../../data/logs/2026-10-12-cnn-mac-step1/README.md)。首步原语本身不证明阵列或板端输出；10/13 后续阵列、整网控制器与 OOC 的证据见[当前说明](README.md)。
+2026-10-12 首步原语 `int8_mac.v` 以组合逻辑实现 signed INT8 activation/weight 与 INT32 累加在 33 位中相加，溢出时 result 无效、调用方必须拒绝；语义要求（不改 §3.3 的合法模型累加不溢出、不做每次 MAC 饱和）由现役 `mac_array_pipeline.v`/`int8_requant_pipeline.v` 承载，不变。
+2026-10-29 起，逐步构建诊断原语组（`int8_mac.v`、`mac_array.v`、`mac_lane.v`、`dot8.v`、`int8_requant.v`）退出仓库：验收链路只保留 pipeline 变体，`run_iverilog.sh cop_mac/cop_array/cop_mac_lane/cop_dot8` 入口同步退役；源码与单元 TB 见 git 历史（88ac1c4 前）。首步原语的原始证据见 [首步证据](../../data/logs/2026-10-12-cnn-mac-step1/README.md)；10/13 后续阵列、整网控制器与 OOC 的证据见[当前说明](README.md)。
 
 ## 5. 最终类别、整数 score 与低置信
 

@@ -8,7 +8,7 @@
 和[10/07 真实相机恢复](../../data/logs/2026-10-07-pi-pynq/README.md)；全项目 M2 尚缺网络硬件输出，CNN／工业闭环未完成。
 
 ```text
-HDMI IN → dvi2rgb → 彩色原图直通 → rgb2dvi → HDMI OUT → USB 采集卡 → Windows EXE
+HDMI IN → dvi2rgb → 彩色原图直通 → rgb2dvi → HDMI OUT → USB 采集卡 → 网页端
                    └→ 归一化 → 灰度 → 高斯/边缘 → 缩放 → 双帧缓冲 → cop_* / 调试 ILA
 PS AXI-Lite → 暂存参数 → R11 提交 → 帧首整组生效 → R12 配置号确认
 ```
@@ -48,7 +48,7 @@ bash sim/scripts/run_vivado_hdmi.sh           # 全物理 HDMI 工程，离板�
 `VISION_PYTHON` 可指定 Python 路径；`VISION_VIVADO_BIN` 可指定 Vivado bin 目录。
 默认 Vivado 路径为 `/d/Vivado_downloads/2026.1/Vivado/bin`。
 物理输出在 `sim/build/hdmi-project/`；脚本不会打开 Hardware Manager 或下载板卡。
-EXE 构建和接口原型操作见 [客户端说明](../vision_client/README.md)。
+网页端见 [src/web_client](../web_client/README.md)；记录/CSV 参考实现在 `src/pynq_host/`（`records.py`、`export_records.py`）。
 
 ## 验收边界
 
@@ -58,7 +58,7 @@ EXE 构建和接口原型操作见 [客户端说明](../vision_client/README.md)
 上板实测（2026-10-03，证据 [../../data/logs/2026-10-03-vision-onboard/README.md](../../data/logs/2026-10-03-vision-onboard/README.md)）：
 实机 bit 下载、真实源锁定（笔记本 720p）、HDMI OUT→采集卡闭环彩色直通（色彩无
 通道错乱）、PS 真实 MMIO 原子配置（65 次 commit 全帧首确认）、经采集卡端到端
-延迟上界 125 ms（含采集卡缓冲，不计指标口径）、EXE 接真实采集卡源——**已成立**。
+延迟上界 125 ms（含采集卡缓冲，不计指标口径）经真实采集卡源验证——**已成立**。
 
 断连实测暴露并修复一个真 bug：`video_locked` 曾连带复位 AXI 从机，源断开瞬间
 PS 总线挂死（串口/网口同死）。修复为双复位拓扑（axi_rst_n 只随 s_axi_aresetn，
@@ -69,8 +69,8 @@ PS 总线挂死（串口/网口同死）。修复为双复位拓扑（axi_rst_n 
 
 版本边界：10/06–10/07 记录的位流差异是历史事实；10/10 已把原板端 bit/hwh 与归档 XSA 配对，但未锚定构建源码，见[追溯记录](../../data/evidence/2026-10-10-onboard-bit-provenance/README.md)。C01 候选是另一套产物，不能混用验收结果。
 
-灰度 `out_*` 的 OSD 是诊断能力；HDMI 主显示保留彩色原图。EXE 模拟框不是物体检测；
+灰度 `out_*` 的 OSD 是诊断能力；HDMI 主显示保留彩色原图。前端模拟框不是物体检测；
 单独 UVC 预览标为 `UNASSOCIATED`；[轮次协议](../../docs/contracts/vision-sync-protocol-decisions.md) v1.2 支持 MOCK/LIVE，FILE/LIVE 原型恒标 PROTOTYPE，按年龄窗叠加不代表逐帧精确关联或硬件分类。
 
-未实现 / 未接入：CNN 协处理器顶层/核接入/正式 INT8 模型、实际定位/硬件后端、核工业固件、真实识别结果与
-采集卡画面关联。它们属于模块三应用交接，整帧快照不代表逐目标硬件裁剪已经完成。
+未实现 / 未接入：正式 INT8 模型与生产黄金、真实识别结果与采集卡画面关联、整机验收；实时全链（真实取帧定位误检）未闭环。
+已接入：C01 原帧捕获 + PS 定位/ROI + 硬件 CNN（`cop_product_service`，10/27 真实帧，RECHECK 为实际判定）。整帧快照不代表逐目标硬件裁剪已经完成。

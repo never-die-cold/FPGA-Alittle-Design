@@ -86,7 +86,7 @@ bash sim/scripts/run_inspection_python.sh
 非法朝向与朝向缺口、来源必填与报告中断/覆盖拒绝。
 独立子进程调用 CLI，不加载模型或 PyTorch。
 
-已有[测试夹具和报告](../../data/evidence/2026-10-10-dataset-audit/README.md)可直接复算到新输出：
+已有git 历史（88ac1c4 前）data/evidence/2026-10-10-dataset-audit/README.md可直接复算到新输出：
 
 ```powershell
 python -I sim/vision/audit_fastener_dataset.py data/evidence/2026-10-10-dataset-audit/fixture sim/build/vision/inspection/audit-review.json --source-kind TEST_FIXTURE --max-targets 10
@@ -100,7 +100,7 @@ python sim/vision/generate_dataset_audit_fixture.py sim/build/vision/inspection/
 
 夹具 CSV 明确写 LF，使仓库的换行规范不改变其摘要；审计器仍对实际读到的原始 CSV 字节计算摘要。
 首次 CRLF 夹具的报告和清单字节作为过程记录保留，不作为最终归档报告。
-原始结果见[验证记录](../../data/logs/2026-10-10-dataset-audit/README.md)。
+原始结果见git 历史（88ac1c4 前）data/logs/2026-10-10-dataset-audit/README.md。
 
 ## 未实现与人工核查
 

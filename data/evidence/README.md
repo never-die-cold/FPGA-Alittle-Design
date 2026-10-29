@@ -19,25 +19,19 @@
 4. 缺 README 的目录标记 `PROVENANCE GAP`；补说明时不得把“有文件”写成“已验收”。
 
 <!-- RUN-INDEX:START -->
-## 目录索引（15 个证据主题，自动生成）
+## 目录索引（9 个证据主题，自动生成）
 
 | 目录 | 日期 | 文件数 | 大小 | 说明 |
 |:---|:---:|---:|---:|:---|
-| `cnn-ddr-offline-cdfbf6823fe24cfe8015449a9b0da708` | — | 67 | 567 KB | cnn-ddr-offline-cdfbf6823fe24cfe8015449a9b0da708 |
-| `cnn-ddr-offline-0635d33e8e274f88a88cd2a6a90464b2` | — | 67 | 567 KB | cnn-ddr-offline-0635d33e8e274f88a88cd2a6a90464b2 |
-| `2026-10-13-soc-reset-ce` | 2026-10-13 | 20 | 81 KB | 2026-10-13-soc-reset-ce |
+| `2026-10-28-web-hud-shots` | 2026-10-28 | 10 | 3.5 MB | 网页端 HUD 评审截图存档 |
+| `2026-10-28-cnn-r6` | 2026-10-28 | 13 | 265 KB | CNN r6：清晰竖立螺母开发候选 |
 | `2026-10-13-ddr-experiment-inputs` | 2026-10-13 | 8 | 43 KB | 2026-10-13-ddr-experiment-inputs |
-| `2026-10-13-cnn-pipeline-ooc-inputs` | 2026-10-13 | 11 | 25 KB | 2026-10-13-cnn-pipeline-ooc-inputs |
-| `2026-10-13-cnn-ooc-inputs` | 2026-10-13 | 9 | 21 KB | 2026-10-13-cnn-ooc-inputs |
-| `2026-10-13-cnn-address-ooc-inputs` | 2026-10-13 | 11 | 26 KB | 2026-10-13-cnn-address-ooc-inputs |
-| `2026-10-12-live-interface-sample` | 2026-10-12 | 4 | 188 KB | LIVE 接口样例（G0 互交件） |
 | `2026-10-12-c01-exact-build-inputs` | 2026-10-12 | 101 | 2.6 MB | C01构建输入的精确字节恢复（2026-10-12） |
 | `2026-10-10-onboard-bit-provenance` | 2026-10-10 | 2 | 490 KB | 上板位流字节对应（2026-10-10） |
 | `2026-10-10-offline-inspection` | 2026-10-10 | 16 | 354 KB | FILE_REPLAY 示例证据 |
 | `2026-10-10-model-reference` | 2026-10-10 | 75 | 3.4 MB | 交付原型 FP32 软件参考包 |
 | `2026-10-10-fastener-handoff` | 2026-10-10 | 3 | 17 KB | 2026-10-10-fastener-handoff |
-| `2026-10-10-dataset-audit` | 2026-10-10 | 7 | 25 KB | 数据集审计：测试夹具证据 |
-| `2026-10-03-arm-localize-baseline` | 2026-10-03 | 531 | 43.8 MB | ARM 文件输入定位/裁剪：证据索引 |
+| `2026-10-03-arm-localize-baseline` | 2026-10-03 | 2 | 1 KB | 2026-10-03-arm-localize-baseline（最小留存） |
 <!-- RUN-INDEX:END -->
 
 ## 相关入口

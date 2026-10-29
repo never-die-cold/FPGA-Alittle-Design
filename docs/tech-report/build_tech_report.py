@@ -340,13 +340,13 @@ abstract = (
     "针对多品种、小批量装配工位对紧固件种类与数量复核的需求，本作品在 PYNQ-Z2（Zynq-7020）上实现了一套桌面紧固件识别与工业检查系统。"
     "系统由四条自主设计的链路组成：自研 RV32IM 三级流水 RISC-V 核负责调度与工单判定，核内实现三路数据转发、64 项可切换 BHT 和 Radix-4 乘法器；"
     "HDMI 视觉流水线完成 720p60 采集、彩色原图恒延迟直通以及灰度分析/224×224 快照分流；128 MAC 的 INT8 CNN 协处理器完成紧固件小图分类；"
-    "PS 侧 Python 服务与 Windows EXE 负责任务提交、结果消费、工单比较、记录与追溯。"
+    "PS 侧 Python 服务负责任务提交、结果消费、工单比较、记录与追溯，HTML 网页端负责展示与操作。"
     "在验证上，核通过 44/44 组 arch-test 签名和 CoreMark 2K/32 四档对比，CPI 由 1.886 降至 1.606，OOC 后布线时序最高通过频率 86.806 MHz；"
     "视觉流水线 22 个仓库内 testbench 在 Icarus 与 XSim 同判据通过，物理 HDMI 工程完成 720p 彩色直通上板；"
     "协处理器完成 6/6 离板门禁、36,032 B 模型清单校验、40.000000 MHz 板上时钟门禁与 payload/ROI DMA；"
-    "软件完成 172 条回归、服务+EXE 模拟闭环以及 4 轮服务异常矩阵。"
+    "软件完成 172 条回归、服务+前端模拟闭环以及 4 轮服务异常矩阵。"
     "2026-10-26 至 10-27，板上硬件 CNN zero/pattern/roi_001/frame 四例均与黄金输出一致（PROVISIONAL）；"
-    "共存位流可同时输出 HDMI、抓取原帧并运行硬件 CNN，现有 EXE 已连接真实 UVC 与 HTTP 生成检查记录。"
+    "共存位流可同时输出 HDMI、抓取原帧并运行硬件 CNN；检查记录链路已在真实 UVC 与 HTTP 下联调验证。"
     "多目标结果槽错位的 RTL 修复已通过定向仿真，但修复包尚未上板；正式 INT8 模型、识别精度与整机验收仍未完成。"
     "本文严格区分离板仿真、软件联调、单目标板上推理与整机验收，不将前四者中的任何一项表述为整机验收通过。"
 )
@@ -369,7 +369,7 @@ add_h2(doc, "1.1 功能与特性")
 p11 = (
     "系统面向桌面工件复核，提供五项功能。其一，自由摆放识别：零件无需固定夹具，传统视觉定位给出外接框，CNN 对每个目标裁剪小图分类为螺栓、螺母或垫圈。"
     "其二，工单检查：将实际类别计数与工单期望比较，输出缺件、多余件、错料及对应数量。"
-    "其三，同屏呈现：HDMI 彩色原图经采集卡进入 EXE，叠加目标框、类别、置信度与判定结果。"
+    "其三，同屏呈现：HDMI 彩色原图经采集卡进入网页端，叠加目标框、类别、置信度与判定结果。"
     "其四，批次记录：每次手动检查生成一条记录，保存截图、结果报文、协处理器 trace 与 ROI，可导出 CSV。"
     "其五，异常防护：超时、重复请求、陈旧结果、运行失败和断联均进入明确错误态，不显示为检查通过。"
 )
@@ -388,7 +388,7 @@ add_body(doc, p12)
 
 add_h2(doc, "1.3 主要技术特点")
 p13 = (
-    "（1）全栈自研：除 Xilinx dvi2rgb/rgb2dvi IP 外，RISC-V 核、HDMI 视觉流水线、CNN 协处理器、驻留固件、PS 服务和 EXE 均由团队实现，接口以仓库内契约文档冻结。"
+    "（1）全栈自研：除 Xilinx dvi2rgb/rgb2dvi IP 外，RISC-V 核、HDMI 视觉流水线、CNN 协处理器、驻留固件、PS 服务和网页端均由团队实现，接口以仓库内契约文档冻结。"
     "（2）显示与分析解耦：彩色原图恒 1 拍直通显示，灰度分析与 224×224 快照独立推进，分析开关和反压不影响上屏。"
     "（3）契约化软硬件协作：寄存器、报文、模型清单和作业时序均有版本化文档与门禁。"
     "（4）全整数推理：INT8 权重与激活、INT32 累加、移位 requant，模型载荷带 SHA256 与 CRC32，双 bank 影子配置原子切换。"
@@ -440,19 +440,19 @@ p21 = (
     "系统总体架构如图 2-1 所示。系统由四部分组成：HDMI 相机、PYNQ-Z2 板卡、USB 采集卡和 Windows PC。相机输出 1280×720@60 彩色图像，经 dvi2rgb 进入 PL。"
     "PL 内三条硬件链路并行工作：视觉流水线把彩色原图恒 1 拍直通到 rgb2dvi，同时把灰度分析流和 224×224 快照送往 CNN 协处理器；"
     "自研 RISC-V SoC 运行驻留固件，负责启动推理、读取结果并执行工单规则；INT8 CNN 协处理器完成逐目标分类。"
-    "PS 运行 Linux 与 Python 服务，经 AXI-Lite 配置，模型/ROI 经 AXI DMA 传输（实板由 loader 先行验证，服务侧 DMA 平面待接入），并把结果以 HTTP/JSON 发给 EXE。"
-    "EXE 负责视频预览、目标框叠加、工单比较、计数和批次记录。"
+    "PS 运行 Linux 与 Python 服务，经 AXI-Lite 配置，模型/ROI 经 AXI DMA 传输（实板由 loader 先行验证，服务侧 DMA 平面待接入），并把结果以 HTTP/JSON 发给网页端。"
+    "网页端负责视频预览、目标框叠加、工单比较、计数和批次记录。"
 )
 add_body(doc, p21)
 p21b = (
-    "数据分三条路径。视频路径为 HDMI OUT→USB 采集卡→EXE，保证彩色原图不经分析链路；结果路径为 PS→以太网→EXE，携带检查标识、帧号、目标列表和判定；"
-    "控制路径为 EXE→PS→PL，提交工单配置和检查触发。每条结果都带 session、config、frame 和 RESULT_SEQ，"
-    "EXE 只接受与当前会话和配置一致、且在有效期内的结果。"
+    "数据分三条路径。视频路径为 HDMI OUT→USB 采集卡→网页端，保证彩色原图不经分析链路；结果路径为 PS→以太网→网页端，携带检查标识、帧号、目标列表和判定；"
+    "控制路径为网页端→PS→PL，提交工单配置和检查触发。每条结果都带 session、config、frame 和 RESULT_SEQ，"
+    "网页端只接受与当前会话和配置一致、且在有效期内的结果。"
 )
 add_body(doc, p21b)
 p21c = (
     "截至 2026 年 10 月 27 日，视频链路、RISC-V 核与硬件 CNN 单目标推理已在板上验证：zero/pattern/roi_001/frame 四例与黄金输出一致；"
-    "共存位流可同时输出 HDMI、抓取 BGR 原帧并运行硬件 CNN，现有 EXE 已连接真实 UVC 与 HTTP 生成检查记录。"
+    "共存位流可同时输出 HDMI、抓取 BGR 原帧并运行硬件 CNN；检查记录链路已在真实 UVC 与 HTTP 下联调验证。"
     "多目标结果槽错位的修复已通过定向仿真，但修复包尚未上板；正式模型、识别精度、手动按钮/CSV 闭环与整机验收仍未完成。"
     "第三部分按“离板仿真—软件联调—单目标板上推理—整机验收”四级分别列出。"
 )
@@ -480,8 +480,8 @@ add_body(doc, p221b)
 add_table(doc, "表 2-1　硬件组成", ["模块", "型号 / 规格", "作用"], [
     ["FPGA 板卡", "PYNQ-Z2；XC7Z020-1CLG400C", "PL + PS、DDR3、HDMI、以太网"],
     ["HDMI 相机", "1280×720@60", "采集桌面工件图像"],
-    ["USB 采集卡", "HDMI→UVC", "把板卡 HDMI OUT 送入 EXE"],
-    ["PC", "Windows 10/11", "EXE、记录与导出"],
+    ["USB 采集卡", "HDMI→UVC", "把板卡 HDMI OUT 送入 PC 网页端"],
+    ["PC", "Windows 10/11", "网页端、记录与导出"],
     ["时钟", "FCLK0 100 MHz / FCLK1 40 MHz / pclk 74.25 MHz", "AXI / 协处理器 / 像素"],
 ], [3.2, 6.6, 5.2], font_size=10.5, align_center_cols=[0])
 
@@ -538,9 +538,9 @@ add_body(doc, p223e)
 add_h2(doc, "2.3 软件系统介绍")
 add_h3(doc, "2.3.1 软件整体介绍")
 p231 = (
-    "软件分三层：EXE、PS 服务、CopDriver 与固件。EXE 与服务之间只使用 HTTP/JSON；服务与硬件之间只使用 32 位 MMIO 和 DMA（实板 DMA 平面待接入）。"
+    "软件分三层：网页端、PS 服务、CopDriver 与固件。网页端与服务之间只使用 HTTP/JSON；服务与硬件之间只使用 32 位 MMIO 和 DMA（实板 DMA 平面待接入）。"
     "CopDriver 对上层暴露同一组 read32/write32、DMA 和作业接口，底层可切换 PynqMmio（实板）或 CopSim（仿真），"
-    "因此从模拟迁移到实板不需要重写服务和 EXE。图 2-5 给出分层与一次检查的作业时序。"
+    "因此从模拟迁移到实板不需要重写服务和网页端。图 2-5 给出分层与一次检查的作业时序。"
 )
 add_body(doc, p231)
 p231b = (
@@ -558,13 +558,13 @@ add_figure(doc, "fig_sw.png", "图 2-5　软件分层与一次检查的作业时
 
 add_h3(doc, "2.3.2 软件各模块介绍")
 p232a = (
-    "（1）EXE。使用 Python 3 与 OpenCV/numpy，不依赖 Qt。界面为 1600×900 HUD，视频视口 1264×711，刷新上限 30 fps。"
+    "（1）网页端。HTML 单文件实现（HUD v4「应用外壳」），零依赖、无构建步骤，支持亮暗主题与响应式布局。"
     "顶栏显示 LIVE/MOCK、PROTOTYPE、状态、分辨率、帧率、会话和时钟；右侧识别范围表按类别勾选并显示计数；"
     "RUN INSPECTION 按钮有 IDLE、QUEUED/WAITING、RUNNING 三态；下方为检测目标卡片和 freshness 条。"
     "判定规则为：无 reason 且 actual==expected 时 CHECK_PASS；数量不一致为 CHECK_FAIL；出现 target_limit、低分、未知类别或触碰边界时 RECHECK。"
     "协议能力 16 个目标，业务策略 10 个；超过策略上限显示“未完整计数”，计数栏显示“--”，不把 0 当作实测。"
     "只有手动触发且有效的轮次写入记录；记录包含截图、报文、目标、判定和时间；异常写入 anomalies.jsonl 和异常截图；CSV 使用 UTF-8-BOM。"
-    "失败时立即撤下旧 PASS，显示 NO VALID RESULT；连续 3 次 HTTP 失败显示 SERVICE OFFLINE 并重新握手。"
+    "失败时立即撤下旧 PASS，显示 NO VALID RESULT；连续 3 次 HTTP 失败显示 SERVICE OFFLINE 并重新握手。真实数据源接线（采集卡视频与板端报文）为待接入项，当前以合成数据演示界面形态。"
 )
 add_body(doc, p232a)
 p232b = (
@@ -573,7 +573,7 @@ p232b = (
     "服务对 trigger_ref 保留 16 条已完成轮次，重试复用同一 ref，不重复采集；会话变更会强制重新握手并丢弃旧结果。"
     "持久化采用 .pending 写入后 rename，先写 capture.png、capture.sha256、packet.json、cop_trace.json 和 ROI，再调用 CONSUME；"
     "任何一步失败都不消费，保留粘滞证据。round_artifacts.py 校验报文绑定、截图字节、像素哈希、判定一致性和 ROI 数量/哈希。"
-    "10-27 新增 cop_product_service.py：C01 原帧捕获 + COP_HW 硬件引擎 + 现有 EXE，工单 2/4/4；真机已生成检查记录，"
+    "10-27 新增 cop_product_service.py：C01 原帧捕获 + COP_HW 硬件引擎 + 前端消费，工单 2/4/4；真机已生成检查记录，"
     "后续服务断连、手动按钮与 CSV 未完成。"
 )
 add_body(doc, p232b)
@@ -603,19 +603,19 @@ add_h2(doc, "2.4 软硬件责任边界")
 p24 = (
     "为避免“软件等硬件、硬件等软件”的互相等待，表 2-5 固定每个环节的责任方与交付物。"
     "定位、裁剪、量化与作业调度留在 PS，便于用 Python 快速迭代；卷积、GAP、FC 与结果窗口留在 PL，保证确定性时序；"
-    "工单规则由驻留固件和 PS 双重执行，PS 只允许更严格、不允许更宽松；显示与记录由 EXE 负责，不参与实时控制。"
+    "工单规则由驻留固件和 PS 双重执行，PS 只允许更严格、不允许更宽松；显示与记录由网页端负责，不参与实时控制。"
 )
 add_body(doc, p24)
 add_table(doc, "表 2-5　软硬件责任边界", ["环节", "实现位置", "责任与交付物"], [
     ["采集 / 定位 / 裁剪", "PS（Python）", "取帧、背景分割、外接框、64×64 预处理"],
     ["量化 / 作业提交", "PS CopDriver", "量化、配置、DMA、看门狗、结果校验"],
     ["推理", "PL 协处理器 + 固件", "INT8 MAC、GAP/FC、START/ACCEPTED、工单判定"],
-    ["视频显示", "PL + 采集卡 + EXE", "彩色直通、框/标签叠加、freshness"],
-    ["记录 / 追溯", "PS 服务 + EXE", "packet/trace/截图/ROI、CSV、异常记录"],
+    ["视频显示", "PL + 采集卡 + 网页端", "彩色直通、框/标签叠加、freshness"],
+    ["记录 / 追溯", "PS 服务 + 网页端", "packet/trace/截图/ROI、CSV、异常记录"],
 ], [4.0, 4.2, 6.2], font_size=9.5, align_center_cols=[0])
 p24b = (
     "这条边界也是模拟迁移到实板的依据：CopDriver 只依赖 read32/write32 与 DMA 平面，CopSim 与 PynqMmio 实现同一接口；"
-    "服务和 EXE 不感知底层是仿真还是实板，因此切换后端不需要改上层代码。"
+    "服务和网页端不感知底层是仿真还是实板，因此切换后端不需要改上层代码。"
 )
 add_body(doc, p24b)
 
@@ -632,15 +632,15 @@ add_figure(doc, "photo_plate.jpg", "图 3-1　系统实物：左为整体布置�
 p31b = (
     "截至 2026 年 10 月 27 日，板上已完成：直连 40.000000 MHz 包 20/20 首读 STATUS=0x1；MMCM 包输入 142.857143 MHz、协处理器域 40 MHz、10,000 次寄存器读取无错误；"
     "硬件 CNN zero/pattern/roi_001/frame 四例与黄金输出一致（PROVISIONAL）；共存位流 b2690b0a 同时输出 HDMI、抓取 BGR 原帧并运行硬件 CNN；"
-    "现有 EXE 经真实 UVC 与 HTTP 生成检查记录。多目标结果槽错位已在 RTL 中修复并通过定向仿真，但修复包因 Vivado 子进程错误未生成、未上板；"
+    "检查记录链路经真实 UVC 与 HTTP 联调验证。多目标结果槽错位已在 RTL 中修复并通过定向仿真，但修复包因 Vivado 子进程错误未生成、未上板；"
     "工单 2/4/4 下当前判定 RECHECK，手动按钮核验与 CSV 导出中断未完成；正式 INT8 模型与识别精度未验收。"
 )
 add_body(doc, p31b)
 add_table(doc, "表 3-1　完成度矩阵（√ 完成；△ 部分完成；— 未完成）", ["模块", "仿真 / 离板", "综合 / 时序", "上板", "软件"], [
     ["RISC-V 核", "√ 38 用例 + 44/44 arch + CoreMark", "√ 86.806 MHz", "√ 40 MHz，LED 1101", "—"],
     ["视觉链路", "√ 22 tb，Icarus/XSim", "√ WNS +0.330 ns", "√ 720p 直通 108 帧", "—"],
-    ["CNN 协处理器", "√ 6/6 门禁；2×73,795 元素；多目标修复 tb", "√ 40 MHz WNS +2.498；共存 +1.184", "√ 单目标四例；△ 多目标修复未上板", "√ COP_HW / EXE 记录"],
-    ["EXE / 服务", "√ 全量回归 172；19+21 组", "—", "√ 真机 UVC/HTTP 记录；△ 手动/CSV 未完成", "√ 模拟闭环"],
+    ["CNN 协处理器", "√ 6/6 门禁；2×73,795 元素；多目标修复 tb", "√ 40 MHz WNS +2.498；共存 +1.184", "√ 单目标四例；△ 多目标修复未上板", "√ COP_HW / 前端记录"],
+    ["前端 / 服务", "√ 全量回归 172；17+20 组", "—", "√ 真机 UVC/HTTP 记录；△ 手动/CSV 未完成", "√ 模拟闭环"],
 ], [3.0, 5.0, 3.4, 4.2, 2.4], font_size=9.0, align_center_cols=[0])
 
 add_h2(doc, "3.2 工程成果")
@@ -662,12 +662,12 @@ add_body(doc, p322)
 
 add_h3(doc, "3.2.3 软件成果")
 p323 = (
-    "软件成果包括 EXE、PS 服务、CopDriver、固件和验证脚本。图 3-2 为模拟后端下的 CHECK_PASS 界面，界面带 PROTOTYPE 标识，用于联调而非板上识别验收。"
+    "软件成果包括网页端、PS 服务、CopDriver、固件和验证脚本。图 3-2 为模拟后端下的 CHECK_PASS 界面，界面带 PROTOTYPE 标识，用于联调而非板上识别验收。"
     "10-27 在真实 UVC 与 HTTP 下已生成检查记录（工单 2/4/4，判定 RECHECK），但手动按钮核验与 CSV 导出中断未完成。"
     "一次检查会生成 session.json、capture.png、capture.sha256、packet.json、cop_trace.json、ROI 和记录截图；CSV 可导出。"
 )
 add_body(doc, p323)
-add_figure(doc, "fig_exe.png", "图 3-2　EXE 模拟后端下的 CHECK_PASS 界面（PROTOTYPE）", width_cm=13.2)
+add_figure(doc, "fig_exe.png", "图 3-2　检查界面模拟后端下的 CHECK_PASS 状态（PROTOTYPE；截图为原视口形态）", width_cm=13.2)
 
 add_h2(doc, "3.3 特性成果")
 p33a = (
@@ -701,7 +701,7 @@ add_table(doc, "表 3-3　时序与资源（Vivado 2026.1，xc7z020clg400-1）",
 p33c = (
     "表 3-4 为软件验证。2026-10-24 Icarus 全量回归 172 条 PASS、9 条预期门禁失败、0 条意外失败；"
     "2026-10-21 Python 19 个检查组和 21 个视觉组退出 0；2026-10-11 XSim 25 个视觉 tb、2 个采集 tb 和 axi_lock 退出 0；"
-    "2026-10-21 服务+EXE 模拟轮次 CHECK_PASS 1/1/1、3 目标/3 ROI、1 条记录；异常矩阵覆盖 4 轮服务和 9 个引擎场景；"
+    "2026-10-21 服务+前端模拟轮次 CHECK_PASS 1/1/1、3 目标/3 ROI、1 条记录；异常矩阵覆盖 4 轮服务和 9 个引擎场景；"
     "2026-10-17 板上 PS 原型 2 轮，16 目标，RECHECK，prototype=true。"
 )
 add_body(doc, p33c)
@@ -709,20 +709,20 @@ add_table(doc, "表 3-4　软件与服务验证", ["项目", "结果"], [
     ["Icarus 全量回归（2026-10-24）", "172 PASS；9 条预期门禁失败；0 意外"],
     ["Python 分组（2026-10-21）", "19 检查 + 21 视觉；退出 0"],
     ["XSim（2026-10-11）", "25 视觉 tb + 2 采集 + 1 axi_lock；退出 0"],
-    ["服务 + EXE 模拟轮次（2026-10-21）", "CHECK_PASS 1/1/1；3 目标/3 ROI；1 条记录"],
+    ["服务 + 前端模拟轮次（2026-10-21）", "CHECK_PASS 1/1/1；3 目标/3 ROI；1 条记录"],
     ["异常矩阵", "4 轮服务异常 + 9 个引擎场景"],
     ["板上 PS 原型（2026-10-17）", "2 轮；16 目标；RECHECK；prototype=true"],
 ], [6.4, 8.6], font_size=10.0)
 p33d = (
     "表 3-5 为板上 bring-up。10-25 旧包在 40.000000 MHz、20/20 STATUS=0x1、DMA 通过后仍 NO_ACK，定位为 IMEM 初值缺失；"
     "10-26 修复 bit 上 zero/pattern 各 3 轮全匹配；10-27 cdc 包四例 zero/pattern/roi_001/frame 全匹配、10,000 次寄存器读取无错误；"
-    "共存 bit b2690b0a 另完成 roi_001 黄金、HDMI+原帧+CNN 与 EXE 真机记录。多目标旧包出现结果槽错位，修复版仅通过定向仿真，未上板。"
+    "共存 bit b2690b0a 另完成 roi_001 黄金、HDMI+原帧+CNN 与真机检查记录。多目标旧包出现结果槽错位，修复版仅通过定向仿真，未上板。"
 )
 add_body(doc, p33d)
 add_table(doc, "表 3-5　板上 bring-up 结果", ["日期", "包 / bit", "时钟", "结果"], [
     ["2026-10-25", "759744b9；111/111", "40.000000 MHz", "20/20 STATUS=0x1；DMA 通过；NO_ACK（IMEM）"],
     ["2026-10-26", "59c2c918；PROVISIONAL", "40.000000 MHz", "zero/pattern 3+3 全匹配；STATUS=0x61；RESULT_SEQ=1；无 UNCONSUMED"],
-    ["2026-10-27", "cdc 包 / b2690b0a", "40 MHz（MMCM 输入 142.857）", "四例黄金（cdc）；roi_001+EXE 记录（共存）；多目标槽错位"],
+    ["2026-10-27", "cdc 包 / b2690b0a", "40 MHz（MMCM 输入 142.857）", "四例黄金（cdc）；roi_001+真机记录（共存）；多目标槽错位"],
     ["2026-10-27", "多目标修复版", "—", "RTL 定向仿真 PASS；新包构建失败，未上板"],
 ], [3.4, 5.0, 3.4, 5.4], font_size=9.0, align_center_cols=[0, 1, 2])
 p33e = (
@@ -735,7 +735,7 @@ add_body(doc, p33e)
 p33f = (
     "复现入口：bash sim/scripts/run_iverilog.sh all；sim/scripts/cop_board_fast_run.py --package <包> --case <zero|pattern|roi_001|frame>；"
     "bash sim/scripts/run_vision_xsim.sh all；python src/vision_client/export_records.py <记录目录>。"
-    "验收边界：单目标四例是 PROVISIONAL 黄金对拍，不是识别精度；多目标修复包未上板；EXE 手动按钮与 CSV 未完成；"
+    "验收边界：单目标四例是 PROVISIONAL 黄金对拍，不是识别精度；多目标修复包未上板；真机手动按钮与 CSV 未完成；"
     "板卡 SD/mmc 历史故障未复现，长时/温度稳定性未测；正式 INT8 模型与整机验收仍未完成。"
 )
 add_body(doc, p33f, align=WD_ALIGN_PARAGRAPH.LEFT)

@@ -33,8 +33,9 @@
 采集卡索引要按 `sim/scripts/list_dshow_video.ps1` 中 `USB Video` 现场枚举；本轮为 2。
 
 ```powershell
+# 2026-10-28 注：EXE 形态已移除（本地备份保留），下述视口命令为 2026-10-27 历史口径；
+# CSV 导出现入口：python src/pynq_host/export_records.py data/logs/<运行目录>/records
 sim/build/vision-client/dist/vision_preview/vision_preview.exe --source 2 --endpoint http://192.168.50.99:8765 --interval 3 --max-age 8 --records-dir data/logs/<新运行目录>/records
-python src/vision_client/export_records.py data/logs/<运行目录>/records
 ```
 
 已确认真实视频、LIVE 接口、工单差额、JSONL 记录。界面操作被物理 Esc 中止，

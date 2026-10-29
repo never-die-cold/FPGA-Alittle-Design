@@ -1,6 +1,6 @@
 # src/coprocessor —— CNN 整数算子与整网控制器
 
-轻量 INT8 CNN 的计算链已进入离板验证。v0 已冻结为 MMIO/AXI4-Lite 控制面 + DMA 数据面，
+轻量 INT8 CNN 的计算链已完成离板验证，并经共存包真实帧上板（COP_HW，10-27）；正式板验与多目标验收未签。v0 已冻结为 MMIO/AXI4-Lite 控制面 + DMA 数据面，
 RISC-V 以 load/store 访问且不启用自定义指令。
 
 ## 阶段 0 契约
@@ -8,11 +8,11 @@ RISC-V 以 load/store 访问且不启用自定义指令。
 - [C02 整数与硬件契约](design_v0.md)：首网、量化、逐位舍入/饱和、排布与资源预算；
 - [C03 集成接口契约](../../docs/contracts/coprocessor-integration-v0.md)：MMIO、DMA、状态、结果、固件与 PS 分工。
 
-两份文件均已由 JL 于 2026-10-11 冻结；它们不是 RTL、正式 INT8 模型或 M2 验收证据。模块 J01–J10 状态见 [plan.md](plan.md)；WC/NC 交接从 [docs/contracts/coprocessor-handoff-v0.md](../../docs/contracts/coprocessor-handoff-v0.md) 进入。
+两份文件已于 2026-10-11 冻结；它们不是 RTL、正式 INT8 模型或 M2 验收证据。模块状态与验收边界见本 README 与 [交接单](../../docs/contracts/coprocessor-handoff-v0.md)；交接从 [docs/contracts/coprocessor-handoff-v0.md](../../docs/contracts/coprocessor-handoff-v0.md) 进入。
 
 ## 模块与边界
 
-J04a 已实现并离板冒烟（JL 侧）：`cop_top.v`、`cop_ctrl_regs.v`、`cop_axi_lite_frontend.v`、`cop_cdc_mailbox.v`、`cop_dma_loader.v`、`cop_task_ctrl.v`、`cop_config_regs.v`、`cop_core_mmio_gate.v`，以及 `src/riscv_fw/cop_job.c` 工单固件。J04b 的 OPEN：任意 `TARGET_DESC_ADDR` 描述表（当前 `target_id == roi_index` 仅恒等映射）、结果 DMA（`RESULT_ADDR`）、真实 payload CRC 负例收口、CDC/AXI 深测收尾与板验；manifest v1→影子 bank、16 ROI 槽与生产板顶（`cop_payload_adapter.v`、`pynq_cop_top.v`）已落地，`payload_network` 离板 TB 已入 `all`；详见[实现交接单](../../docs/runbooks/coprocessor-j04-handoff.md)与[模块计划](plan.md)。
+J04a 已实现并离板冒烟：`cop_top.v`、`cop_ctrl_regs.v`、`cop_axi_lite_frontend.v`、`cop_cdc_mailbox.v`、`cop_dma_loader.v`、`cop_task_ctrl.v`、`cop_config_regs.v`、`cop_core_mmio_gate.v`，以及 `src/riscv_fw/cop_job.c` 工单固件。J04b 的 OPEN：任意 `TARGET_DESC_ADDR` 描述表（当前 `target_id == roi_index` 仅恒等映射）、结果 DMA（`RESULT_ADDR`）、真实 payload CRC 负例收口、CDC/AXI 深测收尾与板验；manifest v1→影子 bank、16 ROI 槽与生产板顶（`cop_payload_adapter.v`、`pynq_cop_top.v`）已落地，`payload_network` 离板 TB 已入 `all`；详见[实现交接单](../../docs/runbooks/coprocessor-j04-handoff.md)。
 
 未实现/未验收：`buffer.v` 实体 BRAM 生产适配、`dma_ctrl.v` 独立描述符顶层、`isa_extension.v`（v0 不例化、不占 opcode）、视频集成验证与板端整网输出验收；SoC 集成（`pynq_cop_top.v`，核＋协处理器）已实现并通过 40 MHz 整机综合实现门禁，板级验收未完成。
 
@@ -25,9 +25,10 @@ J04a 已实现并离板冒烟（JL 侧）：`cop_top.v`、`cop_ctrl_regs.v`、`c
 
 ## 已实现的离板计算链（2026-10-13）
 
-现役计算通路使用 `mac_array_pipeline.v` 内部的 128 路乘法/加法树；`mac_lane.v` 与 `dot8.v` 仅是独立诊断模块，未被现役阵列实例化，二者 PASS 不能替代现役流水线对拍。
+现役计算通路使用 `mac_array_pipeline.v` 内部的 128 路乘法/加法树与 `int8_requant_pipeline.v` 分拍 requant；两者是唯一入卷积链的 MAC/requant 实现。
 
-`int8_mac.v` 和 `mac_array.v` 提供组合乘加与 O16/I8 阵列；`mac_array_pipeline.v` 提供 128 路乘法和分拍加法树。`int8_requant.v` / `int8_requant_pipeline.v` 按 C02 实现 ReLU、远离零舍入与对称饱和；`int8_gap.v`、`int8_logits.v` 实现 GAP、稳定 argmax、margin/score 和低置信判定。INT32 溢出导致失败，不回绕或饱和后继续。
+`mac_array_pipeline.v` 提供 128 路乘法和分拍加法树。`int8_requant_pipeline.v` 按 C02 实现 ReLU、远离零舍入与对称饱和；`int8_gap.v`、`int8_logits.v` 实现 GAP、稳定 argmax、margin/score 和低置信判定。INT32 溢出导致失败，不回绕或饱和后继续。
+历史说明：最初的逐步构建原语（`int8_mac.v`、`mac_array.v`、`mac_lane.v`、`dot8.v`、`int8_requant.v`）已于 2026-10-29 退役删除，其语义与证据由 pipeline 变体和 [10/12 首步证据](../../data/logs/2026-10-12-cnn-mac-step1/README.md)（含 git 历史 88ac1c4 中的源码）承载。
 
 `conv_engine.v` 实现一拍同步 BRAM 读接口、分拍地址生成、padding/尾通道、bias 和卷积/FC 调度；`cnn_sequencer.v` 串联四层 Conv→GAP→FC。暂停保持数据和有效位，复位/取消/超时使结果无效。外部 ROI/ping/pong/权重/参数存储须共享复位，busy 期间禁止修改；该模块不包含实体 BRAM、C03 寄存器、DMA 或核接入。
 

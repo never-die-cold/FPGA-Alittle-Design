@@ -1,4 +1,4 @@
-"""批次记录 CSV 导出（src/vision_client/export_records.py）离线测试。
+"""批次记录 CSV 导出（src/pynq_host/export_records.py）离线测试。
 
 纯 stdlib；落盘在仓库内 sim/build/vision/export-test/。
 覆盖：表头与行数、关键字段、v2 派生列（status/missing/extra/prototype）、
@@ -13,7 +13,7 @@ from pathlib import Path
 
 root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(root / "src/pynq_host"))
-sys.path.insert(0, str(root / "src/vision_client"))
+sys.path.insert(0, str(root / "src/pynq_host"))
 from export_records import export_records
 from records import BatchRecords
 from vision_mock_service import live_packet

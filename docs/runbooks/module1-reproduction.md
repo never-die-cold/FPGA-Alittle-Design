@@ -1,4 +1,5 @@
 # 模块一复现清单（#skill候选）
+> 状态：历史快照（模块一 2026-10-07 已收口；复现入口见 report/module1-closure.md）；本地产物路径已迁 others/build/。
 更新：2026-10-07。对应 [收口报告](../../report/module1-closure.md) 与 [原始证据](../../data/logs/2026-10-07-module1-closure)。
 适用范围：同 RTL/hex 的四档核对比；不用于官方 CoreMark 或完整 ISA 认证。
 

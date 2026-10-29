@@ -1,7 +1,7 @@
 # J04 协处理器实现交接单
 
 > 状态：JL 侧“实现 + 可交接”收口；不等于完整验证通过或板级验收，JL 不代 WC/NC 签字。
-> J04 总状态见[模块计划](../../src/coprocessor/plan.md)：J04a（JL 实现/冒烟）✅，J04b 🟡（影子 bank 与整机 40 MHz 综合实现门禁已过；任务描述表、结果 DMA 与板验未完成，以模块计划现行口径为准）。
+> J04 总状态见[交接单](../../docs/contracts/coprocessor-handoff-v0.md)：J04a 已实现/冒烟 ✅，J04b 🟡（影子 bank 与整机 40 MHz 综合实现门禁已过；任务描述表、结果 DMA 与板验未完成，以模块计划现行口径为准）。
 > 源码锚点：PR #86 的 head（`dev/riscv`），不写死 SHA 以免自我引用失效；交接基线为 `7d6355b`
 > （`411d9ee..7d6355b`，9 个提交）。内容锚点以本单 §2 的文件 SHA256 为准。
 > 早期日志中的 `9fdd035` 等哈希是 rebase 前本地记录，不对应远端提交；复现以本单和 `dev/riscv` 为准。
@@ -89,7 +89,7 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 | cop_top OOC 时序 | `cop_clk` 10 ns：WNS **+0.165 ns**（Fmax ≈ 101.7 MHz）；CRC 逐字节化之前是 −2.743 ns / 78.5 MHz | PASS（OOC，无 I/O delay） |
 | J02 zero 黄金 | 9225 packed words/73795 elements；logits `04fd02` | 逐元素 PASS |
 | 协处理器集合 | `run_coprocessor_iverilog.sh all`，退出码 0 | PASS |
-| 全仓入口（2026-10-20 复跑） | `run_iverilog.sh all`：核/协处理器/四档完整 CoreMark/视觉全部完成；[原始证据](../../data/logs/2026-10-20-pr-merge-sync/README.md) | PASS，退出码 0 |
+| 全仓入口（2026-10-20 复跑） | `run_iverilog.sh all`：核/协处理器/四档完整 CoreMark/视觉全部完成；git 历史（88ac1c4 前）data/logs/2026-10-20-pr-merge-sync/README.md | PASS，退出码 0 |
 | 默认关闭核回归 | `run_iverilog.sh soc`，first=13/1101，second=65/0001 | PASS |
 | RV32I 工单固件 | `firmware` 构建 ELF/hex/dis + 主机规则测试 + `test_firmware_rules.sh`（objdump 失败必须让 make 失败） | PASS |
 

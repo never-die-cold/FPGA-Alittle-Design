@@ -1,6 +1,6 @@
 # src/pynq_host —— PYNQ 上位机
 
-PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采集；Jupyter 保留为板端调试与复现入口。最终工业操作界面为 Windows EXE，由 `watercopper` 负责：采集卡视频和网口识别结果统一展示，见根目录 [项目主计划](../../plan.md) §1.3。
+PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采集；Jupyter 保留为板端调试与复现入口。工业操作界面为 HTML 网页端（[src/web_client](../web_client/README.md)），采集卡视频和网口识别结果统一展示，见根目录 [项目主计划](../../plan.md) §1.3。
 
 ## 当前实现与规划边界（2026-10-12）
 
@@ -14,7 +14,7 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
 `--archive-every-round` 启用逐轮完整归档。分类器在会话中复用，修改权重后须重启服务。
 非原型后端仍须逐轮保存 C04 Q3 capture 证据；当前真实硬件后端尚未实现。
 它没有真实 HDMI/DDR/MMIO/CNN 后端，`/v1/config` 仅推进软件配置号，不证明 R12 硬件应用；见[整合证据](../../data/logs/2026-10-12-pr-review/README.md)。
-工单由服务启动参数提供，HTTP配置仅接收control；在线工单编辑未实现；请求重试幂等已按 C04 §2.4 草案实现（服务 16 条 trigger_ref 回放，待 NC/JL 确认）。
+工单由服务启动参数提供，HTTP配置仅接收control；在线工单编辑未实现；请求重试幂等已按 C04 §2.4 草案实现（服务 16 条 trigger_ref 回放）。
 下列 notebook／通用工具仍是规划，不能由 mock 或训练演练推断已实现。
 
 本轮新增 `roi_preprocess.py`、`inspection_model.py`、`inspection_rules.py`、
@@ -40,8 +40,8 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
 - `benchmark.ipynb`：基线对比与指标采集（CPI、延迟、帧率、加速比）
 - `golden_ref.py`：软件黄金参考实现（OpenCV / 纯 Python 推理）
 - `metrics.py`：数据自动采集与报告生成（→ `data/`）
-- 真实硬件识别后端未实现；FILE/LIVE 骨架已有，不把软件会话/配置号当硬件状态。NC 的实机服务责任与 WC 的适配/服务实现工作见[三人清单](../../docs/project-closeout-three-person-checklist.md)。
-- EXE 在 `src/vision_client/`，已有 LIVE 类别/工单展示、批次、CSV 和 FILE_REPLAY；真实硬件联调、检查快照查看和目标机发布仍待完成。
+- 真实硬件识别后端未实现；FILE/LIVE 骨架已有，不把软件会话/配置号当硬件状态。批次记录与 CSV 导出参考实现在本目录 `records.py`、`export_records.py`。
+- 前端为网页端（`src/web_client/`，原型已含 LIVE 类别/工单展示形态）；真实数据接线、检查快照查看和目标环境发布仍待完成。
 
 ## LIVE 服务捕获后端（W04/N06 诊断包，2026-10-13）
 
@@ -51,14 +51,14 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
   未验证断言清单见 [c01-ddr-frame-ownership-v0.md](../../docs/contracts/c01-ddr-frame-ownership-v0.md) §7；
 - `BaseOverlayCaptures`（`base_captures.py`，base overlay 实时取帧）：`prototype=false`。
 
-N06 诊断包接线（NC 执行；板端脚本提供 overlay 与 read，取帧样板见 `sim/scripts/n03_board_capture.py`）：
+N06 诊断包接线（板端脚本提供 overlay 与 read，取帧样板见 `sim/scripts/n03_board_capture.py`）：
 `captures = BaseOverlayCaptures(<同步包装的 hdmi_in.readframe>)` →
 `make_server(root=…, captures=captures, engine=file_engine(models/cnn-border-fill-best.pt, order, 0.8, 10), order=order)`；
-EXE `--source 0 --endpoint http://<板IP>:8765` 联调。板端需 pynq-venv 的 python3 + OpenCV + torch；
+前端以 `http://<板IP>:8765` 为服务端点联调。板端需 pynq-venv 的 python3 + OpenCV + torch；
 FP32 软件推理来源记录在产物 `result.json` 的 provenance，不当作 CNN 硬件验收。
 服务失败（无视频/超时/所有权错误）转 HTTP 503 且不产 `packet.json`；离板替身测试
 `test_base_captures.py`、`test_c01_backend.py`（视觉栈现 **21 组**；检查链 **19 组**）；
-快照核对器 `round_artifacts.py`（C04 §2.3，待 NC 确认）。
+快照核对器 `round_artifacts.py`（C04 §2.3）。
 
 ## 协处理器 PS 驱动与模拟硬件（2026-10-21，C03 A1/A2）
 
@@ -87,7 +87,7 @@ python src/pynq_host/vision_live_service.py --root <dir> --capture-dir <png dir>
 
 `/v1/status` 增 `engine` 字段（`FILE`/`COP_SIM`）；`prototype` 仍由捕获后端决定。
 `cop-sim` 是模拟计算，分类器是脚本/图像派生的合成结果，`S_input=1/127` 仅为 sim 量化，
-**不是**识别精度或板上证据。提交/完成/取结果/恢复与 JL 待办见
+**不是**识别精度或板上证据。提交/完成/取结果/恢复待办见
 [PS 驱动使用档](../../docs/contracts/coprocessor-ps-driver-v0.md)；一轮证据
 `bash sim/scripts/run_cop_sim_round.sh <output-dir>`（默认写 `sim/build/`，证据目录显式指定）。
 

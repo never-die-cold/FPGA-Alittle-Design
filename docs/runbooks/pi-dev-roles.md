@@ -16,14 +16,16 @@
 | 角色 | 内容 | 前置 | 产出 |
 |:---|:---|:---|:---|
 | R1 交叉基准 | arm_localize 便携包在 Pi（Cortex-A72）跑分，与 Zynq A9 / PC 三方对照 | Pi 可 SSH（现在即可） | 三方耗时表入档，支撑 10/5「定位必须 PL 加速」拍板 |
-| R2 mock 服务宿主 | `vision_mock_service.py --host 0.0.0.0` 挂 Pi，EXE 远程联调 | Pi 可 SSH | EXE 联调不占 PC/板卡；联调日志存证 |
+| R2 mock 服务宿主 | `vision_mock_service.py --host 0.0.0.0` 挂 Pi，前端远程联调 | Pi 可 SSH | 前端联调不占 PC/板卡；联调日志存证 |
 | R3 回放源 | 循环播放合成场景 → HDMI → PYNQ IN：换源/EDID/断连测试 + M3 重复帧/缺件/多余件验收动作 | **micro-HDMI→HDMI-A 线到货** | 素材生成器 `sim/scripts/make_replay_scene.py` + 实测记录 |
 | R4 正式演示源 | CM3 相机 → Pi → PYNQ（原定角色，hardware.md §1 链路） | 线 + CM3 到货 | 验线（hardware.md §4）→ 采集规程 §2 机位定标 |
 
 ## §3 R1 交叉基准 runbook
 
+> 状态：R1 已完成（2026-09-29 结果入档，该日志与本节的 `sim/scripts/make_arm_localize_pkg.py` 组包脚本见 git 历史 88ac1c4 前）；保留本节作为三方对照口径手册，`arm_localize_selftest.py`/`arm_localize_bench.py`/`compare_arm_localize_bench.py` 仍在仓库。
+
 ```bash
-# PC 组包（SHA256 对照 data/evidence/2026-10-03-arm-localize-baseline/final-package-manifest.json）
+# PC 组包（组包脚本 make_arm_localize_pkg.py 已退役，见 git 历史；SHA256 对照 manifest 在 git 历史 88ac1c4 前 data/evidence/2026-10-03-arm-localize-baseline/）
 python sim/scripts/make_arm_localize_pkg.py
 # 上 Pi（<pi> 为 IP；包内含 manifest 自检）
 scp sim/build/arm-localize-package.tar.gz <user>@<pi>:~/
@@ -43,7 +45,7 @@ python sim/vision/compare_arm_localize_bench.py \
 ```bash
 # Pi 上（src/pynq_host 同目录需有 vision_protocol.py）
 python3 vision_mock_service.py --host 0.0.0.0 --port 8765
-# EXE 侧
+# 前端侧
 vision_preview.exe --mock --endpoint http://<pi_ip>:8765
 ```
 

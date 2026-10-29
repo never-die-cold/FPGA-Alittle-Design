@@ -1,4 +1,4 @@
-"""批次记录存储（src/vision_client/records.py）离线测试——D8–D10 语义 + W07 schema v2。
+"""批次记录存储（src/pynq_host/records.py）离线测试——D8–D10 语义 + W07 schema v2。
 
 纯 stdlib：截图写入用桩回调替代 cv2；落盘在仓库内 sim/build/vision/records-test/。
 覆盖：手动轮次落记录、键 (session,check_id) 去重、来源前缀（mock_/proto_/无）、
@@ -12,7 +12,7 @@ from pathlib import Path
 
 root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(root / "src/pynq_host"))
-sys.path.insert(0, str(root / "src/vision_client"))
+sys.path.insert(0, str(root / "src/pynq_host"))
 from records import AnomalyLog, BatchRecords
 from vision_mock_service import live_packet
 from vision_protocol import mock_packet

@@ -48,7 +48,7 @@ RISC-V 固件              │       cop_top（计算域）
 - PS 是数据和配置生产者：准备已预处理/量化 ROI、模型包、target_id 和来源标识。
 - RISC-V 是检查调度与判定者：等待配置生效、启动、轮询、按目标结果计数并写工单判定。
 - `cop_top` 只做数据搬运与整数 CNN，不定位、不画框、不生成 session UUID。
-- LIVE 服务把硬件整数结果与同一轮 bbox/协议字段合并；EXE 仍按既有 v1.2 协议消费。
+- LIVE 服务把硬件整数结果与同一轮 bbox/协议字段合并；前端仍按既有 v1.2 协议消费。
 - `isa_extension.v` 仅保留后续研究入口，v0 不例化、不占 opcode、不改 decode。
 
 ## 3. 控制面与时钟域
@@ -135,7 +135,7 @@ RISC-V 读 0/写零副作用拒绝。核侧拒绝不驻留到全局错误状态�
 | 0x074 | `RESULT_LOGITS` | RO | 三个有符号 INT8 logits，最高字节保留 0 |
 | 0x078 | `RESULT_SCORE` | RO | `[15:0] score_q15,[23:16] margin_q` |
 | 0x07C | `RESULT_SEQ` | RO | 完整结果快照序号；最后写/最后跨域 |
-| 0x080 | `PERF_CYCLES` | RO | 本任务 cop 计算域拍数，不含 PS/EXE |
+| 0x080 | `PERF_CYCLES` | RO | 本任务 cop 计算域拍数，不含 PS/前端 |
 | 0x084 | `DMA_BYTES` | RO | 本任务实际搬运字节数 |
 | 0x088 | `FW_ACTUAL_COUNTS` | RISC-V | 与 WORK_ORDER 相同的三个 8 位计数 |
 | 0x08C | `FW_DECISION` | RISC-V | 判定、原因位与关联的 `RESULT_SEQ` |

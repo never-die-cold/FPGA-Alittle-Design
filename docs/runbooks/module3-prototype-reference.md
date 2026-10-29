@@ -66,7 +66,7 @@ GAP 按空间平均，Linear 输出原始 logits。未来 INT8 实数零的编�
 
 ## 参考包格式
 
-归档入口：[fp32-reference-v1](../../data/evidence/2026-10-10-model-reference/README.md)。
+归档入口：../../data/evidence/2026-10-10-model-reference/README.md。
 包保存折叠权重/偏置、三个诊断输入及每阶段完整期望张量，清单标明来源、
 代码哈希、运行版本、层形状、排布、容差和数值误差；这些输入无真实类别标签。
 
@@ -100,4 +100,4 @@ python -I sim/build/my-fp32-reference/tools/check_model_reference.py sim/build/m
 导出需要 NumPy/PyTorch，校验只需 NumPy。将整个包复制到别处后，执行包内检查器即可。
 测试已在仓库内临时目录以 Python -I、无原模型/源模块依赖的方式隔离复算，
 并覆盖覆盖目录拒绝、工具篡改、审计不一致和修改数值黄金后的拒绝。
-所有验证输出留在仓库内，原始日志见[本轮验证](../../data/logs/2026-10-10-model-reference/README.md)。
+所有验证输出留在仓库内，原始日志见../../data/logs/2026-10-10-model-reference/README.md。

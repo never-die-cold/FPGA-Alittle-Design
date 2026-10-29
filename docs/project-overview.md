@@ -4,9 +4,8 @@
 > **写作口径（ASD-STE100）**：本文按 ASD-STE100 简明技术英语规则的中文对应口径书写——
 > 每句只写一个信息点；句子要短；用主动语态；用一般现在时；一个术语只指一个事物；
 > 不用比喻和口语。模块名、信号名、寄存器名按代码原名写（STE 允许技术名）。
-> **配图**：7 幅图由 [img/make_project_diagrams.py](img/make_project_diagrams.py) 生成。
-> **历史快照：BHT 尚未绘制。**7 幅图保留 2026-10-03 版本；重绘另列批次，本轮不运行生成脚本。
-> **状态口径**：2026-10-19；当前实现以正文、冻结契约和收口证据为准，逐项核对见[实现/文档清单](archive/implementation-document-audit-2026-10-12.md)。更细的契约见 [design_v0.md](../src/riscv/design_v0.md)、
+> **配图**：7 幅图由 [img/make_project_diagrams.py](img/make_project_diagrams.py) 生成，2026-10-28 已按网页端口径重绘；BHT 细节仍未入图。
+> **状态口径**：2026-10-28；当前实现以正文、冻结契约和收口证据为准，逐项核对见git 历史（88ac1c4 前）docs/archive/implementation-document-audit-2026-10-12.md。更细的契约见 [design_v0.md](../src/riscv/design_v0.md)、
 > [design_v1.md](../src/riscv/design_v1.md)、[vision design_v0.md](../src/vision/design_v0.md)。
 
 ---
@@ -16,13 +15,13 @@
 本项目做一台桌面紧固件检查仪。相机拍摄螺栓、螺母和垫圈。零件自由摆放，互不遮挡。
 视频进入 PYNQ-Z2 板卡。板卡完成三件事：图像预处理、物体定位、CNN 分类。
 板上的 RISC-V 核调度检查、汇总数量、对照工单做判定。
-识别结果发给 Windows EXE。EXE 显示视频、矩形框、类别标签和工单判定结果。
-有效检查结果为 CHECK_PASS、CHECK_FAIL 或 RECHECK；缺件、多余件、错料是差额原因。无结果/断联时等待新结果。异常时 EXE 保存事件与截图，批次仅记录有效手动轮次。
+识别结果发给 HTML 网页端。网页端显示视频、矩形框、类别标签和工单判定结果。
+有效检查结果为 CHECK_PASS、CHECK_FAIL 或 RECHECK；缺件、多余件、错料是差额原因。无结果/断联时等待新结果。异常时前端保存事件与截图，批次仅记录有效手动轮次。
 
 ![图 1 系统总览](img/fig1_system.png)
 
-数据走两条物理路径。视频路径：板卡 HDMI OUT → USB 采集卡 → EXE。
-结果路径：板卡 PS → 网口 → EXE。[轮次级同步契约](contracts/vision-sync-protocol-decisions.md)已冻结；mock v1.1 有[落码证据](../data/logs/2026-10-06-vision-sync-schema/README.md)。
+数据走两条物理路径。视频路径：板卡 HDMI OUT → USB 采集卡 → 网页端。
+结果路径：板卡 PS → 网口 → 网页端。[轮次级同步契约](contracts/vision-sync-protocol-decisions.md)已冻结；mock v1.1 有[落码证据](../data/logs/2026-10-06-vision-sync-schema/README.md)。
 真实识别结果与画面关联尚未实现；过期结果不得显示为当前检查通过，不能把轮次级契约称为逐帧精确对齐。
 
 ## 2. 三个模块与当前状态
@@ -32,10 +31,9 @@
 | 模块一 | RISC-V 核＋最小 SoC | jianglibo | 已完成收口。[核收口报告](../report/module1-closure.md) |
 | 模块二 | HDMI 视觉预处理 RTL＋已验证视频链路 | never-die-cold | 已完成（RTL／链路级）。[视频记录](../data/logs/2026-10-03-vision-onboard/README.md)、[真实相机记录](../data/logs/2026-10-07-pi-pynq/README.md) |
 | 模块三 | INT8 CNN 推理协处理器 | jianglibo | C02/C03 已冻结；J02/J03 算子/整网、J04a 控制面与固件已离板冒烟（JL 侧）；J04b 完整验证、实体 BRAM/SoC/视频集成、正式模型与板端输出未验收 |
-| EXE 前端 | 视频/轮次、LIVE 展示、记录与回放 | watercopper | 类别/分数/工单横幅、来源标识、记录 v2 与 CSV 已离板验证；真实硬件闭环与目标机发布未验收 |
+| 网页端前端 | 视频/轮次、LIVE 展示、记录与回放 | — | 类别/分数/工单横幅、来源标识、记录 v2 与 CSV 已离板验证；真实数据接线与目标环境发布未验收 |
 
-里程碑：M1（10/4）核验收；M2（10/12）预处理 + 首个网络 + EXE 原型；
-M3（10/20）工业闭环；M4（10/26）材料收口；11/4 提交。
+提交节点见根目录 [plan.md](../plan.md) §1.2（最终复验 11/3、作品提交 11/4 18:00 前）。
 
 全项目 M2 验收未完成；首个网络硬件输出仍缺实现与黄金参考对齐证据，CNN 与工业闭环不得宣称完成。验收范围以[主计划 §1.4](../plan.md)为准。
 
@@ -64,7 +62,7 @@ RTL 有两棵树，加一处预留。核树在 `src/riscv/`，视觉树在 `src/
 - `soc_top`：SoC 外壳。它例化核、指令 BRAM、数据 RAM、计时器和 LED。
 - `core_top`：当前 v1 三级核；v0 两级基线留存在 `partA-v0`。
 - v1 模块组：`if_stage`、`id_ex_stage`、`mem_wb_stage`、`forwarding`、`hazard`、`branch_predict`。
-  它们服务 Part B/C。共享单元是 `pc`、`decode`、`regfile`、`alu`、`muldiv`、`imem`、`dmem`。
+  它们服务 v1 核的三级流水与分支预测。共享单元是 `pc`、`decode`、`regfile`、`alu`、`muldiv`、`imem`、`dmem`。
 
 视觉树分四组：
 
@@ -206,7 +204,7 @@ PS 的配置时钟和像素时钟异步。直接写寄存器会撕裂配置。�
 6. 快照通路：缩放到 224×224，`cop_buf` 存成整帧。
 7. （待完成的应用路径）原彩色捕获支路写DDR，PS取得安全完整副本后定位、裁剪64×64灰度ROI并量化；DMA把小ROI送入`cop_top`。
 8. （未接入）`cop_top`返回INT8分类结果，RISC-V汇总数量/对照工单判定，PS合并本轮bbox并发报文。
-9. EXE按session/config/接收后年龄叠框、标签和判定；不校验采集卡帧号，不能称“对应帧精确叠加”。
+9. 前端按session/config/接收后年龄叠框、标签和判定；不校验采集卡帧号，不能称“对应帧精确叠加”。
 
 第5–6步是已有分析/快照诊断路径，第7–8步是C03应用目标；当前FILE/LIVE用软件文件副本代替硬件捕获。显示与结果延迟不同，来源capture/check关联和轮次标识必须显式保存。
 
@@ -226,7 +224,7 @@ PS 的配置时钟和像素时钟异步。直接写寄存器会撕裂配置。�
 - 实际定位部署与逐目标推理：未实现；ARM／Python 定位和裁剪参考已有验证，不等于实时板端部署。
 - 正式紧固件数据集与模型：未完成。采集规程已入库。
 - 核侧工业检查固件未实现；PS 文件检查的候选工单规则已实现，不等于核侧判定。
-- EXE 检查快照查看、真实硬件结果联调与目标机发布验收尚未完成；现有 LIVE 展示、记录 v2、CSV 和文件回放已实现。
+- 前端真实数据接线、检查快照查看与目标环境发布未完成；LIVE 展示、记录 v2、CSV 和文件回放已实现。
 - FILE/LIVE 服务骨架与替身已实现，恒显 PROTOTYPE；真实硬件后端未实现。轮次级叠加不代表逐帧精确关联。
 - PL 本体及识别闭环延迟、当前相机配置的长期运行／冷启动／断连恢复：待验证；已有采集卡观测上界不能替代。
 
@@ -235,7 +233,7 @@ PS 的配置时钟和像素时钟异步。直接写寄存器会撕裂配置。�
 | 想了解 | 去哪里 |
 |:---|:---|
 | 全项目目标、分工、里程碑 | 根目录 [plan.md](../plan.md) |
-| 核专项与验收 | [src/riscv/plan.md](../src/riscv/plan.md) |
+| 核验收与演进 | [report/module1-closure.md](../report/module1-closure.md) |
 | v0 核接口契约 | [src/riscv/design_v0.md](../src/riscv/design_v0.md) |
 | v1 流水契约 | [src/riscv/design_v1.md](../src/riscv/design_v1.md) |
 | 视觉接口与寄存器映射 | [src/vision/design_v0.md](../src/vision/design_v0.md) |

@@ -1,5 +1,7 @@
 # 离板检查：共享 ROI、FP32 原型与 FILE_REPLAY
 
+> 状态：历史快照（2026-10-12；EXE 形态已移除，文件回放界面保留于本地备份与 git 历史）。
+
 2026-10-10，原实现基线 `dev/exe @ aa23206`；已通过理解门槛并由 PR #67 合并，集成提交 `b51d46b`。
 不需要板卡。目标是把交付模型接入一条可复现的软件流程，不代替真实工位验收。
 
@@ -9,7 +11,7 @@
   FP32 原型加载/推理；三类工单候选规则；文件定位/裁剪/推理/判定；证据保存与重复请求复用；
   Python 和 Windows EXE 的文件回放展示。
 - 已实现但未验证：上述新模块的 PYNQ 环境兼容性、真实零件精度与工位效果。
-- 后续已有FILE/LIVE HTTP骨架、LIVE分类/工单展示与PROTOTYPE标识；其输入仍为文件。FILE_REPLAY的request_id复用不代表HTTP请求重试幂等，见[核对清单](../archive/implementation-document-audit-2026-10-12.md)。
+- 后续已有FILE/LIVE HTTP骨架、LIVE分类/工单展示与PROTOTYPE标识；其输入仍为文件。FILE_REPLAY的request_id复用不代表HTTP请求重试幂等，见git 历史（88ac1c4 前）docs/archive/implementation-document-audit-2026-10-12.md。
 - 未实现/未接入：custom DDR 安全完整取帧、真实硬件 LIVE 后端、正式 INT8 模型/整网黄金、CNN 协处理器顶层/核接入、RISC-V 工单判定和工业闭环。原 vision 已与归档 XSA 配对但缺源码锚定；完整长测/冷启动/断源复验仍待补。
 
 ## 运行入口
@@ -96,6 +98,6 @@ SHA256 用于意外修改检测，不提供来源签名或真实性认证。
 前端回放在创建相机/联网轮次前分流，标明 FILE REPLAY / OFFLINE FILE / PROTOTYPE，
 数量显示“实际 / 工单”；不产生新联网批次，也不把这些结果加入现有 MOCK 报文。
 
-原始日志见[本轮验证记录](../../data/logs/2026-10-10-offline-inspection/README.md)，
+原始日志见../../data/logs/2026-10-10-offline-inspection/README.md，
 示例快照见[证据目录](../../data/evidence/2026-10-10-offline-inspection/README.md)。
 缺失原始训练/标注/校准图片仍阻止正式精度复验与可信 PTQ。
