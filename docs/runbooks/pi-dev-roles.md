@@ -22,8 +22,10 @@
 
 ## §3 R1 交叉基准 runbook
 
+> 状态：R1 已完成（2026-09-29 结果入档，该日志与本节的 `sim/scripts/make_arm_localize_pkg.py` 组包脚本见 git 历史 88ac1c4 前）；保留本节作为三方对照口径手册，`arm_localize_selftest.py`/`arm_localize_bench.py`/`compare_arm_localize_bench.py` 仍在仓库。
+
 ```bash
-# PC 组包（SHA256 对照 data/evidence/2026-10-03-arm-localize-baseline/final-package-manifest.json）
+# PC 组包（组包脚本 make_arm_localize_pkg.py 已退役，见 git 历史；SHA256 对照 manifest 在 git 历史 88ac1c4 前 data/evidence/2026-10-03-arm-localize-baseline/）
 python sim/scripts/make_arm_localize_pkg.py
 # 上 Pi（<pi> 为 IP；包内含 manifest 自检）
 scp sim/build/arm-localize-package.tar.gz <user>@<pi>:~/
