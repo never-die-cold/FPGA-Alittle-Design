@@ -36,7 +36,7 @@ CoreMark/MHz=32×1e6/(t1−t0)，与 CPI 的全局周期窗口不同；短仿真
 历史仅转发 8.14%、原 25% 门禁 FAIL、Radix-4 乘法净贡献 21.95% 均保留，见 [历史口径](../data/logs/2026-10-05-partB-radix4-cycle-breakdown/README.md)。不同分母的百分比不能相加。
 
 ## 3. 自写 benchmark 与命中率
-[bench_v0_1.c](../src/riscv_fw/bench_v0_1.c)、[Makefile](../src/riscv_fw/Makefile)、[反汇编](../src/riscv_fw/bench_v0_1.dis) 已在库：固定种子、整数循环、volatile 数组、位运算和乘法；启动代码 call main。
+git 历史（88ac1c4 前）src/riscv_fw/bench_v0_1.c、[Makefile](../src/riscv_fw/Makefile)、git 历史（88ac1c4 前）src/riscv_fw/bench_v0_1.dis 已在库：固定种子、整数循环、volatile 数组、位运算和乘法；启动代码 call main。
 同镜像、同 tb，四档均 checksum=0x1385cbd1/327535569、exit=0、retired=1205；四档已接入 all。
 
 | 配置 | benchmark cycles | CPI | lookup / hit / miss | 命中率 |

@@ -157,7 +157,7 @@ dma.load_model(addr, payload) / load_rois(addr, rois, stride) / load_descriptors
 40.000000 MHz 时，改钟后的旧 PL 连续 20 次仍为 `0x0`；时钟不变、fresh Overlay 重配后
 20 次均为 `0x1`。因此 `0x0` 只表示 cop 域未就绪/已失效，不能判成超频。强制恢复顺序为
 改钟 → 重配 PL → 等稳定 → FCLKRESETN1 脉冲 → 首读校验，详见
-[`coprocessor-board-clock-runbook.md`](../coprocessor-board-clock-runbook.md)。本勘误不改变任何寄存器、
+板卡时钟 runbook 要点（git 历史 88ac1c4 前 docs/coprocessor-board-clock-runbook.md）。本勘误不改变任何寄存器、
 握手或 PS 软件接口语义。
 
 ## 7. 证据与边界

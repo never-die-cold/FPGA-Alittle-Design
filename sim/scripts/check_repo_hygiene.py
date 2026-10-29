@@ -26,6 +26,7 @@ ROOT_ALLOWED_FILES = {
 ROOT_ALLOWED_DIRS = {
     ".git",
     ".github",
+    ".zcode",  # IDE 本地状态（gitignore），非仓库内容
     "src",
     "sim",
     "build",

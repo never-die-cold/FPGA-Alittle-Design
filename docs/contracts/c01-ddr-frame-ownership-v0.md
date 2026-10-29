@@ -1,7 +1,7 @@
 # C01 custom DDR帧槽所有权：NC交接候选
 
 2026-10-13，基线 `3e2e1c9`。状态：**单帧 PS 适配已实现并通过离板异常测试，待WC/JL评审与NC实机确认**；完整 custom DDR 帧尚未取得，驱动序列未冻结。
-依据：[捕获CSR](c01-capture-status-contract.md)、[实现基线](c01-capture-implementation-baseline.md)、[停止期实测](../../data/logs/2026-10-11-c01-probe-evidence/README.md)、[C03](coprocessor-integration-v0.md)。不新增CAP1寄存器或LIVE报文字段。
+依据：[捕获CSR](c01-capture-status-contract.md)、[实现基线](c01-capture-implementation-baseline.md)、git 历史（88ac1c4 前）data/logs/2026-10-11-c01-probe-evidence/README.md、[C03](coprocessor-integration-v0.md)。不新增CAP1寄存器或LIVE报文字段。
 
 ## 1. 已有硬件与证据能力
 
@@ -83,7 +83,7 @@ WC给出实际完成/槽绑定/保护/屏障/cache依据与仓库替身入口，
 `vision_live_service`——一轮 = 一个单次租约（factory 现场构造 owner，`capture()` 返回独立完整副本），
 适配器立即编码 PNG 原子落盘，服务统一写 `capture.sha256`；捕获/引擎失败由服务转 **503**
 （`do_POST` 捕获 RuntimeError），失败轮不写 `packet.json`。`prototype` 由后端结构性决定：
-C01 = 真实硬件捕获 → **False**（FILE 后端恒 True，[C04 §3.2](vision-live-semantics.md)）。
+C01 = 真实硬件捕获 → **False**（FILE 后端恒 True，本轮次语义以 [vision-sync-protocol-decisions.md](vision-sync-protocol-decisions.md) 为准）。
 
 **仓库替身入口**：`sim/vision/test_c01_backend.py`（接入 `run_vision_python.sh`）——最小
 VDMA/CAP1/分配器/代次 fake 驱动真实驱动（`src/pynq_host/c01_capture.py`），服务级覆盖 §5 矩阵

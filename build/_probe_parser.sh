@@ -1,1 +1,0 @@
-sed -n "225,300p" /usr/local/share/pynq-venv/lib/python3.10/site-packages/pynq/pl_server/embedded_device.py | cat -n | sed "s/^/  /"

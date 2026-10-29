@@ -89,7 +89,7 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 | cop_top OOC 时序 | `cop_clk` 10 ns：WNS **+0.165 ns**（Fmax ≈ 101.7 MHz）；CRC 逐字节化之前是 −2.743 ns / 78.5 MHz | PASS（OOC，无 I/O delay） |
 | J02 zero 黄金 | 9225 packed words/73795 elements；logits `04fd02` | 逐元素 PASS |
 | 协处理器集合 | `run_coprocessor_iverilog.sh all`，退出码 0 | PASS |
-| 全仓入口（2026-10-20 复跑） | `run_iverilog.sh all`：核/协处理器/四档完整 CoreMark/视觉全部完成；[原始证据](../../data/logs/2026-10-20-pr-merge-sync/README.md) | PASS，退出码 0 |
+| 全仓入口（2026-10-20 复跑） | `run_iverilog.sh all`：核/协处理器/四档完整 CoreMark/视觉全部完成；git 历史（88ac1c4 前）data/logs/2026-10-20-pr-merge-sync/README.md | PASS，退出码 0 |
 | 默认关闭核回归 | `run_iverilog.sh soc`，first=13/1101，second=65/0001 | PASS |
 | RV32I 工单固件 | `firmware` 构建 ELF/hex/dis + 主机规则测试 + `test_firmware_rules.sh`（objdump 失败必须让 make 失败） | PASS |
 

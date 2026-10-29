@@ -70,7 +70,7 @@
 
 ## D6 报文 schema v1.2（2026-10-10 WC+NC 确认冻结）
 
-- 保留 mock v1 全部字段与校验规则：version、mode、session_id、frame_id、config_id、width、height、created_at、status、targets（16 目标上限、**半开区间 bbox `[x0,x1)×[y0,y1)`**——宽=x1-x0、右下端点可恰为 w/h，与[定位外包需求](../outsource/localization-requirements.md) L2 一致；退化/反向/越界拒绝、重复 target_id 拒绝、**严格白名单**：未知字段一律拒绝）。
+- 保留 mock v1 全部字段与校验规则：version、mode、session_id、frame_id、config_id、width、height、created_at、status、targets（16 目标上限、**半开区间 bbox `[x0,x1)×[y0,y1)`**——宽=x1-x0、右下端点可恰为 w/h，与定位需求原文（git 历史 88ac1c4 前 docs/outsource/localization-requirements.md） L2 一致；退化/反向/越界拒绝、重复 target_id 拒绝、**严格白名单**：未知字段一律拒绝）。
 - 新增：check_id（uint32，轮次标识，见 D2）；trigger_ref（可选回显字段）。
 - **v1.2 LIVE 轮廓（2026-10-10 冻结）**：`mode` ∈ {MOCK, LIVE}——MOCK 保持严格（仅定位，class/score/decision/prototype 一律拒绝）；LIVE 允许目标 `class`（bolt/nut/washer 或 null）与 `score`（0–1）。
 - **status 枚举（冻结）**：LOCATION_ONLY / CHECK_PASS / CHECK_FAIL / RECHECK（词表与 `inspection_rules.judge` 一致）；判定类 status **必带**顶层 `decision`（expected/actual/delta/missing/extra/reasons；verdict 可选、出现须与 status 一致），LOCATION_ONLY 不得带 decision。真实服务 mode=LIVE 且 hardware_connected=true——EXE 对 MOCK 结果恒加"MOCK ONLY"横幅（plan.md §3.4）。
@@ -83,7 +83,7 @@
 `vision_mock_service.py` 对请求字段的拒绝不能替代结果报文校验，现有 tb 未覆盖该负例。
 本轮只登记，不改协议、Python 或 tb；最小修复和负例测试须用户另批裁决。
 
-Q01已随PR #67合并：顶层与逐目标严格白名单拒绝非对象/未知字段，保留trigger_ref与空目标列表；[首次失败→修复证据](../../data/logs/2026-10-10-q01-result-fields/README.md)仍保留当时用例数量。当前v1.2允许LIVE分类/判定/prototype字段，后续LIVE测试与整合见[10/12证据](../../data/logs/2026-10-12-pr-review/README.md)，不再是“未提交/待回答”。
+Q01已随PR #67合并：顶层与逐目标严格白名单拒绝非对象/未知字段，保留trigger_ref与空目标列表；git 历史（88ac1c4 前）data/logs/2026-10-10-q01-result-fields/README.md仍保留当时用例数量。当前v1.2允许LIVE分类/判定/prototype字段，后续LIVE测试与整合见[10/12证据](../../data/logs/2026-10-12-pr-review/README.md)，不再是“未提交/待回答”。
 
 ## D7 板端真实服务负责人（已定）
 
@@ -119,7 +119,7 @@ Q01已随PR #67合并：顶层与逐目标严格白名单拒绝非对象/未知�
 | 2026-10-06 | 理解门槛问答通过后：D7 更新为提议定 NC（队长），待 NC 评审确认 |
 | 2026-10-06 | 契约收口：D2–D6 watercopper 确认沿用推荐；D7 NC 本人确认接任，plan.md §3.4/§5.3 同步 | watercopper（EXE 前端） |
 | 2026-10-06 | D3 增实现注记：EXE 触发间隔须小于年龄窗口（0.5s < 1.0s，启动校验）；取值经 WC 质询修正 | watercopper（EXE 前端） |
-| 2026-10-08 | D6 bbox 端点语义对齐：闭区间 → 半开区间 `[x0,x1)×[y0,y1)`（对齐[定位外包需求](../outsource/localization-requirements.md) L2，宽=x1-x0）；协议校验、测试与 EXE 画框同步 | watercopper（EXE 前端） |
+| 2026-10-08 | D6 bbox 端点语义对齐：闭区间 → 半开区间 `[x0,x1)×[y0,y1)`（对齐定位需求原文（git 历史 88ac1c4 前 docs/outsource/localization-requirements.md） L2，宽=x1-x0）；协议校验、测试与 EXE 画框同步 | watercopper（EXE 前端） |
 | 2026-10-08 | 新增 D8–D10 批次记录（手动触发才记录 / 键去重 / JSONL+截图，MOCK 带 `mock_` 标识）；离板实现与测试随 EXE 落地 | watercopper（EXE 前端） |
 | 2026-10-08 | D8 补记录资格时间点（采纳点语义，修"断联中手动轮残包冒充记录"）；新增 D11 异常事件日志（anomalies.jsonl + 异常截图） | watercopper（EXE 前端） |
 | 2026-10-08 | 实机 flap 修复（WC 人工按键测试暴露）：新鲜度改按 EXE 接收时刻计量（D3 注记）；记录增 created_at 原始时间戳（D10） | watercopper（EXE 前端） |

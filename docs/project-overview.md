@@ -5,7 +5,7 @@
 > 每句只写一个信息点；句子要短；用主动语态；用一般现在时；一个术语只指一个事物；
 > 不用比喻和口语。模块名、信号名、寄存器名按代码原名写（STE 允许技术名）。
 > **配图**：7 幅图由 [img/make_project_diagrams.py](img/make_project_diagrams.py) 生成，2026-10-28 已按网页端口径重绘；BHT 细节仍未入图。
-> **状态口径**：2026-10-28；当前实现以正文、冻结契约和收口证据为准，逐项核对见[实现/文档清单](archive/implementation-document-audit-2026-10-12.md)。更细的契约见 [design_v0.md](../src/riscv/design_v0.md)、
+> **状态口径**：2026-10-28；当前实现以正文、冻结契约和收口证据为准，逐项核对见git 历史（88ac1c4 前）docs/archive/implementation-document-audit-2026-10-12.md。更细的契约见 [design_v0.md](../src/riscv/design_v0.md)、
 > [design_v1.md](../src/riscv/design_v1.md)、[vision design_v0.md](../src/vision/design_v0.md)。
 
 ---

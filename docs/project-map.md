@@ -43,10 +43,10 @@
 │   └── golden/         测试答案/参考向量
 ├── docs/               人读文档与导航
 │   ├── contracts/      跨模块接口/语义契约
-│   ├── runbooks/       上板/训练/复现执行单
+│   ├── runbooks/       上板/训练/复现执行单（现役件）
 │   ├── research/       赛题调研、资源、方案对比
-│   ├── archive/        历史快照（不改写）
-│   └── file-guide/     逐文件索引生成器（输出到 build/）
+│   ├── archive/        历史快照（不改写；仅存被现行报告引用的两篇）
+│   └── tech-report/ poster/ img/   技术文档、海报、架构图
 ├── report/             设计报告 + llm_log 协作记录
 ├── tools/              本地辅助脚本（已入库：cop_payload_loader 等）
 └── others/             本地非仓库文件（构建产物/YOLO/VCD；gitignore，不入库）
@@ -83,10 +83,9 @@ RISC-V 核 ── 调度/计数/工单判定 ── PS 服务 ── 网口 ─�
 | 开工纪律/理解门槛 | [`docs/workflow.md`](workflow.md)、[`AGENTS.md`](../AGENTS.md) |
 | 仓库卫生规则 | [`docs/repo-hygiene.md`](repo-hygiene.md) |
 | 接口契约 | [`docs/contracts/`](contracts/README.md) |
-| 执行单/操作手册 | [`docs/runbooks/`](runbooks/README.md) |
-| 调研/背景 | [`docs/research/`](research/README.md) |
-| 历史快照 | [`docs/archive/`](archive/README.md) |
-| 逐文件索引（按需生成） | `python docs/file-guide/tools/generate.py --scope source --date YYYY-MM-DD`，输出在 `build/file-guide/`，不入库 |
+| 执行单/操作手册 | `docs/runbooks/`（现役件：J04/训练/离板检查/复现/共存交接/取数规程/pi 角色） |
+| 调研/背景 | `docs/research/`（资源清单/方案对比/数据集审计） |
+| 历史快照 | `docs/archive/`（仅存被现行报告引用的两篇） |
 
 ## 6. 什么绝对不能改
 

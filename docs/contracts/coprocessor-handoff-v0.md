@@ -24,17 +24,17 @@
 | --- | --- |
 | 网络、整数算术、张量排布、payload | [C02](../../src/coprocessor/design_v0.md) |
 | MMIO、状态、DMA、结果与 PS/核分工 | [C03](coprocessor-integration-v0.md) |
-| PS 一页纸接口（K1 摘录，非契约） | [coprocessor-wc-interface](../coprocessor-wc-interface.md) |
-| 片上存储方案（K2 PLAN/UNVERIFIED） | [coprocessor-storage-plan](../coprocessor-storage-plan.md) |
+| PS 一页纸接口（K1 摘录，非契约） | WC 接口约定（git 历史 88ac1c4 前 docs/coprocessor-wc-interface.md） |
+| 片上存储方案（K2 PLAN/UNVERIFIED） | 存储方案要点（git 历史 88ac1c4 前 docs/coprocessor-storage-plan.md） |
 | 生产 payload manifest v1（PROVISIONAL） | [coprocessor-manifest-v1](coprocessor-manifest-v1.md) |
-| K4 Windows Vivado 门禁清单（UNVERIFIED） | [coprocessor-vivado-checklist](../coprocessor-vivado-checklist.md) |
-| K5 NC 下载/交接与失败恢复 | [coprocessor-nc-handoff](../coprocessor-nc-handoff.md) |
+| K4 Windows Vivado 门禁清单（UNVERIFIED） | Vivado 检查单（git 历史 88ac1c4 前 docs/coprocessor-vivado-checklist.md） |
+| K5 NC 下载/交接与失败恢复 | NC _OFFLINE 交接要点（git 历史 88ac1c4 前 docs/coprocessor-nc-handoff.md） |
 | PS 提交/完成/取结果/恢复与 JL 待办 | [PS 驱动使用档](coprocessor-ps-driver-v0.md) |
 | 核现役语义与待确认 SoC 回写 | [design_v1 §17](../../src/riscv/design_v1.md) |
 | J 状态与收口边界 | 本单「当前状态」与[实现交接单](../runbooks/coprocessor-j04-handoff.md) |
 | J04 实现交接与 OPEN-1..12 | [实现交接单](../runbooks/coprocessor-j04-handoff.md) |
 | J03 本轮离板复验 | [验收索引](../../data/logs/2026-10-18-j03-closeout/README.md) |
-| 10/13 CNN/DDR 历史接口与失败边界 | [历史交接](../archive/cnn-ddr-offline-handoff-2026-10-13.md) |
+| 10/13 CNN/DDR 历史接口与失败边界 | git 历史（88ac1c4 前）docs/archive/cnn-ddr-offline-handoff-2026-10-13.md |
 | 交付签收 | 证据目录逐项核对，未验证项写入交付记录 |
 
 若计划、README 或本页与 C02/C03 冲突，以 C02/C03 为准，并修正文档；不得反向改契约。
@@ -58,7 +58,7 @@ J04a 控制面已在此基础上完成离板冒烟；J04b 完整验证仍未完�
 ## NC 对接边界
 
 - 片上存储需求与 10/13 历史 word 级接口可供规划，但正式 payload 字节数以模型 manifest 为准；
-- OOC 正时序不代表完整 SoC 100 MHz；整机 40 MHz 综合实现门禁已 PASS（见本页「当前状态」最新条目与[NC 交接](../coprocessor-nc-handoff.md)），板上整网推理与连续作业 UNVERIFIED；
+- OOC 正时序不代表完整 SoC 100 MHz；整机 40 MHz 综合实现门禁已 PASS（见本页「当前状态」最新条目与NC _OFFLINE 交接要点（git 历史 88ac1c4 前 docs/coprocessor-nc-handoff.md）），板上整网推理与连续作业 UNVERIFIED；
 - J08 顺序保持“算子诊断包 → 首网包 → 整机包”，当前三包均未正式发布。
 
 ## 复现入口

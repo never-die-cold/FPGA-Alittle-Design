@@ -39,7 +39,7 @@
 - 显示路径保留相机画面，分析路径按模型需要灰度化/缩放；物体坐标须映射回显示画面。视频/分析分流已在 RTL 落地（彩色原图恒延迟直通 display_*，分析路径独立），板上显示保留彩色原图；灰度 out_* 口的框 OSD 只作诊断，不代表物体定位。
 - 视频与结果按[已冻结轮次协议](docs/contracts/vision-sync-protocol-decisions.md)关联；过期、断联或无法确认的画面不得显示为当前检查通过。逐帧精确关联未实现。
 
-外包视觉材料已按文档、模型、脚本和结果拆分并入项目目录，来源、接收核对和复现缺口见 [交接索引](docs/outsource/fastener-handoff.md)。采用 OpenCV 定位 + 逐目标64×64灰度小CNN；C03已选PS定位/ROI，后续下沉PL另评审。首版按单张稳定图检查推进；连续运动的触发、关联和去重未实现，需另定节拍与线速。正式参数与真实部署仍待完成，不能把冻结方案记作已接入。
+外包视觉材料已按文档、模型、脚本和结果拆分并入项目目录，来源、接收核对和复现缺口见 data/evidence/2026-10-10-fastener-handoff/README.md。采用 OpenCV 定位 + 逐目标64×64灰度小CNN；C03已选PS定位/ROI，后续下沉PL另评审。首版按单张稳定图检查推进；连续运动的触发、关联和去重未实现，需另定节拍与线速。正式参数与真实部署仍待完成，不能把冻结方案记作已接入。
 
 **已冻结部分**：轮次协议 v1.2 最多 16 目标、前端目录 `src/web_client/`；[C02](src/coprocessor/design_v0.md)固定首网及整数/张量语义，[C03](docs/contracts/coprocessor-integration-v0.md)固定 MMIO/AXI4-Lite + DMA、PS 定位/ROI 和核判定分工，并区分 16 目标能力与检查 V0 的 10 件策略。**待冻结/验收**：实际工位支持条件、正式模型参数/阈值及 C04 应用语义完整评审；任意接触、堆叠和遮挡不在首版范围。冻结契约不代表接口已接入。
 
@@ -100,7 +100,7 @@
 - 10/13 新增：CNN MAC/卷积寻址/bias/ReLU/requant/GAP/FC 与整网控制器、诊断整数黄金和参数校验；控制器 100 MHz OOC WNS=+0.058 ns、WHS=+0.049 ns、192 DSP，外部存储/SoC 未计入。DDR 单帧所有权适配通过七组离板异常测试，实测两次均在启动 DMA 前失败并恢复。[CNN证据](data/logs/2026-10-13-cnn-arithmetic/README.md)、[DDR证据](data/logs/2026-10-13-ddr-single-frame/README.md)。
 - 10/15–10/17 新增：五组离板独立复核（C01 入口替身 11 条路径、停机期粘滞错误位含桩覆盖、CNN 快批次与几何优化独立复跑一致、N03 包离板 SHA256/配对复算 6/6 OK）；EXE 环在真实网络接通——板端 park 采集后端 + numpy CNN 引擎装入 W05 LIVE 服务骨架，PC 经 192.168.50.99:8765 消费 v1.2 包，/v1/check 两轮 PASS（94–122 s，RECHECK 属实：场景未构图+触边+超限）；板端服务挂掉→OOM 探查→cron 自愈安装全程留档。[10-15证据](data/logs/2026-10-15-c01-entry-surrogate-step2/README.md)、[10-17证据](data/logs/2026-10-17-exe-ring/README.md)。
 - **M3（10/20）卡点报备（10/17，按 §3.4 提前说明）**：已通的是 prototype 六环（真实相机→park 采集→定位→板上 numpy CNN→判定→EXE，PS 过渡路径，一轮 2 分钟级，prototype=true）；**未实现**：C03 硬件 CNN（J02）接入、正式 INT8 模型/生产黄金、正式工位建成与定标采集（N04/N05 等拍摄环境，亚克力工位尚在概念稿阶段）、工业场景矩阵 N10–N12 实测。M3 的硬件闭环与实测项预计顺延；prototype 链按既有口径只作阶段成果，不入验收。裁决与降级范围由 owner 定。
-- 未实现／未接入：正式 INT8 模型/生产黄金、payload 物理 bank/结果 DMA 适配、首网板端输出、custom DDR 完整取帧实测、真实硬件 LIVE 后端及整机发布验收。CNN MMIO/CDC/流载入/工单固件已有 J04 冒烟交接，不代表完整验证。10/12[文档核对清单](docs/archive/implementation-document-audit-2026-10-12.md)是历史盘点，新实现以对应交接证据为准。
+- 未实现／未接入：正式 INT8 模型/生产黄金、payload 物理 bank/结果 DMA 适配、首网板端输出、custom DDR 完整取帧实测、真实硬件 LIVE 后端及整机发布验收。CNN MMIO/CDC/流载入/工单固件已有 J04 冒烟交接，不代表完整验证。10/12git 历史（88ac1c4 前 docs/archive/implementation-document-audit-2026-10-12.md）是历史盘点，新实现以对应交接证据为准。
 
 
 ### 3.2 RISC-V 性能验收口径（转发与组合优化）
@@ -137,7 +137,7 @@
 | RISC-V | [核收口报告](report/module1-closure.md)、[核 README](src/riscv/README.md)、[核契约](src/riscv/design_v0.md)、[核设计 v1](src/riscv/design_v1.md) | 核验收口径与演进记录 |
 | 视觉链路 | [视觉说明](src/vision/README.md)、[视觉设计草案](src/vision/design_v0.md) | 预处理、视频接口、定位与裁剪衔接 |
 | CNN | [协处理器说明](src/coprocessor/README.md)、[模型训练准备](docs/runbooks/module3-model-training.md) | 算子/缓存接口、训练量化与黄金参考 |
-| 外包视觉方案 | [交接索引](docs/outsource/fastener-handoff.md)、[受控流水线方案](docs/%E4%BF%AE%E8%AE%A2%E6%96%B9%E6%A1%88-%E5%8F%97%E6%8E%A7%E6%B5%81%E6%B0%B4%E7%BA%BF.md) | 原始包、实验原型、复现条件与未验收项 |
+| 外包视觉方案 | data/evidence/2026-10-10-fastener-handoff/README.md、git 历史（88ac1c4 前 docs/修订方案-受控流水线.md） | 原始包、实验原型、复现条件与未验收项 |
 | 板端与前端 | [板端说明](src/pynq_host/README.md)、[网页端](src/web_client/README.md) | 通信、同步与网页端展示 |
 
 **维护原则**：根目录 `plan.md` 管全项目；各目录内的 plan 只写该模块的任务、依赖和验收，引用主计划的提交节点，不复制全项目排期。
@@ -172,7 +172,7 @@
 | 2026-09-10 | 从早期计划草稿整理出执行计划 |
 | 2026-09-14 | 建立三分支协作方式和第一阶段任务表 |
 | 2026-09-21 | 压缩 M1 排期；决策记录见 [协作日志](report/llm_log/2026-09-21-schedule-compression.md) |
-| 2026-09-23 | 将基础准备和 Part A 移入 [历史归档](src/riscv/done/m1-first-phase-completed.md) |
+| 2026-09-23 | 将基础准备和 Part A 移入 git 历史（88ac1c4 前 src/riscv/done/m1-first-phase-completed.md） |
 | 2026-09-28 | 调整为三模块并行：10/2 交付模块一 RTL，10/4 验收，10/5 启动模块三 |
 | 2026-09-28 | 重整文档职责：主计划维护分工和验收，执行日历维护每日任务和风险 |
 | 2026-09-29 | 明确允许超前完成（不改变验收标准，结余时间计入最终验收容错）；Part C 频率口径改为“实际最高通过频率/WNS 入档、125 MHz 非阻塞加分” |

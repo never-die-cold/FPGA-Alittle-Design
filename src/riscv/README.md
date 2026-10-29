@@ -2,7 +2,7 @@
 
 自研三级流水 RISC-V 核（RV32IM）：流水线重构 + 数据转发（旁路）+ 轻量分支预测。
 
-> 📋 收口证据与四档数据见 [模块一报告](../../report/module1-closure.md)；两级基线核 v0 的历史与交付物见 [done/m1-first-phase-completed.md](done/m1-first-phase-completed.md)。
+> 📋 收口证据与四档数据见 [模块一报告](../../report/module1-closure.md)；两级基线核 v0 的历史与交付物见 git 历史（88ac1c4 前）src/riscv/done/m1-first-phase-completed.md。
 > 🔧 v0 接口冻结（模块划分 / 信号表 / 控制真值表）：[design_v0.md](design_v0.md)。
 > 🔧 三级流水/转发/BHT 接口权威：[design_v1.md](design_v1.md)；v0 仅为历史基线。
 
@@ -33,7 +33,7 @@
 
 ## 版本基线
 
-- `v0`：两级基线已收口（[历史记录](done/m1-first-phase-completed.md)）；锚点 tag `partA-v0` = `962a4f5`，接口见 `design_v0.md`
+- `v0`：两级基线已收口（git 历史（88ac1c4 前）src/riscv/done/m1-first-phase-completed.md）；锚点 tag `partA-v0` = `962a4f5`，接口见 `design_v0.md`
 - `v1`：三级流水 + 转发 + Radix-4 乘法 + 可切换 BHT（实现与验收证据见 `design_v1.md` §14/§16）
 
 默认配置为转发开、BHT 关；BHT 主验收配置为转发开、BHT2。保持相同存储器端口，核 OOC 与 40MHz SoC/上板频率分开记录。提交仍须用户通过理解门槛。

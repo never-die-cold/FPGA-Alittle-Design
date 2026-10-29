@@ -1,6 +1,6 @@
 # docs —— 人读入口（5 分钟版）
 
-> 给谁看：新队友、答辩准备、或者“这个文件到底在哪”的时候。
+> 给谁看：评委、新队友、答辩准备、或者“这个文件到底在哪”的时候。
 > 先读：根 [`README.md`](../README.md) 知道作品是什么；本文件只做导航，不重复状态。
 > 状态唯一权威：[`plan.md`](../plan.md) §3。
 
@@ -8,21 +8,23 @@
 
 1. 根 [`README.md`](../README.md)：作品目标、架构与提交物。
 2. [`docs/project-map.md`](project-map.md)：目录地图、数据流、找东西、禁止事项。
-3. [`plan.md`](../plan.md)：当前状态、分工、验收与卡点。
-4. 按分工读模块 README 与契约；动手前读 [`docs/workflow.md`](workflow.md)。
-5. 要复现证据时，从 [`data/logs/README.md`](../data/logs/README.md) 或 [`data/evidence/README.md`](../data/evidence/README.md) 进入。
+3. [`plan.md`](../plan.md)：当前状态、验收与卡点。
+4. 论文级总览：[`docs/project-overview.md`](project-overview.md)、[`docs/project-summary-2026-10-27.md`](project-summary-2026-10-27.md)。
+5. 动手前读 [`docs/workflow.md`](workflow.md)；要追证据时，从 [`data/logs/README.md`](../data/logs/README.md) 或 [`data/evidence/README.md`](../data/evidence/README.md) 进入。
 
-## 2. 当前 / 历史 / 草案
+## 2. 提交物与过程材料
 
-| 类型 | 判定 | 例子 |
-|:---|:---|:---|
-| 当前 | 无历史标记，且被本文或 `project-map.md` 列为入口 | `plan.md`、`workflow.md`、`onboarding.md`、各模块 README/契约 |
-| 历史快照 | 首行有“历史快照（日期）”标记 | `archive/three-day-plan.md`、`archive/partB-*`、`archive/partC-*`、旧 review/交接单 |
-| 草案/建议稿 | 标题或状态行注明“草案/建议” | `contracts/inspection-v0-contract.md`、`contracts/c01-capture-status-contract.md` |
-| 外包原文 | `docs/outsource/fastener-vision-2026-10-07/`，原字节保留 | 不改写；项目维护版另见 `outsource/fastener-handoff.md` |
-| 归档 | `docs/archive/` | 一次性执行单、过期计划；不改写原文 |
+| 类型 | 在哪 |
+|:---|:---|
+| 作品技术文档 | [`tech-report/`](tech-report/README.md)（PDF 由 `build_tech_report.py` 生成） |
+| 答辩海报 | [`poster/`](poster/README.md) |
+| 架构图 | [`img/`](img/)（由 `make_project_diagrams.py` 生成） |
+| 跨模块冻结契约 | [`contracts/`](contracts/README.md)（C01/C02/C03/C04、检查、同步、CoreMark） |
+| 操作手册（运行book，被契约引用的现役件） | `runbooks/` |
+| 大模型协作过程记录（加分项） | [`../report/llm_log/`](../report/llm_log) |
+| 历史快照（不改写） | `docs/archive/`（仅保留被现行报告引用的两篇） |
 
-**规则**：历史文档不改写；当前文档只在一处维护，其他地方链接。
+**规则**：历史文档不改写；当前文档只在一处维护，其他地方链接。2026-10-29 提交瘦身：过程性文档（旧执行单、外包原文、旧分析稿、file-guide 生成器）移出仓库，原文见 git 历史 commit 88ac1c4。
 
 ## 3. 目录地图
 
@@ -34,15 +36,11 @@
 | `board/` | 上板指南、冒烟工程、实测记录 |
 | `data/` | 指标、运行日志、证据、黄金参考 |
 | `report/` | 设计报告 + `llm_log/` 协作记录 |
-| `tools/` | 本地辅助脚本（已入库：cop_payload_loader 等） |
-| `others/` | 本地非仓库文件（构建产物/YOLO/VCD；gitignore，不入库） |
-| `skill/` | Skill 包 |
+| `tools/` | 本地辅助脚本（cop_payload_loader 等） |
+| `skill/` | Skill 包（协作纪律沉淀，加分项） |
 | `models/`、`results/` | 外包交付的模型与实验结果；结构例外，不移动 |
-| `docs/` | 本目录：导航（README/project-map/repo-hygiene/workflow/onboarding） |
-| `docs/contracts/` | 跨模块接口/语义契约（C01/C03/C04、检查、同步、CoreMark） |
-| `docs/runbooks/` | 执行单与操作手册（上板、NC、训练、复现、数据采集） |
-| `docs/research/` | 赛题调研、资源、方案对比、数据集审计 |
-| `docs/archive/` | 历史快照（旧计划、旧交接、旧 review） |
+| `docs/` | 本目录：报告/海报/契约/手册/导航 |
+| `others/` | 本地非仓库文件（构建产物/YOLO/VCD；gitignore，不入库） |
 
 ## 4. 找东西
 
@@ -50,7 +48,6 @@
 |:---|:---|
 | 目录/数据流/禁止事项 | [`project-map.md`](project-map.md) |
 | 全项目状态/下一交付物/卡点 | [`plan.md`](../plan.md) §3 |
-| 到收尾还剩什么（无日期待办） | [`closeout-todo.md`](closeout-todo.md) |
 | 指标及原始证据 | [`data/metrics.csv`](../data/metrics.csv) |
 | 仿真/构建/上板原始日志 | [`data/logs/README.md`](../data/logs/README.md) |
 | 源码/bit 溯源与哈希 | [`data/evidence/README.md`](../data/evidence/README.md) |
@@ -60,28 +57,17 @@
 | 视觉契约 | [`src/vision/design_v0.md`](../src/vision/design_v0.md) |
 | CNN 契约 | [`src/coprocessor/design_v0.md`](../src/coprocessor/design_v0.md) |
 | CNN 协处理器状态与交接 | [`contracts/coprocessor-handoff-v0.md`](contracts/coprocessor-handoff-v0.md) |
-| CNN 协处理器 J04 实现交接与 OPEN | [`runbooks/coprocessor-j04-handoff.md`](runbooks/coprocessor-j04-handoff.md) |
-| 协处理器软件接口 | [`coprocessor-wc-interface.md`](coprocessor-wc-interface.md) |
-| 协处理器存储规划 | [`coprocessor-storage-plan.md`](coprocessor-storage-plan.md) |
-| Vivado 检查清单 | [`coprocessor-vivado-checklist.md`](coprocessor-vivado-checklist.md) |
-| 协处理器交接 | [`coprocessor-nc-handoff.md`](coprocessor-nc-handoff.md) |
-| 协处理器板端 40 MHz 时钟 | [`coprocessor-board-clock-runbook.md`](coprocessor-board-clock-runbook.md) |
-| 协处理器最小 payload loader | [`coprocessor-payload-loader.md`](coprocessor-payload-loader.md) |
-| cop_job IMEM/DMEM 初始化门禁 | [`coprocessor-imem-init-gate.md`](coprocessor-imem-init-gate.md) |
-| J07 视频与协处理器集成摸底 | [`coprocessor-video-integration-plan.md`](coprocessor-video-integration-plan.md) |
-| 协处理器 A/B 整机构建变体 | [`coprocessor-build-variants.md`](coprocessor-build-variants.md) |
-| J05 ROI 数据集交接与结构审计 | [`roi-dataset-handoff.md`](roi-dataset-handoff.md) |
+| CNN 训练流程 | [`runbooks/module3-model-training.md`](runbooks/module3-model-training.md) |
 | 仓库卫生规则 | [`repo-hygiene.md`](repo-hygiene.md) |
-| 逐文件索引（按需生成） | `python docs/file-guide/tools/generate.py --scope source --date YYYY-MM-DD` → `build/file-guide/` |
 
 ## 5. 当前入口（按角色）
 
-- 全员：[`workflow.md`](workflow.md)（开工三件事/理解门槛/收尾四件套）、[`onboarding.md`](onboarding.md)、[`closeout-todo.md`](closeout-todo.md)（本轮之后还剩什么）。
+- 全员：[`workflow.md`](workflow.md)（开工三件事/理解门槛/收尾四件套）。
 - 核/协处理器：[`src/riscv/README.md`](../src/riscv/README.md)、[`src/coprocessor/README.md`](../src/coprocessor/README.md)、[`runbooks/coprocessor-j04-handoff.md`](runbooks/coprocessor-j04-handoff.md)；核收口报告 [`report/module1-closure.md`](../report/module1-closure.md)。
 - 视觉/上板：[`src/vision/README.md`](../src/vision/README.md)、[`board/README.md`](../board/README.md)、[`contracts/c01-capture-implementation-baseline.md`](contracts/c01-capture-implementation-baseline.md)。
-- 模型/数据：[`runbooks/module3-model-training.md`](runbooks/module3-model-training.md)、[`outsource/fastener-handoff.md`](outsource/fastener-handoff.md)。
+- 模型/数据：[`runbooks/module3-model-training.md`](runbooks/module3-model-training.md)、[`runbooks/offline-inspection.md`](runbooks/offline-inspection.md)。
 - 前端：[`src/web_client/README.md`](../src/web_client/README.md)；板端服务：[`src/pynq_host/README.md`](../src/pynq_host/README.md)。
-- 交付/答辩：[`plan.md`](../plan.md) §3（当前状态与卡点）、[`report/`](../report)。
+- 交付/答辩：[`plan.md`](../plan.md) §3、[`tech-report/`](tech-report/README.md)、[`poster/`](poster/README.md)、[`report/`](../report)。
 
 ## 6. 写作规范（防 AI 味）
 
@@ -92,25 +78,11 @@
 5. 表格用于枚举和对照；叙事用短段落。
 6. 历史文档加状态行，不改写原文。
 
-## 7. 旧路径对照（仍有效的）
-
-| 旧路径 | 新位置 |
-|:---|:---|
-| `docs/kickoff_checklist.md` | `docs/workflow.md` |
-| `docs/code_review_checklist.md` | `docs/workflow.md` §2 |
-| `docs/prep_checklist.md` | `docs/workflow.md` §5（历史） |
-| `docs/repo_structure.md` | `docs/project-map.md` + 各目录 README |
-| `docs/amd_track_awards.md` | `docs/research/track_research.md` §1 |
-| `docs/track_guides_2026_summary.md` | `docs/research/track_research.md` §2 |
-| `docs/coremark_tb_contract.md` / `coremark_plan.md` | `docs/contracts/coremark.md` |
-| `docs/file-guide/index.html` 等生成物 | 按需生成到 `build/file-guide/`，不再入库 |
-
-## 8. 变更记录
+## 7. 变更记录
 
 | 日期 | 变更 |
 |:---|:---|
-| 2026-10-19 | 新增[收口待办](closeout-todo.md)（无日期版，含冻结项与伪通过判据）；J04 状态拆成 J04a/J04b，交接单迁到 `runbooks/` |
-| 2026-10-19 | 仓库整理：重写为 5 分钟导航；docs 分为 contracts/runbooks/research/archive；日志快照去重并加 manifest/恢复脚本；file-guide 生成物改为按需生成；合并 dev/riscv 的 CNN 协处理器交接入口 |
-| 2026-10-18 | 新增 CNN 协处理器 v0 薄交接索引；原 10/13 CNN/DDR 文档保留为历史证据 |
-| 2026-10-12 | 导航同步整数参考、FILE/LIVE 软件与 C01；Q01 标明已修复 |
-| 2026-10-09 | B01：区分三层收口状态并链接证据；补齐对应版本接口导航 |
+| 2026-10-29 | 提交瘦身：docs 收敛为契约/手册(现役)/报告/海报/导航；旧执行单与外包原文见 git 历史 |
+| 2026-10-19 | 重写为 5 分钟导航；docs 分为 contracts/runbooks/research/archive；file-guide 生成物改为按需生成 |
+| 2026-10-12 | 导航同步整数参考、FILE/LIVE 软件与 C01 |
+| 2026-10-09 | B01：区分三层收口状态并链接证据 |
