@@ -8,11 +8,11 @@ RISC-V 以 load/store 访问且不启用自定义指令。
 - [C02 整数与硬件契约](design_v0.md)：首网、量化、逐位舍入/饱和、排布与资源预算；
 - [C03 集成接口契约](../../docs/contracts/coprocessor-integration-v0.md)：MMIO、DMA、状态、结果、固件与 PS 分工。
 
-两份文件已于 2026-10-11 冻结；它们不是 RTL、正式 INT8 模型或 M2 验收证据。模块 J01–J10 状态见 [plan.md](plan.md)；交接从 [docs/contracts/coprocessor-handoff-v0.md](../../docs/contracts/coprocessor-handoff-v0.md) 进入。
+两份文件已于 2026-10-11 冻结；它们不是 RTL、正式 INT8 模型或 M2 验收证据。模块状态与验收边界见本 README 与 [交接单](../../docs/contracts/coprocessor-handoff-v0.md)；交接从 [docs/contracts/coprocessor-handoff-v0.md](../../docs/contracts/coprocessor-handoff-v0.md) 进入。
 
 ## 模块与边界
 
-J04a 已实现并离板冒烟：`cop_top.v`、`cop_ctrl_regs.v`、`cop_axi_lite_frontend.v`、`cop_cdc_mailbox.v`、`cop_dma_loader.v`、`cop_task_ctrl.v`、`cop_config_regs.v`、`cop_core_mmio_gate.v`，以及 `src/riscv_fw/cop_job.c` 工单固件。J04b 的 OPEN：任意 `TARGET_DESC_ADDR` 描述表（当前 `target_id == roi_index` 仅恒等映射）、结果 DMA（`RESULT_ADDR`）、真实 payload CRC 负例收口、CDC/AXI 深测收尾与板验；manifest v1→影子 bank、16 ROI 槽与生产板顶（`cop_payload_adapter.v`、`pynq_cop_top.v`）已落地，`payload_network` 离板 TB 已入 `all`；详见[实现交接单](../../docs/runbooks/coprocessor-j04-handoff.md)与[模块计划](plan.md)。
+J04a 已实现并离板冒烟：`cop_top.v`、`cop_ctrl_regs.v`、`cop_axi_lite_frontend.v`、`cop_cdc_mailbox.v`、`cop_dma_loader.v`、`cop_task_ctrl.v`、`cop_config_regs.v`、`cop_core_mmio_gate.v`，以及 `src/riscv_fw/cop_job.c` 工单固件。J04b 的 OPEN：任意 `TARGET_DESC_ADDR` 描述表（当前 `target_id == roi_index` 仅恒等映射）、结果 DMA（`RESULT_ADDR`）、真实 payload CRC 负例收口、CDC/AXI 深测收尾与板验；manifest v1→影子 bank、16 ROI 槽与生产板顶（`cop_payload_adapter.v`、`pynq_cop_top.v`）已落地，`payload_network` 离板 TB 已入 `all`；详见[实现交接单](../../docs/runbooks/coprocessor-j04-handoff.md)。
 
 未实现/未验收：`buffer.v` 实体 BRAM 生产适配、`dma_ctrl.v` 独立描述符顶层、`isa_extension.v`（v0 不例化、不占 opcode）、视频集成验证与板端整网输出验收；SoC 集成（`pynq_cop_top.v`，核＋协处理器）已实现并通过 40 MHz 整机综合实现门禁，板级验收未完成。
 

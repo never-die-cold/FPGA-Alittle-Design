@@ -6,7 +6,7 @@
 
 ## 1. 五分钟路线
 
-1. 根 [`README.md`](../README.md)：作品目标、架构、里程碑、提交物。
+1. 根 [`README.md`](../README.md)：作品目标、架构与提交物。
 2. [`docs/project-map.md`](project-map.md)：目录地图、数据流、找东西、禁止事项。
 3. [`plan.md`](../plan.md)：当前状态、分工、验收与卡点。
 4. 按分工读模块 README 与契约；动手前读 [`docs/workflow.md`](workflow.md)。
@@ -77,7 +77,7 @@
 ## 5. 当前入口（按角色）
 
 - 全员：[`workflow.md`](workflow.md)（开工三件事/理解门槛/收尾四件套）、[`onboarding.md`](onboarding.md)、[`closeout-todo.md`](closeout-todo.md)（本轮之后还剩什么）。
-- 核/协处理器：[`src/riscv/plan.md`](../src/riscv/plan.md)、[`src/riscv/plan_calendar.md`](../src/riscv/plan_calendar.md)、[`src/coprocessor/README.md`](../src/coprocessor/README.md)、[`runbooks/coprocessor-j04-handoff.md`](runbooks/coprocessor-j04-handoff.md)。
+- 核/协处理器：[`src/riscv/README.md`](../src/riscv/README.md)、[`src/coprocessor/README.md`](../src/coprocessor/README.md)、[`runbooks/coprocessor-j04-handoff.md`](runbooks/coprocessor-j04-handoff.md)；核收口报告 [`report/module1-closure.md`](../report/module1-closure.md)。
 - 视觉/上板：[`src/vision/README.md`](../src/vision/README.md)、[`board/README.md`](../board/README.md)、[`contracts/c01-capture-implementation-baseline.md`](contracts/c01-capture-implementation-baseline.md)。
 - 模型/数据：[`runbooks/module3-model-training.md`](runbooks/module3-model-training.md)、[`outsource/fastener-handoff.md`](outsource/fastener-handoff.md)。
 - 前端：[`src/web_client/README.md`](../src/web_client/README.md)；板端服务：[`src/pynq_host/README.md`](../src/pynq_host/README.md)。

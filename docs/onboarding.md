@@ -88,9 +88,9 @@ Agent = 能帮你**实际干活**的 AI（写代码、改文件、跑命令）�
    - **Bug 报告**：仿真 / 上板 / 工具链问题，填现象、复现步骤、期望与实际结果、日志
    - **任务 / 待办**：需要跟踪的任务或提问，填验收标准、负责人、截止时间
 2. **标签**（负责人建一次，共 5 个）：`bug` / `rtl` / `verify` / `docs` / `hardware`
-3. **里程碑与检查点**：提交节点以根目录 `plan.md` §1.2 为准；每阶段验收开一个 gate issue 挂到对应里程碑（M1 三个：[#19 Part A](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/19) / [#20 Part B](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20) / [#21 Part C + M1 收口](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)），验收清单全勾才关闭。远端 milestone 日期由维护人核对同步，不把本地文档修改视为远端更新
+3. **issues 与检查点**：核心 gate issue 已关闭归档（[#19](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/19) / [#20](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/20) / [#21](https://github.com/never-die-cold/FPGA-Alittle-Design/issues/21)）；提交节点以根目录 `plan.md` §1.2 为准。
 4. **关闭规矩**：修复的 commit message 写 `fixes #12`（或 `closes #12`），推送后自动关闭；修复过程顺手记入 `report/llm_log/`
-5. **与排期的边界**：主计划只固定收口时间；全项目下一交付物、依赖与卡点看根目录 `plan.md` §3，核专项看 `src/riscv/plan_calendar.md`，不为逐日排期重复建 issue
+5. **与提交节点的边界**：主计划只定提交节点；状态与待办看根目录 `plan.md` §3 与 `docs/closeout-todo.md`，不建逐日排期 issue
 
 ---
 

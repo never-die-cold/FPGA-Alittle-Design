@@ -93,3 +93,30 @@
 - 全量相对链接抽验（改动文件 468 个链接）：0 死链（plan.md 的百分号编码中文文件名经验证真实存在，为检查脚本误报口径）。
 - `python -m py_compile` 两个 tech-report 脚本 PASS；`git diff --check` CLEAN。
 - 累计本会话改动：107 文件，+311/−2163，全部未 commit。
+
+## 补充3（同日）：README/plan 清出执行管理与留痕内容
+
+用户要求：留痕日志/记录不进 README；Part A/B/C 等执行管理内容不进 plan 和 README。
+
+- **README.md（+16/−58）**：删除"风险预案（三级版本策略 L1–L3.5）""大模型协作与 Skill 沉淀"两大节及 TOC 条目；删除树注释里的状态尾巴（收口证据/未验收/未接入字样）；指标表删除"禁止先写目标后凑数据"说教行；架构注释去证据留痕链接；"已冻结、未接入"改"形态"；对照表修入 "docs/research/proposal_upgrade.md" 文本-路径不一致；目录表 plan.md 注释改"目标、验收口径与当前状态"。
+- **plan.md（+11/−16）**：标题去"收口节点、交付物"；§1 改"产品定义"；名称说明删 Part A/B/C、M1–M4、历史"第一阶段"三行；§1.4 改"验收清单"（M2/M3/M4 键 → 预处理与推理/工业应用闭环/材料与发布）；§3.2.1 → §3.2 "RISC-V 性能验收口径（转发与组合优化）"（补齐编号洞）；§3.4 进度风险行去 README 版本预案引用；§5 改"工作纪律与风险维护"；页首"M2 验收未完成"改"预处理／工业闭环整机验收未完成"；L3 保底引用改为内联口径。
+- **保留（有意）**：plan.md §3.1 日期账目与 §变更记录表（历史存证，只追加不改写）；plan.md 留下的编号洞（3.3、旧 3.4→现无 3.5 变化）因外部文档引用 §3.4 锚点而不重排；src/riscv/plan.md（核计划）的 Part A/B/C 章节结构与学习路线**未动**（待用户拍板，其 Part 章节实为核验收档案）。
+- 验证：改动文件 55 链接 0 死（唯一命中为已验证真实存在的中文编码文件名误报）；`git diff --check` CLEAN。
+- 本轮 2 文件 +27/−74，与此前 88ac1c4 增量合计待下笔 commit。
+
+## 补充4（同日）：执行管理内容全仓清出（用户拍板"全部文档"并允许 plan 移本地）
+
+- **移出仓库**：`src/riscv/plan.md`、`src/riscv/plan_calendar.md`、`src/coprocessor/plan.md` →
+  `E:\Projects\FPGA-Alittle-Design-local-backup-20261028\plans-moved-20261028\`（plan-riscv.md / plan_calendar.md / cop-plan.md）。
+  技术承接：核验收口径→根 plan §3.2+收口报告；核历史→src/riscv/done/；协处理器状态→cop README+handoff-v0+j04-handoff。
+- **引用全数改向**（14 处）：AGENTS.md（开工清单/参考入口/目录边界）、workflow.md、PR 模板、docs/README、
+  src/README、project-map、onboarding、plan.md（§4 表/两处正文+变更记录新行）、project-overview、
+  handoff-v0、j04-handoff、poster-content-map（去 5 处行号引用）、cop README、coremark 契约依据行。
+- **overview 补漏**：9 处 EXE→网页端、里程碑段落→提交节点指引、负责人列清空、状态口径刷到 10-28；
+  配图脚本 2 处（Windows EXE 框/同步协议注）改网页端口径并**重绘 7 图**（仅 fig1_system.png 字节变化）。
+- **词表收尾**：module3-model-training 交付表去 M2/M3/M4 键与负责人列；sim README/riscv_fw README
+  Part B/A 标签去除；onboarding issues 段改事实口径。
+- **Part ABC 保留处（有意）**：design_v0/design_v1 冻结契约内的带日期阶段标签（与 data/logs 目录名和
+  gate issue 编号对应）、vision design_v0 历史注、根 plan 变更记录表、research/历史文档、banner 檔。
+- 验证：`check_repo_hygiene.py` **PASS 0 ERROR**；改动文档链接抽验 0 死链（唯一命中为已核实存在的
+  中文编码文件名）；`git diff --check` CLEAN。本轮 25 文件 +88/−473，待 commit。

@@ -12,7 +12,7 @@
 
 - 全项目目标与验收口径：[`plan.md`](../plan.md)（唯一权威）。
 - 当前状态与卡点：[`plan.md`](../plan.md) §3。
-- 模块一核：[`src/riscv/plan.md`](../src/riscv/plan.md)、[`src/riscv/design_v1.md`](../src/riscv/design_v1.md)、[`report/module1-closure.md`](../report/module1-closure.md)。
+- 模块一核：[`report/module1-closure.md`](../report/module1-closure.md)、[`src/riscv/README.md`](../src/riscv/README.md)、[`src/riscv/design_v0.md`](../src/riscv/design_v0.md)、[`src/riscv/design_v1.md`](../src/riscv/design_v1.md)。
 - 模块二视觉：[`src/vision/README.md`](../src/vision/README.md)、[`src/vision/design_v0.md`](../src/vision/design_v0.md)。
 - 模块三 CNN：[`src/coprocessor/README.md`](../src/coprocessor/README.md)、[`src/coprocessor/design_v0.md`](../src/coprocessor/design_v0.md)。
 - 指标：[`data/metrics.csv`](../data/metrics.csv)。

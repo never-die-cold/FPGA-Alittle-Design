@@ -8,7 +8,7 @@
 ## 当前状态
 
 - J03 离板计算链已收口：诊断整数参考、算子、Conv→GAP→FC 控制器和逐元素 TB 可复现。
-- J04a（JL 侧实现/冒烟）已交接：`cop_top`、MMIO/CDC、AXI4-Lite、DMA loader、核接入门和工单固件均有仓库内 TB；J04b：manifest v1→影子 bank、16 ROI 槽与生产板顶（`pynq_cop_top`）已落地，整机 40 MHz 综合实现门禁 PASS；任务描述表、结果 DMA、CDC/AXI 深测收尾与板验未完成。详见[实现交接单](../runbooks/coprocessor-j04-handoff.md)与[模块计划](../../src/coprocessor/plan.md)。
+- J04a（JL 侧实现/冒烟）已交接：`cop_top`、MMIO/CDC、AXI4-Lite、DMA loader、核接入门和工单固件均有仓库内 TB；J04b：manifest v1→影子 bank、16 ROI 槽与生产板顶（`pynq_cop_top`）已落地，整机 40 MHz 综合实现门禁 PASS；任务描述表、结果 DMA、CDC/AXI 深测收尾与板验未完成。详见[实现交接单](../runbooks/coprocessor-j04-handoff.md)；模块说明见 [src/coprocessor/README.md](../../src/coprocessor/README.md)。
 - WC 侧 PS 驱动/模拟硬件/服务引擎已按 C03 §13 落库并跑通离板一轮（mock/脚本分类器，非板上）；提交/完成/取结果/恢复口径与 JL 待办见 [PS 驱动使用档](coprocessor-ps-driver-v0.md)。
 - JL K1/K2 已并入；C03 §14 A1/A2（READY=!BUSY、ACCEPTED/UNCONSUMED/CONSUME、终态互斥、RESULT_SEQ 每轮递增、NO_ACK/HW_TIMEOUT 软件看门狗）已同步到 PS 驱动/mock/服务：有效结果落盘后 PS CONSUME，错误/超时读码后消费。固件重复作业与预启动完成通知仍是阻断项。
 - JL K4/K5 与固件 E2E 已并入（`af53fe2`）：`firmware_e2e` 用真实 CPU/固件/MMIO 跑通 START→ACCEPTED→终态→结果/PSCONSUME；K3 BRAM 增加延迟边界。Vivado 40 MHz 门禁、bitstream、`.hwh` 与板上仍 UNVERIFIED（af53fe2 时点口径；后续门禁与上板进展见下方 10-22/10-23/10-25 条目）；WC 已加只读板上预检 `sim/scripts/cop_board_preflight.py`，数据面等 J08。
@@ -31,7 +31,7 @@
 | K5 NC 下载/交接与失败恢复 | [coprocessor-nc-handoff](../coprocessor-nc-handoff.md) |
 | PS 提交/完成/取结果/恢复与 JL 待办 | [PS 驱动使用档](coprocessor-ps-driver-v0.md) |
 | 核现役语义与待确认 SoC 回写 | [design_v1 §17](../../src/riscv/design_v1.md) |
-| J01–J10 状态和 J04 收口边界 | [模块计划](../../src/coprocessor/plan.md) |
+| J 状态与收口边界 | 本单「当前状态」与[实现交接单](../runbooks/coprocessor-j04-handoff.md) |
 | J04 实现交接与 OPEN-1..12 | [实现交接单](../runbooks/coprocessor-j04-handoff.md) |
 | J03 本轮离板复验 | [验收索引](../../data/logs/2026-10-18-j03-closeout/README.md) |
 | 10/13 CNN/DDR 历史接口与失败边界 | [历史交接](../archive/cnn-ddr-offline-handoff-2026-10-13.md) |

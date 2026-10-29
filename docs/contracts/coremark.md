@@ -323,7 +323,7 @@ vvp build/tb_core_coremark.vvp +hex=<镜像> +exp_exit=0 +timer_addr=80008000 +m
 
 > 状态：执行中；v0 CoreMark 仿真通过，脚本入口已接入；剩余 SoC 计数器/DMEM 上板预载、metrics 与四档数据
 > 主责：基准线 `dev/bench`｜窗口：9/25–10/1（与 Part B/C 并行，2026-09-21 压缩排期）
-> 依据：`docs/research/core_comparison.md`（决策与指标定义）、`src/riscv/plan.md` §1–§3（剩余计划与遗留）、`sim/README.md`
+> 依据：`docs/research/core_comparison.md`（决策与指标定义）、`sim/README.md`
 > 配套契约：本文 §1–§7——接口/观测/判据的唯一执行口径
 > 冲突处理：接口以 `src/riscv/design_v0.md` 为唯一权威；本附录只回答"做什么、谁做、怎么验收、卡在哪"
 

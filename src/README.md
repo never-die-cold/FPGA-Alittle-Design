@@ -7,7 +7,7 @@
 
 | 目录 | 职责 | 入口 |
 |:---|:---|:---|
-| `riscv/` | 自研 RV32IM 核、流水线/转发/BHT、最小 SoC；v0/v1 接口契约 | [README](riscv/README.md)、[plan](riscv/plan.md)、[design_v0](riscv/design_v0.md)、[design_v1](riscv/design_v1.md) |
+| `riscv/` | 自研 RV32IM 核、三级流水/转发/BHT、最小 SoC；v0/v1 接口契约 | [README](riscv/README.md)、[design_v0](riscv/design_v0.md)、[design_v1](riscv/design_v1.md) |
 | `vision/` | HDMI 视觉预处理、捕获状态、AXI 配置、OSD | [README](vision/README.md)、[design_v0](vision/design_v0.md) |
 | `coprocessor/` | INT8 CNN 算子、整网控制器、整数参考 | [README](coprocessor/README.md)、[design_v0](coprocessor/design_v0.md) |
 | `riscv_fw/` | RISC-V 裸机固件、CoreMark、测试程序与 hex/dis | [README](riscv_fw/README.md)、[Makefile](riscv_fw/Makefile) |
