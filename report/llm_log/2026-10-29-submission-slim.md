@@ -43,3 +43,24 @@ C. 为什么用 git rm 而不是改历史？
 - PR B（活代码剪枝）：mock 服务 parse_trigger_ref 搬迁、协处理器未例化变体删除、走访 sim/vision 诊断 tb——全部待回归；
 - 全量回归矩阵一次跑齐（核 24 档 + 视觉 RTL/Python + 检查链 + 协处理器仿真/参考）；
 - docs/tech-report 与 poster 内 EXE 时代配图（fig_exe.png / exe.png）需换为网页端形态（用户材料修订线，非本步范围）。
+
+## PR B 与全量矩阵（2026-10-29 补记）
+
+裁决更新：
+1. **MOCK 服务保留**（用户确认）——`parse_trigger_ref` 被 LIVE 服务 import，20 组视觉回归与 D6 白名单叙事锚在 mock 上，删除使材料变差。
+2. **协处理器五件连契约一起退役**（用户确认）——mac_lane/dot8/int8_mac/mac_array/int8_requant 及其 tb 删除；
+   冻结契约 design_v0.md §4.4 改为带退役记录的历史演进条目；run_iverilog/run_coprocessor_iverilog 双驱动删 8 个入口。
+   门禁：cop iverilog all 全绿 + cop python 13 组全绿。
+3. **sim/vision 审计结论：无可砍项**——25 个 RTL tb 全部在 run_vision_iverilog.sh 回归清单内。
+
+**折返教训（fixture 回归依赖）**：连根砍 arm-localize-baseline 后，`test_arm_localize.py`/`test_arm_localize_package.py`
+两个回归组失败——其一读 `two_targets.json`（439 B），其二 import `sim/scripts/make_arm_localize_pkg.py`（2.5 KB，
+且是保留文档 pi-dev-roles §3 的正文工具）。按最小子集恢复：fixture + 组包脚本 + arm-localize-runbook.md + 目录 README；
+45 MiB 原始大包仍不回（tar 备份 + git 历史 88ac1c4 双在线）。同因曾级联打红 CORE 段——`run_iverilog.sh all` 是全家桶
+（核 TB+协处理器双线+bench 四档+CPI/hazard/muldiv/BHT+vision 门禁+视觉 RTL+vision python），前 13 子步绿、末段挂；
+最小集恢复后 vision python 全 20 组复跑 exit 0，等价全绿。教训入账：**删整目录前必须 grep 测试 fixture 消费关系，管道 tail 会吞退出码不可作门禁写法**。
+
+最终门禁状态：hygiene PASS（0 ERROR）；cop iverilog all PASS；cop python PASS；vision RTL all PASS（VIV_EXIT=0）；
+inspection 17 组 PASS；vision python 20 组复跑 PASS；git diff --check 干净；tracked 3,476 files。
+
+遗留：tech-report/poster 的 EXE 时代配图需换成网页端形态；若赛方平台要求 zip，用 `git archive` 出包（待用户确认）。
