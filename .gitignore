@@ -100,3 +100,4 @@ build/artifacts/
 # --- 本地非仓库文件（others/，仅本机保留） ---
 /others/
 .zcode/
+/src/riscv_fw/*.dis

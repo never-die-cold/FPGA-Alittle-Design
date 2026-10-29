@@ -154,8 +154,6 @@ run_firmware_e2e() {
     (cd "$ROOT" && vision_run_checked "$BUILD/firmware_e2e.log" vvp "$BUILD/firmware_e2e.vvp" "+golden=$dir/zero/result.txt")
 }
 case "${1:-all}" in
-    mac_lane) run_test mac_lane ;;
-    dot8) run_test dot8 ;;
     mmio_gate) run_test cop_core_mmio_gate ;;
     ctrl_regs) run_test cop_ctrl_regs ;;
     mailbox) run_test cop_cdc_mailbox ;;
@@ -171,9 +169,6 @@ case "${1:-all}" in
     axis_fifo_random) run_test cop_axis_async_fifo_random ;;
     firmware) run_firmware ;;
     firmware_e2e) run_firmware_e2e ;;
-    mac) run_test int8_mac ;;
-    array) run_test mac_array ;;
-    requant) run_test int8_requant ;;
     gap) run_test int8_gap ;;
     logits) run_test int8_logits ;;
     conv) run_convolution ;;
@@ -188,6 +183,6 @@ case "${1:-all}" in
     pynq_top) run_pynq_top ;;
     watchdog) run_convolution watchdog; run_network watchdog ;;
     pipeline) run_test mac_array_pipeline; run_test int8_requant_pipeline ;;
-    all) run_test cop_core_mmio_gate; run_test cop_ctrl_regs; run_test cop_cdc_mailbox; run_test cop_config_regs; run_test cop_dma_loader; run_test cop_payload_adapter; run_test cop_activation_storage; run_test cop_task_ctrl; run_test cop_axi_lite_frontend; run_test cop_axi_lite_cdc; run_test cop_axis_async_fifo_random; run_firmware; run_firmware_e2e; run_top; run_pynq_top; run_test mac_lane; run_test dot8; run_test int8_mac; run_test mac_array; run_test int8_requant; run_test int8_gap; run_test int8_logits; run_test mac_array_pipeline; run_test int8_requant_pipeline; run_test cop_bram_latency; run_imem_gate; run_board_summary; run_roi_dataset; run_payload_loader; run_payload_network; run_convolution; run_network ;;
-    *) echo 'usage: run_coprocessor_iverilog.sh [mmio_gate|ctrl_regs|mailbox|config_regs|dma_loader|payload_adapter|payload_loader|imem_gate|board_summary|roi_dataset|activation_storage|task_ctrl|decision_ab|axi_lite|axi_lite_cdc|axis_fifo_random|firmware|firmware_e2e|cop_top|pynq_top|mac_lane|dot8|mac|array|requant|gap|logits|pipeline|conv|network|bram_network|manifest_v1|payload_network|watchdog|all]'; exit 2 ;;
+    all) run_test cop_core_mmio_gate; run_test cop_ctrl_regs; run_test cop_cdc_mailbox; run_test cop_config_regs; run_test cop_dma_loader; run_test cop_payload_adapter; run_test cop_activation_storage; run_test cop_task_ctrl; run_test cop_axi_lite_frontend; run_test cop_axi_lite_cdc; run_test cop_axis_async_fifo_random; run_firmware; run_firmware_e2e; run_top; run_pynq_top; run_test int8_gap; run_test int8_logits; run_test mac_array_pipeline; run_test int8_requant_pipeline; run_test cop_bram_latency; run_imem_gate; run_board_summary; run_roi_dataset; run_payload_loader; run_payload_network; run_convolution; run_network ;;
+    *) echo 'usage: run_coprocessor_iverilog.sh [mmio_gate|ctrl_regs|mailbox|config_regs|dma_loader|payload_adapter|payload_loader|imem_gate|board_summary|roi_dataset|activation_storage|task_ctrl|decision_ab|axi_lite|axi_lite_cdc|axis_fifo_random|firmware|firmware_e2e|cop_top|pynq_top|gap|logits|pipeline|conv|network|bram_network|manifest_v1|payload_network|watchdog|all]'; exit 2 ;;
 esac
