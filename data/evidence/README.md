@@ -19,7 +19,7 @@
 4. 缺 README 的目录标记 `PROVENANCE GAP`；补说明时不得把“有文件”写成“已验收”。
 
 <!-- RUN-INDEX:START -->
-## 目录索引（8 个证据主题，自动生成）
+## 目录索引（9 个证据主题，自动生成）
 
 | 目录 | 日期 | 文件数 | 大小 | 说明 |
 |:---|:---:|---:|---:|:---|
@@ -31,6 +31,7 @@
 | `2026-10-10-offline-inspection` | 2026-10-10 | 16 | 354 KB | FILE_REPLAY 示例证据 |
 | `2026-10-10-model-reference` | 2026-10-10 | 75 | 3.4 MB | 交付原型 FP32 软件参考包 |
 | `2026-10-10-fastener-handoff` | 2026-10-10 | 3 | 17 KB | 2026-10-10-fastener-handoff |
+| `2026-10-03-arm-localize-baseline` | 2026-10-03 | 2 | 1 KB | 2026-10-03-arm-localize-baseline（最小留存） |
 <!-- RUN-INDEX:END -->
 
 ## 相关入口
