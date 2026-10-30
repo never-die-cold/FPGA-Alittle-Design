@@ -2,7 +2,9 @@
 
 PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采集；Jupyter 保留为板端调试与复现入口。工业操作界面为 HTML 网页端（[src/web_client](../web_client/README.md)），采集卡视频和网口识别结果统一展示，见根目录 [项目主计划](../../plan.md) §1.3。
 
-## 当前实现与规划边界（2026-10-12）
+当前产品入口为 `cop_product_service.py`（C01 捕获 → PS 定位/ROI → PL CNN → LIVE API）；最新实板数值对照及剩余精度/定位问题统一见 [plan.md §3.1](../../plan.md#31-当前状态)。网页端真实数据接线仍未实现。下列带日期段落保留对应阶段的边界。
+
+## 早期实现与规划边界（2026-10-12）
 
 已有 `vision_regs.py`／`vision_demo.py`／`m2_onboard.py`／`onboard_smoke.py` 配置及板端诊断；
 `data/golden/vision/localize/reference.py`／`arm_localize.py` 与打包工具提供定位／裁剪黄金参考，不等于实时部署。
@@ -34,7 +36,7 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
 
 后续新增 `dataset_manifest.py`、`dataset_audit.py` 和仓库 CLI：720p 采集清单、
 会话/精确重复像素/实物编号泄漏、覆盖统计和来源声明已用测试夹具验证，理解题及补测已通过。
-这些工具的测试夹具证据见[数据集审计](../../docs/research/fastener-dataset-audit.md)，不验收真实标签或模型精度。10/12 离板证据记录为 14 组（含当时尚未提交的构建输入审计）并退出 0；10/13 记录为 15 组。当前 `run_vision_python.sh` 入口为 **21 组**，`run_inspection_python.sh` 为 **19 组**；新增组以脚本和各自证据为准，不把历史 15 组当当前全量。
+这些工具的测试夹具证据见[数据集审计](../../docs/research/fastener-dataset-audit.md)，不验收真实标签或模型精度。10/12 离板证据记录为 14 组（含当时尚未提交的构建输入审计）并退出 0；10/13 记录为 15 组。当前 `run_vision_python.sh` 入口为 **19 组**，`run_inspection_python.sh` 为 **17 组**；各组以脚本和各自证据为准，不把历史 15 组当当前全量。
 
 - `demo.ipynb`：板端调试与复现 notebook
 - `benchmark.ipynb`：基线对比与指标采集（CPI、延迟、帧率、加速比）
@@ -97,7 +99,7 @@ offset，适配器不再加 base。上板后先跑只读预检
 `PynqDmaPlane`（2026-10-26）按 `tools/cop_payload_loader.py` 同一条 MM2S 握手实现：
 每个 kind 一个包、GPIO `dma_start` 电平启动、`STATUS.DMA_BUSY` 把关、`DMA_BYTES` 对账；
 PS 地址由它自己分配的 buffer 决定（`addresses=plane.addresses`），单包 ROI 上限 15 目标。
-10/27 已在共存旧包上运行真实帧；多目标结果槽错位已发现并修复 RTL，修复包未上板，不能据此签署多目标验收。描述符表仍按门禁装载器保持清零、不做 DMA（J08 未冻结物理排布）。
+旧共存包的多目标结果槽错位修复及后续实板对照统一见 [plan.md §3.1](../../plan.md#31-当前状态)。数值对照不代替分类精度与工业整机验收。描述符表仍按门禁装载器保持清零、不做 DMA（J08 未冻结物理排布）。
 
 真实服务入口为 `cop_product_service.py --package <包> --root <新目录> --order 2,4,4`；
 调用 C01 park 捕获、PS 定位/ROI 和 PL CNN，记录 `COP_HW` 来源。当前模型与定位仍待重新联调，

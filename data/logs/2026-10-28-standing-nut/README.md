@@ -34,3 +34,12 @@ r3 在这张图上 FP32 为 3/5（两个竖立仍误判 bolt），INT8 为 5/5�
 
 原始训练、量化、范围搜索、比较日志分别保留 training-r5/r6.log、ptq-r5/r6.log、calibration-r6.log 和各比较目录；CLI 均退出 0，不把过程完成等同于正式分类验收。
 候选归档：[CNN r6](../../evidence/2026-10-28-cnn-r6/README.md)。当前可识别这张清晰图中的竖立姿态，但更多朝向/实物与独立会话仍须采样；新模型尚未上板，纸边误框和自动清晰度拒收仍未实现。
+
+## 2026-10-30 重复图片去重
+
+下列编号图与保留图逐字节相同；比较 JSON、ROI 和原帧保持不变。原路径可从 `a631fd2` 恢复。
+
+- `layout03-after-r6/numbered.png` → [layout03-after-r5/numbered.png](layout03-after-r5/numbered.png)
+- `focused-after-r5/numbered.png` → [archive-check-r6/numbered.png](archive-check-r6/numbered.png)
+- `focused-after-r6/numbered.png` → [archive-check-r6/numbered.png](archive-check-r6/numbered.png)
+- `focused-before-training/numbered.png` → [archive-check-r6/numbered.png](archive-check-r6/numbered.png)

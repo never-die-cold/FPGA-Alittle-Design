@@ -101,3 +101,7 @@ build/artifacts/
 /others/
 .zcode/
 /src/riscv_fw/*.dis
+
+# Retired HOG baseline; the product uses CNN.
+/models/hog-svm-train-only.yml
+/sim/vision/train_hog_fastener_classifier.py

@@ -51,3 +51,9 @@ YOLO 三个原跟踪文件只执行 git rm --cached，仍留在原路径；字�
 
 验证：真实采集/训练/量化 CLI、6 个脚本 AST、两个评估器 --help、YOLO 文件保留哈希、忽略规则、已跟踪执行代码无 ultralytics 导入；git diff --check 和缓存区检查均通过。
 未完成：新候选的板端数值对拍、稳定的跨姿态/光照真实精度；后续竖立螺母的失焦画面已单独保留，等待清晰重拍，不把压力图直接作为合格训练输入。
+
+## 2026-10-30 重复图片去重
+
+下列编号图与保留图逐字节相同；比较 JSON、ROI 和原帧保持不变。原路径可从 `a631fd2` 恢复。
+
+- `layout03-r2/numbered.png`、`layout03-r3/numbered.png`、`layout03-r4/numbered.png` → [相同编号图](../2026-10-28-standing-nut/layout03-after-r5/numbered.png)

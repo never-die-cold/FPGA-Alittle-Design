@@ -5,6 +5,8 @@
 - 模型：原 64×64 灰度、四卷积/BN/ReLU、GAP、FC 3 类结构，继续符合 C02 参数排布；没有改 RTL 或硬件网络结构。
 - 从 r3 继续 80 epoch，lr=0.00005，seed=20261028，BN running statistics 冻结、类别加权、分类 logit 间隔目标 2。r6 在每 10 轮检查点中按训练正确数、再按干净训练交叉熵选择第 70 轮；没有用开发图选择检查点。最后 80 轮拟合为 32/33，所选 70 轮为 33/33。
 
+本页记录冻结时点；后续实板进展见 [plan.md §3.1](../../../plan.md#31-当前状态)。
+
 ## 结果与边界
 
 | 场景/用途 | FP32 正确 | INT8 正确 | FP32/INT8 分类一致 |
@@ -19,6 +21,7 @@ payload 是 36,032 B PROVISIONAL，model_id 0x4a303257，CRC32 0xa73ee0d9；不�
 
 ## 文件
 
+- `training-start-r3.pt`：2026-10-30 补入原训练初始化权重，字节与 `training.json` 的 `initial_weights_sha256` 一致。
 - `fp32.pt` / `training.json`：实际候选及完整训练元数据；训练样本列表与原权重/标签 SHA256 均记录。
 - `payload/provisional-model/`：INT8 payload、manifest 与哈希侧车。
 - `quantization.json` / `calibration.json`：校准样本、逐 ROI 类别、激活范围及范围搜索原始数据。
@@ -30,7 +33,7 @@ payload 是 36,032 B PROVISIONAL，model_id 0x4a303257，CRC32 0xa73ee0d9；不�
 训练和采样历史见[垫圈记录](../../logs/2026-10-28-washer-collection/README.md)及[竖立螺母记录](../../logs/2026-10-28-standing-nut/README.md)。从仓库根目录运行，输出目录须用新名字：
 
 ```powershell
-python -X utf8 sim/scripts/fine_tune_real_rois.py --annotations data/logs/2026-10-28-standing-nut/annotations-confirmed-train.json --weights sim/build/real-roi-adapt-20261028-r3/fp32.pt --epochs 80 --lr 0.00005 --seed 20261028 --balance-classes --min-logit-margin 2 --select-training-fit --output sim/build/<新训练目录>
+python -X utf8 sim/scripts/fine_tune_real_rois.py --annotations data/logs/2026-10-28-standing-nut/annotations-confirmed-train.json --weights data/evidence/2026-10-28-cnn-r6/training-start-r3.pt --epochs 80 --lr 0.00005 --seed 20261028 --balance-classes --min-logit-margin 2 --select-training-fit --output sim/build/<新训练目录>
 python -X utf8 sim/scripts/calibrate_real_rois.py --weights sim/build/<训练目录>/fp32.pt --annotations data/logs/2026-10-28-standing-nut/annotations-confirmed-train.json --output data/logs/<新的范围搜索.json>
 python -X utf8 sim/scripts/quantize_real_rois.py --annotations data/logs/2026-10-28-standing-nut/annotations-confirmed-train.json --weights sim/build/<训练目录>/fp32.pt --model-id 0x4A303257 --activation-headroom 1 --output sim/build/<新PTQ目录>
 python -X utf8 sim/scripts/check_real_scene_models.py --frame data/logs/2026-10-28-standing-nut/focused/raw.png --weights data/evidence/2026-10-28-cnn-r6/fp32.pt --package data/evidence/2026-10-28-cnn-r6 --reference-package data/evidence/2026-10-28-cnn-r6/reference --truth-counts 0 5 0 --output data/logs/<新姿态比较目录>

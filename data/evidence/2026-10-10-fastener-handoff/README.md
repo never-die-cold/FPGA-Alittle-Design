@@ -1,24 +1,5 @@
-# 2026-10-10-fastener-handoff
+# 外包材料接收清单（历史）
 
-> 状态：**PROVENANCE GAP**（整理时未找到该目录的原始 README；以下仅写可核实的目录事实，来源/结论/负责人待原执行人补充）。
-> 日期：未知
+`manifest.csv` 和 `installed.csv` 保留接收时点的路径、大小及校验记录，用于对照 Git 历史 `cd7290e`。它们不是当前工作树的文件完整性清单：后续已退役 YOLO、HOG/SVM 和旧过程材料。
 
-## 目录事实
-
-- 文件数：4
-- 大小：32.5 KB
-- 顶层条目（前 8 个）：
-- `installed.csv`
-- `manifest.csv`
-
-
-
-## 待补
-
-- [ ] 这份证据要证明什么
-- [ ] 来源（commit/外包包/本机工作区）
-- [ ] 输入与 sha256
-- [ ] 校验命令与结果
-- [ ] 能证明什么、不能证明什么
-
-> 补全后删除本目录的 `PROVENANCE GAP` 标记，并运行 `python sim/scripts/index_runs.py --write` 刷新索引。
+当前保留的 FP32 原型见 [models](../../../models/README.md)，现役 r6 模型、训练输入和 INT8 参数见 [CNN r6 包](../2026-10-28-cnn-r6/README.md)。历史 CSV 原样保留，不用当前目录缺少旧支线文件推断接收失败。

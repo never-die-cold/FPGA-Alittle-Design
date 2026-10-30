@@ -42,7 +42,6 @@
 ## JL 当前可交付给开发的内容
 
 - 现役数据通路：`mac_array_pipeline` → `conv_engine` → `cnn_sequencer`；
-- 诊断模块：`mac_lane`、`dot8`，未被现役阵列实例化；
 - 两组诊断整网逐元素黄金，每组 73,795 个有效元素、472,593 个控制周期；
 - 独立 runner、协处理器 `all` 与全仓 `all`；最终夜间复验均退出 0；
 - 控制器 OOC 历史证据，但不包含实体 BRAM、DMA、SoC 或视频链。
@@ -66,8 +65,6 @@ J04a 控制面已在此基础上完成离板冒烟；J04b 完整验证仍未完�
 ```text
 bash sim/scripts/run_coprocessor_python.sh manifests
 bash sim/scripts/run_coprocessor_python.sh all
-bash sim/scripts/run_iverilog.sh cop_mac_lane
-bash sim/scripts/run_iverilog.sh cop_dot8
 bash sim/scripts/run_coprocessor_iverilog.sh all
 bash sim/scripts/run_iverilog.sh all
 ```

@@ -129,7 +129,7 @@ BENCH_ARGS=(
     +exp_tohost=327535569 +max_cycles=200000
 )
 for tb in "${TBS[@]}"; do
-    [ -f "$tb" ] || continue
+    [ -f "$tb" ] || { echo "ERROR: missing testbench $tb"; exit 1; }
     name=$(basename "$tb" .v)
     echo "== $name =="
     iverilog -g2012 -Wall "${IVERILOG_ARGS[@]}" -s "$name" -o "build/$name.vvp" "$tb" "${RTL_FILES[@]}" || exit 1

@@ -16,18 +16,19 @@
 7. 当前目录缺 README 的标记为 `PROVENANCE GAP`；补说明时只写能核实的事实，未知处写“待核”。
 
 <!-- RUN-INDEX:START -->
-## 目录索引（54 个运行，自动生成）
+## 目录索引（55 个运行，自动生成）
 
 | 目录 | 日期 | 文件数 | 大小 | 说明 |
 |:---|:---:|---:|---:|:---|
 | `c01-capture-e2a602d6e0da49a2b6da072abca47c70` | — | 83 | 3.3 MB | c01-capture-e2a602d6e0da49a2b6da072abca47c70 |
-| `2026-10-28-washer-collection` | 2026-10-28 | 101 | 4.3 MB | 2026-10-28 CNN 继续训练与本地实验隔离 |
-| `2026-10-28-standing-nut` | 2026-10-28 | 158 | 9.4 MB | 2026-10-28 五螺母、两竖立姿态诊断 |
+| `2026-10-28-washer-collection` | 2026-10-28 | 98 | 2.4 MB | 2026-10-28 CNN 继续训练与本地实验隔离 |
+| `2026-10-28-standing-nut` | 2026-10-28 | 154 | 6.9 MB | 2026-10-28 五螺母、两竖立姿态诊断 |
 | `2026-10-28-r6-holdout-layout04` | 2026-10-28 | 58 | 1.6 MB | Frozen r6: new placement of the existing specimens |
 | `2026-10-28-multitarget-board-r6` | 2026-10-28 | 141 | 3.8 MB | Multi-target result-slot fix and frozen CNN r6 on-board comparison |
 | `2026-10-28-mixed-standing-r6` | 2026-10-28 | 30 | 1.5 MB | 2026-10-28 CNN r6 新混合摆放对照 |
 | `2026-10-27-startup-clock-repair` | 2026-10-27 | 70 | 5.4 MB | 2026-10-27 启动竞争与 MMCM 工具修复 |
 | `2026-10-27-reboard-status` | 2026-10-27 | 10 | 60 KB | 2026-10-27 重新上板状态检查 |
+| `2026-10-27-real-data-layout-02` | 2026-10-27 | 11 | 18 KB | r6 训练必需的第二组 ROI |
 | `2026-10-27-product-coexist` | 2026-10-27 | 123 | 20.4 MB | 2026-10-27 共存位流与真实检查链 |
 | `2026-10-27-git-integration` | 2026-10-27 | 14 | 33 KB | 2026-10-27 提交前定向检查 |
 | `2026-10-27-fresh-board-start` | 2026-10-27 | 54 | 5.7 MB | 2026-10-27 新启动与真实场景模型诊断 |

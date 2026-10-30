@@ -85,7 +85,7 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 | 连续两笔任务不误完成 | `cop_top` 第二次 START 后 20 拍仍 `busy`/`WAIT_ENGINE`；去掉保护拍负向对照立即 FAIL | PASS |
 | AXI4-Lite 深测 | `axi_lite`：AW/W 同拍与 W 先到、B/R 背压不丢响应、写读 SLVERR、未完成时拒收第二笔、复位清 B/R | PASS |
 | 固件构建链自检 | `test_firmware_rules.sh`：`OBJDUMP=false` 必须让 make 非零退出且不改写 `.dis` | PASS |
-| cop_top OOC 综合/实现 | `build/build_cop.tcl`：0 critical DRC、LUT 6,308 / FF 7,256 / DSP 136 / BRAM 0；core→cop 45 safe，cop→core 99 unsafe / 45 unknown | OOC 实现已跑；返回 CDC 未收口 |
+| cop_top OOC 综合/实现 | 历史 `a631fd2:build/build_cop.tcl`：0 critical DRC、LUT 6,308 / FF 7,256 / DSP 136 / BRAM 0；core→cop 45 safe，cop→core 99 unsafe / 45 unknown | OOC 实现已跑；返回 CDC 未收口 |
 | cop_top OOC 时序 | `cop_clk` 10 ns：WNS **+0.165 ns**（Fmax ≈ 101.7 MHz）；CRC 逐字节化之前是 −2.743 ns / 78.5 MHz | PASS（OOC，无 I/O delay） |
 | J02 zero 黄金 | 9225 packed words/73795 elements；logits `04fd02` | 逐元素 PASS |
 | 协处理器集合 | `run_coprocessor_iverilog.sh all`，退出码 0 | PASS |
@@ -151,7 +151,7 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 - **OPEN-10 PS 空闲 ABORT**：`CTRL.ABORT` 未加 busy 门禁，空闲时写入会置 `STATUS.ERROR`
   但不产生任务错误脉冲，与 §3.1.1「非驻留拒绝」口径不一致；本轮保留该行为未改，服务停止流程
   需自行按 STATUS 判读。影响停止/恢复流程的错误计数。
-- **OPEN-12 `cop_top` 跑不到 100 MHz（已解决）**：`build_cop.tcl` 的 OOC 实现原本给 `cop_clk` 10 ns
+- **OPEN-12 `cop_top` 跑不到 100 MHz（已解决）**：历史 `a631fd2:build/build_cop.tcl` 的 OOC 实现原本给 `cop_clk` 10 ns
   WNS **−2.743 ns**（Fmax ≈ 78.5 MHz），前 10 条违例路径都在 `cop_dma_loader` 的 CRC32
   （`crc_state_reg`→`crc32_o_reg`，13 级 LUT）。已改为**逐字节折叠**（一拍 stream 占 8 个 cop 拍，
   消化期间拉低 `stream_ready_o`），复跑 WNS **+0.165 ns**（Fmax ≈ 101.7 MHz），LUT 反而降 391 个。
@@ -173,3 +173,5 @@ TB 内用任务组织激励，用常量/J02 生成文件作参考，并用独立
 2026-10-20 全仓入口复跑证据已补入 §4。整机 40 MHz 综合实现门禁与位流已过（edge-fix bit
 `9341F7FA…`，见 `data/logs/2026-10-26-build/README.md`，板上 UNVERIFIED）。独立 arch-test 本轮重跑、
 穷举负例、CDC 全场景与返回路径、整机 XSim 对拍、连续作业与板级整网验证仍未完成；不代 WC/NC/验证队友签字。
+
+当前 cop_top OOC 入口统一为 `build/build_coprocessor_gate.tcl`；旧构建脚本已退役，历史结果不变。

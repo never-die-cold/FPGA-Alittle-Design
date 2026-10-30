@@ -63,18 +63,14 @@ LINK_EXCLUDE_PREFIXES = (
     "src/riscv_fw/coremark/vendor/",
 )
 BIG_FILE_LIMIT = 5 * 1024 * 1024
-BIG_FILE_ALLOW = {
-    "models/hog-svm-train-only.yml",
-    "data/logs/2026-10-12-pr-review/pr69-full-diff-check.txt",
-    "data/logs/2026-10-15-onboard-n02-n03/exe-ffb7ab2.zip",
-}
+BIG_FILE_ALLOW: set[str] = set()
 
 
 def git_paths(*args: str) -> list[str]:
     raw = subprocess.check_output(
         ["git", "-c", "core.quotepath=false", "ls-files", *args], cwd=ROOT
     )
-    return [p for p in raw.decode("utf-8", "replace").splitlines() if p]
+    return [p for p in raw.decode("utf-8", "replace").splitlines() if p and (ROOT / p).is_file()]
 
 
 def check_root() -> list[str]:
@@ -204,7 +200,7 @@ def check_duplicates(tracked: list[str]) -> list[str]:
     for line in raw.splitlines():
         meta, _, path = line.partition("\t")
         parts = meta.split()
-        if len(parts) < 2:
+        if len(parts) < 2 or not (ROOT / path).is_file():
             continue
         groups[parts[1]].append(path)
     warnings = []

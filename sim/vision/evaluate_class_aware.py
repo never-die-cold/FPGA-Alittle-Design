@@ -1,4 +1,4 @@
-"""Class-aware evaluation of OpenCV localization with crop CNN or HOG."""
+"""Class-aware evaluation of OpenCV localization with crop CNN."""
 
 import argparse
 import json
@@ -6,13 +6,11 @@ import time
 from pathlib import Path
 
 import cv2
-import numpy as np
 import torch
 
 from evaluate_fastener_classifier import crop_tensor
 from localization_opencv import box_iou, detect_boxes
 from train_fastener_classifier import CLASSES, FastenerCNN
-from train_scene_classifier import preprocess
 
 
 def truths(path, width, height):
@@ -50,7 +48,7 @@ def count_matches(predicted, actual, classes, threshold=0.5):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dataset", type=Path, required=True)
-    parser.add_argument("--engine", choices=("hybrid", "hog"), required=True)
+    parser.add_argument("--engine", choices=("hybrid",), default="hybrid")
     parser.add_argument("--weights", type=Path, required=True)
     parser.add_argument("--class-confidence", type=float, default=0.0,
                         help="reject hybrid crop classes below this softmax score")
@@ -60,13 +58,9 @@ def main():
     args = parser.parse_args()
     torch.set_num_threads(4)
     cv2.setNumThreads(1)
-    if args.engine == "hog":
-        model = cv2.ml.SVM_load(str(args.weights))
-        hog = cv2.HOGDescriptor((64,64), (16,16), (8,8), (8,8), 9)
-    else:
-        state = torch.load(args.weights, map_location="cpu", weights_only=False)
-        model = FastenerCNN(); model.load_state_dict(state["state_dict"]); model.eval()
-        input_size = state.get("input_size", 64)
+    state = torch.load(args.weights, map_location="cpu", weights_only=False)
+    model = FastenerCNN(); model.load_state_dict(state["state_dict"]); model.eval()
+    input_size = state.get("input_size", 64)
 
     totals, confusion, elapsed, count = [0, 0, 0], [[0]*(len(CLASSES)+1) for _ in CLASSES], 0.0, 0
     records = []
@@ -74,26 +68,17 @@ def main():
         image = cv2.imread(str(path)); height, width = image.shape[:2]
         actual = truths(args.dataset / "labels" / f"{path.stem}.txt", width, height)
         start = time.perf_counter()
-        if args.engine == "hybrid":
-            boxes = detect_boxes(image, args.color_threshold, args.min_area_ratio)
-            tensors = [crop_tensor(image, box, input_size, state.get('preprocess_mode', 'opposite')) for box in boxes]
-            if tensors:
-                with torch.no_grad():
-                    probabilities = torch.softmax(model(torch.stack(tensors)), dim=1)
-                    scores, labels = probabilities.max(1)
-                    labels = [label.item() if score.item() >= args.class_confidence
-                              else len(CLASSES) for score, label in zip(scores, labels)]
-                predicted = list(zip(labels, boxes))
-            else:
-                predicted = []
+        boxes = detect_boxes(image, args.color_threshold, args.min_area_ratio)
+        tensors = [crop_tensor(image, box, input_size, state.get('preprocess_mode', 'opposite')) for box in boxes]
+        if tensors:
+            with torch.no_grad():
+                probabilities = torch.softmax(model(torch.stack(tensors)), dim=1)
+                scores, labels = probabilities.max(1)
+                labels = [label.item() if score.item() >= args.class_confidence
+                          else len(CLASSES) for score, label in zip(scores, labels)]
+            predicted = list(zip(labels, boxes))
         else:
-            boxes = detect_boxes(image, args.color_threshold, args.min_area_ratio)
-            features = [hog.compute(preprocess(image, box, 64)[0]).reshape(-1) for box in boxes]
-            if features:
-                labels = model.predict(np.asarray(features, np.float32))[1].reshape(-1).astype(int)
-                predicted = list(zip(labels.tolist(), boxes))
-            else:
-                predicted = []
+            predicted = []
         elapsed += time.perf_counter() - start
         tp, fp, fn, matrix = count_matches(predicted, actual, len(CLASSES))
         accepted = [p for p in predicted if 0 <= p[0] < len(CLASSES)]

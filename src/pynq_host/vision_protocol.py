@@ -11,6 +11,7 @@ v1.2（2026-10-10 WC+NC 确认，LIVE 轮廓冻结）：
   （EXE 恒加 PROTOTYPE 标识，对齐 MOCK 的诚实约束）；
 - 有效性判据（D3）= session_id + config_id + created_at 年龄；frame_id 仅透传展示。
 """
+import json
 import math
 import time
 
@@ -20,6 +21,8 @@ MAX_TRIGGER_REF_LEN = 64
 CLASSES = ("bolt", "nut", "washer")
 VERDICTS = ("CHECK_PASS", "CHECK_FAIL", "RECHECK")
 LOCATION_STATUS = "LOCATION_ONLY"
+
+
 MOCK_PACKET_FIELDS = frozenset(("version", "mode", "session_id", "frame_id", "config_id",
                                 "check_id", "trigger_ref", "width", "height", "created_at",
                                 "status", "targets"))
@@ -28,6 +31,19 @@ MOCK_TARGET_FIELDS = frozenset(("target_id", "bbox"))
 LIVE_TARGET_FIELDS = frozenset(("target_id", "bbox", "class", "score"))
 DECISION_FIELDS = frozenset(("verdict", "expected", "actual", "delta", "missing", "extra",
                              "reasons"))
+
+
+def parse_trigger_ref(body):
+    """Parse the optional check request using the D6 field whitelist."""
+    if not body:
+        return None
+    request = json.loads(body)
+    if not isinstance(request, dict) or set(request) - {"trigger_ref"}:
+        raise ValueError("expected trigger_ref only")
+    ref = request.get("trigger_ref")
+    if ref is not None and (not isinstance(ref, str) or not 0 < len(ref) <= MAX_TRIGGER_REF_LEN):
+        raise ValueError("invalid trigger_ref")
+    return ref
 
 
 def uint(value, name):

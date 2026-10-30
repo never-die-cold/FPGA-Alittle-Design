@@ -190,11 +190,6 @@
       "bytes": 2959
     },
     {
-      "path": "focused-after-r5/numbered.png",
-      "sha256": "b81782a07637938d7f2591a63cd2465d47c1375acf36c93b72b7011828b4af6e",
-      "bytes": 630358
-    },
-    {
       "path": "focused-after-r5/roi-00.bin",
       "sha256": "9031c9dc64b270d3f9909c5240e9b42b1add8a8f24f935d056062b605b621236",
       "bytes": 4096
@@ -260,11 +255,6 @@
       "bytes": 2961
     },
     {
-      "path": "focused-after-r6/numbered.png",
-      "sha256": "b81782a07637938d7f2591a63cd2465d47c1375acf36c93b72b7011828b4af6e",
-      "bytes": 630358
-    },
-    {
       "path": "focused-after-r6/roi-00.bin",
       "sha256": "9031c9dc64b270d3f9909c5240e9b42b1add8a8f24f935d056062b605b621236",
       "bytes": 4096
@@ -328,11 +318,6 @@
       "path": "focused-before-training/comparison.json",
       "sha256": "09490383759bb123f6e2887a0b5db5e1c99023a8d2600a88b8ae0545002c819d",
       "bytes": 2966
-    },
-    {
-      "path": "focused-before-training/numbered.png",
-      "sha256": "b81782a07637938d7f2591a63cd2465d47c1375acf36c93b72b7011828b4af6e",
-      "bytes": 630358
     },
     {
       "path": "focused-before-training/roi-00.bin",
@@ -525,11 +510,6 @@
       "bytes": 4882
     },
     {
-      "path": "layout03-after-r6/numbered.png",
-      "sha256": "e8018df3bba99d4fa1b2809f06118bfc6c7ced99ed4a1006159e11087e59909f",
-      "bytes": 683679
-    },
-    {
       "path": "layout03-after-r6/roi-00.bin",
       "sha256": "e82ca95d021329780b6bd7b24cc478040be25f4cd0e998c2d3d472cb320ad379",
       "bytes": 4096
@@ -646,8 +626,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "e7e87e7aae0a7dcfed87d840155ee1491be7f44686608e477130f83aeed602f1",
-      "bytes": 4380
+      "sha256": "64b31513c4fb4bd8bdc7592cbf91082805ae3778be4400f10647d1131306e0b2",
+      "bytes": 4953
     },
     {
       "path": "series-focused/annotations-draft.json",
@@ -789,5 +769,14 @@
       "sha256": "2ca849839445806ff576ae2b20494363769a996f150b970eecc5b82bade316c5",
       "bytes": 2597
     }
-  ]
+  ],
+  "deduplicated": {
+    "source_commit": "a631fd2",
+    "aliases": {
+      "layout03-after-r6/numbered.png": "layout03-after-r5/numbered.png",
+      "focused-after-r5/numbered.png": "archive-check-r6/numbered.png",
+      "focused-after-r6/numbered.png": "archive-check-r6/numbered.png",
+      "focused-before-training/numbered.png": "archive-check-r6/numbered.png"
+    }
+  }
 }

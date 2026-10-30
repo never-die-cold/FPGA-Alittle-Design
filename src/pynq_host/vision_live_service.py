@@ -27,8 +27,7 @@ from collections import OrderedDict
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-from vision_mock_service import parse_trigger_ref
-from vision_protocol import VERSION, validate_packet
+from vision_protocol import VERSION, parse_trigger_ref, validate_packet
 
 CLASSES = ("bolt", "nut", "washer")
 

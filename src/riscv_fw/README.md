@@ -43,7 +43,7 @@ mingw-w64-ucrt-x86_64-riscv32-unknown-elf-newlib 4.5.0.20241231-1
 ## 构建
 
 ```powershell
-mingw32-make          # 另产出 soc_check.*、bench_v0_1.* 与 CoreMark 镜像
+mingw32-make PYTHON=python  # 另产出 soc_check.*、bench_v0_1.* 与 CoreMark 镜像
 mingw32-make clean
 ```
 
@@ -54,7 +54,7 @@ mingw32-make clean
 |:---|:---:|:---|
 | `hello.elf` / `hello_v0.elf` | 否 | 完整链接结果（ELF32 / RISC-V） |
 | `hello.bin` / `hello_v0.bin` | 否 | 裸二进制 |
-| `hello.dis` / `hello_v0.dis` | 是 | objdump 反汇编，测试证据 |
+| `hello.dis` / `hello_v0.dis` | 否 | objdump 本地生成的反汇编，已加入 gitignore |
 | `hello.hex` / `hello_v0.hex` | 是 | `$readmemh` 32 位小端字，指令 BRAM 预载用 |
 
 ## 冒烟程序与预期

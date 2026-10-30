@@ -25,7 +25,7 @@
 │   ├── riscv/          RV32IM 核、流水线/转发/BHT、最小 SoC、契约
 │   ├── vision/         HDMI 预处理、捕获状态、AXI、OSD
 │   ├── coprocessor/    INT8 CNN 算子/整网控制器/整数参考
-│   ├── riscv_fw/       裸机固件、CoreMark、测试程序；hex/dis 入库
+│   ├── riscv_fw/       裸机固件、CoreMark、测试程序；hex 入库，dis 本地生成
 │   ├── pynq_host/      PS 侧配置、定位/ROI、检查服务、FILE/LIVE 骨架、记录/CSV 参考
 │   └── web_client/     网页端前端（原型；真实数据接线待完成）
 ├── sim/                testbench 与仿真入口
@@ -51,7 +51,7 @@
 ├── tools/              本地辅助脚本（已入库：cop_payload_loader 等）
 └── others/             本地非仓库文件（构建产物/YOLO/VCD；gitignore，不入库）
 ├── skill/              Skill 包（换题可复用）
-├── models/             FP32/HOG 原型权重（结构例外，见下）
+├── models/             FP32 CNN 原型权重（结构例外，见下）
 ├── results/            外包实验的逐图评估与训练记录（结构例外，见下）
 ```
 
