@@ -1,8 +1,8 @@
 """Assemble a board package for the coprocessor loader (trained or diagnostic).
 
-Mirrors sim/scripts/package_coprocessor_nc.sh, but the case list comes from the
-network manifest instead of the hardcoded pattern/zero pair, so a trained-weight
-payload and real-image cases can be loaded by tools/cop_payload_loader.py.
+The case list comes from the network manifest. Both diagnostic and trained
+payloads use this entry; tools/cop_payload_loader.py validates the resulting
+package before board access.
 """
 import argparse
 import hashlib

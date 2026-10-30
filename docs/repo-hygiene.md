@@ -29,10 +29,9 @@
 
 ## 3. 生成物与输出位置
 
-- file-guide：`python docs/file-guide/tools/generate.py --scope source --date YYYY-MM-DD` → `build/file-guide/`（ignore）。
 - Icarus：`sim/build/`（ignore）；`.vvp` 不再入库。
 - XSim：`sim/xsim.dir/`、`*.log`、`*.jou`、`*.wdb`（ignore）。
-- Vivado：`others/build/run/`、`others/build/reports/`（原 `build/run/`、`build/reports/`，2026-10-28 迁移）、*.dcp、*.bit（ignore）。
+- Vivado：当前构建脚本输出到 `build/run/`、`build/reports/`；本地历史产物另存 `others/`，中间产物不入库。
 - Python：`__pycache__/`、`.pytest_cache/`、`.venv/`（ignore）。
 
 ## 4. 检查命令

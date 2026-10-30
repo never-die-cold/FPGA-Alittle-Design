@@ -40,8 +40,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "1b8e0cc6f8426028e03de4b6ddcb66f413a347c1115ddcaf6f7ac7c26a3b54c6",
-      "bytes": 3943
+      "sha256": "7f99b914f4d9fed2758f9eb546e03e4c5d9ef86fe5797f6e483a169526afc5cd",
+      "bytes": 4190
     },
     {
       "path": "reference/golden/roi_001/input.hex",
@@ -62,6 +62,11 @@
       "path": "training.json",
       "sha256": "3a169b6bf004e61fa28d85123e359caa9aff8483c63bd047343576abf88dc6cc",
       "bytes": 12311
+    },
+    {
+      "path": "training-start-r3.pt",
+      "sha256": "85e2b51bc3ef2264232d8db4c1314c18ef045a1f783104abd5bf795c2ae7471e",
+      "bytes": 145205
     }
   ],
   "sources": {

@@ -5,7 +5,7 @@
 [本轮记录](../../data/logs/2026-10-02-vision-offboard/README.md)。
 
 模块二 HDMI 视觉预处理 RTL＋已验证视频链路已完成（RTL／链路级），见[10/03 视频](../../data/logs/2026-10-03-vision-onboard/README.md)
-和[10/07 真实相机恢复](../../data/logs/2026-10-07-pi-pynq/README.md)；全项目 M2 尚缺网络硬件输出，CNN／工业闭环未完成。
+和[10/07 真实相机恢复](../../data/logs/2026-10-07-pi-pynq/README.md)；CNN 硬件输出及多目标数值对照已有[10/28 实板记录](../../data/logs/2026-10-28-multitarget-board-r6/README.md)，工业闭环验收未完成。
 
 ```text
 HDMI IN → dvi2rgb → 彩色原图直通 → rgb2dvi → HDMI OUT → USB 采集卡 → 网页端
@@ -29,7 +29,7 @@ Digilent 并行视频字节顺序是 R,B,G，`vision_axi.v` 双向转换为内�
 - `video_pipeline` 内部 post-route：WNS +0.330 ns / WHS +0.027 ns，像素周期13.468ns、
   AXI周期10ns；1985 LUT、1515 寄存器、38 BRAM tile、0 DSP。
 - PS 配置绑定、定位/逐目标裁剪黄金参考；MOCK 与 FILE/LIVE HTTP 骨架、Windows LIVE 展示和记录已离板验证，替身/FILE 恒标来源。
-- C01 增加原彩色捕获支路与状态监测，候选 bit/hwh/XSA、显示/状态实机诊断已有；DDR BGR 完整副本与帧槽所有权尚未实现/验收，见[C01 基线](../../docs/contracts/c01-capture-implementation-baseline.md)。
+- C01 原彩色捕获支路与状态监测已接入产品服务，使用 park 驱动取得 BGR 原帧；当前实板验证和剩余定位问题见 [plan.md §3.1](../../plan.md#31-当前状态)，历史实现边界见 [C01 基线](../../docs/contracts/c01-capture-implementation-baseline.md)。
 
 ## 一键入口
 

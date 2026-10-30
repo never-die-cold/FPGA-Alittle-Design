@@ -23,7 +23,7 @@
 
 - `soc_top.v`：PL 侧 SoC 顶层（核 + 指令 BRAM + 数据 RAM + 最小外设）
 - `imem.v` / `dmem.v`：32KB 同步读指令 BRAM / 32KB 异步读分布式数据 RAM
-- **未实现**：`bus_interconnect.v`、`ps_interface.v`、统一 `addr_map.md`；当前译码在 soc_top，PS/协处理器集成属于后续模块
+- 当前地址译码在 `soc_top`；PS/协处理器集成通过 [pynq_cop_top.v](pynq_cop_top.v) 实现，接口见 `design_v1.md` §17。独立 `bus_interconnect.v`、`ps_interface.v` 与统一 `addr_map.md` 未实现。
 
 ## 命名与编码约定
 

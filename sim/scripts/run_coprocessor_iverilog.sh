@@ -29,9 +29,24 @@ if ! command -v make >/dev/null 2>&1 && command -v mingw32-make >/dev/null 2>&1;
     export -f make
 fi
 VECTORS="$BUILD/arithmetic-vectors"
-"$PY" "$ROOT/sim/coprocessor/generate_arithmetic_vectors.py" --output "$VECTORS"
+ARITHMETIC_READY=0
+NETWORK_READY=0
+PAYLOAD_READY=0
+prepare_network() {
+    if [ "$NETWORK_READY" -eq 0 ]; then
+        "$PY" "$ROOT/sim/coprocessor/generate_network_vectors.py" --output "$BUILD/network-vectors"
+        NETWORK_READY=1
+    fi
+}
 run_test() {
     local name="$1"
+    case "$name" in
+        int8_gap|int8_logits|int8_requant_pipeline)
+            if [ "$ARITHMETIC_READY" -eq 0 ]; then
+                "$PY" "$ROOT/sim/coprocessor/generate_arithmetic_vectors.py" --output "$VECTORS"
+                ARITHMETIC_READY=1
+            fi ;;
+    esac
     vision_require_tb "$ROOT/sim/coprocessor/tb_$name.v"
     iverilog -g2001 -Wall -s "tb_$name" -o "$BUILD/$name.vvp" \
         "$ROOT/sim/coprocessor/tb_$name.v" "$ROOT"/src/coprocessor/*.v
@@ -57,7 +72,7 @@ run_convolution() {
 run_network() {
     local dir="$BUILD/network-vectors" name mode="${1:-}"
     local vvp="$BUILD/cnn_sequencer.vvp" prefix="network"
-    "$PY" "$ROOT/sim/coprocessor/generate_network_vectors.py" --output "$dir"
+    prepare_network
     if [ "$mode" = bram ]; then
         vvp="$BUILD/cnn_bram.vvp"; prefix="network_bram"
         iverilog -g2001 -Wall -s tb_cnn_sequencer -P tb_cnn_sequencer.USE_BRAM=1 -o "$vvp" \
@@ -79,10 +94,12 @@ run_network() {
     done < "$dir/cases.txt"
 }
 run_manifest() {
+    if [ "$PAYLOAD_READY" -eq 1 ]; then return; fi
     local network="$BUILD/network-vectors" output="$BUILD/payload-v1"
-    "$PY" "$ROOT/sim/coprocessor/generate_network_vectors.py" --output "$network"
+    prepare_network
     "$PY" "$ROOT/sim/coprocessor/generate_payload_manifest.py" --network-dir "$network" --output "$output"
     "$PY" "$ROOT/sim/coprocessor/test_payload_manifest.py" --network-dir "$network" --output "$output"
+    PAYLOAD_READY=1
 }
 run_payload_loader() {
     local network="$BUILD/network-vectors" output="$BUILD/payload-v1"
@@ -124,7 +141,7 @@ run_pynq_top() {
 }
 run_top() {
     local dir="$BUILD/network-vectors"
-    "$PY" "$ROOT/sim/coprocessor/generate_network_vectors.py" --output "$dir"
+    prepare_network
     iverilog -g2001 -Wall -s tb_cop_top -o "$BUILD/cop_top.vvp" \
         "$ROOT/sim/coprocessor/tb_cop_top.v" "$ROOT"/src/coprocessor/*.v
     vision_run_checked "$BUILD/cop_top.log" vvp "$BUILD/cop_top.vvp" "+model=$dir" "+case=$dir/zero"

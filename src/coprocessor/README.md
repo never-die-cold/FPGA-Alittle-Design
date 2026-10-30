@@ -1,6 +1,6 @@
 # src/coprocessor —— CNN 整数算子与整网控制器
 
-轻量 INT8 CNN 的计算链已完成离板验证，并经共存包真实帧上板（COP_HW，10-27）；正式板验与多目标验收未签。v0 已冻结为 MMIO/AXI4-Lite 控制面 + DMA 数据面，
+轻量 INT8 CNN 采用 MMIO/AXI4-Lite 控制面 + DMA 数据面；最新模型、实板数值对照和验收边界统一见 [plan.md §3.1](../../plan.md#31-当前状态)。
 RISC-V 以 load/store 访问且不启用自定义指令。
 
 ## 阶段 0 契约
@@ -14,14 +14,14 @@ RISC-V 以 load/store 访问且不启用自定义指令。
 
 J04a 已实现并离板冒烟：`cop_top.v`、`cop_ctrl_regs.v`、`cop_axi_lite_frontend.v`、`cop_cdc_mailbox.v`、`cop_dma_loader.v`、`cop_task_ctrl.v`、`cop_config_regs.v`、`cop_core_mmio_gate.v`，以及 `src/riscv_fw/cop_job.c` 工单固件。J04b 的 OPEN：任意 `TARGET_DESC_ADDR` 描述表（当前 `target_id == roi_index` 仅恒等映射）、结果 DMA（`RESULT_ADDR`）、真实 payload CRC 负例收口、CDC/AXI 深测收尾与板验；manifest v1→影子 bank、16 ROI 槽与生产板顶（`cop_payload_adapter.v`、`pynq_cop_top.v`）已落地，`payload_network` 离板 TB 已入 `all`；详见[实现交接单](../../docs/runbooks/coprocessor-j04-handoff.md)。
 
-未实现/未验收：`buffer.v` 实体 BRAM 生产适配、`dma_ctrl.v` 独立描述符顶层、`isa_extension.v`（v0 不例化、不占 opcode）、视频集成验证与板端整网输出验收；SoC 集成（`pynq_cop_top.v`，核＋协处理器）已实现并通过 40 MHz 整机综合实现门禁，板级验收未完成。
+生产顶层 [pynq_cop_top.v](../riscv/pynq_cop_top.v) 已集成核、协处理器、`cop_model_storage.v` 与 `cop_activation_storage.v`。结果 DMA 与任意描述符表未实现；正式模型精度与工业整机验收未完成。v0 不使用自定义指令。
 
 ## 接口约定
 
 - 与 RISC-V 核：`soc_top` 本地 MMIO 窗口，固件以 load/store 启动和轮询；现有核数据口没有等待握手，不能直接冒充 AXI master
 - 与 PS：AXI4-Lite 配置/状态；数据通过 AXI DMA/DataMover 搬运
 - 与存储系统：只搬权重、逐目标 64×64 ROI 与小结果；中间特征默认驻留 BRAM，不默认全分辨率逐帧 DDR 回写
-- C03 已给出寄存器映射；J04a 控制面已离板冒烟；J04b 的 SoC 集成已实现并通过 40 MHz 整机综合实现门禁（板级验收未完成），视频集成验证、结果 DMA 与任意描述表尚未完成；接入时须同步核/SoC 契约与驱动
+- C03 定义寄存器映射；核/SoC、视频和实板数值对照的最新状态见 [plan.md §3.1](../../plan.md#31-当前状态)。结果 DMA 与任意描述表尚未完成；接口变动须同步核/SoC 契约与驱动。
 
 ## 已实现的离板计算链（2026-10-13）
 
@@ -51,6 +51,8 @@ COPROCESSOR_PYTHON=sim/build/coprocessor-venv/bin/python bash sim/scripts/run_co
 ```
 venv 位于已忽略的 `sim/build`，不作为交付文件；PASS 证据仍来自仓库内测试与 runner。
 
+板端包统一由 `python sim/scripts/build_board_package.py --help` 对应入口组装，支持诊断与训练模型；按网络 manifest 选择用例，输入为已构建的 bit/hwh、payload 和黄金参考。旧 NC 专用组包脚本已退役。仿真与打包分别运行，包的 BOARD 状态保持 UNVERIFIED，直到真实上板验收。
+
 综合入口：`powershell.exe -NoProfile -File sim/scripts/run_cnn_ooc.ps1`，自动存档源码/脚本，运行 100 MHz 控制器 OOC 综合与布局布线，保存时序/资源/DRC和退出码。外部存储、SoC与视频未计入，OOC报告不代替整机时序或板端实测。
 
 ## 设计参考
@@ -59,4 +61,4 @@ venv 位于已忽略的 `sim/build`，不作为交付文件；PASS 证据仍来�
 - 算子化验证（CONV/POOL/GEMM 加速比表）与吞吐率指标（每拍采样数/SSR 思路）：[docs/proposal_upgrade.md](../../docs/research/proposal_upgrade.md)
 - 训练/量化侧前期准备与接口对齐点：[docs/runbooks/module3-model-training.md](../../docs/runbooks/module3-model-training.md)
 
-> 未完成：正式 INT8 训练/权重发布、结果 DMA 与任意 `TARGET_DESC_ADDR` 描述表、视频集成验证、板级验收。整机 40 MHz 综合实现门禁已 PASS（edge-fix bit `9341F7FA…`，WNS +3.062 ns，见 `data/logs/2026-10-26-build/README.md`；不等于板级验收）；板上 PROVISIONAL 诊断网 zero/pattern 6/6 为旧 IMEM bit 上的结果（见 `data/logs/2026-10-26-board/README.md`），BOARD 仍 UNVERIFIED。J04a 控制面/`cop_top`/MMIO/CDC/DMA/工单固件已离板冒烟；J04b 板验未完成。
+> 未完成：正式模型精度验收、结果 DMA、任意 `TARGET_DESC_ADDR` 描述表与工业整机验收。各历史位流的门禁及板测结果按日期查阅 [plan.md §3.1](../../plan.md#31-当前状态)，不以早期 BOARD UNVERIFIED 覆盖后续实板数值验证。

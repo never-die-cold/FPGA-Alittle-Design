@@ -15,7 +15,7 @@ import threading
 import time
 import uuid
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from vision_protocol import CLASSES, VERSION, mock_packet, uint, validate_packet
+from vision_protocol import CLASSES, VERSION, mock_packet, parse_trigger_ref, uint, validate_packet
 
 
 class State:
@@ -56,19 +56,6 @@ class State:
             self.control = control
             self.config_id = (self.config_id + 1) & 0xFFFFFFFF
             return {"mode": self.mode, "applied_config_id": self.config_id}
-
-
-def parse_trigger_ref(body):
-    """请求体可选：无 body / {} / {"trigger_ref": "..."}；未知字段拒绝（D6 严格校验）。"""
-    if not body:
-        return None
-    request = json.loads(body)
-    if not isinstance(request, dict) or set(request) - {"trigger_ref"}:
-        raise ValueError("expected trigger_ref only")
-    ref = request.get("trigger_ref")
-    if ref is not None and (not isinstance(ref, str) or not 0 < len(ref) <= 64):
-        raise ValueError("invalid trigger_ref")
-    return ref
 
 
 LIVE_WORK_ORDER = {"bolt": 2, "nut": 2, "washer": 2}
@@ -173,4 +160,3 @@ if __name__ == "__main__":
     label = "LIVE STAND-IN (prototype, not on-board recognition)" if args.live else "MOCK ONLY"
     print(f"{label}: http://{shown}:{args.port}/v1/status", flush=True)
     make_server(host=args.host, port=args.port, live=args.live).serve_forever()
-    make_server(host=args.host, port=args.port).serve_forever()
