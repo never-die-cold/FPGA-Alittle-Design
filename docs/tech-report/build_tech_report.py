@@ -55,8 +55,7 @@ def add_body(doc, text, indent=True, size=12, align=WD_ALIGN_PARAGRAPH.JUSTIFY,
     pf.space_before = Pt(space_before)
     pf.space_after = Pt(space_after)
     p.alignment = align
-    r = p.add_run(text)
-    set_run_font(r, size=size, bold=bold, color=color)
+    _emit_rich(p, rich_segs(text), size, bold=bold, color=color)
     return p
 
 
@@ -101,7 +100,7 @@ def add_h3(doc, text):
 
 def add_body_rich(doc, segs, indent=True, size=12):
     """富文本正文段：segs = [(text, fmt), ...]，fmt 含 i=斜体、sub=下标、sup=上标、
-    mono=等宽；用于公式字符的规范排版（变量斜体 + 真下标，等价 LaTeX 渲染效果）。"""
+    mono=等宽；普通段再过一遍标识符扫描，保证公式字符全文口径一致。"""
     p = doc.add_paragraph()
     pf = p.paragraph_format
     pf.first_line_indent = Pt(size * 2) if indent else None
@@ -111,15 +110,12 @@ def add_body_rich(doc, segs, indent=True, size=12):
     p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
     for text, fmt in segs:
         tokens = (fmt or "").split()
-        r = p.add_run(text)
         if "mono" in tokens:
-            set_run_font(r, ascii_font="Consolas", east=SONG, size=size - 1)
-        else:
-            set_run_font(r, size=size, italic="i" in tokens)
-        if "sub" in tokens:
-            r.font.subscript = True
-        if "sup" in tokens:
-            r.font.superscript = True
+            _emit_rich(p, [(text, "mono")], size)
+            continue
+        for t2, f2 in rich_segs(text):
+            merged = " ".join(x for x in (fmt or "", "mono" if f2 == "mono" else "") if x)
+            _emit_rich(p, [(t2, merged)], size)
     return p
 
 
@@ -202,12 +198,10 @@ def add_table(doc, caption, headers, rows, widths_cm, font_size=10.5,
             p.paragraph_format.line_spacing = 1.15
             p.paragraph_format.space_before = Pt(0)
             p.paragraph_format.space_after = Pt(0)
-            r = p.add_run(str(val))
             if mono_cols and i in mono_cols:
-                set_run_font(r, ascii_font="Consolas", east=SONG,
-                             size=font_size - 0.5)
+                _emit_rich(p, [(str(val), "mono")], font_size)
             else:
-                set_run_font(r, size=font_size)
+                _emit_rich(p, rich_segs(str(val)), font_size)
     # 小表尽量不跨页：除最后一行外，其余行与下一行同页
     for ri, row in enumerate(table.rows):
         if ri < len(table.rows) - 1:
@@ -267,6 +261,48 @@ def bottom_border(paragraph, color="1F3A5F", sz=8):
 
 def count_cn(text):
     return len(re.findall(r"[\u4e00-\u9fff]", text))
+
+
+# ------------------------------------------------------------------ 标识符排版
+# 全文统一口径：snake_case 标识符、寄存器/协议 UPPER_SNAKE 名、文件名与指定
+# 协议常量一律等宽字体（Consolas），等效 LaTeX \texttt{}；正文其余部分不改动。
+MONO_PAT = re.compile(
+    r"(\b[a-z][a-z0-9]*(?:_[a-z0-9]+)+\b"                                  # snake_case
+    r"|\b[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)+\b"                                  # UPPER_SNAKE
+    r"|\b[a-z][a-z0-9]*_\*"                                                # display_* / cop_*
+    r"|\b\w[\w\-]*\.(?:py|json|jsonl|png|sha256|md|sh|bat|csv|v|tcl)(?![A-Za-z0-9])"  # 文件名
+    r"|\b(?:STATUS|START|ACCEPTED|UNCONSUMED|CONSUME|BUSY|DONE|ERROR_CODE"
+    r"|WATCHDOG|HW_TIMEOUT|NO_ACK|STALE_RESULT|TASK_ERROR|ABORTED)\b"
+    r"|scene-gray-border-padding-v1|\.pending|readmemh)")
+
+
+def rich_segs(text):
+    """把字符串切成 [(text, fmt)] 段；命中的标识符段标 mono，其余为普通段。"""
+    segs, pos = [], 0
+    for m in MONO_PAT.finditer(text):
+        if m.start() > pos:
+            segs.append((text[pos:m.start()], ""))
+        segs.append((m.group(0), "mono"))
+        pos = m.end()
+    if pos < len(text) or not segs:
+        segs.append((text[pos:], ""))
+    return segs
+
+
+def _emit_rich(p, segs, size, bold=False, color=BLACK):
+    for text, fmt in segs:
+        tokens = (fmt or "").split()
+        r = p.add_run(text)
+        if "mono" in tokens:
+            set_run_font(r, ascii_font="Consolas", east=SONG,
+                         size=size - 1, bold=bold, color=color)
+        else:
+            set_run_font(r, size=size, bold=bold, color=color,
+                         italic="i" in tokens)
+        if "sub" in tokens:
+            r.font.subscript = True
+        if "sup" in tokens:
+            r.font.superscript = True
 
 
 def section_count(title, paragraphs):
