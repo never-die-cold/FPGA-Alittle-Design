@@ -5,7 +5,7 @@
 > 上一版（2026-10-27 初版 V0.9）保留在 git 历史（tag/commit 可回溯）。
 
 本目录存放技术文档及其可复现生成脚本。
-当前稿：9 幅图、12 张表、15 篇参考文献；摘要 268 字。
+当前稿：9 幅图、13 张表、16 篇参考文献；摘要 268 字。
 
 ## 文件
 
@@ -43,6 +43,9 @@ py docs\tech-report\build_tech_report.py
    （export_records.py 已迁至 src/pynq_host/）。
 8. 心得体会改为「我们」口吻、叙事化重写（463 字），删除 AI 腔的排比结构。
 9. 新增 4.3 节「大语言模型协作记录与 Skills 沉淀」（llm_log 220 条 + 9 个技能包清单）。
+10. 3.3 增补公开口径横向对比（表 3-3）：Ibex 官方三档 CoreMark/MHz（0.904/2.47/3.13，新增文献 [16]）、
+    PicoRV32 官方 Dhrystone 0.516 DMIPS/MHz（CPI 4.100，[11]）；「业界标准指标」表述改为引证
+    EEMBC [3] 与体系结构教材 [15]；表 3-3 之后表格顺延为 3-4…3-7。
 
 ## 插图来源（repo-hygiene 规则 6：用途 / sha256 / 来源与重建）
 
@@ -77,7 +80,8 @@ py docs\tech-report\build_tech_report.py
 ## 事实口径
 
 - 核：v1 三级 + 三路转发 + Radix-4 + 可切换 BHT；CoreMark 2K/32 四档消融 CPI 1.886→1.606（IPC 0.623、
-  CoreMark/MHz 1.974）；44/44 arch-test 签名；OOC 86.806 MHz。
+  CoreMark/MHz 1.974）；44/44 arch-test 签名；OOC 86.806 MHz。公开口径对比：Ibex 官方 0.904/2.47/3.13
+  CoreMark/MHz [16]；PicoRV32 官方 Dhrystone 0.516 DMIPS/MHz、CPI 4.100 [11]——编译器与运行条件有差异，作量级参照。
 - 视觉：22 个仓库内 tb；720p60；video_pipeline OOC WNS +0.330 ns；物理 HDMI 板级直通 108 帧。
 - 协处理器：128 MAC INT8；36,032 B PROVISIONAL 清单；6/6 离板门禁；40 MHz 全系统门禁 WNS +2.498 ns。
 - 板上（2026-10-26/27）：zero/pattern 各 3 轮全匹配；四例黄金全匹配；10,000 次寄存器读取无错误；共存位流

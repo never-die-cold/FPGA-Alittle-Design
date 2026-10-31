@@ -754,19 +754,31 @@ add_table(doc, "表 3-2　CoreMark 2K/32 四档消融", ["配置", "cycles", "re
     ["v1 转发 + BHT2", "16,232,079", "10,106,386", "1.606121", "0.623", "1.974"],
 ], [3.4, 3.0, 2.8, 2.2, 1.4, 2.6], font_size=9.0, align_center_cols=[0, 1, 2, 3, 4, 5])
 p33a2 = (
-    "以传统公开口径归纳：最终配置 IPC 0.623、CoreMark/MHz 1.974，均为业界标准指标，可直接与同类 RISC-V 软核的文献值横向比较；"
-    "同板卡、同工具链下的第三方软核对照（如 PicoRV32）列入后续工作。CPI 1.606 距理想单发射顺序执行（CPI=1）尚有 0.606 拍，"
-    "对应 load-use 停顿、分支冲刷与访存等待之和，即后续优化空间所在。"
+    "表 3-2 的 CPI/IPC 与 CoreMark/MHz 均为公开标准口径：CoreMark 是 EEMBC 发布的行业基准 [3]，"
+    "CoreMark/MHz 是其标准报告口径，CPI/IPC 为体系结构通用指标 [15]。表 3-3 据此把本设计与公开报告的"
+    "同类 RISC-V 软核横向对比：Ibex（lowRISC）官方报告三种流水配置的 CoreMark/MHz [16]；"
+    "PicoRV32（尺寸优化多周期软核）官方报告 Dhrystone 0.516 DMIPS/MHz、平均 CPI 4.100 [11]。"
+    "本设计 CoreMark/MHz 1.974，介于 Ibex 二周期基础配置（0.904）与两级流水配置（2.47）之间；"
+    "CPI 1.606 仅为 PicoRV32 官方报告值（4.100）的四成——两核设计目标不同（性能 vs 极致面积），"
+    "且各核编译器与运行条件存在差异，数值作量级参照而非精确排名。CPI 1.606 距理想单发射顺序执行（CPI=1）"
+    "尚有 0.606 拍，对应 load-use 停顿、分支冲刷与访存等待之和；同板卡、同工具链下的第三方软核复测列入后续工作。"
 )
 add_body(doc, p33a2)
+add_table(doc, "表 3-3　与公开报告口径的同类 RISC-V 软核对比", ["核 / 配置", "流水结构", "基准", "公开数值", "来源"], [
+    ["本设计 v1 转发 + BHT2", "三级 + 转发 + 64 项 BHT", "CoreMark 2K/32", "1.974 CoreMark/MHz（CPI 1.606）", "本文"],
+    ["Ibex 基础配置", "二周期 RV32EC", "CoreMark", "0.904 CoreMark/MHz", "[16]"],
+    ["Ibex 两级流水", "2-stage", "CoreMark", "2.47 CoreMark/MHz", "[16]"],
+    ["Ibex 三级流水", "3-stage（高性能档）", "CoreMark", "3.13 CoreMark/MHz", "[16]"],
+    ["PicoRV32", "多周期（快速乘除/桶形移位）", "Dhrystone", "0.516 DMIPS/MHz（CPI 4.100）", "[11]"],
+], [3.8, 4.0, 2.4, 3.6, 1.2], font_size=9.0, align_center_cols=[2, 4])
 p33b = (
-    "表 3-3 为时序与资源。核 OOC 在 11.52 ns 约束下 WNS +0.538 ns，对应 86.806 MHz；SoC 在 40 MHz 下 WNS +3.618 ns；"
+    "表 3-4 为时序与资源。核 OOC 在 11.52 ns 约束下 WNS +0.538 ns，对应 86.806 MHz；SoC 在 40 MHz 下 WNS +3.618 ns；"
     "video_pipeline 在 74.25 MHz 下 WNS +0.330 ns；协处理器控制器在 100 MHz 下 WNS +0.317 ns；"
     "40 MHz 全系统门禁 WNS +2.498 ns；共存位流 b2690b0a 重新分析 WNS +1.184 ns、WHS +0.005 ns。"
     "全系统 DSP 136/220、BRAM 69/140、DRC 0。"
 )
 add_body(doc, p33b)
-add_table(doc, "表 3-3　时序与资源（Vivado 2026.1，xc7z020clg400-1）", ["设计", "约束", "WNS", "LUT / FF", "BRAM / DSP"], [
+add_table(doc, "表 3-4　时序与资源（Vivado 2026.1，xc7z020clg400-1）", ["设计", "约束", "WNS", "LUT / FF", "BRAM / DSP"], [
     ["核 OOC（bht2）", "11.52 ns", "+0.538 ns", "2443 / 637", "0 / 0"],
     ["SoC（bht2）", "25 ns（40 MHz）", "+3.618 ns", "6768 / 859", "8 / 0"],
     ["video_pipeline", "13.468 ns（74.25 MHz）", "+0.330 ns", "1985 / 1515", "38 / 0"],
@@ -775,13 +787,13 @@ add_table(doc, "表 3-3　时序与资源（Vivado 2026.1，xc7z020clg400-1）",
     ["共存位流 b2690b0a", "25 ns（40 MHz）", "+1.184 ns", "—", "69 / 136"],
 ], [4.6, 4.4, 2.8, 2.8, 2.4], font_size=9.5, align_center_cols=[0, 1, 2, 3, 4])
 p33c = (
-    "表 3-4 为软件验证。2026-10-24 Icarus 全量回归 172 条 PASS、9 条预期门禁失败、0 条意外失败；"
+    "表 3-5 为软件验证。2026-10-24 Icarus 全量回归 172 条 PASS、9 条预期门禁失败、0 条意外失败；"
     "2026-10-21 Python 19 个检查组和 21 个视觉组退出 0；2026-10-11 XSim 25 个视觉 tb、2 个采集 tb 和 axi_lock 退出 0；"
     "2026-10-21 服务+前端模拟轮次 CHECK_PASS 1/1/1、3 目标/3 ROI、1 条记录；异常矩阵覆盖 4 轮服务和 9 个引擎场景；"
     "2026-10-17 板上 PS 原型 2 轮，16 目标，RECHECK，prototype=true。"
 )
 add_body(doc, p33c)
-add_table(doc, "表 3-4　软件与服务验证", ["项目", "结果"], [
+add_table(doc, "表 3-5　软件与服务验证", ["项目", "结果"], [
     ["Icarus 全量回归（2026-10-24）", "172 PASS；9 条预期门禁失败；0 意外"],
     ["Python 分组（2026-10-21）", "19 检查 + 21 视觉；退出 0"],
     ["XSim（2026-10-11）", "25 视觉 tb + 2 采集 + 1 axi_lock；退出 0"],
@@ -790,11 +802,11 @@ add_table(doc, "表 3-4　软件与服务验证", ["项目", "结果"], [
     ["板上 PS 原型（2026-10-17）", "2 轮；16 目标；RECHECK；prototype=true"],
 ], [6.4, 8.6], font_size=10.0)
 p33d = (
-    "表 3-5 为板上 bring-up 时间线：从 10-25 的 NO_ACK（定位为 IMEM 初值缺失）及其修复，"
+    "表 3-6 为板上 bring-up 时间线：从 10-25 的 NO_ACK（定位为 IMEM 初值缺失）及其修复，"
     "到 10-26/27 的四例黄金对拍与共存位流联调；多目标旧包暴露结果槽错位，修复版仅通过定向仿真，未上板。"
 )
 add_body(doc, p33d)
-add_table(doc, "表 3-5　板上 bring-up 结果", ["日期", "时钟", "结果"], [
+add_table(doc, "表 3-6　板上 bring-up 结果", ["日期", "时钟", "结果"], [
     ["2026-10-25", "40.000000 MHz", "20/20 STATUS=0x1；DMA 通过；NO_ACK，定位为 IMEM 初值缺失"],
     ["2026-10-26", "40.000000 MHz", "zero/pattern 各 3 轮全匹配；STATUS=0x61；RESULT_SEQ=1；无 UNCONSUMED"],
     ["2026-10-27", "40 MHz（MMCM 输入 142.857）", "四例黄金全匹配、10,000 次寄存器读取无错误；共存位流另完成 roi_001 黄金、HDMI+原帧+CNN 与真机检查记录"],
@@ -808,11 +820,11 @@ p33e = (
 )
 add_body(doc, p33e)
 p33f = (
-    "复现入口见表 3-6。验收边界：单目标四例是 PROVISIONAL 黄金对拍，不是识别精度；多目标修复包未上板；"
+    "复现入口见表 3-7。验收边界：单目标四例是 PROVISIONAL 黄金对拍，不是识别精度；多目标修复包未上板；"
     "板卡 SD/mmc 历史故障未复现，长时/温度稳定性未测；正式 INT8 模型与整机验收仍未完成。"
 )
 add_body(doc, p33f, align=WD_ALIGN_PARAGRAPH.LEFT)
-add_table(doc, "表 3-6　复现入口", ["入口", "命令"], [
+add_table(doc, "表 3-7　复现入口", ["入口", "命令"], [
     ["RTL 全量回归", "bash sim/scripts/run_iverilog.sh all"],
     ["视觉 XSim 全量", "bash sim/scripts/run_vision_xsim.sh all"],
     ["协处理器板上对拍", "py sim/scripts/cop_board_fast_run.py --package <包> --case <zero|pattern|roi_001|frame>"],
@@ -896,6 +908,7 @@ refs = [
     "Xilinx. Vivado Design Suite User Guide: Synthesis, UG901.",
     "Xilinx. Vivado Design Suite User Guide: Implementation, UG904.",
     "Patterson D. A., Hennessy J. L. Computer Organization and Design: The Hardware/Software Interface, RISC-V Edition. Morgan Kaufmann, 2017.",
+    "lowRISC. Ibex: A 32-bit RISC-V CPU Core（官方性能文档：各配置 CoreMark/MHz）. https://github.com/lowRISC/ibex",
 ]
 for i, ref in enumerate(refs, 1):
     p = doc.add_paragraph()
