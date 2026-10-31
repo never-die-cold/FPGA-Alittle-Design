@@ -52,11 +52,14 @@ py docs\tech-report\build_tech_report.py
 | `figures/photo_board_pi.jpg` | 图 2-2 板卡与树莓派相机 | `A3F613FC00B7C4E7` |
 | `figures/photo_board_closeup.jpg` | 图 3-2 板卡特写 | `9EC96A7024CF8FD4` |
 | `figures/webui_live.png` | 图 3-3 网页端 LIVE 界面 | `3B69E948E472940B` |
+| `figures/header_banner.png` | 每页页眉竞赛横幅（芯辰大海 FPGA · 点亮未来） | `787DB8FA20DE80A8` |
 
 来源：owner 2026-10-31 拍摄（前三张）与 2026-10-30 23:56 前端联调截图（webui_live），
 原图存 `D:\Desktop\contests\2026fpga\技术文档插图\`（仓外）；入库件由 `_import_photos.py` 生成
 （最长边缩至 1600，JPEG q88 / PNG optimize），可用该脚本从原图一键重建。fig_* 示意图由
 `make_tech_report_figures.py` 生成；`fig_exe.png`、`photo_plate.jpg` 已不被文档引用，保留作历史素材。
+页眉横幅 `header_banner.png` 提取自官方参考模板《技术文档参考.docx》（owner 提供），
+显示尺寸 6.52 cm × 1.19 cm 居中，每页生效。
 
 ## 结构
 

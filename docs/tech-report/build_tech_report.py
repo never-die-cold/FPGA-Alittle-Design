@@ -309,14 +309,16 @@ props.subject = "2026 年全国大学生嵌入式芯片与系统设计竞赛 AMD
 props.author = "EdgeSight 团队"
 props.comments = "修订版 V1.0；按评审意见修订：摘要精简、公式排版、指标口径对齐传统基准、EXE 改 HTML、新增 LLM 协作与 Skills 沉淀。"
 
-# 页眉页脚
+# 页眉页脚：每页页眉为竞赛横幅（「芯辰大海 FPGA · 点亮未来」，取自官方参考模板，
+# 显示 6.52 cm × 1.19 cm 居中），下沿保留细分隔线
 header = sec.header
 header.is_linked_to_previous = False
 hp = header.paragraphs[0]
 hp.text = ""
-hp.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-hr = hp.add_run("边缘慧眼（EdgeSight）· 技术文档")
-set_run_font(hr, size=9, color=GRAY)
+hp.alignment = WD_ALIGN_PARAGRAPH.CENTER
+hp.paragraph_format.space_after = Pt(2)
+hr = hp.add_run()
+hr.add_picture(os.path.join(FIG, "header_banner.png"), width=Cm(6.52))
 bottom_border(hp, color="BFBFBF", sz=4)
 
 footer = sec.footer
