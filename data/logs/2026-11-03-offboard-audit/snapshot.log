@@ -1,0 +1,52 @@
+{
+  "runs": 5,
+  "total": {
+    "total": 167,
+    "restore": 0,
+    "keep": 9,
+    "drop": 6,
+    "unique": 152
+  },
+  "runs_detail": [
+    {
+      "run": "2026-10-11-c01-capture-rtl",
+      "total": 75,
+      "restore": 0,
+      "keep": 3,
+      "drop": 1,
+      "unique": 71
+    },
+    {
+      "run": "2026-10-14-n03-return-review",
+      "total": 2,
+      "restore": 0,
+      "keep": 0,
+      "drop": 0,
+      "unique": 2
+    },
+    {
+      "run": "2026-10-15-improvements-fast",
+      "total": 11,
+      "restore": 0,
+      "keep": 0,
+      "drop": 0,
+      "unique": 11
+    },
+    {
+      "run": "2026-10-17-exe-ring",
+      "total": 4,
+      "restore": 0,
+      "keep": 1,
+      "drop": 0,
+      "unique": 3
+    },
+    {
+      "run": "c01-capture-e2a602d6e0da49a2b6da072abca47c70",
+      "total": 75,
+      "restore": 0,
+      "keep": 5,
+      "drop": 5,
+      "unique": 65
+    }
+  ]
+}

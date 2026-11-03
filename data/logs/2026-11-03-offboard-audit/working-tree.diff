@@ -1,0 +1,1131 @@
+diff --git a/README.md b/README.md
+index 43846ab..2249584 100644
+--- a/README.md
++++ b/README.md
+@@ -22,7 +22,7 @@
+ 
+ ## 项目背景与创新点
+ 
+-装配工位需要核对紧固件的类别和数量，并将识别结果与工单要求比较，发现缺件、多余件和错料。本项目以“相机采集 → 定位与识别 → 工单检查 → 界面与记录”为目标；当前已实现能力、实板结果和整机验收缺口见 [plan.md §3.1](plan.md#31-当前状态)，网页端真实数据接线尚未实现。
++装配工位需要核对紧固件的类别和数量，并将识别结果与工单要求比较，发现缺件、多余件和错料。本项目以“相机采集 → 定位与识别 → 工单检查 → 界面与记录”为目标；网页端已接通真实板端 API、USB 视频和检查快照，连续稳定性与分类精度仍待完善。当前已实现能力、实板结果和整机验收缺口见 [plan.md §3.1](plan.md#31-当前状态)。
+ 
+ 本作品的定位是**桌面紧固件识别与工业检查系统**：板卡承担视觉分析和检查调度，HTML 网页端承担统一显示、工单配置与记录。
+ 
+diff --git a/data/logs/README.md b/data/logs/README.md
+index f06ed78..4394cb1 100644
+--- a/data/logs/README.md
++++ b/data/logs/README.md
+@@ -16,11 +16,12 @@
+ 7. 当前目录缺 README 的标记为 `PROVENANCE GAP`；补说明时只写能核实的事实，未知处写“待核”。
+ 
+ <!-- RUN-INDEX:START -->
+-## 目录索引（55 个运行，自动生成）
++## 目录索引（56 个运行，自动生成）
+ 
+ | 目录 | 日期 | 文件数 | 大小 | 说明 |
+ |:---|:---:|---:|---:|:---|
+ | `c01-capture-e2a602d6e0da49a2b6da072abca47c70` | — | 83 | 3.3 MB | c01-capture-e2a602d6e0da49a2b6da072abca47c70 |
++| `2026-10-30-web-live` | 2026-10-30 | 4 | 873 KB | 2026-10-30 网页端真实链路联调 |
+ | `2026-10-28-washer-collection` | 2026-10-28 | 98 | 2.4 MB | 2026-10-28 CNN 继续训练与本地实验隔离 |
+ | `2026-10-28-standing-nut` | 2026-10-28 | 154 | 6.9 MB | 2026-10-28 五螺母、两竖立姿态诊断 |
+ | `2026-10-28-r6-holdout-layout04` | 2026-10-28 | 58 | 1.6 MB | Frozen r6: new placement of the existing specimens |
+diff --git a/docs/project-map.md b/docs/project-map.md
+index 5caa99d..2797472 100644
+--- a/docs/project-map.md
++++ b/docs/project-map.md
+@@ -27,7 +27,7 @@
+ │   ├── coprocessor/    INT8 CNN 算子/整网控制器/整数参考
+ │   ├── riscv_fw/       裸机固件、CoreMark、测试程序；hex 入库，dis 本地生成
+ │   ├── pynq_host/      PS 侧配置、定位/ROI、检查服务、FILE/LIVE 骨架、记录/CSV 参考
+-│   └── web_client/     网页端前端（原型；真实数据接线待完成）
++│   └── web_client/     网页检查界面、本机服务与板端 API 转发
+ ├── sim/                testbench 与仿真入口
+ │   ├── riscv/          RISC-V tb
+ │   ├── vision/         视觉 tb 与视觉 Python 测试
+diff --git a/docs/project-overview.md b/docs/project-overview.md
+index d257120..e54c960 100644
+--- a/docs/project-overview.md
++++ b/docs/project-overview.md
+@@ -5,7 +5,7 @@
+ > 每句只写一个信息点；句子要短；用主动语态；用一般现在时；一个术语只指一个事物；
+ > 不用比喻和口语。模块名、信号名、寄存器名按代码原名写（STE 允许技术名）。
+ > **配图**：7 幅图由 [img/make_project_diagrams.py](img/make_project_diagrams.py) 生成，2026-10-28 已按网页端口径重绘；BHT 细节仍未入图。
+-> **状态口径**：2026-10-28；当前实现以正文、冻结契约和收口证据为准，逐项核对见git 历史（88ac1c4 前）docs/archive/implementation-document-audit-2026-10-12.md。更细的契约见 [design_v0.md](../src/riscv/design_v0.md)、
++> **状态口径**：2026-10-31；当前实现以正文、冻结契约和收口证据为准，逐项核对见git 历史（88ac1c4 前）docs/archive/implementation-document-audit-2026-10-12.md。更细的契约见 [design_v0.md](../src/riscv/design_v0.md)、
+ > [design_v1.md](../src/riscv/design_v1.md)、[vision design_v0.md](../src/vision/design_v0.md)。
+ 
+ ---
+@@ -22,7 +22,7 @@
+ 
+ 数据走两条物理路径。视频路径：板卡 HDMI OUT → USB 采集卡 → 网页端。
+ 结果路径：板卡 PS → 网口 → 网页端。[轮次级同步契约](contracts/vision-sync-protocol-decisions.md)已冻结；mock v1.1 有[落码证据](../data/logs/2026-10-06-vision-sync-schema/README.md)。
+-真实识别结果与画面关联尚未实现；过期结果不得显示为当前检查通过，不能把轮次级契约称为逐帧精确对齐。
++网页端已接入真实结果和本轮板端快照，并能在 UVC 视频上作轮次级叠加；过期结果撤框，逐帧精确对齐仍未实现。
+ 
+ ## 2. 三个模块与当前状态
+ 
+@@ -30,12 +30,12 @@
+ |:---|:---|:---|:---|
+ | 模块一 | RISC-V 核＋最小 SoC | jianglibo | 已完成收口。[核收口报告](../report/module1-closure.md) |
+ | 模块二 | HDMI 视觉预处理 RTL＋已验证视频链路 | never-die-cold | 已完成（RTL／链路级）。[视频记录](../data/logs/2026-10-03-vision-onboard/README.md)、[真实相机记录](../data/logs/2026-10-07-pi-pynq/README.md) |
+-| 模块三 | INT8 CNN 推理协处理器 | jianglibo | C02/C03 已冻结；J02/J03 算子/整网、J04a 控制面与固件已离板冒烟（JL 侧）；J04b 完整验证、实体 BRAM/SoC/视频集成、正式模型与板端输出未验收 |
+-| 网页端前端 | 视频/轮次、LIVE 展示、记录与回放 | — | 类别/分数/工单横幅、来源标识、记录 v2 与 CSV 已离板验证；真实数据接线与目标环境发布未验收 |
++| 模块三 | INT8 CNN 推理协处理器 | jianglibo | r6 已有实板整数数值对照；正式精度及连续应用稳定性未完成，见主计划 |
++| 网页端前端 | 视频/轮次、LIVE 展示、记录与回放 | — | 真实 API、UVC 和本轮快照已联调；本页手动记录和 CSV 已核对；持久记录及长期运行未完成 |
+ 
+ 提交节点见根目录 [plan.md](../plan.md) §1.2（最终复验 11/3、作品提交 11/4 18:00 前）。
+ 
+-全项目 M2 验收未完成；首个网络硬件输出仍缺实现与黄金参考对齐证据，CNN 与工业闭环不得宣称完成。验收范围以[主计划 §1.4](../plan.md)为准。
++全项目工业整机验收未完成。CNN r6 有实板整数数值对照，但不等于分类精度与长期运行通过；验收范围以[主计划 §1.4](../plan.md)为准。
+ 
+ - ✅ **已实现并验证**
+   - v0 保留 `partA-v0` 锚点；v1 三级、转发、Radix-4、BHT 三档及四档入口已收口。[核收口报告](../report/module1-closure.md)
+@@ -220,12 +220,10 @@ PS 的配置时钟和像素时钟异步。直接写寄存器会撕裂配置。
+ 
+ ## 8. 未实现清单（明确标注）
+ 
+-- J04a 控制面/`cop_top`/MMIO/CDC/DMA/工单固件已离板冒烟（JL 侧）；**J04b 完整验证、实体 BRAM 生产地址适配、SoC/视频集成与板端输出未验收**。正式 INT8 模型/整网黄金仍缺。详见[实现交接单](runbooks/coprocessor-j04-handoff.md)。
+-- 实际定位部署与逐目标推理：未实现；ARM／Python 定位和裁剪参考已有验证，不等于实时板端部署。
++- C01/PS 定位与 ROI、PL CNN、核侧工单固件及视频共存已有实板记录；连续检查的 TASK_ERROR/DMA 故障恢复仍待修复，最新结论见[主计划](../plan.md#31-当前状态)。
+ - 正式紧固件数据集与模型：未完成。采集规程已入库。
+-- 核侧工业检查固件未实现；PS 文件检查的候选工单规则已实现，不等于核侧判定。
+-- 前端真实数据接线、检查快照查看与目标环境发布未完成；LIVE 展示、记录 v2、CSV 和文件回放已实现。
+-- FILE/LIVE 服务骨架与替身已实现，恒显 PROTOTYPE；真实硬件后端未实现。轮次级叠加不代表逐帧精确关联。
++- 前端真实 API、UVC 和检查快照已接入；持久批次、异常截图、网页工单下发和目标环境完整发布未完成。本页记录不等于已退役 EXE 的记录 v2 持久存储。
++- FILE 后端保持 PROTOTYPE；真实 C01/COP_HW 后端已接入。轮次级叠加不代表逐帧精确关联。
+ - PL 本体及识别闭环延迟、当前相机配置的长期运行／冷启动／断连恢复：待验证；已有采集卡观测上界不能替代。
+ 
+ ## 9. 文档关系与复现入口
+diff --git a/plan.md b/plan.md
+index dc68257..32409d6 100644
+--- a/plan.md
++++ b/plan.md
+@@ -1,6 +1,6 @@
+ # 项目主计划：目标、验收与当前状态
+ 
+-更新日期：2026-10-28。目标形态为**受控工位紧固件识别与工业检查系统**；仓库处于提交（2026-11-4 18:00 前）前的优化与调整阶段。
++更新日期：2026-10-31。目标形态为**受控工位紧固件识别与工业检查系统**；仓库处于提交（2026-11-4 18:00 前）前的优化与调整阶段。
+ 
+ **三层状态**：模块一核＋最小 SoC 已完成收口，见[核收口报告](report/module1-closure.md)。
+ 模块二 HDMI 视觉预处理 RTL＋已验证视频链路已完成（RTL／链路级），见[视频记录](data/logs/2026-10-03-vision-onboard/README.md)和[真实相机链路](data/logs/2026-10-07-pi-pynq/README.md)。
+@@ -79,6 +79,8 @@
+ 
+ ### 3.1 当前状态
+ 
++- **2026-10-30 网页端实板联调**：本机网页服务已接入 PYNQ 的 C01/COP_HW API，USB 采集卡预览为 1280×720、约 30 FPS；真实轮次显示 6 个框、类别分数和 RECHECK/low_score，并支持读取本轮板端快照。恢复后的 4 轮（2 手动、2 自动）对应 2 条可导出的手动记录；过期撤框、失败不计数已核对。另一次会话第 5 轮出现 TASK_ERROR，随后 DMA 超时，重启服务后恢复，连续稳定性仍未通过；实物为 4 螺栓/1 螺母/1 垫圈，模型把垫圈判作螺母，精度问题未闭环。启动与原始结果见[网页联调记录](data/logs/2026-10-30-web-live/README.md)。逐帧精确关联、网页工单下发、持久批次/异常截图和工业整机验收仍未实现或未完成。
++
+ - **2026-10-28 多目标修复与 r6 实板数值对照（最新）**：新共存位流整机门禁通过，WNS 1.359 ns、WHS 0.012 ns；r6 单目标黄金 `[67,-60,-13]` 精确匹配。两组真实 ROI 共 12 轮/85 个结果的 logits、目标编号、有效/错误位、类别、margin/score 与整数参考逐项一致，覆盖 1/3/9/10 目标、倒序、重复任务及产品 10 目标上限，结果槽错位未再出现。视频与 LIVE/C01/COP_HW 服务已恢复；真实取帧仍把上方/右侧纸边多框为 2 个目标，11 个候选触发 target_limit，尚不能计为实时 CNN 成功轮。未改整机自启动。构建后其他操作将共享工作区从 cfbded8 快进到 0430257，导致 loader 返回值接口变化；已修复调用兼容并冻结 r1 包，保留失败尝试。源码锚点、包/板端路径、原始结果、剩余 methodology 警告见[实板记录](data/logs/2026-10-28-multitarget-board-r6/README.md)。
+ 
+ - **2026-10-28 CNN r6 冻结后新摆放留出**：用户只有既有同批实物，重新摆放 3/3/3（含 2 个竖立螺母），并逐编号确认标签。全部 9 件均被定位；FP32/INT8 各正确 8/9、分类一致 9/9，均将 3 号垫圈判为螺母。此图不用于训练、校准或模型选择；换实物的泛化验收未实现，不能用分类一致代替分类正确。原图、人工真值及板端数值对照向量见[新摆放留出记录](data/logs/2026-10-28-r6-holdout-layout04/README.md)。
+diff --git a/sim/vision/test_vision_live_service.py b/sim/vision/test_vision_live_service.py
+index 7c326b5..9841c4d 100644
+--- a/sim/vision/test_vision_live_service.py
++++ b/sim/vision/test_vision_live_service.py
+@@ -90,6 +90,16 @@ def main():
+             assert packet["prototype"] is True and packet["config_id"] == 0  # 未握手 config 前
+         assert statuses == ["RECHECK", "CHECK_FAIL", "CHECK_PASS"]
+         assert packets[0]["trigger_ref"] == "ref-0"
++        capture_url = f"{base}/v1/captures/{packets[0]['session_id']}/1.png"
++        with urllib.request.urlopen(capture_url, timeout=2) as response:
++            assert response.headers["Content-Type"] == "image/png"
++            assert response.read() == raw_a
++        for path in ("/v1/captures/old-session/1.png", f"/v1/captures/{packets[0]['session_id']}/999.png"):
++            try:
++                urllib.request.urlopen(base + path, timeout=2)
++                raise AssertionError("missing or cross-session capture accepted")
++            except urllib.error.HTTPError as error:
++                assert error.code == 404
+         assert all("trigger_ref" not in p for p in packets[1:])
+         assert packets[0]["decision"]["actual"] == {"bolt": 1, "nut": 1, "washer": 0}  # 超限映射
+         assert packets[0]["decision"]["verdict"] == "RECHECK"
+diff --git a/src/README.md b/src/README.md
+index 82a695f..ed4d1d9 100644
+--- a/src/README.md
++++ b/src/README.md
+@@ -10,9 +10,9 @@
+ | `riscv/` | 自研 RV32IM 核、三级流水/转发/BHT、最小 SoC；v0/v1 接口契约 | [README](riscv/README.md)、[design_v0](riscv/design_v0.md)、[design_v1](riscv/design_v1.md) |
+ | `vision/` | HDMI 视觉预处理、捕获状态、AXI 配置、OSD | [README](vision/README.md)、[design_v0](vision/design_v0.md) |
+ | `coprocessor/` | INT8 CNN 算子、整网控制器、整数参考 | [README](coprocessor/README.md)、[design_v0](coprocessor/design_v0.md) |
+-| `riscv_fw/` | RISC-V 裸机固件、CoreMark、测试程序与 hex/dis | [README](riscv_fw/README.md)、[Makefile](riscv_fw/Makefile) |
++| `riscv_fw/` | RISC-V 裸机固件、CoreMark、测试程序与 hex；dis 本地生成 | [README](riscv_fw/README.md)、[Makefile](riscv_fw/Makefile) |
+ | `pynq_host/` | PS 侧配置、定位/ROI、检查服务、FILE/LIVE 骨架 | [README](pynq_host/README.md)、[ONBOARD](pynq_host/ONBOARD.md) |
+-| `web_client/` | HTML 网页端前端（HUD v4 检查界面，单文件 index.html） | [README](web_client/README.md) |
++| `web_client/` | 网页检查界面、报文解析、本机静态服务与板端 API 转发 | [README](web_client/README.md) |
+ 
+ ## 常用入口
+ 
+diff --git a/src/pynq_host/README.md b/src/pynq_host/README.md
+index 8d14278..392621c 100644
+--- a/src/pynq_host/README.md
++++ b/src/pynq_host/README.md
+@@ -2,7 +2,7 @@
+ 
+ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采集；Jupyter 保留为板端调试与复现入口。工业操作界面为 HTML 网页端（[src/web_client](../web_client/README.md)），采集卡视频和网口识别结果统一展示，见根目录 [项目主计划](../../plan.md) §1.3。
+ 
+-当前产品入口为 `cop_product_service.py`（C01 捕获 → PS 定位/ROI → PL CNN → LIVE API）；最新实板数值对照及剩余精度/定位问题统一见 [plan.md §3.1](../../plan.md#31-当前状态)。网页端真实数据接线仍未实现。下列带日期段落保留对应阶段的边界。
++当前产品入口为 `cop_product_service.py`（C01 捕获 → PS 定位/ROI → PL CNN → LIVE API）；最新实板数值对照及剩余精度/定位问题统一见 [plan.md §3.1](../../plan.md#31-当前状态)。网页端已接入真实 API、UVC 预览及本轮快照，启动见[网页端说明](../web_client/README.md)；连续检查稳定性未通过。下列带日期段落保留对应阶段的边界。
+ 
+ ## 早期实现与规划边界（2026-10-12）
+ 
+@@ -43,7 +43,7 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采
+ - `golden_ref.py`：软件黄金参考实现（OpenCV / 纯 Python 推理）
+ - `metrics.py`：数据自动采集与报告生成（→ `data/`）
+ - 真实硬件识别后端未实现；FILE/LIVE 骨架已有，不把软件会话/配置号当硬件状态。批次记录与 CSV 导出参考实现在本目录 `records.py`、`export_records.py`。
+-- 前端为网页端（`src/web_client/`，原型已含 LIVE 类别/工单展示形态）；真实数据接线、检查快照查看和目标环境发布仍待完成。
++- 前端为网页端（`src/web_client/`），真实数据接线和检查快照查看已在 2026-10-30 联调；目标环境长期运行与发布验收仍待完成。
+ 
+ ## LIVE 服务捕获后端（W04/N06 诊断包，2026-10-13）
+ 
+diff --git a/src/pynq_host/vision_live_service.py b/src/pynq_host/vision_live_service.py
+index b3e1dd4..dc03e83 100644
+--- a/src/pynq_host/vision_live_service.py
++++ b/src/pynq_host/vision_live_service.py
+@@ -20,6 +20,7 @@ FILE 原型自动轮询在内存中检查并更新 latest_packet.json；手动
+ import argparse
+ import hashlib
+ import json
++import re
+ import threading
+ import time
+ import uuid
+@@ -193,11 +194,12 @@ def make_server(host="127.0.0.1", port=8765, root=None, captures=None, engine=No
+     state = State(root, captures, engine, order, archive_every_round)
+ 
+     class Handler(BaseHTTPRequestHandler):
+-        def reply(self, status, body):
+-            data = json.dumps(body, allow_nan=False).encode()
++        def reply(self, status, body, content_type="application/json"):
++            data = body if isinstance(body, bytes) else json.dumps(body, allow_nan=False).encode()
+             try:
+                 self.send_response(status)
+-                self.send_header("Content-Type", "application/json")
++                self.send_header("Content-Type", content_type)
++                self.send_header("Cache-Control", "no-store")
+                 self.send_header("Content-Length", str(len(data)))
+                 self.end_headers()
+                 self.wfile.write(data)
+@@ -222,6 +224,13 @@ def make_server(host="127.0.0.1", port=8765, root=None, captures=None, engine=No
+                     self.reply(404, {"error": "no check yet"})
+                 else:
+                     self.reply(200, state.last_packet)
++            elif match := re.fullmatch(r"/v1/captures/([^/]+)/([0-9]{1,10})\.png", self.path):
++                session, check = match.groups()
++                capture = state.session_dir / f"check-{int(check):06d}" / "capture.png"
++                if session != state.session_id or not capture.is_file():
++                    self.reply(404, {"error": "capture not found in this session"})
++                else:
++                    self.reply(200, capture.read_bytes(), "image/png")
+             else:
+                 self.reply(404, {"error": "unknown route"})
+ 
+diff --git a/src/web_client/README.md b/src/web_client/README.md
+index e6f78ab..16d1ae9 100644
+--- a/src/web_client/README.md
++++ b/src/web_client/README.md
+@@ -1,67 +1,54 @@
+-# EdgeSight 网页端（HUD v4「应用外壳」，2026-10-27 起）
++# EdgeSight 网页端
+ 
+-`index.html` 是 EdgeSight 的 **HTML 网页端前端**（HUD v4「EdgeSight 应用外壳」）：
+-页面骨架、交互思路与视觉语言借鉴 Project Mozart 控制中心前端
+-（顶栏状态条 + 三栏布局 + 设计令牌 + 亮暗主题 + 终端式日志），
+-信息架构与状态语义沿用 HUD v4 定稿。
+-**单文件、零依赖、无构建步骤**，浏览器直接打开即可运行。当前为纯前端原型（合成数据），真实数据源接入为待接入项。
++HTML/JavaScript 检查界面，无前端构建步骤。LIVE 模式通过本机 Python 服务连接 PYNQ；合成数据只出现在 LOCAL DEMO。实际验证和剩余问题见 [2026-10-30 联调记录](../../data/logs/2026-10-30-web-live/README.md)。
+ 
+-## 打开方式
++## 启动
+ 
+-直接双击 `index.html`，或：
++在仓库根目录运行（Python 3.10+，仅标准库）：
+ 
+ ```powershell
+-start src\web_client\index.html
++python src/web_client/serve.py --endpoint http://192.168.50.99:8765
+ ```
+ 
+-字体在本目录 `assets/fonts/InterVariable.ttf`（OFL）；
+-单独拷走 `index.html` 时回退系统字体，仍可正常显示。
+-默认暗色主题，右上角按钮切换亮/暗（localStorage `edgesight-theme`）。
+-
+-## 信息架构映射（HUD v4 → 网页端）
+-
+-| HUD v4 定稿（原 EXE 形态） | 网页端 |
+-|:---|:---|
+-| 顶栏（徽标 / 状态 / 分辨率·FPS·session / 时钟） | 顶部状态条（徽标 + 判定文字 + RES/FPS/SESSION 仪表组 + SYSTEM ONLINE + 时钟） |
+-| 视频圆角视口（无面板遮挡，角括号，绿框 + T 序号片） | 中栏视频舞台（角括号 + 绿框 + T 片 + 判定横幅 + WAITING 深色衬底） |
+-| 识别范围表「INSPECTION SCOPE」右栏置顶 | 右栏置顶卡片：勾选框 / 类别 / 计数，行悬停高亮 |
+-| FRESHNESS 条 + RUN INSPECTION 三态按钮 | 并入范围表内：青 IDLE → 琥珀 QUEUED·WAITING → 暗底 RUNNING |
+-| DETECTED OBJECTS（3 卡片 + +N more） | 右栏第二卡片（缩略图 / T 序号 / XYWH） |
+-| EdgeSight 品牌块 | 顶栏品牌 + 左上 logo |
+-| 终端式日志（参考前端引入） | 中栏底部终端日志（标签过滤，演示轮次/状态/链路事件） |
+-| —（原视口形态用命令行参数） | 左栏表单：自动轮询开关、interval、max-age、数据源三模式、演示事件注入 |
+-
+-数据源三行的含义（单选互斥，同一时刻只运行一种）：
+-`LIVE` = 采集卡视频 + 板端 `:8765` 轮次叠加（真实数据接线待完成）；
+-`LOCAL DEMO` = 本地合成数据（MOCK ONLY 徽标，不得作为板端证据）；
+-`FILE REPLAY` = `result.json` 离线回放（只读：无触发按钮、无勾选框、计数为「实际/工单」）。
+-服务不可达时隐藏面板并进入重连，原型中以断联演示近似表达。
+-
+-## 状态语义（对 `rounds.py` 对外语义的演示）
+-
+-- 结果有效性 = 会话 + 配置号 + 年龄窗（D3）：过期 / 断联 / 配置变化即**撤框 + 计数置 -- + 状态文字**三重冗余；
+-- 手动轮（按钮 / `C` 键）成功才 REC+1 并落记录；自动间隔轮永不记录；
+-- 手动轮失败立即 `NO VALID RESULT | check failed` 并撤旧 PASS，不等 max-age（2026-10-20 语义）；
+-- 断联连续 3 次 HTTP 失败自动重新握手（D5），恢复后更换 session；
+-- target_limit 轮：RECHECK 未完整计数，计数列显示 `--`，不映射零值；
+-- 勾选只作用于本地显示/跟踪：未勾选类别不画框、不进列表，**T 序号保留原始编号不重排**，计数灰显保留（不隐瞒）；
+-- interval ≥ max-age 的参数组合按启动校验语义拒绝（防止周期性空窗）。
+-
+-## 配色纪律（沿用 HUD v4 定稿）
+-
+-- 面板区 UI 控件一律**品牌青**（勾选态、RUN 按钮、FRESHNESS、REC 计数）；
+-- **绿色专属**目标框 / T 序号片 / 判定 PASS / 对象计数徽标，不与普通 UI 混用；
+-- 琥珀 = 等待（QUEUED / WAITING / RECHECK），红 = FAIL / PROTOTYPE / 故障；
+-- 等待文字置于深色衬底框内（避免亮琥珀落在浅底发虚，10-08 定稿要点）。
+-
+-## 评审截图
+-
+-9 张实渲染截图（2026-10-27/28 评审，各状态基准图，含 sha256 与重建步骤）存档于
+-[data/evidence/2026-10-28-web-hud-shots](../../data/evidence/2026-10-28-web-hud-shots/README.md)。
+-
+-## 边界（勿过度解读）
+-
+-- **纯前端模拟**：合成数据、合成场景循环（PASS → FAIL → RECHECK），不访问相机、板端服务或 records 目录；
+-  不代表板上识别效果，不得作为板端证据。
+-- 网页端即前端形态；真实数据源接入与勾选下发服务端（待 C04 §6）为待接入项。
+-- 未实现：勾选下发服务端（待 C04 §6）、多会话/权限、国际化。
++打开 <http://127.0.0.1:8000>。可用 `--port` 改端口。服务仅监听本机，静态目录仅为本目录；`/v1/status`、`/v1/config`、`/v1/check`、`/v1/latest` 和本轮快照转发到指定板端，不需要 CORS 或关闭浏览器安全检查。
++
++直接双击 HTML 不能运行 LIVE；ES module 和相机访问需要 HTTP/localhost。板端先运行 `cop_product_service.py`，包路径和参数以板端部署为准。启动会等待真实视频帧，须接好 HDMI IN 并将相机设置为 1280×720。
++
++## 现场操作
++
++1. 等待检查服务连接，页面显示板端 session 和已确认 config。
++2. 在“视频设备”选择 USB 采集卡，例如 `USB Video (345f:2109)`，点击“连接采集卡”。首次授权后可再次选择设备；不启用麦克风。
++3. 保持零件静止，点击 RUN INSPECTION 或按 C。检查结果来自板端，工单数量沿用服务端配置。
++4. 自动检查默认暂停，刷新间隔默认 0.5 秒，可选 0.25/0.5/1.0/2.2 秒。开启后立即检查，每次只允许一个请求在途，不累计批次；失败会暂停自动检查。
++5. 手动有效报文每个 `(session_id, check_id)` 只记一次。CSV 从本页内存导出，带 UTF-8 BOM 和会话号；刷新页面会清空本页记录。板端原始轮次另存于服务的 `--root`。
++
++USB 视频仅在本机显示。FPS 根据浏览器实际呈现帧数计量；没有视频时显示 `—`。预览须为 16:9，避免留黑边导致框坐标错位。
++
++界面不再叠加页头/视频判定横幅或视频下方状态条。会话与配置只在 SERVICE 显示，ROUND 只在识别范围卡显示，REC 只在批次卡显示；检查判定保留在日志与 CSV。操作说明放在本文，演示控制仅在 LOCAL DEMO 显示。
++
++未连接 UVC 时，完成检查会显示该报文对应的板端原帧，标为 SNAPSHOT；快照 URL 包含会话和检查编号。它是本轮静态图，不能当作连续视频。UVC 与板端结果只作轮次级叠加，逐帧精确关联未实现。
++
++## 数据源与有效性
++
++- LIVE：真实 HTTP 请求和板端类别、分数、目标编号、工单判定；不生成合成结果。框按报文尺寸缩放，bbox 为半开区间。
++- LOCAL DEMO：合成场景，始终标为 MOCK ONLY/PROTOTYPE；模拟断联、配置变化和缺件等按钮仅在此模式可用。
++- FILE REPLAY：选择板端 `packet.json` 只读查看，不访问网络或相机；没有加载对应图像，不能用它验证画面与框的对应关系。
++- 结果按接收时刻计龄；超龄撤框和计数。会话/配置不符、非法报文、手动检查失败均撤除旧判定。切换数据源后不采纳旧请求的响应。
++- 下一轮请求期间保留仍在有效期内的结果，新结果到达后直接替换，不在每次请求开始时清屏。等待首个结果或旧结果过期时，在途检查显示“识别中”；不会延长旧结果的 4.5 秒有效期。实际刷新速度受板端取帧/定位/推理耗时限制，0.5 秒不是硬件推理帧率。离线重连保持约 2 秒间隔；UVC 开启时不下载每轮快照。
++- `target_limit` 的计数为未知，显示 `--`；判定、数量差额与原因仍保存在检查报文中，界面不再重复叠加展示。
++- 类别勾选仅改变本地显示，不下发工单；保留板端原始 T 编号，不重排。工单编辑/下发尚未实现。
++
++亮暗主题按钮使用 localStorage `edgesight-theme`。字体位于 `assets/fonts/`，许可文件随附。
++
++## 验证
++
++```powershell
++python sim/vision/test_web_server.py
++node --test sim/vision/test_web_protocol.mjs
++node --test sim/vision/test_web_refresh.mjs
++python sim/vision/test_vision_live_service.py
++```
++
++HTTP 与报文测试覆盖模块 MIME、转发与断联错误、轮次/配置/坐标校验和未知计数；刷新测试用可控时钟和网络延迟执行真实页面模块，覆盖在途保留、过期/失败撤框、串行请求与批次计数；LIVE 服务测试验证快照只能读取当前会话的对应轮次。实板操作按上述步骤复现，原始结果见联调记录。
++
++历史 HUD 设计截图见 [2026-10-28 原型评审](../../data/evidence/2026-10-28-web-hud-shots/README.md)，属于合成界面基准。当前边界：连续硬件检查稳定性、正式分类精度、跨机时延/逐帧关联、持久批次/异常截图和完整工业验收尚未完成。
+diff --git a/src/web_client/index.html b/src/web_client/index.html
+index ac117ae..e1e30ed 100644
+--- a/src/web_client/index.html
++++ b/src/web_client/index.html
+@@ -4,7 +4,7 @@
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta name="theme-color" id="meta-theme-color" content="#0B0F17">
+-<title>EdgeSight · 检查控制台（Web 原型）</title>
++<title>EdgeSight · 检查控制台</title>
+ <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M6 26 14 6h5L11 26Z' fill='%2300D2FF'/%3E%3Cpath d='M15 26 23 6h5L20 26Z' fill='%231E5F8A'/%3E%3C/svg%3E">
+ <script>
+   // 首帧前确定主题，避免暗色闪白（同参考前端做法，键名 edgesight-theme）。
+@@ -17,15 +17,7 @@
+   })();
+ </script>
+ <style>
+-/* ==========================================================================
+-   EdgeSight 检查控制台 —— HUD v4「应用外壳」网页端。
+-   布局/交互骨架借鉴 Project Mozart 控制中心（顶栏状态条 + 三栏 + 设计令牌 +
+-   亮暗主题 + 终端日志）；信息架构、状态语义与配色纪律来自 HUD v4 定稿：
+-   - 面板区 UI 控件用品牌青，绿色专属目标框/序号片/判定 PASS（不与 UI 混用）；
+-   - RUN 按钮三态：青 IDLE → 琥珀 QUEUED·WAITING → 暗底 RUNNING；
+-   - 等待态三重冗余：撤框 + 计数置 -- + 状态文字（等待文字琥珀置深色衬底）。
+-   纯前端模拟，不访问相机/网络/板端服务；数据为合成演示数据。
+-   ========================================================================== */
++/* 三栏检查界面：青色控件、绿色目标框，LIVE 与演示数据分离。 */
+ 
+ @font-face {
+   font-family: 'Inter';
+@@ -130,25 +122,13 @@ button, h1, h2, h3 { font-family: inherit; }
+ .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+ .brand-logo { width: 26px; height: 26px; flex: none; }
+ .brand-name { font-size: 17px; font-weight: 800; letter-spacing: -0.01em; }
+-.brand-tag {
+-  font-size: 9px; font-weight: 800; letter-spacing: 0.14em; color: var(--ink-4);
+-  border: 1px solid var(--edge); border-radius: 4px; padding: 2px 6px; white-space: nowrap;
+-}
+ .badge {
+   display: inline-flex; align-items: center; border-radius: 999px;
+   padding: 3px 11px; font-size: 11px; font-weight: 800; letter-spacing: 0.06em;
+   font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+   white-space: nowrap;
+ }
+-.badge-live { background: var(--accent); color: #06222E; }
+-.badge-mock { background: var(--amber); color: #2A1C00; }
+-.badge-file { background: var(--panel3); color: var(--ink-2); border: 1px solid var(--edge); }
+ .badge-proto { background: var(--red); color: #2B0505; }
+-.verdict-text { font-size: 14px; font-weight: 800; letter-spacing: 0.02em; white-space: nowrap; }
+-.verdict-pass { color: var(--green); }
+-.verdict-fail { color: var(--red); }
+-.verdict-warn { color: var(--amber); }
+-.verdict-none { color: var(--ink-3); }
+ .hw-group { display: flex; align-items: center; gap: 0; margin-left: 6px; overflow: hidden; }
+ .hw-stat { display: flex; align-items: center; gap: 7px; padding: 4px 13px; white-space: nowrap; }
+ .hw-stat + .hw-stat { border-left: 1px solid var(--edge-soft); }
+@@ -156,10 +136,8 @@ button, h1, h2, h3 { font-family: inherit; }
+ .hw-label { font-size: 10px; font-weight: 800; letter-spacing: 0.08em; color: var(--ink-4); }
+ .hw-value { font-size: 12px; font-weight: 700; color: var(--ink-2); }
+ .header-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+-.sys-online { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; color: var(--ink-2); white-space: nowrap; }
+ .sys-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px rgba(0, 230, 130, 0.5); }
+ .sys-dot.off { background: var(--red); box-shadow: 0 0 8px rgba(255, 77, 79, 0.5); }
+-.header-sep { width: 1px; height: 26px; background: var(--edge); }
+ .clock { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--ink-2); }
+ .theme-toggle {
+   display: inline-flex; width: 32px; height: 32px; align-items: center; justify-content: center;
+@@ -188,14 +166,6 @@ button, h1, h2, h3 { font-family: inherit; }
+ }
+ .card-title .hint { font-size: 10px; font-weight: 700; letter-spacing: 0.04em; color: var(--ink-4); text-transform: none; }
+ .micro { font-size: 10px; line-height: 1.4; }
+-.tiny { font-size: 11px; line-height: 1.45; }
+-.dim { color: var(--ink-3); }
+-.faint { color: var(--ink-4); }
+-.kbd {
+-  display: inline-block; min-width: 20px; text-align: center; padding: 1px 6px;
+-  border: 1px solid var(--edge); border-bottom-width: 2px; border-radius: 5px;
+-  background: var(--panel2); font-size: 10px; font-weight: 800; color: var(--ink-2);
+-}
+ 
+ /* ---------- 左栏：系统状态 / 数据源 / 演示控制 / 记录 ---------- */
+ .sys-line { display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 800; }
+@@ -254,7 +224,7 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
+ .col-center { overflow: hidden; }
+ .stage-wrap { flex: none; display: flex; justify-content: center; }
+ .stage {
+-  position: relative; width: 100%; aspect-ratio: 16 / 9; max-height: 56vh;
++  position: relative; width: 100%; aspect-ratio: 16 / 9;
+   border-radius: 14px; border: 1px solid var(--edge); overflow: hidden;
+   background: var(--feed);
+   background-image:
+@@ -263,6 +233,7 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
+   background-size: 64px 64px;
+   box-shadow: inset 0 0 90px rgba(20, 16, 10, 0.16), var(--shadow);
+ }
++.stage video, .stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+ .corner { position: absolute; width: 26px; height: 26px; pointer-events: none; }
+ /* 亮色主题下视频舞台加强外阴影与描边，与浅色卡片拉开层次 */
+ [data-theme="light"] .stage {
+@@ -297,14 +268,6 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
+ .shape-washer { width: 86%; height: 86%; border-radius: 50%;
+   background: radial-gradient(closest-side, transparent 0 41%, #413B31 42% 76%, transparent 77%); }
+ 
+-.verdict-banner {
+-  position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+-  border-radius: 999px; padding: 5px 16px; font-size: 13px; font-weight: 800; letter-spacing: 0.06em;
+-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); white-space: nowrap;
+-}
+-.verdict-banner.pass { background: var(--green); color: #06210F; }
+-.verdict-banner.fail { background: var(--red); color: #FFF3F3; }
+-.verdict-banner.warn { background: var(--amber); color: #2A1C00; }
+ .overlay-center { position: absolute; inset: 0; display: flex; flex-direction: column;
+   align-items: center; justify-content: center; gap: 7px; pointer-events: none; }
+ .overlay-chip {
+@@ -315,25 +278,13 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
+ .overlay-chip span { font-size: 11px; color: #C2C9D4; }
+ .overlay-chip.err { border-color: rgba(255, 77, 79, 0.5); color: var(--red); }
+ 
+-.status-strip {
+-  flex: none; display: flex; align-items: center; gap: 12px;
+-  background: var(--surface); border: 1px solid var(--edge); border-radius: 12px;
+-  padding: 9px 14px; min-height: 46px; box-shadow: var(--shadow);
+-}
+-.strip-item { display: flex; align-items: baseline; gap: 7px; }
+-.strip-label { font-size: 9px; font-weight: 800; letter-spacing: 0.12em; color: var(--ink-4); }
+-.strip-value { font-size: 15px; font-weight: 800; }
+ .chip {
+   display: inline-flex; align-items: center; border-radius: 5px; padding: 2px 8px;
+   font-size: 10px; font-weight: 800; letter-spacing: 0.05em; white-space: nowrap;
+   font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+ }
+ .chip-ok { background: var(--ok-bg); color: var(--green); }
+-.chip-warn { background: var(--warn-bg); color: var(--amber); }
+-.chip-err { background: var(--err-bg); color: var(--red); }
+-.chip-info { background: var(--info-bg); color: var(--accent); }
+ .chip-subtle { background: var(--panel2); color: var(--ink-2); border: 1px solid var(--edge); }
+-.strip-right { margin-left: auto; display: flex; gap: 14px; font-size: 11px; font-weight: 600; color: var(--ink-3); }
+ 
+ .console-log {
+   flex: 1 1 170px; min-height: 150px; display: flex; flex-direction: column;
+@@ -365,7 +316,6 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
+ .log-tag.t-ERR { color: #F87171; } .log-tag.t-BOOT { color: #94A3B8; }
+ 
+ /* ---------- 右栏：识别范围表（置顶）/ 检测对象 / 服务信息 ---------- */
+-.scope-note { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; color: var(--ink-4); margin: -4px 0 6px; }
+ .scope-row {
+   display: flex; align-items: center; gap: 12px; height: 40px;
+   border-radius: 8px; padding: 0 10px; cursor: pointer;
+@@ -447,7 +397,6 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
+ @media (max-width: 1180px) {
+   .layout { grid-template-columns: 1fr; height: auto; }
+   .col { overflow: visible; }
+-  .stage { max-height: none; }
+   .console-log { min-height: 240px; }
+   .hw-group { display: none; }
+ }
+@@ -458,7 +407,7 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
+ </head>
+ <body>
+ 
+-<!-- 顶部状态条：模式徽标 + 工单判定 + 资源统计 + 系统在线 + 时钟（HUD v4 顶栏语义） -->
++<!-- 顶栏：品牌、画面统计与时钟 -->
+ <header class="app-header">
+   <div class="brand">
+     <svg class="brand-logo" viewBox="0 0 32 32" aria-hidden="true">
+@@ -466,28 +415,19 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
+       <path d="M15 26 23 6h5L20 26Z" fill="#1E5F8A"/>
+     </svg>
+     <span class="brand-name">EdgeSight</span>
+-    <span class="brand-tag">HUD v4 · WEB</span>
+   </div>
+-  <span id="mode-badge" class="badge badge-live">LIVE</span>
+   <span id="proto-badge" class="badge badge-proto">PROTOTYPE</span>
+-  <span id="verdict-text" class="verdict-text verdict-none">SYSTEM BOOT</span>
+-  <div class="hw-group" aria-label="画面与会话统计">
++  <div class="hw-group" aria-label="画面统计">
+     <div class="hw-stat">
+       <svg class="hw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
+-      <span class="hw-label">RES</span><span class="hw-value mono">1280×720</span>
++      <span class="hw-label">RES</span><span class="hw-value mono" id="hw-res">—</span>
+     </div>
+     <div class="hw-stat">
+       <svg class="hw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h3l2-6 4 12 3-8 2 4h6"/></svg>
+-      <span class="hw-label">FPS</span><span class="hw-value mono" id="hw-fps">30</span>
+-    </div>
+-    <div class="hw-stat">
+-      <svg class="hw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
+-      <span class="hw-label">SESSION</span><span class="hw-value mono" id="hw-session">—</span>
++      <span class="hw-label">FPS</span><span class="hw-value mono" id="hw-fps">—</span>
+     </div>
+   </div>
+   <div class="header-right">
+-    <div class="sys-online"><span id="sys-dot" class="sys-dot"></span><span id="sys-text">SYSTEM ONLINE</span></div>
+-    <div class="header-sep"></div>
+     <div class="clock">
+       <svg class="hw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+       <span class="mono" id="clock">—</span>
+@@ -504,22 +444,22 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
+   <!-- 左栏：系统控制与记录（参考前端左栏语义 → 数据源/参数/记录） -->
+   <aside class="col" aria-label="系统控制">
+     <section class="card">
+-      <h2 class="card-title">SYSTEM <span class="hint" id="sys-sub">vision-service v1.2</span></h2>
++      <h2 class="card-title">SYSTEM</h2>
+       <div class="sys-line"><span id="svc-dot" class="sys-dot"></span><span id="svc-text" class="state-ok">检查服务已连接</span></div>
+-      <div class="tiny dim" style="margin:4px 0 10px" id="svc-desc">PYNQ 板端 · 轮次协议 v1.2 · 自动轮询进行中</div>
+       <div class="param-row">
+         <label for="sel-auto">自动轮询</label>
+         <div class="toggle" style="transform:scale(0.9)">
+-          <input type="checkbox" id="sel-auto" checked aria-label="自动轮询开关">
++          <input type="checkbox" id="sel-auto" aria-label="自动轮询开关">
+           <span class="track"></span><span class="knob"></span>
+         </div>
+       </div>
+       <div class="param-row">
+         <label for="sel-interval">轮询间隔 interval</label>
+         <select class="field" id="sel-interval">
+-          <option value="1100">1.1 s（快）</option>
+-          <option value="2200" selected>2.2 s（标准）</option>
+-          <option value="4400">4.4 s（慢）</option>
++          <option value="250">0.25 s（快）</option>
++          <option value="500" selected>0.5 s（标准）</option>
++          <option value="1000">1.0 s（慢）</option>
++          <option value="2200">2.2 s</option>
+         </select>
+       </div>
+       <div class="param-row">
+@@ -529,11 +469,16 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
+           <option value="4500" selected>4.5 s</option>
+         </select>
+       </div>
+-      <div class="micro faint" style="margin-top:5px">启动校验：interval 必须小于 max-age（防周期性空窗）。</div>
+     </section>
+ 
+     <section class="card">
+-      <h2 class="card-title">数据源 <span class="hint">单选，三种数据源互斥</span></h2>
++      <h2 class="card-title">USB 采集卡</h2>
++      <select class="field" id="sel-camera" aria-label="视频设备" style="width:100%"><option value="">请选择采集卡</option></select>
++      <button type="button" class="btn btn-block" id="btn-video" style="margin-top:7px">连接采集卡</button>
++      <label class="micro" id="replay-file-label" hidden>载入板端 packet.json <input type="file" id="replay-file" accept=".json,application/json"></label>
++    </section>
++    <section class="card">
++      <h2 class="card-title">数据源</h2>
+       <div class="mode-row is-active" id="mode-live">
+         <div><div class="mode-name mono">LIVE</div><div class="mode-desc">采集卡视频 + 板端轮次叠加</div></div>
+         <span class="spacer"></span>
+@@ -551,55 +496,41 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
+       </div>
+     </section>
+ 
+-    <section class="card">
+-      <h2 class="card-title">演示控制 <span class="hint">注入联调事件</span></h2>
++    <section class="card" id="demo-controls" hidden>
++      <h2 class="card-title">演示控制</h2>
+       <div class="sim-grid">
+         <button type="button" class="btn" id="sim-drop">模拟断联</button>
+         <button type="button" class="btn" id="sim-cfg">配置变化</button>
+         <button type="button" class="btn" id="sim-miss">缺件场景</button>
+         <button type="button" class="btn" id="sim-limit">target_limit 轮</button>
+       </div>
+-      <div class="micro faint" style="margin-top:6px">断联后连续 3 次失败自动重新握手（D5）。</div>
+     </section>
+ 
+     <section class="card">
+-      <h2 class="card-title">批次记录 <span class="hint mono">records.jsonl</span></h2>
++      <h2 class="card-title">本页批次记录</h2>
+       <div class="rec-line"><span class="rec-num mono" id="rec-num">0</span><span class="rec-label">REC</span></div>
+       <button type="button" class="btn btn-accent btn-block" id="btn-export">
+         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+         导出 CSV（UTF-8 BOM）
+       </button>
+-      <div class="micro faint" style="margin-top:7px">仅手动<b>有效</b>轮次落记录；自动轮永不记录（D8–D10）。</div>
+-    </section>
+-
+-    <section class="card tiny dim">
+-      <span class="kbd">C</span>&nbsp; 触发检查 · 悬停范围表行可预览
+     </section>
+   </aside>
+ 
+-  <!-- 中栏：视频视口（无面板遮挡）+ 轮次状态条 + 终端日志 -->
++  <!-- 中栏：视频视口与日志 -->
+   <section class="col col-center" aria-label="检查画面与日志">
+     <div class="stage-wrap">
+       <div class="stage" id="stage">
++        <video id="capture-video" autoplay muted playsinline hidden></video>
++        <img id="capture-image" alt="本轮板端原始快照" hidden>
+         <span class="corner tl"></span><span class="corner tr"></span>
+         <span class="corner bl"></span><span class="corner br"></span>
+         <div id="targets" style="position:absolute;inset:0"></div>
+-        <div id="verdict-banner" class="verdict-banner" hidden></div>
+         <div id="overlay-center" class="overlay-center" hidden>
+           <div class="overlay-chip" id="overlay-chip"><b>WAITING</b><span id="overlay-sub">等待下一轮有效结果</span></div>
+         </div>
+       </div>
+     </div>
+ 
+-    <div class="status-strip">
+-      <div class="strip-item"><span class="strip-label">ROUND</span><span class="strip-value mono" id="strip-round">0</span></div>
+-      <span id="strip-verdict" class="chip chip-subtle">—</span>
+-      <span class="tiny dim" id="strip-missing"></span>
+-      <div class="strip-right mono">
+-        <span id="strip-check">check —</span><span id="strip-cfg">cfg —</span><span id="strip-trigger">—</span>
+-      </div>
+-    </div>
+-
+     <div class="console-log" role="log" aria-live="polite" aria-label="系统日志">
+       <div class="console-head">
+         <span>系统日志</span>
+@@ -617,8 +548,7 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
+   <!-- 右栏：识别范围表（置顶）+ 检测对象 + 服务信息（HUD v4 右列信息架构） -->
+   <aside class="col" aria-label="识别范围与检测结果">
+     <section class="card" id="scope-card">
+-      <h2 class="card-title">INSPECTION SCOPE <span class="hint" id="scope-round-note">ROUND — · REC —</span></h2>
+-      <div class="scope-note" id="scope-note">勾选 = 显示并跟踪该类别；计数 = 该类别已分类目标数</div>
++      <h2 class="card-title">INSPECTION SCOPE <span class="hint" id="scope-round-note">ROUND —</span></h2>
+       <div id="scope-rows"></div>
+       <div class="fresh-row">
+         <span class="fresh-label">FRESHNESS</span>
+@@ -629,7 +559,6 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
+         <span id="run-label">RUN INSPECTION</span>
+         <svg class="run-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
+       </button>
+-      <div class="micro faint" id="replay-note" hidden>回放模式只读：无触发按钮，勾选框隐藏，计数为「实际 / 工单」。</div>
+     </section>
+ 
+     <section class="card">
+@@ -655,13 +584,14 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
+ 
+ <div class="toast" id="toast" role="alert" aria-atomic="true"></div>
+ 
+-<script>
++<script type="module">
++import { decodePacket } from './protocol.mjs';
+ 'use strict';
+ /* ==========================================================================
+-   模拟内核：按 rounds.py 的对外语义做离线演示——
++   按 rounds.py 的轮次语义展示 LIVE 或离线演示——
+    自动轮（interval）永不记录；手动轮（RUN / C 键）成功才 REC+1；
+    结果有效性 = 会话 + 配置号 + 年龄窗（D3），过期/断联/配置变化即撤框 WAITING；
+-   手动轮失败立即置 NO VALID RESULT 并撤旧 PASS（2026-10-20 异常语义）。
++   手动轮失败立即撤除旧结果。
+    ========================================================================== */
+ const $ = (s) => document.querySelector(s);
+ const CLASSES = ['bolt', 'nut', 'washer'];
+@@ -669,10 +599,10 @@ const WORKORDER = { bolt: 2, nut: 2, washer: 2 };
+ 
+ const state = {
+   mode: 'live',            // live | mock | replay
+-  connected: true,
+-  session: rid(), config: 3, checkId: 47, round: 12, rec: 0,
++  connected: false,
++  session: null, config: null, checkId: 0, round: 0, rec: 0,
+   prototype: true,
+-  auto: true, interval: 2200, maxAge: 4500,
++  auto: false, interval: 500, maxAge: 4500,
+   scope: { bolt: true, nut: true, washer: true },
+   button: 'idle',          // idle | queued | running
+   result: null,            // { scene, targets, verdict, missing, counts, ts, check, cfg, trigger }
+@@ -764,82 +694,50 @@ function toast(msg, isErr) {
+   toastTimer = setTimeout(() => { el.className = 'toast' + (isErr ? ' err' : ''); }, 4000);
+ }
+ 
+-/* ---------- 顶栏 / 状态条 ---------- */
+-function setVerdict(text, cls) {
+-  const el = $('#verdict-text');
+-  el.textContent = text; el.className = 'verdict-text ' + cls;
+-}
+-function renderTopbar() {
+-  const badge = $('#mode-badge');
+-  badge.className = 'badge ' + (state.mode === 'live' ? 'badge-live' : state.mode === 'mock' ? 'badge-mock' : 'badge-file');
+-  badge.textContent = state.mode === 'live' ? 'LIVE' : state.mode === 'mock' ? 'MOCK ONLY' : 'OFFLINE FILE';
++/* ---------- 服务状态：每项信息只保留一个位置 ---------- */
++function renderService() {
+   $('#proto-badge').hidden = !(state.prototype && state.mode !== 'replay');
+-  $('#hw-session').textContent = state.session;
+-  $('#sys-text').textContent = state.connected ? 'SYSTEM ONLINE' : 'SERVICE LOST';
+-  $('#sys-dot').className = 'sys-dot' + (state.connected ? '' : ' off');
+   const svcUp = state.mode === 'replay' ? true : state.connected; // 回放本地文件，不涉及网络
+   $('#svc-dot').className = 'sys-dot' + (svcUp ? '' : ' off');
+-  $('#svc-text').textContent = svcUp ? '检查服务已连接' : '检查服务不可达';
++  $('#svc-text').textContent = state.mode === 'replay' ? '离线回放' : state.mode === 'mock' ? '本地演示' : svcUp ? '检查服务已连接' : '检查服务不可达';
+   $('#svc-text').className = svcUp ? 'state-ok' : 'state-err';
++  $('#svc-session').textContent = state.session || '—';
++  $('#svc-cfg').textContent = state.config ?? '—';
++  $('#svc-endpoint').textContent = state.mode === 'live' ? `${location.origin}/v1 → PYNQ` : state.mode === 'mock' ? 'LOCAL DEMO' : 'OFFLINE FILE';
++  $('#svc-uvc').textContent = state.mode === 'live' ? videoReady ? 'UVC LIVE' : snapshotReady && state.result ? 'BOARD SNAPSHOT' : 'NO VIDEO' : 'OFFLINE';
+ }
+-function renderStrip() {
+-  $('#strip-round').textContent = state.round;
+-  $('#hw-session').textContent = state.session;
+-  $('#svc-session').textContent = state.session;
+-  $('#svc-cfg').textContent = state.config;
+-  $('#svc-endpoint').textContent = state.mode === 'mock' ? 'mock://127.0.0.1:8765' : 'http://127.0.0.1:8765';
+-  $('#svc-uvc').textContent = state.mode === 'replay' ? 'OFFLINE' : state.connected ? 'CAPTURE OK' : 'NO SIGNAL';
+-  const r = state.result;
+-  const chip = $('#strip-verdict'), miss = $('#strip-missing');
+-  if (!r) {
+-    chip.textContent = 'WAITING'; chip.className = 'chip chip-warn'; miss.textContent = '';
+-    setVerdict(state.manualFail ? 'NO VALID RESULT | check failed' : 'WAITING', state.manualFail ? 'verdict-fail' : 'verdict-warn');
+-  } else {
+-    const map = { pass: ['chip-ok', 'verdict-pass'], fail: ['chip-err', 'verdict-fail'], warn: ['chip-warn', 'verdict-warn'] };
+-    chip.textContent = r.verdict + (r.missing ? ' ' + r.missing : '');
+-    chip.className = 'chip ' + map[r.kind][0];
+-    miss.textContent = r.missing ? `工单 ${woText()} · 差额 ${r.missing}` : `工单 ${woText()} · 全部满足`;
+-    setVerdict(r.verdict + (r.missing ? ' ' + r.missing : ''), map[r.kind][1]);
+-  }
+-  $('#strip-check').textContent = r ? `check ${r.check}` : `check ${state.checkId + 1}`;
+-  $('#strip-cfg').textContent = `cfg ${r ? r.cfg : state.config}`;
+-  $('#strip-trigger').textContent = r ? (r.trigger === 'manual' ? '手动触发' : r.trigger === 'replay' ? '回放快照' : '自动轮询') : '—';
+-}
+-function woText() { return 'bolt×2 nut×2 washer×2'; }
+ 
+-/* ---------- 视频舞台：目标框（绿色专属）+ 判定横幅 + WAITING 衬底 ---------- */
++/* ---------- 视频舞台：目标框与无结果状态 ---------- */
+ function renderStage() {
+   const layer = $('#targets');
+   layer.innerHTML = '';
+-  const banner = $('#verdict-banner');
+-  const r = state.result;
++  const r = state.mode === 'live' && !videoReady && !snapshotReady ? null : state.result;
+   if (r) {
+     for (const t of r.targets) {
+       if (t.cls && !state.scope[t.cls]) continue; // 未勾选：不画框（T 序号保留原始编号）
+       const [x, y, w, h] = t.box;
+       const box = document.createElement('div');
+       box.className = 'tgt';
+-      box.style.left = (x / 1280 * 100) + '%'; box.style.top = (y / 720 * 100) + '%';
+-      box.style.width = (w / 1280 * 100) + '%'; box.style.height = (h / 720 * 100) + '%';
++      box.style.left = (x / (r.width || 1280) * 100) + '%'; box.style.top = (y / (r.height || 720) * 100) + '%';
++      box.style.width = (w / (r.width || 1280) * 100) + '%'; box.style.height = (h / (r.height || 720) * 100) + '%';
+       const chip = document.createElement('span');
+       chip.className = 'tgt-chip'; chip.textContent = t.t;
+       const shape = document.createElement('span');
+       shape.className = 'shape ' + (t.cls ? `shape-${t.cls}` : 'shape-nut');
+       shape.style.opacity = t.cls ? '1' : '0.55';
+-      box.append(shape, chip);
++      if (state.mode === 'mock') box.append(shape);
++      box.append(chip);
+       layer.appendChild(box);
+     }
+-    banner.hidden = false;
+-    banner.className = 'verdict-banner ' + r.kind;
+-    banner.textContent = r.verdict + (r.missing ? ' ' + r.missing : '');
+-  } else {
+-    banner.hidden = true;
+   }
+   const overlay = $('#overlay-center');
+   overlay.hidden = !!r;
+   if (!r) {
+     const chipEl = $('#overlay-chip');
+-    if (!state.connected) {
++    if (state.mode === 'live' && !videoReady && !snapshotReady) {
++      chipEl.className = 'overlay-chip'; chipEl.querySelector('b').textContent = 'NO VIDEO';
++      $('#overlay-sub').textContent = '连接采集卡以预览视频，或手动检查以查看本轮板端快照';
++    } else if (!state.connected) {
+       chipEl.className = 'overlay-chip err';
+       chipEl.querySelector('b').textContent = 'RECONNECTING';
+       $('#overlay-sub').textContent = '连续 HTTP 失败 · 自动重新握手（D5）';
+@@ -847,6 +745,10 @@ function renderStage() {
+       chipEl.className = 'overlay-chip err';
+       chipEl.querySelector('b').textContent = 'CHECK FAILED';
+       $('#overlay-sub').textContent = '本轮请求无效 · 旧判定已撤除';
++    } else if (state.button === 'running') {
++      chipEl.className = 'overlay-chip';
++      chipEl.querySelector('b').textContent = '识别中';
++      $('#overlay-sub').textContent = '正在处理检查请求';
+     } else if (state.mode === 'replay') {
+       chipEl.className = 'overlay-chip';
+       chipEl.querySelector('b').textContent = 'OFFLINE FILE';
+@@ -865,10 +767,6 @@ function renderScope() {
+   wrap.innerHTML = '';
+   const readonly = state.mode === 'replay';
+   $('#run-btn').hidden = readonly;
+-  $('#replay-note').hidden = !readonly;
+-  $('#scope-note').textContent = readonly
+-    ? '回放只读：计数为「实际 / 工单」，勾选框隐藏'
+-    : '勾选 = 显示并跟踪该类别；计数 = 该类别已分类目标数';
+   const r = state.result;
+   for (const cls of CLASSES) {
+     const on = state.scope[cls];
+@@ -881,7 +779,7 @@ function renderScope() {
+     }
+     let countText, has;
+     if (readonly) {
+-      const n = r ? (r.counts ? r.counts[cls] : 0) : 0;
++      const n = r?.counts?.[cls] ?? '--';
+       countText = `${n} / ${WORKORDER[cls]}`; has = true;
+     } else {
+       const n = r && r.counts ? r.counts[cls] : null;
+@@ -892,7 +790,7 @@ function renderScope() {
+     row.addEventListener('mouseenter', () => { if (!readonly) row.classList.add('hover'); });
+     wrap.appendChild(row);
+   }
+-  $('#scope-round-note').textContent = `ROUND ${state.round} · REC ${state.rec}`;
++  $('#scope-round-note').textContent = `ROUND ${state.round}`;
+ }
+ function toggleScope(cls) {
+   if (state.mode === 'replay') return;
+@@ -931,7 +829,7 @@ function renderObjects() {
+     card.className = 'obj-card';
+     const [x, y, w, h] = t.box;
+     card.innerHTML =
+-      `<div class="obj-thumb"><span class="shape ${t.cls ? 'shape-' + t.cls : 'shape-nut'}" style="${t.cls ? '' : 'opacity:.55'}"></span></div>` +
++      `<div class="obj-thumb">${state.mode === 'mock' ? `<span class="shape ${t.cls ? 'shape-' + t.cls : 'shape-nut'}"></span>` : 'ROI'}</div>` +
+       `<div class="obj-meta"><div class="obj-top"><span class="obj-tchip mono">${t.t}</span>` +
+       `<span class="obj-class">${t.cls || 'unclassified'}</span>` +
+       `<span class="obj-score mono">${t.score != null ? t.score.toFixed(2) : '--'}</span></div>` +
+@@ -948,6 +846,7 @@ function renderButton() {
+   const btn = $('#run-btn');
+   const label = $('#run-label');
+   btn.className = 'run-btn' + (state.button === 'idle' ? '' : ' ' + state.button);
++  btn.disabled = state.mode === 'live' && (!state.connected || liveBusy);
+   if (state.button === 'idle') label.textContent = 'RUN INSPECTION';
+   else if (state.button === 'queued') label.textContent = 'QUEUED · WAITING';
+   else label.textContent = 'RUNNING';
+@@ -957,12 +856,16 @@ function renderButton() {
+ }
+ async function manualRun() {
+   if (state.mode === 'replay') { toast('回放模式只读，不提供触发', false); return; }
++  if (state.mode === 'live') { await liveRound(true); return; }
+   if (state.button !== 'idle') return;
++  const epoch = modeEpoch;
+   state.button = 'queued'; renderButton();
+   log('RUN', '手动轮请求已入队（trigger_ref 复用直到成功；check 号完成时分配）');
+   await sleep(900);
++  if (epoch !== modeEpoch) return;
+   state.button = 'running'; renderButton();
+   await sleep(1500);
++  if (epoch !== modeEpoch) return;
+   state.button = 'idle'; renderButton();
+   if (!state.connected) {
+     state.manualFail = true; state.result = null;   // 立即撤旧 PASS，不等 max_age
+@@ -975,15 +878,100 @@ async function manualRun() {
+   const scene = manualScene();
+   state.manualFail = false;
+   state.result = { ...scene, counts: countsOf(scene), ts: now(), check: state.checkId, cfg: state.config, trigger: 'manual' };
+-  state.records.push({ check: state.checkId, round: state.round, time: fmtClock(new Date()), mode: state.mode, verdict: scene.verdict, missing: scene.missing, targets: scene.targets.length });
+-  log('RUN', `手动轮 #${state.round} check=${state.checkId} 完成 → REC ${state.rec}（${state.mode === 'mock' ? 'mock_' : ''}${state.checkId}.png）`);
++  state.records.push({ session: state.session, check: state.checkId, round: state.round, time: fmtClock(new Date()), mode: 'MOCK', verdict: scene.verdict, missing: scene.missing, targets: scene.targets.length });
++  log('RUN', `DEMO 手动轮 #${state.round} 完成 → 本页 REC ${state.rec}（合成数据）`);
+   renderAll();
+ }
+ function sleep(ms) { return new Promise((res) => setTimeout(res, ms)); }
+ 
++/* ---------- LIVE HTTP：单轮串行；模式切换后丢弃在途响应 ---------- */
++let liveBusy = false, modeEpoch = 0, manualRef = null, reconnectAfter = 0;
++async function api(path, body) {
++  const response = await fetch(path, { cache: 'no-store', signal: AbortSignal.timeout(45000),
++    ...(body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' },
++      body: JSON.stringify(body) }) });
++  const data = await response.json();
++  if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
++  return data;
++}
++async function connectLive() {
++  if (liveBusy || state.mode !== 'live') return;
++  liveBusy = true;
++  const epoch = modeEpoch;
++  try {
++    const status = await api('/v1/status');
++    if (status.mode !== 'LIVE' || status.hardware_connected !== true || !status.session_id)
++      throw new Error('板端硬件未连接或服务不是 LIVE');
++    const changed = status.session_id !== state.session || state.config === null;
++    const config = changed ? await api('/v1/config', { control: 0 }) : null;
++    if (config && (!Number.isInteger(config.applied_config_id) || config.mode !== 'LIVE'))
++      throw new Error('板端未确认配置');
++    if (epoch !== modeEpoch) return;
++    if (changed) { state.config = config.applied_config_id; manualRef = null; }
++    state.session = status.session_id; state.prototype = status.prototype !== false;
++    state.connected = true; state.result = null;
++    log('LINK', `LIVE 已连接 · ${status.backend}/${status.engine} · session=${state.session} · cfg=${state.config}`);
++  } catch (error) {
++    if (epoch !== modeEpoch) return;
++    state.connected = false; state.result = null;
++    log('ERR', `LIVE 连接失败：${error.message}`);
++  } finally { liveBusy = false; renderAll(); }
++}
++async function liveRound(manual) {
++  if (liveBusy || !state.connected) return;
++  liveBusy = true;
++  const epoch = modeEpoch;
++  const ref = manual ? (manualRef ||= crypto.randomUUID()) : null;
++  state.button = 'running'; renderAll();
++  try {
++    const packet = await api('/v1/check', manual ? { trigger_ref: ref } : {});
++    if (epoch !== modeEpoch) return;
++    if (manual && packet.trigger_ref !== ref) throw new Error('检查请求标识不匹配');
++    const result = decodePacket(packet, state.session, state.config);
++    snapshotReady = false;
++    state.prototype = packet.prototype !== false; state.manualFail = false;
++    state.checkId = packet.check_id; state.round++;
++    state.result = { ...result, ts: now(), trigger: manual ? 'manual' : 'auto' };
++    if (!videoReady) {
++      snapshot.onload = () => {
++        if (epoch !== modeEpoch || state.result?.packet !== packet) return;
++        snapshotReady = true; renderAll();
++      };
++      snapshot.onerror = () => {
++        if (epoch !== modeEpoch || state.result?.packet !== packet) return;
++        snapshotReady = false; renderAll();
++      };
++      snapshot.src = `/v1/captures/${encodeURIComponent(packet.session_id)}/${packet.check_id}.png`;
++    }
++    if (result.expected) Object.assign(WORKORDER, result.expected);
++    if (manual && !state.records.some((r) => r.session === state.session && r.check === packet.check_id)) {
++      state.records.push({ session: state.session, check: packet.check_id, round: state.round,
++        time: fmtClock(new Date()), mode: 'LIVE', verdict: result.verdict,
++        missing: result.missing, targets: result.targets.length });
++      state.rec = state.records.length;
++    }
++    if (manual) manualRef = null;
++    log('RUN', `${manual ? '手动' : '自动'} LIVE check=${packet.check_id} · frame=${packet.frame_id} · ${result.verdict} · ${result.targets.length} 目标`);
++  } catch (error) {
++    if (epoch !== modeEpoch) return;
++    state.result = null; state.manualFail = manual; state.connected = false;
++    state.auto = false; $('#sel-auto').checked = false;
++    log('ERR', `LIVE 检查失败，旧判定已撤除：${error.message}`);
++  } finally {
++    liveBusy = false;
++    if (epoch === modeEpoch) { state.button = 'idle'; renderAll(); }
++  }
++}
++
+ /* ---------- 自动轮询（自动轮永不记录）与断联重握手 ---------- */
+ let autoTimer = null;
+ function autoRound() {
++  if (state.mode === 'live') {
++    if (!state.connected && now() >= reconnectAfter) {
++      reconnectAfter = now() + 2000; connectLive();
++    } else if (state.auto) liveRound(false);
++    return;
++  }
+   if (!state.auto || state.mode === 'replay') return;
+   if (!state.connected) { linkFails(); return; }
+   state.checkId++; state.round++;
+@@ -999,9 +987,11 @@ function linkFails() {
+   failCount++;
+   if (failCount < 3) log('LINK', `POST /v1/check 失败 ${failCount}/3，${(state.interval / 1000).toFixed(1)}s 后重试`);
+   if (failCount >= 3) {
++    const epoch = modeEpoch;
+     recovering = true;
+     log('LINK', '连续 3 次 HTTP 失败，触发重新握手（D5）…');
+     setTimeout(() => {
++      if (epoch !== modeEpoch || state.mode !== 'mock') return;
+       state.session = rid(); state.connected = true; failCount = 0; recovering = false;
+       log('LINK', `握手成功 → session=${state.session} · cfg=${state.config} · 新会话结果按 D3 重新计龄`);
+       renderAll();
+@@ -1026,16 +1016,21 @@ function setMode(mode) {
+   state.mode = mode;
+   syncModeRows(); // 活动模式不允许关断：勾选态始终回写
+   if (!changed) return;
++  modeEpoch++; state.button = 'idle'; state.result = null; state.manualFail = false;
++  stopVideo(); snapshotReady = false;
++  state.connected = mode !== 'live'; state.prototype = true;
++  state.session = mode === 'mock' ? rid() : null; state.config = mode === 'mock' ? 0 : null;
++  manualRef = null;
++  failCount = 0; recovering = false;
++  if (mode === 'mock') Object.assign(WORKORDER, { bolt: 2, nut: 2, washer: 2 });
+   if (mode === 'replay') {
+-    const scene = SCENES.pass;
+-    state.result = { ...scene, counts: countsOf(scene), ts: now(), check: state.checkId, cfg: state.config, trigger: 'replay' };
+-    log('REC', '载入回放 result.json · packet 绑定 + capture 哈希校验通过（只读，不联网）');
+-    setVerdict('OFFLINE FILE', 'verdict-none');
++    log('REC', '离线回放：请载入板端 packet.json；此模式不连接网络或相机');
+   } else {
+     state.result = null;
+     log('LINK', mode === 'live' ? '切换 LIVE：采集卡视频 + 板端轮次叠加' : '切换 LOCAL DEMO：MOCK 服务（合成数据，不得作为板端识别证据）');
+   }
+   renderAll();
++  if (mode === 'live') connectLive();
+ }
+ document.querySelectorAll('.mode-row input').forEach((input) => {
+   input.addEventListener('change', () => {
+@@ -1073,8 +1068,8 @@ $('#sim-limit').addEventListener('click', () => {
+ /* ---------- 参数 / 记录 / 主题 / 键盘 ---------- */
+ $('#sel-auto').addEventListener('change', (e) => {
+   state.auto = e.target.checked;
+-  $('#svc-desc').textContent = state.auto ? 'PYNQ 板端 · 轮次协议 v1.2 · 自动轮询进行中' : 'PYNQ 板端 · 轮次协议 v1.2 · 自动轮询已暂停';
+   log('STATE', `自动轮询${state.auto ? '开启' : '暂停'}（暂停后结果将在 max-age 后过期，画面进入 WAITING）`);
++  if (state.auto) autoRound();
+ });
+ $('#sel-interval').addEventListener('change', (e) => {
+   const v = Number(e.target.value);
+@@ -1099,8 +1094,9 @@ $('#sel-maxage').addEventListener('change', (e) => {
+ });
+ $('#btn-export').addEventListener('click', () => {
+   if (!state.records.length) { toast('暂无批次记录：手动触发一轮有效检查后再导出', false); return; }
+-  const head = 'check_id,round,time,mode,verdict,missing,targets';
+-  const rows = state.records.map((r) => [r.check, r.round, r.time, r.mode, r.verdict, r.missing || '', r.targets].join(','));
++  const head = 'session_id,check_id,round,time,mode,verdict,missing,targets';
++  const cell = (value) => '"' + String(value ?? '').replaceAll('"', '""') + '"';
++  const rows = state.records.map((r) => [r.session, r.check, r.round, r.time, r.mode, r.verdict, r.missing, r.targets].map(cell).join(','));
+   const blob = new Blob(['\uFEFF' + [head, ...rows].join('\r\n')], { type: 'text/csv;charset=utf-8' });
+   const a = document.createElement('a');
+   a.href = URL.createObjectURL(blob); a.download = 'records.csv'; a.click();
+@@ -1127,22 +1123,91 @@ if (document.documentElement.dataset.theme === 'light') {
+ }
+ 
+ /* ---------- 时钟与 FPS（顶栏仪表） ---------- */
++let videoReady = false;
++let videoBusy = false;
++const video = $('#capture-video');
++let snapshotReady = false;
++const snapshot = $('#capture-image');
++async function listCameras() {
++  if (!navigator.mediaDevices) return;
++  const selected = $('#sel-camera').value;
++  const devices = (await navigator.mediaDevices.enumerateDevices()).filter((d) => d.kind === 'videoinput');
++  $('#sel-camera').replaceChildren(new Option('请选择采集卡', ''));
++  devices.forEach((d, i) => $('#sel-camera').add(new Option(d.label || `视频设备 ${i + 1}`, d.deviceId)));
++  if (devices.some((d) => d.deviceId === selected)) $('#sel-camera').value = selected;
++}
++function stopVideo() {
++  videoReady = false;
++  video.srcObject?.getTracks().forEach((track) => track.stop());
++  video.srcObject = null; video.hidden = true;
++  $('#hw-fps').textContent = '—'; $('#btn-video').textContent = '连接采集卡';
++}
++$('#btn-video').addEventListener('click', async () => {
++  if (videoBusy) return;
++  if (video.srcObject) { stopVideo(); state.result = null; renderAll(); return; }
++  const deviceId = $('#sel-camera').value;
++  videoBusy = true; $('#btn-video').textContent = '等待视频授权…'; renderAll();
++  try {
++    if (!deviceId) {
++      const permission = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
++      try { await listCameras(); } finally { permission.getTracks().forEach((t) => t.stop()); }
++      toast('已获得视频权限，请选择 USB 采集卡后再次连接'); return;
++    }
++    const epoch = modeEpoch;
++    const stream = await navigator.mediaDevices.getUserMedia({ audio: false,
++      video: { deviceId: { exact: deviceId }, width: { ideal: 1280 }, height: { ideal: 720 } } });
++    if (epoch !== modeEpoch || state.mode !== 'live') { stream.getTracks().forEach((t) => t.stop()); return; }
++    video.srcObject = stream; video.hidden = false; await video.play();
++    if (Math.abs(video.videoWidth / video.videoHeight - 16 / 9) > .01)
++      throw new Error('采集卡须输出 16:9 视频，避免目标框坐标错位');
++    videoReady = true;
++    const track = stream.getVideoTracks()[0];
++    track.onended = track.onmute = () => { videoReady = false; state.result = null; renderAll(); };
++    track.onunmute = () => { videoReady = true; renderAll(); };
++    $('#btn-video').textContent = '断开采集卡';
++    $('#hw-res').textContent = `${video.videoWidth}×${video.videoHeight}`;
++    log('LINK', `采集卡已连接：${track.label} · ${video.videoWidth}×${video.videoHeight}`);
++    await listCameras(); renderAll();
++  } catch (error) { stopVideo(); log('ERR', `视频连接失败：${error.message}`); toast(error.message, true); }
++  finally { videoBusy = false; $('#btn-video').textContent = video.srcObject ? '断开采集卡' : '连接采集卡'; renderAll(); }
++});
++$('#replay-file').addEventListener('change', async (event) => {
++  try {
++    const packet = JSON.parse(await event.target.files[0].text());
++    if (state.mode !== 'replay') return;
++    state.result = { ...decodePacket(packet, packet.session_id, packet.config_id), ts: now(), trigger: 'replay' };
++    state.session = packet.session_id; state.config = packet.config_id;
++    if (state.result.expected) Object.assign(WORKORDER, state.result.expected);
++    log('REC', '已载入板端报文；未载入对应图像，不能据此确认画面与框对应'); renderAll();
++  } catch (error) { state.result = null; toast(error.message, true); renderAll(); }
++});
++listCameras().catch((error) => log('ERR', `读取视频设备失败：${error.message}`));
++navigator.mediaDevices?.addEventListener('devicechange', () => listCameras().catch(() => {}));
+ setInterval(() => { $('#clock').textContent = fmtClock(new Date()); }, 500);
+ $('#clock').textContent = fmtClock(new Date());
+-setInterval(() => { $('#hw-fps').textContent = String(29 + Math.floor(Math.random() * 2)); }, 1000);
++let lastFrames = 0, lastVideoTime = now();
++setInterval(() => {
++  const frames = video.getVideoPlaybackQuality?.().totalVideoFrames || 0;
++  const time = now();
++  $('#hw-fps').textContent = videoReady ? Math.max(0, (frames - lastFrames) * 1000 / (time - lastVideoTime)).toFixed(1) : '—';
++  lastFrames = frames; lastVideoTime = time;
++}, 1000);
+ 
+ /* ---------- 总渲染与启动 ---------- */
+ function renderAll() {
+-  renderTopbar(); renderStrip(); renderStage(); renderScope(); renderObjects(); renderButton();
++  renderService(); renderStage(); renderScope(); renderObjects(); renderButton();
+   $('#rec-num').textContent = String(state.rec);
++  for (const id of ['sim-drop', 'sim-cfg', 'sim-miss', 'sim-limit']) $("#" + id).disabled = state.mode !== 'mock';
++  $('#demo-controls').hidden = state.mode !== 'mock';
++  $('#btn-video').disabled = state.mode !== 'live' || videoBusy; $('#sel-camera').disabled = state.mode !== 'live' || !!video.srcObject;
++  $('#replay-file-label').hidden = state.mode !== 'replay';
++  snapshot.hidden = state.mode !== 'live' || videoReady || !snapshotReady || !state.result;
+ }
+ renderAll();
+ startAuto();
+ setInterval(freshnessLoop, 180); // 年龄按前端接收时刻计量，180ms 步进收缩足够平滑
+-log('BOOT', 'EdgeSight Web 原型启动 · 画布自适应 · HUD v4 语义（纯前端模拟，合成数据）');
+-log('LINK', `握手成功 session=${state.session} · cfg=${state.config} · protocol=v1.2`);
+-log('STATE', '自动轮询已开启 · 结果有效性 = 会话 + 配置号 + 年龄窗（D3）');
+-setTimeout(() => autoRound(), 400);
++log('BOOT', 'EdgeSight 启动 · LIVE 使用板端 API · 自动检查默认暂停');
++connectLive();
+ </script>
+ </body>
+ </html>

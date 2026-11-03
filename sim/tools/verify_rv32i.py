@@ -104,7 +104,7 @@ def decode(w):
         o = "lui" if opc==0x37 else "auipc"; return f"{o} {rn(rd)}, 0x{w>>12:x}"
     if opc==0x6f:
         i=(((w>>31)&1)<<20)|(((w>>12)&0xff)<<12)|(((w>>20)&1)<<11)|(((w>>21)&0x3ff)<<1)
-        i = i-(1<<21) if i&(1<<19) else i
+        i = i-(1<<21) if i&(1<<20) else i
         return f"jal {rn(rd)}, {i}"
     if opc==0x67:
         imm = w>>20; imm = imm-(1<<12) if imm&(1<<11) else imm
@@ -160,3 +160,4 @@ for name, h in DISASM_CASES:
     print(f"{name} {status}  0x{h} -> {a}")
 
 print("ALL OK" if ok else "HAS MISMATCH")
+raise SystemExit(0 if ok else 1)

@@ -1,0 +1,24 @@
+✔ LIVE keeps board IDs, half-open boxes, verdict and actual order (2.3736ms)
+✔ target_limit keeps counts unknown (0.5837ms)
+✔ RECHECK preserves the low-confidence reason alongside order differences (0.2844ms)
+✔ reject mismatched sessions/config, malformed boxes, duplicate IDs and invalid verdicts (0.4286ms)
+✔ trigger_ref matches Python optional string and 64 code point limit (0.2244ms)
+✔ an in-flight refresh retains the last valid result and its original age (7.2043ms)
+✔ success replaces the result; automatic rounds never add records (1.5713ms)
+✔ a slow request cannot keep expired results visible (2.7568ms)
+✔ manual failure removes the old result and pauses automatic checks (2.0654ms)
+✔ switching mode rejects a delayed response from the old epoch (1.1967ms)
+✔ repeated timer ticks never submit concurrent checks (1.055ms)
+✔ new boxes stay hidden until the matching board snapshot loads (1.0645ms)
+✔ 500 ms mode starts immediately and UVC does not download per-round PNGs (2.4447ms)
+✔ fast polling keeps offline reconnection attempts two seconds apart (1.0409ms)
+✔ same-session configuration refresh is read-only and recovers the next round (1.0936ms)
+✔ idle heartbeat detects hardware loss and clears the result (0.8397ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 180.6004

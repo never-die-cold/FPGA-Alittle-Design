@@ -1,0 +1,98 @@
+{
+  "tracked_count": 3475,
+  "tracked_worktree_bytes": 131115130,
+  "largest_log_directories": [
+    [
+      268,
+      "data/logs/2026-10-07-module1-closure"
+    ],
+    [
+      251,
+      "data/logs/2026-10-11-c01-capture-rtl"
+    ],
+    [
+      154,
+      "data/logs/2026-10-28-standing-nut"
+    ],
+    [
+      149,
+      "data/logs/2026-11-03-offboard-audit"
+    ],
+    [
+      141,
+      "data/logs/2026-10-28-multitarget-board-r6"
+    ]
+  ],
+  "duplicate_groups": [
+    {
+      "bytes": 1132603,
+      "paths": [
+        "data/logs/2026-10-27-product-coexist/exe-r1-records/screenshots/anomaly_0001.png",
+        "data/logs/2026-10-27-product-coexist/exe-r1-records/screenshots/f901ed63_000003.png"
+      ]
+    },
+    {
+      "bytes": 562709,
+      "paths": [
+        "data/evidence/2026-10-12-c01-exact-build-inputs/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/docs/rgb2dvi.pdf",
+        "data/logs/c01-capture-e2a602d6e0da49a2b6da072abca47c70/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/docs/rgb2dvi.pdf"
+      ]
+    },
+    {
+      "bytes": 388413,
+      "paths": [
+        "docs/poster/assets/board.jpg",
+        "docs/tech-report/figures/photo_board.jpg"
+      ]
+    },
+    {
+      "bytes": 325152,
+      "paths": [
+        "data/evidence/2026-10-12-c01-exact-build-inputs/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/docs/dvi2rgb.pdf",
+        "data/logs/c01-capture-e2a602d6e0da49a2b6da072abca47c70/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/docs/dvi2rgb.pdf"
+      ]
+    },
+    {
+      "bytes": 233990,
+      "paths": [
+        "data/evidence/2026-10-12-c01-exact-build-inputs/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/docs/dvi2rgb.docx",
+        "data/logs/c01-capture-e2a602d6e0da49a2b6da072abca47c70/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/docs/dvi2rgb.docx"
+      ]
+    },
+    {
+      "bytes": 208937,
+      "paths": [
+        "data/logs/2026-10-03-vision-onboard/hdmi-rebuild-after-fix.log",
+        "data/logs/2026-10-03-vision-onboard/hdmi/driver.log"
+      ]
+    },
+    {
+      "bytes": 149051,
+      "paths": [
+        "data/evidence/2026-10-12-c01-exact-build-inputs/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/docs/rgb2dvi.docx",
+        "data/logs/c01-capture-e2a602d6e0da49a2b6da072abca47c70/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/docs/rgb2dvi.docx"
+      ]
+    },
+    {
+      "bytes": 131800,
+      "paths": [
+        "data/evidence/2026-10-10-offline-inspection/viewer-exe.png",
+        "data/evidence/2026-10-10-offline-inspection/viewer.png"
+      ]
+    },
+    {
+      "bytes": 130269,
+      "paths": [
+        "docs/poster/assets/exe.png",
+        "docs/tech-report/figures/fig_exe.png"
+      ]
+    },
+    {
+      "bytes": 102468,
+      "paths": [
+        "data/logs/2026-10-02-vision-offboard/route-final-console.log",
+        "data/logs/2026-10-02-vision-offboard/route/driver.log"
+      ]
+    }
+  ]
+}

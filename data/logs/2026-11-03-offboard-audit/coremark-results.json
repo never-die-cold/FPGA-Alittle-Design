@@ -1,0 +1,38 @@
+[
+  {
+    "profile": "nofwd",
+    "cycles": 19057438,
+    "retired": 10106386,
+    "bubbles": 8951052,
+    "cpi": 1.885683,
+    "crc_match": true,
+    "errors_raw": 1
+  },
+  {
+    "profile": "fwd",
+    "cycles": 17114141,
+    "retired": 10106386,
+    "bubbles": 7007755,
+    "cpi": 1.693399,
+    "crc_match": true,
+    "errors_raw": 1
+  },
+  {
+    "profile": "bht1",
+    "cycles": 16335562,
+    "retired": 10106386,
+    "bubbles": 6229176,
+    "cpi": 1.61636,
+    "crc_match": true,
+    "errors_raw": 1
+  },
+  {
+    "profile": "bht2",
+    "cycles": 16232079,
+    "retired": 10106386,
+    "bubbles": 6125693,
+    "cpi": 1.606121,
+    "crc_match": true,
+    "errors_raw": 1
+  }
+]

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" id="meta-theme-color" content="#0B0F17">
-<title>EdgeSight · 检查控制台（Web 原型）</title>
+<title>EdgeSight · 检查控制台</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M6 26 14 6h5L11 26Z' fill='%2300D2FF'/%3E%3Cpath d='M15 26 23 6h5L20 26Z' fill='%231E5F8A'/%3E%3C/svg%3E">
 <script>
   // 首帧前确定主题，避免暗色闪白（同参考前端做法，键名 edgesight-theme）。
@@ -17,15 +17,7 @@
   })();
 </script>
 <style>
-/* ==========================================================================
-   EdgeSight 检查控制台 —— HUD v4「应用外壳」网页端。
-   布局/交互骨架借鉴 Project Mozart 控制中心（顶栏状态条 + 三栏 + 设计令牌 +
-   亮暗主题 + 终端日志）；信息架构、状态语义与配色纪律来自 HUD v4 定稿：
-   - 面板区 UI 控件用品牌青，绿色专属目标框/序号片/判定 PASS（不与 UI 混用）；
-   - RUN 按钮三态：青 IDLE → 琥珀 QUEUED·WAITING → 暗底 RUNNING；
-   - 等待态三重冗余：撤框 + 计数置 -- + 状态文字（等待文字琥珀置深色衬底）。
-   纯前端模拟，不访问相机/网络/板端服务；数据为合成演示数据。
-   ========================================================================== */
+/* 三栏检查界面：青色控件、绿色目标框，LIVE 与演示数据分离。 */
 
 @font-face {
   font-family: 'Inter';
@@ -130,25 +122,13 @@ button, h1, h2, h3 { font-family: inherit; }
 .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .brand-logo { width: 26px; height: 26px; flex: none; }
 .brand-name { font-size: 17px; font-weight: 800; letter-spacing: -0.01em; }
-.brand-tag {
-  font-size: 9px; font-weight: 800; letter-spacing: 0.14em; color: var(--ink-4);
-  border: 1px solid var(--edge); border-radius: 4px; padding: 2px 6px; white-space: nowrap;
-}
 .badge {
   display: inline-flex; align-items: center; border-radius: 999px;
   padding: 3px 11px; font-size: 11px; font-weight: 800; letter-spacing: 0.06em;
   font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
   white-space: nowrap;
 }
-.badge-live { background: var(--accent); color: #06222E; }
-.badge-mock { background: var(--amber); color: #2A1C00; }
-.badge-file { background: var(--panel3); color: var(--ink-2); border: 1px solid var(--edge); }
 .badge-proto { background: var(--red); color: #2B0505; }
-.verdict-text { font-size: 14px; font-weight: 800; letter-spacing: 0.02em; white-space: nowrap; }
-.verdict-pass { color: var(--green); }
-.verdict-fail { color: var(--red); }
-.verdict-warn { color: var(--amber); }
-.verdict-none { color: var(--ink-3); }
 .hw-group { display: flex; align-items: center; gap: 0; margin-left: 6px; overflow: hidden; }
 .hw-stat { display: flex; align-items: center; gap: 7px; padding: 4px 13px; white-space: nowrap; }
 .hw-stat + .hw-stat { border-left: 1px solid var(--edge-soft); }
@@ -156,10 +136,8 @@ button, h1, h2, h3 { font-family: inherit; }
 .hw-label { font-size: 10px; font-weight: 800; letter-spacing: 0.08em; color: var(--ink-4); }
 .hw-value { font-size: 12px; font-weight: 700; color: var(--ink-2); }
 .header-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
-.sys-online { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; color: var(--ink-2); white-space: nowrap; }
 .sys-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px rgba(0, 230, 130, 0.5); }
 .sys-dot.off { background: var(--red); box-shadow: 0 0 8px rgba(255, 77, 79, 0.5); }
-.header-sep { width: 1px; height: 26px; background: var(--edge); }
 .clock { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--ink-2); }
 .theme-toggle {
   display: inline-flex; width: 32px; height: 32px; align-items: center; justify-content: center;
@@ -188,14 +166,6 @@ button, h1, h2, h3 { font-family: inherit; }
 }
 .card-title .hint { font-size: 10px; font-weight: 700; letter-spacing: 0.04em; color: var(--ink-4); text-transform: none; }
 .micro { font-size: 10px; line-height: 1.4; }
-.tiny { font-size: 11px; line-height: 1.45; }
-.dim { color: var(--ink-3); }
-.faint { color: var(--ink-4); }
-.kbd {
-  display: inline-block; min-width: 20px; text-align: center; padding: 1px 6px;
-  border: 1px solid var(--edge); border-bottom-width: 2px; border-radius: 5px;
-  background: var(--panel2); font-size: 10px; font-weight: 800; color: var(--ink-2);
-}
 
 /* ---------- 左栏：系统状态 / 数据源 / 演示控制 / 记录 ---------- */
 .sys-line { display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 800; }
@@ -254,7 +224,7 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
 .col-center { overflow: hidden; }
 .stage-wrap { flex: none; display: flex; justify-content: center; }
 .stage {
-  position: relative; width: 100%; aspect-ratio: 16 / 9; max-height: 56vh;
+  position: relative; width: 100%; aspect-ratio: 16 / 9;
   border-radius: 14px; border: 1px solid var(--edge); overflow: hidden;
   background: var(--feed);
   background-image:
@@ -263,6 +233,7 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
   background-size: 64px 64px;
   box-shadow: inset 0 0 90px rgba(20, 16, 10, 0.16), var(--shadow);
 }
+.stage video, .stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 .corner { position: absolute; width: 26px; height: 26px; pointer-events: none; }
 /* 亮色主题下视频舞台加强外阴影与描边，与浅色卡片拉开层次 */
 [data-theme="light"] .stage {
@@ -297,14 +268,6 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
 .shape-washer { width: 86%; height: 86%; border-radius: 50%;
   background: radial-gradient(closest-side, transparent 0 41%, #413B31 42% 76%, transparent 77%); }
 
-.verdict-banner {
-  position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
-  border-radius: 999px; padding: 5px 16px; font-size: 13px; font-weight: 800; letter-spacing: 0.06em;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); white-space: nowrap;
-}
-.verdict-banner.pass { background: var(--green); color: #06210F; }
-.verdict-banner.fail { background: var(--red); color: #FFF3F3; }
-.verdict-banner.warn { background: var(--amber); color: #2A1C00; }
 .overlay-center { position: absolute; inset: 0; display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 7px; pointer-events: none; }
 .overlay-chip {
@@ -315,25 +278,13 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
 .overlay-chip span { font-size: 11px; color: #C2C9D4; }
 .overlay-chip.err { border-color: rgba(255, 77, 79, 0.5); color: var(--red); }
 
-.status-strip {
-  flex: none; display: flex; align-items: center; gap: 12px;
-  background: var(--surface); border: 1px solid var(--edge); border-radius: 12px;
-  padding: 9px 14px; min-height: 46px; box-shadow: var(--shadow);
-}
-.strip-item { display: flex; align-items: baseline; gap: 7px; }
-.strip-label { font-size: 9px; font-weight: 800; letter-spacing: 0.12em; color: var(--ink-4); }
-.strip-value { font-size: 15px; font-weight: 800; }
 .chip {
   display: inline-flex; align-items: center; border-radius: 5px; padding: 2px 8px;
   font-size: 10px; font-weight: 800; letter-spacing: 0.05em; white-space: nowrap;
   font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace;
 }
 .chip-ok { background: var(--ok-bg); color: var(--green); }
-.chip-warn { background: var(--warn-bg); color: var(--amber); }
-.chip-err { background: var(--err-bg); color: var(--red); }
-.chip-info { background: var(--info-bg); color: var(--accent); }
 .chip-subtle { background: var(--panel2); color: var(--ink-2); border: 1px solid var(--edge); }
-.strip-right { margin-left: auto; display: flex; gap: 14px; font-size: 11px; font-weight: 600; color: var(--ink-3); }
 
 .console-log {
   flex: 1 1 170px; min-height: 150px; display: flex; flex-direction: column;
@@ -365,7 +316,6 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
 .log-tag.t-ERR { color: #F87171; } .log-tag.t-BOOT { color: #94A3B8; }
 
 /* ---------- 右栏：识别范围表（置顶）/ 检测对象 / 服务信息 ---------- */
-.scope-note { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; color: var(--ink-4); margin: -4px 0 6px; }
 .scope-row {
   display: flex; align-items: center; gap: 12px; height: 40px;
   border-radius: 8px; padding: 0 10px; cursor: pointer;
@@ -447,7 +397,6 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
 @media (max-width: 1180px) {
   .layout { grid-template-columns: 1fr; height: auto; }
   .col { overflow: visible; }
-  .stage { max-height: none; }
   .console-log { min-height: 240px; }
   .hw-group { display: none; }
 }
@@ -458,7 +407,7 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
 </head>
 <body>
 
-<!-- 顶部状态条：模式徽标 + 工单判定 + 资源统计 + 系统在线 + 时钟（HUD v4 顶栏语义） -->
+<!-- 顶栏：品牌、画面统计与时钟 -->
 <header class="app-header">
   <div class="brand">
     <svg class="brand-logo" viewBox="0 0 32 32" aria-hidden="true">
@@ -466,28 +415,19 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
       <path d="M15 26 23 6h5L20 26Z" fill="#1E5F8A"/>
     </svg>
     <span class="brand-name">EdgeSight</span>
-    <span class="brand-tag">HUD v4 · WEB</span>
   </div>
-  <span id="mode-badge" class="badge badge-live">LIVE</span>
   <span id="proto-badge" class="badge badge-proto">PROTOTYPE</span>
-  <span id="verdict-text" class="verdict-text verdict-none">SYSTEM BOOT</span>
-  <div class="hw-group" aria-label="画面与会话统计">
+  <div class="hw-group" aria-label="画面统计">
     <div class="hw-stat">
       <svg class="hw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
-      <span class="hw-label">RES</span><span class="hw-value mono">1280×720</span>
+      <span class="hw-label">RES</span><span class="hw-value mono" id="hw-res">—</span>
     </div>
     <div class="hw-stat">
       <svg class="hw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h3l2-6 4 12 3-8 2 4h6"/></svg>
-      <span class="hw-label">FPS</span><span class="hw-value mono" id="hw-fps">30</span>
-    </div>
-    <div class="hw-stat">
-      <svg class="hw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
-      <span class="hw-label">SESSION</span><span class="hw-value mono" id="hw-session">—</span>
+      <span class="hw-label">FPS</span><span class="hw-value mono" id="hw-fps">—</span>
     </div>
   </div>
   <div class="header-right">
-    <div class="sys-online"><span id="sys-dot" class="sys-dot"></span><span id="sys-text">SYSTEM ONLINE</span></div>
-    <div class="header-sep"></div>
     <div class="clock">
       <svg class="hw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
       <span class="mono" id="clock">—</span>
@@ -504,22 +444,22 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
   <!-- 左栏：系统控制与记录（参考前端左栏语义 → 数据源/参数/记录） -->
   <aside class="col" aria-label="系统控制">
     <section class="card">
-      <h2 class="card-title">SYSTEM <span class="hint" id="sys-sub">vision-service v1.2</span></h2>
+      <h2 class="card-title">SYSTEM</h2>
       <div class="sys-line"><span id="svc-dot" class="sys-dot"></span><span id="svc-text" class="state-ok">检查服务已连接</span></div>
-      <div class="tiny dim" style="margin:4px 0 10px" id="svc-desc">PYNQ 板端 · 轮次协议 v1.2 · 自动轮询进行中</div>
       <div class="param-row">
         <label for="sel-auto">自动轮询</label>
         <div class="toggle" style="transform:scale(0.9)">
-          <input type="checkbox" id="sel-auto" checked aria-label="自动轮询开关">
+          <input type="checkbox" id="sel-auto" aria-label="自动轮询开关">
           <span class="track"></span><span class="knob"></span>
         </div>
       </div>
       <div class="param-row">
         <label for="sel-interval">轮询间隔 interval</label>
         <select class="field" id="sel-interval">
-          <option value="1100">1.1 s（快）</option>
-          <option value="2200" selected>2.2 s（标准）</option>
-          <option value="4400">4.4 s（慢）</option>
+          <option value="250">0.25 s（快）</option>
+          <option value="500" selected>0.5 s（标准）</option>
+          <option value="1000">1.0 s（慢）</option>
+          <option value="2200">2.2 s</option>
         </select>
       </div>
       <div class="param-row">
@@ -529,11 +469,16 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
           <option value="4500" selected>4.5 s</option>
         </select>
       </div>
-      <div class="micro faint" style="margin-top:5px">启动校验：interval 必须小于 max-age（防周期性空窗）。</div>
     </section>
 
     <section class="card">
-      <h2 class="card-title">数据源 <span class="hint">单选，三种数据源互斥</span></h2>
+      <h2 class="card-title">USB 采集卡</h2>
+      <select class="field" id="sel-camera" aria-label="视频设备" style="width:100%"><option value="">请选择采集卡</option></select>
+      <button type="button" class="btn btn-block" id="btn-video" style="margin-top:7px">连接采集卡</button>
+      <label class="micro" id="replay-file-label" hidden>载入板端 packet.json <input type="file" id="replay-file" accept=".json,application/json"></label>
+    </section>
+    <section class="card">
+      <h2 class="card-title">数据源</h2>
       <div class="mode-row is-active" id="mode-live">
         <div><div class="mode-name mono">LIVE</div><div class="mode-desc">采集卡视频 + 板端轮次叠加</div></div>
         <span class="spacer"></span>
@@ -551,52 +496,38 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
       </div>
     </section>
 
-    <section class="card">
-      <h2 class="card-title">演示控制 <span class="hint">注入联调事件</span></h2>
+    <section class="card" id="demo-controls" hidden>
+      <h2 class="card-title">演示控制</h2>
       <div class="sim-grid">
         <button type="button" class="btn" id="sim-drop">模拟断联</button>
         <button type="button" class="btn" id="sim-cfg">配置变化</button>
         <button type="button" class="btn" id="sim-miss">缺件场景</button>
         <button type="button" class="btn" id="sim-limit">target_limit 轮</button>
       </div>
-      <div class="micro faint" style="margin-top:6px">断联后连续 3 次失败自动重新握手（D5）。</div>
     </section>
 
     <section class="card">
-      <h2 class="card-title">批次记录 <span class="hint mono">records.jsonl</span></h2>
+      <h2 class="card-title">本页批次记录</h2>
       <div class="rec-line"><span class="rec-num mono" id="rec-num">0</span><span class="rec-label">REC</span></div>
       <button type="button" class="btn btn-accent btn-block" id="btn-export">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
         导出 CSV（UTF-8 BOM）
       </button>
-      <div class="micro faint" style="margin-top:7px">仅手动<b>有效</b>轮次落记录；自动轮永不记录（D8–D10）。</div>
-    </section>
-
-    <section class="card tiny dim">
-      <span class="kbd">C</span>&nbsp; 触发检查 · 悬停范围表行可预览
     </section>
   </aside>
 
-  <!-- 中栏：视频视口（无面板遮挡）+ 轮次状态条 + 终端日志 -->
+  <!-- 中栏：视频视口与日志 -->
   <section class="col col-center" aria-label="检查画面与日志">
     <div class="stage-wrap">
       <div class="stage" id="stage">
+        <video id="capture-video" autoplay muted playsinline hidden></video>
+        <img id="capture-image" alt="本轮板端原始快照" hidden>
         <span class="corner tl"></span><span class="corner tr"></span>
         <span class="corner bl"></span><span class="corner br"></span>
         <div id="targets" style="position:absolute;inset:0"></div>
-        <div id="verdict-banner" class="verdict-banner" hidden></div>
         <div id="overlay-center" class="overlay-center" hidden>
           <div class="overlay-chip" id="overlay-chip"><b>WAITING</b><span id="overlay-sub">等待下一轮有效结果</span></div>
         </div>
-      </div>
-    </div>
-
-    <div class="status-strip">
-      <div class="strip-item"><span class="strip-label">ROUND</span><span class="strip-value mono" id="strip-round">0</span></div>
-      <span id="strip-verdict" class="chip chip-subtle">—</span>
-      <span class="tiny dim" id="strip-missing"></span>
-      <div class="strip-right mono">
-        <span id="strip-check">check —</span><span id="strip-cfg">cfg —</span><span id="strip-trigger">—</span>
       </div>
     </div>
 
@@ -617,8 +548,7 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
   <!-- 右栏：识别范围表（置顶）+ 检测对象 + 服务信息（HUD v4 右列信息架构） -->
   <aside class="col" aria-label="识别范围与检测结果">
     <section class="card" id="scope-card">
-      <h2 class="card-title">INSPECTION SCOPE <span class="hint" id="scope-round-note">ROUND — · REC —</span></h2>
-      <div class="scope-note" id="scope-note">勾选 = 显示并跟踪该类别；计数 = 该类别已分类目标数</div>
+      <h2 class="card-title">INSPECTION SCOPE <span class="hint" id="scope-round-note">ROUND —</span></h2>
       <div id="scope-rows"></div>
       <div class="fresh-row">
         <span class="fresh-label">FRESHNESS</span>
@@ -629,7 +559,6 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
         <span id="run-label">RUN INSPECTION</span>
         <svg class="run-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
       </button>
-      <div class="micro faint" id="replay-note" hidden>回放模式只读：无触发按钮，勾选框隐藏，计数为「实际 / 工单」。</div>
     </section>
 
     <section class="card">
@@ -655,13 +584,14 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
 
 <div class="toast" id="toast" role="alert" aria-atomic="true"></div>
 
-<script>
+<script type="module">
+import { decodePacket } from './protocol.mjs';
 'use strict';
 /* ==========================================================================
-   模拟内核：按 rounds.py 的对外语义做离线演示——
+   按 rounds.py 的轮次语义展示 LIVE 或离线演示——
    自动轮（interval）永不记录；手动轮（RUN / C 键）成功才 REC+1；
    结果有效性 = 会话 + 配置号 + 年龄窗（D3），过期/断联/配置变化即撤框 WAITING；
-   手动轮失败立即置 NO VALID RESULT 并撤旧 PASS（2026-10-20 异常语义）。
+   手动轮失败立即撤除旧结果。
    ========================================================================== */
 const $ = (s) => document.querySelector(s);
 const CLASSES = ['bolt', 'nut', 'washer'];
@@ -669,10 +599,10 @@ const WORKORDER = { bolt: 2, nut: 2, washer: 2 };
 
 const state = {
   mode: 'live',            // live | mock | replay
-  connected: true,
-  session: rid(), config: 3, checkId: 47, round: 12, rec: 0,
+  connected: false,
+  session: null, config: null, checkId: 0, round: 0, rec: 0,
   prototype: true,
-  auto: true, interval: 2200, maxAge: 4500,
+  auto: false, interval: 500, maxAge: 4500,
   scope: { bolt: true, nut: true, washer: true },
   button: 'idle',          // idle | queued | running
   result: null,            // { scene, targets, verdict, missing, counts, ts, check, cfg, trigger }
@@ -764,82 +694,50 @@ function toast(msg, isErr) {
   toastTimer = setTimeout(() => { el.className = 'toast' + (isErr ? ' err' : ''); }, 4000);
 }
 
-/* ---------- 顶栏 / 状态条 ---------- */
-function setVerdict(text, cls) {
-  const el = $('#verdict-text');
-  el.textContent = text; el.className = 'verdict-text ' + cls;
-}
-function renderTopbar() {
-  const badge = $('#mode-badge');
-  badge.className = 'badge ' + (state.mode === 'live' ? 'badge-live' : state.mode === 'mock' ? 'badge-mock' : 'badge-file');
-  badge.textContent = state.mode === 'live' ? 'LIVE' : state.mode === 'mock' ? 'MOCK ONLY' : 'OFFLINE FILE';
+/* ---------- 服务状态：每项信息只保留一个位置 ---------- */
+function renderService() {
   $('#proto-badge').hidden = !(state.prototype && state.mode !== 'replay');
-  $('#hw-session').textContent = state.session;
-  $('#sys-text').textContent = state.connected ? 'SYSTEM ONLINE' : 'SERVICE LOST';
-  $('#sys-dot').className = 'sys-dot' + (state.connected ? '' : ' off');
   const svcUp = state.mode === 'replay' ? true : state.connected; // 回放本地文件，不涉及网络
   $('#svc-dot').className = 'sys-dot' + (svcUp ? '' : ' off');
-  $('#svc-text').textContent = svcUp ? '检查服务已连接' : '检查服务不可达';
+  $('#svc-text').textContent = state.mode === 'replay' ? '离线回放' : state.mode === 'mock' ? '本地演示' : svcUp ? '检查服务已连接' : '检查服务不可达';
   $('#svc-text').className = svcUp ? 'state-ok' : 'state-err';
+  $('#svc-session').textContent = state.session || '—';
+  $('#svc-cfg').textContent = state.config ?? '—';
+  $('#svc-endpoint').textContent = state.mode === 'live' ? `${location.origin}/v1 → PYNQ` : state.mode === 'mock' ? 'LOCAL DEMO' : 'OFFLINE FILE';
+  $('#svc-uvc').textContent = state.mode === 'live' ? videoReady ? 'UVC LIVE' : snapshotReady && state.result ? 'BOARD SNAPSHOT' : 'NO VIDEO' : 'OFFLINE';
 }
-function renderStrip() {
-  $('#strip-round').textContent = state.round;
-  $('#hw-session').textContent = state.session;
-  $('#svc-session').textContent = state.session;
-  $('#svc-cfg').textContent = state.config;
-  $('#svc-endpoint').textContent = state.mode === 'mock' ? 'mock://127.0.0.1:8765' : 'http://127.0.0.1:8765';
-  $('#svc-uvc').textContent = state.mode === 'replay' ? 'OFFLINE' : state.connected ? 'CAPTURE OK' : 'NO SIGNAL';
-  const r = state.result;
-  const chip = $('#strip-verdict'), miss = $('#strip-missing');
-  if (!r) {
-    chip.textContent = 'WAITING'; chip.className = 'chip chip-warn'; miss.textContent = '';
-    setVerdict(state.manualFail ? 'NO VALID RESULT | check failed' : 'WAITING', state.manualFail ? 'verdict-fail' : 'verdict-warn');
-  } else {
-    const map = { pass: ['chip-ok', 'verdict-pass'], fail: ['chip-err', 'verdict-fail'], warn: ['chip-warn', 'verdict-warn'] };
-    chip.textContent = r.verdict + (r.missing ? ' ' + r.missing : '');
-    chip.className = 'chip ' + map[r.kind][0];
-    miss.textContent = r.missing ? `工单 ${woText()} · 差额 ${r.missing}` : `工单 ${woText()} · 全部满足`;
-    setVerdict(r.verdict + (r.missing ? ' ' + r.missing : ''), map[r.kind][1]);
-  }
-  $('#strip-check').textContent = r ? `check ${r.check}` : `check ${state.checkId + 1}`;
-  $('#strip-cfg').textContent = `cfg ${r ? r.cfg : state.config}`;
-  $('#strip-trigger').textContent = r ? (r.trigger === 'manual' ? '手动触发' : r.trigger === 'replay' ? '回放快照' : '自动轮询') : '—';
-}
-function woText() { return 'bolt×2 nut×2 washer×2'; }
 
-/* ---------- 视频舞台：目标框（绿色专属）+ 判定横幅 + WAITING 衬底 ---------- */
+/* ---------- 视频舞台：目标框与无结果状态 ---------- */
 function renderStage() {
   const layer = $('#targets');
   layer.innerHTML = '';
-  const banner = $('#verdict-banner');
-  const r = state.result;
+  const r = state.mode === 'live' && !videoReady && !snapshotReady ? null : state.result;
   if (r) {
     for (const t of r.targets) {
       if (t.cls && !state.scope[t.cls]) continue; // 未勾选：不画框（T 序号保留原始编号）
       const [x, y, w, h] = t.box;
       const box = document.createElement('div');
       box.className = 'tgt';
-      box.style.left = (x / 1280 * 100) + '%'; box.style.top = (y / 720 * 100) + '%';
-      box.style.width = (w / 1280 * 100) + '%'; box.style.height = (h / 720 * 100) + '%';
+      box.style.left = (x / (r.width || 1280) * 100) + '%'; box.style.top = (y / (r.height || 720) * 100) + '%';
+      box.style.width = (w / (r.width || 1280) * 100) + '%'; box.style.height = (h / (r.height || 720) * 100) + '%';
       const chip = document.createElement('span');
       chip.className = 'tgt-chip'; chip.textContent = t.t;
       const shape = document.createElement('span');
       shape.className = 'shape ' + (t.cls ? `shape-${t.cls}` : 'shape-nut');
       shape.style.opacity = t.cls ? '1' : '0.55';
-      box.append(shape, chip);
+      if (state.mode === 'mock') box.append(shape);
+      box.append(chip);
       layer.appendChild(box);
     }
-    banner.hidden = false;
-    banner.className = 'verdict-banner ' + r.kind;
-    banner.textContent = r.verdict + (r.missing ? ' ' + r.missing : '');
-  } else {
-    banner.hidden = true;
   }
   const overlay = $('#overlay-center');
   overlay.hidden = !!r;
   if (!r) {
     const chipEl = $('#overlay-chip');
-    if (!state.connected) {
+    if (state.mode === 'live' && !videoReady && !snapshotReady) {
+      chipEl.className = 'overlay-chip'; chipEl.querySelector('b').textContent = 'NO VIDEO';
+      $('#overlay-sub').textContent = '连接采集卡以预览视频，或手动检查以查看本轮板端快照';
+    } else if (!state.connected) {
       chipEl.className = 'overlay-chip err';
       chipEl.querySelector('b').textContent = 'RECONNECTING';
       $('#overlay-sub').textContent = '连续 HTTP 失败 · 自动重新握手（D5）';
@@ -847,6 +745,10 @@ function renderStage() {
       chipEl.className = 'overlay-chip err';
       chipEl.querySelector('b').textContent = 'CHECK FAILED';
       $('#overlay-sub').textContent = '本轮请求无效 · 旧判定已撤除';
+    } else if (state.button === 'running') {
+      chipEl.className = 'overlay-chip';
+      chipEl.querySelector('b').textContent = '识别中';
+      $('#overlay-sub').textContent = '正在处理检查请求';
     } else if (state.mode === 'replay') {
       chipEl.className = 'overlay-chip';
       chipEl.querySelector('b').textContent = 'OFFLINE FILE';
@@ -865,10 +767,6 @@ function renderScope() {
   wrap.innerHTML = '';
   const readonly = state.mode === 'replay';
   $('#run-btn').hidden = readonly;
-  $('#replay-note').hidden = !readonly;
-  $('#scope-note').textContent = readonly
-    ? '回放只读：计数为「实际 / 工单」，勾选框隐藏'
-    : '勾选 = 显示并跟踪该类别；计数 = 该类别已分类目标数';
   const r = state.result;
   for (const cls of CLASSES) {
     const on = state.scope[cls];
@@ -881,7 +779,7 @@ function renderScope() {
     }
     let countText, has;
     if (readonly) {
-      const n = r ? (r.counts ? r.counts[cls] : 0) : 0;
+      const n = r?.counts?.[cls] ?? '--';
       countText = `${n} / ${WORKORDER[cls]}`; has = true;
     } else {
       const n = r && r.counts ? r.counts[cls] : null;
@@ -892,7 +790,7 @@ function renderScope() {
     row.addEventListener('mouseenter', () => { if (!readonly) row.classList.add('hover'); });
     wrap.appendChild(row);
   }
-  $('#scope-round-note').textContent = `ROUND ${state.round} · REC ${state.rec}`;
+  $('#scope-round-note').textContent = `ROUND ${state.round}`;
 }
 function toggleScope(cls) {
   if (state.mode === 'replay') return;
@@ -931,7 +829,7 @@ function renderObjects() {
     card.className = 'obj-card';
     const [x, y, w, h] = t.box;
     card.innerHTML =
-      `<div class="obj-thumb"><span class="shape ${t.cls ? 'shape-' + t.cls : 'shape-nut'}" style="${t.cls ? '' : 'opacity:.55'}"></span></div>` +
+      `<div class="obj-thumb">${state.mode === 'mock' ? `<span class="shape ${t.cls ? 'shape-' + t.cls : 'shape-nut'}"></span>` : 'ROI'}</div>` +
       `<div class="obj-meta"><div class="obj-top"><span class="obj-tchip mono">${t.t}</span>` +
       `<span class="obj-class">${t.cls || 'unclassified'}</span>` +
       `<span class="obj-score mono">${t.score != null ? t.score.toFixed(2) : '--'}</span></div>` +
@@ -948,6 +846,7 @@ function renderButton() {
   const btn = $('#run-btn');
   const label = $('#run-label');
   btn.className = 'run-btn' + (state.button === 'idle' ? '' : ' ' + state.button);
+  btn.disabled = state.mode === 'live' && (!state.connected || liveBusy);
   if (state.button === 'idle') label.textContent = 'RUN INSPECTION';
   else if (state.button === 'queued') label.textContent = 'QUEUED · WAITING';
   else label.textContent = 'RUNNING';
@@ -957,12 +856,16 @@ function renderButton() {
 }
 async function manualRun() {
   if (state.mode === 'replay') { toast('回放模式只读，不提供触发', false); return; }
+  if (state.mode === 'live') { await liveRound(true); return; }
   if (state.button !== 'idle') return;
+  const epoch = modeEpoch;
   state.button = 'queued'; renderButton();
   log('RUN', '手动轮请求已入队（trigger_ref 复用直到成功；check 号完成时分配）');
   await sleep(900);
+  if (epoch !== modeEpoch) return;
   state.button = 'running'; renderButton();
   await sleep(1500);
+  if (epoch !== modeEpoch) return;
   state.button = 'idle'; renderButton();
   if (!state.connected) {
     state.manualFail = true; state.result = null;   // 立即撤旧 PASS，不等 max_age
@@ -975,15 +878,110 @@ async function manualRun() {
   const scene = manualScene();
   state.manualFail = false;
   state.result = { ...scene, counts: countsOf(scene), ts: now(), check: state.checkId, cfg: state.config, trigger: 'manual' };
-  state.records.push({ check: state.checkId, round: state.round, time: fmtClock(new Date()), mode: state.mode, verdict: scene.verdict, missing: scene.missing, targets: scene.targets.length });
-  log('RUN', `手动轮 #${state.round} check=${state.checkId} 完成 → REC ${state.rec}（${state.mode === 'mock' ? 'mock_' : ''}${state.checkId}.png）`);
+  state.records.push({ session: state.session, check: state.checkId, round: state.round, time: fmtClock(new Date()), mode: 'MOCK', verdict: scene.verdict, missing: scene.missing, targets: scene.targets.length });
+  log('RUN', `DEMO 手动轮 #${state.round} 完成 → 本页 REC ${state.rec}（合成数据）`);
   renderAll();
 }
 function sleep(ms) { return new Promise((res) => setTimeout(res, ms)); }
 
+/* ---------- LIVE HTTP：单轮串行；模式切换后丢弃在途响应 ---------- */
+let liveBusy = false, modeEpoch = 0, manualRef = null, reconnectAfter = 0;
+async function api(path, body) {
+  const response = await fetch(path, { cache: 'no-store', signal: AbortSignal.timeout(45000),
+    ...(body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body) }) });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
+  return data;
+}
+async function connectLive() {
+  if (liveBusy || state.mode !== 'live') return;
+  liveBusy = true;
+  const epoch = modeEpoch;
+  const wasConnected = state.connected;
+  reconnectAfter = now() + 2000;
+  try {
+    const status = await api('/v1/status');
+    if (status.mode !== 'LIVE' || status.hardware_connected !== true || !status.session_id)
+      throw new Error('板端硬件未连接或服务不是 LIVE');
+    const sessionChanged = status.session_id !== state.session;
+    const hasConfig = Number.isInteger(status.config_id) && status.config_id >= 0 && status.config_id <= 0xffffffff;
+    if (Object.hasOwn(status, 'config_id') && !hasConfig)
+      throw new Error('板端配置编号无效');
+    const config = hasConfig ? {mode: 'LIVE', applied_config_id: status.config_id}
+      : wasConnected && !sessionChanged && state.config !== null
+        ? {mode: 'LIVE', applied_config_id: state.config}
+        : await api('/v1/config', { control: 0 }); // Older board service compatibility.
+    if (config && (!Number.isInteger(config.applied_config_id) || config.mode !== 'LIVE'))
+      throw new Error('板端未确认配置');
+    if (epoch !== modeEpoch) return;
+    const changed = sessionChanged || config.applied_config_id !== state.config;
+    if (changed) { state.config = config.applied_config_id; state.result = null; manualRef = null; }
+    state.session = status.session_id; state.prototype = status.prototype !== false;
+    state.connected = true;
+    if (changed || !wasConnected)
+      log('LINK', `LIVE 已连接 · ${status.backend}/${status.engine} · session=${state.session} · cfg=${state.config}`);
+  } catch (error) {
+    if (epoch !== modeEpoch) return;
+    state.connected = false; state.result = null;
+    log('ERR', `LIVE 连接失败：${error.message}`);
+  } finally { liveBusy = false; renderAll(); }
+}
+async function liveRound(manual) {
+  if (liveBusy || !state.connected) return;
+  liveBusy = true;
+  const epoch = modeEpoch;
+  const ref = manual ? (manualRef ||= crypto.randomUUID()) : null;
+  state.button = 'running'; renderAll();
+  try {
+    const packet = await api('/v1/check', manual ? { trigger_ref: ref } : {});
+    if (epoch !== modeEpoch) return;
+    if (manual && packet.trigger_ref !== ref) throw new Error('检查请求标识不匹配');
+    const result = decodePacket(packet, state.session, state.config);
+    snapshotReady = false;
+    state.prototype = packet.prototype !== false; state.manualFail = false;
+    state.checkId = packet.check_id; state.round++;
+    state.result = { ...result, ts: now(), trigger: manual ? 'manual' : 'auto' };
+    if (!videoReady) {
+      snapshot.onload = () => {
+        if (epoch !== modeEpoch || state.result?.packet !== packet) return;
+        snapshotReady = true; renderAll();
+      };
+      snapshot.onerror = () => {
+        if (epoch !== modeEpoch || state.result?.packet !== packet) return;
+        snapshotReady = false; renderAll();
+      };
+      snapshot.src = `/v1/captures/${encodeURIComponent(packet.session_id)}/${packet.check_id}.png`;
+    }
+    if (result.expected) Object.assign(WORKORDER, result.expected);
+    if (manual && !state.records.some((r) => r.session === state.session && r.check === packet.check_id)) {
+      state.records.push({ session: state.session, check: packet.check_id, round: state.round,
+        time: fmtClock(new Date()), mode: 'LIVE', verdict: result.verdict,
+        missing: result.missing, targets: result.targets.length });
+      state.rec = state.records.length;
+    }
+    if (manual) manualRef = null;
+    log('RUN', `${manual ? '手动' : '自动'} LIVE check=${packet.check_id} · frame=${packet.frame_id} · ${result.verdict} · ${result.targets.length} 目标`);
+  } catch (error) {
+    if (epoch !== modeEpoch) return;
+    state.result = null; state.manualFail = manual; state.connected = false;
+    state.auto = false; $('#sel-auto').checked = false;
+    log('ERR', `LIVE 检查失败，旧判定已撤除：${error.message}`);
+  } finally {
+    liveBusy = false;
+    if (epoch === modeEpoch) { state.button = 'idle'; renderAll(); }
+  }
+}
+
 /* ---------- 自动轮询（自动轮永不记录）与断联重握手 ---------- */
 let autoTimer = null;
 function autoRound() {
+  if (state.mode === 'live') {
+    if (now() >= reconnectAfter && !liveBusy) {
+      reconnectAfter = now() + 2000; connectLive();
+    } else if (state.auto) liveRound(false);
+    return;
+  }
   if (!state.auto || state.mode === 'replay') return;
   if (!state.connected) { linkFails(); return; }
   state.checkId++; state.round++;
@@ -999,9 +997,11 @@ function linkFails() {
   failCount++;
   if (failCount < 3) log('LINK', `POST /v1/check 失败 ${failCount}/3，${(state.interval / 1000).toFixed(1)}s 后重试`);
   if (failCount >= 3) {
+    const epoch = modeEpoch;
     recovering = true;
     log('LINK', '连续 3 次 HTTP 失败，触发重新握手（D5）…');
     setTimeout(() => {
+      if (epoch !== modeEpoch || state.mode !== 'mock') return;
       state.session = rid(); state.connected = true; failCount = 0; recovering = false;
       log('LINK', `握手成功 → session=${state.session} · cfg=${state.config} · 新会话结果按 D3 重新计龄`);
       renderAll();
@@ -1026,16 +1026,21 @@ function setMode(mode) {
   state.mode = mode;
   syncModeRows(); // 活动模式不允许关断：勾选态始终回写
   if (!changed) return;
+  modeEpoch++; state.button = 'idle'; state.result = null; state.manualFail = false;
+  stopVideo(); snapshotReady = false;
+  state.connected = mode !== 'live'; state.prototype = true;
+  state.session = mode === 'mock' ? rid() : null; state.config = mode === 'mock' ? 0 : null;
+  manualRef = null;
+  failCount = 0; recovering = false;
+  if (mode === 'mock') Object.assign(WORKORDER, { bolt: 2, nut: 2, washer: 2 });
   if (mode === 'replay') {
-    const scene = SCENES.pass;
-    state.result = { ...scene, counts: countsOf(scene), ts: now(), check: state.checkId, cfg: state.config, trigger: 'replay' };
-    log('REC', '载入回放 result.json · packet 绑定 + capture 哈希校验通过（只读，不联网）');
-    setVerdict('OFFLINE FILE', 'verdict-none');
+    log('REC', '离线回放：请载入板端 packet.json；此模式不连接网络或相机');
   } else {
     state.result = null;
     log('LINK', mode === 'live' ? '切换 LIVE：采集卡视频 + 板端轮次叠加' : '切换 LOCAL DEMO：MOCK 服务（合成数据，不得作为板端识别证据）');
   }
   renderAll();
+  if (mode === 'live') connectLive();
 }
 document.querySelectorAll('.mode-row input').forEach((input) => {
   input.addEventListener('change', () => {
@@ -1073,8 +1078,8 @@ $('#sim-limit').addEventListener('click', () => {
 /* ---------- 参数 / 记录 / 主题 / 键盘 ---------- */
 $('#sel-auto').addEventListener('change', (e) => {
   state.auto = e.target.checked;
-  $('#svc-desc').textContent = state.auto ? 'PYNQ 板端 · 轮次协议 v1.2 · 自动轮询进行中' : 'PYNQ 板端 · 轮次协议 v1.2 · 自动轮询已暂停';
   log('STATE', `自动轮询${state.auto ? '开启' : '暂停'}（暂停后结果将在 max-age 后过期，画面进入 WAITING）`);
+  if (state.auto) autoRound();
 });
 $('#sel-interval').addEventListener('change', (e) => {
   const v = Number(e.target.value);
@@ -1099,8 +1104,9 @@ $('#sel-maxage').addEventListener('change', (e) => {
 });
 $('#btn-export').addEventListener('click', () => {
   if (!state.records.length) { toast('暂无批次记录：手动触发一轮有效检查后再导出', false); return; }
-  const head = 'check_id,round,time,mode,verdict,missing,targets';
-  const rows = state.records.map((r) => [r.check, r.round, r.time, r.mode, r.verdict, r.missing || '', r.targets].join(','));
+  const head = 'session_id,check_id,round,time,mode,verdict,missing,targets';
+  const cell = (value) => '"' + String(value ?? '').replaceAll('"', '""') + '"';
+  const rows = state.records.map((r) => [r.session, r.check, r.round, r.time, r.mode, r.verdict, r.missing, r.targets].map(cell).join(','));
   const blob = new Blob(['\uFEFF' + [head, ...rows].join('\r\n')], { type: 'text/csv;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob); a.download = 'records.csv'; a.click();
@@ -1127,22 +1133,91 @@ if (document.documentElement.dataset.theme === 'light') {
 }
 
 /* ---------- 时钟与 FPS（顶栏仪表） ---------- */
+let videoReady = false;
+let videoBusy = false;
+const video = $('#capture-video');
+let snapshotReady = false;
+const snapshot = $('#capture-image');
+async function listCameras() {
+  if (!navigator.mediaDevices) return;
+  const selected = $('#sel-camera').value;
+  const devices = (await navigator.mediaDevices.enumerateDevices()).filter((d) => d.kind === 'videoinput');
+  $('#sel-camera').replaceChildren(new Option('请选择采集卡', ''));
+  devices.forEach((d, i) => $('#sel-camera').add(new Option(d.label || `视频设备 ${i + 1}`, d.deviceId)));
+  if (devices.some((d) => d.deviceId === selected)) $('#sel-camera').value = selected;
+}
+function stopVideo() {
+  videoReady = false;
+  video.srcObject?.getTracks().forEach((track) => track.stop());
+  video.srcObject = null; video.hidden = true;
+  $('#hw-fps').textContent = '—'; $('#btn-video').textContent = '连接采集卡';
+}
+$('#btn-video').addEventListener('click', async () => {
+  if (videoBusy) return;
+  if (video.srcObject) { stopVideo(); state.result = null; renderAll(); return; }
+  const deviceId = $('#sel-camera').value;
+  videoBusy = true; $('#btn-video').textContent = '等待视频授权…'; renderAll();
+  try {
+    if (!deviceId) {
+      const permission = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+      try { await listCameras(); } finally { permission.getTracks().forEach((t) => t.stop()); }
+      toast('已获得视频权限，请选择 USB 采集卡后再次连接'); return;
+    }
+    const epoch = modeEpoch;
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: false,
+      video: { deviceId: { exact: deviceId }, width: { ideal: 1280 }, height: { ideal: 720 } } });
+    if (epoch !== modeEpoch || state.mode !== 'live') { stream.getTracks().forEach((t) => t.stop()); return; }
+    video.srcObject = stream; video.hidden = false; await video.play();
+    if (Math.abs(video.videoWidth / video.videoHeight - 16 / 9) > .01)
+      throw new Error('采集卡须输出 16:9 视频，避免目标框坐标错位');
+    videoReady = true;
+    const track = stream.getVideoTracks()[0];
+    track.onended = track.onmute = () => { videoReady = false; state.result = null; renderAll(); };
+    track.onunmute = () => { videoReady = true; renderAll(); };
+    $('#btn-video').textContent = '断开采集卡';
+    $('#hw-res').textContent = `${video.videoWidth}×${video.videoHeight}`;
+    log('LINK', `采集卡已连接：${track.label} · ${video.videoWidth}×${video.videoHeight}`);
+    await listCameras(); renderAll();
+  } catch (error) { stopVideo(); log('ERR', `视频连接失败：${error.message}`); toast(error.message, true); }
+  finally { videoBusy = false; $('#btn-video').textContent = video.srcObject ? '断开采集卡' : '连接采集卡'; renderAll(); }
+});
+$('#replay-file').addEventListener('change', async (event) => {
+  try {
+    const packet = JSON.parse(await event.target.files[0].text());
+    if (state.mode !== 'replay') return;
+    state.result = { ...decodePacket(packet, packet.session_id, packet.config_id), ts: now(), trigger: 'replay' };
+    state.session = packet.session_id; state.config = packet.config_id;
+    if (state.result.expected) Object.assign(WORKORDER, state.result.expected);
+    log('REC', '已载入板端报文；未载入对应图像，不能据此确认画面与框对应'); renderAll();
+  } catch (error) { state.result = null; toast(error.message, true); renderAll(); }
+});
+listCameras().catch((error) => log('ERR', `读取视频设备失败：${error.message}`));
+navigator.mediaDevices?.addEventListener('devicechange', () => listCameras().catch(() => {}));
 setInterval(() => { $('#clock').textContent = fmtClock(new Date()); }, 500);
 $('#clock').textContent = fmtClock(new Date());
-setInterval(() => { $('#hw-fps').textContent = String(29 + Math.floor(Math.random() * 2)); }, 1000);
+let lastFrames = 0, lastVideoTime = now();
+setInterval(() => {
+  const frames = video.getVideoPlaybackQuality?.().totalVideoFrames || 0;
+  const time = now();
+  $('#hw-fps').textContent = videoReady ? Math.max(0, (frames - lastFrames) * 1000 / (time - lastVideoTime)).toFixed(1) : '—';
+  lastFrames = frames; lastVideoTime = time;
+}, 1000);
 
 /* ---------- 总渲染与启动 ---------- */
 function renderAll() {
-  renderTopbar(); renderStrip(); renderStage(); renderScope(); renderObjects(); renderButton();
+  renderService(); renderStage(); renderScope(); renderObjects(); renderButton();
   $('#rec-num').textContent = String(state.rec);
+  for (const id of ['sim-drop', 'sim-cfg', 'sim-miss', 'sim-limit']) $("#" + id).disabled = state.mode !== 'mock';
+  $('#demo-controls').hidden = state.mode !== 'mock';
+  $('#btn-video').disabled = state.mode !== 'live' || videoBusy; $('#sel-camera').disabled = state.mode !== 'live' || !!video.srcObject;
+  $('#replay-file-label').hidden = state.mode !== 'replay';
+  snapshot.hidden = state.mode !== 'live' || videoReady || !snapshotReady || !state.result;
 }
 renderAll();
 startAuto();
 setInterval(freshnessLoop, 180); // 年龄按前端接收时刻计量，180ms 步进收缩足够平滑
-log('BOOT', 'EdgeSight Web 原型启动 · 画布自适应 · HUD v4 语义（纯前端模拟，合成数据）');
-log('LINK', `握手成功 session=${state.session} · cfg=${state.config} · protocol=v1.2`);
-log('STATE', '自动轮询已开启 · 结果有效性 = 会话 + 配置号 + 年龄窗（D3）');
-setTimeout(() => autoRound(), 400);
+log('BOOT', 'EdgeSight 启动 · LIVE 使用板端 API · 自动检查默认暂停');
+connectLive();
 </script>
 </body>
 </html>

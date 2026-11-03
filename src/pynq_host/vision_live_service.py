@@ -20,6 +20,8 @@ FILE 原型自动轮询在内存中检查并更新 latest_packet.json；手动�
 import argparse
 import hashlib
 import json
+import re
+import shutil
 import threading
 import time
 import uuid
@@ -89,9 +91,11 @@ def complete_decision(decision, targets):
 class State:
     """会话状态：check_id 单调回绕；每轮 = 新捕获 → 引擎 → 报文校验 → 产物原子落盘。"""
 
-    def __init__(self, root, captures, engine, order, archive_every_round=False):
+    def __init__(self, root, captures, engine, order, archive_every_round=False,
+                 initial_config_id=0, min_free_bytes=256 * 1024 * 1024):
         self.session_id = str(uuid.uuid4())
-        self.config_id = 0
+        self.config_id = initial_config_id
+        self.min_free_bytes = min_free_bytes
         self.check_id = 0
         self.captures = captures
         self.engine = engine
@@ -114,6 +118,8 @@ class State:
             if trigger_ref is not None and trigger_ref in self.completed_refs:
                 # 同一次用户触发的网络重试：回原轮报文，不新取帧、不递增 check_id。
                 return self.completed_refs[trigger_ref]
+            if shutil.disk_usage(self.session_dir).free < self.min_free_bytes:
+                raise RuntimeError("archive storage reserve reached; inspection paused")
             self.check_id = (self.check_id + 1) & 0xFFFFFFFF
             check = self.check_id
             round_dir = self.session_dir / f"check-{check:06d}"
@@ -189,15 +195,18 @@ def file_engine(weights, order, min_score, max_targets, policy_max=None):
 
 
 def make_server(host="127.0.0.1", port=8765, root=None, captures=None, engine=None, order=None,
-                archive_every_round=False):
-    state = State(root, captures, engine, order, archive_every_round)
+                archive_every_round=False, initial_config_id=0,
+                min_free_bytes=256 * 1024 * 1024):
+    state = State(root, captures, engine, order, archive_every_round,
+                  initial_config_id, min_free_bytes)
 
     class Handler(BaseHTTPRequestHandler):
-        def reply(self, status, body):
-            data = json.dumps(body, allow_nan=False).encode()
+        def reply(self, status, body, content_type="application/json"):
+            data = body if isinstance(body, bytes) else json.dumps(body, allow_nan=False).encode()
             try:
                 self.send_response(status)
-                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Type", content_type)
+                self.send_header("Cache-Control", "no-store")
                 self.send_header("Content-Length", str(len(data)))
                 self.end_headers()
                 self.wfile.write(data)
@@ -213,8 +222,13 @@ def make_server(host="127.0.0.1", port=8765, root=None, captures=None, engine=No
 
         def do_GET(self):
             if self.path == "/v1/status":
+                try:
+                    health = getattr(state.captures, "health", lambda: True)()
+                except (RuntimeError, OSError):
+                    health = False
                 self.reply(200, {"mode": "LIVE", "session_id": state.session_id,
-                                 "hardware_connected": True, "backend": state.captures.backend,
+                                 "hardware_connected": bool(health), "config_id": state.config_id,
+                                 "backend": state.captures.backend,
                                  "engine": state.engine_label,
                                  "prototype": state.captures.prototype})
             elif self.path == "/v1/latest":
@@ -222,6 +236,13 @@ def make_server(host="127.0.0.1", port=8765, root=None, captures=None, engine=No
                     self.reply(404, {"error": "no check yet"})
                 else:
                     self.reply(200, state.last_packet)
+            elif match := re.fullmatch(r"/v1/captures/([^/]+)/([0-9]{1,10})\.png", self.path):
+                session, check = match.groups()
+                capture = state.session_dir / f"check-{int(check):06d}" / "capture.png"
+                if session != state.session_id or not capture.is_file():
+                    self.reply(404, {"error": "capture not found in this session"})
+                else:
+                    self.reply(200, capture.read_bytes(), "image/png")
             else:
                 self.reply(404, {"error": "unknown route"})
 
@@ -248,7 +269,7 @@ def make_server(host="127.0.0.1", port=8765, root=None, captures=None, engine=No
                     self.reply(200, {"mode": "LIVE", "applied_config_id": applied})
             except (ValueError, TypeError) as error:
                 self.reply(400, {"error": str(error)})
-            except RuntimeError as error:
+            except (RuntimeError, OSError) as error:
                 # 捕获（C01 所有权/超时/错误）或引擎运行失败：服务侧故障，不产生正常结果
                 self.reply(503, {"error": f"capture/engine failed: {error}"})
 

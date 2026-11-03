@@ -32,7 +32,10 @@ def main():
     parser.add_argument("--background-mode", choices=("corners", "local"), default="local")
     parser.add_argument("--host", default="0.0.0.0")
     parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument("--min-free-mib", type=int, default=256)
     args = parser.parse_args()
+    if args.min_free_mib < 0:
+        parser.error("min-free-mib must be nonnegative")
     package = args.package.resolve()
     order_values = [int(value) for value in args.order.split(",")]
     if len(order_values) != 3 or any(value < 0 for value in order_values):
@@ -68,6 +71,10 @@ def main():
                 PL.bitfile_name, str(PL.timestamp))
 
     class Captures(C01Captures):
+        def health(self):
+            flags = status.read(0x04)
+            return bool(flags & 1) and not bool(flags & 4)
+
         def configure(self, control):
             if control != 0:
                 raise ValueError("raw_capture supports control=0; analysis preprocessing runs on PS")
@@ -98,7 +105,8 @@ def main():
                   "localization": vars(args) | {"package": str(package), "root": str(args.root)}}
     (args.root/"hardware.json").write_text(json.dumps(provenance, indent=2))
     server = make_server(args.host, args.port, args.root, captures, engine, order,
-                         archive_every_round=True)
+                         archive_every_round=True, initial_config_id=config,
+                         min_free_bytes=args.min_free_mib * 1024 * 1024)
     print("PRODUCT_SERVICE_READY " + json.dumps({"engine": engine.label, "capture": "C01_PARK",
                                                 "port": args.port, "order": order}), flush=True)
     try:

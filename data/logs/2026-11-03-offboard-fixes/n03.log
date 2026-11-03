@@ -1,0 +1,4 @@
+REPRODUCED: cached frame returned once; second release calls munmap
+PASS: production guard prevents second unmap of a cached frame
+PASS: ordinary buffer still unmapped once
+LIMIT: spy replay proves the branch, not the cause of a native crash

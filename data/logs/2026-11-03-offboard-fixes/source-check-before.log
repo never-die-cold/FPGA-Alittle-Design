@@ -1,0 +1,79 @@
+sha256sum: 'README.md'$'\r': No such file or directory
+README.md
+: FAILED open or read
+sha256sum: 'build/README.md'$'\r': No such file or directory
+build/README.md
+: FAILED open or read
+sha256sum: 'docs/contracts/vision-sync-protocol-decisions.md'$'\r': No such file or directory
+docs/contracts/vision-sync-protocol-decisions.md
+: FAILED open or read
+sha256sum: 'docs/project-map.md'$'\r': No such file or directory
+docs/project-map.md
+: FAILED open or read
+sha256sum: 'docs/project-overview.md'$'\r': No such file or directory
+docs/project-overview.md
+: FAILED open or read
+sha256sum: 'docs/runbooks/final-offboard-check.md'$'\r': No such file or directory
+docs/runbooks/final-offboard-check.md
+: FAILED open or read
+sha256sum: 'plan.md'$'\r': No such file or directory
+plan.md
+: FAILED open or read
+sha256sum: 'sim/scripts/board_ssh.py'$'\r': No such file or directory
+sim/scripts/board_ssh.py
+: FAILED open or read
+sha256sum: 'sim/scripts/export_trained_payload.py'$'\r': No such file or directory
+sim/scripts/export_trained_payload.py
+: FAILED open or read
+sha256sum: 'sim/scripts/run_offboard.sh'$'\r': No such file or directory
+sim/scripts/run_offboard.sh
+: FAILED open or read
+sha256sum: 'sim/tools/test_verify_rv32i.py'$'\r': No such file or directory
+sim/tools/test_verify_rv32i.py
+: FAILED open or read
+sha256sum: 'sim/tools/verify_rv32i.py'$'\r': No such file or directory
+sim/tools/verify_rv32i.py
+: FAILED open or read
+sha256sum: 'sim/vision/test_live_service_guards.py'$'\r': No such file or directory
+sim/vision/test_live_service_guards.py
+: FAILED open or read
+sha256sum: 'sim/vision/test_release_tools.py'$'\r': No such file or directory
+sim/vision/test_release_tools.py
+: FAILED open or read
+sha256sum: 'sim/vision/test_vision_live_service.py'$'\r': No such file or directory
+sim/vision/test_vision_live_service.py
+: FAILED open or read
+sha256sum: 'sim/vision/test_web_protocol.mjs'$'\r': No such file or directory
+sim/vision/test_web_protocol.mjs
+: FAILED open or read
+sha256sum: 'sim/vision/test_web_refresh.mjs'$'\r': No such file or directory
+sim/vision/test_web_refresh.mjs
+: FAILED open or read
+sha256sum: 'sim/vision/test_web_server.py'$'\r': No such file or directory
+sim/vision/test_web_server.py
+: FAILED open or read
+sha256sum: 'src/README.md'$'\r': No such file or directory
+src/README.md
+: FAILED open or read
+sha256sum: 'src/pynq_host/README.md'$'\r': No such file or directory
+src/pynq_host/README.md
+: FAILED open or read
+sha256sum: 'src/pynq_host/cop_product_service.py'$'\r': No such file or directory
+src/pynq_host/cop_product_service.py
+: FAILED open or read
+sha256sum: 'src/pynq_host/vision_live_service.py'$'\r': No such file or directory
+src/pynq_host/vision_live_service.py
+: FAILED open or read
+sha256sum: 'src/web_client/README.md'$'\r': No such file or directory
+src/web_client/README.md
+: FAILED open or read
+sha256sum: 'src/web_client/index.html'$'\r': No such file or directory
+src/web_client/index.html
+: FAILED open or read
+sha256sum: 'src/web_client/protocol.mjs'$'\r': No such file or directory
+src/web_client/protocol.mjs
+: FAILED open or read
+sha256sum: 'src/web_client/serve.py'$'\r': No such file or directory
+src/web_client/serve.py
+: FAILED open or read
+sha256sum: WARNING: 26 listed files could not be read

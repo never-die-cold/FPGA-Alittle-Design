@@ -1,0 +1,20 @@
+ M README.md
+ M data/logs/README.md
+ M docs/project-map.md
+ M docs/project-overview.md
+ M plan.md
+ M sim/vision/test_vision_live_service.py
+ M src/README.md
+ M src/pynq_host/README.md
+ M src/pynq_host/vision_live_service.py
+ M src/web_client/README.md
+ M src/web_client/index.html
+?? data/logs/2026-10-30-web-live/
+?? data/logs/2026-11-03-offboard-audit/
+?? docs/tech-report/latex/
+?? report/llm_log/2026-10-30-collab-dev-report.md
+?? sim/vision/test_web_protocol.mjs
+?? sim/vision/test_web_refresh.mjs
+?? sim/vision/test_web_server.py
+?? src/web_client/protocol.mjs
+?? src/web_client/serve.py

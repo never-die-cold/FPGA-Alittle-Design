@@ -80,6 +80,8 @@ def main():
         status = get(base, "/v1/status")
         assert status["mode"] == "LIVE" and status["hardware_connected"] is True
         assert status["backend"] == "FILE" and status["prototype"] is True
+        assert status["config_id"] == 0
+        assert get(base, "/v1/status")["config_id"] == 0  # Read-only handshake.
         statuses, packets = [], []
         for i in range(3):
             packet = post(base, "/v1/check", {"trigger_ref": f"ref-{i}"} if i == 0 else {})
@@ -90,6 +92,16 @@ def main():
             assert packet["prototype"] is True and packet["config_id"] == 0  # 未握手 config 前
         assert statuses == ["RECHECK", "CHECK_FAIL", "CHECK_PASS"]
         assert packets[0]["trigger_ref"] == "ref-0"
+        capture_url = f"{base}/v1/captures/{packets[0]['session_id']}/1.png"
+        with urllib.request.urlopen(capture_url, timeout=2) as response:
+            assert response.headers["Content-Type"] == "image/png"
+            assert response.read() == raw_a
+        for path in ("/v1/captures/old-session/1.png", f"/v1/captures/{packets[0]['session_id']}/999.png"):
+            try:
+                urllib.request.urlopen(base + path, timeout=2)
+                raise AssertionError("missing or cross-session capture accepted")
+            except urllib.error.HTTPError as error:
+                assert error.code == 404
         assert all("trigger_ref" not in p for p in packets[1:])
         assert packets[0]["decision"]["actual"] == {"bolt": 1, "nut": 1, "washer": 0}  # 超限映射
         assert packets[0]["decision"]["verdict"] == "RECHECK"

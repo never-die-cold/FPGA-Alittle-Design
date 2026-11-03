@@ -1,0 +1,2 @@
+REPRODUCED: 0x800000ef decoded as jal x1, 1048576 ; signed J immediate must be -1048576
+REPRODUCED: injected wrong expected word prints HAS MISMATCH but returns normally

@@ -1,0 +1,302 @@
+{
+  "files": 3499,
+  "extensions": {
+    "<none>": 20,
+    ".md": 399,
+    ".py": 225,
+    ".bat": 2,
+    ".tcl": 70,
+    ".xdc": 30,
+    ".v": 152,
+    ".sh": 43,
+    ".rpt": 266,
+    ".txt": 668,
+    ".json": 236,
+    ".csv": 4,
+    ".hex": 143,
+    ".npy": 34,
+    ".sha256": 25,
+    ".png": 287,
+    ".bin": 151,
+    ".xsa": 2,
+    ".xml": 20,
+    ".dat": 6,
+    ".docx": 5,
+    ".pdf": 6,
+    ".gtcl": 2,
+    ".vhd": 52,
+    ".data": 6,
+    ".xci": 4,
+    ".ps1": 19,
+    ".pt": 4,
+    ".log": 475,
+    ".diff": 1,
+    ".output": 68,
+    ".jsonl": 6,
+    ".hwh": 1,
+    ".patch": 3,
+    ".exit": 10,
+    ".pid": 1,
+    ".jpg": 4,
+    ".html": 2,
+    ".tex": 10,
+    ".include": 3,
+    ".ld": 3,
+    ".h": 5,
+    ".c": 14,
+    ".s": 3,
+    ".dis": 1,
+    ".service": 2,
+    ".mjs": 3,
+    ".md5": 1,
+    ".ttf": 2
+  },
+  "python_parsed": 225,
+  "python_syntax_errors": [],
+  "json_parse_errors": [],
+  "text_encoding_errors": [],
+  "largest_code_files": [
+    [
+      1213,
+      "src/web_client/index.html"
+    ],
+    [
+      808,
+      "docs/tech-report/build_tech_report.py"
+    ],
+    [
+      707,
+      "src/pynq_host/cop_driver.py"
+    ],
+    [
+      542,
+      "src/pynq_host/cop_mmio_sim.py"
+    ],
+    [
+      540,
+      "docs/poster/poster.html"
+    ],
+    [
+      518,
+      "docs/img/make_project_diagrams.py"
+    ],
+    [
+      476,
+      "docs/tech-report/make_tech_report_figures.py"
+    ],
+    [
+      398,
+      "sim/vision/test_cop_driver.py"
+    ],
+    [
+      392,
+      "tools/cop_payload_loader.py"
+    ],
+    [
+      319,
+      "src/pynq_host/vision_live_service.py"
+    ],
+    [
+      309,
+      "sim/vision/test_cop_mmio.py"
+    ],
+    [
+      292,
+      "src/pynq_host/rounds.py"
+    ],
+    [
+      271,
+      "src/pynq_host/cop_engine.py"
+    ],
+    [
+      262,
+      "build/build_pynq_cop_gate.tcl"
+    ],
+    [
+      261,
+      "src/vision/scaler.v"
+    ],
+    [
+      257,
+      "sim/scripts/check_repo_hygiene.py"
+    ],
+    [
+      255,
+      "sim/coprocessor/tb_cnn_sequencer.v"
+    ],
+    [
+      248,
+      "sim/vision/test_c01_ddr_onboard.py"
+    ],
+    [
+      248,
+      "sim/scripts/export_trained_payload.py"
+    ],
+    [
+      241,
+      "sim/vision/test_c01_backend.py"
+    ],
+    [
+      239,
+      "sim/riscv/tb_core_coremark.v"
+    ],
+    [
+      229,
+      "sim/vision/tb_top.v"
+    ],
+    [
+      227,
+      "src/coprocessor/conv_engine.v"
+    ],
+    [
+      222,
+      "src/riscv/core_top.v"
+    ],
+    [
+      213,
+      "sim/vision/localization_data.py"
+    ]
+  ],
+  "branch_heavy_functions": [
+    [
+      29,
+      51,
+      "src/pynq_host/vision_protocol.py",
+      97,
+      "validate_packet"
+    ],
+    [
+      27,
+      135,
+      "src/pynq_host/cop_driver.py",
+      573,
+      "run"
+    ],
+    [
+      26,
+      100,
+      "src/pynq_host/cop_mmio_sim.py",
+      372,
+      "_run_job"
+    ],
+    [
+      26,
+      83,
+      "src/pynq_host/c01_capture.py",
+      81,
+      "capture"
+    ],
+    [
+      26,
+      66,
+      "src/pynq_host/dataset_manifest.py",
+      87,
+      "load_manifest"
+    ],
+    [
+      21,
+      44,
+      "tools/check_roi_dataset.py",
+      30,
+      "audit"
+    ],
+    [
+      19,
+      65,
+      "src/pynq_host/c01_park_capture.py",
+      97,
+      "capture"
+    ],
+    [
+      18,
+      75,
+      "src/pynq_host/vision_live_service.py",
+      192,
+      "make_server"
+    ],
+    [
+      17,
+      44,
+      "src/pynq_host/inspection_rules.py",
+      15,
+      "judge"
+    ],
+    [
+      17,
+      29,
+      "src/pynq_host/round_artifacts.py",
+      79,
+      "_verify_cop_trace"
+    ],
+    [
+      16,
+      35,
+      "tools/summarize_board_run.py",
+      11,
+      "collect"
+    ],
+    [
+      15,
+      108,
+      "src/pynq_host/cop_engine.py",
+      130,
+      "_fields"
+    ],
+    [
+      15,
+      42,
+      "tools/summarize_board_run.py",
+      46,
+      "summarize"
+    ],
+    [
+      15,
+      33,
+      "src/coprocessor/int8_tensor_reference.py",
+      53,
+      "conv2d_accumulate"
+    ],
+    [
+      15,
+      30,
+      "src/pynq_host/dataset_manifest.py",
+      23,
+      "validate_row"
+    ],
+    [
+      14,
+      39,
+      "src/pynq_host/cop_engine.py",
+      56,
+      "__init__"
+    ],
+    [
+      14,
+      30,
+      "src/pynq_host/cop_mmio_sim.py",
+      158,
+      "_read_reg"
+    ],
+    [
+      14,
+      24,
+      "src/pynq_host/cop_driver.py",
+      427,
+      "_validate_job"
+    ],
+    [
+      14,
+      16,
+      "src/pynq_host/vision_protocol.py",
+      79,
+      "_validate_decision"
+    ],
+    [
+      13,
+      60,
+      "src/pynq_host/reference_package.py",
+      14,
+      "export_reference"
+    ]
+  ]
+}

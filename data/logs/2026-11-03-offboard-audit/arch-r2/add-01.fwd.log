@@ -1,0 +1,21 @@
+== [1/4] 编译 add-01（套件 6f7f47b）==
+mingw32-make: Entering directory 'E:/Projects/FPGA-Alittle-Design/sim/arch_test/suite'
+
+============================ VARIABLE INFO ==================================
+ROOTDIR: /e/Projects/FPGA-Alittle-Design/sim/arch_test/suite [origin: file]
+WORK: E:/Projects/FPGA-Alittle-Design/sim/build/arch_test [origin: command line]
+TARGETDIR: E:/Projects/FPGA-Alittle-Design/sim/arch_test/target [origin: command line]
+RISCV_TARGET: pynq_z2_v0 [origin: command line]
+XLEN: 32 [origin: command line]
+RISCV_DEVICE: I [origin: command line]
+=============================================================================
+
+C:/mingw64/bin/mingw32-make -j1 \
+	RISCV_TARGET=pynq_z2_v0 \
+	RISCV_DEVICE=I \
+	compile -C /e/Projects/FPGA-Alittle-Design/sim/arch_test/suite/riscv-test-suite/rv32i_m/I
+mingw32-make[1]: Entering directory 'E:/Projects/FPGA-Alittle-Design/sim/arch_test/suite'
+mingw32-make[1]: *** /e/Projects/FPGA-Alittle-Design/sim/arch_test/suite/riscv-test-suite/rv32i_m/I: No such file or directory.  Stop.
+mingw32-make[1]: Leaving directory 'E:/Projects/FPGA-Alittle-Design/sim/arch_test/suite'
+mingw32-make: *** [Makefile:78: compile] Error 2
+mingw32-make: Leaving directory 'E:/Projects/FPGA-Alittle-Design/sim/arch_test/suite'
