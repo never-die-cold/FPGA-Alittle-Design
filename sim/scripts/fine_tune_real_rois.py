@@ -25,12 +25,16 @@ def main():
     parser.add_argument("--camera-augment", action="store_true")
     parser.add_argument("--select-training-fit", action="store_true",
                         help="development checkpoint selection by training fit, not validation accuracy")
+    parser.add_argument("--allow-assistant-reviewed", action="store_true",
+                        help="explicit development-only opt-in; preserve non-human annotation provenance")
+    parser.add_argument("--hard-mining", action="store_true", help="extra loss on currently misclassified clean training ROIs")
     args = parser.parse_args()
     output = args.output.resolve()
     if ROOT not in output.parents or output.exists() or args.epochs < 1 or args.lr <= 0:
         parser.error("use a new output directory inside the repository and positive training options")
     annotations = json.loads(args.annotations.read_text(encoding="utf-8"))
-    if annotations["annotation_status"] != "HUMAN_CONFIRMED":
+    if (annotations["annotation_status"] != "HUMAN_CONFIRMED" and not
+            (args.allow_assistant_reviewed and annotations["annotation_status"] == "MIXED_ASSISTANT_REVIEWED")):
         parser.error("per-object labels require human confirmation")
     random.seed(args.seed)
     np.random.seed(args.seed)
@@ -90,6 +94,10 @@ def main():
         batch_labels = torch.cat((y, y))
         logits = model(batch)
         loss = loss_fn(logits, batch_labels)
+        if args.hard_mining:
+            wrong = logits[:len(y)].detach().argmax(1) != y
+            if wrong.any():
+                loss = loss + loss_fn(logits[:len(y)][wrong], y[wrong])
         if args.min_logit_margin > 0:
             correct = logits.gather(1, batch_labels[:, None]).squeeze(1)
             alternatives = logits.masked_fill(torch.nn.functional.one_hot(batch_labels, len(meta["classes"])).bool(), -1e9).max(1).values
@@ -111,6 +119,8 @@ def main():
     if best_state is not None:
         model.load_state_dict(best_state)
     report = {"kind": "DEVELOPMENT_ADAPTATION", "formal_validation": False,
+              "annotation_status": annotations["annotation_status"],
+              "hard_mining": args.hard_mining,
               "seed": args.seed, "epochs": args.epochs, "lr": args.lr, "bn_statistics": "FROZEN",
               "class_counts": class_counts.tolist(), "balanced_classes": args.balance_classes,
               "min_logit_margin": args.min_logit_margin,

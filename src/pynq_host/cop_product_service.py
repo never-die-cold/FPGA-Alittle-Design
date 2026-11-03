@@ -29,7 +29,7 @@ def main():
     parser.add_argument("--min-score", type=float, default=0.8)
     parser.add_argument("--color-threshold", type=float, default=20)
     parser.add_argument("--min-area-ratio", type=float, default=0.00008)
-    parser.add_argument("--background-mode", choices=("corners", "local"), default="local")
+    parser.add_argument("--background-mode", choices=("corners", "local", "local-fast"), default="local")
     parser.add_argument("--host", default="0.0.0.0")
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--min-free-mib", type=int, default=256)
@@ -91,16 +91,19 @@ def main():
                 raise RuntimeError("video configuration did not reach a frame boundary") from exc
             return applied
 
-        def capture(self, round_dir):
+        def capture_round(self, round_dir):
             owner = ParkFrameCapture(vdma, status, allocate, identity, timeout=5)
             try:
                 frame = owner.capture()
                 path = Path(round_dir) / "capture.png"
                 self._save_png(path, frame)
                 self.seq += 1
-                return path
+                return path, frame
             finally:
                 (Path(round_dir) / "capture-dma.json").write_text(json.dumps(owner.evidence, indent=2))
+
+        def capture(self, round_dir):
+            return self.capture_round(round_dir)[0]
 
     captures = Captures(None)
     args.root.mkdir(parents=True, exist_ok=True)

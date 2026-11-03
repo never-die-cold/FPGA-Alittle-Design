@@ -133,11 +133,16 @@ class State:
                 fields = self.engine.inspect_frame(self.captures.capture_frame())
             else:
                 round_dir.mkdir(exist_ok=False)
-                capture_path = self.captures.capture(round_dir)
+                direct = callable(getattr(self.captures, "capture_round", None)) and callable(getattr(self.engine, "inspect_round", None))
+                if direct:
+                    capture_path, frame = self.captures.capture_round(round_dir)
+                else:
+                    capture_path = self.captures.capture(round_dir)
                 # 快照哈希侧车（C04 §2.3）：供读取方核对 capture 字节未被替换/篡改
                 atomic_write(round_dir / "capture.sha256",
                              (hashlib.sha256(capture_path.read_bytes()).hexdigest() + "\n").encode())
-                fields = self.engine(capture_path, round_dir, f"chk{check:06d}")
+                fields = (self.engine.inspect_round(frame, round_dir, f"chk{check:06d}") if direct
+                          else self.engine(capture_path, round_dir, f"chk{check:06d}"))
             packet = validate_packet({
                 "version": VERSION, "mode": "LIVE", "session_id": self.session_id,
                 "frame_id": self.captures.seq, "config_id": self.config_id,

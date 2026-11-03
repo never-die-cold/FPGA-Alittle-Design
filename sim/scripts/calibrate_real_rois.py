@@ -16,11 +16,13 @@ def main():
     parser.add_argument("--weights", type=Path, required=True)
     parser.add_argument("--annotations", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--allow-assistant-reviewed", action="store_true")
     args = parser.parse_args()
     if args.output.exists() or ROOT not in args.output.resolve().parents:
         parser.error("use a new output file inside the repository")
     annotations = json.loads(args.annotations.read_text(encoding="utf-8"))
-    if annotations["annotation_status"] != "HUMAN_CONFIRMED" or annotations["split"] != "TRAIN_DEVELOPMENT_ONLY":
+    reviewed = (args.allow_assistant_reviewed and annotations["annotation_status"] == "MIXED_ASSISTANT_REVIEWED")
+    if (annotations["annotation_status"] != "HUMAN_CONFIRMED" and not reviewed) or annotations["split"] != "TRAIN_DEVELOPMENT_ONLY":
         parser.error("calibration requires confirmed training-only ROIs")
     pixels = []
     for frame in annotations["frames"]:

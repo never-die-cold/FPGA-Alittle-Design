@@ -1,0 +1,58 @@
+\Needspace{10\baselineskip}
+\section{附录}
+\label{sec:appendix}
+
+\subsection{复现入口}
+复现入口见表~\ref{tab:repro}。
+\begin{table}[H]\centering\small
+\caption{仓库内复现入口}\label{tab:repro}
+\begin{tabularx}{\linewidth}{@{}P{68mm}Y@{}}\toprule
+入口 & 覆盖范围\\\midrule
+\code{bash sim/scripts/run_iverilog.sh all} & RTL 全量回归（核、视觉、协处理器 tb）\\
+\code{python sim/scripts/check_repo_hygiene.py} & 仓库卫生门禁（预算、断链、生成物）\\
+\code{data/logs/<日期-主题>/README.md} & 实验证据目录（命令、结果、产物、边界）\\
+\code{data/evidence/<日期-主题>/README.md} & 权重、位流等大件证据与复现命令\\
+\code{report/llm_log/} & 大模型协作记录与理解门槛落盘\\
+\code{docs/runbooks/} & 板端交接与复现手册\\\bottomrule
+\end{tabularx}\end{table}
+
+\subsection{术语表}
+常用术语见表~\ref{tab:terms}。
+\begin{table}[H]\centering\small
+\caption{术语表}\label{tab:terms}
+\begin{tabularx}{\linewidth}{@{}P{30mm}Y@{}}\toprule
+术语 & 含义\\\midrule
+PL / PS & FPGA 可编程逻辑 / Zynq 处理系统\\
+OOC & Out-of-Context 综合，单元级时序与资源口径\\
+WNS / WHS & 建立时间 / 保持时间最差裕量\\
+CPI & 每指令周期数\\
+BHT & 分支历史表（分支预测）\\
+arch-test & riscv-arch-test 官方架构测试（签名比对）\\
+黄金参考 & 独立于被测实现的参考输出，用于逐位对拍\\
+三态口径 & 离板仿真 / 综合（门禁）/ 板上（实测）三级标注\\
+PTQ & 训练后量化\\
+ROI & 感兴趣区域（目标裁剪框）\\
+MMIO / AXI4-Lite & 内存映射寄存器 / 轻量总线接口\\
+DMA & 直接内存访问\\
+CDC & 跨时钟域\\
+PROVISIONAL & 临时口径数据，未达正式发布条件\\
+UNVERIFIED & 已构建但未获板级实测证据\\
+park 驱动 & 借助暖机窗口完成 DDR 帧复制的取帧方案\\
+轮次协议 v1.2 & 视频、结果与检查轮次的关联契约（16 目标上限）\\
+C01--C04 & DDR 帧所有权 / 整数契约 / 集成契约 / 应用语义四份冻结契约\\
+理解门槛 & AI 生成代码入库前的讲解与测试制度\\\bottomrule
+\end{tabularx}\end{table}
+
+\subsection{素材清单}
+图片素材与状态见表~\ref{tab:materials}。
+\begin{table}[H]\centering\small
+\caption{图片素材与状态}\label{tab:materials}
+\begin{tabularx}{\linewidth}{@{}P{34mm}Y@{}}\toprule
+素材 & 状态\\\midrule
+\code{fig_system.png}、\code{fig_video.png}、\code{fig_core.png}、\code{fig_cop.png}、\code{fig_sw.png}、\code{fig_flow.png} & 已入库（\code{docs/tech-report/figures/}）\\
+\code{photo_plate.jpg} 等实物照片 & 已入库\\
+网页端实机运行截图 & 待补充（桌面程序已退役，需新形态截图）\\
+团队与成员信息 & 待补充\\
+\bottomrule
+\end{tabularx}\end{table}
+\FloatBarrier

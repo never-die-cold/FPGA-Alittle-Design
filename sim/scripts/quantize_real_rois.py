@@ -25,12 +25,14 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--model-id", type=lambda v: int(v, 0), default=0x4A303252)
     parser.add_argument("--activation-headroom", type=float, default=1.0)
+    parser.add_argument("--allow-assistant-reviewed", action="store_true")
     args = parser.parse_args()
     output = args.output.resolve()
     if ROOT not in output.parents or output.exists() or args.activation_headroom <= 0:
         parser.error("output must be new and inside the repository")
     annotations = json.loads(args.annotations.read_text(encoding="utf-8"))
-    if annotations["annotation_status"] != "HUMAN_CONFIRMED":
+    if (annotations["annotation_status"] != "HUMAN_CONFIRMED" and not
+            (args.allow_assistant_reviewed and annotations["annotation_status"] == "MIXED_ASSISTANT_REVIEWED")):
         parser.error("human-confirmed per-object labels required")
     pixels, samples = [], []
     for frame in annotations["frames"]:
@@ -77,6 +79,7 @@ def main():
     (reference / "input.hex").write_text("".join(f"{v:02x}\n" for v in quantized_input(pixels[0]).tobytes()), encoding="ascii")
     (reference / "result.json").write_text(json.dumps(classify_logits(rows[0]["int8_logits"], 5), indent=2)+"\n")
     report = {"kind": "DEVELOPMENT_PTQ", "formal_validation": False,
+              "annotation_status": annotations["annotation_status"],
               "calibration_count": len(pixels), "calibration_only_training_rois": True,
               "weights_sha256": hashlib.sha256(args.weights.read_bytes()).hexdigest(),
               "annotations_sha256": hashlib.sha256(args.annotations.read_bytes()).hexdigest(),
