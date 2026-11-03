@@ -410,7 +410,7 @@ abstract = (
     "核通过 44/44 组 arch-test 与 CoreMark 四档消融，CPI 由 1.886 降至 1.606，OOC 86.806 MHz；"
     "视觉流水线 22 个 testbench 双仿真器同判据通过并上板 720p 直通；"
     "协处理器通过全部离板门禁，板上 zero/pattern/roi_001/frame 四例与黄金输出一致；"
-    "软件通过 172 条回归与 4 轮异常矩阵，网页端已接入采集卡回传完成轮次联调。"
+    "软件通过 172 条回归与 4 轮异常矩阵；网页端经本机服务接入采集卡回传与板端轮次，完成工单应用、手动检查与 CSV 导出联调。"
     "多目标修复包尚未上板，正式模型与整机验收未完成——本文严格区分四级证据，不以前级替代板上结论。"
 )
 add_h1(doc, "摘要", page_break=False)
@@ -546,14 +546,16 @@ add_table(doc, "表 2-1　硬件组成", ["模块", "型号 / 规格", "作用"]
     ["PC", "Windows 10/11", "网页端、记录与导出"],
     ["时钟", "FCLK0 100 MHz / FCLK1 40 MHz / pclk 74.25 MHz", "AXI / 协处理器 / 像素"],
 ], [3.2, 6.6, 5.2], font_size=10.5, align_center_cols=[0])
-add_figure(doc, "photo_board_pi.jpg", "图 2-2　硬件实物：PYNQ-Z2 与提供 HDMI 视频源的树莓派摄像头模组（同装于亚克力支架）", width_cm=7.5)
+add_figure(doc, "photo_board_pi2.jpg", "图 2-2　硬件实物：PYNQ-Z2 与提供 HDMI 视频源的树莓派摄像头模组（同装于亚克力支架）", width_cm=9.5)
 
 add_h3(doc, "2.2.2 机械设计介绍")
 p222 = (
-    "本项目不设计机械结构。首版采用现成相机支架、板卡铜柱和桌面布置，保证相机光轴垂直桌面、视场覆盖 A4 幅面。"
-    "机械自由度由支架的俯仰和高度调节提供，不涉及定制加工件。实物布置照片见第三部分图 3-1。"
+    "本项目不设计机械结构。首版采用现成亚克力支架、板卡铜柱和桌面布置：摄像头模组固定在工作区正上方，"
+    "光轴垂直桌面、视场覆盖 A4 幅面（图 2-3）。机械自由度由支架的俯仰与高度调节提供，不涉及定制加工件；"
+    "视频源与板卡同装于支架，缩短 HDMI 走线。整机布置照片见第三部分图 3-1。"
 )
 add_body(doc, p222)
+add_figure(doc, "photo_camera.jpg", "图 2-3　摄像头安装：树莓派摄像头模组（CSI 排线连接）固定于工作区正上方，向下拍摄台面", width_cm=11.5)
 
 add_h3(doc, "2.2.3 电路各模块介绍")
 p223 = (
@@ -568,9 +570,9 @@ add_table(doc, "表 2-2　板级电路模块", ["模块", "实现", "关键信�
     ["PS 外设", "DDR3、SD、以太网、USB", "AXI HP/GP、MIO"],
     ["时钟与复位", "PS FCLK0/1、MMCM、reset_sync", "100 MHz、40 MHz、74.25 MHz、异步置位同步释放"],
 ], [3.2, 6.4, 5.4], font_size=10.5, align_center_cols=[0])
-add_figure(doc, "fig_video.png", "图 2-3　视觉流水线三路径：显示直通、灰度分析与 224×224 快照")
+add_figure(doc, "fig_video.png", "图 2-4　视觉流水线三路径：显示直通、灰度分析与 224×224 快照")
 p223b = (
-    "视频流水线如图 2-3。in_align 把 dvi2rgb 的原始 vs/hs/de 归一化为帧首单拍、行尾单拍和像素有效；"
+    "视频流水线如图 2-4。in_align 把 dvi2rgb 的原始 vs/hs/de 归一化为帧首单拍、行尾单拍和像素有效；"
     "显示路径把原始 RGB 恒延迟 1 拍送到 rgb2dvi，分析开关、缩放和消费反压都不影响上屏；"
     "分析路径依次为 rgb2gray、gaussian_3x3、sobel 和 OSD，输出仅用于诊断；"
     "快照路径在 sobel 之后分叉，经 16.16 双线性 scaler 缩到 224×224，写入双 bank cop_buf，整帧原子回放给协处理器。"
@@ -578,20 +580,20 @@ p223b = (
 )
 add_body(doc, p223b)
 p223c = (
-    "CNN 协处理器如图 2-4。PS 经 AXI-Lite 写配置寄存器和邮箱，经 AXI DMA 把 36,032 B 模型载荷和 4,096 B ROI 送入 PL；"
+    "CNN 协处理器如图 2-5。PS 经 AXI-Lite 写配置寄存器和邮箱，经 AXI DMA 把 36,032 B 模型载荷和 4,096 B ROI 送入 PL；"
     "协处理器域内，驻留固件等待 CFG_VALID、MODEL_VALID、DMA 完成和 ROI 数量匹配，随后置 START；"
     "128 个 INT8 MAC 按 8×16 阵列执行 Conv、GAP 和 FC，结果写入 16×16 B 结果窗口；PS 通过 AXI-Lite 读回 META、LOGITS、SCORE 和 RESULT_SEQ。"
     "模型存储采用双 bank 影子结构，新载荷写入非活动 bank，校验通过后原子切换。"
 )
 add_body(doc, p223c)
-add_figure(doc, "fig_cop.png", "图 2-4　CNN 协处理器数据通路、寄存器与 DMA")
+add_figure(doc, "fig_cop.png", "图 2-5　CNN 协处理器数据通路、寄存器与 DMA")
 p223d = (
-    "RISC-V 核如图 2-5。三级流水为 IF、ID+EX、MEM+WB；三路转发优先级为 EX>MEM>WB；load-use 固定停 1 拍；"
+    "RISC-V 核如图 2-6。三级流水为 IF、ID+EX、MEM+WB；三路转发优先级为 EX>MEM>WB；load-use 固定停 1 拍；"
     "taken 分支冲刷 1 个年轻槽；64 项 BHT 支持关闭、1-bit 和 2-bit 三档；乘法器为 Radix-4，16 次迭代，除法为 Radix-2，32 次迭代。"
     "核通过 if_stage 和 mem_wb_stage 两个边界寄存器隔离组合逻辑，所有副作用以 valid 为前提。"
 )
 add_body(doc, p223d)
-add_figure(doc, "fig_core.png", "图 2-5　RISC-V 三级流水、三路转发与 BHT")
+add_figure(doc, "fig_core.png", "图 2-6　RISC-V 三级流水、三路转发与 BHT")
 p223e = (
     "PS 侧地址分配为：协处理器 AXI-Lite 0x4000_0000–0x4000_0FFF，DMA 0x4001_0000，dma_control 0x4002_0000；"
     "核内局部 MMIO 窗口 0x8001_0000。关键寄存器与地址分配见 2.3.2 节。"
@@ -603,7 +605,7 @@ add_h3(doc, "2.3.1 软件整体介绍")
 p231 = (
     "软件分三层：网页端、PS 服务、CopDriver 与固件。网页端与服务之间只使用 HTTP/JSON；服务与硬件之间只使用 32 位 MMIO 和 DMA（实板 DMA 平面待接入）。"
     "CopDriver 对上层暴露同一组 read32/write32、DMA 和作业接口，底层可切换 PynqMmio（实板）或 CopSim（仿真），"
-    "因此从模拟迁移到实板不需要重写服务和网页端。图 2-6 给出分层与一次检查的作业时序。"
+    "因此从模拟迁移到实板不需要重写服务和网页端。图 2-7 给出分层与一次检查的作业时序。"
 )
 add_body(doc, p231)
 p231b = (
@@ -617,19 +619,26 @@ add_table(doc, "表 2-3　服务端接口", ["方法", "路径", "作用"], [
     ["POST", "/v1/check", "触发检查，可带 ≤64 字符的 trigger_ref"],
     ["POST", "/v1/config", "应用控制配置，返回 applied_config_id"],
 ], [2.0, 4.4, 8.6], font_size=10.5, align_center_cols=[0])
-add_figure(doc, "fig_sw.png", "图 2-6　软件分层与一次检查的作业时序")
+add_figure(doc, "fig_sw.png", "图 2-7　软件分层与一次检查的作业时序")
 
 add_h3(doc, "2.3.2 软件各模块介绍")
 p232a = (
-    "（1）网页端。HTML 单文件实现（HUD v4「应用外壳」），零依赖、无构建步骤，支持亮暗主题与响应式布局。"
-    "顶栏显示 LIVE/MOCK、PROTOTYPE、判定摘要、分辨率、帧率、会话和时钟；左侧提供 USB 采集卡选择与断开、自动轮询与年龄窗参数；"
-    "右侧识别范围表按类别勾选并显示计数；RUN INSPECTION 按钮有 IDLE、QUEUED/WAITING、RUNNING 三态；"
-    "下方为检测目标卡片、系统日志与本页批次记录（CSV EXPORT，UTF-8-BOM）。"
+    "（1）网页端。HTML/JavaScript 界面，无前端构建步骤，经本机 Python 服务访问（ES module 与相机权限需要 HTTP 环境），"
+    "服务把状态、配置与检查请求转发到板端，页面不直接访问板卡。顶部状态条显示分辨率、实测帧率与时钟；"
+    "左栏为 SYSTEM（服务连接状态、自动轮询开关、轮询间隔与年龄窗参数）、检查工单（三类期望数量，应用后配置号递增并在日志记录）、"
+    "USB 采集卡（设备选择与连接/断开）和数据源三选一；中栏为 16:9 视频视口与系统日志（BOOT/LINK/CFG/RUN 分类，可按标签过滤）；"
+    "右栏为识别范围表（ROUND、类别勾选与计数、FRESHNESS 条、RUN INSPECTION 三态按钮）、检测对象列表（ROI 缩略图、原始 T 编号、类别、分数与 XYWH）"
+    "和 SERVICE（endpoint、session、config、协议版本）。"
     "判定规则为：无 reason 且 actual==expected 时 CHECK_PASS；数量不一致为 CHECK_FAIL；出现 target_limit、低分、未知类别或触碰边界时 RECHECK。"
-    "协议能力 16 个目标，业务策略 10 个；超过策略上限显示“未完整计数”，计数栏显示“--”，不把 0 当作实测。"
-    "只有手动触发且有效的轮次写入记录；异常写入异常日志与截图。失败时立即撤下旧 PASS，显示 NO VALID RESULT；"
-    "连续 3 次 HTTP 失败显示 SERVICE OFFLINE 并重新握手。数据源三形态互斥：LIVE（采集卡+板端服务）、LOCAL DEMO（合成数据联调）、FILE REPLAY（只读回放）；"
-    "10-30 已在 LIVE 形态接入 USB 采集卡回传与板端服务并完成轮次联调。"
+    "判定与数量差额保留在系统日志与 CSV 中，不在视频画面上叠加横幅。"
+    "协议能力 16 个目标，业务策略 10 个；超过策略上限时计数栏显示“--”，不把 0 当作实测。"
+    "数据源三形态互斥：LIVE 经本机服务使用采集卡视频与板端轮次；LOCAL DEMO 为合成场景，始终标注 MOCK ONLY，仅用于联调；"
+    "FILE REPLAY 只读取板端 packet.json，不访问相机或网络。"
+    "结果按页面接收时刻计龄，有效期 4.5 s；超龄、断联、配置不符或非法报文立即撤框并清空计数。"
+    "自动检查默认暂停，开启后每次只允许一个请求在途，失败即暂停；手动有效轮次按会话与检查编号只记一条，自动轮不增加批次。"
+    "CSV 从页面内存导出，UTF-8 BOM 并带会话号，刷新页面即清空本页记录，板端原始轮次另存于服务记录目录。"
+    "UVC 未连接时，完成检查会显示该轮板端原帧并标为 SNAPSHOT；它是静态图，不能当作连续视频。"
+    "类别勾选只改变本地显示，保留板端原始编号不重排。当前按单页使用：同一会话的第二个客户端会争用配置并导致连接中断，已知限制。"
 )
 add_body(doc, p232a)
 add_body_rich(doc, [
@@ -640,7 +649,7 @@ add_body_rich(doc, [
     ("持久化采用 .pending 写入后 rename，先写 capture.png、capture.sha256、packet.json、cop_trace.json 和 ROI，再调用 CONSUME；"
      "任何一步失败都不消费，保留粘滞证据。round_artifacts.py 校验报文绑定、截图字节、像素哈希、判定一致性和 ROI 数量/哈希。", ""),
     ("10-27 新增 cop_product_service.py：C01 原帧捕获 + COP_HW 硬件引擎 + 前端消费，工单 2/4/4；真机已生成检查记录，"
-     "10-30 起手动触发与 CSV 导出在网页端 LIVE 形态下联调通过（见 3.2.3 节）。", ""),
+     "10-30 手动触发与 CSV 导出在网页端 LIVE 形态联调通过，11-03 补充页面工单应用（见 3.2.3 节）。", ""),
 ])
 p232c = (
     "（3）CopDriver 与协议。作业顺序为：确认 BUSY=0 且 UNCONSUMED=0；写影子配置；CFG_SEQ 加 1 并写 CFG_COMMIT；"
@@ -692,14 +701,15 @@ add_h1(doc, "第三部分　完成情况及性能参数")
 add_h2(doc, "3.1 整体介绍")
 p31 = (
     "实物由 PYNQ-Z2、树莓派 HDMI 相机、USB 采集卡和 Windows PC 组成。相机与板卡同装于亚克力支架，相机 HDMI 送入板卡，"
-    "板卡 HDMI OUT 送入采集卡，采集卡 USB 接入 PC；板卡以太网与 PC 直连，用于结果报文。整机工位见图 3-1。"
+    "板卡 HDMI OUT 送入采集卡，采集卡 USB 接入 PC；板卡以太网与 PC 直连，用于结果报文。整机工位见图 3-1（实验室布置）。"
 )
 add_body(doc, p31)
-add_figure(doc, "photo_workstation.jpg", "图 3-1　系统整机工位：亚克力支架上的 PYNQ-Z2 与树莓派相机链路、网页端演示笔记本", width_cm=7.5)
+add_figure(doc, "photo_workstation2.jpg", "图 3-1　系统整机工位：亚克力支架上的 PYNQ-Z2 与树莓派相机链路、网页端演示笔记本", width_cm=13.2)
 p31b = (
     "板上已完成：直连 40.000000 MHz 包 20/20 首读 STATUS=0x1；MMCM 包输入 142.857143 MHz、协处理器域 40 MHz、10,000 次寄存器读取无错误；"
     "硬件 CNN zero/pattern/roi_001/frame 四例与黄金输出一致（PROVISIONAL）；共存位流 b2690b0a 同时输出 HDMI、抓取 BGR 原帧并运行硬件 CNN。"
-    "10-30 网页端接入 USB 采集卡回传与板端服务，完成手动轮次触发、页面批次记录与 CSV 导出的联调（工单 3/3/3，判定 RECHECK）。"
+    "网页端自 10-30 起接入 USB 采集卡回传与板端服务；11-03 实验室复测完成页面工单应用（配置号递增）、手动轮次、批次记录与 CSV 导出，"
+    "本轮检出 7 个目标、判定 RECHECK。连续多轮稳定性尚未验收：10-30 记录同一会话第 5 轮出现任务错误、随后 DMA 超时，根因未定位。"
     "多目标结果槽错位已在 RTL 修复并通过定向仿真，修复包未上板；正式 INT8 模型与识别精度未验收。"
 )
 add_body(doc, p31b)
@@ -707,7 +717,7 @@ add_table(doc, "表 3-1　完成度矩阵（√ 完成；△ 部分完成；— 
     ["RISC-V 核", "√ 38 用例 + 44/44 arch + CoreMark", "√ 86.806 MHz", "√ 40 MHz，LED 1101", "—"],
     ["视觉链路", "√ 22 tb，Icarus/XSim", "√ WNS +0.330 ns", "√ 720p 直通 108 帧", "—"],
     ["CNN 协处理器", "√ 6/6 门禁；2×73,795 元素；多目标修复 tb", "√ 40 MHz WNS +2.498；共存 +1.184", "√ 单目标四例；△ 多目标修复未上板", "√ COP_HW / 前端记录"],
-    ["前端 / 服务", "√ 全量回归 172；17+20 组", "—", "√ 真机 UVC/HTTP 记录；√ 手动/CSV LIVE 联调（10-30）", "√ 模拟闭环"],
+    ["前端 / 服务", "√ 全量回归 172；17+20 组", "—", "√ 真机 UVC/HTTP 记录；√ 工单/手动/CSV LIVE 联调（11-03）；△ 连续多轮稳定性", "√ 模拟闭环"],
 ], [3.0, 5.0, 3.4, 4.2, 2.4], font_size=9.0, align_center_cols=[0])
 
 add_h2(doc, "3.2 工程成果")
@@ -726,18 +736,18 @@ p322 = (
     "无自制 PCB 和原理图。板卡特写见图 3-2。"
 )
 add_body(doc, p322)
-add_figure(doc, "photo_board_closeup.jpg", "图 3-2　PYNQ-Z2 板卡特写：HDMI 输入/输出、千兆以太网、USB 与亚克力支架接线", width_cm=8.5)
+add_figure(doc, "photo_board_closeup2.jpg", "图 3-2　PYNQ-Z2 板卡特写：HDMI 输入/输出、千兆以太网、USB 与亚克力支架接线", width_cm=8.5)
 
 add_h3(doc, "3.2.3 软件成果")
 p323 = (
-    "软件成果包括网页端、PS 服务、CopDriver、固件和验证脚本。图 3-3 为网页端 LIVE 形态的实机界面（2026-10-30 联调）："
-    "画面来自 USB 采集卡回传，目标框、范围表计数与判定来自板端服务轮次；当前工单 3/3/3、实际 4/2/0，"
-    "判定 RECHECK（差额 +bolt×1 -nut×1 -washer×3，原因 low_score），低置信目标不进入通过结论。"
-    "界面同时保留 LOCAL DEMO 与 FILE REPLAY 两种离线形态用于联调与回放。"
+    "软件成果包括网页端、本机服务转发层、PS 服务、CopDriver、固件和验证脚本。图 3-3 为网页端 LIVE 形态的实验室实机界面（2026-11-03 复测）："
+    "画面来自 USB 采集卡 1280×720 回传，目标框、范围表计数与判定来自板端轮次；页面内填写并应用工单（螺栓/螺母/垫圈）后配置号递增，"
+    "本轮应用工单 2/3/2、配置号 6，检出 7 个目标、实际计数 4/1/2，判定 RECHECK——所有目标分数均低于阈值，低置信结果不进入通过结论。"
+    "自动轮询默认暂停，本片为手动触发一轮；界面同时保留 LOCAL DEMO 与 FILE REPLAY 两种离线形态用于联调与回放。"
     "一次检查会生成 session.json、capture.png、capture.sha256、packet.json、cop_trace.json、ROI 和记录截图；页面内可一键导出 CSV。"
 )
 add_body(doc, p323)
-add_figure(doc, "webui_live.png", "图 3-3　HTML 网页端 LIVE 界面：采集卡回传视频与板端轮次叠加（工单 3/3/3，判定 RECHECK）")
+add_figure(doc, "webui_live2.png", "图 3-3　HTML 网页端 LIVE 界面：采集卡回传视频与板端轮次叠加（应用工单 2/3/2，7 目标，判定 RECHECK）")
 
 add_h2(doc, "3.3 特性成果")
 p33a = (

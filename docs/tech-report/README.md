@@ -5,7 +5,7 @@
 > 上一版（2026-10-27 初版 V0.9）保留在 git 历史（tag/commit 可回溯）。
 
 本目录存放技术文档及其可复现生成脚本。
-当前稿：9 幅图、13 张表、16 篇参考文献；摘要 268 字。
+当前稿：10 幅图、13 张表、16 篇参考文献；摘要 286 字。
 
 ## 文件
 
@@ -47,23 +47,30 @@ py docs\tech-report\build_tech_report.py
 10. 3.3 增补公开口径横向对比（表 3-3）：Ibex 官方三档 CoreMark/MHz（0.904/2.47/3.13，新增文献 [16]）、
     PicoRV32 官方 Dhrystone 0.516 DMIPS/MHz（CPI 4.100，[11]）；「业界标准指标」表述改为引证
     EEMBC [3] 与体系结构教材 [15]；表 3-3 之后表格顺延为 3-4…3-7。
+11. **2026-11-03 终稿**：五张实验室实拍/截图替换全部旧图（板卡与树莓派、摄像头安装、整机工位、
+    板卡特写、网页端 LIVE），新增图 2-3 摄像头安装，图号级联为 2-1…2-7；前端章节按 10-30/11-03
+    实态重写（本机服务转发、工单应用、自动轮询默认暂停、判定只在日志与 CSV、4.5 s 计龄、
+    SNAPSHOT 语义、单页限制）；3.1/3.2.3/表 3-1 更新为 11-03 复测口径，并写明连续多轮稳定性未验收。
 
 ## 插图来源（repo-hygiene 规则 6：用途 / sha256 / 来源与重建）
 
 | 文件 | 用途 | sha256（前 16 位） |
 |:---|:---|:---|
-| `figures/photo_workstation.jpg` | 图 3-1 整机工位 | `3EC77E0DAFEA2CB4` |
-| `figures/photo_board_pi.jpg` | 图 2-2 板卡与树莓派相机 | `A3F613FC00B7C4E7` |
-| `figures/photo_board_closeup.jpg` | 图 3-2 板卡特写 | `9EC96A7024CF8FD4` |
-| `figures/webui_live.png` | 图 3-3 网页端 LIVE 界面 | `3B69E948E472940B` |
+| `figures/photo_board_pi2.jpg` | 图 2-2 板卡与树莓派（2026-11-03 实验室） | `DAC9D77B9B7A24B6` |
+| `figures/photo_camera.jpg` | 图 2-3 摄像头安装 | `1B873A479746D5B4` |
+| `figures/photo_workstation2.jpg` | 图 3-1 整机工位（实验室布置） | `25FEA0E7F1FD27B9` |
+| `figures/photo_board_closeup2.jpg` | 图 3-2 板卡特写 | `4AC92CEC0E84D271` |
+| `figures/webui_live2.png` | 图 3-3 网页端 LIVE 界面（11-03 复测） | `465B83A5BBEBA38D` |
 | `figures/header_banner.png` | 每页页眉竞赛横幅（芯辰大海 FPGA · 点亮未来） | `787DB8FA20DE80A8` |
 
-来源：owner 2026-10-31 拍摄（前三张）与 2026-10-30 23:56 前端联调截图（webui_live），
-原图存 `D:\Desktop\contests\2026fpga\技术文档插图\`（仓外）；入库件由 `_import_photos.py` 生成
-（最长边缩至 1600，JPEG q88 / PNG optimize），可用该脚本从原图一键重建。fig_* 示意图由
-`make_tech_report_figures.py` 生成；`fig_exe.png`、`photo_plate.jpg` 已不被文档引用，保留作历史素材。
-页眉横幅 `header_banner.png` 提取自官方参考模板《技术文档参考.docx》（owner 提供），
-显示尺寸 6.52 cm × 1.19 cm 居中，每页生效。
+早期入库件 `photo_board_pi.jpg`、`photo_workstation.jpg`、`photo_board_closeup.jpg`、`webui_live.png`
+已被上表替代，保留作历史素材（技术上文档不再引用）。
+
+来源：前三张照片与界面截图由 owner 于 2026-11-03 实验室拍摄/截屏（原图存仓外
+`D:\Desktop\contests\2026fpga\技术文档插图\`），入库件由 `_import_photos2.py` 生成
+（照片最长边 1600、JPEG q88；界面截图 2000 宽、PNG optimize），可用该脚本从原图一键重建。
+`header_banner.png` 提取自官方参考模板《技术文档参考.docx》，显示尺寸 6.52 cm × 1.19 cm 居中，每页生效。
+`figures/fig_*.png` 由 `make_tech_report_figures.py` 生成；`fig_exe.png`、`photo_plate.jpg` 等历史图不再被引用。
 
 ## 结构
 
