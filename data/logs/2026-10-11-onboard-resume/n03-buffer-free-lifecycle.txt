@@ -1,0 +1,200 @@
+HOST_STARTED_UTC=2026-10-11T08:15:03.6153528Z
+PORT=COM12 BAUD=115200 8N1 NO_FLOW
+COMMAND=grep --color=never -n -A 85 'class _FrameCache' /home/xilinx/pynq/lib/video/dma.py; sed -n '1,100p' /home/xilinx/pynq/buffer.py; ls -lt /var/crash 2>/dev/null | head -n 8; git -C /home/xilinx/pynq status --short; git -C /home/xilinx/pynq log -1 --oneline
+grep --color=never -n -A 85 'class _FrameCache' /home/xilinx/pynq/lib/video/dma.py; sed -n '1,100p' /home/xilinx/pynq/buffer.py; ls -lt /var/crash 2>/dev/null | head -n 8; git -C /home/xilinx/pynq status --short; git -C /home/xilinx/pynq log -1 --oneline; printf '\n__PYNQ_RC_9f8bcb5be9ff45d5bba89e74fe4883a0=%d\n' $?
+[?2004l13:class _FrameCache:
+14-    def __init__(self, mode, memory, capacity=5, cacheable=0):
+15-        self._cache = []
+16-        self._mode = mode
+17-        self._capacity = capacity
+18-        self._cacheable = cacheable
+19-        self._memory = memory
+20-
+21-    def getframe(self):
+22-        """Retrieve a frame from the cache or create a new frame if the
+23-        cache is empty. The freebuffer method of the returned array is
+24-        overriden to return the object to the cache rather than freeing
+25-        the object.
+26-
+27-        """
+28-        if self._cache:
+29-            frame = allocate(
+30-                shape=self._mode.shape,
+31-                dtype="u1",
+32-                cacheable=self._cacheable,
+33-                pointer=self._cache.pop(),
+34-                cache=self,
+35-                target=self._memory,
+36-            )
+37-        else:
+38-            frame = allocate(
+39-                shape=self._mode.shape,
+40-                dtype=np.uint8,
+41-                cacheable=self._cacheable,
+42-                cache=self,
+43-                target=self._memory,
+44-            )
+45-        return frame
+46-
+47-    def return_pointer(self, pointer):
+48-        if len(self._cache) < self._capacity:
+49-            self._cache.append(pointer)
+50-
+51-    def clear(self):
+52-        self._cache.clear()
+53-
+54-
+55-class AxiVDMA(DefaultIP):
+56-    """Driver class for the Xilinx VideoDMA IP core
+57-
+58-    The driver is split into input and output channels are exposed using the
+59-    readchannel and writechannel attributes. Each channel has start and
+60-    stop methods to control the data transfer. All channels MUST be stopped
+61-    before reprogramming the bitstream or inconsistent behaviour may result.
+62-
+63-    The DMA uses a single ownership model of frames in that frames are either
+64-    owned by the DMA or the user code but not both. S2MMChannel.readframe
+65-    and MM2SChannel.newframe both return a frame to the user. It is the
+66-    user's responsibility to either free the frame using the freebuffer()
+67-    method or to hand ownership back to the DMA using MM2SChannel.writeframe.
+68-    Once ownership has been returned the user should not access the contents
+69-    of the frame as the underlying memory may be deleted without warning.
+70-
+71-    Attributes
+72-    ----------
+73-    readchannel : AxiVDMA.S2MMChannel
+74-        Video input DMA channel
+75-    writechannel : AxiVDMA.MM2SChannel
+76-        Video output DMA channel
+77-
+78-    """
+79-
+80-    class _FrameList:
+81-        """Internal helper class for handling the list of frames associated
+82-        with a DMA channel. Assumes ownership of all frames it contains
+83-        unless explicitly removed with takeownership
+84-
+85-        """
+86-
+87-        def __init__(self, parent, offset, count):
+88-            self._frames = [None] * count
+89-            self._mmio = parent._mmio
+90-            self._offset = offset
+91-            self._slaves = set()
+92-            self.count = count
+93-            self.reload = parent.reload
+94-
+95-        def __getitem__(self, index):
+96-            frame = self._frames[index]
+97-            return frame
+98-
+#   Copyright (c) 2016, Xilinx, Inc.
+#   SPDX-License-Identifier: BSD-3-Clause
+
+
+import warnings
+import os
+import numpy as np
+from pynq.ps import ON_TARGET
+
+if ON_TARGET:
+    import ctypes
+    libc = ctypes.CDLL("libc.so.6")
+    libc.munmap.argtypes = [ctypes.c_void_p, ctypes.c_size_t]
+    libc.munmap.restype = ctypes.c_int
+
+
+class PynqBuffer(np.ndarray):
+    """A subclass of numpy.ndarray which is allocated using
+    physically contiguous memory for use with DMA engines and
+    hardware accelerators. As physically contiguous memory is a
+    limited resource it is strongly recommended to free the
+    underlying buffer with `close` when the buffer is no longer
+    needed. Alternatively a `with` statement can be used to
+    automatically free the memory at the end of the scope.
+
+    This class should not be constructed directly and instead
+    created using `pynq.allocate()`.
+
+    Attributes
+    ----------
+    device_address: int
+        The physical address to the array
+    coherent: bool
+        Whether the buffer is coherent
+
+    """
+
+    def __new__(
+        cls, *args, device=None, device_address=0, bo=0, coherent=False, **kwargs
+    ):
+        self = super().__new__(cls, *args, **kwargs)
+        self.device_address = device_address
+        self.coherent = coherent
+        self.bo = bo
+        self.device = device
+        self.offset = 0
+        self.freed = False
+        return self
+
+    def __array_finalize__(self, obj):
+        if isinstance(obj, PynqBuffer) and obj.coherent is not None:
+            self.coherent = obj.coherent
+            offset = self.virtual_address - obj.virtual_address
+            self.device_address = obj.device_address + offset
+            self.offset = obj.offset + offset
+            self.device = obj.device
+            self.bo = obj.bo
+        else:
+            self.device_address = None
+            self.coherent = None
+
+    def __del__(self):
+        self.freebuffer()
+
+    def freebuffer(self):
+        """Free the underlying memory
+
+        This will free the memory regardless of whether other objects
+        may still be using the buffer so ensure that no other references
+        to the array exist prior to freeing.
+
+        """
+        if hasattr(self, "memory"):
+            if hasattr(self, "pointer") and self.pointer:
+                if self.return_to:
+                    self.return_to.return_pointer(self.pointer)
+                self.pointer = 0
+            else:
+                if not self.freed:
+                    self.freed = True
+                    libc.munmap(ctypes.cast(self.virtual_address, ctypes.c_void_p), self.nbytes)
+                    del self.bo
+
+
+    @property
+    def cacheable(self):
+        return not self.coherent
+
+    @property
+    def physical_address(self):
+        return self.device_address
+
+    @property
+    def virtual_address(self):
+        return self.__array_interface__["data"][0]
+
+    def close(self):
+        """Unused - for backwards compatibility only"""
+        warnings.warn(
+            ".close no longer functional - use scopes to manage buffers",
+total 52572
+-rw-r----- 1 root root    96450 Sep 21 16:40 _usr_bin_sudo.0.crash
+-rw-r----- 1 root root 53718778 Sep 21 16:24 _usr_bin_python3.10.0.crash
+-rw-r----- 1 root root    10180 Sep 20 11:17 _usr_sbin_haveged.0.crash
+fatal: not a git repository (or any of the parent directories): .git
+fatal: not a git repository (or any of the parent directories): .git
+
+__PYNQ_RC_9f8bcb5be9ff45d5bba89e74fe4883a0=128
+[?2004hxilinx@pynq:~$ 
+HOST_EXIT_CODE=128

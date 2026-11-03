@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "E:\Projects\FPGA-Alittle-Design\sim\tools\test_verify_rv32i.py", line 18, in <module>
+    assert scope["asm_to_int"](f"jal x1, {offset}") == word
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Projects\FPGA-Alittle-Design\sim\tools\verify_rv32i.py", line 49, in asm_to_int
+    if op in R:
+             ^
+NameError: name 'R' is not defined

@@ -47,7 +47,7 @@ class Net(nn.Module):
 
 
 def load_weights(path):
-    blob = torch.load(path, map_location="cpu", weights_only=False)
+    blob = torch.load(path, map_location="cpu", weights_only=True)
     if not isinstance(blob, dict) or "state_dict" not in blob:
         raise ValueError("checkpoint must be a dict with state_dict")
     meta = {key: blob.get(key) for key in

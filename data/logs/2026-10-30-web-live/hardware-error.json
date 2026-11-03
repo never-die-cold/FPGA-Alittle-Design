@@ -1,0 +1,130 @@
+{
+ "capture_id": 5,
+ "compute_backend": "PL_CNN_FASTENER",
+ "descriptors": [
+  {
+   "bbox": [
+    358,
+    99,
+    433,
+    168
+   ],
+   "target_id": 0,
+   "touches_border": false
+  },
+  {
+   "bbox": [
+    576,
+    161,
+    614,
+    244
+   ],
+   "target_id": 1,
+   "touches_border": false
+  },
+  {
+   "bbox": [
+    454,
+    271,
+    524,
+    344
+   ],
+   "target_id": 2,
+   "touches_border": false
+  },
+  {
+   "bbox": [
+    787,
+    366,
+    828,
+    405
+   ],
+   "target_id": 3,
+   "touches_border": false
+  },
+  {
+   "bbox": [
+    605,
+    404,
+    660,
+    459
+   ],
+   "target_id": 4,
+   "touches_border": false
+  },
+  {
+   "bbox": [
+    870,
+    416,
+    926,
+    495
+   ],
+   "target_id": 5,
+   "touches_border": false
+  }
+ ],
+ "error": "coprocessor terminal without a valid result (status=0x00001069, error_code=1, sim_error=TASK_ERROR)",
+ "error_code": 1,
+ "error_type": "CopJobError",
+ "frame": {
+  "height": 720,
+  "pixel_sha256": "8562aabe0ce98cf63a4eb4f03be992dda86be3aacc8d8166e46b98c7a397110d",
+  "width": 1280
+ },
+ "job_id": 5,
+ "kind": "cop_failure",
+ "last_terminal": {
+  "error_code": 1,
+  "fw_decision": 4099,
+  "reason": "terminal",
+  "result_seq": 4,
+  "status": 4201
+ },
+ "localization": {
+  "background_mode": "local",
+  "color_threshold": 25.0,
+  "min_area_ratio": 8e-05
+ },
+ "protocol_check": "chk000005",
+ "rois": [
+  {
+   "bytes_sha256": "33bb56a29e5d82a319fb2d8cf0363985a8644ff4a1bbfc3db2e3e7cdd2c6e6fd",
+   "index": 0,
+   "path": "cop/roi_000.bin"
+  },
+  {
+   "bytes_sha256": "76327f510c85cbc513d0463a640a73f89f8b3f3eccbcb64b87e94fe7adde5899",
+   "index": 1,
+   "path": "cop/roi_001.bin"
+  },
+  {
+   "bytes_sha256": "7ce198798ef5beab789e2ccd6a37114088abaee478ac81fc2765193a3da92ca2",
+   "index": 2,
+   "path": "cop/roi_002.bin"
+  },
+  {
+   "bytes_sha256": "0b2d8553803e881880a5a6f8e6c765e4a0555ea7ca61c0a2085b1c0f0206f4ed",
+   "index": 3,
+   "path": "cop/roi_003.bin"
+  },
+  {
+   "bytes_sha256": "ceabc29be888ca2cef491da1f1f11c3dbd3467bf3b1c4e7c6f4f9654b6a424e0",
+   "index": 4,
+   "path": "cop/roi_004.bin"
+  },
+  {
+   "bytes_sha256": "c7c24485575d0a3bb314fd81ae94a3a3a6d96a013e38bb8a4aa348fa4860e3cf",
+   "index": 5,
+   "path": "cop/roi_005.bin"
+  }
+ ],
+ "sim_error": null,
+ "simulated": false,
+ "terminal": {
+  "error_code": 0,
+  "fw_decision": 4099,
+  "reason": "engine_failure",
+  "result_seq": 4,
+  "status": 97
+ }
+}

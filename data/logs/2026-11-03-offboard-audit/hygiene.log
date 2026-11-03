@@ -1,0 +1,18 @@
+{
+  "tracked": 3475,
+  "errors": [
+    "stale index: data/logs/README.md (run python sim/scripts/index_runs.py --write)"
+  ],
+  "warnings": [
+    "duplicate blob (2x, 1106 KB): data/logs/2026-10-27-product-coexist/exe-r1-records/screenshots/anomaly_0001.png ...",
+    "duplicate blob (2x, 550 KB): data/evidence/2026-10-12-c01-exact-build-inputs/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/docs/rgb2dvi.pdf ...",
+    "duplicate blob (2x, 379 KB): docs/poster/assets/board.jpg ...",
+    "duplicate blob (2x, 318 KB): data/evidence/2026-10-12-c01-exact-build-inputs/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/docs/dvi2rgb.pdf ...",
+    "duplicate blob (2x, 229 KB): data/evidence/2026-10-12-c01-exact-build-inputs/inputs/sim/build/hdmi-library-full/ip/dvi2rgb/docs/dvi2rgb.docx ...",
+    "duplicate blob (2x, 204 KB): data/logs/2026-10-03-vision-onboard/hdmi-rebuild-after-fix.log ...",
+    "duplicate blob (2x, 146 KB): data/evidence/2026-10-12-c01-exact-build-inputs/inputs/sim/build/hdmi-library-full/ip/rgb2dvi/docs/rgb2dvi.docx ...",
+    "duplicate blob (2x, 129 KB): data/evidence/2026-10-10-offline-inspection/viewer-exe.png ...",
+    "duplicate blob (2x, 127 KB): docs/poster/assets/exe.png ...",
+    "duplicate blob (2x, 100 KB): data/logs/2026-10-02-vision-offboard/route-final-console.log ..."
+  ]
+}

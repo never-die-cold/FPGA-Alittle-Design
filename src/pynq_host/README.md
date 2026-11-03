@@ -2,7 +2,7 @@
 
 PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采集；Jupyter 保留为板端调试与复现入口。工业操作界面为 HTML 网页端（[src/web_client](../web_client/README.md)），采集卡视频和网口识别结果统一展示，见根目录 [项目主计划](../../plan.md) §1.3。
 
-当前产品入口为 `cop_product_service.py`（C01 捕获 → PS 定位/ROI → PL CNN → LIVE API）；最新实板数值对照及剩余精度/定位问题统一见 [plan.md §3.1](../../plan.md#31-当前状态)。网页端真实数据接线仍未实现。下列带日期段落保留对应阶段的边界。
+当前产品入口为 `cop_product_service.py`（C01 捕获 → PS 定位/ROI → PL CNN → LIVE API）；最新实板数值对照及剩余精度/定位问题统一见 [plan.md §3.1](../../plan.md#31-当前状态)。网页端已接入真实 API、UVC 预览及本轮快照，启动见[网页端说明](../web_client/README.md)；连续检查稳定性未通过。下列带日期段落保留对应阶段的边界。
 
 ## 早期实现与规划边界（2026-10-12）
 
@@ -14,8 +14,8 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
 10/15 起，FILE 原型自动轮询直接在内存中检查，只原子更新 `<root>/<session前8位>/latest_packet.json`；
 手动 `POST /v1/check` 携 `trigger_ref` 时，完整产物保存到同会话的 `check-<check_id六位>/`。
 `--archive-every-round` 启用逐轮完整归档。分类器在会话中复用，修改权重后须重启服务。
-非原型后端仍须逐轮保存 C04 Q3 capture 证据；当前真实硬件后端尚未实现。
-它没有真实 HDMI/DDR/MMIO/CNN 后端，`/v1/config` 仅推进软件配置号，不证明 R12 硬件应用；见[整合证据](../../data/logs/2026-10-12-pr-review/README.md)。
+非原型后端仍须逐轮保存 C04 Q3 capture 证据；当前真实后端见上方产品入口。
+上述FILE原型没有真实 HDMI/DDR/MMIO/CNN 后端，其`/v1/config`仅推进软件配置号，不证明R12硬件应用；见[整合证据](../../data/logs/2026-10-12-pr-review/README.md)。
 工单由服务启动参数提供，HTTP配置仅接收control；在线工单编辑未实现；请求重试幂等已按 C04 §2.4 草案实现（服务 16 条 trigger_ref 回放）。
 下列 notebook／通用工具仍是规划，不能由 mock 或训练演练推断已实现。
 
@@ -36,14 +36,14 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
 
 后续新增 `dataset_manifest.py`、`dataset_audit.py` 和仓库 CLI：720p 采集清单、
 会话/精确重复像素/实物编号泄漏、覆盖统计和来源声明已用测试夹具验证，理解题及补测已通过。
-这些工具的测试夹具证据见[数据集审计](../../docs/research/fastener-dataset-audit.md)，不验收真实标签或模型精度。10/12 离板证据记录为 14 组（含当时尚未提交的构建输入审计）并退出 0；10/13 记录为 15 组。当前 `run_vision_python.sh` 入口为 **19 组**，`run_inspection_python.sh` 为 **17 组**；各组以脚本和各自证据为准，不把历史 15 组当当前全量。
+这些工具的测试夹具证据见[数据集审计](../../docs/research/fastener-dataset-audit.md)，不验收真实标签或模型精度。10/12离板证据记录为14组（含当时尚未提交的构建输入审计）并退出0；10/13记录为15组。当前集合以`sim/scripts/run_offboard.sh`及其调用列表为准，不把历史组数当当前全量。
 
 - `demo.ipynb`：板端调试与复现 notebook
 - `benchmark.ipynb`：基线对比与指标采集（CPI、延迟、帧率、加速比）
 - `golden_ref.py`：软件黄金参考实现（OpenCV / 纯 Python 推理）
 - `metrics.py`：数据自动采集与报告生成（→ `data/`）
-- 真实硬件识别后端未实现；FILE/LIVE 骨架已有，不把软件会话/配置号当硬件状态。批次记录与 CSV 导出参考实现在本目录 `records.py`、`export_records.py`。
-- 前端为网页端（`src/web_client/`，原型已含 LIVE 类别/工单展示形态）；真实数据接线、检查快照查看和目标环境发布仍待完成。
+- FILE/LIVE原型的软件会话/配置号不等于硬件状态；当前C01/COP_HW产品服务已有实板记录。批次记录与CSV导出参考实现在本目录`records.py`、`export_records.py`，网页持久存储尚未接入。
+- 前端为网页端（`src/web_client/`），真实数据接线和检查快照查看已在 2026-10-30 联调；目标环境长期运行与发布验收仍待完成。
 
 ## LIVE 服务捕获后端（W04/N06 诊断包，2026-10-13）
 
@@ -59,7 +59,7 @@ N06 诊断包接线（板端脚本提供 overlay 与 read，取帧样板见 `sim
 前端以 `http://<板IP>:8765` 为服务端点联调。板端需 pynq-venv 的 python3 + OpenCV + torch；
 FP32 软件推理来源记录在产物 `result.json` 的 provenance，不当作 CNN 硬件验收。
 服务失败（无视频/超时/所有权错误）转 HTTP 503 且不产 `packet.json`；离板替身测试
-`test_base_captures.py`、`test_c01_backend.py`（视觉栈现 **21 组**；检查链 **19 组**）；
+`test_base_captures.py`、`test_c01_backend.py`（当前测试列表以汇总脚本为准）；
 快照核对器 `round_artifacts.py`（C04 §2.3）。
 
 ## 协处理器 PS 驱动与模拟硬件（2026-10-21，C03 A1/A2）
@@ -106,6 +106,10 @@ PS 地址由它自己分配的 buffer 决定（`addresses=plane.addresses`），
 `RECHECK` 是实际判定；包/位流/服务版本和已验证边界见[10/27交接](../../docs/runbooks/pynq-coexist-handoff-2026-10-27.md)。
 
 ## 板卡访问
+
+2026-11-03离板修复：`GET /v1/status`只读返回当前`config_id`；产品服务用启动时确认的配置号初始化，并读取CAP1 lock/pending状态提供健康信息。它不保证CNN链路下一轮一定成功。服务默认保留256 MiB磁盘余量；`cop_product_service.py --min-free-mib <值>`可调整，余量不足暂停检查、返回503，不自动删历史证据；单轮写入仍可能超过余量，写盘错误同样返回503。真实轮次完整归档仍保留，需运行者归档监控磁盘。
+
+`sim/scripts/board_ssh.py`使用已知主机校验。先在可信连接核对板卡指纹并保存到用户`~/.ssh/known_hosts`，或用`BOARD_KNOWN_HOSTS`指定已核对的文件；未知或变化的密钥拒绝连接。`BOARD_PASSWORD`可覆盖开发镜像的默认`xilinx`口令，此脚本不修改板端账号或口令。以上改动尚未上板复验，离板入口见[最终检查说明](../../docs/runbooks/final-offboard-check.md)。
 
 - 校园网内 SSH：`ssh xilinx@<板卡内网IP>`（2026-09-20 建立，SD 卡已烧录 PYNQ 镜像）；notebook 在板卡 Jupyter（默认端口 9090）上运行
 

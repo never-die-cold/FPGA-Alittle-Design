@@ -66,6 +66,11 @@
 
 ## D5 会话生命周期
 
+2026-11-03 服务增补：`GET /v1/status` 返回当前 `config_id`，读取不触发配置提交。
+网页启动/重连与约2秒的空闲心跳只读确认此编号；同session配置改变也撤除旧结果并采用新编号。
+真实产品服务传入启动时已确认的硬件配置号；旧服务不含该字段时，首次连接仍兼容POST control=0。
+`hardware_connected` 在真实产品入口查询CAP1 lock/pending，不以API存活冒充视频健康；FILE仍明确标记PROTOTYPE。
+
 - **推荐**：沿用 mock v1——session_id 由服务端生成（uuid）；板端复位、Overlay 重载或换视频源 → 新会话；EXE 不得跨会话复用结果（校验强制），检测到 session 变化即清空本地状态，并重新确认配置生效后才恢复叠加。
 
 ## D6 报文 schema v1.2（2026-10-10 WC+NC 确认冻结）
@@ -88,7 +93,7 @@ Q01已随PR #67合并：顶层与逐目标严格白名单拒绝非对象/未知�
 ## D7 板端真实服务负责人（已定）
 
 - EXE 前端 = watercopper（已定）。板端 PS 上的真实 HTTP 服务（消费 cop_* 快照、响应触发、MMIO 配置）主责 = **never-die-cold（2026-10-06 NC 本人确认接任）**。理由——EXE 开发机无网口，实机网口联调依赖队长环境；队长已有上板操作经验（2026-10-03 vision onboard 由其执行）。plan.md §3.4/§5.3 已同步。
-- 过渡方案：定位mock恒标MOCK；`vision_mock_service.py --live`合成替身与`vision_live_service.py` FILE后端使用LIVE报文但恒标PROTOTYPE。真实硬件后端未接入，来源不能由mode或hardware_connected字段单独推断。
+- 过渡方案：定位mock恒标MOCK；`vision_mock_service.py --live`合成替身与`vision_live_service.py` FILE后端使用LIVE报文但恒标PROTOTYPE。C01/COP_HW真实后端已接入，当前实板证据与未验收项见[主计划](../../plan.md#31-当前状态)；来源不能由mode或hardware_connected字段单独推断。
 
 ## D8–D10 批次记录（M3 起步，2026-10-08 随离板实现落地）
 
@@ -97,8 +102,8 @@ Q01已随PR #67合并：顶层与逐目标严格白名单拒绝非对象/未知�
   视频帧/自动轮询再多也不产生记录。
 - **D9 去重**：记录键 = (session_id, check_id)；同键重复写入被拒，"一次确认的检查只记一条"。
   结果未到/过期/断联不记录（异常事件与异常截图列 M3 项，独立于批次）。
-  当前实现只维护进程内键集合，跨进程复用同目录未恢复旧键；持久去重与HTTP请求重试幂等仍待实现，不能由D9同进程测试推导。
-- **D10 存储与标识**：当前`records.jsonl`为schema v2，保存session/check/config/frame、记录时间/接收时基年龄/原created_at、目标、status、原decision、prototype、protocol_version与截图名；兼容导出旧v1记录。`screenshots/`保存记录时含框画面：MOCK=`mock_`，LIVE+prototype=`proto_`，真实LIVE无前缀。MOCK/PROTOTYPE不得当板上识别证据；无前缀也不独立证明硬件来源。CSV已实现，字段以[records.py](../../src/pynq_host/records.py)及[export_records.py](../../src/pynq_host/export_records.py)为准，C04整体仍待评审。
+  网页只维护本页内存记录，刷新清空；板端保留16条trigger_ref重试键。Python参考实现另支持从records.jsonl恢复去重键，不能据此声称网页已实现持久存储。
+- **D10 存储与标识**：Python参考实现的`records.jsonl`为schema v2，保存原报文与截图来源，见[records.py](../../src/pynq_host/records.py)及[export_records.py](../../src/pynq_host/export_records.py)。当前网页为本页内存记录和8列CSV，刷新清空，持久批次与异常截图未实现；不得将参考模块能力当成网页已接入能力。MOCK/PROTOTYPE不得当板上识别证据，C04整体仍待评审。
 - **D8 补充（记录资格时间点，2026-10-08 经理解题推演修正）**：手动标记在**报文被采纳**时
   才生效——断联中的手动触发失败后，残留旧报文不得冒充手动轮结果被记入批次档案。
 - **D11 异常事件日志**：overlay 状态迁移（no_result/outage/stale/config/offline/ok，含恢复）、

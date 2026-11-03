@@ -1,0 +1,22 @@
+{
+  "vision_python_test_files": 41,
+  "covered_by_audit_commands": 41,
+  "unassigned": [],
+  "coprocessor_python_files": [
+    "test_check_roi_dataset.py",
+    "test_cop_imem_gate.py",
+    "test_cop_payload_loader.py",
+    "test_int8_conv.py",
+    "test_int8_conv_layer.py",
+    "test_int8_gap_fc.py",
+    "test_int8_manifests.py",
+    "test_int8_model_schema.py",
+    "test_int8_model_trace.py",
+    "test_int8_network.py",
+    "test_int8_primitives.py",
+    "test_int8_result.py",
+    "test_int8_tensors.py",
+    "test_payload_manifest.py",
+    "test_summarize_board_run.py"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "ProcessId": 18368,
+  "ParentProcessId": 53376,
+  "CommandLine": "C:\\msys64\\ucrt64\\bin\\vvp.exe build/tb_core_coremark.vvp +hex=../src/riscv_fw/coremark.hex +exp_exit=0 +timer_addr=80008000 +max_cycles=50000000 +exp_tohost=34713 +exp_iter=32 +exp_seedcrc=e9f5 +exp_crclist=e714 +exp_crcmatrix=1fd7 +exp_crcstate=8e3a +exp_crcfinal=8799"
+}
+INTENTIONAL_STOP: nofwd and fwd completed; duplicate BHT stage stopped; BHT profiles and remaining entries run separately.

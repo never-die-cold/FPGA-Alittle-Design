@@ -5,7 +5,7 @@
 > 每句只写一个信息点；句子要短；用主动语态；用一般现在时；一个术语只指一个事物；
 > 不用比喻和口语。模块名、信号名、寄存器名按代码原名写（STE 允许技术名）。
 > **配图**：7 幅图由 [img/make_project_diagrams.py](img/make_project_diagrams.py) 生成，2026-10-28 已按网页端口径重绘；BHT 细节仍未入图。
-> **状态口径**：2026-10-28；当前实现以正文、冻结契约和收口证据为准，逐项核对见git 历史（88ac1c4 前）docs/archive/implementation-document-audit-2026-10-12.md。更细的契约见 [design_v0.md](../src/riscv/design_v0.md)、
+> **状态口径**：2026-11-03；当前实现以正文、冻结契约和收口证据为准，逐项核对见git 历史（88ac1c4 前）docs/archive/implementation-document-audit-2026-10-12.md。更细的契约见 [design_v0.md](../src/riscv/design_v0.md)、
 > [design_v1.md](../src/riscv/design_v1.md)、[vision design_v0.md](../src/vision/design_v0.md)。
 
 ---
@@ -22,7 +22,7 @@
 
 数据走两条物理路径。视频路径：板卡 HDMI OUT → USB 采集卡 → 网页端。
 结果路径：板卡 PS → 网口 → 网页端。[轮次级同步契约](contracts/vision-sync-protocol-decisions.md)已冻结；mock v1.1 有[落码证据](../data/logs/2026-10-06-vision-sync-schema/README.md)。
-真实识别结果与画面关联尚未实现；过期结果不得显示为当前检查通过，不能把轮次级契约称为逐帧精确对齐。
+网页端已接入真实结果和本轮板端快照，并能在 UVC 视频上作轮次级叠加；过期结果撤框，逐帧精确对齐仍未实现。
 
 ## 2. 三个模块与当前状态
 
@@ -30,29 +30,30 @@
 |:---|:---|:---|:---|
 | 模块一 | RISC-V 核＋最小 SoC | jianglibo | 已完成收口。[核收口报告](../report/module1-closure.md) |
 | 模块二 | HDMI 视觉预处理 RTL＋已验证视频链路 | never-die-cold | 已完成（RTL／链路级）。[视频记录](../data/logs/2026-10-03-vision-onboard/README.md)、[真实相机记录](../data/logs/2026-10-07-pi-pynq/README.md) |
-| 模块三 | INT8 CNN 推理协处理器 | jianglibo | C02/C03 已冻结；J02/J03 算子/整网、J04a 控制面与固件已离板冒烟（JL 侧）；J04b 完整验证、实体 BRAM/SoC/视频集成、正式模型与板端输出未验收 |
-| 网页端前端 | 视频/轮次、LIVE 展示、记录与回放 | — | 类别/分数/工单横幅、来源标识、记录 v2 与 CSV 已离板验证；真实数据接线与目标环境发布未验收 |
+| 模块三 | INT8 CNN 推理协处理器 | jianglibo | r6 已有实板整数数值对照；正式精度及连续应用稳定性未完成，见主计划 |
+| 网页端前端 | 视频/轮次、LIVE 展示、记录与回放 | — | 真实 API、UVC 和本轮快照已联调；本页手动记录和 CSV 已核对；持久记录及长期运行未完成 |
 
 提交节点见根目录 [plan.md](../plan.md) §1.2（最终复验 11/3、作品提交 11/4 18:00 前）。
 
-全项目 M2 验收未完成；首个网络硬件输出仍缺实现与黄金参考对齐证据，CNN 与工业闭环不得宣称完成。验收范围以[主计划 §1.4](../plan.md)为准。
+全项目工业整机验收未完成。CNN r6 有实板整数数值对照，但不等于分类精度与长期运行通过；验收范围以[主计划 §1.4](../plan.md)为准。
 
 - ✅ **已实现并验证**
   - v0 保留 `partA-v0` 锚点；v1 三级、转发、Radix-4、BHT 三档及四档入口已收口。[核收口报告](../report/module1-closure.md)
-  - v1：44 组 arch-test 子集签名、四档 XSim 对拍；BHT2 核 OOC 11.520 ns 实点 WNS +0.538，40 MHz 主档真实下载并观察 LED，均见核收口报告。
+  - v1：arch-test子集11个测试（3个I类+8个M类）×4档配置共44次签名运行、四档XSim对拍；不代表完整ISA认证。BHT2核OOC 11.520 ns实点WNS +0.538，40 MHz主档真实下载并观察LED，均见核收口报告。
   - 视觉：当前入口含 25 个 RTL tb，新增捕获几何/状态测试；[10/12 整合证据](../data/logs/2026-10-12-pr-review/README.md)与[10/03 特定配置实机记录](../data/logs/2026-10-03-vision-onboard/README.md)分开引用，原视频物理实现 WNS +0.956。
   - 相机：CM3 经 PYNQ 到采集卡取得真实画面，720p 连续 24 帧；[10/07 记录](../data/logs/2026-10-07-pi-pynq/README.md)保留原黑屏、恢复过程与用户确认。
   - v0/PicoRV32 OOC 对比已入档；83.8 MHz 等是 Slack 外推，不是该频率实点通过，见[对比记录](../data/logs/2026-10-03-picorv32-compare/README.md)。
 - 🟡 **已实现但仍有验证／追溯缺口**
+  - C01取帧、PS定位/ROI、PL CNN、核侧工单固件和真实LIVE均已有实板证据；10/28 r6整数数值对照、10/30网页联调的范围见[主计划](../plan.md#31-当前状态)。分类误差、纸边误检与连续检查TASK_ERROR/DMA故障仍未闭环。
   - 原 vision 的 bit/hwh 已与归档 XSA 配对，构建源码锚定仍缺；C01 捕获候选有独立构建输入和显示/状态实机诊断。完整 DDR 取帧、长测/冷启动/断源恢复未验收，见[C01 基线](contracts/c01-capture-implementation-baseline.md)。
   - 采集卡观测延迟上界 125 ms 已记录，不能当作 PL 本体延迟；PL／识别端到端延迟仍缺同口径实测。
 - ⬜ **未实现 / 未接入**
-  - CNN 协处理器顶层/实体缓存/MMIO/DMA/核接入、正式 INT8 模型/整网黄金、DDR 帧槽所有权/完整副本、真实定位/推理后端、核工业检查固件、真实硬件 LIVE 与发布验收、PYNQ 开机自动加载。
+  - 正式独立数据集与精度验收、网页工单下发、持久批次/异常截图、完整工业整机与目标环境发布验收。最新共存包的冷启动/长测/断源恢复仍待验证。
 
 ## 3. RTL 代码组成
 
 RTL 有两棵树，加一处预留。核树在 `src/riscv/`，视觉树在 `src/vision/`。
-`src/coprocessor/` 已有冻结的 C02 文档、INT8 标量/张量/卷积软件参考，以及 MAC/卷积/requant/GAP/FC、整网控制器和 J04 控制面 RTL（`cop_top`/MMIO/CDC/DMA/工单固件）；**实体 BRAM 生产地址适配、SoC/视频/板端集成尚未验收**。旧图中的行数和实现标记只对应历史快照。
+`src/coprocessor/` 已有冻结的 C02 文档、INT8 标量/张量/卷积软件参考，以及 MAC/卷积/requant/GAP/FC、整网控制器和 J04 控制面 RTL（`cop_top`/MMIO/CDC/DMA/工单固件）；实体BRAM和SoC/视频共存已有实板数值对照，仍不等于整机稳定性与精度验收。旧图中的行数和实现标记只对应历史快照。
 
 ![图 2 RTL 组成树](img/fig2_rtl_tree.png)
 
@@ -202,16 +203,16 @@ PS 的配置时钟和像素时钟异步。直接写寄存器会撕裂配置。�
 4. 显示通路：原始波形寄存 1 拍，`rgb2dvi` 串化，HDMI OUT 出图。
 5. 分析通路：灰度化、平滑、边缘、OSD 叠加，出灰度诊断流。
 6. 快照通路：缩放到 224×224，`cop_buf` 存成整帧。
-7. （待完成的应用路径）原彩色捕获支路写DDR，PS取得安全完整副本后定位、裁剪64×64灰度ROI并量化；DMA把小ROI送入`cop_top`。
-8. （未接入）`cop_top`返回INT8分类结果，RISC-V汇总数量/对照工单判定，PS合并本轮bbox并发报文。
+7. 当前共存包由原彩色捕获支路写DDR，PS经C01 park后端取副本、定位、裁剪64×64灰度ROI并量化；DMA把小ROI送入`cop_top`。
+8. `cop_top`返回INT8分类结果，RISC-V汇总数量/对照工单判定，PS合并本轮bbox并发报文；已有实板数值对照。
 9. 前端按session/config/接收后年龄叠框、标签和判定；不校验采集卡帧号，不能称“对应帧精确叠加”。
 
-第5–6步是已有分析/快照诊断路径，第7–8步是C03应用目标；当前FILE/LIVE用软件文件副本代替硬件捕获。显示与结果延迟不同，来源capture/check关联和轮次标识必须显式保存。
+第5–6步描述原视觉RTL的分析/快照诊断路径，当前共存包以原彩色捕获→PS定位/ROI→PL CNN作为应用路径；不能将诊断链全部算作当前推理输入。FILE原型用文件副本，C01/COP_HW真实后端执行第7–8步。显示与结果延迟不同，来源capture/check关联和轮次标识必须显式保存。
 
 ## 7. 验证体系
 
-全量功能回归入口：`bash sim/scripts/run_iverilog.sh all`；arch-test、XSim 与 Vivado 另有专项入口。
-它覆盖核 tb、四档 CoreMark/benchmark、门禁自检、25 个视觉 tb 和 Python 检查。视觉 Python 当前 **21 组**，检查链 **14 组**，INT8 参考 **10 组**（均以 `sim/scripts` 的脚本列表为准）；历史全量结果与当前定向回归分别留痕。门禁故意注入的 FAIL 由自检判据处理，真正测试失败使整体失败。
+最终离板汇总入口：`bash sim/scripts/run_offboard.sh all`，环境与范围见[最终检查说明](runbooks/final-offboard-check.md)。它调用原 `run_iverilog.sh all`，补齐arch-test、检查链、网页、N03与发布工具检查；XSim与Vivado仍为专项入口。
+测试集合以汇总脚本及其调用列表为准，避免在多份说明重复维护组数；历史全量结果与当前定向回归分别留痕。门禁故意注入的FAIL由自检判据处理，真正测试失败使整体失败。
 
 - 每个视觉单元都有黄金参考。Python 生成输入和期望，tb 逐像素比对。数据在 `data/golden/vision/`。
 - iverilog 全 PASS 后，XSim 用同一判据复跑（`bash sim/scripts/run_vision_xsim.sh all`）。
@@ -220,12 +221,10 @@ PS 的配置时钟和像素时钟异步。直接写寄存器会撕裂配置。�
 
 ## 8. 未实现清单（明确标注）
 
-- J04a 控制面/`cop_top`/MMIO/CDC/DMA/工单固件已离板冒烟（JL 侧）；**J04b 完整验证、实体 BRAM 生产地址适配、SoC/视频集成与板端输出未验收**。正式 INT8 模型/整网黄金仍缺。详见[实现交接单](runbooks/coprocessor-j04-handoff.md)。
-- 实际定位部署与逐目标推理：未实现；ARM／Python 定位和裁剪参考已有验证，不等于实时板端部署。
+- C01/PS 定位与 ROI、PL CNN、核侧工单固件及视频共存已有实板记录；连续检查的 TASK_ERROR/DMA 故障恢复仍待修复，最新结论见[主计划](../plan.md#31-当前状态)。
 - 正式紧固件数据集与模型：未完成。采集规程已入库。
-- 核侧工业检查固件未实现；PS 文件检查的候选工单规则已实现，不等于核侧判定。
-- 前端真实数据接线、检查快照查看与目标环境发布未完成；LIVE 展示、记录 v2、CSV 和文件回放已实现。
-- FILE/LIVE 服务骨架与替身已实现，恒显 PROTOTYPE；真实硬件后端未实现。轮次级叠加不代表逐帧精确关联。
+- 前端真实 API、UVC 和检查快照已接入；持久批次、异常截图、网页工单下发和目标环境完整发布未完成。本页记录不等于已退役 EXE 的记录 v2 持久存储。
+- FILE 后端保持 PROTOTYPE；真实 C01/COP_HW 后端已接入。轮次级叠加不代表逐帧精确关联。
 - PL 本体及识别闭环延迟、当前相机配置的长期运行／冷启动／断连恢复：待验证；已有采集卡观测上界不能替代。
 
 ## 9. 文档关系与复现入口
@@ -245,8 +244,9 @@ PS 的配置时钟和像素时钟异步。直接写寄存器会撕裂配置。�
 python docs/img/make_project_diagrams.py      # 旧图生成器；重绘须另批授权，本轮不执行
 bash sim/scripts/run_iverilog.sh all          # 全量回归（核四档 + 视觉 25 tb）
 bash sim/scripts/run_vision_xsim.sh all       # XSim 同判据复跑
-bash sim/scripts/run_vision_python.sh        # 21组；VISION_PYTHON可指定真实解释器
-bash sim/scripts/run_inspection_python.sh     # 14组检查链
+bash sim/scripts/run_offboard.sh software    # 本次软件修复回归；不重跑RTL
+bash sim/scripts/run_vision_python.sh        # VISION_PYTHON可指定真实解释器
+bash sim/scripts/run_inspection_python.sh     # 检查链
 bash sim/scripts/run_coprocessor_python.sh all # 10组INT8参考（含 manifests），需python3与NumPy
 ```
 

@@ -21,7 +21,11 @@ def password():
 
 def connect():
     client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    client.load_system_host_keys()
+    known_hosts = os.environ.get("BOARD_KNOWN_HOSTS")
+    if known_hosts:
+        client.load_host_keys(known_hosts)
+    client.set_missing_host_key_policy(paramiko.RejectPolicy())
     client.connect(HOST, username=USER, password=password(), timeout=15,
                    allow_agent=False, look_for_keys=False)
     return client

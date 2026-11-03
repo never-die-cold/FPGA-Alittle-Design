@@ -27,7 +27,7 @@
 │   ├── coprocessor/    INT8 CNN 算子/整网控制器/整数参考
 │   ├── riscv_fw/       裸机固件、CoreMark、测试程序；hex 入库，dis 本地生成
 │   ├── pynq_host/      PS 侧配置、定位/ROI、检查服务、FILE/LIVE 骨架、记录/CSV 参考
-│   └── web_client/     网页端前端（原型；真实数据接线待完成）
+│   └── web_client/     网页检查界面、本机服务与板端 API 转发
 ├── sim/                testbench 与仿真入口
 │   ├── riscv/          RISC-V tb
 │   ├── vision/         视觉 tb 与视觉 Python 测试

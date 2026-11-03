@@ -1,0 +1,21 @@
+✔ an in-flight refresh retains the last valid result and its original age (11.17ms)
+✔ success replaces the result; automatic rounds never add records (2.6145ms)
+✔ a slow request cannot keep expired results visible (2.3476ms)
+✔ manual failure removes the old result and pauses automatic checks (2.5136ms)
+✔ switching mode rejects a delayed response from the old epoch (1.8175ms)
+✔ repeated timer ticks never submit concurrent checks (1.5011ms)
+✔ new boxes stay hidden until the matching board snapshot loads (1.5725ms)
+✔ 500 ms mode starts immediately and UVC does not download per-round PNGs (2.5291ms)
+✔ fast polling keeps offline reconnection attempts two seconds apart (2.2021ms)
+REPRODUCED: reconnect skips config refresh; next real round fails again
+REPRODUCED: trigger_ref object accepted by JS schema parser
+✔ AUDIT: same-session config change cannot recover by reconnecting (2.5556ms)
+✔ AUDIT: JS parser accepts an invalid trigger_ref object (0.2769ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 178.7219
