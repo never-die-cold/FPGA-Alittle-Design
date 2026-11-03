@@ -25,11 +25,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--package", type=Path, required=True)
     parser.add_argument("--root", type=Path, required=True)
-    parser.add_argument("--order", default="2,4,4")
+    parser.add_argument("--order", help="optional explicit bolt,nut,washer order; default waits for web input")
     parser.add_argument("--min-score", type=float, default=0.8)
     parser.add_argument("--color-threshold", type=float, default=20)
     parser.add_argument("--min-area-ratio", type=float, default=0.00008)
-    parser.add_argument("--background-mode", choices=("corners", "local"), default="local")
+    parser.add_argument("--background-mode", choices=("corners", "local", "local-fast"), default="local")
     parser.add_argument("--host", default="0.0.0.0")
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--min-free-mib", type=int, default=256)
@@ -37,10 +37,15 @@ def main():
     if args.min_free_mib < 0:
         parser.error("min-free-mib must be nonnegative")
     package = args.package.resolve()
-    order_values = [int(value) for value in args.order.split(",")]
-    if len(order_values) != 3 or any(value < 0 for value in order_values):
-        parser.error("order must contain three nonnegative counts")
-    order = dict(zip(R.CLASSES, order_values))
+    order = None
+    if args.order is not None:
+        try:
+            order_values = [int(value) for value in args.order.split(",")]
+        except ValueError:
+            parser.error("order must contain three nonnegative counts")
+        if len(order_values) != 3 or any(value < 0 for value in order_values):
+            parser.error("order must contain three nonnegative counts")
+        order = dict(zip(R.CLASSES, order_values))
     lock = Path("/home/xilinx/fpga-product.lock").open("a")
     fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     sys.path.insert(0, str(package / "payload/tools"))
@@ -86,16 +91,19 @@ def main():
                 raise RuntimeError("video configuration did not reach a frame boundary") from exc
             return applied
 
-        def capture(self, round_dir):
+        def capture_round(self, round_dir):
             owner = ParkFrameCapture(vdma, status, allocate, identity, timeout=5)
             try:
                 frame = owner.capture()
                 path = Path(round_dir) / "capture.png"
                 self._save_png(path, frame)
                 self.seq += 1
-                return path
+                return path, frame
             finally:
                 (Path(round_dir) / "capture-dma.json").write_text(json.dumps(owner.evidence, indent=2))
+
+        def capture(self, round_dir):
+            return self.capture_round(round_dir)[0]
 
     captures = Captures(None)
     args.root.mkdir(parents=True, exist_ok=True)

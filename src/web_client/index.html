@@ -471,6 +471,14 @@ select.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1
       </div>
     </section>
 
+    <section class="card" id="work-order-card">
+      <h2 class="card-title">检查工单</h2>
+      <div class="param-row"><label for="order-bolt">螺栓</label><input class="field" id="order-bolt" type="number" min="0" max="10" step="1" style="width:80px" inputmode="numeric"></div>
+      <div class="param-row"><label for="order-nut">螺母</label><input class="field" id="order-nut" type="number" min="0" max="10" step="1" style="width:80px" inputmode="numeric"></div>
+      <div class="param-row"><label for="order-washer">垫圈</label><input class="field" id="order-washer" type="number" min="0" max="10" step="1" style="width:80px" inputmode="numeric"></div>
+      <button type="button" class="btn btn-accent btn-block" id="btn-order">应用工单</button>
+      <p class="micro" id="order-note">请填写数量并应用工单</p>
+    </section>
     <section class="card">
       <h2 class="card-title">USB 采集卡</h2>
       <select class="field" id="sel-camera" aria-label="视频设备" style="width:100%"><option value="">请选择采集卡</option></select>
@@ -602,6 +610,7 @@ const state = {
   connected: false,
   session: null, config: null, checkId: 0, round: 0, rec: 0,
   prototype: true,
+  orderReady: false,
   auto: false, interval: 500, maxAge: 4500,
   scope: { bolt: true, nut: true, washer: true },
   button: 'idle',          // idle | queued | running
@@ -846,7 +855,7 @@ function renderButton() {
   const btn = $('#run-btn');
   const label = $('#run-label');
   btn.className = 'run-btn' + (state.button === 'idle' ? '' : ' ' + state.button);
-  btn.disabled = state.mode === 'live' && (!state.connected || liveBusy);
+  btn.disabled = state.mode === 'live' && (!state.connected || !state.orderReady || liveBusy);
   if (state.button === 'idle') label.textContent = 'RUN INSPECTION';
   else if (state.button === 'queued') label.textContent = 'QUEUED · WAITING';
   else label.textContent = 'RUNNING';
@@ -886,6 +895,46 @@ function sleep(ms) { return new Promise((res) => setTimeout(res, ms)); }
 
 /* ---------- LIVE HTTP：单轮串行；模式切换后丢弃在途响应 ---------- */
 let liveBusy = false, modeEpoch = 0, manualRef = null, reconnectAfter = 0;
+let orderDirty = false;
+function validOrder(order) {
+  return order && Object.keys(order).length === 3
+    && CLASSES.every((c) => Number.isInteger(order[c]) && order[c] >= 0 && order[c] <= 10)
+    && CLASSES.reduce((n,c) => n + order[c], 0) >= 1
+    && CLASSES.reduce((n,c) => n + order[c], 0) <= 10;
+}
+function syncOrder(order) {
+  state.orderReady = !orderDirty && !!validOrder(order);
+  if (validOrder(order)) Object.assign(WORKORDER, order);
+  if (!orderDirty) for (const c of CLASSES) $('#order-' + c).value = validOrder(order) ? order[c] : '';
+  $('#order-note').textContent = state.orderReady ? '工单已确认生效' : orderDirty ? '工单已修改，请应用' : '请填写数量并应用工单';
+}
+for (const c of CLASSES) $('#order-' + c).addEventListener('input', () => {
+  orderDirty = true; state.orderReady = false; state.result = null; manualRef = null;
+  state.auto = false; $('#sel-auto').checked = false;
+  $('#order-note').textContent = '工单已修改，请应用'; renderAll();
+});
+$('#btn-order').addEventListener('click', applyWorkOrder);
+async function applyWorkOrder() {
+  if (liveBusy || state.mode !== 'live' || !state.connected) return;
+  const order = Object.fromEntries(CLASSES.map((c) => [c, $('#order-' + c).value.trim() === '' ? NaN : Number($('#order-' + c).value)]));
+  if (!validOrder(order)) { toast('请填写三类整数数量，合计为 1–10 件', true); return; }
+  liveBusy = true; const epoch = modeEpoch;
+  state.auto = false; $('#sel-auto').checked = false;
+  state.result = null; state.orderReady = false; manualRef = null; renderAll();
+  try {
+    const confirmed = await api('/v1/config', {control:0, order});
+    if (epoch !== modeEpoch) return;
+    if (confirmed.mode !== 'LIVE' || !Number.isInteger(confirmed.applied_config_id)
+        || confirmed.applied_config_id < 0 || confirmed.applied_config_id > 0xffffffff
+        || !validOrder(confirmed.work_order) || !CLASSES.every((c) => confirmed.work_order[c] === order[c]))
+      throw new Error('板端未确认本次工单');
+    state.config = confirmed.applied_config_id; orderDirty = false; syncOrder(confirmed.work_order);
+    log('CFG', `工单已应用 · bolt=${order.bolt} nut=${order.nut} washer=${order.washer} · cfg=${state.config}`);
+  } catch (error) {
+    if (epoch !== modeEpoch) return;
+    state.connected = false; state.orderReady = false; toast(error.message, true);
+  } finally { liveBusy = false; renderAll(); }
+}
 async function api(path, body) {
   const response = await fetch(path, { cache: 'no-store', signal: AbortSignal.timeout(45000),
     ...(body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -918,6 +967,7 @@ async function connectLive() {
     const changed = sessionChanged || config.applied_config_id !== state.config;
     if (changed) { state.config = config.applied_config_id; state.result = null; manualRef = null; }
     state.session = status.session_id; state.prototype = status.prototype !== false;
+    syncOrder(status.work_order);
     state.connected = true;
     if (changed || !wasConnected)
       log('LINK', `LIVE 已连接 · ${status.backend}/${status.engine} · session=${state.session} · cfg=${state.config}`);
@@ -928,14 +978,14 @@ async function connectLive() {
   } finally { liveBusy = false; renderAll(); }
 }
 async function liveRound(manual) {
-  if (liveBusy || !state.connected) return;
+  if (liveBusy || !state.connected || !state.orderReady) return;
   liveBusy = true;
   const epoch = modeEpoch;
   const ref = manual ? (manualRef ||= crypto.randomUUID()) : null;
   state.button = 'running'; renderAll();
   try {
     const packet = await api('/v1/check', manual ? { trigger_ref: ref } : {});
-    if (epoch !== modeEpoch) return;
+    if (epoch !== modeEpoch || !state.orderReady) return;
     if (manual && packet.trigger_ref !== ref) throw new Error('检查请求标识不匹配');
     const result = decodePacket(packet, state.session, state.config);
     snapshotReady = false;
@@ -1027,6 +1077,7 @@ function setMode(mode) {
   syncModeRows(); // 活动模式不允许关断：勾选态始终回写
   if (!changed) return;
   modeEpoch++; state.button = 'idle'; state.result = null; state.manualFail = false;
+  state.orderReady = false; orderDirty = false;
   stopVideo(); snapshotReady = false;
   state.connected = mode !== 'live'; state.prototype = true;
   state.session = mode === 'mock' ? rid() : null; state.config = mode === 'mock' ? 0 : null;
@@ -1077,6 +1128,9 @@ $('#sim-limit').addEventListener('click', () => {
 
 /* ---------- 参数 / 记录 / 主题 / 键盘 ---------- */
 $('#sel-auto').addEventListener('change', (e) => {
+  if (state.mode === 'live' && !state.orderReady && e.target.checked) {
+    e.target.checked = false; state.auto = false; toast('请先应用检查工单', true); return;
+  }
   state.auto = e.target.checked;
   log('STATE', `自动轮询${state.auto ? '开启' : '暂停'}（暂停后结果将在 max-age 后过期，画面进入 WAITING）`);
   if (state.auto) autoRound();
@@ -1211,6 +1265,9 @@ function renderAll() {
   $('#demo-controls').hidden = state.mode !== 'mock';
   $('#btn-video').disabled = state.mode !== 'live' || videoBusy; $('#sel-camera').disabled = state.mode !== 'live' || !!video.srcObject;
   $('#replay-file-label').hidden = state.mode !== 'replay';
+  $('#work-order-card').hidden = state.mode !== 'live';
+  $('#btn-order').disabled = state.mode !== 'live' || !state.connected || liveBusy;
+  for (const c of CLASSES) $('#order-' + c).disabled = state.mode !== 'live' || liveBusy;
   snapshot.hidden = state.mode !== 'live' || videoReady || !snapshotReady || !state.result;
 }
 renderAll();

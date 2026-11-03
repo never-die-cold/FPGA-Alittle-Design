@@ -258,14 +258,18 @@ class CopDriver:
                  model_id=MODEL_ID_DEFAULT, addresses=None, job_timeout_s=5.0,
                  accept_timeout_s=1.0, config_timeout_s=2.0, poll_s=0.002,
                  dma_after_commit=False):
-        judge([], order, min_score, max_targets, policy_max)  # freeze/validate inputs
+        if order is not None:
+            judge([], order, min_score, max_targets, policy_max)
+        elif (not 1 <= effective_policy(max_targets, policy_max) <= max_targets <= 16
+              or not math.isfinite(min_score) or not 0 <= min_score <= 1):
+            raise ValueError("invalid unconfigured driver limits")
         if not isinstance(model_payload, (bytes, bytearray)) or not model_payload:
             raise ValueError("model payload must be non-empty bytes")
         if type(model_id) is not int or not 0 < model_id <= 0xFFFFFFFF:
             raise ValueError("model_id must be a non-zero uint32")
         self.transport = transport
         self.dma = dma
-        self.order = dict(order)
+        self.order = dict(order) if order is not None else None
         self.min_score = float(min_score)
         self.max_targets = max_targets
         self.policy_max = effective_policy(max_targets, policy_max)
@@ -495,6 +499,25 @@ class CopDriver:
 
         if not self.dma_after_commit:
             load_data_plane()
+        else:
+            # Firmware reads STATUS before CFG_APPLIED. A stale MODEL_VALID
+            # plus a new sequence could otherwise launch with the old ROI data.
+            # First commit a valid count that cannot match previous DMA_BYTES;
+            # then observe MODEL_VALID cleared before publishing the real job.
+            previous_bytes = self.read("DMA_BYTES")
+            guard_count = 2 if previous_bytes == R.ROI_BYTES else 1
+            self.write("ROI_COUNT", guard_count)
+            self._commit_config()
+            self._poll(lambda: not self.status() & R.STATUS_MODEL_VALID,
+                       self.config_timeout_s, "old MODEL_VALID to clear")
+            self.write("ROI_COUNT", count)
+        self._commit_config()
+        if self.dma_after_commit:
+            self._model_loaded = None
+            load_data_plane()
+        return self.cfg_seq
+
+    def _commit_config(self):
         self.cfg_seq = (self.cfg_seq + 1) & 0xFFFFFFFF
         if self.cfg_seq == 0:
             self.cfg_seq = 1
@@ -522,12 +545,6 @@ class CopDriver:
             raise CopConfigError(
                 f"configuration not applied (status=0x{status:08x}, "
                 f"error_code={error_code}, sim_error={error_name})")
-        if self.dma_after_commit:
-            # cop_top clears MODEL_VALID and ROI_VALID on every new commit.
-            # The physical model bank must therefore be revalidated each job.
-            self._model_loaded = None
-            load_data_plane()
-        return self.cfg_seq
 
     def _ps_targets(self, hardware, descriptors):
         targets = []
@@ -571,6 +588,8 @@ class CopDriver:
                          error_code=error_code)
 
     def run(self, job):
+        if self.order is None:
+            raise CopConfigError("set a work order before submitting a job")
         self._validate_job(job)
         count = len(job["targets"])
         key = (job["job_id"], job["work_order_rev"])

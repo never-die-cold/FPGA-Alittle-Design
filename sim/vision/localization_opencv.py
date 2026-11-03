@@ -6,8 +6,15 @@ import numpy as np
 
 def contrast_mask(lab, background, color_threshold):
     """Exact half-integer median distances, without per-pixel float/sqrt arrays."""
-    delta = lab.astype(np.int16) * 2 - np.rint(background * 2).astype(np.int16)
-    squared = np.einsum("ijk,ijk->ij", delta, delta, dtype=np.int32)
+    if background.shape == lab.shape and background.dtype == np.int16:
+        # Local background is integer 0..255. Byte absdiff + a square LUT avoids
+        # several full-frame int16/float conversions on the Cortex-A9.
+        delta = cv2.absdiff(lab, background.astype(np.uint8))
+        squares = cv2.LUT(delta, np.arange(256, dtype=np.float32) ** 2)
+        squared = cv2.transform(squares, np.ones((1, 3), np.float32)) * 4
+    else:
+        delta = lab.astype(np.int16) * 2 - np.rint(background * 2).astype(np.int16)
+        squared = np.einsum("ijk,ijk->ij", delta, delta, dtype=np.int32)
     threshold = float(color_threshold)
     if threshold <= 0:
         return np.full(lab.shape[:2], 255, dtype=np.uint8)
@@ -35,17 +42,18 @@ def detect_boxes(image, color_threshold=22, min_area_ratio=0.00008, background_m
                               lab[-patch:, -patch:].reshape(-1, 3)))
     if background_mode == "corners":
         background = np.median(corners, axis=0)
-    elif background_mode == "local":
+    elif background_mode in ("local", "local-fast"):
         # At 720p this removes narrow fasteners from the background estimate,
         # while following broad illumination gradients. Widen before doubling.
-        small = cv2.resize(lab, (max(1, width//4), max(1, height//4)),
+        factor, window = (8, 15) if background_mode == "local-fast" else (4, 31)
+        small = cv2.resize(lab, (max(1, width//factor), max(1, height//factor)),
                            interpolation=cv2.INTER_AREA)
-        background = cv2.resize(cv2.medianBlur(small, 31), (width, height),
+        background = cv2.resize(cv2.medianBlur(small, window), (width, height),
                                 interpolation=cv2.INTER_LINEAR).astype(np.int16)
     else:
-        raise ValueError("background_mode must be corners or local")
+        raise ValueError("background_mode must be corners, local or local-fast")
     mask = contrast_mask(lab, background, color_threshold)
-    if background_mode == "local":
+    if background_mode in ("local", "local-fast"):
         # Join small gaps in reflective rims before removing isolated grain.
         mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE,
                                cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7)))

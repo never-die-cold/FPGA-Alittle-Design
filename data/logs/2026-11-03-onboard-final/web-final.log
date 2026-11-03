@@ -1,0 +1,29 @@
+✔ LIVE keeps board IDs, half-open boxes, verdict and actual order (1.2135ms)
+✔ target_limit keeps counts unknown (0.9103ms)
+✔ RECHECK preserves the low-confidence reason alongside order differences (0.3465ms)
+✔ reject mismatched sessions/config, malformed boxes, duplicate IDs and invalid verdicts (0.2816ms)
+✔ trigger_ref matches Python optional string and 64 code point limit (0.2536ms)
+✔ an in-flight refresh retains the last valid result and its original age (7.7336ms)
+✔ success replaces the result; automatic rounds never add records (1.5443ms)
+✔ a slow request cannot keep expired results visible (3.5766ms)
+✔ manual failure removes the old result and pauses automatic checks (2.9526ms)
+✔ switching mode rejects a delayed response from the old epoch (1.9887ms)
+✔ repeated timer ticks never submit concurrent checks (1.7678ms)
+✔ new boxes stay hidden until the matching board snapshot loads (2.1289ms)
+✔ 500 ms mode starts immediately and UVC does not download per-round PNGs (3.2032ms)
+✔ fast polling keeps offline reconnection attempts two seconds apart (2.3184ms)
+✔ same-session configuration refresh is read-only and recovers the next round (1.2664ms)
+✔ an invalid status config is rejected without a configuration write (1.3729ms)
+✔ unchanged status retains the retry intent and original result age (2.8727ms)
+✔ idle heartbeat detects hardware loss and clears the result (1.0649ms)
+✔ no preset order: blank inputs block checks until a matching server ACK (1.9164ms)
+✔ editing an order clears results and pauses checks; heartbeat preserves the draft (1.8731ms)
+✔ invalid input and mismatched order ACK cannot enable checking (2.0572ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 220.7873

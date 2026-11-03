@@ -350,7 +350,7 @@ def test_hardware_commit_revalidates_model():
     driver = CopDriver(hardware, Plane(), dict(ORDER), 0.8, dma_after_commit=True)
     for job_id in (1, 2):
         driver._configure(make_job(job_id), 3)
-    assert hardware.events == ["commit", "model", "roi", "commit", "model", "roi"]
+    assert hardware.events == ["commit", "commit", "model", "roi", "commit", "commit", "model", "roi"]
 
 
 def test_ps_base_rule():

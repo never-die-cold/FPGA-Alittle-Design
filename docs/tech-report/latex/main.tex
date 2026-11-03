@@ -1,0 +1,110 @@
+% !TeX program = xelatex
+\RequirePackage{fix-cm}
+\documentclass[UTF8,a4paper,zihao=-4,fontset=fandol]{ctexart}
+\usepackage[left=24mm,right=24mm,top=23mm,bottom=23mm]{geometry}
+\usepackage{lmodern}
+\usepackage{booktabs,tabularx,longtable,array,graphicx,xcolor,amsmath}
+\usepackage{enumitem,caption,placeins,needspace,float,hyperref}
+\hypersetup{unicode=true,hidelinks,pdftitle={EdgeSight 技术报告},pdfauthor={EdgeSight 团队}}
+\urlstyle{same}
+\graphicspath{{../figures/}}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.3em}
+\linespread{1.2}
+\setlength{\emergencystretch}{2em}
+\widowpenalty=10000
+\clubpenalty=10000
+\setcounter{tocdepth}{2}
+\setcounter{topnumber}{4}
+\setcounter{bottomnumber}{3}
+\setcounter{totalnumber}{6}
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.9}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.7}
+\makeatletter
+\setlength{\@fptop}{0pt}
+\setlength{\@fpsep}{18pt}
+\makeatother
+\setlist{nosep,leftmargin=2em}
+\captionsetup{font=small,labelfont=bf,labelsep=quad}
+\ctexset{section={format=\Large\bfseries},subsection={format=\large\bfseries},subsubsection={format=\normalsize\bfseries}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\newcommand{\todo}{\textbf{待补充}}
+\newcommand{\measure}{待实测}
+\newcommand{\sourcepath}[2]{\href{https://github.com/never-die-cold/FPGA-Alittle-Design/blob/a631fd2/#1}{#2}}
+\newcommand{\figplaceholder}[4]{%
+  \begin{figure}[H]\centering
+  \fbox{\parbox[c][#4][c]{0.88\linewidth}{\centering\small 图片占位\par\medskip #3\par\medskip 待补充}}
+  \caption{#1}\label{#2}\end{figure}}
+\begin{document}
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\vspace*{18mm}
+\noindent{\LARGE\bfseries EdgeSight（边缘慧眼）\par}
+\vspace{7mm}
+\noindent{\Large 基于自研 RISC-V 的边缘智能视觉 SoC 技术报告\par}
+\vspace{13mm}
+\noindent\begin{tabularx}{\linewidth}{@{}lY@{}}
+\toprule
+参赛方向 & AMD 自主选题赛道（初级组）\\
+文档版本 & v0.1，提交初稿（LaTeX 版）\\
+修订日期 & 2026 年 10 月 30 日\\
+源码基线 & 分支 \code{dev/submission-slim}，提交 \code{a631fd2}\\
+目标平台 & AMD PYNQ-Z2（XC7Z020-1CLG400C）\\
+团队与成员 & \todo\\
+\bottomrule
+\end{tabularx}
+\par\vspace{12mm}
+\noindent\textbf{摘要}\par
+EdgeSight 是面向受控工位紧固件识别与工业检查的边缘智能视觉系统。
+系统在 PYNQ-Z2 的可编程逻辑内同时部署自研 RV32IM 处理器核、HDMI 视觉预处理流水线与 INT8 CNN 推理协处理器。
+处理器核通过 44 项 RISC-V 架构测试签名，OOC 实点 86.806 MHz；SoC 以 40 MHz 上板。
+视觉链路支持 720p60 显示直通与灰度分析分流。
+协处理器整网推理 472,593 拍，板上输出与整数参考逐项一致。
+本文依次说明作品概述、系统组成、三个自研模块、数据与工业闭环、完成情况与验证边界。
+\vfill
+\noindent\small 本文范围：当前源码实现的模块、已留档的实测结果，以及提交前所需的图片与未闭环清单。
+\end{titlepage}
+\hypersetup{pageanchor=true}
+\begingroup
+\small
+\setlength{\parskip}{0pt}
+\linespread{1}\selectfont
+\tableofcontents
+\endgroup
+\clearpage
+\input{sections/01-overview}
+\input{sections/02-architecture}
+\clearpage
+\input{sections/03-riscv-core}
+\input{sections/04-vision-pipeline}
+\clearpage
+\input{sections/05-cnn-coprocessor}
+\input{sections/06-data-closedloop}
+\clearpage
+\input{sections/07-status-metrics}
+\input{sections/08-conclusion}
+\clearpage
+\appendix
+\input{sections/09-appendix}
+\begin{thebibliography}{9}
+\bibitem{plan}\sourcepath{plan.md}{项目主计划（2026-10-28 口径）}，2026-10-28。
+\bibitem{m1closure}\sourcepath{report/module1-closure.md}{模块一核与最小 SoC 收口报告}，2026-10-07。
+\bibitem{designv1}\sourcepath{src/riscv/design_v1.md}{RISC-V v1 冻结契约（含 \S 14.2 性能口径）}。
+\bibitem{cpi}\sourcepath{data/logs/2026-10-05-partB-v1-coremark-cpi/}{转发双档 CoreMark 原始数据}，2026-10-05。
+\bibitem{radix4}\sourcepath{data/logs/2026-10-05-partB-radix4-cycle-breakdown/}{Radix-4 乘法器周期分解}，2026-10-05。
+\bibitem{visionoff}\sourcepath{data/logs/2026-10-02-vision-offboard/}{视觉预处理离板收口}，2026-10-02。
+\bibitem{visionon}\sourcepath{data/logs/2026-10-03-vision-onboard/}{视觉链路上板记录}，2026-10-03。
+\bibitem{c02}\sourcepath{src/coprocessor/design_v0.md}{C02 协处理器整数契约}。
+\bibitem{c03}\sourcepath{docs/contracts/coprocessor-integration-v0.md}{C03 集成契约（MMIO/AXI4-Lite + DMA）}。
+\bibitem{sync}\sourcepath{docs/contracts/vision-sync-protocol-decisions.md}{视觉轮次协议 v1.2 裁决记录}。
+\bibitem{r6board}\sourcepath{data/logs/2026-10-28-multitarget-board-r6/}{多目标修复与 r6 实板数值对照}，2026-10-28。
+\bibitem{r6pkg}\sourcepath{data/evidence/2026-10-28-cnn-r6/}{CNN r6 权重、参数与复现命令}，2026-10-28。
+\bibitem{status26}\sourcepath{report/project-final-status-2026-10-26.md}{项目三态盘点（只记录事实）}，2026-10-26。
+\bibitem{coexist}\sourcepath{docs/runbooks/pynq-coexist-handoff-2026-10-27.md}{PYNQ 共存位流交接单}，2026-10-27。
+\bibitem{llmlog}\sourcepath{report/llm_log/}{大模型协作记录（218 篇）}，2026-09-04 至 2026-10-29。
+\end{thebibliography}
+\end{document}

@@ -1,0 +1,64 @@
+{
+  "date": {
+    "exit": 0,
+    "output": "2026-09-23T02:20:09+00:00\n"
+  },
+  "uptime": {
+    "exit": 0,
+    "output": " 02:20:09 up 3 min,  1 user,  load average: 0.87, 1.06, 0.47\n"
+  },
+  "disk": {
+    "exit": 0,
+    "output": "Filesystem     1K-blocks    Used Available Use% Mounted on\n/dev/root       14841640 8089928   6043052  58% /\n/dev/root       14841640 8089928   6043052  58% /\n"
+  },
+  "listeners": {
+    "exit": 0,
+    "output": "State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess\nLISTEN 0      50           0.0.0.0:139       0.0.0.0:*          \nLISTEN 0      4096   127.0.0.53%lo:53        0.0.0.0:*          \nLISTEN 0      128          0.0.0.0:22        0.0.0.0:*          \nLISTEN 0      128          0.0.0.0:80        0.0.0.0:*          \nLISTEN 0      50           0.0.0.0:445       0.0.0.0:*          \nLISTEN 0      128          0.0.0.0:9090      0.0.0.0:*          \nLISTEN 0      50              [::]:139          [::]:*          \nLISTEN 0      128             [::]:22           [::]:*          \nLISTEN 0      128             [::]:80           [::]:*          \nLISTEN 0      50              [::]:445          [::]:*          \n"
+  },
+  "boot_service": {
+    "exit": 0,
+    "output": "ExecMainStatus=0\nExecStart={ path=/bin/bash ; argv[]=/bin/bash -lc source /etc/profile.d/xrt_setup.sh && source /etc/profile.d/pynq_venv.sh && python3 -u /home/xilinx/vision_m2/pynq_vision_boot.py ; ignore_errors=no ; start_time=[Wed 2026-09-23 02:18:22 UTC] ; stop_time=[Wed 2026-09-23 02:18:39 UTC] ; pid=841 ; code=exited ; status=0 }\nActiveState=active\nSubState=exited\n"
+  },
+  "boot_id": "89d82a5c-64cd-48d7-b8cf-51be273ccf62",
+  "fpga_state": "operating",
+  "services": [],
+  "packages": [
+    "/home/xilinx/cop-pkg-trained566b",
+    "/home/xilinx/cop-pkg-gate566b",
+    "/home/xilinx/cop-pkg-r6-multitarget-20261028",
+    "/home/xilinx/cop-pkg",
+    "/home/xilinx/cop-pkg-edge-trained-8884046",
+    "/home/xilinx/cop-pkg-trained-566b",
+    "/home/xilinx/cop-pkg-edge-diag-8884046",
+    "/home/xilinx/cop-pkg-edge-20261026",
+    "/home/xilinx/cop-pkg-mmcm-20261027-diagnostic",
+    "/home/xilinx/cop-pkg-mmcm-oldtool",
+    "/home/xilinx/cop-pkg-imem-20261026",
+    "/home/xilinx/cop-pkg-cdc-20261027-trained",
+    "/home/xilinx/cop-pkg-cdc-20261027-diagnostic",
+    "/home/xilinx/cop-pkg-r6-multitarget-20261028-r1",
+    "/home/xilinx/cop-pkg-trained-oldbit",
+    "/home/xilinx/cop-pkg-diagnostic-566b",
+    "/home/xilinx/cop-pkg-product",
+    "/home/xilinx/cop-pkg-product-20261027-r1"
+  ],
+  "apps": [
+    "/home/xilinx/cop-app-fresh-20261027-r2",
+    "/home/xilinx/cop-app-web-20261030",
+    "/home/xilinx/cop-app-product-20261027-r1",
+    "/home/xilinx/cop-app-r6-20261028"
+  ],
+  "runs": [
+    "/home/xilinx/cop-live-web-20261030",
+    "/home/xilinx/cop-live-fresh-20261027-r1",
+    "/home/xilinx/cop-live-20261027-r1",
+    "/home/xilinx/cop-live-fresh-20261027-r2",
+    "/home/xilinx/cop-live-data-20261027-r1",
+    "/home/xilinx/cop-live-web-20261030-r2",
+    "/home/xilinx/cop-live-web-20261030-r3",
+    "/home/xilinx/cop-live-r6-20261028",
+    "/home/xilinx/cop-live-web-20261030-r4",
+    "/home/xilinx/cop-live-exe-20261027-r2",
+    "/home/xilinx/cop-live-web-20261030-r1"
+  ]
+}

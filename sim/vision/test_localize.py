@@ -8,7 +8,19 @@ from reference import locate, crop_resize, prepare_targets
 def main():
     import numpy as np
     from localization_opencv import contrast_mask
+    from localization_opencv import detect_boxes, score_boxes
     lab = np.random.default_rng(20261015).integers(0, 256, (64, 96, 3), dtype=np.uint8)
+    background = np.random.default_rng(20261103).integers(0,256,lab.shape,dtype=np.int16)
+    distance = np.linalg.norm(lab.astype(np.float64)-background,axis=2)
+    for threshold in [0,25,100,np.nextafter(distance[0,0],-np.inf),distance[0,0],np.nextafter(distance[0,0],np.inf)]:
+        np.testing.assert_array_equal(contrast_mask(lab,background,threshold),(distance>=threshold).astype(np.uint8)*255)
+    import cv2
+    fixture = Path(__file__).resolve().parents[2] / "data/logs/2026-10-28-r6-holdout-layout04/uvc/raw.png"
+    frame = cv2.imread(str(fixture))
+    original = detect_boxes(frame,25,.00008,"local")
+    fast = detect_boxes(frame,25,.00008,"local-fast")
+    metrics = score_boxes(fast,original,.9)
+    assert len(original) == len(fast) == 9 and metrics["tp"] == 9 and metrics["mean_iou"] > .97
     thresholds = [-1, 0, 22, 22.5, 512, float("inf"), float("nan")]
     for background in (np.array([.5, 127.5, 254.5]), np.array([0., 255., 127.])):
         distance = np.linalg.norm(lab.astype(np.float32) - background, axis=2)

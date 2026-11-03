@@ -99,7 +99,7 @@ class State:
         self.check_id = 0
         self.captures = captures
         self.engine = engine
-        self.order = dict(order)
+        self.order = dict(order) if order is not None else None
         self.archive_every_round = archive_every_round
         self.last_packet = None
         self.engine_label = getattr(engine, "label", "FILE")
@@ -115,6 +115,8 @@ class State:
 
     def check(self, trigger_ref):
         with self.lock:  # 引擎在锁内执行：检查轮次串行（单板单推理通道的现实约束）
+            if self.order is None:
+                raise ValueError("set a work order before checking")
             if trigger_ref is not None and trigger_ref in self.completed_refs:
                 # 同一次用户触发的网络重试：回原轮报文，不新取帧、不递增 check_id。
                 return self.completed_refs[trigger_ref]
@@ -131,11 +133,16 @@ class State:
                 fields = self.engine.inspect_frame(self.captures.capture_frame())
             else:
                 round_dir.mkdir(exist_ok=False)
-                capture_path = self.captures.capture(round_dir)
+                direct = callable(getattr(self.captures, "capture_round", None)) and callable(getattr(self.engine, "inspect_round", None))
+                if direct:
+                    capture_path, frame = self.captures.capture_round(round_dir)
+                else:
+                    capture_path = self.captures.capture(round_dir)
                 # 快照哈希侧车（C04 §2.3）：供读取方核对 capture 字节未被替换/篡改
                 atomic_write(round_dir / "capture.sha256",
                              (hashlib.sha256(capture_path.read_bytes()).hexdigest() + "\n").encode())
-                fields = self.engine(capture_path, round_dir, f"chk{check:06d}")
+                fields = (self.engine.inspect_round(frame, round_dir, f"chk{check:06d}") if direct
+                          else self.engine(capture_path, round_dir, f"chk{check:06d}"))
             packet = validate_packet({
                 "version": VERSION, "mode": "LIVE", "session_id": self.session_id,
                 "frame_id": self.captures.seq, "config_id": self.config_id,
@@ -228,6 +235,7 @@ def make_server(host="127.0.0.1", port=8765, root=None, captures=None, engine=No
                     health = False
                 self.reply(200, {"mode": "LIVE", "session_id": state.session_id,
                                  "hardware_connected": bool(health), "config_id": state.config_id,
+                                 "work_order": state.order,
                                  "backend": state.captures.backend,
                                  "engine": state.engine_label,
                                  "prototype": state.captures.prototype})
@@ -256,17 +264,29 @@ def make_server(host="127.0.0.1", port=8765, root=None, captures=None, engine=No
                     self.reply(200, state.check(parse_trigger_ref(body)))
                 else:
                     request = json.loads(body)
-                    if not isinstance(request, dict) or set(request) != {"control"}:
-                        raise ValueError("expected control only")
+                    if (not isinstance(request, dict) or "control" not in request
+                            or set(request) - {"control", "order"}):
+                        raise ValueError("expected control and optional order")
                     control = request["control"]
                     if type(control) is not int or not 0 <= control <= 15:
                         raise ValueError("reserved control bits")
                     with state.lock:
+                        update_order = getattr(state.engine, "configure_order", None)
+                        if "order" in request:
+                            if not callable(update_order):
+                                raise ValueError("this engine does not support work order updates")
+                            update_order(request["order"], validate_only=True)
                         configure = getattr(state.captures, "configure", None)
                         state.config_id = (configure(control) if configure else
                                            (state.config_id + 1) & 0xFFFFFFFF)
+                        if "order" in request:
+                            update_order(request["order"])
+                            state.order = dict(request["order"])
+                        state.last_packet = None
                         applied = state.config_id
-                    self.reply(200, {"mode": "LIVE", "applied_config_id": applied})
+                        confirmed_order = state.order
+                    self.reply(200, {"mode": "LIVE", "applied_config_id": applied,
+                                     "work_order": confirmed_order})
             except (ValueError, TypeError) as error:
                 self.reply(400, {"error": str(error)})
             except (RuntimeError, OSError) as error:

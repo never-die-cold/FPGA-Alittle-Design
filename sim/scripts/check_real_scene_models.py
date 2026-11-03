@@ -26,6 +26,7 @@ def main():
     parser.add_argument("--reference-package", type=Path,
                         help="known validated package for checking the integer evaluator")
     parser.add_argument("--color-threshold", type=float, default=25)
+    parser.add_argument("--background-mode", choices=("local", "local-fast"), default="local")
     parser.add_argument("--truth-counts", type=int, nargs=3, metavar=("BOLT", "NUT", "WASHER"))
     args = parser.parse_args()
     output = args.output.resolve()
@@ -42,7 +43,7 @@ def main():
     golden = bytes(int(v, 16) for v in (reference / "golden/roi_001/input.hex").read_text().split())
     if predict(golden, reference_layers) != [-12, -30, 41]:
         raise RuntimeError("packaged integer golden mismatch")
-    boxes = detect_boxes(frame, args.color_threshold, 0.00008, "local")
+    boxes = detect_boxes(frame, args.color_threshold, 0.00008, args.background_mode)
     output.mkdir(parents=True)
     classes, rows = list(meta["classes"]), []
     annotated = frame.copy()
@@ -72,7 +73,7 @@ def main():
               "frame_sha256": hashlib.sha256(args.frame.read_bytes()).hexdigest(),
               "weights_sha256": hashlib.sha256(args.weights.read_bytes()).hexdigest(),
               "payload_sha256": hashlib.sha256((args.package / "payload/provisional-model/payload.bin").read_bytes()).hexdigest(),
-              "localization": {"mode": "local", "threshold": args.color_threshold, "min_area_ratio": 0.00008},
+              "localization": {"mode": args.background_mode, "threshold": args.color_threshold, "min_area_ratio": 0.00008},
               "human_scene_counts": dict(zip(classes, args.truth_counts)) if args.truth_counts else None,
               "roi_count": len(rows), "agreement_count": sum(r["agree"] for r in rows), "rois": rows}
     (output / "comparison.json").write_text(json.dumps(report, indent=2)+"\n", encoding="utf-8")

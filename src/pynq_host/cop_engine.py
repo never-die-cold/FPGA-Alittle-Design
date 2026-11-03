@@ -64,7 +64,7 @@ class CopEngine:
         self.label = "COP_SIM" if self.simulated else "COP_HW"
         self.quantizer = quantizer or quantize_roi
         self.quantization_label = quantization_label or f"SIM_ONLY S_input={SIM_S_INPUT:.10f}"
-        self.order = dict(order)
+        self.order = dict(order) if order is not None else None
         # Localization tuning is scene-specific (C04 leaves the thresholds to the
         # station setup); defaults keep the previous behaviour.
         self.color_threshold = float(color_threshold)
@@ -96,6 +96,15 @@ class CopEngine:
     def close(self):
         if self._owns_sim and self.sim is not None:
             self.sim.close()
+
+    def configure_order(self, order, validate_only=False):
+        """Service holds its round lock across validation, video ACK and apply."""
+        judge([], order, self.min_score, self.max_targets, self.policy)
+        if self._pending_consume is not None:
+            raise RuntimeError("previous result must be persisted/consumed before changing work order")
+        if not validate_only:
+            self.order = dict(order)
+            self.driver.order = dict(order)  # next job commits this order to firmware
 
     def consume(self):
         """Called by the service after the packet is persisted (A2 order)."""

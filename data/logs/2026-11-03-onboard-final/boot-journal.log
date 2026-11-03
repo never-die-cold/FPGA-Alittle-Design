@@ -1,0 +1,8 @@
+Sep 23 02:18:22 pynq systemd[1]: Starting PYNQ vision after stock PL initialization...
+Sep 23 02:18:37 pynq bash[841]: ip_dict:
+Sep 23 02:18:37 pynq bash[841]:   pipe @ 0x40000000 range 0x10000
+Sep 23 02:18:37 pynq bash[841]:   ps7 @ 0x00000000 range 0x0
+Sep 23 02:18:37 pynq bash[841]: axi_regs 段: pipe @ 0x40000000
+Sep 23 02:18:37 pynq bash[841]: PASS: load
+Sep 23 02:18:38 pynq bash[841]: VISION_BOOT_PASS applied_config_id=1
+Sep 23 02:18:39 pynq systemd[1]: Finished PYNQ vision after stock PL initialization.
