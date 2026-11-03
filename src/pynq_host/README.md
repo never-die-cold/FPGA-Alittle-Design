@@ -16,7 +16,7 @@ PS 侧负责配置与结果通信、ARM 软件基线、黄金参考和指标采�
 `--archive-every-round` 启用逐轮完整归档。分类器在会话中复用，修改权重后须重启服务。
 非原型后端仍须逐轮保存 C04 Q3 capture 证据；当前真实后端见上方产品入口。
 上述FILE原型没有真实 HDMI/DDR/MMIO/CNN 后端，其`/v1/config`仅推进软件配置号，不证明R12硬件应用；见[整合证据](../../data/logs/2026-10-12-pr-review/README.md)。
-工单由服务启动参数提供，HTTP配置仅接收control；在线工单编辑未实现；请求重试幂等已按 C04 §2.4 草案实现（服务 16 条 trigger_ref 回放）。
+历史FILE原型工单由启动参数提供；11/03真实产品服务已支持网页`/v1/config`下发order，默认等待输入（status work_order=null，未确认前拒绝检查）。引擎与驱动同步采用新工单，每轮仍校验核侧配置/判定；显式CLI --order仅保留工具兼容。本次现场不传预设工单。请求重试幂等按C04 §2.4草案实现（服务16条trigger_ref回放）。
 下列 notebook／通用工具仍是规划，不能由 mock 或训练演练推断已实现。
 
 本轮新增 `roi_preprocess.py`、`inspection_model.py`、`inspection_rules.py`、
@@ -101,7 +101,7 @@ offset，适配器不再加 base。上板后先跑只读预检
 PS 地址由它自己分配的 buffer 决定（`addresses=plane.addresses`），单包 ROI 上限 15 目标。
 旧共存包的多目标结果槽错位修复及后续实板对照统一见 [plan.md §3.1](../../plan.md#31-当前状态)。数值对照不代替分类精度与工业整机验收。描述符表仍按门禁装载器保持清零、不做 DMA（J08 未冻结物理排布）。
 
-真实服务入口为 `cop_product_service.py --package <包> --root <新目录> --order 2,4,4`；
+真实服务入口为 `cop_product_service.py --package <包> --root <新目录>`，默认等待网页输入工单；
 调用 C01 park 捕获、PS 定位/ROI 和 PL CNN，记录 `COP_HW` 来源。当前模型与定位仍待重新联调，
 `RECHECK` 是实际判定；包/位流/服务版本和已验证边界见[10/27交接](../../docs/runbooks/pynq-coexist-handoff-2026-10-27.md)。
 

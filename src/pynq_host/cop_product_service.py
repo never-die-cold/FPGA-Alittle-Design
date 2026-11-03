@@ -25,7 +25,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--package", type=Path, required=True)
     parser.add_argument("--root", type=Path, required=True)
-    parser.add_argument("--order", default="2,4,4")
+    parser.add_argument("--order", help="optional explicit bolt,nut,washer order; default waits for web input")
     parser.add_argument("--min-score", type=float, default=0.8)
     parser.add_argument("--color-threshold", type=float, default=20)
     parser.add_argument("--min-area-ratio", type=float, default=0.00008)
@@ -37,10 +37,15 @@ def main():
     if args.min_free_mib < 0:
         parser.error("min-free-mib must be nonnegative")
     package = args.package.resolve()
-    order_values = [int(value) for value in args.order.split(",")]
-    if len(order_values) != 3 or any(value < 0 for value in order_values):
-        parser.error("order must contain three nonnegative counts")
-    order = dict(zip(R.CLASSES, order_values))
+    order = None
+    if args.order is not None:
+        try:
+            order_values = [int(value) for value in args.order.split(",")]
+        except ValueError:
+            parser.error("order must contain three nonnegative counts")
+        if len(order_values) != 3 or any(value < 0 for value in order_values):
+            parser.error("order must contain three nonnegative counts")
+        order = dict(zip(R.CLASSES, order_values))
     lock = Path("/home/xilinx/fpga-product.lock").open("a")
     fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     sys.path.insert(0, str(package / "payload/tools"))

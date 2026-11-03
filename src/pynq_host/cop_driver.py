@@ -258,14 +258,18 @@ class CopDriver:
                  model_id=MODEL_ID_DEFAULT, addresses=None, job_timeout_s=5.0,
                  accept_timeout_s=1.0, config_timeout_s=2.0, poll_s=0.002,
                  dma_after_commit=False):
-        judge([], order, min_score, max_targets, policy_max)  # freeze/validate inputs
+        if order is not None:
+            judge([], order, min_score, max_targets, policy_max)
+        elif (not 1 <= effective_policy(max_targets, policy_max) <= max_targets <= 16
+              or not math.isfinite(min_score) or not 0 <= min_score <= 1):
+            raise ValueError("invalid unconfigured driver limits")
         if not isinstance(model_payload, (bytes, bytearray)) or not model_payload:
             raise ValueError("model payload must be non-empty bytes")
         if type(model_id) is not int or not 0 < model_id <= 0xFFFFFFFF:
             raise ValueError("model_id must be a non-zero uint32")
         self.transport = transport
         self.dma = dma
-        self.order = dict(order)
+        self.order = dict(order) if order is not None else None
         self.min_score = float(min_score)
         self.max_targets = max_targets
         self.policy_max = effective_policy(max_targets, policy_max)
@@ -571,6 +575,8 @@ class CopDriver:
                          error_code=error_code)
 
     def run(self, job):
+        if self.order is None:
+            raise CopConfigError("set a work order before submitting a job")
         self._validate_job(job)
         count = len(job["targets"])
         key = (job["job_id"], job["work_order_rev"])

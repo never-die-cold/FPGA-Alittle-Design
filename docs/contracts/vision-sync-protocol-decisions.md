@@ -69,6 +69,13 @@
 2026-11-03 服务增补：`GET /v1/status` 返回当前 `config_id`，读取不触发配置提交。
 网页启动/重连与约2秒的空闲心跳只读确认此编号；同session配置改变也撤除旧结果并采用新编号。
 真实产品服务传入启动时已确认的硬件配置号；旧服务不含该字段时，首次连接仍兼容POST control=0。
+
+2026-11-03用户要求在线输入工单：产品服务默认不带预设工单，status的`work_order=null`时拒绝检查。
+网页提交`POST /v1/config {control:0,order:{bolt:N,nut:N,washer:N}}`，数量必须为非负整数、总数1–10。
+服务在轮次锁内先校验工单，等待视频配置ACK后同步更新引擎/驱动/服务工单，返回`applied_config_id`和`work_order`。
+该ACK确认下一轮采用的新工单；每轮驱动仍须等待核侧CFG_APPLIED并交叉核对PS/FW判定，不能用HTTP ACK替代硬件握手。
+修改输入即暂停自动检查、撤旧结果；网页仅在收到与输入一致的ACK后允许检查，旧配置报文不得采纳。
+保留显式CLI `--order`作工具兼容，但本次现场启动不传该参数。FILE原型无更新hook时拒绝在线工单，不伪装成功。
 `hardware_connected` 在真实产品入口查询CAP1 lock/pending，不以API存活冒充视频健康；FILE仍明确标记PROTOTYPE。
 
 - **推荐**：沿用 mock v1——session_id 由服务端生成（uuid）；板端复位、Overlay 重载或换视频源 → 新会话；EXE 不得跨会话复用结果（校验强制），检测到 session 变化即清空本地状态，并重新确认配置生效后才恢复叠加。

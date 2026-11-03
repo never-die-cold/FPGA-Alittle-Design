@@ -15,7 +15,7 @@ function element() {
     querySelector: element, append(...items) { this.children.push(...items); },
     appendChild(item) { this.children.push(item); }, set innerHTML(value) { this.children = []; } };
 }
-async function setup() {
+async function setup(workOrder = packet.decision.expected) {
   const nodes = new Map(), requests = [];
   const node = (selector) => {
     assert.ok(selector.startsWith('#') && ids.has(selector.slice(1)), `Missing DOM element: ${selector}`);
@@ -29,13 +29,13 @@ async function setup() {
     setInterval() {}, clearInterval() {}, setTimeout() {}, clearTimeout() {},
     fetch: (path, options) => path === '/v1/check' ? new Promise((resolve, reject) => requests.push({ resolve, reject, options }))
       : Promise.resolve(response(path === '/v1/status' ? { mode: 'LIVE', hardware_connected: true,
-        session_id: packet.session_id, prototype: false } : { mode: 'LIVE', applied_config_id: packet.config_id })) });
+        session_id: packet.session_id, prototype: false, work_order: workOrder } : { mode: 'LIVE', applied_config_id: packet.config_id })) });
   context.performance = { now: () => context.clock };
   vm.runInContext(source, context, { filename: 'index.html' });
   await new Promise(setImmediate); // Finish the real startup handshake's promise chain.
   context.seed = { ...decodePacket(packet, packet.session_id, packet.config_id), ts: 1000, trigger: 'auto' };
   vm.runInContext('state.result=seed; state.auto=true; videoReady=true; snapshotReady=true; renderAll()', context);
-  const ui = vm.runInContext('({state,liveRound,freshnessLoop,setMode,snapshot})', context);
+  const ui = vm.runInContext('({state,liveRound,freshnessLoop,setMode,snapshot,applyWorkOrder})', context);
   return { context, nodes, requests, ui, complete: (extra = {}) => requests[0].resolve(response({ ...packet, check_id: 2, ...extra })) };
 }
 
@@ -104,7 +104,7 @@ test('same-session configuration refresh is read-only and recovers the next roun
   t.context.fetch = async (path, options) => {
     if (options?.method === 'POST') writes++;
     return response(path === '/v1/status' ? {mode:'LIVE',hardware_connected:true,
-      session_id:packet.session_id,config_id:packet.config_id+1,prototype:false}
+      session_id:packet.session_id,config_id:packet.config_id+1,prototype:false,work_order:packet.decision.expected}
       : {...packet,config_id:packet.config_id+1});
   };
   t.context.clock = 3000; vm.runInContext('autoRound()', t.context);
@@ -134,7 +134,7 @@ test('unchanged status retains the retry intent and original result age', async 
   const t = await setup(), old = t.ui.state.result;
   vm.runInContext("manualRef='same-config-retry'", t.context);
   t.context.fetch = async () => response({mode:'LIVE',hardware_connected:true,
-    session_id:packet.session_id,config_id:packet.config_id});
+    session_id:packet.session_id,config_id:packet.config_id,work_order:packet.decision.expected});
   t.context.clock = 3000; vm.runInContext('autoRound()', t.context);
   await new Promise(setImmediate);
   assert.equal(t.ui.state.result, old); assert.equal(old.ts, 1000);
@@ -148,4 +148,46 @@ test('idle heartbeat detects hardware loss and clears the result', async () => {
   t.context.clock = 3000; vm.runInContext('autoRound()', t.context);
   await new Promise(setImmediate);
   assert.equal(t.ui.state.connected, false); assert.equal(t.ui.state.result, null);
+});
+
+test('no preset order: blank inputs block checks until a matching server ACK', async () => {
+  const t = await setup(null);
+  assert.equal(t.ui.state.orderReady, false);
+  assert.equal(t.nodes.get('#order-bolt').value, '');
+  const toggle = {checked:true};
+  t.nodes.get('#sel-auto').listeners.change({target:toggle});
+  assert.equal(toggle.checked, false); assert.equal(t.ui.state.auto, false);
+  await t.ui.liveRound(true); assert.equal(t.requests.length, 0);
+  for (const [c,n] of Object.entries({bolt:2,nut:1,washer:0})) t.nodes.get('#order-' + c).value = String(n);
+  t.context.fetch = async (path, options) => {
+    assert.equal(path, '/v1/config');
+    assert.deepEqual(JSON.parse(options.body), {control:0,order:{bolt:2,nut:1,washer:0}});
+    assert.equal(t.ui.state.orderReady, false);
+    return response({mode:'LIVE',applied_config_id:packet.config_id+1,work_order:{bolt:2,nut:1,washer:0}});
+  };
+  await t.ui.applyWorkOrder();
+  assert.equal(t.ui.state.orderReady, true); assert.equal(t.ui.state.config, packet.config_id+1);
+  assert.equal(t.ui.state.auto, false); assert.equal(t.ui.state.result, null);
+});
+
+test('editing an order clears results and pauses checks; heartbeat preserves the draft', async () => {
+  const t = await setup(); t.nodes.get('#order-bolt').value = '1';
+  t.nodes.get('#order-bolt').listeners.input();
+  assert.equal(t.ui.state.auto, false); assert.equal(t.ui.state.orderReady, false);
+  assert.equal(t.ui.state.result, null);
+  t.context.fetch = async () => response({mode:'LIVE',hardware_connected:true,
+    session_id:packet.session_id,config_id:packet.config_id,work_order:packet.decision.expected});
+  t.context.clock = 3000; vm.runInContext('autoRound()', t.context); await new Promise(setImmediate);
+  assert.equal(t.nodes.get('#order-bolt').value, '1'); assert.equal(t.ui.state.orderReady, false);
+});
+
+test('invalid input and mismatched order ACK cannot enable checking', async () => {
+  const t = await setup(null); let writes = 0;
+  t.context.fetch = async () => { writes++; return response({mode:'LIVE',applied_config_id:8,
+    work_order:{bolt:9,nut:0,washer:0}}); };
+  for (const c of ['bolt','nut','washer']) t.nodes.get('#order-' + c).value = '0';
+  await t.ui.applyWorkOrder(); assert.equal(writes, 0);
+  t.nodes.get('#order-bolt').value = '2';
+  await t.ui.applyWorkOrder(); assert.equal(writes, 1); assert.equal(t.ui.state.orderReady, false);
+  assert.equal(t.ui.state.connected, false);
 });

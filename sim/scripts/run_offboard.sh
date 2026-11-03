@@ -21,7 +21,7 @@ else
 fi
 bash sim/scripts/run_inspection_python.sh
 for name in class_aware_metrics localization_data n03_board_capture n03_buffer_lifecycle \
-            web_server live_service_guards release_tools; do
+            web_server live_service_guards release_tools work_order_live; do
     "$PY" "sim/vision/test_$name.py"
 done
 "$PY" sim/tools/test_verify_rv32i.py
