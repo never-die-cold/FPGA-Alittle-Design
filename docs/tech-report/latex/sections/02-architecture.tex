@@ -24,7 +24,8 @@ CNN 推理协处理器 & PL，Verilog-2001 & 64$\times$64 ROI 的 INT8 推理与
 \subsection{视频与分析数据流}
 相机画面经 HDMI 输入进入预处理流水线。
 彩色原图以恒定延迟直通 \code{display_*} 口输出 HDMI OUT，板上显示保留彩色原图。
-分析路径独立输出灰度 \code{out_*} 口，经 DDR 进入 PS：park 驱动取帧后，由 OpenCV 定位并裁剪出 64$\times$64 ROI，交给协处理器推理。
+分析路径在 PL 内有独立的灰度 \code{out_*} 口（模块级实现，含滤波与缩放）；现役共存位流未接入该支路，
+板端直接捕获 native RGB/BGR 原帧，由 PS 用 OpenCV 定位并裁剪出 64$\times$64 灰度 ROI，交给协处理器推理。
 结果槽经轮次协议关联后进入网页端；\code{out_*} 口的框叠加只作诊断，不代表物体定位。
 视频与分析的关联采用冻结的轮次协议 v1.2：判据为 \code{session_id}、\code{config_id} 与年龄窗口，\code{frame_id} 仅透传；过期、断联或无法确认的画面不得显示为当前检查通过。
 
